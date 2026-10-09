@@ -1,0 +1,194 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.ProcessReadinessCheck
+
+    <script src="~/js/settings.js"></script>
+
+    <script>
+        $(".search-slider-inner11").click(function () {
+            $("#dataTableSearch").toggleClass('field-width-big')
+        });
+
+    </script>
+<style>
+    .dataTables_scrollBody {
+        height: 30vh !important;
+    }
+    .searchicons {
+        z-index: 3;
+        position: relative;
+        padding-top: 6px;
+    }
+</style>
+<div class="row tab-style-button">
+    <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+        <div class="tab-items">
+
+        </div>
+
+
+
+        <div class="tab-items select-option high">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner11">
+                    <i class="fa fa-search searchicons "></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+            @*<div class="sraech-slider">
+
+
+
+            <div class="search-slider-inner">
+                <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+            </div>
+            <input id="searchList" type="text" class="form-control form-control-sm"
+                   placeholder="ID/Name" onkeyup="EmployeeSearch('TableHRTimeOffice')">
+        </div>*@
+
+
+        <a data-bs-toggle="tooltip" title=""
+           class="btn btn-excel"
+           data-bs-original-title="Export to Excel" onclick="ExportToExcelSalaryPopUp('@ViewBag.SalaryType','@ViewBag.RowName','ProcessReadinessCheck_Popup_Count');">
+            <i class="icon-xl far fa-file-excel"></i>
+        </a>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  ">
+    @Html.HiddenFor(Model => Model.ProcessReadinessCheck_Popup.Count)
+    <table id="TableHRTimeOffice" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+
+
+
+                @if (@ViewBag.RowName == "New Joins")
+                {
+                    <th scope="col" tooltip="Date Of Joining">DOJ</th>
+
+                }
+                @if (@ViewBag.RowName == "Resignation")
+                {
+                    <th scope="col" tooltip="">Resignation Date</th>
+                    <th scope="col" tooltip="Last Working Date">LWD</th>
+
+                }
+                @if (@ViewBag.RowName == "Loss Of Pay")
+                {
+                    <th scope="col" tooltip="">LOP Count</th>
+
+                }
+
+                @if (@ViewBag.RowName == "Joining Pending")
+                {
+                    <th scope="col" tooltip="Expected Date of joinig">Ex.DOJ</th>
+
+                }
+
+                @if (@ViewBag.RowName == "Resignation Pending")
+                {
+                    <th scope="col" tooltip="">Resignation Date</th>
+                    <th scope="col" tooltip="Last Working Date">LWD</th>
+                    <th scope="col" tooltip="">Stage</th>
+
+                }
+
+                @if (@ViewBag.RowName == "Job Transition Pending")
+                {
+                    <th scope="col" tooltip="Job Transition Type">Type</th>
+                }
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.ProcessReadinessCheck_Popup != null && Model.ProcessReadinessCheck_Popup.Count > 0)
+            {
+                for (int i = 0; i < Model.ProcessReadinessCheck_Popup.Count; i++)
+                {
+            <tr>
+                <td data-label="ID">
+                    @Model.ProcessReadinessCheck_Popup[i].ID
+                </td>
+                <td data-label="Employee Name">
+                    @Model.ProcessReadinessCheck_Popup[i].Name
+
+                </td>
+                <td data-label="Designation">@Model.ProcessReadinessCheck_Popup[i].Designation</td>
+                <td data-label="Department">
+                    @Model.ProcessReadinessCheck_Popup[i].Department
+                </td>
+                <td data-label="Location">@Model.ProcessReadinessCheck_Popup[i].Location</td>
+
+                @if (@ViewBag.RowName == "New Joins")
+                {
+                    <td data-label=">Date of joining">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].DOJ))</td>
+
+
+                }
+                @if (@ViewBag.RowName == "Resignation")
+                {
+                    <td data-label="Resignation date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].ResignationDate))</td>
+
+                    <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].LWD))</td>
+
+
+                }
+                @if (@ViewBag.RowName == "Loss Of Pay")
+                {
+                    <td data-label="lop count">@Model.ProcessReadinessCheck_Popup[i].LOP</td>
+                }
+
+                @if (@ViewBag.RowName == "Joining Pending")
+                {
+                    <td data-label="Expected DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].ExDOJ))</td>
+                }
+                @if (@ViewBag.RowName == "Resignation Pending")
+                {
+
+                    <td data-label="Resignation date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].ResignationDate))</td>
+
+                    <td data-label="Last working date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ProcessReadinessCheck_Popup[i].LWD))</td>
+
+
+
+
+                    <td data-label="Stage">@Model.ProcessReadinessCheck_Popup[i].Stage</td>
+
+
+                }
+                @if (@ViewBag.RowName == "Job Transition Pending")
+                {
+                    <td data-label="Job Transition Type">@Model.ProcessReadinessCheck_Popup[i].JobTransitionType</td>
+                }
+            </tr>
+
+
+                }
+            }
+        </tbody>
+
+
+    </table>
+</div>

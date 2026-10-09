@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.Master.UserRole
+<script>
+    $(document).ready(function () {
+        if ($('#moduleAllCheckBox').find('input[type="checkbox"]:checked').length == $('#moduleAllCheckBox').find('input[type="checkbox"]').length - 1) {
+            $('#moduleAll').prop('checked', true);
+        }
+
+    });
+</script>
+<style>
+  
+</style>
+<div class="row">
+    <div class="col-md-10">
+        <div class="step-outer mt-4">
+
+
+            <div class="step-item step-item-1 active  new-resposive-tab   ">
+                <label class="label-1">
+                    Module
+                </label>
+        
+                <span class="step-circle focused"></span>
+            </div>
+            <div class="step-item   step-item-2 step_new_2    new-resposive-tab ">
+                <label class="label-2">
+                    Sub Module
+                </label>
+                
+                <span class="step-circle step-circle-2      "></span>
+            </div>
+            <div class="step-item step-item-3   new-resposive-tab ">
+                <label class="label-3">
+                    Menu
+                </label>
+                <span class="step-circle step-circle-3       "></span>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+        <div class="row mt-3">
+            <div id="module" class="col-md-4">
+                <div class="ihits-table table-border user-role-module-list mb-0 vertical-scroll-250">
+                    <table id="moduleAllCheckBox">
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">Module</th>
+                                <th scope="col">
+                                    <div class="checkbox-inline" style=" padding-left: 9px;">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            <input type="checkbox"
+                                                   name="Checkboxes15" id="moduleAll" onclick="onAllClick('moduleAll','moduleAllCheckBox')">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.UserVsModule.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.UserVsModule.Count; i++)
+                                {
+                                    @Html.HiddenFor(m => m.UserVsModule[i].Code)
+                                    @Html.HiddenFor(m => m.UserVsModule[i].Name)
+                                    <tr>
+                                        <td data-label="Allowance">@Model.UserVsModule[i].Name</td>
+                                        <td data-label="Y/S">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                    @Html.CheckBoxFor(m => m.UserVsModule[i].Applicable, new { @onclick = "onChkBoxClick(this,'moduleAll','moduleAllCheckBox')" })
+                                                    @*, new { @onclick = "moduleChange(" + i + ")" }*@
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                    <div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-2">
+
+                <div id="modulebtn" class="arrow-outer">
+                    <button type="button" class="arrow-next" onclick="onNextClick('Module', '@Model.UserVsModule.Count','moduleAllCheckBox')">
+                        <i class="icon-xl fas fa-angle-double-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @*<div class="ihits-table table-border esi-setting-list-allowance-slider mb-0 vertical-scroll-300">
+                <table>
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Module</th>
+                            <th scope="col">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        <input type="checkbox" name="Checkboxes15" checked="checked">
+                                        <span></span>All
+                                    </label>
+                                </div>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                @Html.HiddenFor(m => m[i].Code)
+                                @Html.HiddenFor(m => m[i].Name)
+                                <tr>
+                                    <td data-label="Allowance">@Model[i].Name</td>
+                                    <td data-label="Y/S">
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                @Html.CheckBoxFor(m => m[i].Applicable, new { @onclick = "moduleChange(" + i + ")" })
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>*@

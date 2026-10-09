@@ -1,0 +1,111 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table EmpVsNominee-list-tab mb-2">
+            <table id="education">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Catgeory</th>
+                        <th scope="col">Relation</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Percentage</th>
+                        <th scope="col">Comments</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.HiddenFor(m => m.EmployeeGI)
+
+                    @if (Model.EmployeeVsNomineeList != null && Model.EmployeeVsNomineeList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.EmployeeVsNomineeList.Count; i++)
+                        {
+                            @if (Model.EmployeeVsNomineeList[i].EmpVsNomLogGI != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                            {
+                                <tr id="row_OI_@i">
+                                    <td data-label="Category">
+                                        @Html.HiddenFor(m => m.EmployeeVsNomineeList[i].NominationCategory.Code)
+                                        @Html.DisplayFor(m => m.EmployeeVsNomineeList[i].NominationCategory.Name)
+
+                                    </td>
+                                    <td data-label="Relation">
+                                        @Html.HiddenFor(m => m.EmployeeVsNomineeList[i].Relation.Code)
+                                        @Html.DisplayFor(m => m.EmployeeVsNomineeList[i].Relation.Name)
+                                    </td>
+
+
+                                    <td data-label="Name">
+
+                                        @Html.DisplayFor(m => m.EmployeeVsNomineeList[i].Name)
+                                    </td>
+
+                                    <td data-label="Percentage">
+
+
+                                        @Html.DisplayFor(m => m.EmployeeVsNomineeList[i].Percentage)
+                                    </td>
+                                    <td data-label="Comments">
+
+                                        @Html.DisplayFor(m => m.EmployeeVsNomineeList[i].Comments)
+                                    </td>
+                                    <td data-label="Edit">
+                                        <div class="small-btn-group">
+                                            <a id="addEmpVsNomineeDetails" type="button"
+                                               class="btn btn-icon btn-default icon-only" data-bs-toggle="tooltip" data-placement="top" title="Edit" onclick="onEmpVsNomineeSave('@Model.EmployeeVsNomineeList[i].NominationCategory.Code','@Model.EmployeeVsNomineeList[i].Relation.Code')">
+                                                <i class="icon-xl fas fa-pencil-alt"></i>
+                                            </a>
+
+                                            <a type="button"
+                                               class="btn btn-icon btn-delete icon-only" data-bs-toggle="tooltip" data-placement="top" title="Delete" onclick="onEmpVsNomineeDelete('@Model.EmployeeVsNomineeList[i].NominationCategory.Code','@Model.EmployeeVsNomineeList[i].Relation.Code')">
+                                                <i class="icon-xl far fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>No table data</td>
+                        </tr>
+                    }
+
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.EmployeeVsNomineeApprovalPending == false)
+        {
+            <label class="new_approval_pend_btn">
+                Approval Pending
+            </label>
+        }
+
+
+    </div>
+    <div class="col-md-6 ">
+        <button id="addEducationDetails" type="button" class="btn btn-default float-right " onclick="onEmpVsNomineeSave()">
+            <i class="icon-nm fas fa-plus"></i>Add
+            New
+        </button>
+        <div id="empNomineesave" class="hide">
+
+            @await Html.PartialAsync("_EmployeeVsNomineeSave", Model)
+        </div>
+    </div>
+</div>

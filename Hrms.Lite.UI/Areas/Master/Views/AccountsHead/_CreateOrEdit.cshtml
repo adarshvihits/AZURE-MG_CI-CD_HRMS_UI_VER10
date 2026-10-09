@@ -1,0 +1,163 @@
+﻿@model Hrms.Lite.Shared.Master.AccountsHead
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+    });
+
+
+</script>
+
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "AccountsHead", FormMethod.Post, new { id = "AccountsSave" }))
+{
+    <div id="adddeduction" class="slider-forms slider-forms-open AddDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Accounts Head
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Accounts Head Code
+                            <span class="Mandatory">*</span>
+                        </label>                       
+
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.TextBoxFor(Model => Model.AccountsHeadUserCode, new { @class = "form-control form-control-sm Acode", @placeholder = "Code", @onblur = "Validate(this,'code')" })
+                        <span id="code" class="text-danger"></span>
+
+
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm Aname", @placeholder = "Name", @onblur = "Validate(this,'name')", maxlength = "120" })
+                        <span id="name" class="text-danger"></span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>
+                            Short Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm Sname", @placeholder = "Short Name", @onblur = "Validate(this,'SName')" , maxlength = "5" })
+                        <span id="SName" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>
+                            Accounts Head Type
+                            <span class="Mandatory">*</span>
+                        </label>
+                     
+                        @Html.DropDownListFor(Model => Model.AccountsHeadCodeType, (SelectList)ViewBag.AccountHeadType, "--Select--", new { @class = "form-control form-control-sm Type", @onblur = "validate(this,'type')" })
+                        <span id="type" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-12 d-flex align-items-center">
+                    <div>Active</div>
+                    <label class="switch" onchange="ActiveInactiveValidationAccount('AccountHead','@Model.Code')">
+                        @Html.HiddenFor(m => Model.Code)
+                        @Html.CheckBoxFor(model => model.Active, new { @id = "accounts" })
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <label>Description</label>
+                        @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm ADescription", @placeholder = "Description", maxlength = "250" })
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+
+                            @Html.DisplayFor(Model => Model.Description)
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="AccountSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="AccountSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,129 @@
+@model Hrms.Lite.Shared.Recruitment.InterviewFeedbackSettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+    var selectedGrades = Model.SelectedGrades ?? new List<int>();
+    var questions = Model.QuestionList ?? new List<Hrms.Lite.Shared.Recruitment.InterviewFeedbackQuestion>();
+    var title = Model.Mode == "MODIFY" ? "Edit Question Set" + (string.IsNullOrEmpty(Model.SetID) ? "" : " · " + Model.SetID) : "Create Feedback Question Set";
+}
+<form id="feedbackSetForm" onsubmit="return false;">
+    <input type="hidden" id="FeedbackSetGI" value="@Model.FeedbackSetGI" />
+    <input type="hidden" id="FeedbackSetMode" value="@Model.Mode" />
+
+    <div id="FeedbackSetSlider" class="slider-forms FeedbackSet ifs-drawer">
+        <div class="slider-inner-style">
+            <div class="ifs-drawer-head">
+                <div>
+                    <h4>@title</h4>
+                    <div class="ifs-drawer-sub">Define the interview round, applicable grades and feedback questions</div>
+                </div>
+                <button type="button" class="ifs-drawer-close" onclick="closeFeedbackSetSlider()" title="Close">
+                    <i class="ki ki-close icon-xs"></i>
+                </button>
+            </div>
+
+            <div class="ifs-drawer-body">
+
+                <!-- Question set details -->
+                <div class="ifs-section">
+                    <div class="ifs-section-title">Question Set Details</div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label>Question Set Name</label>
+                                <input type="text" id="FeedbackSetName" class="form-control" maxlength="200"
+                                       placeholder="e.g. Retail Sales – First Round Screening" value="@Model.Name"
+                                       onchange="validateById('#FeedbackSetName', 'ifsName')" />
+                                <span id="ifsName"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group mb-0">
+                                <label>Interview Round</label>
+                                <div class="radio-inline ifs-radio-field">
+                                    <label class="radio radio-outline radio-primary">
+                                        <input type="radio" name="FeedbackRound" value="1" @(Model.RoundType != 2 ? "checked" : "") />
+                                        <span></span>First Round
+                                    </label>
+                                    <label class="radio radio-outline radio-primary">
+                                        <input type="radio" name="FeedbackRound" value="2" @(Model.RoundType == 2 ? "checked" : "") />
+                                        <span></span>Second Round
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applicable grades -->
+                <div class="ifs-section">
+                    <div class="ifs-section-title">Applicable Grades</div>
+                    <div class="ifs-section-note">Select every grade this question set applies to — multiple grades can share the same set of questions.</div>
+                    <div class="form-group mb-0">
+                        <label>Grades</label>
+                        <select id="FeedbackSetGrades" class="multiselectDropdownFields form-control-multiselect form-control-sm" multiple="multiple">
+                            @if (Model.GradeList != null)
+                            {
+                                foreach (var grade in Model.GradeList)
+                                {
+                                    <option value="@grade.Code" selected="@selectedGrades.Contains(grade.Code)">@grade.Name</option>
+                                }
+                            }
+                        </select>
+                        <span id="ifsGrades"></span>
+                    </div>
+                </div>
+
+                <!-- Feedback questions -->
+                <div class="ifs-section border-0">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="ifs-section-title mb-0">Feedback Questions</div>
+                        <span class="btn-notification ifs-question-count">@questions.Count</span>
+                    </div>
+                    <div class="ifs-section-note">Add the questions panel members will answer for this round. Switch off Active to stop asking a question.</div>
+
+                    <div class="ifs-question-head">
+                        <label>Question</label>
+                        <label class="text-center">Active</label>
+                        <span></span>
+                    </div>
+                    <div id="FeedbackQuestionRows">
+                        @foreach (var question in questions)
+                        {
+                            <div class="ifs-question-row">
+                                <textarea class="form-control form-control-sm ifs-question" rows="2" maxlength="1000" placeholder="Enter feedback question">@question.Question</textarea>
+                                <div class="ifs-active-cell">
+                                    <label class="switch" title="Active">
+                                        <input type="checkbox" class="ifs-active" @(question.Active ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <a class="ifs-remove-row" title="Remove question" onclick="removeFeedbackQuestion(this)">
+                                    <i class="ki ki-close icon-xs"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <span id="ifsQuestions"></span>
+
+                    <a class="btn btn-sm ifs-add-question mt-3" onclick="addFeedbackQuestion()">
+                        <i class="fas fa-plus"></i> Add Question
+                    </a>
+                </div>
+            </div>
+
+            <div class="ifs-drawer-foot">
+                <a class="btn ifs-btn-cancel mr-2" onclick="closeFeedbackSetSlider()">Cancel</a>
+                @if (Model.Mode == "CREATE" && CurrentUserRoleActions.Create == true)
+                {
+                    <a class="btn btn-default" onclick="feedbackSetSave('Save')">Save Question Set</a>
+                }
+                @if (Model.Mode == "MODIFY" && CurrentUserRoleActions.Modify == true)
+                {
+                    <a class="btn btn-default" onclick="feedbackSetSave('Modify')">Update Question Set</a>
+                }
+            </div>
+        </div>
+    </div>
+</form>

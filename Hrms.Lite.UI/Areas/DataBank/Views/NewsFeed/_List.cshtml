@@ -1,0 +1,60 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.NewsFeed
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color  odd-even mobile-responsive-table NewsFeed-List">
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">News Feed </th>
+                <th scope="col">Details</th>
+                <th scope="col">Visible From </th>
+                <th scope="col">Visible To</th>
+                <th scope="col" data-bs-toggle="tooltip" title=""
+                    data-bs-original-title="Acceptance Employee Count">
+                    Acc. Emp Count
+                </th>
+                <th scope="col"> Actions</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.NewsFeedList != null && Model.NewsFeedList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.NewsFeedList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Policy Name">@Model.NewsFeedList[i].NewsFeedname</td>
+                        <td data-label="Description">
+                            @Model.NewsFeedList[i].Description
+                        </td>
+                        <td data-label="Visible From">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.NewsFeedList[i].VisibleFrom))</td>
+                        <td data-label="Visible To">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.NewsFeedList[i].VisibleTo))</td>
+                        <td data-label="Acceptance Employee Count">@Model.NewsFeedList[i].EmpCount</td>
+                        <td data-label="Actions">
+                            <a data-bs-toggle="tooltip" title="" id="viewgrievance" type="button" class="btn btn-icon btn-eye icon-only pr-2" data-bs-original-title="" 
+                               onclick="showDocument('@Model.NewsFeedList[i].Attachment.FileName', '@Model.NewsFeedList[i].Attachment.AbsoluteUri')">
+                                <i class="icon-xl far fa-eye"></i>
+                            </a>
+                            <a data-bs-toggle="tooltip" title="Edit"
+                               class="btn btn-icon btn-edit icon-only" onclick="Edit('@Model.NewsFeedList[i].NewsFeedGI')">
+                                <i class="icon-xl fas fa-pencil-alt"></i>
+                            </a>
+                            <a data-bs-toggle="tooltip" title="Delete" id="deleteskilltype"
+                               type="button"
+                               class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="confirmDelete('@Model.NewsFeedList[i].NewsFeedGI')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        </td>
+
+
+                    </tr>
+
+
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

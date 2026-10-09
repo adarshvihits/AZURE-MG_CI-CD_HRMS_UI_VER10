@@ -1,0 +1,81 @@
+﻿@model Hrms.Lite.Shared.Master.RoundOffSettings
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border odd-even vertical-scroll-90-per mobile-responsive-table roundoff_settings_list">
+    @Html.HiddenFor(model => Model.TabName)
+    @Html.HiddenFor(model => Model.Details.Count)
+    <table id="AllowDedtable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col"> Name</th>
+                <th scope="col"> Type</th>
+                <th scope="col" class="text-left">Round Off</th>
+                <th scope="col">Action</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Details != null && Model.Details.Count > 0)
+                {
+                    for (int i = 0; i < Model.Details.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.Details[i].ParameterCode)
+                            <td data-label="Name"> @Model.Details[i].ParameterName </td>
+                            <td data-label="Name"> @Model.Details[i].Type </td>
+
+
+                            <td data-label="Round Off">
+
+
+                                <div class="form-group">
+                                    <span id="amtLabel2_@i">@Model.Details[i].RoundOffName</span><span id="amtTxtbox2_@i" class="hide">
+
+                                        @Html.DropDownListFor(Model => Model.Details[i].RoundOffCode, (SelectList)ViewBag.RoundOff, "--Select RoundOff--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'roundOff')", @style = "width:100%;" })
+                                        <span id="roundoffSettings"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+
+
+                            <td data-label="Edit">
+                                <span id="editbt2_@i">
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="ceedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onEditClick(@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                </span>
+
+
+                                <span id="updateCancel2_@i" class="hide">
+                                    <a data-bs-toggle="tooltip" title="Update"
+                                       id="cupdate"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onUpdateClick(@i)">
+                                        <i class="icon-xl fas fa-sync-alt"></i>
+                                    </a>
+                                    <a data-bs-toggle="tooltip" title="Update"
+                                       id="ccancel"
+                                       class="btn btn-icon btn-cancel icon-only" onclick="onCancelClick(@i)">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </a>
+                                </span>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

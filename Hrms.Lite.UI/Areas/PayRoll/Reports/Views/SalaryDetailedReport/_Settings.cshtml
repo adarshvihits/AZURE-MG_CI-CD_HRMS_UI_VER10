@@ -1,0 +1,72 @@
+﻿<style>
+    .k-grid-content table thead tr th:nth-child(1),
+    .k-grid-content table tbody tr td:nth-child(1) {
+        text-align: center;
+    }
+</style>
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.PayRoll.Reports;
+
+<div class="vertical-scroll-250">
+
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            @(
+                Html.Kendo().Grid<Hrms.Lite.Shared.PayRoll.Reports.AlwSettings>()
+                .Name("allowance")
+                .Columns(columns =>
+                {
+                    columns.Select().Width(50).HtmlAttributes(new { style = "" });
+                    columns.Bound(e => e.AllowanceCode).Visible(false);
+                    columns.Bound(e => e.Name).Title("Allowance");
+                   
+                })
+                .Events(events => events
+                .DataBound("onAlwDataBound")
+                )
+
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(50)
+                .Read(read => read.Action("GetAlwSettings", "SalaryDetailedReport"))
+                )
+                .Scrollable().HtmlAttributes(new { style = "height:330px;" })
+                //  .ToClientTemplate()
+                )
+
+        </div>
+
+        <div class="col-md-6">
+            @(
+                Html.Kendo().Grid<Hrms.Lite.Shared.PayRoll.Reports.DedSettings>()
+                .Name("deductions")
+                .Columns(columns =>
+                {
+                    columns.Select().Width(50).HtmlAttributes(new { style = "" });
+                    columns.Bound(e => e.DeductionCode).Visible(false);
+                    columns.Bound(e => e.Name).Title("Deduction");
+                })
+                .Events(events => events
+                .DataBound("onDedDataBound")
+                )
+
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(50)
+                .Read(read => read.Action("GetDedSettings", "SalaryDetailedReport"))
+                )
+                .Scrollable().HtmlAttributes(new { style = "height:330px;" })
+                
+                )
+
+
+        </div>
+        <button type="button" onclick="saveSelectedSkills()" class="btn btn-default btn-sm float-left">
+            Apply
+        </button>
+    </div>
+
+</div>

@@ -1,0 +1,107 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.Master.Holiday
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InActiveCount");
+        $('.PendingTabCount').html("@Model.PendingCount");
+
+        //$('#HolidayTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table holiday-master-list">
+    @Html.HiddenFor(m => m.HolidayList.Count)
+    <table id="HolidayTable" class="common-table layout-ihits dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Holiday Description</th>
+                <th scope="col">Type</th>
+                <th scope="col">Date</th>
+                <th scope="col">Holiday Group</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.HolidayList != null && Model.HolidayList.Count > 0)
+                {
+                    for (int i = 0; i < Model.HolidayList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.HolidayList[i].EditActive)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+
+                            <td data-label="HolidayDiscription">@Model.HolidayList[i].HolidayDescription</td>
+                            <td data-label="Type">@Model.HolidayList[i].HolidayType.Name</td>
+                            <td data-label="Date ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.HolidayList[i].HolidayDate))</td>
+                            <td data-label="HolidayGroup">@Model.HolidayList[i].HolidayGroup.Name</td>
+                            <td data-label="Actions">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit" id="editholiday"
+                                           class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.HolidayList[i].GI', '@Model.HolidayList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit" id="editholiday"
+                                           class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.HolidayList[i].GI', '@Model.HolidayList[i].LogGI',@i);
+                                           swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="holidaydelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick( '@Model.HolidayList[i].GI', '@Model.HolidayList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="holidaydelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.HolidayList[i].GI', '@Model.HolidayList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

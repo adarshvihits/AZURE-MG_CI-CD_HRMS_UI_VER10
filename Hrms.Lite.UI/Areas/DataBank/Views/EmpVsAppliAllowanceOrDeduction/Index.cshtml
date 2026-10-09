@@ -1,0 +1,240 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmpVsAppliAllowanceOrDeduction
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .card.card-custom > .card-body {
+        padding: 18px 30px 115px 20px !important;
+    }
+</style>
+<script src="~/scripts/DataBank/EmpVsAppliAllowanceOrDeduction.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Vs Applicable Allowance or Deduction</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Employee Vs Applicable Allowance or Deduction
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "EmpVsAppAllowOrDeduction" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+                                <div class="tab-items">
+
+                                    <div class="row-outer pb-2 " style="width:180px">
+                                        <label>Type</label>
+
+                                        <div class="form-group ">
+                                            @Html.DropDownListFor(m => m.Type.Code, (IEnumerable<SelectListItem>)ViewBag.Type, "--Select Type--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Type');OnTypeChange(this,'Type')" })
+
+                                            <span id="Type"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-items pl-3">
+                                    <div class="row-outer pb-2 " style="width:180px">
+                                        <label id="AllowOrDed"></label>
+
+                                        <div class="form-group ">
+                                            @Html.DropDownListFor(m => m.AllowanceOrDeduction.Code, (SelectList)ViewBag.AllowOrDeduction, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'AllowOrDeduction')" })
+                                            <span id="AllowOrDeduction"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-items pt-2">
+                                    <div class="d-flex">
+
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-success">
+                                                @Html.RadioButtonFor(m => m.radioSelection, "0")
+                                                <span></span>All
+                                            </label>
+                                            <label class="radio radio-outline radio-success">
+                                                @Html.RadioButtonFor(m => m.radioSelection, "1")
+                                                <span></span>Yes
+                                            </label>
+                                            <label class="radio radio-outline radio-success">
+                                                @Html.RadioButtonFor(m => m.radioSelection, "2")
+                                                <span></span>No
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2  align-items-center d-flex justify-content-center">
+                                    <a href="#" type="button"
+                                       class="btn btn-default float-right mobile-full-width mt-5" onclick="getList()">
+                                        Proceed
+                                    </a>
+                                </div>
+
+
+                                <div class="tab-items select-option">
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="AlwDedEmpSearch" class="form-control form-control-sm"
+                                               placeholder="Search Employee ID" onkeyup="searchRows()">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+
+                                    <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                    <button type="button" data-bs-toggle="tooltip" title="Import From Excel" onclick="validateDropdowns()"
+                                            class="btn btn-excel ml-0 import">
+                                        <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                    </button>
+
+                                </div>
+                                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content popup">
+                                            <div class="modal-header" style="padding:10px">
+                                                <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatchedlist').html('');$('#Excel_FileData').val()">
+                                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body pt-3">
+                                                <div class="colums_list pb-1">
+                                                    Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                    Employee ID,
+                                                    Employee Name,
+                                                    Applicability ( Applicability Should be 'Y' OR 'N')<br />
+                                                    @*Columns Needed :- Employee ID, Employee Name, Applicability*@
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="file-upload-form-group">
+                                                            <label for="formFileMultiple" class="form-label">
+                                                                Attach
+                                                                File
+                                                                <span class="Mandatory">*</span>
+                                                            </label>
+
+                                                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only .xlsx files are
+                                            allowed , File size less than 1 MB.">
+                                                                <div class="small-btn-group">
+
+                                                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                                </div>
+                                                                <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                                @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                                @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+                                                            </div>
+
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div id="Unmatchedlist">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Table Section -->
+                <div id="AllowOrDedList">
+                    @await Html.PartialAsync("_SettingsList")
+                </div>
+
+
+                        <!-- Table Setion End -->
+
+                        <div class="row card-footer-bottom-fixed border-none">
+                            <div class="col-md-6">
+                                <div class="row-count1">
+                                 
+                                     
+                                  
+                                        <span class="row-count"><b>Total Rows:<span id="rwCnt">0</span></b></span>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-md-6 align-right">
+                                <a type="button"
+                                   class="btn btn-default  mobile-full-width" onclick="Save()">
+                                    Save
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <!--end: Datatable-->
+                    }
+                    <div id="filterSlider">
+
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

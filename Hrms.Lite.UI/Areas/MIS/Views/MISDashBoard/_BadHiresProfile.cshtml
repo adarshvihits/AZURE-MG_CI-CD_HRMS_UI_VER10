@@ -1,0 +1,624 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@*@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+@using Kendo.Mvc.UI
+
+
+<script>
+    function onPlotAreaOver(e) {
+        $("#bhMonth").css("cursor", "pointer");
+    }
+    function onPlotAreaClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Month', code: 0 },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Month&name=Month&code=0';
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesAgeOver(e) {
+        $("#bhAge").css("cursor", "pointer");
+    }
+    function onSeriesAgeClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Age', code: e.dataItem.years },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Age&name=Age' + e.dataItem.years + '&code=' + e.dataItem.years;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+    function onGenderSeriesHover(e) {
+        $("#bhGender").css("cursor", "pointer");
+    }
+    function onGenderSeriesClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Gender', code: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Gender&name=' + e.dataItem.gender + '&code=' + e.dataItem.code;
+
+
+                // $("#MisDashBoard").html(result);
+                // $("#joiningCount").html(result.joiningCount);
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+
+    function onSeriesDptOver(e) {
+        $("#bhDepartment").css("cursor", "pointer");
+    }
+    function onSeriesDptClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Department', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr +  '&type=Department&name=' + e.dataItem.fullname + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesLcnOver(e) {
+        $("#bhLocation").css("cursor", "pointer");
+    }
+    function onSeriesLcnClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Location', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Location&name=' + e.dataItem.fullname + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesCatOver(e) {
+        $("#bhCategory").css("cursor", "pointer");
+    }
+    function onSeriesCatClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Category', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Category&name=' + e.dataItem.category + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesGrdOver(e) {
+        $("#bhGrade").css("cursor", "pointer");
+    }
+    function onSeriesGrdClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Grade', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Grade&name=' + e.dataItem.grade + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesDivOver(e) {
+        $("#bhDivision").css("cursor", "pointer");
+    }
+    function onSeriesDivClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Division', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Division&name=' + e.dataItem.division + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesRgnOver(e) {
+        $("#bhRegion").css("cursor", "pointer");
+    }
+    function onSeriesRgnClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYr = $("#finYear").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 129, type: 'Region', code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=129&groupCom=' + groupCom + '&financialYr=' + financialYr + '&type=Region&name=' + e.dataItem.region + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        if (axis.categories != undefined) {
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+    }
+</script>
+
+
+<script id="bhmonth" type="text/x-kendo-template">
+    @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresMonth>()
+                                                .Name("bhMonth")
+                                            .Title("")
+                                                        .Events(e => e.DataBound("sortData").PlotAreaHover("onPlotAreaOver")
+                 .PlotAreaClick("onPlotAreaClick")
+                                                        )
+                                            .Legend(legend => legend
+                                                .Position(ChartLegendPosition.Top)
+                                            )
+                                                        .DataSource(ds => ds.Read(read => read.Action("GetBadHiresMonth", "MISDashBoard").Data("getValBH")))
+                                            .Series(series =>
+                                            {
+                                                series.Line(model => model.count).Name("Bad Hires").CategoryField("month").Color("\\#6cf57e");
+
+
+                                            })
+                                            .ChartArea(ch => ch.Width(750).Height(250))
+                                            .CategoryAxis(axis => axis
+                                                .Labels(labels => labels.Rotation(0))
+                                                .Crosshair(c => c.Visible(true))
+                                            )
+                                            .ValueAxis(axis => axis.Numeric()
+                                                .Labels(labels => labels.Format("{0:N0}"))
+
+                                            )
+                                            .Tooltip(tooltip => tooltip
+                                                .Visible(true)
+                                                .Shared(true)
+                                                .Format("{0:N0}")
+                                            )
+
+                                            .ToClientTemplate()
+                    )
+</script>
+
+<script id="bhgender" type="text/x-kendo-template">
+    @(
+            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresGender>()
+                                                                  .Name("bhGender")
+                                                                  .Title("")
+                                                                  .Events(e => e.SeriesClick("onGenderSeriesClick")
+                                                                  .SeriesHover("onGenderSeriesHover"))
+                                                                  .Legend(legend => legend
+
+                                                                  .Position(ChartLegendPosition.Right)
+                                                                  .Orientation(ChartLegendOrientation.Vertical)
+                                                                  .Visible(true)
+                                                                  )
+                                                                  .ChartArea(chart => chart
+                                                                  .Background("transparent")
+                                                                  )
+                                                                  .DataSource(ds =>
+                                                                  {
+                                                                      ds.Read(read => read.Action("GetBadHiresGender", "MISDashBoard").Data("getValBH"));
+                                                                  }
+                                                                  )
+                                                                  .Series(series => series
+
+                                                                      .Donut(model => model.count, model => model.gender).HoleSize(40).Size(40)
+
+                                                                  .Labels(labels => labels
+                                                                  .Template("\\#= dataItem.gender \\# - \\#= dataItem.count \\#").Visible(true)
+                                                                  //.Template("\\#= (dataItem.gender) \\# - \\#= (dataItem.count)#\\")
+                                                                  .Position(ChartSeriesLabelsPosition.OutsideEnd)
+                                                                  .Background("transparent")
+                                                                  .Visible(true)
+                                                                  )
+                                                                  )
+                                                       .HtmlAttributes(new { style = "height:100%;width:100%;" })
+                                                       .SeriesColors("\\#166f99", "\\#2185b4")
+
+                                                      .ToClientTemplate()
+                                                  )
+</script>
+
+<script id="bhage" type="text/x-kendo-template">
+    @(
+                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresAge>()
+
+                                                           .Name("bhAge")
+
+                                                               .Events(e => e.SeriesOver("onSeriesAgeOver"))
+                                                  .Events(e => e.SeriesClick("onSeriesAgeClick"))
+
+                                                           .Title("")
+
+                                                               // .Events(e => e.SeriesClick("onSeriesClick"))
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom)
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                           .DataSource(ds => ds.Read(read => read.Action("GetBadHiresAge", "MISDashBoard").Data("getValBH")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Bad Hires").CategoryField("years").Color("\\#89CFF0")
+                                                                        .Tooltip(tooltip => tooltip.
+                                                                                         Template("Age(\\#= (dataItem.years)\\#) : \\#= (dataItem.count)\\# ").Visible(true));
+                                                           })
+                                                       .CategoryAxis(axis => axis
+                                                       //.Labels(labels => labels.Rotation(0))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       //.Rotation(0)
+                                                       )
+                                                       //.MajorUnit(200)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+
+<script id="bhdepartment" type="text/x-kendo-template">
+    @(
+                            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresDepartment>()
+                                                    .Name("bhDepartment")
+                                                .Title("")
+                                                   .Events(e => e.SeriesHover("onSeriesDptOver")
+                                                .SeriesClick("onSeriesDptClick"))
+                                                .Legend(legend => legend
+                                                    .Position(ChartLegendPosition.Top)
+                                                )
+                                                                .DataSource(ds => ds.Read(read => read.Action("GetBadHiresDepartment", "MISDashBoard").Data("getValBH")))
+                                                .Series(series =>
+                                                {
+                                                    //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                    series.Column(model => model.count).Name("Bad Hires").CategoryField("department").Color("\\#89CFF0")
+                                                                     .Tooltip(tooltip => tooltip.
+                                                                                     Template("(\\#= (dataItem.fullname)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                })
+                                                .ChartArea(ch => ch.Width(550).Height(250))
+                                                .CategoryAxis(axis => axis
+                                                    .Labels(labels => labels.Rotation(0))
+                                                    .Crosshair(c => c.Visible(true))
+                                                )
+                                                .ValueAxis(axis => axis.Numeric()
+                                                    .Labels(labels => labels.Format("{0:N0}"))
+
+                                                )
+                                                .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                    .Shared(true)
+                                                    .Format("{0:N0}")
+                                                )
+
+                                                .ToClientTemplate()
+                        )
+</script>
+
+<script id="bhlocation" type="text/x-kendo-template">
+    @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresLocation>()
+                                                        .Name("bhLocation")
+                                                    .Title("")
+                                                       .Events(e => e.SeriesHover("onSeriesLcnOver")
+                                             .SeriesClick("onSeriesLcnClick"))
+                                                    .Legend(legend => legend
+                                                        .Position(ChartLegendPosition.Top)
+                                                    )
+                                                                    .DataSource(ds => ds.Read(read => read.Action("GetBadHiresLocation", "MISDashBoard").Data("getValBH")))
+                                                    .Series(series =>
+                                                    {
+                                                        //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                            series.Column(model => model.count).Name("Bad Hires").CategoryField("location").Color("\\#89CFF0")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                         Template("(\\#= (dataItem.fullname)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                    })
+                                                    .ChartArea(ch => ch.Width(550).Height(250))
+                                                    .CategoryAxis(axis => axis
+                                                        .Labels(labels => labels.Rotation(0))
+                                                        .Crosshair(c => c.Visible(true))
+                                                    )
+                                                    .ValueAxis(axis => axis.Numeric()
+                                                        .Labels(labels => labels.Format("{0:N0}"))
+
+                                                    )
+                                                    .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Shared(true)
+                                                        .Format("{0:N0}")
+                                                    )
+
+                                                    .ToClientTemplate()
+                            )
+</script>
+
+<script id="bhdivision" type="text/x-kendo-template">
+    @(
+                                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresDivision>()
+                                                            .Name("bhDivision")
+                                                        .Title("")
+                                                          .Events(e => e.SeriesHover("onSeriesDivOver")
+                                         .SeriesClick("onSeriesDivClick"))
+                                                        .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Top)
+                                                        )
+                                                                        .DataSource(ds => ds.Read(read => read.Action("GetBadHiresDivision", "MISDashBoard").Data("getValBH")))
+                                                        .Series(series =>
+                                                        {
+                                                            //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                                series.Column(model => model.count).Name("Bad Hires").CategoryField("division").Color("\\#89CFF0")
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                             Template("(\\#= (dataItem.division)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                        })
+                                                        .ChartArea(ch => ch.Width(550).Height(250))
+                                                        .CategoryAxis(axis => axis
+                                                            .Labels(labels => labels.Rotation(0))
+                                                            .Crosshair(c => c.Visible(true))
+                                                        )
+                                                        .ValueAxis(axis => axis.Numeric()
+                                                            .Labels(labels => labels.Format("{0:N0}"))
+
+                                                        )
+                                                        .Tooltip(tooltip => tooltip
+                                                            .Visible(true)
+                                                            .Shared(true)
+                                                            .Format("{0:N0}")
+                                                        )
+
+                                                        .ToClientTemplate()
+                                )
+</script>
+
+<script id="bhcategory" type="text/x-kendo-template">
+    @(
+                                            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresCategory>()
+                                                                .Name("bhCategory")
+                                                            .Title("")
+                                                               .Events(e => e.SeriesHover("onSeriesCatOver")
+                                     .SeriesClick("onSeriesCatClick"))
+                                                            .Legend(legend => legend
+                                                                .Position(ChartLegendPosition.Top)
+                                                            )
+                                                                            .DataSource(ds => ds.Read(read => read.Action("GetBadHiresCategory", "MISDashBoard").Data("getValBH")))
+                                                            .Series(series =>
+                                                            {
+                                                                    series.Column(model => model.count).Name("Bad Hires").CategoryField("category").Color("\\#89CFF0")
+                                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                 Template("(\\#= (dataItem.category)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                            })
+                                                            .ChartArea(ch => ch.Width(550).Height(250))
+                                                            .CategoryAxis(axis => axis
+                                                                .Labels(labels => labels.Rotation(0))
+                                                                .Crosshair(c => c.Visible(true))
+                                                            )
+                                                            .ValueAxis(axis => axis.Numeric()
+                                                                .Labels(labels => labels.Format("{0:N0}"))
+
+                                                            )
+                                                            .Tooltip(tooltip => tooltip
+                                                                .Visible(true)
+                                                                .Shared(true)
+                                                                .Format("{0:N0}")
+                                                            )
+
+                                                            .ToClientTemplate()
+                                    )
+</script>
+
+<script id="bhgrade" type="text/x-kendo-template">
+    @(
+                                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresGrade>()
+                                                                    .Name("bhGrade")
+                                                                .Title("")
+                                                                      .Events(e => e.SeriesHover("onSeriesGrdOver")
+                                    .SeriesClick("onSeriesGrdClick"))
+                                                                .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Top)
+                                                                )
+                                                                                .DataSource(ds => ds.Read(read => read.Action("GetBadHiresGrade", "MISDashBoard").Data("getValBH")))
+                                                                .Series(series =>
+                                                                {
+                                                                        series.Column(model => model.count).Name("Bad Hires").CategoryField("grade").Color("\\#89CFF0")
+                                                                                     .Tooltip(tooltip => tooltip.
+                                                                                                     Template("(\\#= (dataItem.grade)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                                })
+                                                                .ChartArea(ch => ch.Width(550).Height(250))
+                                                                .CategoryAxis(axis => axis
+                                                                    .Labels(labels => labels.Rotation(0))
+                                                                    .Crosshair(c => c.Visible(true))
+                                                                )
+                                                                .ValueAxis(axis => axis.Numeric()
+                                                                    .Labels(labels => labels.Format("{0:N0}"))
+
+                                                                )
+                                                                .Tooltip(tooltip => tooltip
+                                                                    .Visible(true)
+                                                                    .Shared(true)
+                                                                    .Format("{0:N0}")
+                                                                )
+
+                                                                .ToClientTemplate()
+                                        )
+</script>
+
+<script id="bhregion" type="text/x-kendo-template">
+    @(
+                                                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHiresRegion>()
+                                                                        .Name("bhRegion")
+                                                                    .Title("")
+                                                                          .Events(e => e.SeriesHover("onSeriesRgnOver")
+                                  .SeriesClick("onSeriesRgnClick"))
+                                                                    .Legend(legend => legend
+                                                                        .Position(ChartLegendPosition.Top)
+                                                                    )
+                                                                                    .DataSource(ds => ds.Read(read => read.Action("GetBadHiresRegion", "MISDashBoard").Data("getValBH")))
+                                                                    .Series(series =>
+                                                                    {
+                                                                            series.Column(model => model.count).Name("Bad Hires").CategoryField("region").Color("\\#89CFF0")
+                                                                                         .Tooltip(tooltip => tooltip.
+                                                                                                         Template("(\\#= (dataItem.region)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                                    })
+                                                                    .ChartArea(ch => ch.Width(550).Height(250))
+                                                                    .CategoryAxis(axis => axis
+                                                                        .Labels(labels => labels.Rotation(0))
+                                                                        .Crosshair(c => c.Visible(true))
+                                                                    )
+                                                                    .ValueAxis(axis => axis.Numeric()
+                                                                        .Labels(labels => labels.Format("{0:N0}"))
+
+                                                                    )
+                                                                    .Tooltip(tooltip => tooltip
+                                                                        .Visible(true)
+                                                                        .Shared(true)
+                                                                        .Format("{0:N0}")
+                                                                    )
+
+                                                                    .ToClientTemplate()
+                                            )
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(6)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Bad Hires Month Wise")).BodyTemplateId("bhmonth").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Gender Wise")).BodyTemplateId("bhgender").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Age Wise")).BodyTemplateId("bhage").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Department Wise")).BodyTemplateId("bhdepartment").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Location Wise")).BodyTemplateId("bhlocation").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Division Wise")).BodyTemplateId("bhdivision").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Category Wise")).BodyTemplateId("bhcategory").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Grade Wise")).BodyTemplateId("bhgrade").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Bad Hires Region Wise")).BodyTemplateId("bhregion").ColSpan(3).RowSpan(2);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

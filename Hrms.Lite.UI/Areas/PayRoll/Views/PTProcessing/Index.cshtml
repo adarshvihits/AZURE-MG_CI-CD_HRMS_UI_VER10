@@ -1,0 +1,240 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PTProcessing
+
+@{
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/PayRoll/PTProcessing.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        fillData();
+    });
+</script>
+
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">PT Processing</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area =""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        PT Processing
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="form-group filter-combobox pt-2 pl-2  " style="width: 148px;">
+                                <label>Month</label>
+                                @Html.DropDownListFor(Model => Model.Month.Code, (SelectList)ViewBag.Month, "--Select--", new { @class = "form-control form-control-sm ",onchange= "validate(this,'mCode');fillData()" })
+                                <span id="mCode"></span>
+                            </div>
+                            <div class="form-group filter-combobox pt-2 pl-4  " style="width: 140px;">
+                                <label>PT Group</label>
+                                @Html.DropDownListFor(Model => Model.PTGroup.Code, (SelectList)ViewBag.PTGroup, "--Select--", new { @class = "form-control form-control-sm ", @onchange = "GetData(this);validate(this,'ptGrp')" })
+                                <span id="ptGrp"></span>
+                            </div>
+
+
+                            <div class="d-flex hide" id="hideDisplayData">
+
+
+                                <div class="form-group filter-combobox pt-4 pl-5  d-flex align-items-center">
+                                    <div class="row-outer">
+                                        <label class="">
+                                            PT Processed For :
+
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <div class="form-group filter-combobox pt-4 pl-5">
+                                    <div class="row-outer">
+                                        <label class="view-title">
+                                            From
+
+                                        </label>
+                                        <div class="view-details">
+                                            <span class="fromdate"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group filter-combobox pt-4 pl-5  ">
+                                    <div class="row-outer">
+                                        <label class="view-title">
+                                            To
+
+                                        </label>
+                                        <div class="view-details">
+                                            <span class="todate"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group filter-combobox pt-4 pl-5  ">
+                                    <div class="row-outer">
+                                        <label class="view-title">
+                                            No. Of Salary Months
+
+                                        </label>
+                                        <div class="view-details">
+
+                                            <span class="salary"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group filter-combobox pt-4 pl-5  ">
+                                    <div class="row-outer">
+                                        <label class="view-title">
+                                            Duration
+
+                                        </label>
+                                        <div class="view-details">
+
+                                            <span class="duration"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="tab-items select-option highs mr-0 mt-5">
+                                <div class="button-group float-left">
+                                    <button id="BatchUpdate" type="button"
+                                            class="btn btn-default btn-sm mr-5" onclick="OnBatchUpdate()">
+                                        Batch Update
+                                    </button>
+                                </div>
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+
+
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                        data-bs-original-title="Export to Excel"onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+                        <div id="PTProcessingList" style="width:100%">
+                            @await Html.PartialAsync("_PTProcessingList.cshtml", Model)
+                        </div>
+                        <div id="BatchUpdateSlider">
+
+                        </div>
+                      <div id="editSlider">
+
+                      </div>
+                        <div id="filterSlider">
+                            @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.filter)
+                        </div>
+
+                        <div class="row card-footer-bottom-fixed align-right">
+
+                            <div class="col-md-12">
+
+                                <a id="addPlanning" type="button"
+                                   class="btn btn-default mobile-full-width ">
+
+                                    Process
+                                </a>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer bg-white d-flex flex-lg-column" id="kt_footer">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
+            <!--begin::Copyright-->
+            <div class="text-dark order-2 order-md-1">
+                <span class="text-muted font-weight-bold mr-2">2021©</span>
+                <a href="#" target="_blank" class="text-dark-75 text-hover-primary">
+                    ihits-table
+                    technologies
+                </a>
+            </div>
+            <!--end::Copyright-->
+            <!--begin::Nav-->
+            <div class="nav nav-dark">
+                <a href="#" target="_blank" class="nav-link pl-0 pr-5">About</a>
+                <a href="#" target="_blank" class="nav-link pl-0 pr-5">Team</a>
+                <a href="#" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
+            </div>
+            <!--end::Nav-->
+        </div>
+        <!--end::Container-->
+    </div>
+</div>

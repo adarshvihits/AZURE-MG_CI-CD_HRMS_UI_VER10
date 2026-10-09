@@ -1,0 +1,143 @@
+﻿
+@model Hrms.Lite.Shared.TDS.TDSDeclarationReport
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>
+(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TDS/TDSDeclarationReport.js"></script>
+
+
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">TDS Declaration Report</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            TDS Declaration Report
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+
+
+                                <div class="tab-items">
+
+                                    <div class="row-outer pb-2 " style="width:180px">
+                                        <label>Assessment Year</label>
+
+                                        <div class="form-group ">
+                                            @Html.DropDownListFor(Model => Model.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, new { @class = "form-control form-control-sm", @onchange = "fillData();validate(this,'Assessmnt_year')" })
+                                            <span id="assessmnt"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group filter-combobox mr-10 highs mb-0 mt-2">
+
+                                </div>
+
+
+                              
+
+                            </div>
+                        </div>
+                        <div id="DeclarationList">
+                            @await Html.PartialAsync("~/Areas/TDS/Reports/Views/TDSDeclarationReport/_List.cshtml")
+                        </div>
+                        @*<div id="filterSlider">
+                            @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                        </div>*@
+
+
+                        <!--end: Datatable-->
+                        <!--end: Datatable-->
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed" style=" padding: 6px 4px !important;">
+
+                        <div class="col-md-12 ">
+                            <div class="d-flex ">
+                                <a href="#" type="button" class="btn btn-default float-right mobile-full-width" onclick="TDSDetailRptExportToExcel()">
+                                    Export - Detail Report
+                                </a>
+                            </div>
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+
+
+</div>
+

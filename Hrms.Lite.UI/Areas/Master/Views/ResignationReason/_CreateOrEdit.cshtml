@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.Master.ResignationReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<link href="~/css/custom.css" rel="stylesheet" />
+
+
+<script src="~/js/multiselect.js"></script>
+<script src="~/js/custom.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+<style>
+    .bootstrap-select.form-control-sm .dropdown-toggle {
+        padding: 7px 13px !important;
+    }
+
+    .multiselect-native-select .btn {
+        border: none !important;
+    }
+
+    .multiselect-native-select .dropdown-menu {
+        min-width: 15rem !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "validateResignationReason" }))
+{
+    <div id="adddesignationreason" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Resignation Reason
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm RName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'ResignationReasonName')", maxlength = "120" })
+                        <span id="ResignationReasonName"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Short Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm RShtName", @placeholder = "ShortName", @onblur = "validate(this,'ResignationReasonShortName')", maxlength = "5" })
+                        <span id="ResignationReasonShortName"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2" id="kt_image_4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Resignation Type
+                            <span class="Mandatory">*</span>
+                        </label>
+                        <div class="form-control-sm form-control  RType ">
+                            @Html.ListBoxFor(Model => Model.ResignationReasonTypes, (SelectList)ViewBag.ResigantionReasonType, new { @class = "multiselectDropdownField  ", @multiple = "multiple", data_placeholder = "Resignation Type", @onchange = "validateMultiselect('ResignationReasonTypes','ResignationReasonType','RType')" })
+                        </div>
+
+                    </div>
+                    <span id="ResignationReasonType"></span>
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+
+                    <div>
+                        Active
+                    </div>
+                    <label class="switch" onclick="ActiveInactiveValidationResignation('RESIGNATION REASON',@Model.Code)">
+                        @Html.CheckBoxFor(Model => Model.Active,new { @id="resignation"})
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <label>Description</label>
+                        @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm RDescription", @placeholder = "Description", maxlength = "250" })
+                        <span id="ResignationReasonDes"></span>
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.DisplayFor(Model => Model.Description)
+
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="ResignationReasonSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="ResignationReasonSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,171 @@
+﻿@model Hrms.Lite.Shared.PayRoll.GratuityProcessing
+@{
+
+}
+<script src="~/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.delObj').addClass('hide');
+    });
+
+   
+</script>
+<script>
+     .note-content {
+        color: red;
+    }
+</script>
+
+
+
+
+<div class="step-outer pb-10 step_row">
+
+
+    <a href="#" class="step-item active" @*onclick="onStepCircleClick('Breaking_Service')*@">
+        Breaking Service
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item " @*onclick="onStepCircleClick('Approval')*@">
+        Approval
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item " @*onclick="onStepCircleClick('Payment_details')*@">
+        Payment Details
+        <span class="step-circle"></span>
+    </a>
+    @*<div class="step-item ">
+            Approval
+            <span class="step-circle"></span>
+        </div>*@
+    @*<div class="step-item">
+        Payment Details
+        <span class="step-circle"></span>
+    </div>*@
+
+
+
+</div>
+
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table">
+    <table class="table form-grid clear fixTable" id="Gratuity_processingtable">
+        @{var abc = 0;}
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">SlNo.</th>
+                <th scope="col">Breaking Start Date</th>
+                <th scope="col">Breaking End Date</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+
+
+            @for (int i = 0; i < Model.BreakingService.Count; i++)
+            {
+                abc = i;
+                <tr id="row_OI_@i">
+                    <td data-label="Sl" id="grid_slno">
+                        @(i+1)
+                    </td>
+
+                    <td data-label="Amount">
+                        @*@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.BreakingService[i].StartDate))*@
+                        @Html.TextBoxFor(m => m.BreakingService[i].StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dojpicker CommonObj", @readonly = "true", @placeholder = "Start Date", @onchange = "return StartDateValidate(" + i+")"})
+                        <span class="test2 startclass" id="start_@i"></span>
+                    </td>
+
+                    <td data-label="Amount">
+                        @*@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.BreakingService[i].EndDate))*@
+                        @Html.TextBoxFor(m => m.BreakingService[i].EndDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dojpicker CommonObj", @readonly = "true", @placeholder = "End Date", @onchange = "return EndDateValidate(" + i + ")" })
+                        <span class="test2 endclass" id="end_@i"></span>
+                    </td>
+                    <td data-label="Amount">
+
+                        @Html.TextAreaFor(Model => Model.BreakingService[i].Remarks, new { @class = "form-control form-control-sm CommonObj", @placeholder = "Remarks", maxlength = "120", @*@onblur = "validateResumeDB(this,'pointname_'," + @i + ")"*@})
+                        <span class="test2 RemarksClass" id="remarks_@i"></span>
+                    </td>
+
+                    <td data-label="Actions">
+                        @if (Model.BreakingService.Count == (i + 1) || Model.BreakingService.Count == 1)
+                        {
+
+
+                            <button id="Add_@i" type="button" onclick="AddRow('Gratuity_processingtable',@i)" class="btn btn-icon btn-default icon-only  mobile-full-width addObj">
+                                <i class="icon-xl fas fa-plus"></i>
+                            </button>
+
+                            @*<button type="button" title="" id="edit_@i" class="btn btn-icon btn-edit icon-only editObj" onclick="onAddNewOrEditClick()" data-bs-original-title="Edit">
+                                <i class="icon-xl fas fa-pencil-alt"></i>
+                            </button>*@
+
+                            <button type="button" onclick="DeleteRw(0)" class="btn btn-icon btn-delete icon-only mobile-full-width delObj" id="delete_@i">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </button>
+
+
+
+                        }
+
+
+
+                        else
+                        {
+
+                            <button id="Add_@i" type="button" onclick="AddRow('Gratuity_processingtable',@i)" class="btn btn-icon btn-default icon-only  mobile-full-width addObj hide">
+                                <i class="icon-xl fas fa-plus"></i>
+                            </button>
+                            <button type="button" title="" id="edit_@i" class="btn btn-icon btn-edit icon-only editObj hide" onclick="onAddNewOrEditClick()" data-bs-original-title="Edit">
+                                <i class="icon-xl fas fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" onclick="DeleteRw(0)" class="btn btn-icon btn-delete icon-only mobile-full-width delObj hide" id="delete_@i">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </button>
+
+
+
+
+                        }
+
+                    </td>
+                </tr>
+
+            }
+
+
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</div>
+
+<div class="row card-footer-bottom-fixed">
+  <div class="col-md-6 text-center note-content">
+      <div>*Note:<span>
+          </span></div>
+  </div>
+    <div class="col-md-6 align-right">
+        
+
+        <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveBreakingService('@Model.EmployeeGI')">
+            Save And Next
+        </button>
+    </div>
+
+</div>

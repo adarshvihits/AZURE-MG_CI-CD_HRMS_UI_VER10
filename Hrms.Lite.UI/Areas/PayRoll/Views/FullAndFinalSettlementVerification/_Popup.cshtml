@@ -1,0 +1,405 @@
+﻿@model Hrms.Lite.Shared.PayRoll.FullandFinalSettelment
+<style>
+    .image-input.image-input-outline .image-input-wrapper {
+        box-shadow: none !important;
+    }
+
+    .row-outer {
+        padding: 0px 0px 10px;
+    }
+
+    .size-fontss {
+        font-size: 11px;
+    }
+
+    .back-color-new-add {
+        background-color: #B2B3B5;
+        height: 520px;
+        box-shadow: rgba(99, 94, 102, 0.2) 0px -1px 15px 0px;
+        border-radius: 10px;
+    }
+
+    .back-color-new-add-two {
+        background-color: #B2B3B5;
+        height: 288px;
+        box-shadow: rgba(99, 94, 102, 0.2) 0px -1px 15px 0px;
+        border-radius: 10px;
+    }
+
+    .drop-pad-new {
+        padding: 32px 10px 26px;
+    }
+
+    .new_ihitstable_scroll table {
+        height: 495px !important;
+        overflow-y: scroll !important;
+        display: block !important;
+        background-color: #fff;
+    }
+
+        .new_ihitstable_scroll table thead {
+            position: sticky;
+            top: 0;
+        }
+
+    .new_ihitstable table {
+        height: 265px !important;
+        overflow-y: scroll !important;
+        display: block !important;
+        background-color: #fff;
+    }
+
+        .new_ihitstable table thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+    .table-scroll {
+        /*width:100%; */
+        display: block;
+        empty-cells: show;
+        /* Decoration */
+        border-spacing: 0;
+        border: 1px solid;
+    }
+
+        .table-scroll thead {
+            background-color: #f1f1f1;
+            position: relative;
+            display: block;
+            width: 100%;
+            /*overflow-y: scroll;*/
+        }
+
+        .table-scroll tbody {
+            /* Position */
+            display: block;
+            position: relative;
+            width: 100%;
+            overflow-y: scroll;
+            /* Decoration */
+            border-top: 1px solid rgba(0,0,0,0.2);
+        }
+
+        .table-scroll tr {
+            width: 100%;
+            display: flex;
+        }
+
+        .table-scroll td, .table-scroll th {
+            flex-basis: 100%;
+            flex-grow: 2;
+            display: block;
+            padding: 1rem;
+            text-align: left;
+        }
+</style>
+<div class="" style="padding: 7px 10px;">
+    <div class="profile-header position-relative box-shadow-none mb-2" style="box-shadow:none!important; border-radius:10px!important;">
+        <!--begin: Search Form-->
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+        <div class="profile-header-overflow"></div>
+    </div>
+
+    <div class="row w-100">
+        <div class="col-md-12 ">
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-right" data-bs-original-title="Export to Excel" onclick="EmpExportToExcelPopUp('@Model.EmployeeHeader.EmployeeGuid')">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+
+
+
+
+
+        </div>
+    </div>
+
+
+    <div class="row" style="padding-top:3px;">
+
+
+
+        <div class="col-md-7">
+
+            <div class="back-color-new-add">
+                <div class="ihits-table table-border new_ihitstable_scroll hover-color odd-even mobile-responsive  TDS-confirmation-pop-up vertical-scroll-45" style="padding:10px;">
+                    @Html.HiddenFor(m => m.TDSEmployeeDetails.TDSComponentSplitUp_PopUp.Count)
+                    <table class="tble-new-color-chng">
+                        <thead>
+                            <tr class="table-color-new  table-light    " style="color:white;  ">
+
+                                <th class="table-radius-new-payroll ">Sl.No.</th>
+                                <th scope="col">Head</th>
+                                <th scope="col">Processed Salary</th>
+                                <th class="" scope="col">Projected Salary</th>
+                                <th class="table-radius-new-payroll-end" scope="col">Total</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody style="overflow-x: hidden;">
+                            @if (Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp != null && Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp.Count > 0)
+                            {
+                                for (int i = 0; i < Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="slno">
+                                            @Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp[i].SlNo
+                                        </td>
+                                        <td data-label="head">
+                                            @Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp[i].Head
+
+                                        </td>
+                                        <td data-label="processedsal" class="text-right">@Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp[i].ProcessedSalary</td>
+                                        <td data-label="projectdsal" class="text-right">
+                                            @Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp[i].ProjectedSalary
+                                        </td>
+                                        <td data-label="total" class="text-right">@Model.TDSEmployeeDetails.TDSComponentSplitUp_PopUp[i].Total</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">
+                                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-5">
+
+            <div class="back-color-new-add-two">
+
+                <div class="ihits-table table-border new_ihitstable hover-color odd-even mobile-responsive  TDS-confirmation-pop-up-two vertical-scroll-20" style="padding:10px;">
+                    <table class="tble-new-color-chng table-scroll small-first-col">
+                        <thead>
+                            <tr class="table-color-new  table-light  " style="color: white; ">
+                                <th class="table-radius-new-payroll ">Amount</th>
+                                <th scope="col">IT Rate</th>
+                                <th scope="col">TAX</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.TDSEmployeeDetails.TaxDetails != null && Model.TDSEmployeeDetails.TaxDetails.Count > 0)
+                            {
+                                for (int i = 0; i < Model.TDSEmployeeDetails.TaxDetails.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="amount" class="text-right">
+                                            @Model.TDSEmployeeDetails.TaxDetails[i].Amount
+                                        </td>
+                                        <td data-label="itrate" class="text-right">@Model.TDSEmployeeDetails.TaxDetails[i].ITRate</td>
+                                        <td data-label="tds" class="text-right">
+                                            @Model.TDSEmployeeDetails.TaxDetails[i].TDS
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">
+                                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+
+
+
+
+            <div class="drop-pad-new">
+
+                <div class=" row ">
+
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Taxable Income: @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.TaxableIncme, new { @class = "form-control form-control-sm new-withsss ", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Tax: @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.Tax, new { @class = "form-control form-control-sm cShtName new-withsss", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+
+                    @*</div>*@
+
+                </div>
+
+
+
+
+
+                <div class=" row ">
+
+
+                    @*<div class=" row drop-pad-new">*@
+
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Edu Cess: @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.EduCess, new { @class = "form-control form-control-sm new-withsss ", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label class="size-fontss"> Total Tax: @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.TotTax, new { @class = "form-control form-control-sm new-withsss", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                @*<div class=" row drop-pad-new">*@
+                <div class=" row ">
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Tax Already Deducted : @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.TaxDeductd, new { @class = "form-control form-control-sm cShtName new-withsss ", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+
+
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Balance Tax Payable  : @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.BalTaxPayable, new { @class = "form-control form-control-sm new-withsss ", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label class="size-fontss">Current Tax : @*<b class="font-size-h6">*@    @*@Model.TaxtoPay</b>*@</label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(Model => Model.TDSEmployeeDetails.TaxtoPay, new { @class = "form-control form-control-sm new-withsss ", @style = "text-align: right", @readonly = true, @placeholder = "", maxlength = "5" })
+
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+
+
+        <div class="col-md-12 align-right">
+            <button type="button" class="btn btn-default  mobile-full-width" onclick="TDSAmountUpdate()">
+                Apply
+            </button>
+        </div>
+
+
+    </div>
+</div>

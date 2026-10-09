@@ -1,0 +1,106 @@
+﻿
+@model Hrms.Lite.Shared.TrainingModule.TraineeCost
+<script src="~/js/tooltip.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        TotalCost();
+    });
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "SaveList" }))
+{
+
+    <div id="editloanissue" class="slider-forms slider-forms-open EditLoanIssueSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close mb-4" onclick="CloseSlider('EditLoanIssueSlider')">
+
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Trainee Cost</h4>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+
+            @Html.HiddenFor(m => m.EmployeeCode)
+
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table loan-History-Table">
+
+            <table id="CostDetails" class="">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Cost Head</th>
+                        <th scope="col">Cost</th>                    
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal totalCost = 0; // Initialize total cost variable
+                    }
+                    @if (Model.Details != null && Model.Details.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.Details.Count; i++)
+                        {
+                            <tr>
+                                <td data-label="Name">
+
+                                    @Html.HiddenFor(m => Model.Details[i].CostHead)
+                                    @Html.HiddenFor(m => Model.Details[i].CostHeadCode)
+                                    @Model.Details[i].CostHead
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Details[i].Cost, new { @class = "form-control form-control-sm cost-head" })
+                                    <!--<input class="form-control form-control-sm" id="Details_JobTitle" maxlength="50" name="Details.JobTitle"--> @*onblur="validate(this, 'jobtitle')"*@ <!--placeholder="Trainee Cost" type="text" value="">-->
+                                </td>
+
+                                @{
+                                    // Add the current CostHead value to the totalCost variable
+                                    totalCost += @Model.Details[i].Cost;
+                                }
+
+                            </tr>
+                        }
+
+
+                    }
+
+
+
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">TOTAL </label>
+                        <div class="view-details" id="totalCost">
+
+                            @totalCost
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="Save()">
+                        Save
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}

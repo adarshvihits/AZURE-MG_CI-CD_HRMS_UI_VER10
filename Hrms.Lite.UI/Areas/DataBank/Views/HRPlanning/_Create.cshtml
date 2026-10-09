@@ -1,0 +1,78 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.HRPlanning
+    <script>
+        $(document).ready(function () {
+            debugger;
+            $('.slider_plan').focus();
+        });
+    </script>
+@using (Html.BeginForm(null,null, FormMethod.Post, new { @class = "display-flex",id= "HRPlanning-Save",onsubmit="return validateHRPlanning()"}))
+{
+    <div id="addPlanning" class="slider-forms slider-forms-open create">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('create')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Resource planning</h4>
+            <div class="row mb-4">
+                @Html.HiddenFor(m => m.HRPlanningSettingsGI)
+                @Html.HiddenFor(m => m.HRPlanningSettingsId)
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Planning Name</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.HRPlanningName.Code, (SelectList)ViewBag.PlanningName, "--Select--", new { @class = "form-control form-control-sm slider_plan", @onchange = "validate(this, 'Name');onHRPlanningNameChange(this,'create')" })
+                        <span id="Name"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            <span class="combination1Label">@Html.DisplayFor(m => m.Combination1Label) </span>
+                            
+                        </label>
+                       
+                        @Html.DropDownListFor(m => m.Combination1.Code, (SelectList)ViewBag.AddNewCombination1, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'comb1');onHRPlanningCombination1Change(this,'slider_plan')" })
+                        <span id="comb1"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Planning Period From</label>
+                        <div class="view-details"><span class="fromDate"></span></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Planning Period To</label>
+                        <div class="view-details"><span class="toDate"></span></div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div id="combination2PlanningGrid">
+
+            </div>
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12">
+                    <button  
+                       type="button" class="btn btn-default float-right mobile-full-width" onclick="SaveHRPlanning()">
+                        Save
+                   </button>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+}

@@ -1,0 +1,332 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.SalaryIncrementTool
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/DataBank/SalaryIncrement.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<style>
+    .instructions table tbody tr td {
+        padding: 15px 8px !important;
+    }
+
+    #dark-blue .instructions .table-border table thead tr.table-dark th, .instructions .table-border table tbody tr.table-dark td {
+        background-color: #1b3280;
+        padding: 15px 8px !important;
+    }
+
+    .instructions table tbody tr {
+        /* border-bottom: 1px solid #F6F7F9; */
+        border-bottom: 1px solid #c6cbd8;
+        /* margin: 15px 8px; */
+    }
+
+    .table-dark th, .table-dark td, .table-dark thead th {
+        background-color: #1b3280;
+        padding: 9px 5px;
+    }
+
+    .instructions .common-table {
+        border: 1px solid #c6cbd8;
+    }
+
+    .playslip_note {
+        color: red;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Salary Increment Tool</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Salary Increment Tool
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <div class="page_white">
+                        <div class="row">
+                            <div class="col-xl-3 col-md-3">
+                                @*FIXED List*@
+                                <div class="">
+                                    @await Html.PartialAsync("_FixedTable", Model)
+
+                                </div>
+                                @*Classification List*@
+                                @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "ClassificationAndAllowance" }))
+                                {
+                                    <div class="pt-10">
+                                        @await Html.PartialAsync("_ClassiFicationList", Model)
+                                    </div>
+                                    @*Allowance List*@
+                                    <div class="pt-10">
+
+                                        @await Html.PartialAsync("_AllowanceList", Model)
+
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-xl-5 col-md-5">
+                                @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "SaveSettings" }))
+                                {
+                                    <div class="" id="SettingsListTab">
+                                        @*Settings List*@
+                                        @await Html.PartialAsync("_SettingsList", Model)
+
+                                    </div>
+                                    <div class="row">
+
+
+                                        <div class="col-md-6 ">
+                                            <div class="form-group mt-5 float-left hide">
+                                                <button type="button" class="btn btn-default" onclick="ToolSettingsSave()">Clear</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mt-5 float-right">
+                                                <button type="button" class="btn btn-default" onclick="ToolSettingsSave()">Settings Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "SalaryIncrementUpload", enctype = "multipart/form-data" }))
+                            {
+
+                                <div class="col-xl-4 col-md-4">
+                                    <div class="">
+                                        <div class="row mb-1  ">
+
+                                            <div class="col-md-6 ">
+                                                <div class="form-group">
+                                                    <label>Transition Type</label>
+
+                                                    @Html.DropDownListFor(m => m.TransitionType.Code, (SelectList)ViewBag.TransitionType, "--Select Transition Type--", new { @class = "form-control form-control-sm", @onchange = "onResignationTypeChange(this)", onblur = "validate(this,'RType')" })
+                                                    <span id="TransitionType"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="form-group">
+                                                    <label>Reason</label>
+                                                    @Html.DropDownListFor(m => m.Reason.Code, (SelectList)ViewBag.Reason, "--Select Reason--", new { @class = "form-control form-control-sm", @onchange = "onResignationTypeChange(this)", onblur = "validate(this,'RType')" })
+                                                    <span id="Reason"></span>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                        <div class="row mb-1  ">
+
+                                            <div class="col-md-6">
+                                                <div class="file-upload-form-group">
+                                                    <label for="formFileMultiple" class="form-label">
+                                                        Upload
+                                                    </label>
+
+                                                    <div class="file-upload-form mb-1">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="Preview('resume')">
+                                                                <i class="icon-xl far fa-eye"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                            <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                            @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                            @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100" })
+                                                            <span id="FileCheck"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                        <div class="row mb-1  ">
+
+                                            <div class="col-md-12">
+                                                <label>Comments</label>
+                                                @Html.TextAreaFor(model => Model.Remark, new { @class = "form-control form-control-sm DesDiscription", @placeholder = "Remark", maxlength = "500" })
+                                                <span id="currEmploymentComments"></span>
+                                            </div>
+
+
+
+
+
+
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 pt-1">
+                                                <div class="form-group mt-5 ">
+                                                    <button type="button" class="btn btn-default PrepareExcel hide" onclick="OnPrepareExcel()">Upload</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 pt-1">
+                                                <div class="form-group mt-5 float-right">
+                                                    <button type="button" class="btn btn-default ProcessExcel hide" onclick="onProcessExcelClick()">Process</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 pt-1">
+                                                <div class="form-group mt-5 float-right">
+                                                    <button type="button" class="btn btn-default ImportExcel " onclick="OnPrepareExcel()">Upload</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 pl-10 hide">
+                                                <div class="playslip_note">Steps:<span>
+    1).Upload The Document First.
+    2).Process The Document
+    3).Save The Document
+</span></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1  pt-2">
+
+                                            <div class="col-md-12">
+                                                <div class=" table-border instructions hover-color odd-even mobile-responsive-table mrf-request-list">
+
+                                                    <table class="common-table ">
+
+
+                                                        <thead>
+                                                            <tr class="table-dark">
+
+
+                                                                <th class="Header">
+                                                                    Instructions
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <tr>
+
+                                                                <td class="">
+                                                                    1. Index No. 1-4 colums are Fixed.
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="">
+                                                                    2. No. of columns in  excel sheet and the settings should be same.
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="">
+                                                                    3. Column name of excel sheet and settings should be same.
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="">
+                                                                    4. make sure date format should be in DD-MMM-YYYY (column-3,column-4).
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="" style="background-color: #e4e6ef; ">
+                                                                    Check before you upload
+                                                                </td>
+                                                            </tr>
+
+
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatchedlist').html('');$('#Excel_FileData').val()">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body pt-3">
+             
+
+                <div id="Unmatchedlist">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

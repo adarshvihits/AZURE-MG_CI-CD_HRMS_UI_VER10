@@ -1,0 +1,75 @@
+﻿
+@model Hrms.Lite.Shared.Master.YearlyOffdaySettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table offdaysettings-master-list pt-2 ">
+    @Html.HiddenFor(m => m.List.Count)
+    <table id="YearlyOffDayTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Year</th>
+                <th scope="col">Combination Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.List != null && Model.List.Count > 0)
+            {
+
+                for (int i = 0; i < Model.List.Count; i++)
+                {
+                    @Html.HiddenFor(model => Model.OffdaySettingsGI)
+
+                    <tr>
+
+                        <td data-label="Year">@Model.List[i].Year.Name</td>
+                        <td data-label="Combination Name">@Model.List[i].CombinationName</td>
+                        <td data-label="Actions">
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+
+                                <a data-bs-toggle="tooltip" title="Edit" id="offdaysettingsedit"
+                                   class="btn btn-icon btn-edit icon-only " onclick="OnAddNeworEditClick('Modify', '@Model.List[i].OffdaySettingsGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Edit" id="offdaysettingsedit"
+                                   class="btn btn-icon btn-edit icon-only " onclick="OnAddNeworEditClick('Modify', '@Model.List[i].OffdaySettingsGI');
+                                   swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider'); });">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                            @if (CurrentUserRoleActions.Delete == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Delete"
+                                   id="offdaysettingsdelete"
+                                   class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.List[i].OffdaySettingsGI')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+                            else
+                            { 
+                                <a data-bs-toggle="tooltip" title="Delete"
+                                   id="offdaysettingsdelete"
+                                   class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.List[i].OffdaySettingsGI');
+                                    swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+
+                            </td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,86 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "FamilySave" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                Model.TabIndex = "Family Details";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.ApproveMode)
+            <div class="ihits-table table-border hover-color odd-even mobile-responsive-table personal-profile-family-section mb-2">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Name</th>
+                            <th scope="col">Relation</th>
+                            <th scope="col">Date of Birth</th>
+                            <th scope="col">Occupation</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.FamilyDetails.Count; i++)
+                        {
+                           
+                                <tr id="row_OI_@i">
+                                    <td data-label="Name">
+                                        @Html.HiddenFor(m => m.FamilyDetails[i].FamilyLogGI)
+                                        @Html.HiddenFor(m => m.FamilyDetails[i].flag)
+                                        @Html.HiddenFor(m => m.FamilyDetails[i].Name)
+                                        @Html.DisplayFor(m => m.FamilyDetails[i].Name)
+                                    </td>
+                                    <td data-label="Relation">
+                                        @*<input class="form-control" type="text"
+                                    placeholder="Father">*@
+                                        @Html.DisplayFor(m => m.FamilyDetails[i].RelationName)
+                                    </td>
+                                    <td data-label="Date of Birth">
+                                        <div class="input-group date">
+                                            @*<input type="text" class="form-control kt_datepicker_2"
+                                        readonly="readonly"
+                                        placeholder="Select date" />*@
+                                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.FamilyDetails[i].DateOfBirth))
+                                        </div>
+                                    </td>
+                                    <td data-label="Occupation">
+                                        @*<input class="form-control" type="text"
+                                    placeholder="Retired">*@
+                                        @Html.DisplayFor(m => m.FamilyDetails[i].Occupation)
+                                    </td>
+                                    <td data-label="Status">
+                                        @*<input class="form-control" type="text"
+                                    placeholder="Alive">*@
+                                        @Html.DisplayFor(m => m.FamilyDetails[i].StatusName)
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-12 align-right">
+                                                <button type="button" id="FamilyLabel_@i"
+                                                        class="btn btn-default mobile-full-width hide">
+                                                    Test
+                                                </button>
+                                                <a data-bs-toggle="tooltip" data-bs-original-title="Reject" id="FamilyRejectbtnId_@i"
+                                                         class="btn_reject" onclick="PersonalProfileFamilyApprove(@i,'REJECT')">
+                                                    
+                                                </a>
+                                                 <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="FamilyApprovebtnId_@i"
+                                                  class="btn_approve" onclick="PersonalProfileFamilyApprove(@i,'APPROVE')">
+                                                  
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                          
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

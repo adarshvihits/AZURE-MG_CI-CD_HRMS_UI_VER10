@@ -1,0 +1,276 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Recruitmentdrive
+@{
+    ViewData["Title"] = "AddNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@using System.Linq
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+
+    // saved rows (empty on Add New); the JS loads them into the grid
+    var savedRowsJson = JsonConvert.SerializeObject(
+        (Model.CostSplitUpList ?? new System.Collections.Generic.List<Hrms.Lite.Shared.Recruitment.RecruitmentDriveCost>())
+        .Select(r => new { code = r.CostHead?.Code, amount = r.Amount }));
+}
+<script src="~/js/jquery.min.js"></script>
+<script>
+    var savedRows = @Html.Raw(savedRowsJson);
+</script>
+<script src="~/scripts/Recruitment/recruitmentdrive.js"></script>
+<script>
+    $(document).ready(function () {
+        moveCursorToEnd('Name');
+        if ('@CurrentUserRoleActions.Create' == 'False')
+            DisableAllElements('#kt_content');
+    });
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "recruitment-drive-save" }))
+{
+    <div id="kt_header" class="header header-fixed">
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Recruitment Drive</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "Recruitmentdrive", new { Area = "Recruitment" })">Recruitment Drive List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">Recruitment Drive</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <div class="d-flex flex-column-fluid">
+            <div class="container full-width">
+
+                @Html.HiddenFor(m => m.Mode)
+                @Html.HiddenFor(m => m.GI)
+                @Html.HiddenFor(m => m.LogGI)
+
+                <div class="card card-custom height-100per footer-row-fixed pb-0">
+                    <div class="card-body">
+
+                        <div class="row my-3">
+                           
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", @maxlength = 128, @placeholder = "Name", @onblur = "validate(this,'SName')" })
+                                </div>
+                                <span id="SName"></span>
+                            </div>
+
+
+                               <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    @Html.TextBoxFor(m => m.LocationName, new { @class = "form-control form-control-sm", @maxlength = 150, @placeholder = "Location", @onblur = "validate(this,'SLocation')" })
+                                </div>
+                                <span id="SLocation"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Venue</label>
+                                    @Html.DropDownListFor(m => m.Venue.Code, (SelectList)ViewBag.RecruitmentVenue, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'SVenue')" })
+                                </div>
+                                <span id="SVenue"></span>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                     
+
+                        <div class="row my-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    @Html.TextBoxFor(m => m.DateFrom, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm", @type = "date", @onblur = "validate(this,'SFrom')" })
+                                </div>
+                                <span id="SFrom"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    @Html.TextBoxFor(m => m.DateTo, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm", @type = "date", @onblur = "validate(this,'STo')" })
+                                </div>
+                                <span id="STo"></span>
+                            </div>
+
+                                <div class="col-md-4 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div>Active</div>
+                                    <label class="switch">
+                                        @Html.CheckBoxFor(m => m.Active)
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="row my-3">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = 800 })
+                                </div>
+                            </div>
+                        </div>
+
+                      
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="personal-details-left mt-0">
+                                    <ul class="nav nav-tabs exittab" role="tablist">
+                                        <li class="nav-item exititem">
+                                            <a class="nav-link exit-link active" data-bs-toggle="tab" href="#tabs-1" role="tab">Cost Split Up</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content" style="display: block; position: relative; top: 5px;">
+                                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+
+                                            <div class="ihits-table table-border mobile-responsive-table Recruitmentdriveadd ">
+                                                <table id="costSplitTable">
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Expense Type</th>
+                                                            <th scope="col">Amount</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+
+
+
+
+                                                    <tfoot>
+
+                                                        <tr>
+
+                                                              <td></td>
+                                                                <td class="exp-amt">
+
+                                                                       <label>Total</label>
+                                                    <b id="costTotal">0.00</b>
+
+
+                                                                </td>
+                                                                  <td></td>
+
+
+
+                                                          
+                                                        </tr>
+
+
+                                                    </tfoot>
+
+
+                                                </table>
+                                            </div>
+                                            <style>
+
+                                                .exp-amt{
+                                                    text-align:right;
+                                                }
+
+                                                #costSplitTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#costSplitTable thead,
+#costSplitTable tbody,
+#costSplitTable tfoot {
+    width: 100%;
+}
+
+/* Fixed header */
+#costSplitTable thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Scrollable body */
+#costSplitTable tbody {
+    display: block;
+    max-height: 150px;
+    height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Keep rows aligned with header */
+#costSplitTable tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Footer */
+#costSplitTable tfoot {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Optional: header/footer styling */
+#costSplitTable th,
+#costSplitTable td {
+    padding: 8px 12px;
+    vertical-align: middle;
+}
+
+                                                </style>
+
+                                          
+
+                                            @* hidden template for the dropdown in every new row; disabled so it is never posted *@
+                                            @Html.DropDownList("costTypeTemplate", (SelectList)ViewBag.ExpenseType, "--Select--", new { @id = "costTypeTemplate", @style = "display:none", @disabled = "disabled" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-12 align-right">
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button id="saverecruitmentdrive" type="button"
+                                        class="btn btn-default float-right mobile-full-width"
+                                        onclick="SaveRecruitmentdrive('@(Model.Mode == "MODIFY" ? "Modify" : "Save")')">
+                                    Save
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

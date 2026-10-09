@@ -1,0 +1,103 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ApplicantTracking
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <script>
+    $(document).ready(function () {
+        debugger;
+
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.Tab6Count').html("@Model.Tab6Count");
+        $('.Tab7Count').html("@Model.Tab7Count");
+
+    });
+
+    </script>
+    <style>
+        .view_btn_appli {
+            width: 18px;
+            height: 18px;
+            background: url(/images/icons/viewappli.svg);
+            background-size: contain;
+            color: white;
+            display: inline-block;
+            background-repeat: no-repeat;
+            margin: 2px;
+        }
+    </style>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table post_approval_list">
+        @Html.HiddenFor(m => Model.ApplicantTrackingList.Count)
+
+        <table class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Applicant ID">Appli.ID</th>
+                    <th scope="col">Applicant Name</th>
+                    <th scope="col">MRF No</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Deadline</th>
+                    <th scope="col">Doc Verified </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Aging After RA Approval">Aging</th>
+                    <th scope="col">Stage </th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Resume Uploaded By Candidate">Resume</th>
+                    <th scope="col">Reject </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.ApplicantTrackingList != null && Model.ApplicantTrackingList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ApplicantTrackingList.Count; i++)
+                    {
+                <tr>
+                    <td data-label="Applicant ID"> @Model.ApplicantTrackingList[i].RefNo</td>
+                    <td data-label="Job Title">
+                        @Model.ApplicantTrackingList[i].ApplicantName
+
+                    </td>
+                    <td data-label="Candidate Name"> @Model.ApplicantTrackingList[i].JobCode</td>
+                    <td data-label="MRF No"> @Model.ApplicantTrackingList[i].JobTitle</td>
+                    <td data-label="Designation"> @Model.ApplicantTrackingList[i].Designation</td>
+                    <td data-label="Location"> @Model.ApplicantTrackingList[i].Location</td>
+                    <td data-label="Need By Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ApplicantTrackingList[i].NeededByDate))</td>
+                    <td data-label="Doc Verified">
+                        @if (Model.ApplicantTrackingList[i].DocVerified == "Y")
+                        {
+
+                            <button class="btn btn-icon btn-tick">
+                                <i class="icon-xl fas fa-check"></i>
+                            </button>
+
+                        }
+                        else
+                        {
+                            <button class="btn btn-icon btn-close">
+                                <i class="icon-xl fas fa-times"></i>
+                            </button>
+                        }
+                    </td>
+                    <td data-label="Aging">
+                        @Model.ApplicantTrackingList[i].Aging
+                    </td>
+                    <td data-label="Stage">
+                        @Model.ApplicantTrackingList[i].Stage
+                    </td>
+                    <td data-label="View">
+                        <a data-bs-toggle="tooltip" title="" class="view_btn_appli" title="Resume Uploaded By Candidate" onclick="showDocument('@Model.ApplicantTrackingList[i].ResumeFile','@Model.ApplicantTrackingList[i].Resume')" cursorshover="true"> </a>
+                    </td>
+                    <td data-label="Action">
+                        <button class="btn btn-icon btn-close slider-btn" type="button" onclick="RAApproveOrReject('Reject','@Model.ApplicantTrackingList[i].ResumeDataBankGI',@Model.ApplicantTrackingList[i].ApplicantTrackingCode)">
+                            <i class="icon-xl fas fa-times new_reject"></i>
+                        </button>
+
+                    </td>
+
+                </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>

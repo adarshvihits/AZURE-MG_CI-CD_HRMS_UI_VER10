@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+@{
+    ViewData["Title"] = "DailyAttendanceEditList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TimeOffice/Report/MonthlyAttendanceReport.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        if (@ViewBag.IsFilterApplied == 0) {
+            $('#filterForm').removeClass('filter-apply');
+        }
+        else {
+            $('#filterForm').addClass('filter-apply');
+        }
+    });
+</script>
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Monthly Attendance</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "MonthlyAttendanceReport", new { Month=Model.Month.Code, PayrollGrp= Model.PayrollGroup.Code,TabIndex= 0,Area = "TimeOffice" })">Monthly Attendance Report</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Monthly Attendance
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ml-3 mt-3 border-none ">
+                                <label>Selected Date : <b class="font-size-h6">@ViewBag.selectedDate</b></label>
+                                @*<label>Selected Date : <b class="font-size-h6">@Model.SelectedDate.ToString("dd-MMM-yyyy")</b></label>*@
+                            </div>
+                            <div class="tab-items select-option">
+                                <div class="form-group filter-combobox mr-4 float-left" style="width: 100px;">
+                                    @Html.DropDownListFor(m => Model.AttnDay.Code, (SelectList)ViewBag.AttendenceStatus, "ALL", new { @class = "form-control form-control-sm", @onchange = "GetAttendanceDateList()" @*@onchange = "GetAttendanceDateList('" + Model.SelectedDate.ToString("yyyy-MM-dd") + "',this)"*@})
+
+                                </div>
+
+                                <div class="button-group float-left">
+
+                                    @*<button id="BatchUpdate" type="button" class="btn btn-default btn-sm mr-10 " onclick="onBatchUpdateClick()">
+                                        Batch Update
+                                    </button>*@
+
+                                </div>
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button" data-bs-toggle="tooltip" title="Filter" onclick="onFilterClick('innerList')">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="Export to Excel"
+                                   class="btn btn-excel">
+                                    <i class="icon-xl far fa-file-excel" onclick="exportToExcel_DailyAttendanceEDitList('@ViewBag.selectedDate')"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <!-- Table Section -->
+                    <div id="dailyAttenEditListPartial">
+                        @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/MonthlyAttendanceReport/_DailyAttendanceEditListPartial.cshtml", Model)
+                    </div>
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                    <div id="DailyAttedEditSlider">
+
+
+                    </div>
+
+                    <div id="DailyDateWiseFilter">
+                 
+                    </div>
+
+                    <div id="batchUpdateDailySlider"></div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

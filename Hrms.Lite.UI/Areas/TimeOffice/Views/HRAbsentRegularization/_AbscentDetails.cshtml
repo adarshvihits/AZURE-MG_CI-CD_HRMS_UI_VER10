@@ -1,0 +1,108 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.HRAbsentRegularization
+
+
+<style>
+    .hrAbscentDetails .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        max-height: 30vh !important;
+        height: 30vh !important;
+    }  
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "HR_AbscentEmp_Form" }))
+{
+<div class="profile-header position-relative pb-12 mb-5"
+     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+    <div class="row">
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+    </div>
+    <div class="profile-header-overflow"></div>
+    @Html.HiddenFor(m => m.Leave.Code)
+    @Html.HiddenFor(m => m.Month.Code)
+    @Html.HiddenFor(m => m.EmployeeHeader.EmployeeCode)
+    @Html.HiddenFor(m => m.LeaveBalance)
+
+
+</div>
+<div class="row pt-3">
+    <div class="col-md-2">
+
+        <label class="view-title">Payroll Group</label>
+        <div class="view-details">
+            @Model.PGroup.Name
+        </div>      
+    </div>
+    <div class="col-md-2">
+
+        <label class="view-title">Month</label>
+        <div class="view-details">@Model.Month.Name
+        </div>
+
+    </div>
+    <div class="col-md-2">
+
+        <label class="view-title">Leave</label>
+        <div class="view-details">
+            @Model.Leave.Name
+
+        </div>
+    </div>
+    <div class="col-md-2">
+
+        <label class="view-title">Leave Balance</label>
+        <div class="view-details">@Model.LeaveBalance  </div>
+    </div>
+</div>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table hrAbscentDetails vertical-scroll-200">
+        @Html.HiddenFor(m => m.ABStatusDetails.Count)
+        <table id="" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Sl.No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Day Status</th>
+                    <th scope="col">
+                        @*<div class="checkbox-inline abscentselectAllChkBx">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                <input data-val="true" value="true" id="abscentSelectAll" name="SelectAll" type="checkbox" onchange="onSelectAllClick()">
+                                <span cursorshover="true"></span>
+                            </label>
+                            <label class="checkbox checkbox-outline checkbox-success"></label>
+                        </div>*@
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.ABStatusDetails != null && Model.ABStatusDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ABStatusDetails.Count; i++)
+                    {
+
+                        <tr>
+                            <td>
+                                @(i + 1)
+                                @Html.HiddenFor(m => m.ABStatusDetails[i].Date)
+                            </td>
+                            <td>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ABStatusDetails[i].Date))</td>
+                            <td>
+                                @Model.ABStatusDetails[i].Status
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(Model => Model.ABStatusDetails[i].Applicable)
+                            </td>
+
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+        <div class="col-md-12">
+
+            <a onclick="empRegularize()"
+               class="btn btn-default float-right mobile-full-width">
+                Regularize
+            </a>
+        </div>
+    </div>
+    }

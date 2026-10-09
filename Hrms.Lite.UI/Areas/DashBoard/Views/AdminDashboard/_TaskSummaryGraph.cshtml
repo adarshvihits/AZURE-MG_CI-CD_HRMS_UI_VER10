@@ -1,0 +1,41 @@
+﻿@model Hrms.Lite.Shared.DashBoard.AdminDashBoard
+@using Kendo.Mvc.UI
+
+<div id="summarychart" @*style="height: 100px; width: 200px;"*@>
+
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DashBoard.AdminDashBoard>()
+    .Name("chart")
+
+    .Legend(legend => legend
+    .Visible(true)
+    .Position(ChartLegendPosition.Bottom)
+    .Labels(labels => labels
+        .Font("11px Arial,Helvetica,sans-serif")
+        .Padding(p => p.Top(10).Right(50))
+    )
+)
+    .ChartArea(chart => chart
+        .Background("transparent")
+        .Height(300) // Adjusted height
+        .Width(300)  // Adjusted width
+
+    )
+    .Series(series =>
+    {
+        series.Donut(new dynamic[] {
+            new {category = "Completed",value = Model.SummaryGraph.Green},
+            new {category = "Pending",value = Model.SummaryGraph.Red},
+            new {category = "In Pogress",value = Model.SummaryGraph.Yellow},
+
+        });
+    })
+    .SeriesColors(new string[] { "#3bb353", "#c82d19", "#f4ca16" })
+
+.Tooltip(tooltip => tooltip
+    .Visible(true)
+    .Template("#= category #: #= value #")
+)
+)
+
+</div>

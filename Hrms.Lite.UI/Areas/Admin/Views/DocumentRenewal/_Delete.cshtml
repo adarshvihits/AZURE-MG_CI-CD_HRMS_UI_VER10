@@ -1,0 +1,87 @@
+﻿
+@model Hrms.Lite.Shared.Admin.DocumentRenewal
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/custom.js"></script>
+
+@using (Html.BeginForm("Delete", "DocumentRenewal", FormMethod.Post, new { @id = "DocumentRenewalDelete" }))
+{
+
+    <div id="banknamedelete" class="slider-forms slider-forms-open Delete">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('Delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Document Renewal  </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Category</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.RenewalsCategory.Name)   @Html.HiddenFor(model => Model.RenewalsCategory.Code)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.DocumentName)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.DocumentName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Renewal Date
+                            </label>
+                            <div class="view-details">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.RenewalDate))    @Html.HiddenFor(model => Model.RenewalDate)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Remarks</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Remarks)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

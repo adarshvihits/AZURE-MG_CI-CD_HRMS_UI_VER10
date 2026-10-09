@@ -1,0 +1,112 @@
+﻿@*@model Hrms.Lite.Shared.PayRoll.SalaryPosting*@
+<script src="~/js/tooltip.js"></script>
+
+
+
+                            <div class="step-outer step_row pb-10">
+                                <div class="step-item active" onclick="onTabNameClick('selection')">
+                                    Selection
+                                    <span class="step-circle"></span>
+                                </div>
+                                <div class="step-item active">
+                                    Posting Verification
+                                    <span class="step-circle" onclick="onTabNameClick('Verify')"></span>
+                                </div>
+                                <div class="step-item active">
+                                    Comparison
+                                    <span class="step-circle" onclick="onTabNameClick('Comparison')"></span>
+                                </div>
+                                <div class="step-item">
+                                    Posting
+                                    <span class="step-circle"></span>
+                                </div>
+
+
+                            </div>
+
+                            <div >
+
+                                <div class="row my-2">
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label class="view-title">PayRoll Group </label>
+                                            <div class="view-details">
+                                                @Model.PayrollGroup.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label class="view-title">Month </label>
+                                            <div class="view-details">
+                                                @Model.PayrollMonth.Name
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="ihits-table table-border hover-color odd-even mobile-responsive-table salary-recoreport-new-list-tble vertical-scroll-400">
+                                <table id="SalryComparison">
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th scope="col">Description</th>
+                                            <th scope="col" data-bs-toggle="tooltip" title="Previous  Employee Count">Pre. Emp. Count    </th>
+                                            <th scope="col" data-bs-toggle="tooltip" title=""> Cur.Emp Count  </th>
+                                            <th scope="col" data-bs-toggle="tooltip" title="">Prev.Gross   </th>
+                                            <th scope="col" data-bs-toggle="tooltip" title="">    Cur.Gross    </th>
+                                            <th scope="col">Pre.Earnings   </th>
+                                            <th scope="col" data-bs-toggle="tooltip" title=""> Cur.Earnings</th>
+                                            <th scope="col">Variance in Earnings</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null && Model.SalaryReconciliationPostingDetails != null && Model.SalaryReconciliationPostingDetails.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.SalaryReconciliationPostingDetails.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td data-label="Previous Month Employee Count">
+                                                        @Model.SalaryReconciliationPostingDetails[i].Description
+                                                    </td>
+                                                    <td data-label="Previous Month Employee Count" style="text-align: end;">
+                                                        @Model.SalaryReconciliationPostingDetails[i].PreviousEmpCount
+                                                    </td>
+                                                    <td data-label="Current Month Employee Count" style="text-align: end;">
+                                                        @Model.SalaryReconciliationPostingDetails[i].CurrentEmpCount
+                                                    </td>
+                                                    <td data-label="Variance" style="text-align: end;">@Model.SalaryReconciliationPostingDetails[i].PreviousGross</td>
+                                                    <td data-label="Previous Month Actual Gross" style="text-align: end;">@Model.SalaryReconciliationPostingDetails[i].CurrentGross</td>
+                                                    <td data-label="Current Month Actual Gross" style="text-align: end;">@Model.SalaryReconciliationPostingDetails[i].PreviousEarning</td>
+                                                    <td data-label="Variance" style="text-align: end;">@Model.SalaryReconciliationPostingDetails[i].CurrentEarning</td>
+                                                    <td data-label="Previous Month Earnings" style="text-align: end;">@Model.SalaryReconciliationPostingDetails[i].Variance</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="8">
+                                                    <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <end table></end> -->
+                            <div class="row card-footer-bottom-fixed">
+
+                                <div class="col-md-12 align-right">
+                                    <a href="#" type="button"
+                                       class="btn btn-default float-right mobile-full-width" onclick="onNextClick('Comparison')">
+                                        Next
+                                    </a>
+                                </div>
+
+                            </div>
+                       

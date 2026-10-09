@@ -1,0 +1,173 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.SalaryReconciliation
+
+<style>
+    .new-salary .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        max-height: 30vh !important;
+        height: 30vh !important;
+    }
+
+    .select-option .sraech-slider .search-slider-inner2 {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        text-align: center;
+        padding: 5px 0px;
+        position: relative;
+        z-index: 3;
+        cursor: pointer;
+        margin-top: 1px;
+    }
+
+    .salary-popup {
+        width: 100% !important;
+    }
+    .dataTables_wrapper .dataTables_scrollBody {
+        max-height: 30vh !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".search-slider-inner2").click(function () {
+            $("#dataTableSearchPopUp").toggleClass('field-width-big')
+        });
+    });
+
+    function Filter() {
+        $('#filterSlider').removeClass('hide')
+    }
+
+</script>
+@*<div class="row" style="padding:5px 11px  0;">
+
+        <div class="col-md-12 d-flex justify-content-end align-items-center" style="height:fit-content; ">
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+
+            </div>
+
+            <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter" onclick="$('#filterSlider').removeClass('hide')">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-check"></i>
+            </div>
+            <button data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>
+        </div>
+
+    </div>*@
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap">
+
+
+
+        <div class="tab-items select-option align-items-center">
+            <!-- <label class="lable-left">Evaluation Period</label> -->
+            @*<div class="form-group filter-combobox pt-2 pl-2 mr-10"
+                     style="width: 160px;">
+                    <label>Employee</label>
+                    @Html.DropDownListFor(m => m.Employee.Code, (SelectList)ViewBag.Emp, "--Select--", new { @class = "form-control form-control-sm" })
+                </div>*@
+
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner2">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearchPopUp" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+            @*<div id="filterForm" class="filter-button" data-bs-toggle="tooltip" title="Filter" onclick="$('#filterSlider').removeClass('hide')">
+                    <i class="fas fa-filter"></i>
+                    <i class="fas fa-check"></i>
+                </div>*@
+
+            <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter" onclick="Filter()">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-check"></i>
+            </div>
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div style="padding:10px;"
+     class="ihits-table table-border hover-color odd-even mobile-responsive-table popupreconciliation_report pt-0">
+    @Html.HiddenFor(m => m.SalaryReconciliationEmployeeDetails.Count)
+    @Html.HiddenFor(m => m.Code)
+    @Html.HiddenFor(m => m.Type)
+    <table id="SalaryReconciliationEmployeeTable" class="salary-popup">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>                
+                <th scope="col">Salary</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @*@if (Model != null && Model.SalaryReconciliationEmployeeDetails != null && Model.SalaryReconciliationEmployeeDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.SalaryReconciliationEmployeeDetails.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="ID">
+                                @Model.SalaryReconciliationEmployeeDetails[i].EmployeeID
+                            </td>
+                            <td data-label="Employee Name">
+                                @Model.SalaryReconciliationEmployeeDetails[i].EmployeeName
+
+                            </td>
+                            <td data-label="Designation">
+                                @Model.SalaryReconciliationEmployeeDetails[i].Designation
+                            </td>
+                            <td data-label="Department">
+                                @Model.SalaryReconciliationEmployeeDetails[i].Department
+                            </td>
+                            <td data-label="Location">
+                                @Model.SalaryReconciliationEmployeeDetails[i].Location
+                            </td>
+
+                            <td data-label="Previous Month Earnings">
+                                @Model.SalaryReconciliationEmployeeDetails[i].PreviousEarning
+                            </td>
+                            <td data-label="Current Month Earning">
+                                @Model.SalaryReconciliationEmployeeDetails[i].CurrentEarning
+                            </td>
+                            <td data-label="Variance">@Model.SalaryReconciliationEmployeeDetails[i].Variance</td>
+
+
+
+                        </tr>
+
+                    }
+                }*@
+
+
+
+
+
+
+
+
+        </tbody>
+
+
+    </table>
+</div>
+<div id="filterSlider" class="hide">
+    @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+</div>

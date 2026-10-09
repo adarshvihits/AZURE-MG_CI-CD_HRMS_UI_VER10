@@ -1,0 +1,91 @@
+﻿@model Hrms.Lite.Shared.Master.ResignationReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table resignationreason-master-list pt-1">
+    @Html.HiddenFor(m => m.ResigantionReasonList.Count)
+    <table id="ResignationReasonTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Resignation Type</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.ResigantionReasonList != null && Model.ResigantionReasonList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ResigantionReasonList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.ResigantionReasonList[i].EditActive)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            <td data-label="Name">@Model.ResigantionReasonList[i].Name</td>
+                            <td data-label="Short Name">@Model.ResigantionReasonList[i].ShortName</td>
+                            <td data-label="Short Name">@Model.ResigantionReasonList[i].ResignationType.Name</td>
+                            <td data-label="Actions">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="resignationreason"
+                                           class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.ResigantionReasonList[i].GI', '@Model.ResigantionReasonList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="resignationreason"
+                                           class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.ResigantionReasonList[i].GI', '@Model.ResigantionReasonList[i].LogGI',@i);
+                                           swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="resignationreasondelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.ResigantionReasonList[i].GI', '@Model.ResigantionReasonList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    { 
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="resignationreasondelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.ResigantionReasonList[i].GI', '@Model.ResigantionReasonList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

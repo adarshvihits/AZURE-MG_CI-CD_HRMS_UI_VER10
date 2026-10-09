@@ -1,0 +1,125 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Recruitmentdrive
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approve-recruitment-drive" }))
+{
+    <div id="recruitmentdriveapprove" class="slider-forms slider-forms-open ApproveDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('ApproveDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Recruitment Drive</h4>
+            </div>
+            <div class="add-padding">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.LogGI)
+                                @Html.HiddenFor(model => Model.ApproveMode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Location</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.LocationName)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Venue</label>
+                            <div class="view-details">
+                                @Model.Venue?.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Total Cost</label>
+                            <div class="view-details">
+                                @(Model.Cost?.ToString("N2"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">From</label>
+                            <div class="view-details">
+                                @(Model.DateFrom?.ToString("dd-MMM-yyyy"))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">To</label>
+                            <div class="view-details">
+                                @(Model.DateTo?.ToString("dd-MMM-yyyy"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Active</label>
+                            <div class="view-details">
+                                @if (Model.Active == true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="view-title">Remarks</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Remarks)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                            <button type="button" class="btn btn-danger mobile-full-width" onclick="return confirmReject()">
+                                Reject
+                            </button>
+                            <button type="button" class="btn btn-default mobile-full-width" onclick="return confirmApprove()">
+                                Approve
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

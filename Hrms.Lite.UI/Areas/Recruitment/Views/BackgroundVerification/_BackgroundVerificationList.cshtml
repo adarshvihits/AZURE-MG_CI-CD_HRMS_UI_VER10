@@ -1,0 +1,80 @@
+﻿@model Hrms.Lite.Shared.Recruitment.BackgroundVerification
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table background_verificationvertification_newlist">
+    <table class="common-table">
+        @Html.HiddenFor(m => Model.BackgroundVerificationList.Count)
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Applicant ID">Appli. ID</th>
+                <th scope="col">Applicant Name</th>
+                <th scope="col">MRF No</th>
+
+                <th scope="col">Job Title</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Location</th>
+                <th scope="col">Deadline</th>
+                <th scope="col">Doc Verified </th>
+                @if (Model.TabName != "Pending")
+                {
+                    <th scope="col">Paused Level </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.BackgroundVerificationList != null && Model.BackgroundVerificationList.Count > 0)
+            {
+                for (int i = 0; i < Model.BackgroundVerificationList.Count; i++)
+                {
+                    <tr>
+
+                        <td data-label="MRF No">@Model.BackgroundVerificationList[i].RefNo</td>
+                        <td data-label="Candidate Name">
+                            @if (Model.TabName == "Pending")
+                            {
+                                <a id="creditcheckinglist"
+                                   onclick="onEmpCreditCheckDetailsClick('@Model.BackgroundVerificationList[i].PreEnrollGI', 'CreditChecking')">
+                                    @Model.BackgroundVerificationList[i].CandidateName
+                                </a>
+                            }
+                            else
+                                @Model.BackgroundVerificationList[i].CandidateName
+                        </td>
+                        <td data-label="MRF No">@Model.BackgroundVerificationList[i].JobCode</td>
+
+                        <td data-label="Job Title">@Model.BackgroundVerificationList[i].JobTitle</td>
+                        <td data-label="Designation">@Model.BackgroundVerificationList[i].Designation.Name</td>
+                        <td data-label="Location">@Model.BackgroundVerificationList[i].Location.Name</td>
+                        <td data-label="Need By Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.BackgroundVerificationList[i].NeedByDate))</td>
+                        <td data-label="Doc Verified">
+                            @if (Model.BackgroundVerificationList[i].DocVerified == "Y")
+                            {
+
+                                <button class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+                                </button>
+                            }
+                        </td>
+                        @if (Model.TabName != "Pending")
+                        {
+                            <td data-label="Stage">
+                                @Model.BackgroundVerificationList[i].Stage
+                            </td>
+                        }
+                    </tr>
+
+                }
+            }
+
+
+
+        </tbody>
+    </table>
+</div>

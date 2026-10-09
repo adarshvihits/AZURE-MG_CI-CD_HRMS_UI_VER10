@@ -1,0 +1,71 @@
+@model Hrms.Lite.Shared.Master.HRPlanningMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+    bool isModify = Model.Mode == "MODIFY";
+    var dropdownAttrs = new Dictionary<string, object> { { "class", "form-control form-control-sm" } };
+    if (isModify)
+    {
+        dropdownAttrs["disabled"] = "disabled";
+    }
+    string statusBadgeClass;
+    switch ((Model.Status ?? "").Trim().ToUpper())
+    {
+        case "APPROVED": statusBadgeClass = "badge-success"; break;
+        case "PENDING": statusBadgeClass = "badge-warning"; break;
+        case "REJECTED": statusBadgeClass = "badge-danger"; break;
+        default: statusBadgeClass = "badge-secondary"; break;
+    }
+}
+<tr class="plan-row-editable" data-gi="@Model.GI">
+    @Html.HiddenFor(m => m.GI)
+    @Html.HiddenFor(m => m.LogGI)
+    @Html.HiddenFor(m => m.Mode)
+    @Html.HiddenFor(m => m.Logcode)
+    <td data-label="ID">
+        @if (isModify)
+        {
+            <text>PLN-@Model.Code</text>
+        }
+        else
+        {
+            <span class="text-muted font-italic">new</span>
+        }
+    </td>
+    <td data-label="Department">
+        @Html.DropDownListFor(m => m.Department.Code, (SelectList)ViewBag.Department, "--Select--", dropdownAttrs)
+        <span id="combinationhr" class="error-message"></span>
+    </td>
+    <td data-label="Section">
+        @Html.DropDownListFor(m => m.Section.Code, (SelectList)ViewBag.Section, "--Select--", dropdownAttrs)
+        <span id="sectionhr" class="error-message"></span>
+    </td>
+    <td data-label="Grade">
+        @Html.DropDownListFor(m => m.Grade.Code, (SelectList)ViewBag.Grade, "--Select--", dropdownAttrs)
+        <span id="gradehr" class="error-message"></span>
+    </td>
+    <td data-label="Plan Count">
+        @Html.TextBoxFor(m => m.PlanCount, new { @class = "form-control form-control-sm", @placeholder = "0", maxlength = "6", @oninput = "PreviewPlanRowTotal()" })
+        <span id="plancounthr" class="error-message"></span>
+    </td>
+    <td data-label="Avg Salary">
+        @Html.TextBoxFor(m => m.AvgSalary, new { @class = "form-control form-control-sm", @placeholder = "0", maxlength = "12", @oninput = "PreviewPlanRowTotal()" })
+        <span id="avgsalaryhr" class="error-message"></span>
+    </td>
+    <td data-label="Total Salary"><span id="planRowTotalPreview" class="text-muted">auto</span></td>
+    <td data-label="Status">
+        @if (isModify)
+        {
+            <span class="badge @statusBadgeClass">@Model.Status</span>
+        }
+    </td>
+    <td data-label="Actions">
+        <a data-bs-toggle="tooltip" title="Save" class="btn btn-icon btn-tick icon-only" onclick="SavePlanRow('@(isModify ? "Modify" : "Save")')">
+            <i class="icon-xl fas fa-check"></i>
+        </a>
+        <a data-bs-toggle="tooltip" title="Cancel" class="btn btn-icon btn-close icon-only" onclick="CancelPlanRow(this)">
+            <i class="icon-xl fas fa-times"></i>
+        </a>
+    </td>
+</tr>

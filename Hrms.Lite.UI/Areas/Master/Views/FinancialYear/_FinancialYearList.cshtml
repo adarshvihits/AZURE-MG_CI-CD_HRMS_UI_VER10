@@ -1,0 +1,85 @@
+﻿
+@model Hrms.Lite.Shared.Master.FinancialYear
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table financial-year-list pt-1">
+    @Html.HiddenFor(m => m.FinancialYearList.Count)
+    <table id="FinancialYearActiveTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Financial Year</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.FinancialYearList != null && Model.FinancialYearList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.FinancialYearList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.FinancialYearList[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Active)
+
+                            <td data-label="Name">@Model.FinancialYearList[i].Name</td>
+                            <td data-label="From">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.FinancialYearList[i].FromDate))</td>
+                            <td data-label="To">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.FinancialYearList[i].ToDate))</td>
+                            <td data-label="Actions">
+
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+
+                                    <button data-bs-toggle="tooltip" title="Edit" id="editinterview"
+                                            class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.FinancialYearList[i].GI', '@Model.FinancialYearList[i].LogGI',@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button data-bs-toggle="tooltip" title="Edit" id="editinterview"
+                                            class="btn btn-icon btn-edit icon-only" onclick="swal.fire(MasterPersmissionMsg).then(function () { onAddNewOrEditClick('MODIFY', '@Model.FinancialYearList[i].GI', '@Model.FinancialYearList[i].LogGI',@i)});">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </button>
+                                }
+
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+                                    <button data-bs-toggle="tooltip" title="Delete"
+                                            id="deleteinterview" type="button"
+                                            class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.FinancialYearList[i].GI', '@Model.FinancialYearList[i].LogGI','DELETE',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </button> 
+                                }
+                                else
+                                { 
+                                    <button data-bs-toggle="tooltip" title="Delete"
+                                            id="deleteinterview" type="button"
+                                            class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.FinancialYearList[i].GI', '@Model.FinancialYearList[i].LogGI','DELETE',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </button>
+                                }
+
+
+
+                                </td>
+                        </tr>
+
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,55 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.CompanyDocumentUpload
+
+<div class="employee-info mb-3">
+    @if (Model.EmployeeHeader != null)
+    {
+        <h6>Employee: @Model.EmployeeHeader.EmployeeName</h6>
+    }
+  
+</div>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table companyUploadpopup vertical-scroll-200">
+    @Html.HiddenFor(m => m.DocumentList.Count)
+    @Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+
+    <table id="compdocpopup">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Document Tpe</th>
+                <th scope="col">Document Name</th>
+                <th scope="col">View</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.DocumentList != null && Model.DocumentList.Count > 0)
+                {
+                    for (int i = 0; i < Model.DocumentList.Count; i++)
+                    {
+                        <tr>                          
+                                        <td data-label="">                                                           
+
+                                            @Model.DocumentList[i].DocumentType.Name
+                                        </td>
+                            <td data-label="EmployeeName">@Model.DocumentList[i].CompanyDocument.Name</td>
+                            <td data-label="EmployeeName">
+                                <a data-bs-toggle="tooltip"
+                                   onclick="displayDoc('@Model.EmployeeHeader.EmployeeGuid', @i, @Model.DocumentList[i].DocumentType.Code)"
+                                   class="btn btn-icon btn-eye icon-only pr-2" data-bs-original-title="">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a data-bs-toggle="tooltip" title="Delete"                                  
+                                   class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.DocumentList[i].TrnCode', '@Model.DocumentList[i].EmpCode')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

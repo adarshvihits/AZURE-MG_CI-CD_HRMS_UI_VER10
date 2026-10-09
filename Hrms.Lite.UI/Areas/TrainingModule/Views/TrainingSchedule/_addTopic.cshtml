@@ -1,0 +1,211 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingSchedule
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/bootstrap-timepicker.js"></script>
+<script src="~/scripts/TrainingModule/TrainingSchedule.js"></script>
+@using (Html.BeginForm("Save", "TrainingTopic", FormMethod.Post, new { id = "TrainingTopicSave" }))
+{
+    <div id="addallowance" class="slider-forms slider-forms-open TrainingTopic  rate_width" >
+        <div class="slider-inner-style ">
+            <div class="slider-form-close" onclick="CloseSlider('TrainingTopic'); $('.TrainingTopic').removeClass('rate_width')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+
+                Training Topic
+            </h4>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Subject
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.HiddenFor(m => m.Mode)
+                        @Html.HiddenFor(m => m.ScheduleCode)
+                        @Html.HiddenFor(m => m.TrainingCode)
+                        @Html.HiddenFor(m => m.StartDate)
+                        @Html.HiddenFor(m => m.EndDate)
+                        @Html.DropDownListFor(m => m.Subject.Code, (SelectList)ViewBag.Subject, "--Subject--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'TrainingSub')" })
+                        <span id="TrainingSub"></span>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Trainer Type</label>
+                        @Html.DropDownListFor(m => m.TrainerType.Code, (SelectList)ViewBag.TrainerType, "--TrainerType--", new { @class = "form-control form-control-sm", @onchange = "FilltrainerCombo();validate(this,'TrainerType')" })
+
+                        <span id="TrainerType"></span>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <label>Trainer</label>
+                        @Html.DropDownListFor(m => m.Trainer.Code, (SelectList)ViewBag.Trainer, "--Trainer--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'TrainerTopic')" })
+
+                        <span id="TrainerTopic"></span>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Venue Type
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.DropDownListFor(m => m.VenueType.Code, (SelectList)ViewBag.VenueType, "--VenueType--", new { @class = "form-control form-control-sm", @onchange = "FillVenueCombo();validate(this,'VenueType')" })
+
+                        <span id="VenueType"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Venue</label>
+                        @Html.DropDownListFor(m => m.Venue.Code, (SelectList)ViewBag.Venue, "--Venue--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Venue')" })
+                        <span id="Venue"></span>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Training Date</label>
+                      
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.TrainingDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Start Date", @onchange = "TrainingDateSelect();validate(this,'TrainingDateTopic')" })
+
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <span id="TrainingDateTopic"></span>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Start Time
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.StartTime, new { @class = "form-control form-control-sm kt_timepicker_2", @placeholder = "Start Time", @readonly = "readonly" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="StartTimeTopic"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>End Time</label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.EndTime, new { @class = "form-control form-control-sm kt_timepicker_2", @placeholder = "End Time", @readonly = "readonly" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="EndTimeTopic"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12 align-right">
+
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="TrainingTopicSave()">
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+                <div id="TopicList">
+                    @await Html.PartialAsync("_TopicList", Model)
+                </div>
+
+
+                @*<div class="ihits-table table-border mobile-responsive-table ">
+            <table class="table form-grid clear fixTable" id="TopicList">
+                <thead>
+                    <tr class="table-gray">
+                        <th scope="col">Select Topic<span class="Mandatory">*</span></th>
+                        <th scope="col">Trainer</th>
+                        <th scope="col">Venue</th>
+                        <th scope="col">Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null && Model.TrainerTopicList != null)
+                        {
+
+                            @for (int i = 0; i < Model.TrainerTopicList.Count; i++)
+                            {
+                                @Html.HiddenFor(m => m.TrainerTopicList[i].ScheduleCode)
+                                @Html.HiddenFor(m => m.TrainerTopicList[i].TrainingCode)
+                                @Html.HiddenFor(m => m.TrainerTopicList[i].TrainingSubjectCode)
+                                <tr>
+
+                                    <td data-label="Name">
+                                        @Model.TrainerTopicList[i].Topicsub
+                                    </td>
+                                    <td data-label="Point">
+                                        @Model.TrainerTopicList[i].Trainer
+                                    </td>
+
+                                    <td data-label="Point">
+                                        @Model.TrainerTopicList[i].Venue
+
+                                    </td>
+                                    <td>
+                                        <a data-bs-toggle="tooltip" title="Delete" id="deleteskilltype"
+                                           type="button"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>*@
+
+            </div>
+    </div>
+}
+

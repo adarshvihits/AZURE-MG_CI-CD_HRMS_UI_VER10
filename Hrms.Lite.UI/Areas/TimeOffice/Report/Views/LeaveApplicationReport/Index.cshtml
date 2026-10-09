@@ -1,0 +1,209 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.Report.LeaveApplicationReport
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/scripts/TimeOffice/Report/LeaveApplicationReport.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        $('#From').val(_GetFormattedDate(firstDay));
+        $('#To').val(_GetFormattedDate(lastDay));
+        fillData();
+    });
+
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Leave Application Report </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Leave Application Report
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="topbar">
+
+            <!--begin::User-->
+            <!--end::User-->
+        </div>
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="tab-items">
+                                <span class="btn-title active All" onclick="OnTabClick('All','ALL')">
+                                    All
+                                    <span class="btn-notification AllTabCount">@Model.AllCount</span>
+                                </span>
+
+
+
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title Leave " onclick="OnTabClick('Leave','LEAVE')">
+                                    Leave
+                                    <span class="btn-notification LeaveTabCount">@Model.LeaveCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title OD" onclick="OnTabClick('OD','ONDUTY')">
+                                    OD
+                                    <span class="btn-notification ODTabCount">@Model.OnDutyCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items medium ">
+                                <span class="btn-title coff" onclick="OnTabClick('coff','COFF')">
+                                    COFF
+                                    <span class="btn-notification COFFTabCount">@Model.COFFCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title wfh" onclick="OnTabClick('wfh','WFH')">
+                                    WFH
+                                    <span class="btn-notification WFHTabCount">@Model.WFHCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title attendance" onclick="OnTabClick('attendance','AttendanceRegularization')">
+                                    RA
+                                    <span class="btn-notification AttRegTabCount">@Model.AttendanceRegularizationCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title permission" onclick="OnTabClick('permission','PermissionHour')">
+                                    PH
+                                    <span class="btn-notification PermHourTabCount">@Model.PermissionHourCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <div class="row-outer pb-2">
+                                    @*<label>From</label>*@
+                                    @*<span class="Mandatroy">*</span>*@
+                                    <div class="input-group date" style=" width: 150px;">
+                                        @Html.TextBoxFor(Model => Model.From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "From", onchange = "fillData();validate(this,'fromdate')" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="fromdate"></span>
+                                </div>
+                            </div>
+                            <div class="tab-items high">
+                                <div class="row-outer pb-2">
+
+                                    @*<span class="Mandatroy">*</span>*@
+                                    <div class="input-group date" style="width:150PX">
+                                        @Html.TextBoxFor(Model => Model.To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "To", onchange = "fillData();validate(this,'fromdate')" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="fromdate"></span>
+                                </div>
+                            </div>
+                            <div class="tab-items high">
+                                <div class="row-outer pb-2">
+
+                                    <select id="classification" class="form-control form-control-sm float-right" onchange="fillData()" style="width:150px;">
+                                        <option value="ALL">All</option>
+                                        <option value="PENDING">Pending</option>
+                                        <option value="APPROVED">Approved</option>
+                                        <option value="REJECTED">Rejected</option>
+                                        <option value="CANCELLED">Emp-Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-items select-option d-flex">
+
+                                @*<div class="form-group filter-combobox mt-0 mb-0 ml-2 mr-7" style="width: 120px; margin-right: 10px;">
+
+
+                @Html.DropDownListFor(m => m.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod, new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+            </div>*@
+                                <div class="tab-items high">
+                                    <div class="sraech-slider mt-0">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm" placeholder="ID/Name">
+                                    </div>
+
+                                    <div id="filterForm" class="filter-button slider-btn mt-0" data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left mt-0" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div id="LeaveApplicationList">
+                        @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/LeaveApplicationReport/_LeaveApplicationReportList.cshtml", Model)
+                    </div>
+                    <div id="LeaveApplicationTracker">
+
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.filter)
+                    </div>
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

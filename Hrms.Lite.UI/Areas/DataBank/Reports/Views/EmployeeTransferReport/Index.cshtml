@@ -1,0 +1,198 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.EmployeeTransferReport
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/Reports/employeeTransferReport.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //GetList();
+
+    });
+</script>
+
+
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Transfer Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Employee Transfer Report
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+                            <div class="tab-items">
+                             
+                                    <div class="form-group filter-combobox m-0" style="width: 150px;">
+                                    <label>Type</label>
+                                        @Html.DropDownListFor(m => m.EmployeeTransferType, (SelectList)ViewBag.Type, new { @class = "form-control form-control-sm", @onchange = "GetList()" })
+                                    </div>
+
+                                </div>
+
+
+                            <div class="" id="fromAndtoDates" >
+                                <div class=" d-flex">
+
+
+
+
+                                    <div class="tab-items">
+
+                                        <div class="row-outer pb-2">
+                                            <label>From</label>
+
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(Model => Model.TransferFromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "From", onchange = "ValidateDate();GetList()" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="fromdate"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-items">
+                                        <div class="row-outer pb-2">
+                                            <label>To</label>
+
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(Model => Model.TransferToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "To", onchange = "ValidateDate();GetList()" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="todate"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                                <div class="tab-items select-option" style=" padding-top: 15px;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+
+                                    <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                            data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    <div id="listView">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/EmployeeTransferReport/_List.cshtml")
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

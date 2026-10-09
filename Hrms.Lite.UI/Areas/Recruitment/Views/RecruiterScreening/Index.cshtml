@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "Recruiter Screening";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/RecruiterScreening.css?v=23" rel="stylesheet" type="text/css" />
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Recruitment/RecruiterScreening.js?v=19"></script>
+
+<!-- hidden button: its colour (whatever the active theme is) is copied to the selection circles and active tab -->
+<a class="btn btn-default" id="rsColorProbe" style="position:absolute;visibility:hidden;width:0;height:0;padding:0;border:0;"></a>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Recruiter Screening</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Recruitment
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Recruiter Screening
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container full-width">
+            <div class="card card-custom height-100per rs-card">
+
+                <!-- ============ Vacancy list ============ -->
+                <div id="rsListView">
+                    <div class="rs-top">
+                        <p class="rs-subtitle">Pick an open vacancy to match and shortlist applicants against it</p>
+
+                        <div class="rs-filter-row">
+                            <div class="form-group filter-combobox rs-filter">
+                                @Html.DropDownList("BusinessTypeCode", (SelectList)ViewBag.BusinessType, "Business Type: All",
+                                    new { @id = "rsBusinessType", @class = "form-control form-control-sm", @onchange = "OnBusinessTypeChange()" })
+                            </div>
+                            <div class="form-group filter-combobox rs-filter rs-filter-wide">
+                                @Html.DropDownList("DepartmentCode", (SelectList)ViewBag.Department, "Department: All",
+                                    new { @id = "rsDepartment", @class = "form-control form-control-sm", @onchange = "OnDepartmentChange()" })
+                            </div>
+                            <div class="form-group filter-combobox rs-filter rs-filter-wide">
+                                @Html.DropDownList("SectionCode", (SelectList)ViewBag.Section, "Section: All",
+                                    new { @id = "rsSection", @class = "form-control form-control-sm", @onchange = "OnScreeningFilterChange()" })
+                            </div>
+                        </div>
+
+                        <div class="form-group filter-combobox rs-vacancy">
+                            <label>Job</label>
+                            <select id="rsJob" class="form-control form-control-sm" onchange="OnJobChange()">
+                                <option value="">All Jobs matching the filters above</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="rs-body">
+                        <div class="rs-table-card ihits-table table-border hover-color odd-even">
+                            <table class="rs-table common-table">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th>Job / Vacancy</th>
+                                        <th>Branch</th>
+                                        <th>Department / Section</th>
+                                        <th>Grade</th>
+                                        <th>Openings</th>
+                                        <th>No. Mapped</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rsVacancyRows"></tbody>
+                            </table>
+                            <div class="rs-empty" id="rsListEmpty" style="display:none;">No open vacancies match the filters.</div>
+                            <div class="rs-pager" id="rsPager">
+                                <div class="rs-pager-info" id="rsPagerInfo"></div>
+                                <div class="rs-pager-controls">
+                                    <select id="rsPageSize" class="rs-page-size" onchange="OnPageSizeChange()">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    <div class="rs-pager-buttons" id="rsPagerButtons"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ Selected vacancy ============ -->
+                <div id="rsDetailView" style="display:none;">
+                    <div class="rs-top rs-detail-head">
+                        <a class="rs-back" onclick="BackToVacancyList()" title="Back to vacancies"><i class="fas fa-arrow-left"></i></a>
+                        <div>
+                            <div class="rs-detail-title">Recruiter Screening</div>
+                            <div class="rs-detail-sub">Match and shortlist applicants against this vacancy</div>
+                        </div>
+                    </div>
+
+                    <div class="rs-body">
+                        <div class="rs-vacancy-card">
+                            <div>
+                                <div class="rs-vacancy-title" id="rsVacancyTitle"></div>
+                                <div class="rs-vacancy-meta" id="rsVacancyMeta"></div>
+                            </div>
+                            <span class="rs-openings" id="rsOpenings" style="display:none;"></span>
+                        </div>
+
+                        <div class="rs-tabs-card">
+                            <div class="rs-tabs">
+                                <div class="rs-tab active" id="rsTabLinked" onclick="SwitchCandidateTab('LINKED')">
+                                    Applicants Linked to this Vacancy <span class="rs-tab-count" id="rsLinkedCount">0</span>
+                                </div>
+                                <div class="rs-tab" id="rsTabSuggested" onclick="SwitchCandidateTab('SUGGESTED')">
+                                    Suggested Unattached Applicants <span class="rs-tab-count" id="rsSuggestedCount">0</span>
+                                </div>
+                            </div>
+
+                            <div id="rsCandidateList"></div>
+                            <div class="rs-empty" id="rsEmpty" style="display:none;"></div>
+                        </div>
+                    </div>
+
+                    <div class="rs-footer">
+                        <span><b id="rsSelectedCount">0</b> candidate(s) selected for interview</span>
+                        <a class="btn btn-default" onclick="ScheduleInterview()">
+                            <i class="far fa-calendar-alt mr-2"></i> Schedule Interview
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content-->
+
+<!-- Interview scheduling started -->
+<div class="modal fade" id="rsScheduleModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered rs-modal-dialog" role="document">
+        <div class="modal-content rs-modal">
+            <div class="rs-modal-icon"><i class="fas fa-check"></i></div>
+            <div class="rs-modal-title">Interview Scheduling Started</div>
+            <div class="rs-modal-sub">Requests will be sent, in this order, for:</div>
+
+            <div class="rs-modal-list" id="rsScheduleList"></div>
+
+            <label class="rs-modal-label">Apply Master Interview Panel (optional)</label>
+            <select id="rsPanel" class="form-control rs-modal-select" onchange="OnPanelChange()">
+                <option value="">Select</option>
+            </select>
+
+            <div id="rsInterviewersBox" style="display:none;">
+                <div class="rs-modal-hint">Interviewers <span>&mdash; editable, remove any before confirming</span></div>
+                <div class="rs-chips" id="rsInterviewers"></div>
+            </div>
+
+            <a class="btn btn-default w-100" onclick="CompleteScheduling()">Done</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model Hrms.Lite.Shared.DashBoard.SuccessionDashboard
+    <style>
+        body.black-theme .ihits-table table a, a:not([href]):not([class]) {
+            color: #2179ff !important;
+        }
+
+      /*  .table-light, .table-light > th, .table-light > td {
+            background-color: #ffcd7666 !important;
+            color: #14171c;
+            border-color: #ffb73a !important;
+        }*/
+
+        .ihits-table.table-border table tbody tr td {
+            padding: 4px 6px !important;
+            /* font-size: 11px; */
+            font-size: 12px;
+            font-weight: 400;
+            color: #000;
+        }
+    </style>
+ 
+
+
+
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-1 SuccessionDashboard-table vertical-scroll-200">
+        <table>
+            <thead >
+                <tr class="table-dark">
+
+                    <th scope="col">Code</th>
+                    <th scope="col">Key Role</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Employee</th>
+                    <th scope="col">Mapped Count</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.PlanningGrid != null && Model.PlanningGrid.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.PlanningGrid.Count; i++)
+                    {
+
+                        <tr>
+                            <td>@Model.PlanningGrid[i].KeyPositionCodeDesc</td>
+                            <td>@Model.PlanningGrid[i].KeyPositionName</td>
+                            <td>@Model.PlanningGrid[i].Designation</td>
+                            <td>@Model.PlanningGrid[i].Department</td>
+                            @if (@Model.PlanningGrid[i].Risk == "High Risk")
+                            {
+                                <td>
+                                    <span class="high-badge  p-2">
+                                        @Model.PlanningGrid[i].Risk
+                                    </span>
+                                </td>
+                            }
+                            else if (@Model.PlanningGrid[i].Risk == "Medium Risk")
+                            {
+                                <td>
+                                    <span class="high-medium p-2">
+                                        @Model.PlanningGrid[i].Risk
+                                    </span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <span class="high-low p-2">
+                                        @Model.PlanningGrid[i].Risk
+                                    </span>
+                                </td>
+                            }
+                            <td>@Model.PlanningGrid[i].EmployeeName</td>
+                            <td><a onclick="onEmpClick('@Model.PlanningGrid[i].EmployeeGI', '@Model.PlanningGrid[i].KeyPositionGI')">@Model.PlanningGrid[i].MappedCount</a></td>
+                        </tr>
+                    }
+                }
+
+            </tbody><!-- end tbody -->
+        </table><!-- end table -->
+    </div>

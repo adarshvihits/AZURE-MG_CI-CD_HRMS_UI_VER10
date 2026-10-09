@@ -1,0 +1,243 @@
+@model Hrms.Lite.Shared.Master.JobDescription
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<link href="~/css/JobDescription.css" rel="stylesheet" />
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Master/jobDescription.js"></script>
+
+<script>
+     $(document).ready(function () {
+        if ('@CurrentUserRoleActions.Create' == 'False')
+            DisableAllElements('#kt_content');
+        initJobDescriptionEditor(@Model.MasterJobCode, '@Model.MasterJob?.Name');
+        });
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "JobDescriptionSave" }))
+{
+    @Html.HiddenFor(m => m.GI)
+    @Html.HiddenFor(m => m.LogGI)
+    @Html.HiddenFor(m => m.Code)
+    @Html.HiddenFor(m => m.Mode)
+    <input type="hidden" id="JDescription" name="JDescription" />
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Job Description</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "JobDescription", new { Area = "Master" })" class="">Job Description List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Job Description
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body">
+
+                             @*    <div class="location-slider">
+                                    <h4>
+                                        Job Description
+                                    </h4>
+                                </div> *@
+
+                                <div class="add-padding">
+
+                                 @*    <h6>Master Job</h6> *@
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            @if (Model.Mode == "MODIFY")
+                                            {
+                                                <div class="form-group jd-mj-select-wrap">
+                                                    <label class="jd-mj-label">Master Job</label>
+                                                    <input type="text" class="form-control form-control-sm" value="@Model.MasterJob?.Name" readonly="readonly" />
+                                                    @Html.HiddenFor(m => m.MasterJob.Code)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group jd-mj-select-wrap">
+                                                    <label class="jd-mj-label">Master Job <span class="Mandatory">*</span></label>
+                                                    @Html.DropDownListFor(m => m.MasterJob.Code, (SelectList)ViewBag.MasterJob, "Search Master Job", new
+                                               {
+                                                   @class = "selectpicker sliderSearchInput form-control form-control-sm ip_MasterJob",
+                                                   @onchange = "onMasterJobChange(this)",
+                                                   data_show_subtext = "true",
+                                                   data_live_search = "true"
+                                               })
+                                                    <span id="mjError"></span>
+                                                    <p class="jd-mj-hint">A master job is the combination of Business Type, Department, Section, Grade.</p>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <div class="col-md-3 mt-2 mb-2 pt-5">
+                                            <div class="d-flex align-items-center">
+                                                <div>Active</div>
+                                                <label class="switch" @*onchange="ActiveInactiveValidation('JD','@Model.Code')"*@>
+                                                    @Html.CheckBoxFor(model => model.Active, new { id = "ActiveInactiveJD" })
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @* In Modify mode the flat *Code fields aren't reliably filled by the API —
+                                       the nested Department/Section/Grade/BusinessType objects are (their
+                                       Name already renders correctly above), so prefer those for the values
+                                       actually posted back on save. *@
+                                    @Html.Hidden("BusinessTypeCode", Model.BusinessType != null && Model.BusinessType.Code > 0 ? Model.BusinessType.Code : Model.BusinessTypeCode)
+                                    @Html.Hidden("DepartmentCode", Model.Department != null && Model.Department.Code > 0 ? Model.Department.Code : Model.DepartmentCode)
+                                    @Html.Hidden("SectionCode", Model.Section != null && Model.Section.Code > 0 ? Model.Section.Code : Model.SectionCode)
+                                    @Html.Hidden("GradeCode", Model.Grade != null && Model.Grade.Code > 0 ? Model.Grade.Code : Model.GradeCode)
+
+                                    <div class="row" id="jdSnapshot" hidden="@(Model.Mode != "MODIFY")">
+                                         <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Business Type</label>
+                                                <div class="view-details" id="jdValBiz">@(Model.Mode == "MODIFY" ? (Model.BusinessType?.Name ?? "—") : "—")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Department</label>
+                                                <div class="view-details" id="jdValDept">@(Model.Mode == "MODIFY" ? (Model.Department?.Name ?? "—") : "—")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Section</label>
+                                                <div class="view-details" id="jdValSection">@(Model.Mode == "MODIFY" ? (Model.Section?.Name ?? "—") : "—")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Grade</label>
+                                                <div class="view-details" id="jdValGrade">@(Model.Mode == "MODIFY" ? (Model.Grade?.Name ?? "—") : "—")</div>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+
+                                    <div class="row my-3">
+                                        <div class="col-md-12">
+                                            <div class="jdform-section-head">
+                                                <div>
+                                                    <label class="mb-0">Job Description</label>
+                                                    <span class="Mandatory">*</span>
+                                                </div>
+                                                <button type="button" class="jdform-ai-btn" id="jdGenerateAiBtn">
+                                                    <i class="fas fa-magic"></i> Generate with AI
+                                                </button>
+                                            </div>
+                                            <div class="jdform-editor-shell" id="jdEditorShell">
+                                                <div class="jdform-toolbar" id="jdToolbar">
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="insertUnorderedList" title="Bulleted list"><i class="fas fa-list-ul"></i></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="justifyLeft" title="Align left"><i class="fas fa-align-left"></i></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="justifyCenter" title="Align center"><i class="fas fa-align-center"></i></button>
+                                                    <button type="button" class="jdform-tb-btn" data-cmd="justifyRight" title="Align right"><i class="fas fa-align-right"></i></button>
+                                                </div>
+                                                <div class="jdform-editor" id="jdEditor" contenteditable="true" data-placeholder="Paste the job description from Notepad, or start typing…">@Html.Raw(Model.JDescription)</div>
+                                                <div class="jdform-editor-footer">
+                                                    <span id="jdWordCount">0 words</span>
+                                                    <button type="button" class="btn btn-link btn-sm p-0" id="jdClearBtn">Clear description</button>
+                                                </div>
+                                            </div>
+                                            <span id="descError"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row card-footer-bottom-fixed border-none">
+
+                                        <div class="col-md-12 align-right">
+                                            @if (Model.Mode == "CREATE")
+                                            {
+                                                @if (CurrentUserRoleActions.Create == true)
+                                                {
+                                                    <button type="button" class="btn btn-default  mobile-full-width" onclick="saveJobDescription('Save')">
+                                                        Save
+                                                    </button>
+                                                }
+                                            }
+                                            @if (Model.Mode == "MODIFY")
+                                            {
+                                                @if (CurrentUserRoleActions.Modify == true)
+                                                {
+                                                    <button type="button" class="btn btn-default  mobile-full-width" onclick="saveJobDescription('Modify')">
+                                                        Modify
+                                                    </button>
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

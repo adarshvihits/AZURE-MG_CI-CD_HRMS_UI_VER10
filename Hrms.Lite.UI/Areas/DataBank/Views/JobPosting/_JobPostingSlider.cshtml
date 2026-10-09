@@ -1,0 +1,219 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobPosting
+<script src="~/js/bootstrap-datepicker.js"></script>
+<style>
+    .jpclose{
+        width:665px !important;
+    }
+    .jobdate{
+        height:30px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.posting_Applicable').on('click', function () {
+                    debugger
+            if ($('.posting_Applicable:checked').length == $('.posting_Applicable').length) {
+                $('#all_posting').prop('checked', true);
+                    } else {
+                $('#all_posting').prop('checked', false);
+                    }
+                });
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "JPSave" }))
+{
+    @Html.HiddenFor(m => m.MRFGI)
+    <div id="applicantshortlisted" class="slider-forms slider-forms-open jpclose">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseJobSlider('jpclose')"></i>
+            </div>
+            <h4 class="mb-4">Job Posting</h4>
+
+
+
+            <!----- stepper start here --->
+            <div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                MRF Number
+                            </label>
+                            <div class="view-details">
+                                @Model.Details.JobCode
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Job Title
+                            </label>
+                            <div class="view-details">
+                                @Model.Details.JobTitle
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Deadline
+                            </label>
+                            <div class="view-details">
+                                 @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Details.NeedByDate))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Number Of Requirements
+                            </label>
+                            <div class="view-details">
+                                @Model.Details.NoOfRequirements
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Designation
+                            </label>
+                            <div class="view-details">
+                                @Model.Details.Designation.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Location
+                            </label>
+                            <div class="view-details">
+                                @Model.Details.Location.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- completed -->
+                <div class="row my-2">
+                    <div class="col-md-12">
+                        <div class="ihits-table table-border mobile-responsive-table job-posting-slider">
+                            <table id="Posting_Source_Table">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">Posted In</th>
+                                        <th scope="col">
+                                            <div class="checkbox-inline justify-content-center">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                    <input type="checkbox" name="Checkboxes16" id="all_posting" onchange="onAllApplicabilityClick('all_posting','Posting_Source_Table')">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th scope="col">Visible From</th>
+                                        <th scope="col">Visible To</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.PostedIn != null && Model.PostedIn.Count > 0)
+                                    {
+                                        @Html.HiddenFor(m => m.PostedIn.Count)
+
+                                        for (int i = 0; i < Model.PostedIn.Count; i++)
+                                        {
+                                            @Html.HiddenFor(m => m.PostedIn[i].JobSourceCode)
+                                            @Html.HiddenFor(m => m.PostedIn[i].JobSourceName)
+                                            <tr>
+                                                <td data-label="Posted In">
+                                                    @Model.PostedIn[i].JobSourceName
+                                                </td>
+                                                <td data-label="Select">
+                                                    <div class="checkbox-inline justify-content-center">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                            @Html.CheckBoxFor(m => m.PostedIn[i].Applicability, new { @class="posting_Applicable"})
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Visible From">
+                                                    <div class="date-set">
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBoxFor(m => m.PostedIn[i].From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8 jobdate", @readonly = "true", @placeholder = "From", onchange = "validate(this,'From_" + i + "')" })
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <span id="From_@i"></span>
+                                                        </div>
+                                                </td>
+                                                <td data-label="Visible To">
+                                                    <div class="date-set">
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBoxFor(m => m.PostedIn[i].To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_9 jobdate", @readonly = "true", @placeholder = "To", onchange = "validate(this,'To_" + i + "')" })
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <span id="To_@i"></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="row card-footer-bottom-fixed">
+
+                    <div class="view-details align-right col-md-12">
+                        <a type="button"
+                           class="btn btn-default  mobile-full-width" onclick="JobPostingSave()">
+                            Save
+                        </a>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <!--end::Row-->
+        <!--begin::Row-->
+        <!--end::Row-->
+        <!--end::Dashboard-->
+    </div>
+}

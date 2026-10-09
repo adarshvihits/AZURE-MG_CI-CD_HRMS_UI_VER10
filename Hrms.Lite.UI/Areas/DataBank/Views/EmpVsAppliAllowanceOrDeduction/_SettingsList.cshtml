@@ -1,0 +1,74 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmpVsAppliAllowanceOrDeduction
+
+<script>
+        $(document).ready(function () {
+            if ($('#AllowOrDedAllCheckBox').find('input[type="checkbox"]:checked').length == $('#AllowOrDedAllCheckBox').find('input[type="checkbox"]').length - 1) {
+                $('#AllowOrDedAll').prop('checked', true);
+            }
+            @{
+                int rwCnt = 0;
+            }
+            @if (Model.ApplAllowOrDedList != null && Model.ApplAllowOrDedList.Count > 0)
+            {
+                rwCnt = Model.ApplAllowOrDedList.Count;
+            }
+            $('#rwCnt').html(@rwCnt);
+        });
+</script>
+
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Employee-Vs-Applicable-Allowance vertical-scroll-400">
+        @Html.HiddenFor(Model => Model.ApplAllowOrDedList.Count)
+        <table id="AllowOrDedAllCheckBox">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">DOJ</th>
+                    <th scope="col">
+                        <div class="checkbox-inline pl-2">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                <input type="checkbox"
+                                       name="Checkboxes15" id="AllowOrDedAll" onclick="onAllClick('AllowOrDedAll','AllowOrDedAllCheckBox')">
+                                <span></span>
+                            </label>
+                        </div>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ApplAllowOrDedList != null && Model.ApplAllowOrDedList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ApplAllowOrDedList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                            @Model.ApplAllowOrDedList[i].EmployeeID
+                            @Html.HiddenFor(m => m.ApplAllowOrDedList[i].EmployeeCode)
+                            @Html.HiddenFor(m => m.ApplAllowOrDedList[i].EmployeeGI)
+                            </td>
+                            <td>@Model.ApplAllowOrDedList[i].EmployeeName </td>
+                            <td>@Model.ApplAllowOrDedList[i].Designation</td>
+                            <td>@Model.ApplAllowOrDedList[i].Department</td>
+                            <td>@Model.ApplAllowOrDedList[i].Location</td>
+                            <td> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ApplAllowOrDedList[i].DOJ))</td>
+                            <td data-label="">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        @Html.CheckBoxFor(m => m.ApplAllowOrDedList[i].Applicable, new { @onclick = "onChkBoxClick(this,'AllowOrDedAll','AllowOrDedAllCheckBox')" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+       
+    </div>

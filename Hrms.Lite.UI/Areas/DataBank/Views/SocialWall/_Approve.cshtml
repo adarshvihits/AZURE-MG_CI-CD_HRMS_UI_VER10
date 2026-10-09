@@ -1,0 +1,111 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.SocialWall
+    <script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#GroupCompany').multiselect({
+            includeSelectAllOption: true,
+        });
+    });
+</script>
+<style>
+    .multiselect-native-select .multiselect {
+        border:none !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "SocialWallApprove" }))
+{
+    <div id="addbankname" class="slider-forms slider-forms-open approveSlider">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('approveSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Social Wall  </h4>
+            </div>
+            <div class="add-padding">
+                <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+                <div class="row  my-2">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+
+                            <label class="view-title ">
+                                Description
+                            </label>
+                            <div class="view-details">
+
+                                @Model.Description
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title pb-1">
+                                File
+                            </label>
+                            <div>
+
+
+                                <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width " onclick="showDocument('@Model.file.FileName','@Model.file.AbsoluteUri')">
+                                    View File
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                Group Company
+                                @*<span class="Mandatory">*</span>*@
+                            </label><span class="Mandatory">*</span>
+                            <div class="form-control-sm form-control  GC ">
+                                @Html.HiddenFor(m => m.SocialWallGI)
+                                @Html.ListBoxFor(Model => Model.GroupCompany, (SelectList)ViewBag.GrpCompany, new
+                                {
+                                    @class = "multiselectDropdownFields",
+                                    @multiple = "multiple",
+                                    data_db_filter = "true",
+
+                                })
+                            </div>
+                           
+                           
+                        </div>
+                        <span id="grpC"></span>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <button type="button" class="btn btn-danger  mobile-full-width" onclick="ApproveOrReject('@Model.SocialWallGI', 'Reject')">
+                            Reject
+                        </button>
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="ApproveOrReject('@Model.SocialWallGI', 'Approve')">
+                            Approve
+                        </button>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

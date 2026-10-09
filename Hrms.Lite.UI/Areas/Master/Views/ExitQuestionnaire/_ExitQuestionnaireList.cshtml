@@ -1,0 +1,86 @@
+﻿
+@model Hrms.Lite.Shared.Master.ExitInterviewQuestionnaire
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table exit-questionaire-master-list pt-1 ">
+    @Html.HiddenFor(m => m.ExitInterviewQuestionnaireList.Count)
+    <table id="ExitQuestionnaireTable" class=" common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Question</th>
+                <th scope="col">Type</th>
+                <th scope="col">Group Name</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.ExitInterviewQuestionnaireList != null && Model.ExitInterviewQuestionnaireList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ExitInterviewQuestionnaireList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.ExitInterviewQuestionnaireList[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Mode)
+                            <td data-label="Question">@Model.ExitInterviewQuestionnaireList[i].Name</td>
+
+                            <td data-label="Type">@Model.ExitInterviewQuestionnaireList[i].TypeName</td>
+                            <td data-label="Group Name">@Model.ExitInterviewQuestionnaireList[i].GroupName</td>
+                            <td data-label="Actions">
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit" id="editskilltype"
+                                       type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit" id="editskilltype"
+                                       type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i);
+                                       swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEdit');});">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteskilltype" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('DELETE','@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteskilltype" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('DELETE', '@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

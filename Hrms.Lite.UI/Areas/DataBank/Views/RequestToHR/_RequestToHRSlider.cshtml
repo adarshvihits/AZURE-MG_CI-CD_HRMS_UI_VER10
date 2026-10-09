@@ -1,0 +1,318 @@
+﻿@model Hrms.Lite.Shared.DataBank.RequestToHR
+
+    <script src="~/js/tooltip.js"></script>
+
+    <script>
+
+    
+
+        function filechange(i) {  
+            debugger
+            var a = document.getElementById('RequestToHRDocList_' + i + '__FileData');
+            if (a.value == "") {                
+                $('#fileLabel_' + i).html("No File Chosen");
+            }
+            else {
+                debugger
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 17);
+                
+                $('#fileLabel_' + i).html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+        }
+
+    </script>
+
+<style>
+    .hrrequest {
+        color: white !important;
+    }
+</style>
+
+    @using (Html.BeginForm(null,null , FormMethod.Post, new { @id = "RequestToHrSlider", enctype = "multipart/form-data" }))
+    {
+        <div id="resignationdelete" class="slider-forms slider-forms-open RequestToHr">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('RequestToHr')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4 class="mb-4">Request To HR Acceptance</h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+
+
+                <div class="reward-section border-none">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Request</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.RequestCode)
+                                    @Model.Request
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Entry Date</label>
+                                <div class="view-details">
+
+                                    @Model.EntryDate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <div class="row-outer pb-2">
+                                <label class="view-title">Remarks</label>
+                                <div class="view-details">
+
+                                    @Model.Remarks
+                                </div>
+                                <span id="ApprovedDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Approval Comments</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.radiomode)
+                                    @Html.HiddenFor(Model => Model.RequestCode)
+                                    @Model.ApprovalComments
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                      
+
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer pb-2">
+                                <label class="view-title">Approved Date</label>
+                                <div class="view-details">
+
+                                    @Model.ApprovedDate
+                                </div>
+                                <span id="ApprovedDate"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row my-3">
+
+                        <div class="col-md-12">
+                            <label>Reply</label>
+
+                            @Html.TextAreaFor(Model => Model.Reply, new { @class = "form-control form-control-sm", @placeholder = "Action", maxlength = "250" })
+                            @*@Html.HiddenFor(Model => Model.ResignationDeleteDetails.Reason)*@
+                        </div>
+                        <span id="DeleteReason"></span>
+                    </div>
+
+
+                    @if (Model.radiomode == 0)
+                    {
+                        <div class="ihits-table table-border mobile-responsive-table request_to_hr my-7">
+
+
+
+                            <table class="table form-grid clear fixTable" id="RequestTohrTable">
+                                <thead>
+                                    <tr class="table-gray">
+                                        <th scope="col">
+                                            Document
+                                            @*<span class="Mandatory">*</span>*@
+                                        </th>
+
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.RequestToHRDocList.Count; i++)
+                                    {
+
+                                        <tr id="row_OI_@i">
+                                            <td data-label="Document">
+
+
+
+                                                <div class="file-upload-form-group" style="width:185px;">
+
+
+                                                    <div class="file-upload-form mb-1">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.RequestToHRDocList[i].FileName','@Model.RequestToHRDocList[i].AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                        @Html.HiddenFor(m => m.RequestToHRDocList[i].AbsoluteUri)
+                                                        @Html.HiddenFor(m => m.RequestToHRDocList[i].ActualFileName)
+                                                        @Html.HiddenFor(m => m.RequestToHRDocList[i].FileName)
+                                                        @Html.TextBoxFor(m => m.RequestToHRDocList[i].FileData, new { @type = "file", @title = "", @class = "previewImage hrrequest", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "filechange(" + i + ")" })
+
+                                                        @if (Model.RequestToHRDocList[i].ActualFileName == "")
+                                                        {
+                                                            <label id="fileLabel_@i" class="nofilelabel notchlabel">No File Chosen</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            @*<label id="fileLabel" class="nofilelabel notchlabel">@Model.FactorComments[i].Attachment.ActualFileName.Substring(0,5)</label>*@
+                                                            <label id="fileLabel_@i" class="nofilelabel notchlabel">@Model.RequestToHRDocList[i].ActualFileName</label>
+                                                        }
+
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            </td>
+
+
+                                            <td data-label="Actions">
+                                                <button type="button" onclick="AddRowGrid('RequestTohrTable')"
+                                                        class="btn btn-icon btn-default icon-only  mobile-full-width">
+                                                    <i class="icon-xl fas fa-plus"></i>
+                                                </button>
+                                                <button type="button" onclick="DeleteRw(@i)"
+                                                        class="btn btn-icon btn-delete icon-only mobile-full-width">
+                                                    <i class="icon-xl far fa-trash-alt"></i>
+                                                </button>
+
+
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+                        <div class="row card-footer-bottom-fixed border-none">
+
+                            <div class="col-md-12 align-right">
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="RequestToHRsave()">
+                                    Save
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    }
+
+                    else
+                    {
+
+
+                        <div class="ihits-table table-border mobile-responsive-table request_to_hr my-7">
+
+
+
+                            <table class="table form-grid clear fixTable" id="RequestTohrTable">
+                                <thead>
+                                    <tr class="table-gray">
+                                        <th scope="col">
+                                            Document
+                                            @*<span class="Mandatory">*</span>*@
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.RequestToHRDocList.Count; i++)
+                                    {
+
+                                        <tr id="row_OI_@i">
+                                            <td data-label="Document">
+
+                                                @Html.HiddenFor(m => m.RequestToHRDocList[i].AbsoluteUri)
+                                                @Html.HiddenFor(m => m.RequestToHRDocList[i].ActualFileName)
+                                                @Html.HiddenFor(m => m.RequestToHRDocList[i].FileName)
+
+
+                                                <div class="file-upload-form-group" style="width:185px;">
+
+                                                    <div class="view-details  ">
+                                                        <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="showDocument('@Model.RequestToHRDocList[i].FileName','@Model.RequestToHRDocList[i].AbsoluteUri')">
+                                                            <i class="icon-xl far fa-eye"></i>View File
+                                                        </a>
+                                                    </div>
+                                                    @*<div class="file-upload-form mb-1">
+
+
+
+                                            @Html.HiddenFor(m => m.RequestToHRDocList[i].AbsoluteUri)
+                                            @Html.HiddenFor(m => m.RequestToHRDocList[i].ActualFileName)
+                                            @Html.HiddenFor(m => m.RequestToHRDocList[i].FileName)
+
+
+                                            @Html.TextBoxFor(m => m.RequestToHRDocList[i].FileData, new { @type = "file", @title = "", @class = "previewImage hrrequest", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "filechange(" + i + ")" })
+
+
+                                            <div class="row my-3">
+                                                <div class="col-md-6">
+                                                    <div class="view-details  ">
+                                                        <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="showDocument('@Model.RequestToHRDocList[i].FileName','@Model.RequestToHRDocList[i].AbsoluteUri')">
+                                                            <i class="icon-xl far fa-eye"></i>View File
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>*@
+
+                                                </div>
+
+
+                                            </td>
+
+
+
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+                    }
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    }

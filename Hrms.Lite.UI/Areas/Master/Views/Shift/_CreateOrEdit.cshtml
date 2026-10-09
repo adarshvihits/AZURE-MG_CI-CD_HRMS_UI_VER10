@@ -1,0 +1,646 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.Master.ShiftDetails
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/bootstrap-timepicker.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+@*<script src="~/js/custom.js"></script>*@
+<script>
+    // SELECT COLOR CODE START
+    $('html').click(function () {
+        $('.slider-color-box').hide();
+    });
+    $('.slider-color-list').click(function () {
+        $('.slider-color-box').hide();
+    });
+    $('.slider-color-selecter').click(function (e) {
+        e.stopPropagation();
+    });
+    $('.slider-color-pick').click(function (e) {
+        $('.slider-color-box').toggle();
+    });
+    $('.slider-color-list').click(function () {
+        debugger
+        var one = $(this).attr('data-ticket');
+        //alert(one);
+        var classname = $(this).attr('class');
+        var getColorCodeName = $(this).attr('class').substring(18, classname.lenth)
+
+        $('.slider-color-pick span').html(getColorCodeName);
+        $('.slider-color-pick i').removeClass();
+        $('.slider-color-pick i').addClass('color-code ' + getColorCodeName);
+    });
+
+    $('html').click(function () {
+        $('.slider-color-box-two').hide();
+    });
+    $('.slider-color-list-two').click(function () {
+        $('.slider-color-box-two').hide();
+    });
+    $('.slider-color-selecter-two').click(function (e) {
+        e.stopPropagation();
+    });
+    $('.slider-color-pick-two').click(function (e) {
+        $('.slider-color-box-two').toggle();
+    });
+    $('.slider-color-list-two').click(function () {
+        var one = $(this).attr('data-ticket');
+        //alert(one);
+        var classname = $(this).attr('class');
+        var getColorCodeName = $(this).attr('class').substring(21, classname.lenth)
+        $('.slider-color-pick-two span').html(getColorCodeName);
+        $('.slider-color-pick-two i').removeClass();
+        $('.slider-color-pick-two i').addClass('color-code ' + getColorCodeName);
+    });
+
+// SELECT COLOR CODE END
+</script>
+<script src="~/scripts/Master/shift.js"></script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+       
+        $('#BreakHourEndTime').change(function () {
+            getBreakHour('#BreakHourEndTime','BreakEndTime');
+        })
+
+        $('#BreakHourStartTime').change(function () {
+            getBreakHour('#BreakHourStartTime', 'BreakstartTime');
+        })
+        $('#ShiftStartTime').change(function () {
+            getBreakHour('#ShiftStartTime', 'SStartTime');
+        })
+        $('#ShiftEndTime').change(function () {
+            getBreakHour('#ShiftEndTime', 'SEndTime');
+        })
+        if (@Model.Mode= "MODIFY")
+        {
+
+            var bgHEX = '@Model.DutyRosterBackgroundColor.Name';
+            var bgcolor = colours[bgHEX];
+            $("#shiftDutyBgI").addClass('color-code ' + bgcolor);
+            $("#shiftDutyBgSpan").html(bgcolor);
+
+
+             var fontHEX = '@Model.DutyRosterFontColor.Name';
+            var fontcolor = colours[fontHEX];
+            $("#shiftDutyFontI").addClass('color-code ' + fontcolor);
+            $("#shiftDutyFontSpan").html(fontcolor);
+
+        }
+
+
+    // SELECT COLOR CODE START
+        $('.slider-color-list').click(function () {
+            debugger
+            var bg = $(this).attr('data-ticket');
+
+            $("#DutyRosterBackgroundColor_Name").val(bg);
+            validateById('#DutyRosterBackgroundColor_Name','BgName')
+        });
+
+            $('.slider-color-list-two').click(function () {
+                debugger
+                var front = $(this).attr('data-ticket');
+                $(".ShiftFontColorName").val(front);
+                validateById('#DutyRosterFontColor_Name', 'FName')
+
+            });
+
+        });
+
+</script>
+@using (Html.BeginForm("Save", "Shift", FormMethod.Post, new { id = "shiftsave" }))
+{
+
+    <div id="shiftedit" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Shift</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm SName", @placeholder = "Name", @onblur = "validate(this,'ShiftName')", maxlength = "120", @onchange = "OnlycapitalizeFirstLetter(this,'ShiftName')" })
+                            <span id="ShiftName"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm SShortName", @placeholder = "ShortName", @onblur = "validate(this,'ShiftShtName')", maxlength = "3" })
+                            <span id="ShiftShtName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-1">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Shift Code
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShiftCode, new { @class = "form-control form-control-sm SCode", @placeholder = "Shift Code", @onblur = "validate(this,'ShCode')" })
+                            <span id="ShCode"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label>
+                                Shift Category
+                                <span class="Mandatory">*</span>
+                            </label>
+
+
+                            @Html.DropDownListFor(Model => Model.ShiftCategory.Code, (SelectList)ViewBag.ShiftType, "--Select--", new { @class = "form-control form-control-sm SType", @onblur = "validate(this,'ShiftType')" })
+                            <span id="ShiftType"></span>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- <new></new> -->
+                <div class="row my-1">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Shift Start Time
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+
+                                @Html.TextBoxFor(Model => Model.ShiftStartTime, new { @class = "form-control form-control-sm ShiftstartTime kt_timepicker_2", @placeholder = "Shift Start Time" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="SStartTime"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Shift End Time
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+
+                                @Html.TextBoxFor(Model => Model.ShiftEndTime, new { @class = "form-control form-control-sm kt_timepicker_2 ShiftEndTime", @placeholder = "Shift End Time" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="SEndTime"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <new></new> -->
+                <div class="row my-1">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Break Hour Start
+                                Time
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+
+                                @Html.TextBoxFor(Model => Model.BreakHourStartTime, new { @class = "form-control form-control-sm BStartTime kt_timepicker_2", @placeholder = "Break Hour Start Time" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="BreakstartTime"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Break Hour End Time
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+
+                                @Html.TextBoxFor(Model => Model.BreakHourEndTime, new { @class = "form-control form-control-sm BEndTime kt_timepicker_2", @placeholder = "Break Hour End Time" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="BreakEndTime"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <end></end> -->
+                <!-- <new></new> -->
+                <div class="row my-1">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>
+                                Break Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.BreakHour, new { @class = "form-control form-control-sm BTime", @placeholder = "Break Hours", @readonly = "readonly" })
+                            <span id="BreakTime"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Scheduled Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ScheduledHour, new { @class = "form-control form-control-sm SHour", @placeholder = "Scheduled Hours", @readonly = "readonly" })
+                            <span id="Scheduledtime"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- <end></end> -->
+                <!-- <new></new> -->
+                <div class="row my-1">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Full Day Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.FullDayHour, new { @class = "form-control form-control-sm  kt_timepicker_2 fDayHour", @placeholder = "Full Day Hours", @onchange = "validate(this,'FullDayHr')" })
+
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="FullDayHr">
+                                @*<span class="Mandatory">*</span>*@
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                Half Day Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.HalfDayHour, new { @class = "form-control form-control-sm  kt_timepicker_2 HDayHour", @placeholder = "Half Day Hours", @onchange = "validate(this,'HalfDayHr')" })
+
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="HalfDayHr"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                HP/OP Full Day Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.HPOPFullDayHour, new { @class = "form-control form-control-sm  kt_timepicker_2 hpfDayHour", @placeholder = "HP/OP Full Day Hours", @onchange = "validate(this,'HPOPFullDayHr')" })
+
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="HPOPFullDayHr">
+                                @*<span class="Mandatory">*</span>*@
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mr-2">
+                                HP/OP Half Day Hours
+                                <span class="Mandatory">*</span>
+                            </label>
+                            <div class="input-group timepicker">
+                                @Html.TextBoxFor(Model => Model.HPOPHalfDayHour, new { @class = "form-control form-control-sm  kt_timepicker_2 hpHDayHour", @placeholder = "HP/OP Half Day Hours", @onchange = "validate(this,'HPOPHalfDayHr')" })
+
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-clock-o"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="HPOPHalfDayHr"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <end></end> -->
+                <!-- <end></end> -->
+                <!-- <end></end> -->
+                <div class="row my-1">
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="news">
+                                Duty Roster Background Color
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <div class="slider-color-selecter">
+                                    <div class="slider-color-pick"><i id="shiftDutyBgI"></i><span id="shiftDutyBgSpan">Select Color</span> </div>
+
+                                    <div class="slider-color-box">
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Pale-Pink" data-ticket="#F8DAD5"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Egg-Shell" data-ticket="#D8EDE8"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Lilac" data-ticket="#C8A2C8"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Pastel-Orange" data-ticket="#F8B88B"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Coral-Blue" data-ticket="#AFDCEC"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Silver" data-ticket="#C0C0C0"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Blue-Gray" data-ticket="#98AFC7"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Acid-Green" data-ticket="#B0BF1A"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Pastel-Yellow" data-ticket="#fdfd96"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Caramel" data-ticket="#FDD39B"></div>
+                                        </div>
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Pearl-White" data-ticket="#F8F6F0"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Tea-Green" data-ticket="#CCFB5D"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Light-Azure" data-ticket="#74bbfb"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Organic-Brown" data-ticket="#E3F9A6"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Creamy-Mint" data-ticket="#c8f3cd"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list Aquamarine" data-ticket="#7FFFD4"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="slider-color-selecter">
+                                    <div class="slider-color-pick" style="background-color: #F3F6F9 !important"><i id="shiftDutyBgI"></i><span id="shiftDutyBgSpan">Select Color</span> </div>
+
+
+                                </div>
+                            }
+                            @Html.HiddenFor(model => model.DutyRosterBackgroundColor.Name)
+                            <span id="BgName"></span>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="news">
+                                Duty Roster Font Color
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <div class="slider-color-selecter-two">
+                                    <div class="slider-color-pick-two"><i id="shiftDutyFontI"></i><span id="shiftDutyFontSpan">Select Color</span> </div>
+
+                                    <div class="slider-color-box-two">
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Red" data-ticket="#ff0000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Green" data-ticket="#3d8701"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Blue" data-ticket="#0000ff"></div>
+                                        </div>
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Black" data-ticket="#000000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Orange" data-ticket="#FFA500"></div>
+                                        </div>
+                                        @*<div class="color-selecter-outer">
+                                    <div class="slider-color-list-two Gray" data-ticket="#808080"></div>
+                                </div>*@
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Purple" data-ticket="#800080"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Magenta" data-ticket="#FF00FF"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Maroom" data-ticket="#800000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Cyan" data-ticket="#00FFFF"></div>
+                                        </div>
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Coffee" data-ticket="#6F4E37"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Bronze" data-ticket="#CD7F32"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Raspberry" data-ticket="#E30B5D"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Deep-Purple" data-ticket="#36013F"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Medium-Teal" data-ticket="#045F5F"></div>
+                                        </div>
+
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Eggplant" data-ticket="#614051"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Black-Bean" data-ticket="#3D0C02"></div>
+                                        </div>
+                                        @*<div class="color-selecter-outer">
+                                    <div class="slider-color-list-two Midnight" data-ticket="#2B1B17"></div>
+                                </div>*@
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="slider-color-selecter-two">
+                                    <div class="slider-color-pick-two" style="background-color: #F3F6F9 !important"><i id="shiftDutyFontI"></i><span id="shiftDutyFontSpan">Select Color</span> </div>
+
+                                </div>
+                            }
+                            @Html.HiddenFor(m => m.DutyRosterFontColor.Name, new { @class = "ShiftFontColorName" })
+                            <span id="FName"></span>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row my-1">
+                    <div class="col-md-6 d-flex align-items-center">
+
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                @Html.CheckBoxFor(m => m.ShiftAllowanceApplicable)
+
+                                <span></span> Shift Allowance
+                            </label>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div>Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidationShift('SHIFT', '@Model.Code')">
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "shiftvalidation" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        <div class="view-details">
+
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm SDescription", @placeholder = "Description", maxlength = "250" })
+                                <span id="shiftDescription"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(model => Model.Description)
+                                    @Html.DisplayFor(Model => Model.Description)
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveShiftMaster('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveShiftMaster('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

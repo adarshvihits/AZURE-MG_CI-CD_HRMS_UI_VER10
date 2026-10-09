@@ -1,0 +1,158 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ESISettings
+@*<script src="~/js/settings.js"></script>*@
+<script src="~/js/tooltip.js"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+
+            //$('#EsiSettingsTable').DataTable({
+            //    "pageLength": 25,
+            //    "language": {
+            //        searchPlaceholder: "Search"
+            //    }
+            //});
+
+            //$(".dataTables_filter").addClass("dataTables_filter_trn");
+            //$(".dataTables_filter").addClass("dataTables_filter_onboard");
+            //$('.ihits-table table').removeClass("dataTable no-footer");
+            //$(".ihits-table table tr th").removeAttr('style')
+        });
+    </script>
+    <div id="EsiSettingsList">
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table esi-settings-list">
+            @Html.HiddenFor(m => m.ESISettingsList.Count)
+            <table id="EsiSettingsTable" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">ID</th>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">DOJ</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">ESI Group</th>
+                        <th scope="col">ESI No</th>
+                        <th scope="col">EESI</th>
+                        <th scope="col">MESI</th>
+                        <th scope="col">Min Limit</th>
+                        <th scope="col">Max Limit</th>
+
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@if (Model.ESISettingsList != null && Model.ESISettingsList.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.ESISettingsList.Count; i++)
+                        {
+                            <tr>
+                                <td data-label="ID">@Model.ESISettingsList[i].EmployeeID</td>
+                                <td data-label="Employee">@Model.ESISettingsList[i].EmployeeName</td>
+                                <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ESISettingsList[i].DOJ))</td>
+                                <td data-label="Location">@Model.ESISettingsList[i].Location</td>
+                                <td data-label="ESI Group">@Model.ESISettingsList[i].ESIGroup.Name</td>
+                                <td data-label="ESI No">@Model.ESISettingsList[i].ESINo</td>
+
+
+
+                                <td data-label="EESI">@Model.ESISettingsList[i].EESI</td>
+                                <td data-label="MESI">@Model.ESISettingsList[i].MESI</td>
+                                <td data-label="Min Limit">@Model.ESISettingsList[i].MinLimit</td>
+                                <td data-label="Max Limit">@Model.ESISettingsList[i].EmpMaxLimit</td>
+                                <td data-label="Action">
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="ESI_Settings_slider" type="button"
+                                       class="btn btn-icon btn-edit icon-only slide r-btn" onclick="onEditClick('@Model.ESISettingsList[i].EmployeeGI')">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }*@
+
+                </tbody>
+            </table>
+
+
+
+
+
+        </div>
+        <div class="row card-footer-bottom-fixed">
+
+            <div class="col-md-12 align-left">
+
+
+                <div class="d-flex">
+                    <a data-bs-toggle="modal" data-target=".ESI-modal-lg">
+                        <div class="application-btn d-flex align-items-center">
+                            <div class="history-btn">
+                                <img src="~/images/settings-line-icon.png"  />
+
+                            </div>
+                            <div class="application-icon" onclick="OnESIGeneralSettingsClick()"> <h3 class="pt-2 pl-3">ESI General Settings</h3></div>
+                        </div>
+                    </a>
+
+                    <a data-bs-toggle="modal" data-target=".ESI_settings_applicable" >
+                        <div class="application-btn d-flex align-items-center pl-10">
+                            <div class="history-btn">
+                                <img src="~/images/add-category-icon (1).png"/>
+
+                            </div>
+                            <div class="application-icon" onclick="OnApplicableAllowanceClick()"> <h3 class="pt-2 pl-3">  Applicable Allowance</h3></div>
+                        </div>
+                    </a>
+                </div>
+
+
+
+                @*<a data-bs-toggle="modal" data-target=".ESI-modal-lg" type="button" class="btn btn-default float-left mobile-full-width mr-3" onclick="OnApplicableAllowanceOrGeneralSettingsClick($('#ESIDeduction_Code').val())">
+                    ESI General Settings
+                </a>
+                <a data-bs-toggle="modal" data-target=".ESI_settings_applicable" type="button" class="btn btn-default float-left mobile-full-width mr-3" onclick="OnApplicableAllowanceOrGeneralSettingsClick($('#ESIDeduction_Code').val())">
+                    Applicable Allowance
+                </a>*@
+
+            </div>
+
+
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content popup">
+                    <div class="modal-header" style="padding:10px">
+                        <h5 class="modal-title" id="exampleModalLabel">ESI General Settings</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content popup">
+                    <div class="modal-header" style="padding:10px">
+                        <h5 class="modal-title" id="exampleModalLabel">ESI Applicable Allowance</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+      
+    </div>

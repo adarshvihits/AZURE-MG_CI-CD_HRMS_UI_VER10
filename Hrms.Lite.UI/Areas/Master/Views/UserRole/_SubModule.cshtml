@@ -1,0 +1,150 @@
+﻿@model Hrms.Lite.Shared.Master.UserRole
+<script>
+    $(document).ready(function () {
+        if ($('#SubmoduleAllCheckBox').find('input[type="checkbox"]:checked').length == $('#SubmoduleAllCheckBox').find('input[type="checkbox"]').length - 1) {
+            $('#SubmoduleAll').prop('checked', true);
+        }
+
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="step-outer mt-4">
+
+
+            <div class="step-item active  new-resposive-tab      ">
+                <label class="label-1">
+                    Module
+                </label>
+                <span class="step-circle focused"></span>
+            </div>
+            <div class="step-item step-item-2 step_new_2  new-resposive-tab  active">
+                <label class="label-2">
+                    Sub Module
+                </label>
+
+                <span class="step-circle step-circle-2           "></span>
+            </div>
+            <div class="step-item   step-item-3     new-resposive-tab   ">
+                <label class="label-3">
+                    Menu
+                </label>
+
+                <span class="step-circle step-circle-3        "></span>
+            </div>
+
+        </div>
+        </div>
+</div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="ihits-table table-border user-role-sub-module-list mb-0 vertical-scroll-300">
+                    <table id="SubmoduleAllCheckBox">
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">Module</th>
+                                <th scope="col">Sub Module</th>
+                                <th scope="col">
+                                    <div class="checkbox-inline" style=" padding-left: 9px;">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            <input type="checkbox"
+                                                   name="Checkboxes15" id="SubmoduleAll" onclick="onAllClick('SubmoduleAll','SubmoduleAllCheckBox')">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.UserVsSubModule != null && Model.UserVsSubModule.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.UserVsSubModule.Count; i++)
+                                {
+                                    @Html.HiddenFor(m => m.UserVsSubModule[i].Code)
+                                    @Html.HiddenFor(m => m.UserVsSubModule[i].Name)
+                                    <tr>
+                                        <td data-label="Module">@Model.UserVsSubModule[i].ModuleName</td>
+                                        <td data-label="SubModule">@Model.UserVsSubModule[i].Name</td>
+                                        <td data-label="Y/S">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                    @Html.CheckBoxFor(m => m.UserVsSubModule[i].Applicable, new { @onclick = "onChkBoxClick(this,'SubmoduleAll','SubmoduleAllCheckBox')" })
+                                                    @*, new { @onclick = "moduleChange(" + i + ")" }*@
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="arrow-outer">
+                    @if (Model.UserVsSubModule != null)
+                    {
+
+                        <div>
+                            <button type="button" class="arrow-next" onclick="onNextClick('SubModule', '@Model.UserVsSubModule.Count','SubmoduleAllCheckBox')">
+                                <i class="icon-xl fas fa-angle-double-right"></i>
+                            </button>
+                        </div>
+                    }
+                    <div>
+                        <button type="button" class="arrow-previous" onclick="onBackArrowClck('SubModule')">
+                            <i class="icon-xl fas fa-angle-double-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="ihits-table table-border esi-setting-list-allowance-slider mb-0 vertical-scroll-300">
+                <table>
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sub Module</th>
+                            <th scope="col">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        <input type="checkbox" name="Checkboxes15" checked="checked">
+                                        <span></span>All
+                                    </label>
+                                </div>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.UserVsSubModule != null && Model.UserVsSubModule.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.UserVsSubModule.Count; i++)
+                            {
+                                @Html.HiddenFor(m => m.UserVsSubModule[i].Code)
+                                @Html.HiddenFor(m => m.UserVsSubModule[i].Name)
+                                <tr>
+                                    <td data-label="Allowance">@Model.UserVsSubModule[i].Name</td>
+                                    <td data-label="Y/S">
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                @Html.CheckBoxFor(m => m.UserVsSubModule[i].Applicable, new { @onclick = "submoduleChange(" + i + ")" })
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>*@

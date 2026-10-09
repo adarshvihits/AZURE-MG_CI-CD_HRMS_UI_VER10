@@ -1,0 +1,108 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('.tab1Count').html("@Model.Count_InNoticePeriod");
+    $('.tab2Count').html("@Model.Count_ResignationAccept");
+    $('.tab3Count').html("@Model.Count_ExitChecklistPending");
+    $('.tab4Count').html("@Model.Count_RelivingPending");
+    $('.tab5Count').html("@Model.Count_RetirementDueList");
+    $('.tab6Count').html("@Model.Count_ResignationApproval");
+    $('.tab7Count').html("@Model.Count_ResignationAmendment");
+
+
+
+    //$('#inNoticePeriodTable').DataTable({
+    //    "pageLength": 25,
+    //    "language": {
+    //        searchPlaceholder: "Search"
+    //    }
+    //    });
+
+
+    //$(".dataTables_filter").addClass("dataTables_filter_trn");
+    //    $('.ihits-table table').removeClass("dataTable no-footer");
+    //    $(".ihits-table table tr th").removeAttr('style')
+
+    });</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table resignationapproval-tabOne ">
+    @Html.HiddenFor(m => m.ResignationList.Count)
+    <table id="inNoticePeriodTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+
+
+                <th scope="col">Location</th>
+                <th data-bs-toggle="tooltip" title="Date Of Joining" scope="col">DOJ</th>
+
+                <th scope="col" data-bs-toggle="tooltip" title="Resignation Date">Res. Date</th>
+                <th data-bs-toggle="tooltip" title="Last Working Date" scope="col">Actual LWD</th>
+                <th scope="col">Reporting Manger LWD</th>
+                <th scope="col">Skip level Manager LWD</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Level</th>
+                <th scope="col">Authority 1</th>
+                <th scope="col">Authority 2</th>
+                <th scope="col">Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ResignationList != null && Model.ResignationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ResignationList.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.ResignationList[i].EmployeeGI)
+                    @Html.HiddenFor(m => m.ResignationList[i].ResignationGI)
+
+            <tr>
+                <td data-label="ID">@Model.ResignationList[i].EmployeeID</td>
+                <td data-label="Candidate Name">@Model.ResignationList[i].EmployeeName</td>
+
+
+                <td data-label="Location">@Model.ResignationList[i].Location.Name</td>
+                <td data-label="Y/S">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].DOJ))</td>
+
+                <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].ResignationDate))</td>
+                <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].LWD))</td>
+                <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].ReportingMangerLWD))</td>
+                <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].SkipLevelMangerLWD))</td>
+                <td data-label="Reason">@Model.ResignationList[i].Reason</td>
+                <td data-label="Reason">@Model.ResignationList[i].Level</td>
+                <td data-label="Reason">@Model.ResignationList[i].Authority1</td>
+                <td data-label="Reason">@Model.ResignationList[i].Authority2</td>
+                <td data-label="Reason">@Model.ResignationList[i].Status</td>
+                @*@if (Model.UserVsMenuTab[1].Applicable == true)
+        {
+            @if (Model.ResignationList[i].Stage == "Resignation Accept")
+            {
+                <td data-label="Resignation Stage"> <a href="@Url.Action("GetResignationAcceptance", "Resignation", new { EmployeeGI = Model.ResignationList[i].EmployeeGI, ResignationGI = Model.ResignationList[i].ResignationGI, Area = "DataBank" })">@Model.ResignationList[i].Stage</a> </td>
+            }
+            else if ((Model.ResignationList[i].Stage == "Exit Check List Pending"))
+            {
+                <td data-label="Resignation Stage"> <a href="@Url.Action("GetExitCheckList", "Resignation", new { EmployeeGI = Model.ResignationList[i].EmployeeGI, ResignationGI = Model.ResignationList[i].ResignationGI, Area = "DataBank" })">@Model.ResignationList[i].Stage</a> </td>
+            }
+            else
+            {
+                <td data-label="Resignation Stage"> <a href="@Url.Action("GetEmployeeRelieving", "Resignation", new { EmployeeGI = Model.ResignationList[i].EmployeeGI, ResignationGI = Model.ResignationList[i].ResignationGI, Area = "DataBank" })">@Model.ResignationList[i].Stage</a> </td>
+            }
+        }
+        else
+        {
+
+            <td data-label="Resignation Stage"> <a onclick="swal.fire(MasterPersmissionMsg)">@Model.ResignationList[i].Stage</a> </td>
+
+        }*@
+            </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

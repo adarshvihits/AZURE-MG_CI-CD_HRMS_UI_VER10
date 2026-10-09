@@ -1,0 +1,101 @@
+﻿@model Hrms.Lite.Shared.Master.VersionUpdate
+<script src="~/js/tooltip.js"></script>
+<script>
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    })
+</script>
+
+@using (Html.BeginForm("SaveNewVersion", "NewVersion", FormMethod.Post, new { id = "NewVersionsave" }))
+{
+  
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table exitpopup-questionaire-list vertical-scroll-200 p-3">
+        @{var abc = 0;}
+        <table id="VersionAdd" class="layout-fixed">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Version</th>
+
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (int i = 0; i < Model.NewVersionList.Count; i++)
+
+                {
+                    abc = i;
+                    <tr id="row_OI_@i">
+
+                        <td data-label="Sl. No" id="grid_slno">@(i+1)</td>
+                        <td data-label="Version">
+                            <div class="form-group">
+                                @Html.HiddenFor(model => Model.NewVersionList[i].Code)
+                                @Html.TextBoxFor(Model => Model.NewVersionList[i].Name, new { @class = "form-control form-control-sm", @placeholder = "Version" })
+
+                            </div>
+                        </td>
+
+                        <td data-label="Actions">
+                            @if (Model.NewVersionList.Count == (i + 1) || Model.NewVersionList.Count == 1)
+                            {
+                                <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                   class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewVersionRow('VersionAdd')">
+                                    <i class="fa fa-plus"
+                                       aria-hidden="true"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                   class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewVersionRow('VersionAdd')">
+                                    <i class="fa fa-plus"
+                                       aria-hidden="true"></i>
+                                </a>
+                            }
+
+                            @if (Model.NewVersionList[i].InUse == 0)@*if inuse==0 then no delete button(already in use)*@
+                            {
+                                <a data-bs-toggle="tooltip"
+                                   title="" data-bs-original-title="Delete"
+                                   class="btn btn-icon  icon-only mobile-full-width btn-delete delObj" onclick="DeleteNewVersionRow(@i)">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+
+                            }
+                            else 
+                            {
+                                <a id="objDel_@i" data-bs-toggle="tooltip"
+                                   title="" data-bs-original-title="Delete"
+                                   class="btn btn-icon  icon-only mobile-full-width btn-delete hide delObj" onclick="DeleteNewVersionRow(@i)">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+    <!-- <end table></end> -->
+
+
+    <div class="row pt-3 " style="display:flex; align-items:center;">
+        <div class="col-md-10 align-right">
+           </div>
+        <div class="col-md-2 align-right">
+            <button type="button"
+                    class="btn btn-default float-right mobile-full-width " onclick="SaveNewVersion()">
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+}

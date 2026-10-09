@@ -1,0 +1,134 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.SkillVariance
+<style>
+    .k-grid-content table thead tr th:nth-child(1),
+    .k-grid-content table tbody tr td:nth-child(1) {
+    }
+
+
+    .gColour {
+        background-color: lawngreen;
+    }
+
+    .gBrown {
+        background-color: sandybrown;
+    }
+</style>
+<script>
+    
+    function applyStatusColor(status) {
+        debugger;
+        if (status > 0) {
+            return "<span style='color: #28d119;font-weight:900;'>" + status + "</span>";
+        }
+        else if (status < 0) {
+            return "<span style='color: #f21313;font-weight:900;'>" + status + "</span>";
+        }
+        else {
+            return status;
+        }
+    }
+
+    function getList() {
+        $('#skillRequisitionGrid').data('kendoGrid').dataSource.read();
+
+
+        $('#skillRequisitionGrid').data('kendoGrid').refresh();
+    }
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+        var tabIndex = 0;
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+
+        var skilltypeCode = $('#SkillTypeCode').val();
+
+        temp["searchValue"] = searchValue;
+
+        return { filter1: temp, SkillTypeCode: skilltypeCode };
+    }
+</script>
+@*<link href="~/css/kendo/css/grid.css" rel="stylesheet" />*@
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.all.min.js"></script>
+<link href="~/css/custom.css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.aspnetmvc.min.js"></script>
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+<div class="row">
+    <div class="col-12">
+        @Html.HiddenFor(m => Model.SKillVarianceLists.Count)
+        @(Html.Kendo().Grid<Hrms.Lite.Shared.DataBank.Reports.SkillVariance>()
+            .Name("skillRequisitionGrid")   
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.SkillName).Width(420).Locked(true);
+                columns.Group(group => group
+            .Title("Basics")
+            .Columns(info =>
+            {
+                info.Bound(x => x.BasicAvailable).Title("Available").Width(100);
+                info.Bound(x => x.BasicRequirments).Title("Requirments").Width(100);
+                info.Bound(x => x.BasicVariance).Title("Variance").Width(90).ClientTemplate("#= applyStatusColor(BasicVariance) #");
+            })
+        );
+                columns.Group(group => group
+            .Title("Intermediate")
+            .Columns(info =>
+            {
+                info.Bound(x => x.IntermediateAvailable).Title("Available").Width(100);
+                info.Bound(x => x.IntermediateRequirments).Title("Requirments").Width(100);
+                info.Bound(x => x.IntermediateVariance).Title("Variance").Width(90).ClientTemplate("#= applyStatusColor(IntermediateVariance) #");
+            })
+        );
+                columns.Group(group => group
+            .Title("Being Developed")
+            .Columns(info =>
+            {
+                info.Bound(x => x.BeingDevelopedAvailable).Title("Available").Width(100);
+                info.Bound(x => x.BeingDevelopedRequirments).Title("Requirments").Width(100);
+                info.Bound(x => x.BeingDevelopedVariance).Title("Variance").Width(90).ClientTemplate("#= applyStatusColor(BeingDevelopedVariance) #");
+            })
+        );
+                columns.Group(group => group
+            .Title("Advanced")
+            .Columns(info =>
+            {
+                info.Bound(x => x.AdvancedAvailable).Title("Available").Width(100);
+                info.Bound(x => x.AdvancedRequirments).Title("Requirments").Width(100);
+                info.Bound(x => x.AdvancedVariance).Title("Variance").Width(90).ClientTemplate("#= applyStatusColor(AdvancedVariance) #");
+            })
+        );
+                columns.Group(group => group
+            .Title("Expert")
+            .Columns(info =>
+            {
+                info.Bound(x => x.ExpertAvailable).Title("Available").Width(100);
+                info.Bound(x => x.ExpertRequirments).Title("Requirments").Width(100);
+                info.Bound(x => x.ExpertVariance).Title("Variance").Width(90).ClientTemplate("#= applyStatusColor(ExpertVariance) #");
+            })
+        );
+            })
+
+    .Resizable(resizable => resizable.Columns(true))
+    .HtmlAttributes(new { style = "height: 500px;" })
+    .Scrollable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .Read(read => read.Action("GetList", "SkillVarianceReport").Data("employeeParam"))
+            )
+        )
+    </div>
+</div>
+
+
+
+

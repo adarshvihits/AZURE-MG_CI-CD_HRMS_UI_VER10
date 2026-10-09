@@ -1,0 +1,98 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "DocumentsSave" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                Model.TabIndex = "Documents";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.ApproveMode)
+            <div class="ihits-table table-border mobile-responsive-table  candidate_documents_list mb-2">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Document Name</th>
+                            <th scope="col">Name In Document</th>
+                            <th scope="col">Document Number</th>
+                            <th scope="col">Valid From</th>
+                            <th scope="col">Valid To</th>
+                            <th scope="col">File</th>
+                            <th scope="col">Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.CandidateDocumentUpload.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+                                <td data-label="Company Name & Address">
+                                    @Html.HiddenFor(m => m.CandidateDocumentUpload[i].LogGI)
+                                    @Html.HiddenFor(m => m.CandidateDocumentUpload[i].DocumentCode)
+                                    @Html.HiddenFor(m => m.CandidateDocumentUpload[i].flag)
+                                    @Html.DisplayFor(m => m.CandidateDocumentUpload[i].DocumentName)
+
+                                </td>
+                                <td data-label="Location">                                   
+                                    @Html.DisplayFor(m => m.CandidateDocumentUpload[i].NameInDocument)
+                                </td>
+                                <td data-label="Designation">                                    
+                                    @Html.DisplayFor(m => m.CandidateDocumentUpload[i].DocumentNumber)
+                                </td>
+                                <td data-label="From">
+                                    <div class="input-group date">
+                                        @if (Model.CandidateDocumentUpload[i].ValidFrom == "")
+                                            @Model.CandidateDocumentUpload[i].ValidFrom
+                                        else
+                                            @Convert.ToDateTime(Model.CandidateDocumentUpload[i].ValidFrom).ToString("dd-MMM-yyyy")
+                                    </div>
+                                </td>
+                                <td data-label="To">
+                                    <div class="input-group date">
+
+                                        @if (Model.CandidateDocumentUpload[i].ValidTo == "")
+                                            @Model.CandidateDocumentUpload[i].ValidTo
+                                        else
+                                            @Convert.ToDateTime(Model.CandidateDocumentUpload[i].ValidTo).ToString("dd-MMM-yyyy")
+                                    </div>
+                                </td>
+
+                                <td data-label="File">
+                                    <button data-bs-toggle="tooltip" title="View File" type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="showDocument('@Model.CandidateDocumentUpload[i].Document.FileName', '@Model.CandidateDocumentUpload[i].Document.AbsoluteUri')" data-bs-original-title="">
+                                        <i class="icon-xl far fa-eye"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-12 ">
+                                            <button type="button" id="PreviousEmploymentLabel_@i"
+                                                    class="btn btn-default mobile-full-width hide">
+                                                Test
+                                            </button>
+                                            <a data-bs-toggle="tooltip" data-bs-original-title="Reject" id="PreviousEmploymentRejectbtnId_@i"
+                                               class="btn_reject" onclick="PersonalProfileDocumentDetailsApprove(@i,'REJECT')">
+
+                                            </a>
+                                            <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="PreviousEmploymentApprovebtnId_@i"
+                                               class="btn_approve" onclick="PersonalProfileDocumentDetailsApprove(@i,'APPROVE')">
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

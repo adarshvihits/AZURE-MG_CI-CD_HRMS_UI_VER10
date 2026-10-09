@@ -1,0 +1,339 @@
+﻿@{
+    ViewData["Title"] = "EmployeeWiseAttendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TimeOffice/employeeWiseAttendanceEntry.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+    ::-webkit-scrollbar-thumb{
+        height:0px;
+    }
+</style>
+<script>
+        $(document).ready(function () {
+       debugger
+        global_count =  @Model.Employee_DailyAttendanceEditDetails.Count;
+        });
+
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Wise Attendance</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new {Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "EmployeeWiseAttendanceEntry", new { Month=Model.Month.Code,Area = "TimeOffice" })"> Employee Wise Attendance List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Employee Wise Attendance
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="col-lg-12 col-xl-9 ">
+                            <div class="profile-header mb-3">
+
+                                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                @Html.HiddenFor(m => m.Month.Code)
+                                @Html.HiddenFor(m => m.EmployeeGI)
+
+                                <div class="profile-header-overflow"></div>
+                            </div>
+                            <div class="mobile-tab-section">
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Month</label>
+
+                                            @Model.Month.Name
+
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-center">
+                                        <div class="form-group pt-3">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                @Html.CheckBoxFor(m => m.ShowAbsentDays, new { @onchange = "onAbsentDaysCheckboxChange(this,'" + Model.EmployeeGI + "')" })
+                                                <span style="margin-right:5px;"></span>Show Absent Days only
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-center pt-1">
+
+                                        <div class="button-group float-left">
+                                            <button type="button" class="btn btn-default btn-sm" onclick="onEmpWiseBatchUpdateClick('@Model.EmployeeGI', '@Model.Employee_DailyAttendanceEditDetails[0].Date.ToString("yyyy-MM-dd")')">
+                                                Bach Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--begin: Search Form-->
+                            <div class="row tab-style-button">
+                                <div class="tab-button-wrap">
+
+                                    <div class="tab-items pr-0 border-none">
+                                        <div class="form-group mr-2" style="width: 120px;">
+                                            <label class="view-title">Month</label>
+                                            <div class="view-details">
+                                                @Model.Month.Name
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="tab-items select-option">
+
+                                        <div class="checkbox-inline float-left mt-2 mr-4">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                @*<input type="checkbox" name="Checkboxes16">*@
+                                                @Html.CheckBoxFor(m => m.ShowAbsentDays, new { @class = "absentDays", @onchange = "onAbsentDaysCheckboxChange(this,'" + Model.EmployeeGI + "')" })
+                                                <span></span>Show Absent Days only
+                                            </label>
+                                        </div>
+
+                                        <div class="button-group float-left mr-10">
+
+                                            <button type="button" class="btn btn-default btn-sm" onclick="onEmpWiseBatchUpdateClick('@Model.EmployeeGI', '@Model.Employee_DailyAttendanceEditDetails[0].Date.ToString("yyyy-MM-dd")','@Model.PayrollGroup.Name')">
+                                                Batch Update
+                                            </button>
+
+
+
+                                        </div>
+
+
+                                        <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel" onclick="ExportToExcel_EmployeeAttendanceEDitList('@Model.EmployeeGI')">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <div id="eaEntry_Edit_List_Partial">
+                                @await Html.PartialAsync("_EmployeeWiseAttendanceEditList", Model)
+                            </div>
+
+
+                            <div id="eaEntry_Edit_Slider">
+
+                            </div>
+
+
+                            <div id="eaEntry_BatchUpdateSlider">
+
+                            </div>
+
+                            <!--end: Datatable-->
+                        </div>
+
+                        <div class="col-lg-12 col-xl-3 ">
+                            <div class="row middle_class">
+                                <div class="col-xl-12 col-lg-4">
+
+                                    <div class="right-card">
+                                        <div class=" card-custom mb-5">
+
+                                            <div class="card-body">
+
+
+                                                <h5>Attendance Summary</h5>
+                                                <div class="ihits-table table-border vertical-scroll-100  mobile-responsive-table employee-wise-attendance-entry-two-col">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col">Count</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @if (Model.AttendanceSummary != null && Model.AttendanceSummary.Count > 0)
+                                                            {
+                                                                for (int i = 0; i < Model.AttendanceSummary.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Status">@Model.AttendanceSummary[i].Status</td>
+                                                                        <td data-label="Count">@Model.AttendanceSummary[i].Count</td>
+
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr><td colspan="2"> no data found</td></tr>
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- Table Setion End -->
+                                                <!--end: Datatable-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-lg-4">
+
+
+                                    <div class="right-card">
+                                        <div class=" card-custom mb-5">
+                                            <div class="card-body">
+                                                <h5>Leave Balance</h5>
+                                                <div class="ihits-table table-border vertical-scroll-100  mobile-responsive-table employee-wise-attendance-entry-two-col">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Leave</th>
+                                                                <th scope="col">Balance</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.LeaveBalance != null && Model.LeaveBalance.Count > 0)
+                                                            {
+                                                                for (int i = 0; i < Model.LeaveBalance.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Leave">@Model.LeaveBalance[i].Leave</td>
+                                                                        <td data-label="Balance">@Model.LeaveBalance[i].Balance</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+
+                                                                <tr>
+                                                                    <td colspan="2">No data</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- Table Setion End -->
+                                                <!--end: Datatable-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-lg-4">
+
+
+                                    <div class="right-card">
+                                        <div class=" card-custom">
+
+                                            <div class="card-body">
+
+
+                                                <h5>Coff Details</h5>
+                                                <div class="ihits-table table-border vertical-scroll-100  mobile-responsive-table employee-wise-attendance-entry-two-col">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">E.Date</th>
+                                                                <th scope="col">Expire On</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @if (Model.CoffDetails != null && Model.CoffDetails.Count > 0)
+                                                            {
+                                                                for (int i = 0; i < Model.CoffDetails.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="E.Date">
+                                                                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.CoffDetails[i].EDate))
+                                                                        </td>
+                                                                        <td data-label="Expire On">
+                                                                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.CoffDetails[i].ExpireOn))
+
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+
+                                                                <tr>
+                                                                    <td colspan="2">No data</td>
+                                                                </tr>
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- Table Setion End -->
+                                                <!--end: Datatable-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+
+

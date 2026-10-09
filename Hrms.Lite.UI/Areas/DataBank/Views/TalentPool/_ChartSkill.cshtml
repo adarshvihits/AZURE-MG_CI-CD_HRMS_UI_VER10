@@ -1,0 +1,50 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.TalentPool
+
+@using Kendo.Mvc.UI
+
+<div id="chartSkill" @*style="height: 100px; width: 200px;"*@>
+
+
+
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DataBank.DTO.TalentPool>()
+    .Name("chartSkill")
+    .Title(title => title
+      .Text("SKILL")
+        .Font("bold 16px Arial, Helvetica, sans-serif")
+         .Align(ChartTextAlignment.Center)
+        //.Margin(m => m.Left(30))
+        .Visible(false)
+    )
+    .Legend(legend => legend
+        .Visible(false)
+    )
+    .ChartArea(chart => chart
+        .Background("transparent")
+        .Height(300) // Adjusted height
+        .Width(300)  // Adjusted width
+
+    )
+    .Series(series =>
+    {
+        series.Donut(Model.SkillGraph.Select(SkillGraph => new
+        {
+            category = SkillGraph.NAME,
+            value = SkillGraph.COUNTS,
+        }).ToArray())
+        .Overlay(o => o.Gradient(ChartSeriesGradient.RoundedBevel));
+    })
+    .SeriesColors(new string[] { "#6A9C89", "#AAB396", "#98DED9", "#C7FFD8", "#C4DAD2", "#FF8343", "#287070" })
+    .Tooltip(tooltip => tooltip
+        .Template("${ category } - ${ value }")
+        .Visible(true)
+    )
+)
+
+
+</div>
+<div style="position: relative; width: 300px; height: 250px; margin-top: -300px; pointer-events: none;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; font-weight: bold; text-align: center;">
+       SKILL
+    </div>
+</div>

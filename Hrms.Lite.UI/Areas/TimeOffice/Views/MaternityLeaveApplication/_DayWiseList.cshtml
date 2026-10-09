@@ -1,0 +1,47 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Generic.LeaveApplication
+<div class="ihits-table table-border hover-color mobile-responsive-table leave-details-table vertical-scroll-150">
+    @Html.HiddenFor(m => m.LeaveDetails.DayWiseDetails.Count)
+    <table id="DayWiseLeaveListTableHRMS">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Leave Dates</th>
+                <th scope="col">Day</th>
+                <th scope="col">Session</th>
+                <th scope="col">Leave Type</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.LeaveDetails != null)
+                {
+                    if (Model.LeaveDetails.DayWiseDetails != null && Model.LeaveDetails.DayWiseDetails.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.LeaveDetails.DayWiseDetails.Count; i++)
+
+                        {
+                            <tr>
+                                            <td data-label="Leave date">
+                                                @Html.HiddenFor(Model => Model.LeaveDetails.DayWiseDetails[i].LeaveDate)
+                                                @Html.HiddenFor(Model => Model.LeaveDetails.DayWiseDetails[i].Day)
+                                                @Html.HiddenFor(Model => Model.LeaveDetails.DayWiseDetails[i].Session.Name)
+                                                @Html.HiddenFor(Model => Model.LeaveDetails.DayWiseDetails[i].LeaveType)
+                                                @Html.HiddenFor(Model => Model.LeaveDetails.DayWiseDetails[i].Session.Code)
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveDetails.DayWiseDetails[i].LeaveDate))
+                                            </td>
+                                <td data-label="Day">@Model.LeaveDetails.DayWiseDetails[i].Day</td>
+                                <td data-label="Session">@Model.LeaveDetails.DayWiseDetails[i].Session.Name</td>
+                                <td data-label="Leave type">@Model.LeaveDetails.DayWiseDetails[i].LeaveType</td>
+
+                            </tr>
+                        }
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

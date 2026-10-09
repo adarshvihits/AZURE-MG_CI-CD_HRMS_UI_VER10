@@ -1,0 +1,103 @@
+﻿@model Hrms.Lite.Shared.Master.ResumeSources
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+@using (Html.BeginForm("Save", "ResumeSource", FormMethod.Post, new { id = "ResumeSourceSave" }))
+{
+
+    <div id="adddeduction" class="slider-forms slider-forms-open addResumeSrc">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('addResumeSrc')"></i>
+            </div>
+            <h4>
+                Resume Source
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'name')" })
+                        <span id="name"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Short Name</label>
+                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control form-control-sm", @maxlength = 5, @placeholder = "Short Name", @onblur = "validate(this,'shortname')" })
+                        <span id="shortname"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-12 d-flex align-items-center">
+                    <div> Active</div>
+                    <label class="switch" onclick="ActiveInactiveValidationResume('Resume Source',@Model.Code)">
+
+                        @Html.CheckBoxFor(m => m.Active,new { @id="resume"})
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label>Description</label>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-control-sm", @placeholder = "Description", maxlength = 250 })
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+                @if (Model.Mode == "CREATE")
+                {
+                    @if (CurrentUserRoleActions.Create == true)
+                    {
+                        <div class="col-md-12 align-right">
+                            <a type="button"
+                               class="btn btn-default  mobile-full-width" onclick="SaveResumeSrc('Save')">
+                                Save
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    @if (CurrentUserRoleActions.Modify == true)
+                    {
+                        <div class="col-md-12 align-right">
+                            <a type="button"
+                               class="btn btn-default  mobile-full-width" onclick="SaveResumeSrc('Modify')">
+                                Modify
+                            </a>
+                        </div>
+                    }
+                }
+                </div>
+        </div>
+    </div>
+}

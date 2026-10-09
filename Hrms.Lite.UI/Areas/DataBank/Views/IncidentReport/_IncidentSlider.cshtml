@@ -1,0 +1,136 @@
+﻿@model Hrms.Lite.Shared.DataBank.IncidentReport
+
+    <script src="~/js/tooltip.js"></script>
+
+    <script src="~/scripts/DataBank/ResignationDelete.js?v=1"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('ResignationDeleteDetails_Reason');
+        });
+
+
+    </script>
+    @using (Html.BeginForm(null,null , FormMethod.Post, new { @id = "IncidentSlider" }))
+    {
+        <div id="resignationdelete" class="slider-forms slider-forms-open Feedback">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('Feedback')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4 class="mb-4">Incident Acceptance Report</h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+
+
+                <div class="reward-section border-none">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Incident</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.IncidentCode)
+                                    @Model.Incidentname
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer pb-2">
+                                <label class="view-title">Entry Date</label>
+                                <div class="view-details">
+
+                                    @Model.EntryDate
+                                </div>
+                                <span id="EntryDate"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Remarks</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.IncidentCode)
+                                    @Model.ReplyStatus
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer pb-2">
+                                <label class="view-title">Occured Date</label>
+                                <div class="view-details">
+
+                                    @Model.OccuredDate
+                                </div>
+                                <span id="OccuredDate"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="file-upload-form-group" style="width:185px;">
+
+                            <div class="view-details  ">
+                                <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="showDocument('@Model.Attachment.ActualFileName', '@Model.Attachment.AbsoluteUri')">
+                                    <i class="icon-xl far fa-eye"></i>View File
+                                </a>
+                            </div>
+               
+                        </div>
+                    </div>
+                    <div class="row my-3">
+
+                        <div class="col-md-12">
+                            <label>Action taken</label>
+
+                            @Html.TextAreaFor(Model => Model.Reply, new { @class = "form-control form-control-sm", @placeholder = "Action", maxlength = "250" })
+                            @*@Html.HiddenFor(Model => Model.ResignationDeleteDetails.Reason)*@
+                        </div>
+                        <span id="DeleteReason"></span>
+                    </div>
+
+                    @if (Model.radiomode == 0)
+                    {
+
+                        <div class="row card-footer-bottom-fixed border-none">
+
+                            <div class="col-md-12 align-right">
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Incidentsave()">
+                                    Save
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    }
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    }

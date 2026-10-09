@@ -1,0 +1,147 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryAdvance
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+
+
+<script>
+    $(document).ready(() => {
+        //const myTable = $('#moduleAllCheckBox').dataTable({
+        //    stateSave: true
+        //});
+        var myTable = $('#SalaryAdvanceIssueTable').dataTable();
+        var allPagesCheckboxes = myTable.fnGetNodes();
+
+        $('#SalaryAdvSelectAll').click(function () {
+
+            debugger;
+            var active = $('#SalaryAdvSelectAll').prop("checked") ? 1 : 0;
+            if (active == 0) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', false);
+            }
+            if (active == 1) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', true);
+
+            }
+        });
+    });
+
+</script>
+
+
+<div class="ihits-table table-border odd-even  mobile-responsive-table  salary_advance_issue">
+    @Html.HiddenFor(m => m.SalaryAdvanceList.Count)
+    <table id="SalaryAdvanceIssueTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Gross Salary</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Requested Amount">Req. Amount</th>
+                @*<th scope="col">Remarks</th>
+                <th scope="col">Action</th>*@
+                <th scope="col">Tracker</th>
+                <th>
+                    <div class="checkbox-inline pl-1">
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            <input id="SalaryAdvSelectAll" type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.SalaryAdvanceList != null && Model.SalaryAdvanceList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.SalaryAdvanceList.Count; i++)
+                    {
+                    
+                                               
+            <tr>
+                <td data-label="ID">
+                    @Html.HiddenFor(m => m.SalaryAdvanceList[i].EmployeeGI)
+                    @Html.HiddenFor(m => m.SalaryAdvanceList[i].RequestCode)
+                    @Model.SalaryAdvanceList[i].EmployeeID
+                </td>
+                <td data-label="Name"> @Model.SalaryAdvanceList[i].EmployeeName </td>
+                <td data-label="Designation">@Model.SalaryAdvanceList[i].Designation.Name</td>
+                <td data-label="Department">@Model.SalaryAdvanceList[i].Department.Name</td>
+                <td data-label="Location">@Model.SalaryAdvanceList[i].Location.Name</td>
+                <td data-label="Gross Salary">@Model.SalaryAdvanceList[i].GrossSalary</td>
+                <td data-label="Gross Salary">
+                    <span class="edit_@i" id="loanAmtDisplay_@i">
+                        @Model.SalaryAdvanceList[i].LoanAmount
+                    </span>
+                    <span class="updatecancel_@i hide">
+                        @Html.TextBoxFor(m => m.SalaryAdvanceList[i].LoanAmount, new { @class = "form-control form-control-sm text-end", @maxlength = 8, @style = "text-align: end;", @placeholder = "Amount", @onkeypress = "return onlyAmount(event)", @blur = "validate(this,'LoanAmt_'" + i + ")" })
+                    </span>
+                    <span id="LoanAmt_@i"></span>
+                </td>
+                @*<td>
+                    <span class="edit_@i" id="rmk_@i">
+                        @Model.SalaryAdvanceList[i].Remarks
+                    </span>
+                    <span class="updatecancel_@i hide">
+                        @Html.TextBoxFor(m => m.SalaryAdvanceList[i].Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @blur = "validate(this,'Rmks_'" + i + ")" })
+                    </span>
+                    <span id="Rmks_@i"></span>
+                </td>*@
+
+                @*<td data-label="Action">
+                    <div class="small-btn-group hide updatecancel_@i">
+                        <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only"><i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick('@i')"></i> </button>
+
+                        <button type="button" data-bs-toggle="tooltip"
+                                title="Cancel"
+                                class="btn btn-icon btn-delete icon-only btn-bg-info " onclick="onCancelClick(@i)">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="small-btn-group edit_@i">
+                        <a data-bs-toggle="tooltip" title="Edit" type="button"
+                           class="btn btn-icon btn-edit icon-only" onclick="onEditClick(@i)">
+                            <i class="icon-xl fas fa-pencil-alt"></i>
+                        </a>
+                    </div>
+                </td>*@
+
+
+                <td data-label="Tracker">
+
+                    <a id="applicant " onclick="GetTracker('@Model.SalaryAdvanceList[i].RequestGI')">
+                        <i class="icon-xl la la-arrow-circle-right"></i>
+                    </a>
+                </td>
+
+
+
+                <td data-label="Y/S">
+                    <div class="checkbox-inline pl-1">
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            @Html.CheckBoxFor(m => m.SalaryAdvanceList[i].Applicable, new { @onclick = "onChkBoxClick(this,'SalaryAdvSelectAll','SalaryAdvanceIssueTable')" })
+                            <span></span>
+                        </label>
+                    </div>
+                </td>
+
+
+            </tr>
+
+
+
+                    }
+                }
+
+        </tbody>
+    </table>
+</div>

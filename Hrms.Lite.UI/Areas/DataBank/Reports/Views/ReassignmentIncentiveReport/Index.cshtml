@@ -1,0 +1,225 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ReassignmentIncentiveReport
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Account.Login CurrentUser = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Account.Login>(Context.Session.GetString("User"));
+}
+@*<script src="~/scripts/DataBank/Reports/growthHistory.js"></script>
+<script>
+    $(document).ready(function () {
+          salVisible = @CurrentUser.authUser.SalaryVisibility;
+
+    });
+</script>*@
+<script src="~/scripts/DataBank/Reports/reassignmentincentivereport.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+
+        $('#EmploymentTypes')
+            .multiselect('selectAll', false);
+        $('#Designations')
+            .multiselect('selectAll', false);
+        $('#Departments')
+            .multiselect('selectAll', false);
+        $('#Locations')
+            .multiselect('selectAll', false);
+        $('#Categories')
+            .multiselect('selectAll', false);
+        $('#Grades')
+            .multiselect('selectAll', false);
+        $('#PayrollGroups')
+            .multiselect('selectAll', false);
+        $('#Divisions')
+            .multiselect('selectAll', false);
+        $('#Sections')
+            .multiselect('selectAll', false);
+        $('#WorkLocations')
+            .multiselect('selectAll', false);
+        $('#WageGrades')
+            .multiselect('selectAll', false);
+        $('#GroupCompany')
+            .multiselect('selectAll', false);
+    });
+
+
+
+</script>
+
+
+
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <div class="header-menu-wrapper header-menu-wrapper-left">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Reassignment Incentive Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Home")">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Reassignment Incentive Report</li>
+                </ul>
+            </div>
+        </div>
+        <div class="topbar"></div>
+    </div>
+</div>
+<!--end::Header-->
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container full-width">
+            <div class="row height-100per">
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+                        <div class="card-body">
+                            @using (Html.BeginForm("ExportToexcel", "ReassignmentIncentiveReport", FormMethod.Post, new { id = "reassignmentIncentiveSave" }))
+                            {
+                                <div class="row tab-style-button">
+
+                                    <!-- LEFT SIDE -->
+                                    <div class="col-md-6">
+                                        <div class="page_white">
+                                            <div class="empstatus-new pr-2 pb-3">
+                                                @*<h3>Employee Filter :</h3>*@
+                                            </div>
+
+                                            <!-- DATE FILTERS -->
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>From</label>
+                                                    <div class="input-group date">
+                                                        @Html.TextBoxFor(m => m.DateFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "From" })
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="la la-calendar"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <span id="fromdate"></span>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label>To</label>
+                                                    <div class="input-group date">
+                                                        @Html.TextBoxFor(m => m.DateTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "To" })
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="la la-calendar"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <span id="todate"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- MULTI-SELECT FILTERS -->
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Fun.Designation</label>
+                                                    @Html.ListBoxFor(m => m.Designations, (SelectList)ViewBag.Dsg, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Department</label>
+                                                    @Html.ListBoxFor(m => m.Departments, (SelectList)ViewBag.Dept, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Location</label>
+                                                    @Html.ListBoxFor(m => m.Locations, (SelectList)ViewBag.Loc, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Category</label>
+                                                    @Html.ListBoxFor(m => m.Categories, (SelectList)ViewBag.Cat, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Designation</label>
+                                                    @Html.ListBoxFor(m => m.Grades, (SelectList)ViewBag.Grd, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Payroll Group</label>
+                                                    @Html.ListBoxFor(m => m.PayrollGroups, (SelectList)ViewBag.PayrollGrp, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Division</label>
+                                                    @Html.ListBoxFor(m => m.Divisions, (SelectList)ViewBag.division, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Section</label>
+                                                    @Html.ListBoxFor(m => m.Sections, (SelectList)ViewBag.section, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Employment Type</label>
+                                                    @Html.ListBoxFor(m => m.EmploymentTypes, (SelectList)ViewBag.EmploymentType, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Work Location</label>
+                                                    @Html.DropDownListFor(m => m.WorkLocations, (SelectList)ViewBag.WorkLocation, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label>Wage Grade</label>
+                                                    @Html.DropDownListFor(m => m.WageGrades, (SelectList)ViewBag.WageGrade, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Group Company</label>
+                                                    @Html.DropDownListFor(m => m.GroupCompany, (SelectList)ViewBag.GroupCompany, new { @class = "multiselectDropdownFields", @multiple = "multiple" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col-md-5">
+                                                    <label for="TransitionType">Type</label>
+                                                    @Html.DropDownListFor(
+                                                        m => m.TrType,
+                                                        (MultiSelectList)ViewBag.TransitionType,
+                                                        new { @class = "multiselectDropdownFields", multiple = "multiple" }
+                                                    )
+                                                </div>
+
+                                                <div class="col-md-5">
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row mt-4">
+                                                <div class="col-md-12 text-right">
+                                                    <button type="button" class="btn btn-default mobile-full-width" onclick="ExportToExcel()">
+                                                        Export To Excel
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

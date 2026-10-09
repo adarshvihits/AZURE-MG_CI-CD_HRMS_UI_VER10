@@ -1,0 +1,247 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+<script>
+
+
+
+    function POPUP() {
+
+        var i = 0;
+
+        if ($("#FiledValidations_1__Applicability").val() != "False") {
+            if ($("#BasicInfo_File_FileName").val()=="") {
+                swal.fire('Candidate photo is required');
+                i++;
+            }
+        }
+        if (!validateById("#BasicInfo_FullName", 'fullname')) {
+            $('#BasicInfo_FullName').focus();
+            i++;
+        }
+
+        if (!validateMobile('PermanentAddress_MobileNo', 'mobile')) {
+            debugger;
+            $('#PermanentAddress_MobileNo').focus();
+            i++;
+        }
+        if (!validateEmail(document.getElementById('PermanentAddress_MailID'), 'email', 'FiledValidations_0__Applicability')) {
+            $('#PermanentAddress_MailID').focus();
+            i++;
+        }
+
+        if (!validateDOJ(document.getElementById('BasicInfo_AcceptedDOJ'), 'doj')) {
+
+            $('#BasicInfo_AcceptedDOJ').focus();
+            $('.dojpicker').datepicker('hide');
+            i++;
+        }
+
+
+        if (!validateById("#PermanentAddress_House", 'house')) {
+            $('#PermanentAddress_House').focus();
+            i++;
+        }
+        if (!validateById("#PermanentAddress_Street", 'street')) {
+            $('#PermanentAddress_Street').focus();
+            i++;
+        }
+        if (!validateById("#PermanentAddress_City", 'city')) {
+            $('#PermanentAddress_City').focus();
+            i++;
+        }
+        if (!validatePin($('#PermanentAddress_PinCode'), 'pin')) {
+            $('#PermanentAddress_PinCode').focus();
+            i++;
+        }
+        if (!validateById("#PermanentAddress_Country_Code", 'country')) {
+            $('#PermanentAddress_Country_Code').focus();
+            i++;
+        }
+        if (!validateById("#PermanentAddress_State_Code", 'state')) {
+
+            $('#PermanentAddress_State_Code').focus();
+            i++;
+        }
+        if (!validateById("#PermanentAddress_District_Code", 'district')) {
+            $('#PermanentAddress_District_Code').focus();
+            i++;
+        }
+        if (i > 0) {
+            return false;
+        }
+        else {
+
+            var MPPersonalInfo = new FormData($('#preEditSave')[0]);
+
+            $.ajax({
+                type: 'POST',
+                url: '/DataBank/PreEnrollmentEdit/Summary',
+                dataType: 'html',
+                contentType: false,
+                processData: false,
+                data: MPPersonalInfo,//{'PreEnrollGI' :GI},
+                success: function (Data) {
+                    console.log(Data);
+                    var m = $('.preenrolledit_preview');
+                    m.find('.modal-body').html('');
+                    m.find('.modal-body').html(Data);
+                    m.modal('show');
+                    //  alert($('#BasicInfo_AcceptedDOJ').val());
+                    $('#edoj').text('EDOJ:    ' + $('#BasicInfo_AcceptedDOJ').val());
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(xhr.responseText);
+                    swal.fire(xhr.responseText);
+
+                }
+            });
+
+        }
+    }
+
+
+</script>
+<div class="step-outer step_row">
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+        Personal Info
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Job-Details)">
+        Job Details
+        <span class="step-circle active"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Compensation')">
+        Compensation
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active">
+        Address
+        <span class="step-circle"></span>
+    </a>
+
+</div>
+
+
+
+
+<div class="step-progress-outer">
+
+    <div class="step-left col-md-12">
+        <h3>Address for Communication</h3>
+        <div class="row my-3">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>House</label><span class="Mandatory">*</span>
+                  
+                    @Html.TextBoxFor(m => m.PermanentAddress.House, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "House", @onblur = "validate(this,'house')" })
+                    <span id="house"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Street</label><span class="Mandatory">*</span>
+                  
+                    @Html.TextBoxFor(m => m.PermanentAddress.Street, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Street", @onblur = "validate(this,'street')" })
+                    <span id="street"></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>City</label><span class="Mandatory">*</span>
+                
+                    @Html.TextBoxFor(m => m.PermanentAddress.City, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "City", @onblur = "validate(this,'city')" })
+                    <span id="city"></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>PIN code</label><span class="Mandatory">*</span>
+      
+                    @Html.TextBoxFor(m => m.PermanentAddress.PinCode, new { @class = "form-control form-control-sm", @maxlength = 6, @placeholder = "PIN Code", @onblur = "validatePin(this,'pin')", @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="pin"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Country</label><span class="Mandatory">*</span>
+                   
+                    @Html.DropDownListFor(m => m.PermanentAddress.Country.Code, (SelectList)ViewBag.Cou, "--Select Country--", new { @class = "form-control form-control-sm", @onchange = "onCountryChangep(this,'country')" })
+                    <span id="country"></span>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>State</label><span class="Mandatory">*</span>
+                   
+                    @Html.DropDownListFor(m => m.PermanentAddress.State.Code, (SelectList)ViewBag.St, "--Select State--", new { @class = "form-control form-control-sm", @onchange = "onStateChangep(this,'state')" })
+                    <span id="state"></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>District</label><span class="Mandatory">*</span>
+                
+                    @Html.DropDownListFor(m => m.PermanentAddress.District.Code, (SelectList)ViewBag.Dist, "--Select District--", new { @class = "form-control form-control-sm", @onchange = "onDistrictChange(this,'district')" })
+                    <span id="district"></span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6">
+        <button type="button" onclick="PopUp_PreviewEdit()"
+                class="btn btn-default float-left mobile-full-width">
+            Salary Details
+        </button>
+
+    </div>
+        <div class="col-md-6" style="text-align:end;">
+
+            <button type="button" class="btn btn-default mobile-full-width" data-bs-toggle="modal" onclick="POPUP()" data-target="">
+                Preview & Save
+            </button>
+
+
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade preenrolledit_preview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">Offer Summary</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+

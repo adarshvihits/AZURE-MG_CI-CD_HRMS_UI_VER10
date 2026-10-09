@@ -1,0 +1,67 @@
+﻿@model Hrms.Lite.Shared.TDS.RegimeBatchUpdate 
+<script>
+        $(document).ready(function () {
+            debugger;
+            moveCursorToEnd('RegimeTypeCode');
+
+        });
+    $(window).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (preventENterFlag == 0)
+                    BatchUpdateClick();
+                return false;
+            }
+        });
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "BatchUpdateRegime" }))
+{
+    <div id="BatchUpdate" class="slider-forms slider-forms-open RBatchUpdateDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('RBatchUpdateDiv');preventENterFlag =1">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"></label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.AssessmentYear.Code)
+                            @Model.AssessmentYear.Name
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Regime Type </label><span class="Mandatory">*</span>
+                        <div class="view-details">
+                            @Html.DropDownListFor(model => model.RegimeType.Code, (SelectList)ViewBag.RegimeType, "Select Regime Type", new { @class = "form-control form-control-sm", @onchange = "validate(this,'RegimType')" })
+                            <span id="RegimType"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+          
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="BatchUpdateClick()">
+                        Update
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

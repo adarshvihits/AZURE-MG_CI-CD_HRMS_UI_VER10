@@ -1,0 +1,79 @@
+﻿
+
+@model Hrms.Lite.Shared.TimeOffice.EarnedLeaveEligibility
+<script>
+    $(document).ready(function () {
+
+        $('.NotConfirmedTabCount').html("@Model.Count_NotConfirmed");
+        $('.ConfirmedTabCount').html("@Model.Count_Confirmed");
+
+    });
+
+</script>
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ElBasedOnDOJ">
+    @Html.HiddenFor(m => m.EarnedLeaveEligibilityList.Count)
+    <table id="El_BasedOnDOJ" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Leave Group</th>
+                <th scope="col">DOJ</th>
+                <th scope="col">AB/LOP</th>
+                <th scope="col">Pay Days</th>
+                <th scope="col">Opening</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.EarnedLeaveEligibilityList != null && Model.EarnedLeaveEligibilityList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.EarnedLeaveEligibilityList.Count; i++)
+                {
+
+                    <tr>
+                        <td data-label="ID">
+                            @Model.EarnedLeaveEligibilityList[i].EmployeeID
+                        </td>
+                        @Html.HiddenFor(m => m.EarnedLeaveEligibilityList[i].EmployeeGI)
+
+
+                        <td data-label="Name">@Model.EarnedLeaveEligibilityList[i].EmployeeName</td>
+                        <td data-label="Designation">@Model.EarnedLeaveEligibilityList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.EarnedLeaveEligibilityList[i].Department.Name</td>
+                        <td data-label="Location">@Model.EarnedLeaveEligibilityList[i].Location.Name</td>
+                        <td data-label="LeaveGroup">@Model.EarnedLeaveEligibilityList[i].LeaveGroup.Name</td>
+                        <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EarnedLeaveEligibilityList[i].DOJ))</td>
+                        <td data-label="AB/LOP">@Model.EarnedLeaveEligibilityList[i].ABLOP</td>
+                        <td data-label="Pay Days">@Model.EarnedLeaveEligibilityList[i].PayDays</td>
+                        <td data-label="Opening">
+                            <div class="form-group">
+                                <span id="hideAmount_@i">@Model.EarnedLeaveEligibilityList[i].ELOpening</span><span id="amtTxtbox_@i" class="hide"><input id="newAmount_@i" class="form-control form-control-sm" placeholder="Opening" maxlength="8" onkeypress="return onlyAmount(event)" oninput="process(this)"></span>
+                            </div>
+                        </td>
+                        <td data-label="Action">
+                            <div class="d-flex justify-content-center">
+                                <span id="edit_@i">
+
+                                    <a onmouseenter="tooltipHover()" onclick="onEditClick(@i)" data-bs-toggle="tooltip" title="Edit" type="button" class="btn btn-icon btn-edit icon-only"><i class="icon-xl fas fa-pencil-alt"></i></a>
+                                </span><span id="updatecancel_@i" class="hide"><a onmouseenter="tooltipHover()" type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update icon-only " onclick="onUpdateClick(@i,'@Model.EarnedLeaveEligibilityList[i].EmployeeGI')"> <i class="icon-xl fas fa-sync-alt"></i> </a><a onmouseenter="tooltipHover()" type="button" data-bs-toggle="tooltip" title="Cancel" class="btn btn-icon btn-cancel icon-only " onclick="onCancelClick(@i)"> <i class="icon-xl fas fa-times"></i></a></span>
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

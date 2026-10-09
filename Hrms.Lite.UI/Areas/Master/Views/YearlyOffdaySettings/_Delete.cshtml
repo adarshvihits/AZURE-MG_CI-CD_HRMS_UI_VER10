@@ -1,0 +1,157 @@
+﻿@model Hrms.Lite.Shared.Master.YearlyOffdaySettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Delete", "YearlyOffdaySettings", FormMethod.Post, new { @id = "Deleteoffday" }))
+{
+    <div id="offdaysettingsdelete" class="slider-forms slider-forms-open DeleteDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('DeleteDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Yearly Offday Settings
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Year</label>
+                        <div class="view-details">
+
+                            @Html.DisplayFor(model => Model.Year.Name)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Combination Name</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.CombinationName)
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row m-0 my-3">
+                <div class="col-md-6 pl-0">
+
+                    <div class="ihits-table table-border w-100 hover-color odd-even   table-head-small hover-color odd-even vertical-scroll-350 offdaysetting-slider">
+                        <table>
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">Days</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.HiddenFor(model => Model.OffdaySettingsGI)
+                                @if (Model != null && Model.Days != null && Model.Days.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Days.Count; i++)
+                                    {
+
+                                        <tr>
+                                            <td data-label="Particular">
+                                                <div class="newday">@Model.Days[i].Days</div>
+                                            </td>
+
+
+                                        </tr>
+
+                                    }
+                                }
+
+                                else
+                                {
+                                    <tr>
+
+                                        <td colspan="10" align="center">  No  Data Found</td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-6 pr-0">
+
+                    <div class="ihits-table table-border w-100 hover-color odd-even  vertical-scroll-350 table-head-small hover-color odd-even  offdaysetting-master-slider">
+                        <table>
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">Date</th>
+
+                                    <th scope="col">Day</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (Model != null && Model.Dates != null && Model.Dates.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Dates.Count; i++)
+                                    {
+
+
+                                        <tr>
+                                            <td data-label="Particular">
+                                                @Model.Dates[i].Date
+                                            </td>
+
+                                            <td data-label="Particular">
+                                                @Model.Dates[i].Day
+                                            </td>
+
+                                        </tr>
+
+                                    }
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-4">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        @Html.DisplayFor(model => Model.Description)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Delete == true)
+                    {
+                        <button type="button"
+                                data-bs-toggle="tooltip" title=""
+                                data-bs-original-title="Delete"
+                                class="btn btn-icon btn-delete big-btn float-none" onclick="confirmDelete('@Model.OffdaySettingsGI')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </button>
+                    }
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+}

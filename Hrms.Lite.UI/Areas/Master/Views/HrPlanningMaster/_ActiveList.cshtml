@@ -1,0 +1,172 @@
+@model Hrms.Lite.Shared.Master.HRPlanningMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@using System.Linq;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+    var HRPlanningMasterList = Model.HRPlanningMasterList ?? new List<Hrms.Lite.Shared.Master.HRPlanningMaster>();
+    var approvedHeadcount = HRPlanningMasterList.Sum(x => x.PlanCount);
+    var totalPlanLines = HRPlanningMasterList.Count;
+    var departmentsCovered = HRPlanningMasterList.Where(x => x.Department != null).Select(x => x.Department.Code).Distinct().Count();
+    var totalDepartments = ((List<Hrms.Lite.Shared.General.Dropdown>)ViewBag.Department)?.Count ?? 0;
+    Func<string, string> statusBadgeClass = status =>
+    {
+        switch ((status ?? "").Trim().ToUpper())
+        {
+            case "APPROVED": return "badge-success";
+            case "PENDING": return "badge-warning";
+            case "REJECTED": return "badge-danger";
+            default: return "badge-secondary";
+        }
+    };
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+ <link href="~/css/hrplan.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<div class="stat-row">
+  <div class="stat-tile tone-">
+
+    <div class="stat-label">Approved headcount</div>
+    <div class="stat-value">@approvedHeadcount</div>
+    <div class="stat-sub">@totalPlanLines approved lines</div>
+  </div>
+  <div class="stat-tile tone-">
+    <div class="stat-label">Total plan lines</div>
+    <div class="stat-value">@totalPlanLines</div>
+    <div class="stat-sub">Current filter selection</div>
+  </div>
+  <div class="stat-tile tone-warning" style="cursor:pointer" onclick="ShowPendingList()" title="View pending approvals">
+    <div class="stat-label">Pending approval</div>
+    <div class="stat-value">@Model.PendingCount</div>
+    <div class="stat-sub">@(Model.PendingCount > 0 ? "Awaiting review" : "Nothing waiting")</div>
+  </div>
+  <div class="stat-tile tone-accent">
+    <div class="stat-label">Departments covered</div>
+    <div class="stat-value">@departmentsCovered</div>
+    <div class="stat-sub">@departmentsCovered of @totalDepartments departments</div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+@* <div class="row hr-planning-summary-cards mb-3">
+    <div class="col-md-3 col-sm-6">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="text-muted font-size-sm">Approved headcount</div>
+                <div class="font-size-h2 font-weight-bold">@approvedHeadcount</div>
+                <div class="text-muted font-size-sm">@totalPlanLines approved lines</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="text-muted font-size-sm">Total plan lines</div>
+                <div class="font-size-h2 font-weight-bold">@totalPlanLines</div>
+                <div class="text-muted font-size-sm">Current filter selection</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6" style="cursor:pointer" onclick="ShowPendingList()" title="View pending approvals">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="text-muted font-size-sm">Pending approval</div>
+                <div class="font-size-h2 font-weight-bold">@Model.PendingCount</div>
+                <div class="text-muted font-size-sm">@(Model.PendingCount > 0 ? "Awaiting review" : "Nothing waiting")</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="text-muted font-size-sm">Departments covered</div>
+                <div class="font-size-h2 font-weight-bold">@departmentsCovered</div>
+                <div class="text-muted font-size-sm">@departmentsCovered of @totalDepartments departments</div>
+            </div>
+        </div>
+    </div>
+</div>
+ *@
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table hr-planning-master-listss pt-1">
+    @Html.HiddenFor(m => m.HRPlanningMasterList.Count)
+    <table id="activeTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th >ID</th>
+                <th >Department</th>
+                <th >Section</th>
+                <th >Grade</th>
+                <th >Plan Count</th>
+                <th >Avg Salary</th>
+                <th >Total Salary</th>
+                <th >Status</th>
+                <th >Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (HRPlanningMasterList.Count > 0)
+            {
+
+                for (int i = 0; i < HRPlanningMasterList.Count; i++)
+                {
+                      @Html.HiddenFor(m => m.HRPlanningMasterList[i].EditActive)
+                        @Html.HiddenFor(m => m.HRPlanningMasterList[i].Logcode)
+                    <tr data-gi="@HRPlanningMasterList[i].GI">
+                      
+                        <td data-label="ID">@HRPlanningMasterList[i].planId</td>
+                        <td data-label="Department">@HRPlanningMasterList[i].DepartmentName</td>
+                        <td data-label="Section">@HRPlanningMasterList[i].SectionName</td>
+                        <td data-label="Grade">@HRPlanningMasterList[i].GradeName</td>
+                        <td data-label="Plan Count">@HRPlanningMasterList[i].PlanCount</td>
+                        <td data-label="Avg Salary">&#8377; @HRPlanningMasterList[i].AvgSalary</td>
+                        <td data-label="Total Salary">&#8377; @HRPlanningMasterList[i].TotalSalary</td>
+                        <td data-label="Status"><span class="badge @statusBadgeClass(HRPlanningMasterList[i].Status)">@HRPlanningMasterList[i].Status</span></td>
+                        <td data-label="Actions">
+                            <div>
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="hrPlanningMaseredit"
+                                       class="btn btn-icon btn-edit icon-only " onclick="OnEditClick('MODIFY','@HRPlanningMasterList[i].Logcode', '@HRPlanningMasterList[i].LogGI','@HRPlanningMasterList[i].GI',@i, this)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="hrPlanningMaseredit"
+                                       class="btn btn-icon btn-edit icon-only " onclick="OnEditClick('MODIFY', '@HRPlanningMasterList[i].Logcode', '@HRPlanningMasterList[i].LogGI', '@HRPlanningMasterList[i].GI',@i, this);
+                                       swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#hrPlanningEditSlider');});">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                </div>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div id="EditOrDeleteHrPlanning"></div>
+</div>

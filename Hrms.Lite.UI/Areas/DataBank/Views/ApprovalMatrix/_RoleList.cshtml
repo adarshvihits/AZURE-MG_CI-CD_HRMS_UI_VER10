@@ -1,0 +1,65 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.ApprovalMatrix
+@*@{
+        var fullData = (List<Hrms.Lite.Shared.General.Dropdown>)ViewBag.OriginalDropdownData;
+    }
+    <script>
+        console.log(@Html.Raw(Json.Serialize(fullData)));
+         console.log(@Html.Raw(Json.Serialize(ViewBag.RoleList)));
+    </script>*@
+@{
+    var roleList = ViewBag.Role as List<SelectListItem>;
+}
+<div class="ihits-table table-border odd-even mobile-responsive-table role_slider_list">
+
+    <table id="RoleMappingTable" class="common-table RoleMapping">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl No.</th>
+                <th scope="col">Level</th>
+                <th scope="col">Role</th>
+                @*<th></th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+            @Html.HiddenFor(model => model.ValidationMessage)
+            @Html.HiddenFor(model => model.AlreadyExistsStatus)
+            <input type="hidden" id="ValidationMessageTemp" value="@Model.ValidationMessage" />
+            <input type="hidden" id="AlreadyExistsStatusTemp" value="@Model.AlreadyExistsStatus" />
+            @if (Model.ApprovalRoleList != null && Model.ApprovalRoleList.Count > 0)
+            {
+               
+                @for (int i = 0; i < Model.ApprovalRoleList.Count; i++)
+                {
+                    var roleCode = Model.ApprovalRoleList[i].Role?.Code;
+                    var Name = Model.ApprovalRoleList[i].Role?.Name;
+
+                    <tr id="PanelMapping_@i">
+                        <td>
+                            <span id="PanelMappingslno@(i+1)">@(i + 1)</span>
+                        </td>
+                        <td>
+                            @Html.HiddenFor(m => m.ApprovalRoleList[i].Level.Code)
+                            @Html.DisplayFor(m => m.ApprovalRoleList[i].Level.Name)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.ApprovalRoleList[i].Role.Code,
+                                new SelectList(ViewBag.Role, "Value", "Text", roleCode),
+                                "Select",
+                                new { @class = "form-control role-select", required = "required" , @onChange = "rolechange(" + i + ")" })
+
+                            <input type="hidden" id="RoleCodeTemp_@i" value="@roleCode" />
+                        </td>
+                    </tr>
+                }
+                <input type="hidden" id="ApprovalRoleListCount" value="@Model.ApprovalRoleList.Count" />
+
+             
+            }
+        </tbody>
+
+    </table>
+</div>
+
+

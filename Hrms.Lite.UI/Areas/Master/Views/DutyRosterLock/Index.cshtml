@@ -1,0 +1,120 @@
+﻿@model Hrms.Lite.Shared.Master.DutyRosterLock
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Master/DutyRosterLock.js"></script>
+<script>
+    $(document).ready(function () {
+        GetList();
+    });
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Duty Roster Lock
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Duty Roster Lock
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body ">
+
+
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "dutyRosterLock" }))
+                            {
+                                <div class="row tab-style-button">
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="width:200px">
+
+
+                                            <label>Month</label>
+
+                                            @Html.DropDownListFor(m => Model.Month.Code, (SelectList)ViewBag.month, new { @class = "form-control form-control-sm", @onchange = "GetList()" })
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-end justify-content-end">
+
+                                        <div class="button-group float-left">
+                                            <button type="button" class="btn btn-default btn-sm" onclick="onBatchUpdateClick()">
+                                                Batch Update
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div id="ListView">
+                                    @await Html.PartialAsync("_List")
+                                </div>
+                            }
+                                <div id="sliderView"></div>
+                                <!-- <end table></end> -->
+                                <div class="row card-footer-bottom-fixed">
+
+                                    <div class="col-md-12 align-right">
+
+                                        <button id="adddivision" type="button"
+                                                class="btn btn-default float-right mobile-full-width " onclick="Save()">
+                                            Save
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>

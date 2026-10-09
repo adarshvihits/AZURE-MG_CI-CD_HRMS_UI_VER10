@@ -1,0 +1,114 @@
+﻿@model Hrms.Lite.Shared.Admin.OrganizationTask
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/scripts/Admin/organizationTask.js"></script>
+@using (Html.BeginForm("Create", "OrganizationTask", FormMethod.Post, new { @id = "organizationsave" }))
+{
+    @Html.HiddenFor(m => m.Mode)
+    @Html.HiddenFor(m => m.TaskCode)
+
+    <div class="slider-forms slider-forms-open organizationsave">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('organizationsave')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>OrganizationTask</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Task Description</label>
+                    <div class="view-details">
+
+
+                        @Html.TextAreaFor(model => Model.Task, new { @class = "form-control form-control-sm task H100 ", @placeholder = "Task", maxlength = "200", @onblur = "validate(this,'tsk')" })
+                        <span id="tsk"></span>
+
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Date
+                            <span class="Mandatory">*</span>
+                        </label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.Assigneddate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 date", @readonly = "true", @placeholder = "Date", @onchange = "validate(this,'ADate')", @id = "date" })
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <span id="ADate"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Assigned To
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.DropDownListFor(Model => Model.Employee.Code, (SelectList)ViewBag.Employee, "--Select--", new { @class = "form-control form-control-sm emp", @onblur = "validate(this,'emp')" })
+                        <span id="emp"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            EDC
+                            <span class="Mandatory">*</span>
+                        </label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.EDC, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 edc", @readonly = "true", @placeholder = "EDC", @onchange = "validate(this,'edc')", @id = "edc" })
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <span id="edc"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Supervisor User
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.DropDownListFor(Model => Model.EmployeeSupervisor.Code, (SelectList)ViewBag.Employee, "--Select--", new { @class = "form-control form-control-sm emp", @onblur = "validate(this,'Emp')" })
+                        <span id="Emp" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="OnOrganizationSaveClick('Save')">
+                                Save
+                            </button>
+                        
+                    }
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

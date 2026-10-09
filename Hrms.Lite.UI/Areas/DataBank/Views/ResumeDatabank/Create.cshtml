@@ -1,0 +1,122 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/scripts/DataBank/ResumeDataBank/Grid.js"></script>
+<script src="~/scripts/DataBank/ResumeDataBank/resumeDataBank.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+<script>
+    onTabNameClick('@Model.SelectedTab');
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#Details_RefNo').focus();
+    }
+</script>
+<!--begin::Header-->
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Resume Repository
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "ResumeDataBank", new { Area = "DataBank" })">Resume Repository</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Add New Resume
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+@using (Html.BeginForm("Create", "ResumeDataBank", FormMethod.Post, new { @id = "ResumeDBSave", enctype = "multipart/form-data" }))
+{
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body">
+                                @Html.HiddenFor(Model => Model.Mode)
+                                @Html.HiddenFor(Model => Model.ResumeDataBankGI)
+                                @Html.HiddenFor(Model => Model.ResumeDataBankCode)
+                                @Html.HiddenFor(m => m.Details.CandidatesPhoto.AbsoluteUri)
+                                <div id="Rd_Basic" class="">
+                                    @await Html.PartialAsync("_BasicDetails", Model)
+                                </div>
+
+                                <div id="Rd_Address" class="hide">
+                                    @await Html.PartialAsync("_Address", Model)
+                                </div>
+                                <div id="Rd_Education" class="hide">
+                                    @await Html.PartialAsync("_Education", Model)
+                                </div>
+                                <div id="Rd_Experience" class="hide">
+                                    @await Html.PartialAsync("_Experience", Model)
+                                </div>
+                                <div id="Rd_Certification" class="hide">
+                                    @await Html.PartialAsync("_Certifications", Model)
+                                </div>
+                                <div id="Rd_Skill" class="hide">
+                                    @await Html.PartialAsync("_Skill", Model)
+                                </div>
+                                <div id="Rd_Summary" class="hide">
+                                    @await Html.PartialAsync("_Summary", Model)
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

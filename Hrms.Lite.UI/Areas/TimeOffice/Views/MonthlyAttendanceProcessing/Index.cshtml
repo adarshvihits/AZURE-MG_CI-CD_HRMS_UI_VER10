@@ -1,0 +1,322 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.MonthlyAttendanceProcessing
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TimeOffice/MonthlyAttendanceProcessing.js?empty=1"></script>
+<style>
+    .dataTables_scrollBody {
+        max-height: 60vh;
+        height: 35vh !important;
+    }
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Monthly Attendance Processing
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Monthly Attendance Processing
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+
+
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="selectiondiv">
+                        <div class="step-outer pb-10 mt-0 step_row">
+                            <a class="step-item active">
+                                Selection
+                                <span class="step-circle"></span>
+                            </a>
+                            <a class="step-item">
+                                Attendance Settings
+                                <span class="step-circle"></span>
+                            </a>
+                            <a class="step-item">
+                                Attendance Status
+                                <span class="step-circle"></span>
+                            </a>
+                            <a class="step-item">
+                                Leave
+                                <span class="step-circle"></span>
+                            </a>
+                            <a class="step-item">
+                                Attendance Wages
+                                <span class="step-circle"></span>
+                            </a>
+                            <a class="step-item">
+                                Attendance Processing
+                                <span class="step-circle"></span>
+                            </a>
+
+                        </div>
+                        <!--begin: Search Form-->
+                        @*<div class="row tab-style-button">
+                                <div class="tab-button-wrap">
+                                    <div class="tab-items">
+                                        <div class="form-group">
+                                            <label>Payroll Group</label>
+                                            @Html.DropDownListFor(Model => Model.PayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "--Select--", new { @class = "form-control form-control-sm payroll", @onblur = "validate(this,'payrollgp');fillMonth(this);" })
+                                            <span id="payrollgp"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-items">
+
+                                        <div class="form-group">
+                                            <label>Month</label>
+
+                                            @Html.DropDownListFor(Model => Model.Month.Code, (SelectList)ViewBag.month, "--Select--", new { @class = "form-control form-control-sm month", @onchange = "validate(this,'month')", @style = "width:150px; " })
+                                            <span id="month"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-items d-flex align-items-center">
+                                        <div class="d-flex align-center pt-4">
+                                            <a href="#" type="button"
+                                               class="btn btn-default float-right mobile-full-width" onclick="onNextClick('map_Settings', 1)">
+                                                Proceed
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="tab-items select-option d-flex align-center">
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>*@
+
+
+                        <div class="page_white">
+
+                            <div class="row my-2">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Payroll Group</label>
+                                        @Html.DropDownListFor(Model => Model.PayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "--Select--", new { @class = "form-control form-control-sm payroll", @onblur = "validate(this,'payrollgp');fillMonth(this);" })
+                                        <span id="payrollgp"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Month</label>
+                                        @Html.DropDownListFor(Model => Model.Month.Code, (SelectList)ViewBag.month, "--Select--", new { @class = "form-control form-control-sm month", @onchange = "validate(this,'month')" })
+                                        <span id="month"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2  align-items-center d-flex justify-content-center">
+                                    <a href="#" type="button"
+                                       class="btn btn-default float-right mobile-full-width mt-5" onclick="onNextClick('map_Settings', 1)">
+                                        Proceed
+                                    </a>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row my-2">
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="map_Selection">
+                        @*@await Html.PartialAsync("_AttendanceSelection")*@
+
+                    </div>
+                    <div id="map_Status" class="hide">
+
+                    </div>
+                    <div id="map_Settings" class="hide">
+                    </div>
+                    <div id="map_Processing" class="hide">
+                        @*@await Html.PartialAsync("_AttendanceProcessing")*@
+
+                    </div>
+                    <div id="map_Leave" class="hide">
+
+                    </div>
+                    <div id="map_Wages" class="hide">
+
+                    </div>
+                    <div id="filterSlider" class="hide">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+                    @*<div class="row card-footer-bottom-fixed selectionNext">
+                            <div class="col-md-12">
+
+                                <a onclick="onNextClick('map_Settings', 1)"
+                                   class="btn btn-default float-right mobile-full-width">
+                                    Next
+                                </a>
+                            </div>
+
+                        </div>*@
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg1" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:420px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:1050px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    @*@Model.HR_Time_Office[0].Description*@
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade bd-example-modal-lg2" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:600px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabelemp">
+                   
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade apprPendingPopup" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:1050px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title">
+                   Attendance Approval Pending Employees
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                @await Html.PartialAsync("_AttendanceProcApprPendingPopUp")
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

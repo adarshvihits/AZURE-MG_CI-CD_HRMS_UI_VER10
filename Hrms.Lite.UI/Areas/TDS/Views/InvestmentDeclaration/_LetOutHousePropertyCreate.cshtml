@@ -1,0 +1,210 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    Model.TabIndex = "Income from Let Out House Property";
+}
+<script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "pada" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGuid)
+
+    <div id="addLetOutDetails" class="slider-forms slider-forms-open letouthouse new-slider-expand">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('letouthouse')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <div class="location-slider">
+                <h3>Let Out House Property Details</h3>
+            </div>
+            
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Address of House</label><span class="Mandatory">*</span>
+                            @Html.HiddenFor(m => m.LetOutDetails.TrnCode, new { @class = "form-control form-control-sm" })
+                            @Html.HiddenFor(m => m.SliderName)
+                            @Html.TextBoxFor(m => m.LetOutDetails.HouseAddress, new { @class = "form-control", placeholder = "Name", @maxlength = 120, @onchange = "validate(this,'address')" })
+                            <span id="address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Ownership Status</label><span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => m.LetOutDetails.OwnerStatus.Code, (SelectList)ViewBag.OwnerStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "LetOutOwnerStausChange(this,'ownerstatus')" })
+                            <span id="ownerstatus"></span>
+                        </div>
+                    </div>
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Percentage</label>
+                            @Html.TextBoxFor(m => m.LetOutDetails.Percentage, new { @class = "form-control", placeholder = "Percentage", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'percentage')" })
+                            <span id="percentage"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Purpose</label><span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => m.LetOutDetails.Purpose.Code, (SelectList)ViewBag.Purpose, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'purpose')" })
+                            <span id="purpose"></span>
+                        </div>
+                    </div>
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date of Loan</label><span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.LetOutDetails.DateofLoan, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Loan", @onchange = "validate(this,'dateofloan')" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="dateofloan"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date of Completion</label><span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.LetOutDetails.DateofCompletion, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Completion", @onchange = "validate(this,'dateofcmptn')" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="dateofcmptn"></span>
+                        </div>
+                    </div>
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date of Let Out</label><span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.LetOutDetails.DateofLetOut, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of LetOut", @onchange = "validate(this,'dateofLetOut')" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="dateofLetOut"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Rental Income</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.RentalIncome, new { @class = "form-control", placeholder = "Rental Income", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'rentalincme')" })
+                            <span id="rentalincme"></span>
+                        </div>
+                    </div>
+
+                </div>
+              
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Municipal Tax</label>
+                            @Html.TextBoxFor(m => m.LetOutDetails.MunicipalTax, new { @class = "form-control", placeholder = "Municipal Tax", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Principle Amount</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.PrincipalAmt, new { @class = "form-control", placeholder = "Principle Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'principleamt')" })
+                            <span id="principleamt"></span>
+                        </div>
+                    </div>
+
+                </div>
+              
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Interest</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.Interest, new { @class = "form-control", placeholder = "Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "LOInterestChange(this,'interest')" })
+                            <span id="interest"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Pre EMI Interest</label>
+                            @Html.TextBoxFor(m => m.LetOutDetails.PreEMIInterest, new { @class = "form-control", placeholder = "Pre EMI Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "LOInterestChange()" })
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Total Interest</label>
+                            @Html.TextBoxFor(m => m.LetOutDetails.TotalInterest, new { @class = "form-control", placeholder = "Total Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @readonly = true })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name of Bank</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.NameofBank, new { @class = "form-control", placeholder = "Name of Bank", @maxlength = 120, @onchange = "validate(this,'nameofbank')" })
+                            <span id="nameofbank"></span>
+                        </div>
+                    </div>
+
+                </div>
+              
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>PAN of Bank</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.PANofBank, new { @class = "form-control", placeholder = "PAN of Bank", @maxlength = 10, @onblur = "validatePan('LetOutDetails_PANofBank','panofbank')", @onchange = "validate(this,'panofbank')" })
+                            <span id="panofbank"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Address of Bank</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.LetOutDetails.BankAddress, new { @class = "form-control", placeholder = "Address of Bank", @maxlength = 120, @onchange = "validate(this,'bankaddress')" })
+                            <span id="bankaddress"></span>
+                        </div>
+                    </div>
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            @Html.TextBoxFor(m => m.LetOutDetails.Remarks, new { @class = "form-control", placeholder = "Remarks", @maxlength = 120 })
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 float-right-btn">
+                        <button id="LetOutid" type="button" class="btn btn-default" onclick="LetOutHouseSave('@Model.SliderName')">@Model.SliderName</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

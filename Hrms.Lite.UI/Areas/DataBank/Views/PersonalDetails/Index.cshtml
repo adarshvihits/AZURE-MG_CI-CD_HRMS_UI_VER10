@@ -1,0 +1,197 @@
+﻿@*@using Hrms.Lite.UI;*@
+@*@model Tuple<List<Hrms.Lite.Shared.DataBank.DTO.PersonalDetailsList>, Hrms.Lite.Shared.DataBank.DTO.PersonalDetailsList>*@
+@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetailsList
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/PersonalDetails/personalDetails.js"></script>
+<script>
+    //$(document).ready(function () {
+
+
+    //});
+    function onFilterChange(sender) {
+        debugger;
+        var Id = $(sender).val();
+        fillData();
+    }
+</script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Header Menu-->
+                <h3 class="main-title">Personal Profile List</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Personal Profile List
+                    </li>
+                </ul>
+                <!--end::Header Menu-->
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2 tab-style-button">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    @*<label>Select Type</label>*@
+                                    @*<select class="form-control form-control-sm "
+                                                id="exampleSelects"
+                                                onchange="(this.options[this.selectedIndex].value?  window.open(this.options[this.selectedIndex].value,'_self'):'')">
+                                            <option>...Select...</option>
+                                            <option value="allowance-master.html">Active</option>
+                                            <option value="">Inactive</option>
+                                            <option value="allowance-master-pending.html">
+                                                Pending
+                                            </option>
+
+                                        </select>*@
+                                    @if (Model.percentage > 75)
+                                    {
+                                        <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="Mpers" class="progress-bar medium" style="background-color:green;width: @Model.Totalprofilepercentage;">@Model.Totalprofilepercentage</span></div>
+                                    }
+                                    else if (Model.percentage >= 50)
+                                    {
+                                        <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="Mpers" class="progress-bar medium" style="background-color:orange;width: @Model.Totalprofilepercentage;">@Model.Totalprofilepercentage</span></div>
+                                    }
+                                    else if (Model.percentage < 50)
+                                    {
+                                        <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="Mpers" class="progress-bar medium" style="background-color:red;width: @Model.Totalprofilepercentage;">@Model.Totalprofilepercentage</span></div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-6" id="assetFilter">
+                                <div class="form-group">
+                                    <label>Select Allowance Type</label>
+                                    @Html.DropDownListFor(m => m.PersonalDetailsFilter.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm", @onchange = "onFilterChange(this);$('.pddropdown').val($('#PersonalDetailsFilter_Code').val())" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+                                @*@if (Model.percentage > 75)
+                                    {*@
+                                <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="pers" class="progress-bar medium"></span></div>
+                                @*}
+                                    else if (Model.percentage >= 50)
+                                    {
+                                        <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="pers" class="progress-bar medium" style="background-color:orange;width: @Model.Totalprofilepercentage;">@Model.Totalprofilepercentage</span></div>
+                                    }
+                                    else if (Model.percentage < 50)
+                                    {
+                                        <div class="mt-3 border-0 after-none">Profile Completion Percentage: <span id="pers" class="progress-bar medium" style="background-color:red;width: @Model.Totalprofilepercentage;">@Model.Totalprofilepercentage</span></div>
+                                    }*@
+                            </div>
+
+
+                            <div class="tab-items select-option">
+                                <div class="form-group filter-combobox mr-15">
+                                    @Html.DropDownListFor(m => m.PersonalDetailsFilter.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm filterDropDown pddropdown", @onchange = "onFilterChange(this);$('#PersonalDetailsFilter_Code').val($('.pddropdown').val())" })
+                                </div>
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="onExportToExcelClick1()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <!-- Table Section -->
+
+                    <div id="PersonalDetailsList">
+
+                        @await Html.PartialAsync("_List", Model)
+
+                    </div>
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-6">
+                            <div class="d-flex responsive-center">
+                                <a href="@Url.Action("Index","PersonalDetailsLock", new { Area="DataBank"})">
+                                    <div class="application-btn d-flex align-items-center pr-3 ">
+                                        <div class="history-btn">
+                                            <img src="/images/Icon awesome-history.png">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3">Personal Profile Lock </h3></div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->
+

@@ -1,0 +1,123 @@
+﻿
+
+@model Hrms.Lite.Shared.TrainingModule.TrainingReplyGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approve" }))
+{
+    <div id="regionapprove" class="slider-forms slider-forms-open PendingApprove">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('PendingApprove')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Reply Group
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.LogGI)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.ApproveMode)
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>
+                            Type<span class="Mandatory">*</span>
+
+                        </label>
+                        <div class=" d-flex align-items-center   pr-8" id="radio">
+                            @*<div class="radio-inline pt-4">
+
+
+                                </div>*@
+
+                            <label class="radio radio-outline radio-success">
+                                @Html.RadioButtonFor(m => m.Type, "1")
+                                <span class="mr-2"></span>Objective
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Active</label>
+                            <div class="view-details">
+                                @if (Model.Active == true)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                @*<div class="row my-3">
+
+                        <div class="col-md-12">
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Description)
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+
+
+
+                        @*<a type="button"
+                             class="btn btn-default  mobile-full-width">
+                                  Approve
+                            </a>*@
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                            <button type="button" class="btn btn-danger  mobile-full-width" onclick="return ConfirmRegionReject('@Model.LogGI', '@Model.GI')">
+                                Reject
+                            </button>
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="return  ConfirmRegionApprove('@Model.LogGI', '@Model.GI')">
+                                Approve
+                            </button>
+                        }
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

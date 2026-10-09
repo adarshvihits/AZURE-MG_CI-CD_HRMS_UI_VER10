@@ -1,0 +1,72 @@
+﻿@model Hrms.Lite.Shared.Admin.DocumentsFolder
+<script src="~/js/tooltip.js"></script>
+<script src="~/scripts/Admin/documentsFolder.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<style>
+
+    .wid100{
+
+        width:100%;
+        
+    }
+</style>
+
+@if (@Model.RenewalDateApplicable == true)
+{
+<div class="row">
+    <div class="col-md-6" style=" float: right;">
+        <div class="form-group mb-4" style="padding-left: 10px;">
+            <label>
+                Renewal Date:
+                <span class="Mandatory">*</span>
+            </label>
+            <div class="input-group date">
+                @Html.TextBoxFor(Model => Model.RenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Date Of Renewal" })
+
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <span id="RenewalDate"></span>
+        </div>
+    </div>
+</div>
+
+    }
+    <div class="row">
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table categoryparameter_lists">
+            @Html.HiddenFor(Model => Model.ParameterList.Count)
+
+            <table id="parameterlist">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Parameters</th>
+                        <th scope="col">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.ParameterList.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.ParameterList.Count; i++)
+                        {
+                            @Html.HiddenFor(Model => Model.ParameterList[i].ParameterCode)
+
+                            <tr>
+                                <td data-label="Parameter">@Model.ParameterList[i].ParameterName</td>
+                                <td data-label="Remarks">
+                                    @Html.TextBoxFor(Model => Model.ParameterList[i].Remarks, new { @class = " wid100" })
+                                </td>
+
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>

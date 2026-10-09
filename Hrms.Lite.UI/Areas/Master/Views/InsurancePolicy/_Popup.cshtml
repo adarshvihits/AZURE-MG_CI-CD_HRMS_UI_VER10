@@ -1,0 +1,88 @@
+﻿@model Hrms.Lite.Shared.Master.InsurancePolicy
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "InsuranceCompanySave" }))
+{
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table exitpopup-questionaire-list vertical-scroll-250 ">
+        <table id="insuranceCompanyTable">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Insurance Company</th>
+
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+
+                    if (Model.InsuranceCompanyLt != null && Model.InsuranceCompanyLt.Count > 0)
+                    {
+                        for (int i = 0; i < Model.InsuranceCompanyLt.Count; i++)
+
+                        {
+                            <tr id="row_OI_@i">
+
+                                <td data-label="Sl. No" id="oi_slno">@(i + 1)</td>
+                                <td data-label="Questions">
+                                    <div class="form-group">
+                                        @Html.HiddenFor(m => m.InsuranceCompanyLt[i].Code)
+                                        @Html.TextBoxFor(Model => Model.InsuranceCompanyLt[i].Name, new { @class = "form-control form-control-sm", @placeholder = "Name",@onblur= "validate(this,'ICompanyName')" })
+                                        <span id="ICompanyName_@i" class="InsCompany"></span>
+                                    </div>
+                                </td>
+
+                                <td data-label="Actions">
+                                    @if (Model.InsuranceCompanyLt.Count == (i + 1) || Model.InsuranceCompanyLt.Count == 1)
+                                    {
+                                        <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                           id="PF_Settings_slider"
+                                           class="btn btn-icon btn-edit icon-only addObj" onclick="AddRowGrid('insuranceCompanyTable')">
+                                            <i class="fa fa-plus"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                           id="PF_Settings_slider"
+                                           class="btn btn-icon btn-edit icon-only addObj hide" onclick="AddRowGrid('insuranceCompanyTable')">
+                                            <i class="fa fa-plus"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                    }
+                                    
+
+
+                                    <!-- delete Slider  start-->
+                                    <a data-bs-toggle="tooltip"
+                                       title="Delete"
+                                       id="deleteskilltype"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="DeleteRow(@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+
+
+                                    <!-- <end delete section></end> -->
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row  pr-0 pt-5">
+
+        <div class="col-md-12 align-right">
+            <a  type="button"
+               class="btn btn-default float-right mobile-full-width " onclick="InsuranceCompanySave()">
+                Save
+
+            </a>
+
+        </div>
+
+    </div>
+}

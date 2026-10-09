@@ -1,0 +1,174 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryReleaseBankStatement
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/PayRoll/SalaryReleaseBankStatement.js"></script>
+@*<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>*@
+
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title"> Salary Release Bank Statement</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Salary Release Bank Statement
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                      
+                            <div class="row tab-style-button">
+
+                                <div class="tab-button-wrap">
+                                    <div class="tab-items ml-5 pr-0 border-none select-option">
+
+                                        <div class="form-group filter-combobox mt-0">
+                                            <label>Period</label>
+                                            @Html.DropDownListFor(m => Model.PayrollMonth.Code, (SelectList)ViewBag.month, new { @class = "form-control form-control-sm", @onchange = "Gridclear()", @style = "width:200px;" })
+                                            <span id="Month"></span>
+                                        </div>
+                                        <div class="form-group filter-combobox mt-0">
+                                            <label>Report Format</label>
+                                            @Html.DropDownListFor(m => m.ReportFormat, (SelectList)ViewBag.ReportFormat, "--Select Report Format--", new { @class = "form-control form-control-sm", @onchange = "Gridclear()", @style = "width:200px;" })
+                                            <span id="RptFormat"></span>
+                                        </div>
+
+                                        <div class="form-group  filter-combobox mt-0">
+                                            <label>Execution Date</label>
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(m => m.ExecutionDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", placeholder = "Date", @onchange = "validate(this,'exdate');" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                    <span id="exdate"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-items ">
+                                        <div class="align-items-center d-flex justify-content-center">
+                                            <a href="#" type="button"
+                                               class="btn btn-default float-right mobile-full-width mt-5" onclick="getList()">
+                                                Proceed
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-items select-option">
+                                        <div class="sraech-slider">
+                                            <div class="search-slider-inner">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="SRBnkstmtSearch" class="form-control form-control-sm"
+                                                   placeholder="Search Employee ID" onkeyup="searchRows()">
+                                        </div>
+                                        <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                            <i class="fas fa-filter"></i>
+                                            <i class="fas fa-check"></i>
+                                        </div>
+
+                                        <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="ExportToExcel()">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="tab-button-wrap align-items-center">
+
+
+                                </div>
+                            </div>
+
+                            <div id="filterSlider">
+                                @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                            </div>
+                            <div id="SRBankStatementList">
+                                @await Html.PartialAsync("_SalaryReleaseBnkStmtList")
+                            </div>
+
+                            <!--end: Datatable-->
+                            <div class="row card-footer-bottom-fixed">
+                                <div class="col-md-6">
+                                    <div class="d-flex responsive-center">
+                                        <a onclick="TransactionHistory()">
+                                            <div class="application-btn d-flex align-items-center pr-3 ">
+                                                <div class="history-btn">
+                                                    <img src="/images/Icon awesome-history.png">
+
+                                                </div>
+                                                <div class="application-icon">  <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                                            </div>
+                                        </a>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button"
+                                            class="btn btn-default float-right mobile-full-width " onclick="PostToSFTP()">
+                                        Post to SFTP
+                                    </button>
+
+
+                                </div>
+                            </div>
+                       
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+
+</div>

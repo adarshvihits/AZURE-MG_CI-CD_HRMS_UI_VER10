@@ -1,0 +1,249 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TDS/investmentDeclarationApproval.js"></script>
+<script>
+    $(document).ready(function () {
+        HouseRentTotal();
+        DeductionTotal();
+      /*  DonationTotal();*/
+    });
+   
+</script>
+
+<style>
+
+    textarea.form-control {
+        height: 60px!important;
+        PADDING: 8PX;
+    }
+
+</style>
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    @Html.HiddenFor(m => m.EmployeeGuid)
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Investment Declaration Approval</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "InvestmentDeclarationApproval", new { Area = "TDS" })">Investment Declaration Approval List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Investment Declaration Approval
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="profile-header position-relative box-shadow-none mb-2">
+                        <!--begin: Search Form-->
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+                        <div class="profile-header-overflow"></div>
+                    </div>
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ml-5 pr-0 border-none select-option">
+                                <div class="row-outer">
+                                    <div class="form-group filter-combobox mr-2" style="width: 269px;">
+                                        @Html.DropDownListFor(model => model.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, "--Select Assessment Year--", new { @class = "form-control form-control-sm"@*, @onblur= "validate(this,'Allowance_span')"*@, @onchange = "fillData();validate(this,'Assessmnt_year')", @disabled = "disabled" })
+                                        <span id="Assessmnt_year" style="bottom: -15px;"></span>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+                    <div id="SettingsEmployeeList">
+                        <div class="tab-outer accordion-only pt-7">
+                            <ul class="ulList">
+                                <div class="TabMoving"></div>
+                                <li class="tabOne Investment-tap-color clickOnTab active  ">House Rental</li>
+                                <div id="tabOne" class="tab-content active ">
+
+                                    @await Html.PartialAsync("_HouseRentalApproval", Model)
+
+
+
+
+
+
+                                </div>
+                                <!-- Contact Details Info Tab -->
+                                <div class="TabMoving"></div>
+                                <li class="tabTwo Investment-tap-color clickOnTab">Investment Under Section 80-C</li>
+                                <div id="tabTwo" class="tab-content">
+                                    @await Html.PartialAsync("_80CDeductionsApproval", Model)
+                                </div>
+
+                                <!-- Contact Details Info Tab -->
+                                <!-- Personal Info Tab -->
+                                <div class="TabMoving"></div>
+                                <li class="tabThree  Investment-tap-color clickOnTab">Chapter VI A</li>
+                                <div id="tabThree" class="tab-content">
+                                    @await Html.PartialAsync("_ChapterVIAApproval", Model)
+                                </div>
+                                <!-- Personal Info Tab -->
+                                <!-- Family Details Tab -->
+                                @*<div class="TabMoving"></div>
+                                <li class="tabFour clickOnTab">80G</li>
+                                <div id="tabFour" class="tab-content">
+                                    @await Html.PartialAsync("_80GDonationApproval", Model)
+
+
+                                </div>*@
+
+                                <div class="TabMoving"></div>
+                                <li class="tabFive  Investment-tap-color clickOnTab">Self Occupied House Loan Repayment</li>
+                                <div id="tabFive" class="tab-content">
+
+                                    @await Html.PartialAsync("_HouseLoanRepayApproval", Model)
+                                </div>
+                                <!-- Education Details Tab -->
+                                <!-- Skills Tab -->
+                                <div class="TabMoving"></div>
+                                <li class="tabSix clickOnTab Investment-tap-color">Income from Let Out House Property</li>
+                                <div id="tabSix" class="tab-content">
+
+                                    @await Html.PartialAsync("_LetOutHousePropertyApproval", Model)
+
+
+                                </div>
+                                <!-- Skills Tab -->
+                                <!-- Skills Tab -->
+                                <div class="TabMoving"></div>
+                                <li class="tabSeven clickOnTab  Investment-tap-color">Other Income</li>
+                                <div id="tabSeven" class="tab-content">
+
+                                    @await Html.PartialAsync("_OtherIncomeApproval", Model)
+
+                                </div>
+                                <!-- Skills Tab -->
+                                <!-- Previous Employment Tab -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Table Setion End -->
+                    <div class="row card-footer-bottom-fixed">
+
+
+
+
+                    </div>
+                    <!--end: Datatable-->
+
+                </div>
+
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg " style="max-width:620px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title Name" id="popUpName"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+-------------------REJECTION COMMENTS-------------------
+<div class="modal fade bd-reject-modal-lg " id="RejectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:620px;">
+        <div class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RejectionPopUp">Declaration Approval</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label>Remarks</label>
+                        @Html.HiddenFor(m => m.Rowid)
+                        @Html.HiddenFor(m => m.TabIndex)
+                        @Html.TextAreaFor(m => m.ApproverComments, new { @class = "form-control form-control-sm", @maxlength = "250", @onblur = "validate(this,'rejremarks')" })
+                        <span id="rejremarks" class="text-danger"></span>
+                    </div>
+                 </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" onclick="onRejectionClick()"
+                        class="btn btn-default float-right mr-5" style="background-color:red!important;border-color:red!important;">
+                    Reject
+                </button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

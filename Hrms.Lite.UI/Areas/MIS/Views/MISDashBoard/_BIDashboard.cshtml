@@ -1,0 +1,631 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/MIS/MISDashBoard.js"></script>
+<link href="~/css/BIdashboard.css" rel="stylesheet" />
+<script>
+    $(document).ready(function () {
+        empfilterradio(1)
+        //    onChartDropdownChange('ONE');
+    });
+</script>
+<script>
+    function onSeriesDptOver(e) {
+        $("#hrByDept").css("cursor", "pointer");
+    }
+    function onSeriesDptClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 37, type: 'Department', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=37&groupCom=' + groupCom + '&type=Department&name=' + e.dataItem.department + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+</script>
+
+
+
+<script>
+    function view(divId) {
+        var url = '@Url.Action("Index", "MISDashBoard", new { area = "MIS" })';
+        url += '?id='+divId;
+        window.location.href = url;
+    }
+</script>
+
+<script>
+    function onEmpClick() {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 35, type: 'ActiveEmployees', name: 'ActiveEmployees' },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=35&groupCom=' + groupCom + '&type=ActiveEmployees&name=ActiveEmployees&age=0';
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesAgeOver(e) {
+        $("#hrByAg").css("cursor", "pointer");
+    }
+    function onSeriesAgeClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var age = e.category
+        if (age == '60+') {
+            age = '60-100';
+        }
+        else {
+            age = age.replace(' Year', '');
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 36, type: 'AGE', age: age },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=36&groupCom=' + groupCom + '&type=AGE&name=Age&age=' + e.category;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesDptOver(e) {
+        $("#hrByDept").css("cursor", "pointer");
+    }
+    function onSeriesDptClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 37, type: 'Department', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=37&groupCom=' + groupCom + '&type=Department&name=' + e.dataItem.department + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesLocOver(e) {
+        $("#hrByLoc").css("cursor", "pointer");
+    }
+    function onSeriesLocClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 38, type: 'Department', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=38&groupCom=' + groupCom + '&type=Location&name=' + e.dataItem.location + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesDivOver(e) {
+        $("#hrByDiv").css("cursor", "pointer");
+    }
+    function onSeriesDivClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 39, type: 'Division', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=38&groupCom=' + groupCom + '&type=Division&name=' + e.dataItem.division + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesCatOver(e) {
+        $("#hrByCat").css("cursor", "pointer");
+    }
+    function onSeriesCatClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 50, type: 'Category', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=50&groupCom=' + groupCom + '&type=Category&name=' + e.dataItem.category + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function onSeriesGrdOver(e) {
+        $("#hrByGrd").css("cursor", "pointer");
+    }
+    function onSeriesGrdClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 51, type: 'Grade', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=51&groupCom=' + groupCom + '&type=Grade&name=' + e.dataItem.grade + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+    function onSeriesRegOver(e) {
+        $("#hrByReg").css("cursor", "pointer");
+    }
+    function onSeriesRegClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 52, type: 'Region', age: e.dataItem.code },
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=52&groupCom=' + groupCom + '&type=Region&name=' + e.dataItem.region + '&age=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+</script>
+<style>
+    .card.card-custom > .card-body {
+        padding: 18px 30px 30px 20px !important;
+    }
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+        </div>
+    </div>
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+            <div class="row height-100per">
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2">
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="empfilterradio(1)">
+                                        <img src="https://boltz.dexignzone.com/codeigniter/demo/public/assets/images/card/card44.jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">Total Count</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600 ">@Model.employeeCount</h2>
+
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="user-count ">
+                                                </div>
+                                                @*<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19.2744 18.8013H16.0334V23.616H19.2744C19.9286 23.616 20.5354 23.3506 20.9613 22.9053C21.4066 22.4784 21.672 21.8726 21.672 21.1989C21.673 19.8813 20.592 18.8013 19.2744 18.8013Z" fill="white"></path>
+                                                        <path d="M18 0C8.07429 0 0 8.07429 0 18C0 27.9257 8.07429 36 18 36C27.9257 36 36 27.9247 36 18C36 8.07531 27.9247 0 18 0ZM21.6627 26.3355H19.5398V29.6722H17.3129V26.3355H16.0899V29.6722H13.8528V26.3355H9.91954V24.2414H12.0898V11.6928H9.91954V9.59863H13.8528V6.3288H16.0899V9.59863H17.3129V6.3288H19.5398V9.59863H21.4735C22.5535 9.59863 23.5491 10.044 24.2599 10.7547C24.9706 11.4655 25.416 12.4611 25.416 13.5411C25.416 15.6549 23.7477 17.3798 21.6627 17.4744C24.1077 17.4744 26.0794 19.4647 26.0794 21.9096C26.0794 24.3453 24.1087 26.3355 21.6627 26.3355Z" fill="white"></path>
+                                                        <path d="M20.7062 15.8441C21.095 15.4553 21.3316 14.9338 21.3316 14.3465C21.3316 13.1812 20.3842 12.2328 19.2178 12.2328H16.0334V16.4695H19.2178C19.7959 16.4695 20.3266 16.2226 20.7062 15.8441Z" fill="white"></path>
+                                                    </svg>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="empfilterradio(1)">
+                                        <img src="~/images/icons/card11.jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">Male Count</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600">@Model.employeeMaleCount</h2>
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="head_img-bi">
+                                                </div>
+                                                @*<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19.2744 18.8013H16.0334V23.616H19.2744C19.9286 23.616 20.5354 23.3506 20.9613 22.9053C21.4066 22.4784 21.672 21.8726 21.672 21.1989C21.673 19.8813 20.592 18.8013 19.2744 18.8013Z" fill="white"></path>
+                                                        <path d="M18 0C8.07429 0 0 8.07429 0 18C0 27.9257 8.07429 36 18 36C27.9257 36 36 27.9247 36 18C36 8.07531 27.9247 0 18 0ZM21.6627 26.3355H19.5398V29.6722H17.3129V26.3355H16.0899V29.6722H13.8528V26.3355H9.91954V24.2414H12.0898V11.6928H9.91954V9.59863H13.8528V6.3288H16.0899V9.59863H17.3129V6.3288H19.5398V9.59863H21.4735C22.5535 9.59863 23.5491 10.044 24.2599 10.7547C24.9706 11.4655 25.416 12.4611 25.416 13.5411C25.416 15.6549 23.7477 17.3798 21.6627 17.4744C24.1077 17.4744 26.0794 19.4647 26.0794 21.9096C26.0794 24.3453 24.1087 26.3355 21.6627 26.3355Z" fill="white"></path>
+                                                        <path d="M20.7062 15.8441C21.095 15.4553 21.3316 14.9338 21.3316 14.3465C21.3316 13.1812 20.3842 12.2328 19.2178 12.2328H16.0334V16.4695H19.2178C19.7959 16.4695 20.3266 16.2226 20.7062 15.8441Z" fill="white"></path>
+                                                    </svg>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="empfilterradio(1)">
+                                        <img src="~/images/icons/card33 (1).jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">Female Count</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600">@Model.employeeFeMaleCount</h2>
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="head_img_women-bi    ">
+                                                </div>
+                                                @*<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19.2744 18.8013H16.0334V23.616H19.2744C19.9286 23.616 20.5354 23.3506 20.9613 22.9053C21.4066 22.4784 21.672 21.8726 21.672 21.1989C21.673 19.8813 20.592 18.8013 19.2744 18.8013Z" fill="white"></path>
+                                                        <path d="M18 0C8.07429 0 0 8.07429 0 18C0 27.9257 8.07429 36 18 36C27.9257 36 36 27.9247 36 18C36 8.07531 27.9247 0 18 0ZM21.6627 26.3355H19.5398V29.6722H17.3129V26.3355H16.0899V29.6722H13.8528V26.3355H9.91954V24.2414H12.0898V11.6928H9.91954V9.59863H13.8528V6.3288H16.0899V9.59863H17.3129V6.3288H19.5398V9.59863H21.4735C22.5535 9.59863 23.5491 10.044 24.2599 10.7547C24.9706 11.4655 25.416 12.4611 25.416 13.5411C25.416 15.6549 23.7477 17.3798 21.6627 17.4744C24.1077 17.4744 26.0794 19.4647 26.0794 21.9096C26.0794 24.3453 24.1087 26.3355 21.6627 26.3355Z" fill="white"></path>
+                                                        <path d="M20.7062 15.8441C21.095 15.4553 21.3316 14.9338 21.3316 14.3465C21.3316 13.1812 20.3842 12.2328 19.2178 12.2328H16.0334V16.4695H19.2178C19.7959 16.4695 20.3266 16.2226 20.7062 15.8441Z" fill="white"></path>
+                                                    </svg>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="empfilterradio(2)">
+                                        <img src="~/images/icons/card22.jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">Avg Salary</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600">@Model.avgGP</h2>
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="avg-salary">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="card-bx stacked card" style="height:80px!important;" onclick="empfilterradio()">
+                                            <img src="~/images/icons/card02.jpg" alt="">
+                                            <div class="card-info">
+                                                <p class="mb-1 text-white fs-14">Avg Age</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <h2 class="num-text text-white mb-5 font-w600">@Model.avgAge</h2>
+                                                    <div class="new-tile-iconz-bi">
+                                                        <img class="avg-age">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                                    @*<div class="card-bx stacked card" style="height:80px!important;" onclick="empfilterradio()">
+                                            <img src="~/images/icons/03.png" alt="">
+                                            <div class="card-info">
+                                                <p class="mb-1 text-white fs-14">Avg Service</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <h2 class="num-text text-white mb-5 font-w600">@Model.avgTenure</h2>
+                                                    <div class="new-tile-iconz-bi">
+                                                        <img class="avg-servicee">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="onChartDropdownChange('ONE')">
+                                        <img src="~/images/icons/card08.jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">New Joinee</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600">@Model.joiningCount</h2>
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="newjoniee">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-bx stacked card" style="height:80px;" onclick="onChartDropdownChange('TWO')">
+                                        <img src="~/images/icons/05.jpg" alt="">
+                                        <div class="card-info">
+                                            <p class="mb-1 text-white fs-14">Left Employee</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="num-text text-white mb-5 font-w600">@Model.resignationCount</h2>
+                                                <div class="new-tile-iconz-bi">
+                                                    <img class="Left-Employee">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @*<div class="card-bx stacked card" style="height:80px!important;">
+                                            <img src="~/images/icons/06.jpg" alt="">
+                                            <div class="card-info">
+                                                <p class="mb-1 text-white fs-14">Attrition Rate</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <h2 class="num-text text-white mb-5 font-w600">@Model.attritionRate</h2>
+                                                    <div class="new-tile-iconz-bi">
+                                                        <img class="Attrition-Rate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                                </div>
+
+
+                                <div class="col-sm-12 col-md-7  order2">
+
+
+
+                                    <div class="row second-full-tile-pad" style="padding-left: 6px;padding-top:0px; ">
+                                        <!-- Graph--one-->
+
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="row second-full-tile-pad" style="padding-left: 6px; padding-top:0px;  ">
+
+                                                <div class="col-sm-4">
+                                                    <div class="card-bx left_side stacked card" style="height: auto !important; border-left: 5px solid #796adb;">
+                                                        @*<img src="/images/icons/05.jpg" alt="">*@
+                                                        <div class="card-info">
+                                                            <p class="mb-1 text-white fs-14 left_emp">On Notice</p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <h2 class="num-text text-white mb-5 font-w600 left_emp">@Model.noticeperiod </h2>
+                                                                <div class="new-tile-iconz-bi">
+                                                                    <img class="on_notice">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="card-bx left_side stacked card" style="height: auto !important; border-left: 5px solid #db799d; " >
+
+                                                        <div class="card-info">
+                                                            <p class="mb-1 text-white fs-14 left_emp">Retirement due</p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <h2 class="num-text text-white mb-5 font-w600 left_emp">55</h2>
+                                                                <div class="new-tile-iconz-bi">
+                                                                    <img class="retirement-plan">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="card-bx left_side stacked card" style="height: auto !important; border-left: 5px solid #1eafd5; "   >
+
+                                                        <div class="card-info">
+                                                            <p class="mb-1 text-white fs-14 left_emp">Loan Balance</p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <h2 class="num-text text-white mb-5 font-w600 left_emp">@Model.LoanBalance</h2>
+                                                                <div class="new-tile-iconz-bi">
+                                                                    <img class="loan_balance">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="  graph-hei-databank ">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class=" filter-combobox  pl-2" style="width: 300px; display:flex; align-items:center;">
+                                                            <label style="width:195px;">Group Company</label>
+                                                            @Html.DropDownListFor(m => m.GroupCompanyCode, (SelectList)ViewBag.GrpCompany, "All", new { @class = "form-control form-control-sm " })
+                                                            <span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <select id="classification" class="form-control form-control-sm float-right" onchange="onClassificationDropdownChange()" style="width: 200px;">
+                                                            <option value="AGE">AGE</option>
+                                                            <option value="DEPARTMENT">DEPARTMENT</option>
+                                                            <option value="DIVISION">DIVISION</option>
+                                                            <option value="LOCATION">LOCATION</option>
+                                                            <option value="REGION">REGION</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="customGraph">
+                                                    @*@await Html.PartialAsync("_Chart", Model.HRAgeList)*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Graph--two-->
+                                    </div>
+                                    <!-- Graph--three-->
+
+                                </div>
+
+                                <div class="col-sm-6 col-md-3 ">
+                                    <div class=" main-notification-stlee ">
+
+                                        <div class="notificatiobn_new">
+                                            <div class="d-flex notification-padd">
+                                                <div class="right_notification">
+                                                    <img class="notification_img  new-top-notification-icon-color-chng ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" notifi-databank-heig">
+                                            <div class="notifi-common-space notifi-border-back-box">
+                                                <a>
+                                                    <div class="row">
+                                                        <div id="9" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-11"><img class="HR-glance"></div>
+                                                                <h4>HR at a glance</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="1" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-14"><img class="New-Starters"></div>
+                                                                <h4>New Starters</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="2" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-2"><img class="Resignation-Analysis"></div>
+                                                                <h4>Resignation Analysis</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="16" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-10"><img class="Employee-Overview"></div>
+                                                                <h4>Employee Overview</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="4" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-4"><img class="Leave-Analysis"></div>
+                                                                <h4>Leave Analysis</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div div="" id="40" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-16"><img class="Career-Progression"></div>
+                                                                <h4>Career Progression</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="13" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-7"><img class="Payroll-Overview"></div>
+                                                                <h4>Payroll Overview</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="14" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-8"><img class="Leave-Overview"></div>
+                                                                <h4>Leave Overview</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="10" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon"><img class="Workforce-Time-Trends"></div>
+                                                                <h4>Workforce Time Trends</h4>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="6" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-3"><img class="Absenteesm"></div>
+                                                                <h4>Absenteeism</h4>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="8" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-5"><img class="Recruitment-Analysis"></div>
+                                                                <h4>Recruitment Analysis</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="12" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-6"><img class="Attendance-OverView"></div>
+                                                                <h4>Attendance OverView</h4>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div id="15" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-9"><img class="WorkForce-Time-Overview"></div>
+                                                                <h4>WorkForce Time Overview</h4>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div id="3" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-12"><img class="Employee-Profile"></div>
+                                                                <h4>Employee Profile</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="7" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-13"><img class="Historical-Trends"></div>
+                                                                <h4>Historical Trends</h4>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="5" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-15"><img class="Salary-Analysis"></div>
+                                                                <h4>Salary Analysis</h4>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="41" onclick="view(this.id)" class="hr-rightbox">
+                                                            <div class="d-flex">
+                                                                <div class="hr-icon hr-17"><img class="Grievance"></div>
+                                                                <h4>Grievance</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>

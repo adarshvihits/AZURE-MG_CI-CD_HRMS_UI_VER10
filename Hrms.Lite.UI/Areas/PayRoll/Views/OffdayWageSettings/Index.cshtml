@@ -1,0 +1,216 @@
+﻿@model Hrms.Lite.Shared.PayRoll.AllowanceSettings.ApplicableAllowance
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/PayRoll/offdaywagesettings.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+
+<script src="~/js/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        fillData();
+    });
+</script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Offday Wage Settings</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>       </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Offday Wage Settings
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+      
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body"> 
+
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                             
+                            <div class="tab-items ml-5 pr-0 border-none select-option">
+                                <div class="form-group filter-combobox mr-14">                
+                                    @Html.DropDownListFor(m => m.Allowance.Code, (SelectList)ViewBag.Allowance, "--Select Offday Wage Settings--", new { @class = "form-control form-control-sm",  @style = "width: 257px;", @onchange = "validate(this,'Allowance');fillData()" })
+
+                                </div>   
+                                <span id="Allowance" style="bottom: -15px;"></span>
+                                @*<span id="Allowance"></span>*@
+
+                            </div>
+
+                            @*<div class="tab-items pr-0 border-none">
+                    <div class="button-group float-left border-none">
+                        <button type="button" class="btn btn-default btn-sm mr-10" onclick="getList()">
+                            Proceed
+                        </button>
+                    </div>
+                </div>*@
+                            <!-- <batch updates></batch> -->
+                            <div class="tab-items pr-0 border-none">
+                                <div class="button-group float-left  batchleave mr-10">
+
+
+                                </div>
+                            </div>
+
+                            <!-- <batch updates></batch> -->
+
+
+
+
+
+
+
+
+                            <div class="tab-items select-option">
+
+                                <button id="BatchUpdatebutton" type="button"
+                                        class="btn btn-default btn-sm float-left mt-2 mr-5" onclick="sliderChange()">
+                                    Batch Update
+                                </button>
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+                                <a data-bs-toggle="tooltip" title="Export to Excel"
+                                        class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="SettingsEmployeeList">
+                        @await Html.PartialAsync("_SettingsEmployeeList", Model.ApplicableAllowanceList)
+                    </div>
+                    @*<div id="SettingsEmployeeList">
+                    </div>*@
+
+
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 ">
+
+
+                            <div class="d-flex">
+                                <a>
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="~/images/settings-line-icon.png"/>
+
+                                        </div>
+                                        <div class="application-icon" onclick="defaultSettingsClick()"> <h3 class="pt-2 pl-3"> Default Settings</h3></div>
+                                    </div>
+                                </a>
+
+                                <a class="pl-10">
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="~/images/add-category-icon (1).png"  />
+
+                                        </div>
+                                        <div class="application-icon" onclick="applicableAllowanceClick()"> <h3 class="pt-2 pl-3">  Applicable Allowance</h3></div>
+                                    </div>
+                                </a>
+                            </div>
+
+
+
+
+
+
+
+
+                            @*<button id="defultsettings" type="button" class="btn btn-default slider-btn" onclick="defaultSettingsClick()">Default Settings</button>
+                            <button id="addApplicableAllowance" type="button"
+                                    class="btn btn-default mobile-full-width slider-btn" onclick="applicableAllowanceClick()">
+                                Applicable
+                                Allowance
+                            </button>*@
+
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <div id="batchUpdate"></div>
+
+        <div id="applicableallowance">
+
+        </div>
+
+
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+    <div id="defaultsettings"></div>
+</div>
+<!--end::Content-->

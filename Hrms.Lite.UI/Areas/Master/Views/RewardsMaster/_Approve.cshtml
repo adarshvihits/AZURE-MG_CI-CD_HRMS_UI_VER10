@@ -1,0 +1,175 @@
+﻿@model Hrms.Lite.Shared.Master.Rewards
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approveRewards" }))
+{
+    <div id="approverewardMasterpending"
+         class="slider-forms slider-forms-open PendingApprove">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('PendingApprove')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Rewards</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Name</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Name)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Short
+                            Name
+                        </label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.ShortName)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- <start department sect></start> -->
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="ihits-table table-border  reward-master-departmentadd vertical-scroll-150">
+                        <table>
+                            <thead>
+                                <tr class="table-gray">
+                                    <th scope="col">
+                                        Department
+                                    </th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ if (Model.RewardsGridFill != null && Model.RewardsGridFill.Count > 0)
+                                    {
+
+                                        foreach (var item in Model.RewardsGridFill)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                            </tr>
+ }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+
+                                            <td colspan="3" stye="text-align:center;">  No  Data Found</td>
+                                        </tr>
+ } }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="ihits-table table-border  reward-master-list-add-two-col my-4">
+                <table>
+                    <thead>
+                        <tr class="table-gray">
+                            <th scope="col">
+                                Point Criteria
+                            </th>
+                            <th scope="col">
+                                Rewards Point
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ if (Model.RewardVsPointCriteriaList != null && Model.RewardVsPointCriteriaList.Count > 0)
+                            {
+
+                                foreach (var item in Model.RewardVsPointCriteriaList)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Point</td>
+                                    </tr>
+                                }
+                            } }
+                    </tbody>
+                </table>
+            </div>
+            <!-- <end critria sect></end> -->
+
+
+            <div class="row my-3">
+                <div class="col-md-12">
+                    <div class="row-outer">
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        @Html.DisplayFor(model => model.Description)
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Approve == true)
+                    {
+                        <button type="button" class="btn btn-danger mobile-full-width" onclick="return confirmRewardsReject('@Model.GI','@Model.LogGI')">
+                            Reject
+                        </button>
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="return confirmRewardsApprove('@Model.GI','@Model.LogGI')">
+                            Approve
+                        </button>
+                    }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

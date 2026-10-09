@@ -1,0 +1,347 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/DataBank/resignation.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+<style>
+    .ihits-table.table-border .notice-p thead tr th {
+        color: #fff !important;
+        padding: 4px 7px;
+        font-size: 14px;
+    }
+    .ihits-table.table-border .notice-p tbody tr td {
+        padding: 3px 7px !important;
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff42 !important;
+    }
+
+    .ihits-table.table-border .notice-p tbody {
+        background-color: #01877c;
+        /* border-bottom: 1px solid; */
+        /* color: aqua; */
+    }
+</style>
+<script>
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#ResignationDetails_ResignationType_Code').focus();
+    }
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data",@id="ResignationSave" }))
+{
+
+
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Resignation</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "Resignation", new { Area = "DataBank" })" class="">Resignation List</a>
+                        </li>
+
+                        <li class="breadcrumb-item">
+                            Resignation
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->            
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+  
+    <!--begin::Content-->
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!--begin: Search Form-->
+                                <div class="profile-header position-relative box-shadow-none mb-2">
+                                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                    @Html.HiddenFor(m => m.EmployeeGI)
+                                    <div class="profile-header-overflow"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-header position-relative box-shadow-none mb-2" style=" height: 107px; padding-top: 20px !important;">
+                                    <div class="ihits-table table-border  mobile-responsive-table resignation-pending-list  period">
+                                        <table class="notice-period notice-p">
+                                            <thead>
+
+                                                <tr class="">
+                                                    <th scope="col">Notice Period</th>
+                                                    <th scope="col">In Days</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @*@if (Model.NoticePeriodDetails != null && Model.NoticePeriodDetails.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.NoticePeriodDetails.Count; i++)
+                                    {*@
+                                                <tr>
+                                                    <td data-label="Pending List">
+                                                        <span id="noticePeriodDescription1">
+                                                            @Model.NoticePeriodDetails[0].Description
+                                                        </span>
+                                                    </td>
+                                                    <td data-label="In Days">
+                                                        @Html.HiddenFor(m => m.NoticePeriodDetails[0].InDays)
+                                                        <span id="noticePeriodDays1">
+
+                                                            @Model.NoticePeriodDetails[0].InDays
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td data-label="Pending List">
+                                                        <span id="noticePeriodDescription2">
+                                                            @Model.NoticePeriodDetails[1].Description
+                                                        </span>
+                                                    </td>
+                                                    <td data-label="In Days">
+                                                        <span id="noticePeriodDays2">
+                                                            @Model.NoticePeriodDetails[1].InDays
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                @*}
+                                }*@
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resignation-accept">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Resignation Type</label><span class="Mandatory">*</span>
+
+                                                @*<select class="form-control form-control-sm "
+                                        id="exampleSelects">
+                                    <option>Resignation Type</option>
+                                    <option>Resignation Type</option>
+                                </select>*@
+                                                @Html.DropDownListFor(m => m.ResignationDetails.ResignationType.Code, (SelectList)ViewBag.ResignationType, "--Select Resignation Type--", new { @class = "form-control form-control-sm", @onchange = "onResignationTypeChange(this)", onblur = "validate(this,'RType')" })
+                                            </div>
+                                            <span id="RType"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Reason</label><span class="Mandatory">*</span>
+
+                                                @*<select class="form-control form-control-sm "
+                                        id="exampleSelects">
+                                    <option>Reason</option>
+                                    <option>Reason</option>
+                                </select>*@
+                                                @Html.DropDownListFor(m => m.ResignationDetails.ResignationReason.Code, (SelectList)ViewBag.ResignationReason, "--Select Reason--", new { @class = "form-control form-control-sm", onblur = "validate(this,'RReason')" })
+                                            </div>
+                                            <span id="RReason"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Resignation Date</label><span class="Mandatory">*</span>
+
+                                                <div class="input-group date">
+                                                    @*<input type="text" class="form-control" id="kt_datepicker_2"
+                                    readonly="readonly" placeholder="Resignation Date">*@
+                                                    @Html.TextBoxFor(m => m.ResignationDetails.ResignationDate, "{0:dd/MMM/yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Resignation Date", onchange = "validate(this,'RDate');calculateLWD()" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span id="RDate"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+
+                                            <div class="form-group">
+                                                <label>Last Working Day</label><span class="Mandatory">*</span>
+
+                                                <div class="input-group date">
+                                                    @Html.TextBoxFor(m => m.ResignationDetails.LastWorkingDate, "{0:dd/MMM/yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Last Working Day", @onchange = "NoticePeriodInDays(this,'RLwd')" })
+                                                    @*<input type="text" class="form-control" id="kt_datepicker_2"
+                                    readonly="readonly" placeholder="Last Working Day">*@
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span id="RLwd"></span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-1 pt-6">
+
+                                            <div>
+                                                <div class="checkbox-inline">
+
+                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted mr-1">
+                                                        @*<input type="checkbox" name="Checkboxes16">*@
+                                                        @Html.CheckBoxFor(m => m.ResignationDetails.Rehire)
+                                                        <span></span>
+                                                    </label>
+                                                    <span>Rehire</span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="file-upload-form-group">
+                                                <label for="formFileMultiple" class="form-label">
+                                                    Attach
+                                                    File
+                                                </label>
+
+                                                <div class="file-upload-form mb-1">
+                                                    @*<div class="small-btn-group">
+            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="PreviewImage()"><i class="icon-xl far fa-eye"></i></button>
+        </div>*@
+                                                    <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                        @Html.TextBoxFor(m => m.ResignationDetails.File.FileData, new { @type = "file", @title = "", @class = "previewImage", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "CheckImageExtensionSize(this)" })
+                                                        @*<input class="form-control" type="file" id="formFileMultiple" multiple="">*@
+                                                    </div>
+                                                </div>
+                                                   
+                                                </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+
+                                                <label>Detailed explanation of resignation</label>
+                                                @*<textarea class="form-control" placeholder="Remarks"></textarea>*@
+                                                @Html.TextAreaFor(m => m.ResignationDetails.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Detailed explanation of resignation", @maxlength = 250 })
+                                                @*<span id="RRemarks"></span>*@
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-12 mb-5 align-right">
+                                            <button type="button" class="btn btn-default accept" onclick="validateAll()">Save</button>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="ihits-table table-border mobile-responsive-table mb-2 resignation-pending-list vertical-scroll-200">
+                                        <table>
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <th scope="col">Pending List</th>
+                                                    <th scope="col">Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.ApprovalPendingDetails != null && Model.ApprovalPendingDetails.Count > 0)
+                                                {
+
+                                                    for (int i = 0; i < Model.ApprovalPendingDetails.Count; i++)
+                                                    {
+                                                        <tr>
+
+                                                            <td data-label="Pending List">
+                                                                @Model.ApprovalPendingDetails[i].Description
+                                                            </td>
+                                                            <td data-label="Count">@Model.ApprovalPendingDetails[i].PendingCount</td>
+                                                        </tr>
+                                                    }
+                                                }
+
+
+
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+                            </div>
+                            <!-- Table Setion End -->
+
+
+                        </div>
+                    </div>
+
+
+                        <!--end::Row-->
+                        <!--begin::Row-->
+                        <!--end::Row-->
+                        <!--end::Dashboard-->
+                    </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

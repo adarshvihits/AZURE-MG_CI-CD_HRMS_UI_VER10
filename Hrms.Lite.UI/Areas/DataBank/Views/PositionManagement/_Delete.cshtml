@@ -1,0 +1,75 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.PositionManagement
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Delete", "Position", FormMethod.Post, new { @id = "deletePosition" }))
+{
+    <div id="wageGradeMasterDelete" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Position</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.Code)
+                                @Html.HiddenFor(model => Model.Mode)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">
+                            Short
+                            Name
+                        </label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.ShortName)
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI', '@Model.Code')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

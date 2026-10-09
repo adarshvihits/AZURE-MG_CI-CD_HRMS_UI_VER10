@@ -1,0 +1,278 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.AttendanceWagesConfirmation
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $(".HolidayCount").html(@Model.HolidayCount);
+        $(".LessCount").html(@Model.LessCount);
+        $(".OffdayCount").html(@Model.OffdayCount);
+        $(".OTCount").html(@Model.OTCount);
+        $(".ShiftCount").html(@Model.ShiftCount);
+
+    });
+</script>
+<style>
+    .btn.btn-icon, .small-btn-group .file-upload {
+        width: 23px;
+        height: 23px;
+        border-radius: 12px;
+        padding-right: inherit !important;
+        padding-left: inherit !important;
+        float: left;
+        margin-right: 5px;
+    }
+
+        .btn.btn-icon i::before {
+            font-size: 9px !important;
+        }
+</style>
+<div class="ihits-table table-border mobile-responsive-table Wage_Confirmation_ot">
+    @Html.HiddenFor(Model => Model.ConfirmationList.Count)
+    <table id="AttendanceConfirmationTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+
+                <th scope="col">Department</th>
+                <th scope="col">Location </th>
+
+                @Html.HiddenFor(Model => Model.ConfirmationStatus)
+                @Html.HiddenFor(Model => Model.Details.EmployeeGI)
+                @Html.HiddenFor(Model => Model.TabValues)
+                @if (Model.TabValues == "Holiday")
+                {
+                    <th scope="col"> Holiday Worked</th>
+
+                    <th data-bs-toggle="tooltip" data-bs-original-title="Confirmed Days" scope="col"> Conf Days</th>
+                }
+                @if (Model.TabValues == "OTHours")
+                {
+                    <th scope="col" data-bs-toggle="tooltip" title="Actual Overtime Hours">Act.OT Hrs</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Actual Overtime Minutes">Act.OT Mins</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="">Conf OT Hrs</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="">Conf OT Mins</th>
+                }
+                @if (Model.TabValues == "OffDay")
+                {
+                    <th scope="col">Offday Worked</th>
+
+                    <th data-bs-toggle="tooltip" data-bs-original-title="Confirmed Days" scope="col">Conf Days</th>
+                }
+                @if (Model.TabValues == "Shift")
+                {
+                    <th data-bs-toggle="tooltip" data-bs-original-title="No Of Days" scope="col">NOD</th>
+
+                    <th scope="col">Amount</th>
+                }
+                @if (Model.TabValues == "LessHours")
+                {
+
+                    <th scope="col" data-bs-toggle="tooltip" title="Actual Overtime Hours">Act.Less Hrs</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Actual Overtime Minutes">Act.Less Mins</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="">Conf Less Hrs</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="">Conf Less Mins</th>
+                }
+                @*@if ((Model.ConfirmationStatus == 0))
+                {*@
+                  
+                    <th scope="col">
+
+                        Action
+                    </th>
+                   
+               @* }*@
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.ConfirmationList != null && Model.ConfirmationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ConfirmationList.Count; i++)
+                {
+
+            <tr>
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].EmployeeGI)
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].ConfirmedValues)
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].ActualValue)
+                @Html.HiddenFor(Model => Model.TabValues)
+                <td data-label="ID">@Model.ConfirmationList[i].EmployeeID</td>
+                <td data-label="Name" data-bs-toggle="modal" data-target=".bd-example-modal-lg">
+                    <a onclick="GetEmployeeWiseDetailsPopUp('@Model.ConfirmationList[i].EmployeeGI', '@Model.ConfirmationList[i].ConfirmedValues', '@Model.TabValues')">@Model.ConfirmationList[i].EmployeeName</a>
+                </td>
+                <td data-label="Designaion">@Model.ConfirmationList[i].Designation.Name</td>
+                <td data-label="Department">@Model.ConfirmationList[i].Department.Name</td>
+                <td data-label="Location">@Model.ConfirmationList[i].Location.Name</td>
+
+                @if (Model.TabValues == "Shift")
+                {
+                    <td data-label="No Of Days">
+                        @Model.ConfirmationList[i].NoOfDays
+                    </td>
+
+                    <td data-label="Confirmed Days">
+                        <span id="confirmed_@i">
+                            @Model.ConfirmationList[i].ConfirmedValues
+                        </span>
+                        
+                        <div id="confirmedVal_@i" style="display:none">
+                            @Html.TextBoxFor(m => m.ConfirmationList[i].ConfirmedValues, new { @class = "form-control form-control-sm confMntsValues_" + i + "" })
+                        </div>
+                    </td>
+                }
+                else if (Model.TabValues == "OTHours" || Model.TabValues == "LessHours")
+                {
+                    <td data-label="Act.OT Hrs">
+                        @Model.ConfirmationList[i].ActHrs
+                    </td>
+                    <td data-label="Act.OT Mins">
+                        @Model.ConfirmationList[i].ActMin
+                    </td>
+                    <td data-label="Conf OT Hrs">
+                        <span id="conf_@i">
+                            @Model.ConfirmationList[i].ConfHrs
+                        </span>
+                        <div id="confVal_@i" style="display:none">
+                            @Html.TextBoxFor(m => m.ConfirmationList[i].ConfHrs, new { @class = "form-control form-control-sm confValues_" + i + "" })
+                        </div>
+                    </td>
+                    <td data-label="Conf OT Mins">
+                        <span id="confMnts_@i">
+                            @Model.ConfirmationList[i].ConfMin
+                        </span>
+                        <div id="confMntsVal_@i" style="display:none">
+                            @Html.TextBoxFor(m => m.ConfirmationList[i].ConfMin, new { @class = "form-control form-control-sm confMntsValues_" + i + "" })
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td data-label="Actu Days">
+                        @if (Model.ConfirmationList[i].ActualValue != 0)
+                        {
+                            @Model.ConfirmationList[i].ActualValue
+                        }
+                        else
+                        {
+                           <span>0</span>
+                        }
+                    </td>
+                    <td data-label="Conf Days">
+                        @if (Model.ConfirmationList[i].ConfirmedValues != 0)
+                        {
+                            <span id="confirmed_@i">
+                                @Model.ConfirmationList[i].ConfirmedValues
+                            </span>
+                        }
+                        else
+                        {
+                            <span id="confirmed_@i">
+                                0
+                            </span>
+                        }
+
+                        <div id="confirmedVal_@i" style="display:none">
+                            @Html.TextBoxFor(m => m.ConfirmationList[i].ConfirmedValues, new { @class = "form-control form-control-sm confMntsValues_" + i + "" })
+                        </div>
+                    </td>
+                }
+                @if (Model.ConfirmationStatus == 0)
+                {
+                    @if (Model.TabValues == "OTHours" || Model.TabValues == "LessHours")
+                    {
+
+
+                        <td data-label="Action">
+                            <div class="small-btn-group" id="edit_@i">
+                                <a data-bs-toggle="tooltip" title="Edit" id="EmployRewardsRecognition"
+                                   class="btn btn-icon btn-edit icon-only  mr-4" onclick="onOTEditClick(@i)">
+                                    <i class="icon-xl fas fa-pencil-alt "></i>
+                                </a>
+
+                            </div>
+                            <div class="small-btn-group" id="updatecancel_@i" style="display:none">
+                                <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only"><i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick('@i','@Model.TabValues','@Model.ConfirmationList[i].EmployeeGI')"></i> </button>
+
+                                <button type="button" data-bs-toggle="tooltip"
+                                        title="Cancel"
+                                        class="btn btn-icon btn-delete icon-only btn-bg-info " onclick="onCancelClick(@i)">
+                                    <i class="icon-xl fas fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+
+
+
+                    }
+                    else
+                    {
+
+                        <td data-label="Action">
+                            <div class="small-btn-group">
+                                <a data-bs-toggle="tooltip" title="Edit" id="EmployRewardsRecognition"
+                                   class="btn btn-icon btn-edit icon-only  mr-4" onclick="OnEditClick('@Model.ConfirmationList[i].EmployeeGI')">
+                                    <i class="icon-xl fas fa-pencil-alt "></i>
+                                </a>
+
+                            </div>
+
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td data-label="Action">
+                        <div class="small-btn-group" id="edit_@i">
+                            <a data-bs-toggle="tooltip" title="Edit" id="EmployRewardsRecognition"
+                               class="btn btn-icon btn-edit icon-only  mr-4" onclick="onOTEditClick(@i)">
+                                <i class="icon-xl fas fa-pencil-alt "></i>
+                            </a>
+                            <a data-bs-toggle="tooltip" title="Delete"
+                               id="banknamedelete"
+                               class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onUpdateClick('@i','@Model.TabValues','@Model.ConfirmationList[i].EmployeeGI','Delete');">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        </div>
+                        <div class="small-btn-group" id="updatecancel_@i" style="display:none">
+                            <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only"><i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick('@i','@Model.TabValues','@Model.ConfirmationList[i].EmployeeGI','Edit')"></i> </button>
+
+                            <button type="button" data-bs-toggle="tooltip"
+                                    title="Cancel"
+                                    class="btn btn-icon btn-delete icon-only btn-bg-info " onclick="onCancelClick(@i)">
+                                <i class="icon-xl fas fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                }
+
+            </tr>
+                }
+            }
+            
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel"><span id="popupTitle"></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+        </div>
+    </div>
+</div>

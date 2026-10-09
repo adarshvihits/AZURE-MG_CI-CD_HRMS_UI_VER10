@@ -1,0 +1,51 @@
+﻿@model Hrms.Lite.Shared.DataBank.WorkUnitVsAuthoritySettings
+    <script src="~/js/settings.js"></script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table work_unit_list">
+        @Html.HiddenFor(m => m.WorkUnitVsAuthList.Count)
+        <table id="WorkUnitVsAuthTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Sl No</th>
+                    <th scope="col">Work Unit</th>
+                    <th scope="col">Reporting Manager</th>
+                    <th scope="col">Leave Authority</th>
+                    <th scope="col">Shift</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{if (Model.WorkUnitVsAuthList != null && Model.WorkUnitVsAuthList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.WorkUnitVsAuthList.Count; i++)
+                        {
+                                <tr>
+                                    @Html.HiddenFor(model => Model.WorkUnitVsAuthList[i].WorkUnitCode)
+
+                                    <td data-label="Sl No">@Model.WorkUnitVsAuthList[i].SlNo</td>
+                                    <td data-label="Work Unit">
+                                        <a href="@Url.Action("WorkUnit", "WorkUnitVsAuthoritySettings", new {WorkunitCode =Model.WorkUnitVsAuthList[i].WorkUnitCode, Area = "DataBank", })">
+                                            <span><i></i></span>
+                                            @Model.WorkUnitVsAuthList[i].WorkUnit
+                                        </a>
+                                    </td>
+                                    <td data-label="Reporting Manager">@Model.WorkUnitVsAuthList[i].ReportingManager</td>
+                                    <td data-label="Leave Authority">@Model.WorkUnitVsAuthList[i].LeaveAuthority</td>
+                                    <td data-label="Shift">@Model.WorkUnitVsAuthList[i].Shift</td>
+                                    <td data-label="Actions">
+                                        <a id="objAdd" data-bs-toggle="tooltip" title="Add Shift"
+                                           class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="onApplicableShiftClick('@Model.WorkUnitVsAuthList[i].WorkUnitCode')">
+                                            <i class="fa fa-plus"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                        }
+                    }
+
+
+                }
+
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,98 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.Master.Deduction
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+        //$('#PendingDeductionTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table deduction-master-pending pt-1">
+    @Html.HiddenFor(m => m.DeductionList.Count)
+    <table id="PendingDeductionTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Deduction Type</th>
+                <th scope="col">Display Order</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+                if (Model.DeductionList != null && Model.DeductionList.Count > 0)
+                {
+                    for (int i = 0; i < Model.DeductionList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.DeductionList[i].MakerChecker)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+
+                            <td data-label="Name">@Model.DeductionList[i].Name</td>
+                            <td data-label="Short Name">@Model.DeductionList[i].ShortName</td>
+                            <td data-label="Deduction Type">@Model.DeductionList[i].DeductionType.Name</td>
+                            <td data-label="Display Order">@Model.DeductionList[i].DisplayOrder</td>
+                            <td data-label="Entry Type">@Model.DeductionList[i].Mode</td>
+
+                            <td data-label="Approve">
+
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="deductionapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.DeductionList[i].GI', '@Model.DeductionList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="deductionapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.DeductionList[i].GI', '@Model.DeductionList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                </td>
+
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

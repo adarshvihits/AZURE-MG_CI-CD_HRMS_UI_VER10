@@ -1,0 +1,378 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeBGV
+@{ ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/employeeBGV.js"></script>
+
+<style>
+    .profile-header a, .profile-header i {
+        color: #fff !important;
+    }
+
+
+
+
+    .profile-header {
+        background-color: #01877c !important;
+        border-radius: 10px;
+    }
+
+
+
+    .card.card-custom > .card-body {
+        padding: 5px 30px 60px 20px !important;
+    }
+
+    .tab-content-scroller-tab {
+        height: 240px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .page_white-edit .inner-padding {
+        padding: 0px 15px;
+    }
+
+    .page_white-edit h5 {
+        background-color: #06867b00;
+        color: #02685f !important;
+        padding: 10px 15px 0px 15px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    .page_white-edit {
+        background-color: white;
+        padding: 0px 0px 10px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        border: 1px solid #dddddd9e;
+    }
+
+    .page_white h5 {
+        background-color: #06867b14;
+        color: #02685f !important;
+        padding: 10px 15px 10px 15px;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    .page_white {
+        background-color: white;
+        padding: 0px 0px 10px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        border: 1px solid #06867b9e;
+        margin-top: 20px;
+    }
+
+        .page_white .inner-padding {
+            padding: 0px 15px;
+        }
+
+    .four-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 45px;
+        padding: 0px 10px;
+    }
+
+
+
+    .photostyle-bg {
+        background-color: #eef7ff;
+        border-radius: 20px;
+    }
+
+
+    .photostyle {
+        background: linear-gradient(218deg, rgb(197 222 244) 0%, rgb(201 225 250) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+
+
+    .adarstyle-bg {
+        background-color: #f0faef;
+        border-radius: 20px;
+    }
+
+
+    .adarstyle {
+        background: linear-gradient(168deg, rgba(247, 190, 153, 1) 0%, rgba(255, 255, 255, 1) 47%, rgba(174, 230, 168, 1) 100%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .panstyle-bg {
+        background-color: #fff7fe;
+        border-radius: 20px;
+    }
+
+    .panstyle {
+        background: linear-gradient(218deg, rgba(47, 202, 240, 1) 0%, rgba(215, 169, 211, 1) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .resumestyle-bg {
+        background-color: #e7faf9;
+        border-radius: 20px;
+    }
+
+    .resumestyle {
+        background: linear-gradient(218deg, rgb(215 255 255) 0%, rgb(83 226 214) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .page_white h4 {
+        font-size: 14px;
+        color: #06867b;
+    }
+
+    .ihits-table table tr:first-child th:last-child {
+        border-top-right-radius: 10px !important;
+    }
+
+    .ihits-table table tr:first-child th:first-child {
+        border-top-left-radius: 10px !important;
+    }
+</style>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Background Verification</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "EmployeeBGV", new { Area = "DataBank" })" class="">Employee Background Verification</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Create
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="profile-header position-relative box-shadow-none mb-2">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Html.HiddenFor(m => m.Details.ApplicantCode)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+                        <div class="page_white mb-2">
+                            <h5 class="h5-style">Basic Info</h5>
+                            <div class="inner-padding">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="row-outer">
+                                            <label class="view-title">Applicant ID</label>
+                                            <div class="view-details">@Model.Details.ApplicantID</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-outer">
+                                            <label class="view-title">Aadhar No.</label>
+                                            <div class="view-details">@Model.Details.AadhaarNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-outer">
+                                            <label class="view-title">Name as per Aadhar</label>
+                                            <div class="view-details">@Model.Details.NameInAadhaar</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Pan</label>
+                                            <div class="view-details">@Model.Details.PanNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Whatsapp No</label>
+                                            <div class="view-details">@Model.Details.WhatsappNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="row-outer">
+                                            <label class="view-title">Fresher</label>
+                                            <div class="view-details">
+                                                @(Model.Details.Fresher ? "Yes" : "No")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="page_white mb-2">
+                            <h5 class="h5-style">Background Verification</h5>
+                            <div class="inner-padding">
+                                <div class="two-col p-0 pb-4">
+                                    <div class="row-outer">
+                                        <label class="form-group">Referee Name</label>
+                                        <div class="view-details">
+                                            @(Model.Details.RefereeName)
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">Contact Information (email and/or phone number)</label>
+                                        <div class="view-details">
+                                            @(Model.Details.ContactInformation)
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">Title/Position and Company Name</label>
+                                        <div class="view-details">
+                                            @(Model.Details.TitleAndCompanyName)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="width: 100%; display: flex; flex-wrap: nowrap; gap: 10px;">
+                        <div class="col-md-6">
+                            <label class="form-group">Relationship With Candidate</label>
+                            <div class="view-details">
+                                @(Model.Details.RelationshipWithCandidate.Name)
+                            </div>
+                        </div>
+                        @if (@Model.Details.RelationshipWithCandidate.Name == "Others")
+                        {
+                            <div class="col-md-6" id="details_relation">
+
+                                <label class="form-group">Details</label>
+                                <div class="view-details">
+                                    @(Model.Details.OtherDetails)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">How many years have you known the candidate?</label>
+                                        <div class="view-details">
+                                            @(Model.Details.HowManyYears.Name)
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">Type Of Reference</label>
+                                        <div class="view-details">
+                                            @(Model.Details.TypeOfReferenceName)
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="form-group">Name of company</label>
+                                        <div class="view-details">
+                                            @(Model.Details.BGVCompanyName)
+
+                                        </div>
+                                    </div>
+                                    <div class="row" style="width: 100%; display: flex; flex-wrap: nowrap; gap: 10px;">
+
+                                        <div class="col-md-6">
+
+                                            <label class="form-group pt-6">
+                                                Duration/period where you have worked together
+                                            </label>
+                                        </div>
+
+
+                                        <div class="=col-md-3">
+                                            <label class="form-group">
+                                                in years
+                                            </label>
+                                            <div class="view-details">
+                                                @(Model.Details.DurationYears.Name)
+
+                                            </div>
+                                        </div>
+
+                                        <div class="=col-md-3">
+                                            <label class="form-group">
+                                                in months
+                                            </label>
+                                            <div class="view-details">
+                                                @(Model.Details.DurationMonths.Name)
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">
+                                            Candidate's position at that time during your working relationship
+                                        </label>
+                                        <div class="view-details">
+                                            @(Model.Details.BGVCandidatePosition)
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">
+                                            Would you rehire/work with/work for the candidate again?
+                                        </label>
+                                        <div class="view-details">
+                                            @(Model.Details.BGVRehire)
+
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="form-group">
+                                            Can you please state the reason for the candidate’s exit, while you worked together?
+                                        </label>
+                                        <div class="view-details">
+                                            @(Model.Details.BGVReasonForExit)
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <!--end::Content-->

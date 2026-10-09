@@ -1,0 +1,121 @@
+﻿@model Hrms.Lite.Shared.Master.AttendanceRequestReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Delete", "Department", FormMethod.Post, new { @id = "DeleteAttendanceRequestReason" }))
+{
+    <div id="deleteattendancerequest" class="slider-forms slider-forms-open deleteSlide">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('deleteSlide')"></i>
+            </div>
+            <h4>
+                Attendance Request Reason
+            </h4>
+            <div class="row pt-2">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Reason</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Name)
+                            @Html.HiddenFor(model => Model.Name)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.ReasonGI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(model => Model.ShortName)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+                    <label class="view-title">Active</label>
+                    <div class="view-details">
+
+                        @if (@Model.Active == true)
+                        {
+                            <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-times"></i></button>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="mt-8">  <h4>Set Applicability </h4></div>
+
+            <div class="row my-1">
+
+                <div class="col-md-12">
+                    <div class="ihits-table table-border mobile-responsive-table attendance-request-slider vertical-scroll-400">
+                        <table>
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">
+                                        Leave Type
+                                    </th>
+                                    <th scope="col">  </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Reason_SetApplicability.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Reason_SetApplicability.Count; i++)
+                                    {
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].LeaveCode)
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].ReasonCode)
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].LeaveName)
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].Applicability)
+                                        <tr>
+                                            <td data-label="Allowance">@Model.Reason_SetApplicability[i].LeaveName</td>
+                                            <td data-label="Select">
+                                                @if (@Model.Reason_SetApplicability[i].Applicability == true)
+                                                {
+                                                    <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-icon btn-close"><i class="icon-xl fas fa-times"></i></button>
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Delete == true)
+                    {
+                        <button type="button"
+                                data-bs-toggle="tooltip" title=""
+                                data-bs-original-title="Delete"
+                                class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.ReasonGI', '@Model.LogGI')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </button>
+                    }
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+}

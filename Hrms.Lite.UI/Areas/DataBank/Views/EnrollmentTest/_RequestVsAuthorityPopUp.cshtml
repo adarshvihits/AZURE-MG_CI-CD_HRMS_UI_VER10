@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.EmployeeSettings
+<script>
+    $(document).ready(function () {
+        $('.authoritydropdn').selectpicker();    
+    });
+</script>
+<div class="row mb-2 ">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Request Type</label>
+            @Html.DropDownListFor(m => m.RequestType.Code, (SelectList)ViewBag.ReqType, new { @class = "form-control form-control-sm",@onchange="requestTypeDropdnChange(this)" })
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "reqVsAuthSave" }))
+{
+    <div>
+
+    <div class="ihits-table table-border  mobile-responsive-table request_authority_enroll  ">
+
+        <table id="addleveltable">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">Level</th>
+                    <th scope="col">Authority</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.RequestVsAuthoritySettings != null && Model.RequestVsAuthoritySettings.Count > 0)
+                {
+                    for (int i = 0; i < Model.RequestVsAuthoritySettings.Count; i++)
+                    {
+                        <tr id="row_OI_@i">
+                            <td data-label="Level">
+                                @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].LevelCode)                                
+                                @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].LevelName)
+                                @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].RequestTypeCode, new { @class = "reqCode" })
+                                @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].RequestTypeName,new { @class="reqName"})
+                                <span id="lvlName_@i">@Model.RequestVsAuthoritySettings[i].LevelName</span>
+                            </td>
+                            <td data-label="ID" style="position:relative;">
+                                <div class="form-group ">
+
+
+                                    @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].AuthorityName)
+                                    @Html.HiddenFor(m => m.RequestVsAuthoritySettings[i].AuthorityCode)
+                                    @Html.DropDownListFor(m => m.RequestVsAuthoritySettings[i].AuthorityCode, (SelectList)ViewBag.Aut, "--Select--", new
+                               {
+                                   @class = "selectpicker form-control form-control-sm form-control authoritydropdn general-validation authCodeDropdn_" + i,
+                                   data_show_subtext = "true",
+                                   data_live_search = "true",
+                                   onchange = "OnAuthorityDropdownChange(" + i + ",this)"
+                               })
+                                    @*@Html.DropDownListFor(m => m.RequestVsAuthoritySettings[i].AuthorityCode, (SelectList)ViewBag.Aut, "--Select--", new
+            {
+                @class = "form-control-sm form-control",
+                onchange="OnAuthorityDropdownChange("+i+",this)"
+            })*@
+
+                                </div>
+                                <span id="authCode_@i"></span>
+                            </td>
+                            <td>
+                                <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                   class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('addleveltable')">
+                                    <i class="fa fa-plus"
+                                       aria-hidden="true"></i>
+                                </a>
+                                <a id="#objDel_@i" data-bs-toggle="tooltip"
+                                   title="" data-bs-original-title="Delete"
+                                   class="btn btn-icon  icon-only mobile-full-width btn-delete delObj hide" onclick="DeleteResultRow(@i)">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    
+        
+        </div>
+        <div class="row pt-3">
+        <div class="col-md-12 mt-2 mb-5">
+            <button id="addNewLevel" type="button" class="btn btn-default float-right mobile-full-width" onclick="AddToList()">
+                Add
+            </button>
+        </div>
+    </div>
+
+}

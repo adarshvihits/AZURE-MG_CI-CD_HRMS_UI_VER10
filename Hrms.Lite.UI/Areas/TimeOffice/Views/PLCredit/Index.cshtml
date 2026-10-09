@@ -1,0 +1,169 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.PLCredit;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<style>
+
+        /*    .multiselect {
+            color: #000 !important;
+            border: 1px solid #cdc8c8 !important;
+            padding: 0px 10px;
+            line-height: 18px;
+            height: 34px;
+            display: block;
+            width: 212px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+    */
+
+
+        .wid200 {
+            width: 212px;
+        }
+</style>
+
+<script src="~/scripts/TimeOffice/PLCredit.js"></script>
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">PL Credit </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+
+                        <li class="breadcrumb-item">
+                            PL Credit
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+                                <div class="tab-items">
+
+                                    <div class="row-outer ">
+                                        <div class="form-group">
+                                            @*<label>Leave Code </label>*@
+
+                                            @Html.DropDownListFor(Model => Model.LeavePeriodCode, (SelectList)ViewBag.LeavePeriod, "--Select Leave Period--", new { @class = "form-control form-control-sm", @onchange = "fillData();validate(this,'lpcode')" })
+
+
+                                            <span id="lpcode"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-items">
+
+                                    <div class="row-outer ">
+                                        <div class="form-group">
+                                            @*<label>Leave </label>*@
+
+                                            @Html.DropDownListFor(Model => Model.LeaveCode, (SelectList)ViewBag.Leave, "--Select Leave--", new { @class = "form-control wid200 form-control-sm", @onchange = "fillData();validate(this,'lvcode')" })
+
+
+                                            <span id="lvcode"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+               
+                            
+                                <div class="tab-items select-option">
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                            data-bs-original-title="Export to Excel">
+                                        <i class="icon-xl far fa-file-excel " onclick="ExportToExcel()"></i>
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div id="LeavelapsID">
+                            @await Html.PartialAsync("_PLCreditList.cshtml", Model)
+                        </div>
+                        <div id="filterSlider">
+
+                            @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+
+                        </div>
+
+                        <!-- Table Setion End -->
+                        <!--end: Datatable-->
+
+                    </div>
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+                            <button type="button"
+                                    class="btn btn-default float-right mobile-full-width" onclick="BatchUpdatePLCredit();">
+                                Save
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+                    <!--end::Row-->
+                    <!--end::Dashboard-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+
+        </div>
+        <!--end::Content-->
+
+
+
+    </div>
+</div>

@@ -1,0 +1,166 @@
+﻿@model Hrms.Lite.Shared.DataBank.MedicalCheckup
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Medical_CheckUpSave", enctype = "multipart/form-data" }))
+{
+    <div id="addcompany" class="slider-forms slider-forms-open AddNew">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNew')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Medical CheckUp
+            </h4>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label class="view-title">Checkup Type</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(Model => Model.EmployeeGI)
+                            @Html.HiddenFor(Model => Model.MedicalCheckupGI)
+                            @Html.HiddenFor(Model => Model.CheckupType.Code)
+
+                            @Html.DisplayFor(model => Model.CheckupType.Name)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>
+
+                        Date Of Checkup
+                        <span class="Mandatory">*</span>
+                    </label>
+
+                    <div class="input-group date">
+
+                        @Html.TextBoxFor(Model => Model.CheckupDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "CheckUp Date", @onchange = "validate(this,'dateCheckup')" })
+
+
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="dateCheckup"></span>
+                </div>
+            </div>
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+
+                            Hospital/ Clinic Details
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        @Html.TextBoxFor(Model => Model.HospitalDetails, new { @class = "form-control form-control-sm EShtName", @placeholder = "Hospital Details", @onblur = "validate(this,'Details')" })
+                        <span id="Details"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>
+
+
+                        Checkup Validity
+                        <span class="Mandatory">*</span>
+                    </label>
+
+                    <div class="input-group date">
+
+                        @Html.TextBoxFor(Model => Model.CheckupValidity, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "CheckUp Validity", @onchange = "validate(this,'Validity')" })
+
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="Validity"></span>
+                </div>
+            </div>
+
+            <div class="row my-3">
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Health Card Number</label>
+                        @Html.TextBoxFor(Model => Model.HealthCardNumber, new { @class = "form-control form-control-sm EShtName", @placeholder = "Health Card Number" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Checkup Details</label>
+                        @Html.TextBoxFor(Model => Model.CheckupDetails, new { @class = "form-control form-control-sm EShtName", @placeholder = "CheckUp Details" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Checkup By</label>
+                        @Html.TextBoxFor(Model => Model.CheckupBy, new { @class = "form-control form-control-sm EShtName", @placeholder = "Checkup By" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control form-control-sm EShtName", @placeholder = "Remarks" })
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">Attach File</label>
+
+                        <div class="file-upload-form mb-1">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="previewDocument()"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                            <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+
+                                @Html.TextBoxFor(m => m.Attachment.FileData, new { @type = "file", @title = "", @class = "PreviewImage", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "CheckImageExtensionSize(this)" })
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="MedicalCheckUpSave()">
+                        Save
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+        
+}

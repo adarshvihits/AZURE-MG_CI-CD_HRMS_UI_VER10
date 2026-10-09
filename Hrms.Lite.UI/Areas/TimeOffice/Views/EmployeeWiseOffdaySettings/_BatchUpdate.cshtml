@@ -1,0 +1,88 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.EmployeeWiseOffdaySettings
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "offdayBatchUpdateSave" }))
+{
+    @Html.HiddenFor(m => m.Year.Code)
+    @Html.HiddenFor(m => m.Year.Name)
+    @Html.HiddenFor(m => m.ShiftType.Code)
+    @Html.HiddenFor(m => m.ShiftType.Name)
+    <div id="BatchUpdate" class="slider-forms slider-forms-open batchSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('batchSlider')"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Year</label>
+                        <div class="view-details">
+                            @Model.Year.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Shift Type</label>
+                        <div class="view-details">
+                            @Model.ShiftType.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group m-0">
+                        <label>Previous Combination </label>
+                        @Html.DropDownListFor(m => m.PreviousCombination.Code, (SelectList)ViewBag.PrevCombination, "--Select--", new { @class = "form-control form-control-sm"@*, @onchange = "validate(this,'prevcombination')"*@ })
+                        <span id="prevcombination"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row my-3">
+                <div class="col-md-6">
+                    <div class="form-group m-0">
+                        <label>New Combination </label>
+                        @Html.DropDownListFor(m => m.NewCombination.Code, (SelectList)ViewBag.NewCombination, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'newcombination')" })
+                        <span id="newcombination"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Effective From</label>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.EffectiveFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", placeholder = "Effective From", @onchange = "validate(this,'effectivefrom')" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="effectivefrom"></span>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button" onclick="batchUpdateSave()"
+                       class="btn btn-default  mobile-full-width">
+                        Update
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

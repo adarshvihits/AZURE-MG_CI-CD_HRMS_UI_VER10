@@ -1,0 +1,69 @@
+﻿@model Hrms.Lite.Shared.Master.DuesClearanceAuthorityMatrix
+
+
+<script src="~/js/settings.js"></script>
+<style>
+
+    .checkbox-inline {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "DuesClearanceAuthoritySave" }))
+{
+    <div class="row mb-2 ">
+
+        @Html.HiddenFor(m => m.LevelCode)
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table dues-clearance-popup-list-new">
+            @Html.HiddenFor(m => m.ClearanceVsAuthority.Count)
+            <table id="AuthorityVsDUETable" class="common-table dt-width-fix">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Sl No</th>
+                        <th scope="col">EmployeeId</th>
+                        <th scope="col">Authority</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{if (Model.ClearanceVsAuthority != null && Model.ClearanceVsAuthority.Count > 0)
+                        {
+                            for (int i = 0; i < Model.ClearanceVsAuthority.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Sl No">@Model.ClearanceVsAuthority[i].SlNo</td>
+                                    <td data-label="Sl No">@Model.ClearanceVsAuthority[i].EmployeeId</td>
+                                    <td data-label="Shift">
+                                        @Html.HiddenFor(m => m.ClearanceVsAuthority[i].PositionCode)
+                                        @Model.ClearanceVsAuthority[i].EmployeeName
+                                    </td>
+                                    <td data-label="Sl No">@Model.ClearanceVsAuthority[i].PositionName</td>
+
+
+                                    <td data-label="Actions">
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted ">
+                                                @Html.CheckBoxFor(m => m.ClearanceVsAuthority[i].Applicability)
+
+                                                <span></span>
+                                            </label>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,533 @@
+﻿@model Tuple<Hrms.Lite.Shared.DataBank.Reports.SkillMatrix, System.Data.DataTable,System.Data.DataTable,System.Data.DataTable>
+
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+
+<script>
+    var tooltips = JSON.parse('@Html.Raw(ViewBag.TooltipsJson)');
+
+   
+
+    $(document).ready(function () {
+
+       
+
+        $("#dataTableSearch").on("keyup search paste cut", function () {
+
+            $('#Report').data('kendoGrid').dataSource.read();
+
+
+            $('#Report').data('kendoGrid').refresh();
+
+
+            // dataTable.search(this.value).draw();
+
+        });
+
+        $('.search-slider-inner').click(function () {
+            // dataTable.search('').draw();
+            $('#Report').data('kendoGrid').dataSource.read({ page: 1 });
+            $('#Report').data('kendoGrid').pager.page(1);
+            $('#Report').data('kendoGrid').refresh();
+            $('#dataTableSearch').val('');
+            $('#dataTableSearch').focus();
+        });
+       
+    });
+
+    function contentHandler(e) {
+        // SCRIPT FOR GRID HEADER TOOLTIP
+        var headerTooltip="";
+        if (e.target.is("th")) {
+            var targetText = e.target.text().trim();
+          
+            for (var key in tooltips) {
+               
+                if (key == targetText) {
+                   var value = tooltips[key];
+                    headerTooltip=value
+                  
+                    break;
+                }
+                else
+                {
+                    headerTooltip = targetText;
+                  
+                }
+            }
+            return headerTooltip;
+        }
+
+       // var dataItem = $("#grid").data("kendoGrid").dataItem(e.target.closest("tr"));
+       // var content = dataItem.QuantityPerUnit;
+       // return content;
+    }
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+        var tabIndex = 0;
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+
+       
+        var type = $('#Type').val();
+
+        var skill = $('#selectedSkillCodes').val();
+
+        temp["searchValue"] = searchValue;
+
+        console.log(type);
+
+        return { filter1: temp, type: type,skills:skill };
+    }
+
+    function GetList() {
+        //SCRIPT FOR LOADING GRID 
+        var skill = $('#selectedSkillCodes').val();
+        var selectedType = $('#Type').val();
+        var url = '@Url.Action("ReloadDiv", "SkillMatrixReport", new { area = "DataBank" })';
+       
+       url += '?type=' + selectedType +'&skills='+skill ; // Append the type value as a query parameter
+
+
+       $("#grid").empty();
+        $("#grid").load(url);
+
+
+    }
+    function ApplyFilter(mode) {
+
+        if (mode == 'apply') {
+
+            if (filterApplicable >= 1) {
+
+                $('#Report').data('kendoGrid').dataSource.read();
+
+                //refresh will re-render items in grid from the current datasource
+                $('#Report').data('kendoGrid').refresh();
+
+                CloseSlider('basicFilter');
+                $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+                $('#Report').data('kendoGrid').dataSource.read();
+
+
+                $('#Report').data('kendoGrid').refresh();
+                CloseSlider('basicFilter');
+                $('#filterForm').addClass('filter-apply');
+            }
+
+
+        }
+
+        else {
+            filterApplicable = 1;
+            $('.reset').val('');
+            $('#Optional_Filter_EmploymentStatus_Code').val(0);
+            $('#filterForm').removeClass('filter-apply');
+
+            $('#Report').data('kendoGrid').dataSource.read();
+
+
+            $('#Report').data('kendoGrid').refresh();
+
+        }
+
+
+    }
+
+    function applyCellColor(value, field) {
+       // APPLY CELL COLOUR
+        if (value == 5) {
+            return "<div class='greencolor'>" + value + "</div>";
+        }
+        else if (value >= 4 && value<5) {
+            return "<div class='normalcolor'>" + value + "</div>";
+        }
+        else if (value >= 3 && value<4) {
+            return "<div class='yellowcolor'>" + value + "</div>";
+        }
+        else if (value >= 2 && value < 3) {
+            return "<div class='bluecolor'>" + value + "</div>";
+        }
+        else if (value >= 1 && value<2) {
+            return "<div class='redcolor'>" + value + "</div>";
+        }
+        else {
+            return value;
+        }
+    }
+    function columnHeaderTemplate(columnName, tooltip) {
+        return '<span title="' + tooltip + '">' + columnName + '</span>';
+    }
+
+    function exportGrid() {
+        var grid = $("#Report").data("kendoGrid");
+        
+    grid.saveAsExcel();
+    }
+
+    function excelExport(e) {
+        var sheet = e.workbook.sheets[0];
+
+        //var headerCell = sheet.rows[0].cells[24]
+        //var headerName = headerCell.value;
+        //console.log(headerName);
+
+        for (var rowIndex = 1; rowIndex < sheet.rows.length; rowIndex++) {
+            var sheet = e.workbook.sheets[0];
+           
+          
+                var row = sheet.rows[rowIndex];
+           
+                
+                var cells= row.cells;
+         if(row.type=="data")
+         {
+                cells.forEach(cell => {
+
+                    //console.log(cell.value);
+                    //var headerCell = sheet.rows[0].cells[cellIndex];
+                  
+                        // Apply decimal number format
+                       // cell.value = cellValue + 0.0; // Convert to decimal
+                   //console.log(cell);
+                    if (cell.value == 5) {
+                      
+                        cell.background = "#90EE90";
+                    }
+                    else if (cell.value >= 4 && cell.value < 5) {
+                      
+                        cell.background = "#F4A460";
+                    }
+                    else if (cell.value >= 3 && cell.value < 4) {
+                      
+                        cell.background = "#fafad2";
+                    }
+                    else if (cell.value >= 2 && cell.value < 3) {
+                       
+                        cell.background = "#6495ED";
+                    }
+                    else if (cell.value >= 1 && cell.value < 2) {
+                        
+                        cell.background = "#f7764f";
+                    }
+                    
+
+                })
+                }
+            
+        }
+    }
+
+
+
+          
+</script>
+
+@{
+    Dictionary<string, string> tooltips = ViewBag.Tooltips;
+}
+
+
+
+<div id="grid" class="">
+    @(Html.Kendo().Tooltip()
+        .For("#Report")
+        .Filter("th") //this filter selects the third column's cells and the third column header
+        .Position(TooltipPosition.Right)
+        .Width(250)
+        .ContentHandler("contentHandler")
+        )
+   
+
+    @(
+        Html.Kendo().Grid<dynamic>()
+                                                        .Name("Report")
+                                                        .Columns(columns =>
+                                                        {
+                                                            var tooltips = (Dictionary<string, string>)ViewBag.Tooltips;                                                      
+                                                            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+                                                            {
+                                                                if (column.ColumnName != "EmployeeGI" && column.ColumnName != "EmployeeCode" )
+                                                                {
+                                                                    var c = columns.Bound(column.ColumnName);
+
+                                                                    if (column.ColumnName == "EmployeeID" || column.ColumnName == "FullName" || column.ColumnName == "Yos" || 
+                                                        column.ColumnName == "doj" || column.ColumnName == "Designation" || column.ColumnName == "location" || 
+                                                        column.ColumnName == "department" || column.ColumnName == "OverallRating" || column.ColumnName == "SkillLevel")
+                                                                    {
+
+                                                                        if (column.ColumnName == "EmployeeID")
+                                                                        {
+                                                                            c.Width(85);
+                                                                        }
+                                                                        if (column.ColumnName == "OverallRating")
+                                                                        {
+
+                                                                            c.ClientTemplate("#= applyCellColor(data." + column.ColumnName + ",'" + column.ColumnName + "') #");
+
+                                                                        }
+                                                                        if (column.ColumnName == "Yos" || column.ColumnName == "OverallRating")
+                                                                        {
+                                                                            c.Width(85);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            c.Width(150);
+                                                                        }
+                                                                        c.Locked(true);
+                                                                        c.Filterable(false);
+                                                                        c.HtmlAttributes(new { @class = "column-cell" });
+                                                                c.HeaderHtmlAttributes(new { @class = "column-header", @title = column.ColumnName });
+                                                                c.ClientHeaderTemplate("");
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                    columns.Group(group =>
+    {
+                group.Title("Soft Skills").HtmlAttributes(new { @style = "  justify-content: center;" });
+                group.Columns(skillColumns =>
+                {
+                        foreach (System.Data.DataColumn column1 in Model.Item3.Columns)
+                        {
+                            if (column1.ColumnName != "EMPLOYEECODE")
+                            {
+                                var field = column1.ColumnName.Replace(" ", "");
+
+                                var columnName = column1.ColumnName.ToString();
+                              
+                               @* if(columnName=="SRATING")
+                                {
+                                    columnName = "Rating";
+                                }*@
+                                skillColumns.Bound(columnName).Width(75).
+                                        HtmlAttributes(new { style = "white-space: normal;", @class = "column-cell" })
+                        .Filterable(ftb => ftb.Cell(cell => cell.Operator("is equal to")))
+                                        //.Filterable(ftb=>ftb.Cell(cell=>cell.Operator("equals").ShowOperators(false)))
+                      //  .Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)))
+
+                                .HeaderHtmlAttributes(new { @class = "column-header" })
+
+                                    .ClientTemplate("#= applyCellColor(data." + field + ",'" + field + "') #");
+
+                            }
+                        }
+                    });
+            });
+
+                                                    columns.Group(group =>
+                {
+                            group.Title("Technical Skills").HtmlAttributes(new { @style = "   justify-content: center;" });
+                            group.Columns(skillColumns =>
+                        {
+                                foreach (System.Data.DataColumn column2 in Model.Item4.Columns)
+                                {
+                                    if (column2.ColumnName != "EMPLOYEECODE")
+                                    {
+                                        var field = column2.ColumnName.Replace(" ", "");
+                                        var columnName = column2.ColumnName.ToString();
+                                       @* if (columnName == "TRATING")
+                                        {
+                                            columnName = "Rating2";
+                                        }*@
+
+                                        skillColumns.Bound(columnName).Width(75).HtmlAttributes(new
+                                        {
+                                            style = "white-space: normal;",
+                                            @class = "column-cell"
+                                        })
+
+                        .HeaderHtmlAttributes(new { @class = "column-header" })
+                    .ClientTemplate("#= applyCellColor(data." + field + ",'" + field + "') #");
+                                    }
+                                }
+                            });
+                        });
+
+                                               
+                                            
+
+
+        })
+        //.ToolBar(tools => tools.Excel())
+        .Events(e => e.ExcelExport("excelExport"))
+        .Scrollable(scrollable => scrollable.Height(375))
+        .Filterable(ftb => ftb.Mode(GridFilterMode.Menu).Extra(false).Operators(op=>op.ForString(fs=>fs.Clear()))
+
+      
+        )
+        .Pageable(pager => pager.Numeric(true).PreviousNext(true).Info(true).PageSizes(new[] { 10, 25 }).ButtonCount(5))
+        .Excel(excel => excel
+        .AllPages(true)
+        .FileName("Skill Matrix.xlsx")
+        .Filterable(true)
+        //.ProxyURL(Url.Action("Excel_Export_Save", "SkillMatrixReport"))
+        )
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+            {
+                var field = model.Field(column.ColumnName, column.DataType);
+            }
+
+        })
+        .Read(read => read.Action("GetList", "SkillMatrixReport").Data("employeeParam"))
+        )
+        )
+
+
+
+ 
+   
+   <style>
+         
+        .k-header,
+        .column-header,
+        .group-header,
+        .column-cell {
+            text-align: center !important;
+            vertical-align: middle;
+           
+            border-right: 1px solid #c4c4c4; /* Add vertical line */
+            padding: 5px; /* Adjust padding as needed */
+            position: relative; /* Enable relative positioning for pseudo-elements */
+        }
+
+            .k-header::after,
+            .group-header:before,
+            .column-header:after,
+            .column-cell:after {
+                text-align: center !important;
+                vertical-align: middle;
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 1px;
+                background-color: #e6eef7; /* Color of the vertical line */
+            }
+         .k-grid-header-wrap tr{
+            border-bottom: 1px solid #c4c4c4;
+            }
+
+        .k-grid th{
+            white-space: normal;
+        }
+
+        
+        .normalcolor{
+            background-color: sandybrown !important;
+            padding:5px 10px;
+            text-align:center;
+
+        }
+
+        .greencolor {
+            background-color: lightgreen !important;
+           
+
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .yellowcolor {
+            background-color: lightgoldenrodyellow !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .bluecolor {
+            background-color: cornflowerblue !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .redcolor {
+            background-color: #f7764f !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .k-grid td {
+           padding:10px 3px !important;
+        }
+
+        .k-grid-header-locked table thead tr{
+            height:86px !important;
+        }
+
+        .k-grid-header-wrap table thead tr{
+            height:30px !important;
+        }
+
+        .k-grid th{
+            /*border-color: rgba(55, 60, 65, 0.5) !important;*/
+            border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+        
+        }
+
+        .k-grid {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+
+
+
+
+            .k-grid .k-grid-content-locked, .k-grid .k-grid-content-locked td, .k-grid .k-grid-header-locked, .k-grid .k-grid-header-locked .k-header {
+                border-color: rgba(55, 60, 65, 0.5);
+            }
+
+            .k-grid .k-grid-content, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked, .k-grid td {
+              /*  border-color: rgba(55, 60, 65, 0.5) !important;*/
+                border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+            }
+
+                .k-grid .k-grid-header-locked .k-header {
+                    border-color: rgba(55, 60, 65, 0.5) !important;
+                }
+
+        .k-grid-content table tbody tr {
+            border-bottom: 1px solid #F6F7F9;
+            border-collapse: collapse;
+        }
+
+        .k-grid table {
+            border-collapse: collapse !important;
+        }
+
+        .branch {
+            font-weight: 600 !important;
+        }
+
+        .k-grid td, .k-grid th{
+            font-weight: revert;
+        }
+
+       
+
+
+   </style>
+
+ 
+
+</div>
+<!-- Table Setion End -->

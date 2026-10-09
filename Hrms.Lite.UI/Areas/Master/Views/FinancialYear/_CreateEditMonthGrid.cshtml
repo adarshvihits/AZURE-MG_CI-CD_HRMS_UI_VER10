@@ -1,0 +1,173 @@
+﻿
+@model Hrms.Lite.Shared.Master.FinancialYear
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+       $(document).ready(function () {
+           debugger
+           if ("@Model.Mode"== "Create")
+           $('.fin_isActive').prop('checked', true);
+       });
+
+
+
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table addfinancial-year-lists pt-5 vertical-scroll-400">
+    @Html.HiddenFor(m => m.Mode)
+    <table id="FinancialYearTable">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Month</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Total Days</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average Days Of Loss Of Pay">Avg. LOP</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average Days Of LJP">Avg. LJP</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average Days Of LTP">Avg. LTP</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average Days Of ESI">Avg. ESI</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average PR Days for 1 Off Day">Offdays</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Average Days Of Overtime">Avg. Day OT</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Attendance Closing Date">Att. Close Date</th>
+                <th scope="col">Leave Period</th>
+                <th scope="col">Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.salaryPeriod.Month != null && Model.salaryPeriod.Month.Count > 0)
+                {
+                    for (int i = 0; i < Model.salaryPeriod.Month.Count; i++)
+
+                    {
+                        <tr>
+
+                            <td data-label="Month">
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.LogGI)
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].Name)
+                                @Html.DisplayFor(m => m.salaryPeriod.Month[i].Name)
+                                @*@Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].Name, new { @class = "form-control form-control-sm",
+            @placeholder = "Name" , @readonly="true"})*@
+                            </td>
+                            <td data-label="Short Name">
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].ShortName)
+                                @Html.DisplayFor(m => m.salaryPeriod.Month[i].ShortName)
+                                @*@Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].ShortName, new { @class = "form-control form-control-sm" ,
+                @readonly = "true"
+            })*@
+
+                            </td>
+                            <td data-label="Start Date">
+
+
+                                @*<div class="input-group date" style="flex-wrap: nowrap;">
+                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].StartDate)
+
+                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true" })
+
+                <div class="input-group-append">
+                    <span class="input-group-text" style=" border: 1px solid #999999;">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>*@
+
+
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].StartDate)
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.salaryPeriod.Month[i].StartDate))
+                            </td>
+                            <td data-label="End Date">
+                                @*<div class="input-group date" style="flex-wrap: nowrap;">
+                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].EndDate)
+
+                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].EndDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true" })
+
+                <div class="input-group-append">
+                    <span class="input-group-text" style=" border: 1px solid #999999;">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>*@
+
+
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].EndDate)
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.salaryPeriod.Month[i].EndDate))
+                            </td>
+                            <td data-label="Total Days">
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].TotalDays)
+                                @Html.DisplayFor(m => m.salaryPeriod.Month[i].TotalDays)
+                                @*@Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].TotalDays, new { @class = "form-control form-control-sm OnlycapitalizeFirstLetter", @readonly = "true" })*@
+
+                            </td>
+                            <td data-label="Average LOP">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgLOP, new { @class = "form-control form-control-sm OnlycapitalizeFirstLetter" })
+
+                            </td>
+                            <td data-label="Average LJP">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgDaysLJP, new { @class = "form-control form-control-sm OnlycapitalizeFirstLetter" })
+
+                            </td>
+                            <td data-label="Average LTP">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgDaysLTP, new { @class = "form-control form-control-sm OnlycapitalizeFirstLetter" })
+
+                            </td>
+                            <td data-label="Average ESI">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgDaysESI, new { @class = "form-control form-control-sm OnlycapitalizeFirstLetter" })
+
+                            </td>
+                            <td data-label="Avg. PR Days for 1 Off Day ">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgPrDaysOffday, new { @class = "form-control form-control-sm" })
+
+                            </td>
+                            <td data-label="Average Day OT">
+
+                                @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AvgDayOT, new { @class = "form-control form-control-sm" })
+
+                            </td>
+                            <td data-label="Attendance Close Date">
+                                <div class="input-group date" style="flex-wrap: nowrap;">
+                                    @*@Html.HiddenFor(Model => Model.salaryPeriod.Month[i].AttendanceCloseDate)*@
+                                    @Html.TextBoxFor(Model => Model.salaryPeriod.Month[i].AttendanceCloseDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2" })
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style=" border: 1px solid #999999;">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-label="Leave Period">
+                                @Html.HiddenFor(Model => Model.salaryPeriod.Month[i].LeavePeriod.Name)
+                                @Html.DisplayFor(m => m.salaryPeriod.Month[i].LeavePeriod.Name)
+
+
+                            </td>
+                            <td data-label="Actions">
+                                <label class="switch" onchange="ActiveInactiveValidationFinancial('Financial year',@i,@Model.Code)">
+
+                                    @Html.CheckBoxFor(m => m.salaryPeriod.Month[i].Active, new { @class = "fin_isActive" })
+                                    <span class="slider round"></span>
+                                </label>
+
+
+
+                            </td>
+                        </tr>
+
+                    }
+
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

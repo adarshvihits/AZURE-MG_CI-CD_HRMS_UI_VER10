@@ -1,0 +1,57 @@
+﻿@model Hrms.Lite.Shared.Master.UserRole
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table user-role-master-pending-list pt-1">
+    @Html.HiddenFor(m => m.UserRoleList.Count)
+    <table id="UserRolePendingTable" class="common-table layout-ihits">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Salary Visibility</th>
+                <th scope="col">Permitted Action</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.UserRoleList != null && Model.UserRoleList.Count > 0)
+                {
+                    int i = 0;
+                    foreach (var item in Model.UserRoleList)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.UserRoleList[i].MakerChecker)
+                            <td data-label="Name">@item.userrole</td>
+                            <td data-label="Short Name">@item.ShortName</td>
+                            <td data-label="Salary Visibility">@item.SalaryVisibility.Name</td>
+                            <td data-label="Permitted Action">@item.PermittedActions</td>
+                            <td data-label="Entry Type">@item.EntryType</td>
+                            <td data-label="Approve">
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="approve"
+                                   class="btn btn-icon btn-tick icon-only" onclick="Approve('@item.GI', '@item.LogGI','@i')">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                                @*<a href="user-role-approve-user.html" data-bs-toggle="tooltip" title="Approve" type="button" class="btn btn-icon btn-tick icon-only" data-bs-original-title="Approve"><i class="icon-xl far fa-check-circle"></i></a>*@
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+              
+
+            }
+        </tbody>
+    </table>
+</div>

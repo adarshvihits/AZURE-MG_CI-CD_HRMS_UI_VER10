@@ -1,0 +1,121 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.SalaryIntegrityReport
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "gridSettingsData" }))
+{
+<div style="padding:10px;"
+     class="ihits-table table-border hover-color odd-even mobile-responsive-table Non-payroll-reg-popup-list vertical-scroll-250">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-items">
+                <div>
+
+                    <div class="radio-inline">
+                        <label class="radio radio-outline radio-success">
+                            @Html.RadioButtonFor(m => m.CheckList_Status, "0", new { })
+                            <span></span>Exclude
+                        </label>
+                        <label class="radio radio-outline radio-success">
+                            @Html.RadioButtonFor(m => m.CheckList_Status, "1", new { })
+                            <span></span>Show Only
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="ihits-table table-border hover-color odd-even mobile-responsive-table    Salary-Intergrity-poup-tble  pt-5">
+                <table id="grdSettings">
+                    <thead>
+
+                        <tr class="table-light">
+                            <th scope="col"> Description</th>
+                            <th scope="col">
+                                <div class="checkbox-inline justify-content-center">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        <input type="checkbox"
+                                               name="Checkboxes16" id="AllChk" onchange="onAllClick('AllChk','grdSettings')">
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CheckList != null && Model.CheckList.Count > 0)
+                        {
+
+                            @for (int i = 0; i < Model.CheckList.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Classification">
+                                        @Html.HiddenFor(m => m.CheckList[i].Code)
+                                        @Model.CheckList[i].Description
+                                    </td>
+                                    <td data-label="Count">
+                                        <div class="checkbox-inline justify-content-center">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                @Html.CheckBoxFor(m => m.CheckList[i].Status,new { @onchange= "checkBoxClick(this, 'grdSettings', 'AllChk')" })
+                                                <span></span>
+                                            </label>
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+            <div class="row pt-6">
+
+                <div class="col-md-4 d-flex align-items-center">
+                    <div class="form-group">
+                        <div class="d-flex pt-1">
+                            <h6 class="font-name"
+                                style="font-size: 12px;">
+                                Exclude
+                                diff.between :
+                            </h6>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                    @Html.TextBoxFor(m => m.DiffFrom, new { @class = "form-control form-control-sm", @onkeypress = "return onlyNumberKey(event)" })
+                </div>
+                <div class="col-md-2">
+
+
+                    @Html.TextBoxFor(m => m.DiffTo, new { @class = "form-control form-control-sm", @onkeypress = "return onlyNumberKey(event)" })
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<div class="col-md-12 align-right">
+    <a type="button" class="btn btn-default  mobile-full-width" onclick="fillData(); var m = $('.bd-example-modal-lg');m.modal('hide');">
+        Apply
+    </a>
+</div>
+}

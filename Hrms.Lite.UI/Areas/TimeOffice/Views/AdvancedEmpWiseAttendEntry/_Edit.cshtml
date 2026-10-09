@@ -1,0 +1,223 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<script>
+
+        $(document).ready(function () {
+            $('#DailyAttendanceEditDetails_FirstHalf_Code').focus();
+            debugger
+            if ($("#DailyAttendanceEditDetails_FH_AttendStatusType_ShortName").val() != "COFF")
+                $("#entittleDateID").addClass("hide");
+            else
+                $("#entittleDateID").removeClass("hide");
+            global_fh = $('#DailyAttendanceEditDetails_FirstHalf_Code').val();
+
+            global_sh = $('#DailyAttendanceEditDetails_SecondHalf_Code').val();
+        });
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "eaEntry_Edit_Form" }))
+{
+
+    <div class="slider-forms slider-forms-open eaEntry_Edit">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('eaEntry_Edit')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>
+                Edit
+            </h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Date</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.DailyAttendanceEditDetails.EmployeeGI)
+                            @Html.HiddenFor(m => m.DailyAttendanceEditDetails.SelectedDate)
+                            @Html.HiddenFor(m => m.DailyAttendanceEditDetails.SH_AttendStatusType.ShortName)
+                            @Html.HiddenFor(m => m.DailyAttendanceEditDetails.FH_AttendStatusType.ShortName)
+                            @Model.DailyAttendanceEditDetails.SelectedDate.ToString("dd-MMM-yyyy")
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Day</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.Day
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Shift Code</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.Shift.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Shift Time</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.ShiftTime
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">IN</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.IN
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">OUT</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.OUT
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Total Time</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.TotalTime
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Late In</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.LateIn
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Early Out</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.EarlyOut
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Over Time</label>
+                        <div class="view-details">
+                            @Model.DailyAttendanceEditDetails.OverTime
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border_top_cls">
+
+
+                <div class="row mb-2 ">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>First Half</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => Model.DailyAttendanceEditDetails.FirstHalf.Code, (SelectList)ViewBag.AttendenceStatus, "Select", new
+                       {
+                           @class = "form-control form-control-sm",
+                           @onchange = "validate(this,'ea_fisrtHalf');validatefh(this);"
+                       })
+                            <span id="ea_fisrtHalf"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Second Half</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => Model.DailyAttendanceEditDetails.SecondHalf.Code, (SelectList)ViewBag.AttendenceStatus, "Select", new
+                       {
+                           @class = "form-control form-control-sm",
+                           @onchange = "validate(this,'ea_secondHalf');validatesh(this);"
+                       })
+                            <span id="ea_secondHalf"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="entittleDateID" class="form-group hide">
+                            <label>Coff Entitle Date</label>
+                            @Html.DropDownListFor(m => Model.DailyAttendanceEditDetails.CoffEntitleDate, (SelectList)ViewBag.CoffEntitleDates, "--Select--",
+                           new { @class = "form-control form-control-sm CoffDropdown", @onchange = "validate(this,'ea_CoffDate')" })
+
+                            <span id="ea_CoffDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-12">
+                        <label>Remarks</label>
+                        @Html.TextAreaFor(m => m.DailyAttendanceEditDetails.Remarks, new { @class = "form-control", @placeholder = "Remarks", @maxlength = "250" })
+
+                    </div>
+                </div>
+
+            </div>
+            <h5 class="mt-4">Leave Balance</h5>
+            <div class="ihits-table table-border vertical-scroll-100 mobile-responsive-table employee-wise-attendance-entry-two-col">
+                <table>
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Leave</th>
+                            <th scope="col">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.LeaveBalance != null && Model.LeaveBalance.Count > 0)
+                        {
+                            for (int i = 0; i < Model.LeaveBalance.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Leave">@Model.LeaveBalance[i].Leave</td>
+                                    <td data-label="Balance">@Model.LeaveBalance[i].Balance</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+
+                            <tr>
+                                <td colspan="2">No data</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button" class="btn btn-default  mobile-full-width" onclick="onEmployeeDailyAttendSaveClick()">
+                        Modify
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

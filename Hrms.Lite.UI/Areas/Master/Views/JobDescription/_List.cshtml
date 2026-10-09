@@ -1,0 +1,88 @@
+@model Hrms.Lite.Shared.Master.JobDescription
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.pendingTabCount').html("@Model.PendingCount");
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table job-description-list pt-1">
+    @Html.HiddenFor(m => m.JobDescriptionList.Count)
+    <table id="JDTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+            
+                <th scope="col">Business Type</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.JobDescriptionList != null && Model.JobDescriptionList.Count > 0)
+            {
+
+
+                for (int i = 0; i < Model.JobDescriptionList.Count; i++)
+
+                {
+                    <tr>
+
+                        @Html.HiddenFor(m => Model.JobDescriptionList[i].EditActive)
+
+             
+                        <td data-label="Business Type">@Model.JobDescriptionList[i].BusinessType?.Name</td>
+                        <td data-label="Department">@Model.JobDescriptionList[i].Department?.Name</td>
+                        <td data-label="Section">@Model.JobDescriptionList[i].Section?.Name</td>
+                        <td data-label="Grade">@Model.JobDescriptionList[i].Grade?.Name</td>
+                        <td data-label="Action">
+
+                            <div class="d-flex align-items-center">
+
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editjobdescription" type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onEditClick('@Model.JobDescriptionList[i].GI', '@Model.JobDescriptionList[i].LogGI', @i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editjobdescription" type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deletejobdescription" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.JobDescriptionList[i].GI', '@Model.JobDescriptionList[i].LogGI', @i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deletejobdescription" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

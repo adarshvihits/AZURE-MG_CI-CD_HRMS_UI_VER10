@@ -1,0 +1,264 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.Report.LeaveApplicationReport
+    <script src="~/js/tooltip.js"></script>
+    <div class="slider-forms slider-forms-open AppliocationTracker">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AppliocationTracker')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <div class="location-slider">
+                <h4 class="mb-4">Application Tracker</h4>
+                <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.LeaveApplication.EmployeeHeader)
+                    </div>
+
+                    <div class="profile-header-overflow"></div>
+                </div>
+            </div>
+
+            <div class="add-padding">
+                <div>
+
+                    @if (Model.LeaveApplication.Tracker != null && Model.LeaveApplication.Tracker.Count > 0)
+                    {
+                        for (int i = Model.LeaveApplication.Tracker.Count - 1; i >= 0; i--)
+                        {
+                            if (@Model.LeaveApplication.Tracker[i].ApprovalStatus == "Pending")
+
+                            {
+
+                                <!-- completed -->
+                                <div class="step">
+                                    <div class="v-stepper">
+                                        <div class="circle"><i class="fa fa-check"></i></div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content">
+                                        <div class="row-outer">
+                                            <label class="view-title">@Model.LeaveApplication.Tracker[i].Stage,@Model.LeaveApplication.Tracker[i].Approver</label>
+                                            <div class="view-details">
+                                                @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Model.LeaveApplication.Tracker[i].Approver
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            }
+                            else if (@Model.LeaveApplication.Tracker[i].ApprovalStatus == "Rejected")
+                            {
+                                <div class="step active rejected">
+                                    <div class="v-stepper">
+                                        <div class="circle"><i class="icon-xl fas fa-times icon_reject"></i></div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content">
+                                        <div class="row-outer">
+                                            <label class="view-title">@Model.LeaveApplication.Tracker[i].Stage,@Model.LeaveApplication.Tracker[i].Approver</label>
+
+                                            <div class="view-details">
+                                                @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Model.LeaveApplication.Tracker[i].Approver,@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveApplication.Tracker[i].Date))
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            }
+
+
+                            else
+                            {
+                                @if (Model.LeaveApplication.Tracker[i].ApprovalStatus == "Applied" || Model.LeaveApplication.Tracker[i].ApprovalStatus == "Applied By RM" || Model.LeaveApplication.Tracker[i].ApprovalStatus == "Approved")
+                                {
+                                    <div class="step active completed">
+                                        <div class="v-stepper">
+                                            <div class="circle"><i class="fa fa-check"></i></div>
+                                            <div class="line"></div>
+                                        </div>
+
+                                        <div class="stepper-content">
+                                            <div class="row-outer">
+                                                <label class="view-title">@Model.LeaveApplication.Tracker[i].Stage,@Model.LeaveApplication.Tracker[i].Approver</label>
+
+
+                                                <div class="view-details">
+                                                    @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveApplication.Tracker[i].Date))
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                }
+                                                else
+                                                {
+
+                                                @*<div class="step active rejected">
+                                        <div class="v-stepper">
+                                            <div class="circle"><i class="icon-xl fas fa-times icon_reject"></i></div>
+                                            <div class="line"></div>
+                                        </div>
+
+                                        <div class="stepper-content">
+                                            <div class="row-outer">
+                                                <label class="view-title"></label>
+
+                                                <div class="view-details">
+                                                    @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Model.LeaveApplication.Tracker[i].Approver,@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveApplication.Tracker[i].Date))
+                                                </div>
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>*@
+
+
+
+                                                <div class="step active rejected">
+                                                    <div class="v-stepper">
+                                                        <div class="circle"><i class="icon-xl fas fa-times icon_reject"></i></div>
+                                                        <div class="line"></div>
+                                                    </div>
+
+                                                    <div class="stepper-content">
+                                                        <div class="row-outer">
+                                                            <label class="view-title">@Model.LeaveApplication.Tracker[i].Stage</label>
+
+                                                            <div class="view-details">
+                                                                @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Model.LeaveApplication.Tracker[i].Approver,@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveApplication.Tracker[i].Date))
+                                                            </div>
+
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+
+                                                @*<div class="step active rejected">
+                                    <div class="v-stepper">
+                                        <div class="circle"><i class="icon-xl fas fa-times icon_reject"></i></div>
+                                        <div class="line"></div>
+                                    </div>
+                                    </div>*@
+                                                @*<div class="view-details">
+                                        @Model.LeaveApplication.Tracker[i].ApprovalStatus,@Model.LeaveApplication.Tracker[i].Approver,@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveApplication.Tracker[i].Date))
+                                    </div>*@
+                                                }
+                                           
+                                }
+
+
+                            }
+                        }
+                    </div>
+
+
+
+                <!----- stepper end here --->
+                <!--table start here-->
+                <div class="ihits-table table-border mobile-responsive-table mb-5">
+                    <table>
+                        <thead>
+                            <tr class="table-light">
+                                <th style="width: 25%;" scope="col">Type</th>
+
+                                <th scope="col">No of days</th>
+                                <th scope="col">From</th>
+                                <th scope="col">To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                <tr>
+                                    <td data-label="ID">
+                                        @Model.LeaveApplication.LeaveType.Name
+                                    </td>
+
+                                    <td data-label="No of days">
+                                        @Model.LeaveApplication.NoOfDays
+                                    </td>
+
+                                    <td data-label="From">
+                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveApplication.From))
+                                    </td>
+
+                                    <td data-label="To">
+                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveApplication.To))
+                                    </td>
+
+                                </tr>
+                            }
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--table start end-->
+
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Reason</label>
+                            <div class="view-details">
+                                @Model.LeaveApplication.LeaveReason.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Additional Remarks</label>
+                            <div class="view-details">
+                                @Model.LeaveApplication.AdditionalRemarks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Work Handover:</label>
+                            <div class="view-details">
+                                @Model.LeaveApplication.HandOverDetails
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Contact Details & Address</label>
+                            <div class="view-details">
+
+                                @Model.LeaveApplication.ContactDetails
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row card-footer-bottom-fixed">
+
+                    <div class="view-details align-right col-md-12">
+                        <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="previewDocument('@Model.LeaveApplication.Attachment.AbsoluteUri')">
+                            <i class="icon-xl far fa-eye"></i>View File
+                        </a>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>

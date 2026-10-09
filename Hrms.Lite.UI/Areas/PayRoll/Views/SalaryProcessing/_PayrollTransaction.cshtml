@@ -1,0 +1,168 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryProcessing
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body">
+
+                            <div class="step-outer pb-10 step_row">
+                                <div class="step-item active" onclick="onTabNameClick('selection')">
+                                    Selection
+                                    <span class="step-circle"></span>
+                                </div>
+                                <div class="step-item active" onclick="onTabNameClick('Hr')">
+                                    HR & Time Office
+                                    <span class="step-circle"></span>
+                                </div>
+                                <div class="step-item active" onclick="onTabNameClick('statutory')">
+                                    Statutory
+                                    <span class="step-circle"></span>
+                                </div>
+                                <div class="step-item active" onclick="onTabNameClick('settings')">
+                                    Payroll Settings
+                                    <span class="step-circle"></span>
+                                </div>
+                                <div class="step-item active">
+                                    Payroll Transaction
+                                    <span class="step-circle"></span>
+                                </div>
+
+
+                            </div>
+
+                            <div class="page_white" style="padding: 10px 23px 10px; margin-bottom: 17px; ">
+
+                                <div class="row my-2">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="view-title">Payroll Group </label>
+                                            <div class="view-details">
+                                                @Model.PayrollGroup.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="view-title">Month </label>
+                                            <div class="view-details">
+                                                @Model.PayrollMonth.Name
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="ihits-table table-border  mobile-responsive-table salary-payrolltransaction-list vertical-scroll-200">
+                                <table>
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th scope="col">Payroll Transaction</th>
+                                            <th scope="col">Count</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.Payroll_Transaction != null && Model.Payroll_Transaction.Count > 0)
+                                        {
+
+                                            for (int i = 0; i < Model.Payroll_Transaction.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td data-label="Payroll Transaction">@Model.Payroll_Transaction[i].Description </td>
+                                                    @*<td data-label="Count">@Model.Payroll_Transaction[i].Count</td>*@
+
+
+
+                                                    <td data-label="Count" data-bs-toggle="modal" data-target=".bd-example-modal-lg-TrnPayroll">
+                                                        <a onclick="getPopUp('@Model.Payroll_Transaction[i].Code', '@Model.Payroll_Transaction[i].Description','PAYROLL_TRANSACTION')">@Model.Payroll_Transaction[i].Count</a>
+
+
+
+
+                                                    </td>
+                                                </tr>
+
+
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- <end table></end> -->
+                            <div class="row card-footer-bottom-fixed">
+                                <div class="col-md-12 align-right">
+                                    <a href="#" type="button"
+                                       class="btn btn-default float-right mobile-full-width" onclick="onNextClick('trn')">
+                                        Process
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+
+<div class="modal fade negativeSalaryPopUp" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg" style=" max-width: 1300px;">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Negative Salary List</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="NegativeSalryPopUpClose()">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body pt-3">
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade sal_validation" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel"><span class="validn_heading" style="color:red;font-size:14px;"></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body pt-3">            
+             
+
+              
+            </div>
+
+        </div>
+    </div>
+</div>

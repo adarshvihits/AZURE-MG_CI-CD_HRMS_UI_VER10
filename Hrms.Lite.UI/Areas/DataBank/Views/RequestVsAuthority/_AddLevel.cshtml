@@ -1,0 +1,155 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RequestVsAuthority
+<script src="~/js/multiselect.js"></script>
+<script src="~/js/custom.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('AddLevel_RequestLevel_Code');
+        $('#AddLevel_RequestLevel_Code').selectpicker();
+    });
+</script>
+<style>
+    .bootstrap-select.is-invalid .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", id = "AddevelId" }))
+{
+    <div id="addNewLevel" class="slider-forms slider-forms-open add-batch">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Request vs Authority
+            </h4>
+            <div class="row mt-4">
+
+                <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Level</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(Model => Model.EmployeeGI)
+                            @Html.HiddenFor(Model => Model.AddLevel.LevelCode)
+                            @Html.HiddenFor(Model => Model.AddLevel.RequestVsAuthorityGI)
+                            @Html.HiddenFor(Model => Model.AddLevel.Level)
+                            @Html.HiddenFor(Model => Model.AddLevel.RequestType)
+                            @Html.HiddenFor(Model => Model.AddLevel.Mode)
+                            @Model.AddLevel.Level
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.AddLevel.Mode == "Create" || Model.AddLevel.Mode == "MODIFY")
+                {
+
+
+
+                    <div class="col-md-8">
+                        <div class="form-group ">
+                            <label>Reporting Manager</label>
+                            <span class="Mandatory">*</span>
+                            <span class="" style="padding:5px;">
+                                @*@Html.DropDownListFor(m => m.EmployeeSettings.ReportingManager.Code, (SelectList)ViewBag.ReportingMgr, "--Select--", new { @class = "choices-multiple-remove-button form-control form-control-sm", @onblur = "validate(this,'reportingmanager')" })*@
+                                @Html.DropDownListFor(m => m.AddLevel.RequestLevel.Code, (SelectList)ViewBag.Aut, "--Select Authority--", new
+            {
+            @class = "selectpicker form-control form-control-sm form-control reqAuth",
+            @onchange = "validateReqAuthority(this,'reqAuth','level')",
+            data_show_subtext = "true",
+            data_live_search = "true"
+            })
+                            </span>
+
+                        </div>
+                        <span id="level"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Authority</label>
+                            <div class="view-details">
+                                @Model.AddLevel.AuthorityName
+                            </div>
+                        </div>
+                    </div>
+                }
+                @*@if (Model.AddLevel.Mode == "Create" || Model.AddLevel.Mode == "MODIFY")
+        {
+
+
+
+
+
+            <div class="col-md-8">
+
+                <div class="form-group">
+                    <label>Authority</label>
+                    <span class="Mandatory">*</span>
+                    <div>
+                        @Html.DropDownListFor(m => m.AddLevel.RequestLevel.Code, (SelectList)ViewBag.Aut, "--Select Authority--", new
+                   {
+                       @class = "selectpicker sliderSearchInput form-control form-control-sm reqAuth",
+                       @onchange = "validateReqAuthority(this,'reqAuth','level')",
+                       data_show_subtext = "true",
+                       data_live_search = "true",
+                   })
+                        <span id="level"></span>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Authority</label>
+                    <div class="view-details">
+                        @Model.AddLevel.AuthorityName
+                    </div>
+                </div>
+            </div>
+        }*@
+            </div>
+
+
+
+
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            @if (Model.AddLevel.Mode == "Create")
+                    {
+                            <button type="button" onclick="existCheck()"
+                                    class="btn btn-default  mobile-full-width">
+                                Save
+                            </button>
+                    }
+                    else if(Model.AddLevel.Mode=="MODIFY")
+                    {
+                            <button type="button" onclick="existCheck()"
+                                    class="btn btn-default  mobile-full-width">
+                                Modify
+                            </button>
+                    }
+                    else
+                    {
+                            <a onclick="existCheck()" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete"
+                                    class="btn btn-icon btn-delete big-btn float-none">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                    }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+}

@@ -1,0 +1,565 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+    div.k-tooltip.k-chart-tooltip {
+        margin-left: -50px;
+        margin-top: -50px;
+    }
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .arrow_up {
+        font-size: 20px;
+        color: #62c437;
+        padding-right: 5px;
+    }
+
+    .down_arrow {
+        font-size: 20px;
+        color: red;
+        padding-right: 5px;
+        padding-top: 4px;
+    }
+
+    .common_new {
+        background-color: #ffbb4d59;
+        padding: 10px;
+        width: 440px;
+        border-radius: 10px;
+    }
+
+    .value_cls {
+        color: #FF781B;
+        font-size: 2rem;
+        padding-right: 4px;
+    }
+
+    .new_emp {
+        border-left: 2px solid red;
+        margin: 12px;
+        height: 35px;
+        margin: 20px 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .downarrow {
+        WIDTH: 20PX;
+        transform: rotate(37deg);
+    }
+
+    .uparrow {
+        WIDTH: 20PX;
+        transform: rotate(37deg);
+    }
+
+    .uparrow {
+        WIDTH: 20PX;
+        transform: rotate(215deg);
+    }
+
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+            "Sunday"];
+
+
+
+        if (axis.categories != undefined) {
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+    }
+    </script>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <script id="catagory" type="text/x-kendo-template">
+            @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.CatagoryLeaveCountList>()
+                                                                      .Name("leaveCatagoryOv")
+                                                              .Title("")
+
+                                                              .Legend(legend => legend
+
+                                                              .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                              .Visible(true)
+                                                              )
+                                                              .ChartArea(chart => chart
+                                                              .Background("transparent")
+
+
+                                                              )
+                                                              .DataSource(ds =>
+                                                              {
+                                                                      ds.Read(read => read.Action("GetLeaveType", "MISDashBoard").Data("getSalPeriod"));
+
+                                                              }
+                                                              )
+                                                              .Series(series => series
+
+                                                              .Donut(model => model.total, model => model.catagory).HoleSize(40).Size(40)
+
+                                                              .Labels(labels => labels
+                                                              .Template("\\#= dataItem.catagory \\# - \\#= dataItem.total \\#").Visible(true)
+                                                              .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                              .Background("transparent")
+
+                                                              .Visible(true)
+                                                              )
+                               .Tooltip(tooltip => tooltip.Template("\\#= dataItem.catagory \\# - \\#= dataItem.total \\# ").Visible(true))
+
+
+                                                                  )//.SeriesColors("\\#166f99", "\\#2185b4")
+
+                                                                   .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+
+                                                                  .ToClientTemplate()
+                                                              )
+
+
+
+        </script>
+
+        <script id="leavebyWeek" type="text/x-kendo-template">
+            @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GetLeaveDaysList>()
+
+                                                                               .Name("leaveWeek")
+
+                                                                           .Title("")
+                                                                                 .Events(e => e.DataBound("sortData"))
+                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                           .Legend(legend => legend
+                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                           )
+                                                                           .ChartArea(chartArea => chartArea
+                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                               .DataSource(ds => ds.Read(read => read.Action("GetLeaveDays", "MISDashBoard").Data("getSalPeriod")))
+                                                                           .Series(series =>
+                                                                           {
+                                                                               series.Column(model => model.total).Name("Day").CategoryField("weekDay").Color("\\#fe5f55");
+
+                                                                           })
+                                                                           .CategoryAxis(axis => axis
+                                                                           //.Labels(labels => labels.Rotation(0))
+                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                           .Labels(labels => labels
+                                                                           .Format("{0:N0}")
+                                                                           //.Rotation(0)
+                                                                           )
+                                                                           .MajorUnit(10)
+
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                           .Tooltip(tooltip => tooltip
+                                                                           .Visible(true)
+                                                                           .Format("{0:N0}")
+                                                                           )
+                                                                           .ToClientTemplate()
+                                                                           )
+
+        </script>
+
+        <script id="leavebydepartmentOv" type="text/x-kendo-template">
+            @(
+                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.DepartmentCountList>()
+                                                                .Name("leaveDepartmentOv")
+                                                            .Title("")
+
+                                                            .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                            .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                            )
+                                                            .ChartArea(chartArea => chartArea
+                                                            .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                .DataSource(ds => ds.Read(read => read.Action("GetLeaveDepartment", "MISDashBoard").Data("getSalPeriod")))
+                                                            .Series(series =>
+                                                            {
+                                                                series.Column(model => model.total).Name("Department").CategoryField("shrtName").Color("\\#679436")
+                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                     Template("\\#= (dataItem.department)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+                                                                @* series.Column(model => model.femaleCount).Name("female").CategoryField("shrtName").Color("\\#2b82fc")
+                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                     Template("\\#= (dataItem.department)\\# - \\#= (dataItem.femaleCount)\\# ").Visible(true));
+                                                    *@
+
+                                                            })
+                                                    .CategoryAxis(axis => axis
+                                                    // .Labels(labels => labels.Rotation(45))
+                                                    .MajorGridLines(lines => lines.Visible(false))
+
+                                                    .Line(line => line.Visible(false))
+
+                                                    )
+                                                    .ValueAxis(axis => axis.Numeric()
+
+                                                    .Labels(labels => labels
+                                                    .Format("{0:N0}")
+                                                    //.Rotation(0)
+                                                    )
+                                                    // .MajorUnit(1000)
+
+                                                    .Line(line => line.Visible(false))
+                                                    )
+                                                    .RenderAs(RenderingMode.Canvas)
+                                                    .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                    .Format("{0:N0}")
+                                                    )
+                                                    .ToClientTemplate()
+                                                    )
+        </script>
+
+        <script id="leavebylocationOv" type="text/x-kendo-template">
+            @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.LocationCountList>()
+                                                                    .Name("leaveLocationOv")
+                                                                .Title("")
+
+                                                                .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                .Legend(legend => legend
+                                                                .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                )
+                                                                .ChartArea(chartArea => chartArea
+                                                                .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                    .DataSource(ds => ds.Read(read => read.Action("GetLeaveLocation", "MISDashBoard").Data("getSalPeriod")))
+                                                                .Series(series =>
+                                                                {
+                                                                    series.Column(model => model.total).Name("Location").CategoryField("shrtName").Color("\\#6d2e46")
+                                                                     .Tooltip(tooltip => tooltip.
+                                                                                                         Template("\\#= (dataItem.location)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+
+                                                                })
+                                                        .CategoryAxis(axis => axis
+                                                        // .Labels(labels => labels.Rotation(45))
+                                                        .MajorGridLines(lines => lines.Visible(false))
+
+                                                        .Line(line => line.Visible(false))
+
+                                                        )
+                                                        .ValueAxis(axis => axis.Numeric()
+
+                                                        .Labels(labels => labels
+                                                        .Format("{0:N0}")
+                                                        //.Rotation(0)
+                                                        )
+                                                        // .MajorUnit(1000)
+
+                                                        .Line(line => line.Visible(false))
+                                                        )
+                                                        .RenderAs(RenderingMode.Canvas)
+                                                        .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Format("{0:N0}")
+                                                        )
+                                                        .ToClientTemplate()
+                                                        )
+        </script>
+
+        <script id="leavebydivisionOv" type="text/x-kendo-template">
+            @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.DivisionCountList>()
+                                                                    .Name("leaveDivisionOv")
+                                                                .Title("")
+
+                                                                .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                )
+                                                                .ChartArea(chartArea => chartArea
+                                                                .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                    .DataSource(ds => ds.Read(read => read.Action("GetLeaveDivision", "MISDashBoard").Data("getSalPeriod")))
+                                                                .Series(series =>
+                                                                {
+                                                                    series.Column(model => model.total).Name("Division").CategoryField("shrtName").Color("\\#004e64")
+                                                                     .Tooltip(tooltip => tooltip.
+                                                                                                         Template("\\#= (dataItem.division)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+
+                                                                })
+                                                        .CategoryAxis(axis => axis
+                                                        // .Labels(labels => labels.Rotation(45))
+                                                        .MajorGridLines(lines => lines.Visible(false))
+
+                                                        .Line(line => line.Visible(false))
+
+                                                        )
+                                                        .ValueAxis(axis => axis.Numeric()
+
+                                                        .Labels(labels => labels
+                                                        .Format("{0:N0}")
+                                                        //.Rotation(0)
+                                                        )
+                                                        // .MajorUnit(1000)
+
+                                                        .Line(line => line.Visible(false))
+                                                        )
+                                                        .RenderAs(RenderingMode.Canvas)
+                                                        .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Format("{0:N0}")
+                                                        )
+                                                        .ToClientTemplate()
+                                                        )
+        </script>
+
+        <script id="leavebycategoryOv" type="text/x-kendo-template">
+            @(
+                            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.CategoryCountList>()
+                                                                        .Name("leaveCatOv")
+                                                                    .Title("")
+
+                                                                    .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                    .Legend(legend => legend
+                                                                   .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                    )
+                                                                    .ChartArea(chartArea => chartArea
+                                                                    .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                        .DataSource(ds => ds.Read(read => read.Action("GetLeaveCategory", "MISDashBoard").Data("getSalPeriod")))
+                                                                    .Series(series =>
+                                                                    {
+                                                                        series.Column(model => model.total).Name("Category").CategoryField("shrtName").Color("\\#ffe066")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                                             Template("\\#= (dataItem.category)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+
+                                                                    })
+                                                            .CategoryAxis(axis => axis
+                                                            // .Labels(labels => labels.Rotation(45))
+                                                            .MajorGridLines(lines => lines.Visible(false))
+
+                                                            .Line(line => line.Visible(false))
+
+                                                            )
+                                                            .ValueAxis(axis => axis.Numeric()
+
+                                                            .Labels(labels => labels
+                                                            .Format("{0:N0}")
+                                                            //.Rotation(0)
+                                                            )
+                                                            // .MajorUnit(1000)
+
+                                                            .Line(line => line.Visible(false))
+                                                            )
+                                                            .RenderAs(RenderingMode.Canvas)
+                                                            .Tooltip(tooltip => tooltip
+                                                            .Visible(true)
+                                                            .Format("{0:N0}")
+                                                            )
+                                                            .ToClientTemplate()
+                                                            )
+        </script>
+
+        <script id="leavebyregionOv" type="text/x-kendo-template">
+            @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.RegionCountList>()
+                                                                            .Name("leaveRegOv")
+                                                                        .Title("")
+
+                                                                        .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                        .Legend(legend => legend
+                                                                      .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                        )
+                                                                        .ChartArea(chartArea => chartArea
+                                                                        .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                            .DataSource(ds => ds.Read(read => read.Action("GetLeaveRegion", "MISDashBoard").Data("getSalPeriod")))
+                                                                        .Series(series =>
+                                                                        {
+                                                                            series.Column(model => model.total).Name("Region").CategoryField("shrtName").Color("\\#0fa3b1")
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                                                 Template("\\#= (dataItem.region)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+
+                                                                        })
+                                                                .CategoryAxis(axis => axis
+                                                                // .Labels(labels => labels.Rotation(45))
+                                                                .MajorGridLines(lines => lines.Visible(false))
+
+                                                                .Line(line => line.Visible(false))
+
+                                                                )
+                                                                .ValueAxis(axis => axis.Numeric()
+
+                                                                .Labels(labels => labels
+                                                                .Format("{0:N0}")
+                                                                //.Rotation(0)
+                                                                )
+                                                                // .MajorUnit(1000)
+
+                                                                .Line(line => line.Visible(false))
+                                                                )
+                                                                .RenderAs(RenderingMode.Canvas)
+                                                                .Tooltip(tooltip => tooltip
+                                                                .Visible(true)
+                                                                .Format("{0:N0}")
+                                                                )
+                                                                .ToClientTemplate()
+                                                                )
+        </script>
+
+        <script id="leavebygradeOv" type="text/x-kendo-template">
+            @(
+                                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GradeCountList>()
+                                                                                .Name("leaveGradeOv")
+                                                                            .Title("")
+
+                                                                            .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                            .Legend(legend => legend
+                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                            )
+                                                                            .ChartArea(chartArea => chartArea
+                                                                            .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                .DataSource(ds => ds.Read(read => read.Action("GetLeaveGrade", "MISDashBoard").Data("getSalPeriod")))
+                                                                            .Series(series =>
+                                                                            {
+                                                                                series.Column(model => model.total).Name("Grade").CategoryField("shrtName").Color("\\#41ead4")
+                                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                                     Template("\\#= (dataItem.grade)\\# - \\#= (dataItem.total)\\# ").Visible(true));
+
+
+
+                                                                            })
+                                                                    .CategoryAxis(axis => axis
+                                                                    // .Labels(labels => labels.Rotation(45))
+                                                                    .MajorGridLines(lines => lines.Visible(false))
+
+                                                                    .Line(line => line.Visible(false))
+
+                                                                    )
+                                                                    .ValueAxis(axis => axis.Numeric()
+
+                                                                    .Labels(labels => labels
+                                                                    .Format("{0:N0}")
+                                                                    //.Rotation(0)
+                                                                    )
+                                                                    // .MajorUnit(1000)
+
+                                                                    .Line(line => line.Visible(false))
+                                                                    )
+                                                                    .RenderAs(RenderingMode.Canvas)
+                                                                    .Tooltip(tooltip => tooltip
+                                                                    .Visible(true)
+                                                                    .Format("{0:N0}")
+                                                                    )
+                                                                    .ToClientTemplate()
+                                                                    )
+        </script>
+
+    
+
+        
+
+    </div>
+</div>
+<div id="monthsDiv" class="s_slip_container">
+
+
+    @await Html.PartialAsync("~/Areas/MIS/Views/MISDashBoard/_Months.cshtml", Model)
+
+</div>
+
+
+
+
+
+
+
+<div class="row">
+
+
+    <div class="col-xl-4 col-md-4">
+
+        <!------------- search emplyee here ------------------>
+        <!------------- search emplyee here ------------------>
+
+    </div>
+    <div class="col-xl-8 col-md-8">
+    </div>
+</div>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("170px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Leave Type")).BodyTemplateId("catagory").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Days")).BodyTemplateId("leavebyWeek").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Department Wise")).BodyTemplateId("leavebydepartmentOv").ColSpan(4).RowSpan(2);
+
+            c.Add().Header(h => h.Text("Leave Location Wise")).BodyTemplateId("leavebylocationOv").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Division Wise")).BodyTemplateId("leavebydivisionOv").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Category Wise")).BodyTemplateId("leavebycategoryOv").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Grade Wise")).BodyTemplateId("leavebygradeOv").ColSpan(6).RowSpan(2);
+            c.Add().Header(h => h.Text("Leave Region Wise")).BodyTemplateId("leavebyregionOv").ColSpan(6).RowSpan(2);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )
+
+
+
+

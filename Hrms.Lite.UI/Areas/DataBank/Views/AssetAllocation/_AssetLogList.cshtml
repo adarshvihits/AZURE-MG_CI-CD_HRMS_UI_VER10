@@ -1,0 +1,48 @@
+﻿@model IList<Hrms.Lite.Shared.DataBank.DTO.AssetLog>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table asset-log-details vertical-scroll-100">
+    <table class="layout-ihits">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">SlNo</th>
+                <th scope="col">
+                    Code
+
+                </th>
+                <th scope="col">Category</th>
+                <th scope="col">Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Issue Date</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Return Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @if (Model != null && Model.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Count; i++)
+                {
+            <tr>
+                <td data-label="SlNo">@(i + 1)</td>
+                <td data-label="Code">
+                    @Html.HiddenFor(Model => Model[i].AssetAllocationGI)
+                    <a id="EditAssetAllocation" class="" onclick="onAssetLogClick('@Model[i].AssetAllocationGI')">@Model[i].Asset.AssetCode</a>
+                    @*<div id="assetlog" class="hide">
+                @await Html.PartialAsync("_AssetLog", Model)
+            </div>*@
+
+                </td>
+                <td data-label="Category">@Model[i].Asset.AssetCategory.Name</td>
+                <td data-label="Name">@Model[i].Asset.AssetName</td>
+                <td data-label="Status">@Model[i].Asset.Status</td>
+                <td data-label="Issue Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}",Model[i].GivenDate))</td>
+                <td data-label="Due Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model[i].ReturnDate))</td>               
+                <td data-label="Return Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model[i].ActualReturnDate == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model[i].ActualReturnDate))</td>
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

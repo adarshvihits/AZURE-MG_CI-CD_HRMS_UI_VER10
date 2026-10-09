@@ -1,0 +1,148 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.OnboardingChecklistReport
+
+<script src="~/scripts/DataBank/Reports/onboardingChecklistReport.js"></script>
+<script src="~/js/settings.js"></script>
+<style>
+
+    search-slider-inner1 .select-option .fa-search::before {
+        content: '';
+        display: block;
+        width: 20px;
+        background: url(../images/icons/Search_icon.svg);
+        border: none;
+        height: 20px;
+        background-repeat: no-repeat;
+        z-index: 100 !important;
+        position: absolute !important;
+    }
+
+</style>
+<script>
+    searchClick = 0;
+    function onSearchClick() {
+        debugger;
+        if (searchClick == 0) {
+            searchClick = 1;
+            $('.dataTableSearchPopup').addClass('field-width-big');
+            /*CursorFocusOnSearch();*/
+        }
+        else {
+            searchClick = 0;
+            $('.dataTableSearchPopup').removeClass('field-width-big');
+        }
+    }
+
+
+    $(document).ready(function () {
+        $('.search-slider-inner').click(function () {
+
+            $('.pop-up').val('');
+            $('.pop-up').focus();
+            dataTable.search('').draw();
+        });
+    });
+
+
+</script>
+
+<div class="row" style="padding:5px 16px;">
+    @Html.HiddenFor(Model => Model.EmployeeCode)
+    <div class="col-md-3">
+        <div class="form-group">
+
+            <label class="view-title">Employee Name & ID </label>
+            <div class="view-details">@Model.EmployeeNameID</div>
+
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+
+            <label class="view-title">Verified User</label>
+            <div class="view-details">@Model.UserEmpNameID</div>
+
+
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="form-group">
+
+            <label class="view-title">Verified Date</label>
+            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VerificationDate))</div>
+
+        </div>
+    </div>
+
+    <div class="col-md-3 d-flex justify-content-end">
+
+        <div class="tab-items select-option">
+
+
+
+            <div class="sraech-slider" style=" margin-top: 0px;">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search" onclick="onSearchClick()"></i>
+                </div>
+                <input type="text" id="searchList" class="form-control form-control-sm pop-up dataTableSearchPopup" 
+                       placeholder="Search by Item" onkeyup="searchRows()">
+            </div>
+
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+               data-bs-original-title="Export to Excel" onclick="ItemDetailsExportToExcel()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+    </div>
+    <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table checklist_details  vertical-scroll-200">
+        @Html.HiddenFor(m => m.OnboardingChecklistDetails.Count)
+        @Html.HiddenFor(m => m.EmployeeCode)
+        <table id="ChecklistDetailsTable">
+
+            <thead>
+                <tr class="table-light">
+
+                    <th scope="col">Sl.No.</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.OnboardingChecklistDetails != null && Model.OnboardingChecklistDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.OnboardingChecklistDetails.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Sl.No.">@Model.OnboardingChecklistDetails[i].SlNo</td>
+                            <td data-label="Item">@Model.OnboardingChecklistDetails[i].Item</td>
+                            <td data-label="Type">@Model.OnboardingChecklistDetails[i].Type</td>
+                            <td data-label="Status">@Model.OnboardingChecklistDetails[i].Status</td>
+                            <td data-label="Remarks">@Model.OnboardingChecklistDetails[i].Remarks</td>
+                        </tr>
+
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+
+        </table>
+    </div>
+    </div>
+

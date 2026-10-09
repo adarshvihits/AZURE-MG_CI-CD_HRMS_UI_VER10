@@ -1,0 +1,208 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ResignationTracker
+
+
+    <div id="applicant" class="slider-forms slider-forms-open TrackerSlider">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('TrackerSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4 class="mb-4">Resignation Tracking</h4>
+
+
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="image-input image-input-outline image-input-circle float-right"
+                                 id="kt_image_4"
+                                 style="background-image: url(@Model.Details.EmployeeAbsoluteUri) ">
+                                <div class="image-input-wrapper">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10 pl-7">
+                            <div class="row">
+
+                                <div class="flex-grow-1">
+                                    <!--begin::Title-->
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <div class="d-flex mr-3 header-profile-name">
+                                            <span class="">
+                                                @Model.Details.EmployeeName
+                                            </span>
+                                            @*<span>
+                                        (  @Model.Details.EmployeeID
+                                        )
+                                    </span>*@
+
+                                        </div>
+
+                                    </div>
+
+                                    <!--end::Title-->
+                                    <!--begin::Content-->
+                                    <div class="d-flex flex-wrap justify-content-between">
+                                        <div class="d-flex flex-column flex-grow-1 pr-8">
+                                            <div class="d-flex flex-wrap mb-1">
+                                                <span data-bs-toggle="tooltip"
+                                                      data-bs-original-title="Designation"
+                                                      class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                    <i class="fas fa-briefcase icon-nm mr-2"></i>@Model.Details.Designation
+                                                </span>
+                                                <span data-bs-toggle="tooltip"
+                                                      data-bs-original-title="Department"
+                                                      class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                    <i class="fas fa-network-wired icon-nm mr-2"></i>@Model.Details.Department
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+            </div>
+
+            <div class="add-padding">
+
+                <!----- stepper start here --->
+                <div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Email
+                                    ID
+                                </label>
+                                <div class="view-details">
+                                    @Model.Details.MailID
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Phone Number
+                                </label>
+                                <div class="view-details">
+                                    @Model.Details.Phone
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Tracker != null && Model.Tracker.Count > 0)
+                    {
+                        for (int i = Model.Tracker.Count - 1; i >= 0; i--)
+                        {
+                            if (Model.Tracker[i].FinalStatus == "Pending")
+                            {
+
+                                <div class="step">
+                                    <div class="v-stepper">
+                                        <div class="circle">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content">
+                                        <div class="row-outer">
+                                            <label class="view-title">
+                                                @Model.Tracker[i].Stage
+
+                                            </label>
+
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].EntryDate)) @Model.Tracker[i].ResignationStatus
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+
+                            else if (Model.Tracker[i].FinalStatus == "Rejected")
+                            {
+                                <div class="step active rejected">
+                                    <div class="v-stepper">
+                                        <div class="circle"><i class="icon-xl fas fa-times icon_reject"></i></div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content">
+                                        <div class="row-outer">
+                                            <label class="view-title">@Model.Tracker[i].Stage</label>
+
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].EntryDate)), @Model.Tracker[i].ResignationStatus
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="step active completed">
+                                    <div class="v-stepper">
+                                        <div class="circle">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content ">
+                                        <div class="row-outer">
+
+                                            <label class="view-title">
+                                                @Model.Tracker[i].Stage
+                                            </label>
+
+
+                                            @if (Model.Tracker[i].ResignationStatus == "Resigned" || ((Model.Tracker[i].EntryDate != null && Model.Tracker[i].ResignationStatus == "")))
+                                            {
+                                                <div class="view-details">
+
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].EntryDate))
+                                                </div>
+                                            }
+                                            else if (Model.Tracker[i].EntryDate == null)
+                                            {
+                                                <div class="view-details">
+
+                                                    @Model.Tracker[i].ResignationStatus
+                                                </div>
+                                            }
+
+                                            else
+                                            {
+                                                <div class="view-details">
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].EntryDate)), @Model.Tracker[i].ResignationStatus
+
+                                                </div>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+        </div>

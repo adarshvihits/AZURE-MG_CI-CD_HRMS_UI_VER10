@@ -1,0 +1,88 @@
+﻿
+@model Hrms.Lite.Shared.Master.VersionUpdate
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table VersionUpdate-list pt-1 ">
+    @Html.HiddenFor(m => m.VersionUpdateList.Count)
+    <table id="VersionUpdateTable" class=" common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">SlNo</th>
+                <th scope="col">Module</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.VersionUpdateList != null && Model.VersionUpdateList.Count > 0)
+                {
+                    for (int i = 0; i < Model.VersionUpdateList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+                            <td data-label="SlNo">@Model.VersionUpdateList[i].SlNo</td>
+
+                            <td data-label="Module">@Model.VersionUpdateList[i].Module.Name</td>
+                            <td data-label="Type">@Model.VersionUpdateList[i].Type.Name</td>
+                            <td data-label="Description">@Model.VersionUpdateList[i].Description</td>
+                            <td data-label="Actions">
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit" id="editskilltype"
+                                       type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.VersionUpdateList[i].GI',@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit" id="editskilltype"
+                                       type="button"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.VersionUpdateList[i].GI',@i);
+                                       swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEdit');});">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteskilltype" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('DELETE','@Model.VersionUpdateList[i].GI',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteskilltype" type="button"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('DELETE', '@Model.VersionUpdateList[i].GI',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

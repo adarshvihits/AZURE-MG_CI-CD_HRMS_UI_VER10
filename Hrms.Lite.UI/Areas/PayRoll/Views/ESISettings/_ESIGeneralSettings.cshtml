@@ -1,0 +1,62 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ESISettings
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "esiGeneralSettings" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table mb-5 esisetting-popup"style="padding:10px;">
+        <table>
+            <thead>
+                <tr class="table-light">
+                    <th scope="col"></th>
+
+                    <th scope="col">Settings Parameter</th>
+                    <th scope="col">Value</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ESIGeneralSettings != null && Model.ESIGeneralSettings.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ESIGeneralSettings.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="">@(i+1)</td>
+
+                            <td data-label="Settings Parameter">
+                                @Html.HiddenFor(m => m.ESIGeneralSettings[i].ParameterCode)
+                                @Html.HiddenFor(m => m.ESIDeduction.Code)
+                                @Model.ESIGeneralSettings[i].ParameterName
+                            </td>
+
+                            <td data-label="Value">
+
+                                <div class="form-group">
+
+                                    @*<input type="text" class="form-control form-control-sm" placeholder="3.67">*@
+                                    @Html.TextBoxFor(m => m.ESIGeneralSettings[i].Value, new { @class = "form-control form-control-sm", @placeholder = "Value", @onkeypress = "return onlyAmount(event)" })
+                                </div>
+                            </td>
+
+
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 10px;">
+
+        <div class="col-md-12 align-right mb-3">
+
+            <a type="button" class="btn btn-default  mobile-full-width" onclick="ESIGeneralSettingsSave()">
+                Save
+            </a>
+        </div>
+
+
+    </div>
+}

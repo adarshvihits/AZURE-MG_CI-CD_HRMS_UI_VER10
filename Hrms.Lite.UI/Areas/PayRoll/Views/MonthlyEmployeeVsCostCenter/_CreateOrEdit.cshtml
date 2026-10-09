@@ -1,0 +1,152 @@
+﻿@model Hrms.Lite.Shared.PayRoll.MonthlyEmployeeVsCostCenter
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+         var count = $('#CostCenterTable').val();
+        var tableData = document.getElementById("CostCenterTable");
+        var Tablerows = tableData.getElementsByTagName("tr");
+
+        for (var k = 0; k < (Tablerows.length); k++) {
+
+            if ($('#CostCenterList_' + k + '__Applicability').is(':checked') == false) {
+                $('#CostCenterList_' + k + '__Percentage').attr("disabled", true);
+            }
+            else             
+            {
+                $('#CostCenterList_' + k + '__Percentage').attr("disabled", false);
+            }
+        }   
+    });
+
+    </script>>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "EmployeeVsCostCenterSave" }))
+{
+    @Html.HiddenFor(model => Model.EmployeeCode)
+    @Html.HiddenFor(model => Model.Month.Code)
+    <div id="" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4 class="mb-4">Employee vs Cost Center</h4>
+            <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+
+
+            <div class="">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                               Month
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => model.Month.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ihits-table tab=le-border w-100 hover-color odd-even vertical-scroll-150">
+                        <table id="CostCenterTable">
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col" style="width:50%;">Cost Center</th>
+                                    <th scope="col">Applicability</th>
+                                    <th scope="col">%</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CostCenterList != null && Model.CostCenterList.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.CostCenterList.Count; i++)
+                                    {
+                                        <tr >
+                                            <td data-label="Particular" style="width:50%;">
+                                                @Html.HiddenFor(m => m.CostCenterList[i].CostCenterCode)
+                                            
+                                                @Model.CostCenterList[i].CostCenter
+                                            </td>
+                                            <td data-label="Applicability">
+                                                <div class="checkbox-inline justify-content-center">
+                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                       
+                                                        @Html.CheckBoxFor(m => m.CostCenterList[i].Applicability, new { @class = "applCheckbox", @onclick = "checkBoxChange(" + i + ")" })
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td data-label="%">
+                                            
+                                                @Html.TextBoxFor(m => m.CostCenterList[i].Percentage, new { @class = "form-control form-control-sm", @placeholder = "",
+                                               onkeypress = "return isNumberKey(event)"})
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed ">
+
+                <div class="col-md-12 align-right">
+
+                    <button type="button" class="btn btn-default  mobile-full-width" onclick="Save('Save')">
+                        Save
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+}
+
+
+<style>
+
+    .ihits-table.vertical-scroll-150 tbody {
+        height: 300px !important;
+    }
+
+.table-light > th{
+
+        padding: 6px !important;
+    
+    }
+
+    #CostCenterTable td .form-control{
+        height:25px !important;
+    }
+
+
+  
+
+  
+
+
+</style>

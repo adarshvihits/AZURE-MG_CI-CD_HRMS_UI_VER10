@@ -1,0 +1,133 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.WorkUnitTransferRequest
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+     $(document).ready(function () {
+         debugger
+
+         $('#empNameAndId').html('@Model.EmployeeHeader.EmployeeName')//Popup heading
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+
+                    $('.emp_HeaderPic').css('background-image', "url('" + '@Model.EmployeeHeader.EmployeeAbsoluteUri' + "')");
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.EmployeeHeader.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.EmployeeHeader.FileName');
+                        debugger
+                        $('.emp_HeaderPic').css('background-image', "url('" + mimeType + data + "')");
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "WrkUnitTransferReqAppOrRej" }))
+{
+
+    <div class="row mb-2 ">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="view-title">Current Work Unit</label>
+                <div class="view-details">
+                    @Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+                    @Model.CurrentWorkUnitName
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="view-title">New Work Unit</label>
+                <div class="view-details">
+                    @Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+                    @Model.NewWorkUnitName
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Effective Date</label><span class="Mandatory">*</span>
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.EffectiveDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Effective Date", @onchange = "validate(this,'EfFDate')" })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="EfFDate"></span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+        <div id="PopUpListView">
+            @await Html.PartialAsync("_PopupList")
+        </div>
+
+
+    </div>
+    <div class="row my-1">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="view-title">Remarks</label>
+                <div class="view-details">
+                    @Model.Remarks
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Approver Remarks</label>
+                @Html.TextBoxFor(m => m.ApproverRemarks, new { @class = "form-control form-control-sm",@onblur="apprRemksChange()" })
+            </div>
+            <span id="rmks"></span>
+        </div>
+
+    </div>
+   
+
+    <div class="row ">
+        <div class="col-md-12 align-right">
+            <button type="button" class="btn btn-danger  mobile-full-width" onclick="ApproveOrReject('Rejected')">
+                Reject
+            </button>
+            <button type="button" class="btn btn-default  mobile-full-width" onclick="ApproveOrReject('Approved')">
+                Approve
+            </button>
+        </div>
+    </div>
+}

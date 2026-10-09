@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.SkillMatrix
+<style>
+    .k-grid-content table thead tr th:nth-child(1),
+    .k-grid-content table tbody tr td:nth-child(1) {
+        text-align: center;
+    }
+</style>
+
+<script>
+
+
+ 
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+        var tabIndex = 0;
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+
+
+        var skill = $('#skills').val();
+
+        var rating = $('#rating').val();
+
+        temp["searchValue"] = searchValue;
+
+
+        return { filter1: temp, skill: skill,rating:rating };
+    }
+</script>
+
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+@(
+Html.Kendo().Grid<Hrms.Lite.Shared.DataBank.Reports.SkillMatrixEmployee_List>()
+            .Name("skillGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.Employeeid).Visible(false);
+                columns.Bound(e => e.EmployeeName);
+                columns.Bound(e => e.YOS);
+                columns.Bound(e => e.Designation);
+                columns.Bound(e => e.Department);
+                columns.Bound(e => e.Location);
+                columns.Bound(e => e.Skill);
+                columns.Bound(e => e.Rating);
+            })
+  .Pageable(pager => pager.Numeric(true).PreviousNext(true).Info(true).PageSizes(new[] { 10, 25 }).ButtonCount(5))
+
+            .DataSource(dataSource => dataSource
+                .Ajax()
+               
+                        .Read(read => read.Action("GetList", "SkillMatrixEmployeeList").Data("employeeParam"))
+            )
+             .Scrollable().HtmlAttributes(new { style = "height:330px;" })
+        //  .ToClientTemplate()
+        )
+
+<div style="padding-top: 11px; display:flex; justify-content:flex-end;">
+
+
+</div>
+

@@ -1,0 +1,164 @@
+﻿@model Hrms.Lite.Shared.Admin.DocumentCategory
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/scripts/Admin/documentCategory.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Create", "DocumentCategory", FormMethod.Post, new { @id = "documentCategorySave" }))
+{
+    @Html.HiddenFor(model => Model.Mode)
+    @Html.HiddenFor(model => Model.GI)
+    <div id="addDocCategory" class="slider-forms slider-forms-open documentCategorySaveclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('documentCategorySaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Document Category
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DCName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'DocumentCategoryName')", maxlength = "120" })
+                            <span id="DocumentCategoryName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DCShortName", @placeholder = "Short Name", @onblur = "validate(this,'DocumentCategoryShortName')", maxlength = "120" })
+                            <span id="DocumentCategoryShortName"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row my-3">
+
+
+                    <div class="col-md-12 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('DocumentCategory','@Model.Code')">
+
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "ActiveinactivedocCat" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+
+                            <div> Renewal Date</div>
+
+                            <div class="checkbox-inline" style="margin-left:10px;">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.RenewalDateApplicable)
+
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>
+                                    Description:
+                                    <span class="Mandatory">*</span>
+                                </label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm Description", @placeholder = "Description", @onchange = "validate(this,'Description')", maxlength = "120" })
+                                <span id="Description"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row my-3">
+                        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table document_categoryparameter_lists">
+                            @Html.HiddenFor(Model => Model.ParameterList.Count)
+
+                            <table id="parameterlist" class="common-table">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">Parameters</th>
+                                        <th scope="col">Applicability</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ParameterList != null && Model.ParameterList.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.ParameterList.Count; i++)
+                                        {
+                                            @Html.HiddenFor(m => m.ParameterList[i].ParameterCode)
+
+                                            <tr>
+                                                <td data-label="Parameter">@Model.ParameterList[i].ParameterName</td>
+                                                <td data-label="Y/N">
+                                                    <div class="checkbox-inline">
+                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                            @Html.CheckBoxFor(m => m.ParameterList[i].Applicable)
+
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            @if (Model.Mode == "Create")
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DocCategorySave('Save')">
+                                    Save
+                                </button>
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DocCategorySave('Modify')">
+                                    Modify
+                                </button>
+
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+}

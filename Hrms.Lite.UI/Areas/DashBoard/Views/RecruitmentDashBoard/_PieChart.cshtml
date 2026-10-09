@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DashBoard.RecruitmentDashBoardChartList>
+@using Kendo.Mvc.UI
+
+
+<style>
+
+   /* .wide p {
+        display: none;
+    }*/
+
+
+</style>
+@*<script>
+    $(document).ready(function () {
+        $('canvas').css("width", "100%");
+        $('canvas').css("height", "100%");
+        $('canvas').css("object-fit", "cover");
+    });
+</script>*@
+<div class="demo-section wide">
+
+    @(Html.Kendo().Chart(Model)
+        .Name("OpenPosition")       
+        .HtmlAttributes(new { style = "width: 100%; height: 400px;" })
+        .ChartArea(chartArea => chartArea
+            .Background("transparent"))
+        .Title(title => title
+            .Text("")
+            .Position(ChartTitlePosition.Bottom)
+        )
+        .Legend(legend => legend
+            .Visible(false).Position(ChartLegendPosition.Right))
+        .Events(events =>
+        {
+            events.LegendItemClick("function(e) { e.preventDefault(); }");
+        })
+        .SeriesDefaults(series =>
+            series.Pie().StartAngle(150).AutoFit(true)
+
+        )
+        .Series(series =>
+        {
+            series.Pie(m => m.Count, m => m.Name);
+
+            //series.Pie(new dynamic[] {
+            //    new { category = Model.Today_Check_In_Time_Status[0].Type, value = Model.Today_Check_In_Time_Status[0].count, color = "#36B9EA" },
+            //    new { category = Model.Today_Check_In_Time_Status[1].Type, value = Model.Today_Check_In_Time_Status[1].count, color = "#FB337B" },
+            //    new { category = Model.Today_Check_In_Time_Status[2].Type, value = Model.Today_Check_In_Time_Status[2].count, color = "#44DABE" },
+            //    new { category = Model.Today_Check_In_Time_Status[3].Type, value = Model.Today_Check_In_Time_Status[3].count, color = "#FCC103" },
+            //});
+
+
+        })
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Template("#= category # : #= value #")
+        ).RenderAs(RenderingMode.Canvas)
+
+    )
+
+
+
+
+</div>
+
+
+@*<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <style>
+        #chartdiv {
+            width: 100%;
+
+        }
+    </style>
+
+
+
+    <script>
+
+        var chart = am4core.create("chartdiv", am4charts.PieChart);
+        debugger
+        chart.data = @Html.Raw(ViewBag.Pie);
+
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "Count";
+        pieSeries.dataFields.category = "Name";
+
+        pieSeries.labels.template.disabled = true;
+        pieSeries.ticks.template.disabled = true;
+
+    </script>
+
+    <div id="chartdiv">
+
+    </div>*@

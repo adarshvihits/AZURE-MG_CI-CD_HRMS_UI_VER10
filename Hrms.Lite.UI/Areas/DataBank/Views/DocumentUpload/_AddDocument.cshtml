@@ -1,0 +1,84 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+    <script>
+        $(document).ready(function () {
+            debugger;
+            moveCursorToEnd('SliderDocumentName');
+            $('#docTypes').html();
+        });
+    </script>
+    <script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex",@id="otherDocumentsSave", enctype = "multipart/form-data" }))
+{
+    <div id="addNewDocument" class="slider-forms slider-forms-open addnewDoc">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('addnewDoc')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Other Documents</h4>
+            @Html.HiddenFor(m => m.EmployeeGI)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Name</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.SliderDocumentName, new { @class = "form-control form-control-sm", @placeholder = "Document Name" , @onblur = "validate(this,'DocName')",@maxlength = 120 })
+                        <span id="DocName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Type</label>
+                        @Html.DropDownListFor(m => m.SliderDocument.Code, (SelectList)ViewBag.Document, "--Select Document Type--", new { @class = "form-control form-control-sm", @onchange = "onDocumentChange(this)" })
+                        <h4><span id="docTypes"></span></h4>
+                        <span id="DocType"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                       
+                        @Html.TextAreaFor(m => m.SliderDescription, new { @class = "form-control form-control-sm", @placeholder = "Description",@maxlength = 250 })
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row my-2">
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, jpg, jpeg, png and bmp formats are allowed, File size less than 1 MB.">
+                            <div class="small-btn-group">
+
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                            </div>
+                          
+                            @Html.TextBoxFor(m => m.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)", @title = "" })
+
+                        </div>
+
+
+                    </div>
+                </div>
+               
+
+
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+
+                    <button type="button" class="btn btn-default" onclick="validateAll('Create')">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

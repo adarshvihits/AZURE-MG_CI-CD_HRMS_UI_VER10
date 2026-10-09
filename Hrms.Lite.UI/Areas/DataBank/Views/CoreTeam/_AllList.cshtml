@@ -1,0 +1,71 @@
+﻿@model Hrms.Lite.Shared.DataBank.CoreTeam
+<script src="~/js/tooltip.js"></script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "coreEmpList" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table core_team_list vertical-scroll-500">
+        @*@Html.HiddenFor(m => m.AllList.Count)*@
+
+        <table id="AllListTable">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location </th>
+                    <th scope="col">Category</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Date Of Join">DOJ</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Years Of Service">Y/S</th>
+                    <th scope="col">Actions </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TeamList != null && Model.TeamList.Count > 0)
+                {
+                    for (int i = 0; i < Model.TeamList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.TeamList[i].EmployeeID
+                                @Html.HiddenFor(m => m.TeamList[i].EmployeeCode)
+                            </td>
+                            <td>@Model.TeamList[i].EmployeeName </td>
+                            <td>@Model.TeamList[i].Designation</td>
+                            <td>@Model.TeamList[i].Department</td>
+                            <td>@Model.TeamList[i].Location</td>
+                            <td>@Model.TeamList[i].Category</td>
+                            <td> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.TeamList[i].DOJ))</td>
+                            <td>@Model.TeamList[i].YOS</td>
+                            <td data-label="">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        @Html.CheckBoxFor(m => m.TeamList[i].Applicable)@*, new { @onclick = "onChkBoxClick(this,'AllListTable')" })*@
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row card-footer-bottom-fixed align-right">
+
+
+            <div class="col-md-12">
+                <button class="btn btn-default float-right mobile-full-width" id="saveButton" type="button" onclick="onSaveClick()">
+                    Save
+                </button>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Table Setion End -->
+}

@@ -1,0 +1,48 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.WorkUnitTransferRequest
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border odd-even mobile-responsive-table work_unit_transfer_acceptance">
+    @Html.HiddenFor(m => m.ApprovalList.Count)
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Employee ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Requested Employee</th>
+                <th scope="col">Effective Date</th>
+                <th scope="col">Current Work Unit</th>
+                <th scope="col">New Work Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.ApprovalList != null && Model.ApprovalList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApprovalList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="EmployeeID">@Model.ApprovalList[i].EmployeeID</td>
+                        <td data-label="EmployeeName">
+                            <a class="" onclick="GetPopup('@Model.ApprovalList[i].EmployeeGI')">
+                                @Model.ApprovalList[i].EmployeeName
+                            </a>
+                        </td>
+                        <td data-label="Designation">@Model.ApprovalList[i].Designation</td>
+                        <td data-label="Department">@Model.ApprovalList[i].Department</td>
+                        <td data-label="Location">@Model.ApprovalList[i].Location</td>
+                        <td data-label="WorkUnit">@Model.ApprovalList[i].RequestedEmployee</td>
+                        <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ApprovalList[i].EffectiveDate))</td>
+                        <td data-label="LastTransferDate">@Model.ApprovalList[i].OldWorkUnitName</td>
+                        <td data-label="LastTransferDate">@Model.ApprovalList[i].NewWorkUnitName</td>
+
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>

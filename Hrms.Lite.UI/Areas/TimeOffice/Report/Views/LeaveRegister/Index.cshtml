@@ -1,0 +1,626 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Report.LeaveRegister
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/Report/leaveRegister.js"></script>
+
+
+<script>
+   
+</script>
+<style>
+ /*   .can-toggle {
+        --ts-width: 100px;
+        --ts-height: 36px;
+        --ts-offset: 2px;
+        --ts-font-size: 12px;
+        --ts-border-radius-ext: 4px;
+        --ts-border-radius-int: 2px;
+        --ts-color-disabled: rgba(119, 119, 119, 0.5);
+        --ts-bg-color: #848484;
+        --ts-thumb-bg-color: #fff;
+        --ts-thumb-color: #264f94;
+        --ts-thumb-color-hover: #264f94;
+        --ts-thumb-color-checked: #264f94;
+        --ts-thumb-bg-color-checked-hover: #264f94;
+        --ts-color: #fff;
+        --ts-bg-color-hover: #264f94;
+        --ts-color-hover: #fff;
+        --ts-color-checked-hover: #39ba37;
+        --ts-bg-color-checked: #264f94;
+        --ts-bg-color-checked-hover: #264f94;
+        --ts-box-shadow: 0 3px 3px;
+        position: relative;
+        display: flex;
+    }
+
+        .can-toggle *,
+        .can-toggle *:before,
+        .can-toggle *:after {
+            box-sizing: border-box;
+        }
+
+        .can-toggle input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+            .can-toggle input[type="checkbox"][disabled] ~ label {
+                pointer-events: none;
+            }
+
+                .can-toggle input[type="checkbox"][disabled] ~ label .can-toggle__switch {
+                    opacity: 0.6;
+                }
+
+            .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:before {
+                content: attr(data-unchecked);
+                left: 0;
+            }
+
+            .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
+                content: attr(data-checked);
+            }
+
+        .can-toggle label {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+            .can-toggle label .can-toggle__label-text {
+                flex: 1;
+                padding-left: 16px;
+            }
+
+            .can-toggle label .can-toggle__switch {
+                position: relative;
+            }
+
+            .can-toggle label .can-toggle__switch {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                isolation: isolate;
+            }
+
+                .can-toggle label .can-toggle__switch figure {
+                    display: flex;
+                    align-items: center;
+                    margin-inline: 0;
+                    margin-block: 0;
+                    z-index: 1;
+                }
+
+                .can-toggle label .can-toggle__switch:before {
+                    content: attr(data-checked);
+                    position: absolute;
+                    text-transform: uppercase;
+                    text-align: center;
+                }
+
+                .can-toggle label .can-toggle__switch:after {
+                    content: attr(data-unchecked);
+                    position: absolute;
+                    z-index: 0;
+                    text-transform: uppercase;
+                    text-align: center;
+                    background: var(--ts-thumb-bg-color, white);
+                    transform: translate3d(0, 0, 0);
+                }
+
+        .can-toggle input[type="checkbox"][disabled] ~ label {
+            color: var(--ts-color-disabled);
+        }
+
+        .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch,
+        .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch {
+            background-color: var(--ts-bg-color-hover);
+        }
+
+            .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch:after,
+            .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch:after {
+                color: var(--ts-thumb-color-hover, #5e5e5e);
+            }
+
+        .can-toggle input[type="checkbox"]:hover ~ label {
+            color: var(--ts-color-hover, #6a6a6a);
+        }
+
+        .can-toggle input[type="checkbox"]:checked ~ label:hover {
+            color: var(--ts-color-checked-hover, #55bc49);
+        }
+
+        .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch {
+            background-color: var(--ts-bg-color-checked, #70c767);
+        }
+
+            .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
+                color: var(--ts-thumb-color-checked, #4fb743);
+            }
+
+        .can-toggle input[type="checkbox"]:checked:focus ~ label .can-toggle__switch,
+        .can-toggle input[type="checkbox"]:checked:hover ~ label .can-toggle__switch {
+            background-color: var(--ts-bg-color-checked-hover, #5fc054);
+        }
+
+            .can-toggle
+            input[type="checkbox"]:checked:focus ~ label
+            .can-toggle__switch:after,
+            .can-toggle
+            input[type="checkbox"]:checked:hover ~ label
+            .can-toggle__switch:after {
+                color: var(--ts-thumb-bg-color-checked-hover, #47a43d);
+            }
+
+        .can-toggle label .can-toggle__switch {
+            transition: background-color 0.3s cubic-bezier(0, 1, 0.5, 1);
+            background: #264f94;
+        }
+
+            .can-toggle label .can-toggle__switch:before {
+                color: var(--ts-color, rgba(255, 255, 255, 0.5));
+            }
+
+            .can-toggle label .can-toggle__switch:after {
+                transition: transform 0.3s cubic-bezier(0, 1, 0.5, 1);
+                color: var(--ts-thumb-color, #777);
+            }
+
+        .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch:after,
+        .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch:after {
+            box-shadow: var(--ts-box-shadow, 0 3px 3px) rgba(0, 0, 0, 0.4);
+        }
+
+        .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
+            transform: translate3d(calc(var(--ts-width) + var(--ts-offset) / 2), 0, 0);
+        }
+
+        .can-toggle
+        input[type="checkbox"]:checked:focus ~ label
+        .can-toggle__switch:after,
+        .can-toggle
+        input[type="checkbox"]:checked:hover ~ label
+        .can-toggle__switch:after {
+            box-shadow: var(--ts-box-shadow, 0 3px 3px) rgba(0, 0, 0, 0.4);
+        }
+
+        .can-toggle label {
+            font-size: 14px;
+        }
+
+            .can-toggle label .can-toggle__switch {
+                height: var(--ts-height);
+                flex: 0 0 calc(var(--ts-width) * 2 + var(--ts-offset) * 2);
+                border-radius: var(--ts-border-radius-ext);
+            }
+
+                .can-toggle label .can-toggle__switch:before {
+                    left: calc(var(--ts-width) + var(--ts-offset) / 2);
+                    font-size: var(--ts-font-size);
+                    line-height: var(--ts-height);
+                    width: calc(var(--ts-width) + var(--ts-offset) / 2);
+                }
+
+                .can-toggle label .can-toggle__switch:after {
+                    left: var(--ts-offset);
+                    border-radius: var(--ts-border-radius-int);
+                    width:65px;
+                    line-height: calc(var(--ts-height) - calc(var(--ts-offset) * 2));
+                    font-size: var(--ts-font-size);
+                    height: calc(100% - calc(var(--ts-offset) * 2));
+                }
+
+                .can-toggle label .can-toggle__switch:hover:after {
+                    box-shadow: var(--ts-box-shadow, 0 3px 3px) rgba(0, 0, 0, 0.4);
+                }
+
+        .can-toggle.can-toggle--size-small label {
+            font-size: 13px;
+        }
+
+        .can-toggle.can-toggle--size-small {
+            --ts-width: 45px;
+            --ts-offset: 1px;
+            --ts-height: 28px;
+            --font-size: 10px;
+            --ts-border-radius-ext: 2px;
+            --ts-border-radius-int: 1px;
+            --ts-box-shadow: 0 2px 2px;
+        }
+
+        .can-toggle.can-toggle--size-large {
+            --ts-width: 65px;
+            --ts-offset: 2px;
+            --ts-height: 50px;
+            --font-size: 14px;
+            --ts-border-radius-ext: 4px;
+            --ts-border-radius-int: 2px;
+            --ts-bg-color: #c14b81;
+            --ts-color: #fff;
+            --ts-thumb-color: #b53e74;
+            --ts-bg-color-hover: #b53e74;
+            --ts-thumb-color-hover: #a23768;
+            --ts-color-hover: #8f315c;
+            --ts-color-checked-hover: #39916a;
+            --ts-bg-color-checked: #44ae7f;
+            --ts-thumb-color-checked: #2f7757;
+            --ts-bg-color-checked-hover: #3d9c72;
+            --ts-box-shadow: 0 4px 4px;
+        }
+
+            .can-toggle.can-toggle--size-large label {
+                font-size: 14px;
+            }
+
+        .can-toggle.can-toggle--rounded {
+            --ts-offset: 2px;
+            --ts-height: calc(20px + 3 * var(--ts-offset));
+            --ts-width: 65px;
+            --ts-font-size: 11px;
+            --ts-border-radius-ext: 64px;
+            --ts-border-radius-int: 64px;
+            --ts-box-shadow: 0 4px 4px;
+        }
+
+        .can-toggle.can-toggle--pill label {
+            font-size: 13px;
+        }
+
+        .can-toggle.can-toggle--pill {
+            --icon-w: 25px;
+            --icon-h: 25px;
+            --ts-width: 60px;
+            --ts-offset: 2px;
+            --ts-height: 20px;
+            --ts-font-size: 13px;
+            --ts-border-radius-ext: 60px;
+            --ts-border-radius-int: 60px;
+            --ts-color-disabled: rgba(68, 68, 68, 0.5);
+            --ts-bg-color: #607ceb;
+            --ts-color: rgb(30 30 108 / 72%);
+            --ts-thumb-color: #444;
+            --ts-bg-color-hover: #4d62b3;
+            --ts-thumb-color-hover: #2b2b2b;
+            --ts-color-hover: #6a6a6a;
+            --ts-color-checked-hover: #4d62b3;
+            --ts-bg-color-checked: #607ceb;
+            --ts-thumb-color-checked: #607ceb;
+            --ts-bg-color-checked-hover: #4d62b3;
+            --ts-box-shadow: 0 4px 4px;
+        }
+
+    .can-toggle__switch svg {
+        width: var(--icon-w);
+        height: var(--icon-h);
+        color: var(--ts-color);
+        }*/
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 100px;
+        height: 35px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 25px;
+            width: 55px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            padding: 5px;
+            border-radius: 50px;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+
+    .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:before {
+        content: attr(data-unchecked);
+        left: 0;
+    }
+
+
+
+
+    .onoffswitch {
+    position: relative; width: 136px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+    .onoffswitch-inner:before {
+        content: "Collapse";
+        padding-left: 10px;
+        background-color: #0068ff;
+    }
+.onoffswitch-inner:after {
+    content: "Expand";
+    padding-right: 10px;
+    background-color: red; color: #FFFFFF;
+    text-align: right;
+}
+    .onoffswitch-switch {
+        display: block;
+        width: 55px;
+        margin: 10px;
+        background: #FFFFFF;
+        position: absolute;
+        top: -6px;
+        bottom: 0;
+        right: 66px;
+        /* border: 2px solid #999999; */
+        border-radius: 20px;
+        transition: all 0.3s ease-in 0s;
+    }
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Leave Register</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Leave Register
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="form-group filter-combobox pt-2 pl-2" style="width: 140px;">
+                                <!-- <label>Leave Period</label> -->
+                                @Html.DropDownListFor(m => m.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod, "--LeavePeriod--", new { @class = "form-control form-control-sm", @onchange = "fillData()" @*@onchange = "onLeavePeriodChange('#LeavePeriod_Code','LR_LeavePeriod' )"*@})
+
+
+                                <span id="LR_LeavePeriod"></span>
+                            </div>
+
+                            <div class="tab-items border-none d-flex align-items-center pl-8">
+                                <div>
+                                   
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-success">
+                                            @Html.RadioButtonFor(m => m.BasedOn, "0", new { @onchange = "fillData()" })
+                                            <span></span>Active
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input type="radio" name="radios15">*@
+                                            @Html.RadioButtonFor(m => m.BasedOn, "1", new { @onchange = "fillData()" })
+                                            <span></span>Resigned
+                                        </label>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*  <div class="can-toggle can-toggle--rounded highs expand-data">
+            <input id="f" type="checkbox" checked>
+            <label for="f">
+                <div class="can-toggle__switch" data-checked="Expand" data-unchecked="Collapse"></div>
+
+            </label>
+        </div>*@
+
+                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="LR_Settings"
+                                 aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content popup">
+                                        <div class="modal-header" style="padding:10px">
+                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                Grid
+                                                Settings
+                                            </h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/LeaveRegister/_GridSettingsList.cshtml", Model)
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-items select-option  ">
+                                <div class="d-flex">
+
+                                    <div class="onoffswitch" style="margin-top:6px">
+                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+
+                                        @*<label class="switch">
+                        <input id="on" type="checkbox">
+                        <div class="slider"></div>
+                    </label>*@
+                                        <label class="onoffswitch-label" for="myonoffswitch">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+
+
+
+
+
+
+
+                                    @*<button type="button" class="btn btn-default btn-sm float-left" onclick="onLeavePeriodChange('LR_LeavePeriod')">Proceed</button>*@
+
+                                    <div class="button-group float-left    d-flex align-items-center">
+                                        <button data-bs-toggle="modal" data-target="#LR_Settings"
+                                                type="button" class="btn btn-default btn-sm float-left" @*onclick="POPUP()"*@>
+                                            Grid Settings
+                                        </button>
+                                    </div>
+                                    <!-- <label class="lable-left">Evaluation Period</label> -->
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+
+                                    <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                       data-bs-original-title="Export to Excel" onclick="onExportToExcelClick()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+                    <div id="leaveRegisterList">
+                        @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/LeaveRegister/_LeaveRegisterList.cshtml", Model)
+
+                    </div>
+                    <div>
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.filter)
+                    </div>
+
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->

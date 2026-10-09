@@ -1,0 +1,107 @@
+﻿@model Hrms.Lite.Shared.Master.Faq
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+        //$('#RegionTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ">
+    @Html.HiddenFor(m => m.FaqList.Count)
+    <table id="RegionTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">SoftWare</th>
+                <th scope="col">Faq Category</th>
+                <th scope="col">Question</th>
+                <th scope="col">Answer</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.FaqList != null && Model.FaqList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.FaqList.Count; i++)
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(m => m.FaqList[i].EditActive)
+                            <td data-label="Software">@Model.FaqList[i].Software</td>
+                            <td data-label="FaqCategory">@Model.FaqList[i].FaqCategory</td>
+                            <td data-label="Question">@Model.FaqList[i].Question</td>
+                            <td data-label="Answer">@Model.FaqList[i].Answer</td>
+                            <td data-label="Actions">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addFaq"
+                                           class="btn btn-icon btn-edit icon-only " onclick="onAddNewOrEditClick('MODIFY', '@Model.FaqList[i].GI', '@Model.FaqList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addFaq"
+                                           class="btn btn-icon btn-edit icon-only " onclick="onAddNewOrEditClick('MODIFY', '@Model.FaqList[i].GI', '@Model.FaqList[i].LogGI',@i);
+                                           swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#newRequestSlider');});">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <!-- delete Slider  start-->
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="id=deleteregion"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.FaqList[i].GI','@Model.FaqList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="id=deleteregion"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.FaqList[i].GI', '@Model.FaqList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+        </tbody>
+    </table>
+

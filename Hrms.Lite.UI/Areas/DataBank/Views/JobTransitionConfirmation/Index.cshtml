@@ -1,0 +1,228 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/jobTransitionConfirm.js"></script>
+
+
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Job Transition Approvals</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+
+                        Job Transition Approvals List
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+       
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+                                    
+                                    @Html.DropDownListFor(m => m.TabCode, (SelectList)ViewBag.Tabs, new { @class = "form-control form-control-sm", @onchange = "TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())" })
+                                </div>
+                            </div>
+                            <div class="col-6" id="assetFilter">
+                                <div class="form-group">
+                                    <label>Select Allowance Type</label>
+                                    @Html.DropDownListFor(m => m.Filter.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm", @onchange = "onFilterDropdownChange(this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            @for (int i = 0; i < Model.JobTransition_Tabs.Count; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    <div class="tab-items">
+                                        <span class="btn-title  all active" onclick="ontabClick('all',@Model.JobTransition_Tabs[i].Code,'@Model.JobTransition_Tabs[i].Name')">
+                                            @Model.JobTransition_Tabs[i].Name
+                                            <span class="btn-notification AllTabCount">@Model.AllTabCount</span>
+                                        </span>
+                                    </div>
+                                }
+                                if (i != 0 && Model.JobTransition_Tabs[i].Code != 1000)
+                                {
+                                    if (i <= 4)
+                                    {
+                                        <div class="tab-items high">
+                                            <span class="btn-title tab_@i" onclick="ontabClick('tab_'+@i,@Model.JobTransition_Tabs[i].Code,'@Model.JobTransition_Tabs[i].Name')">
+                                                @Model.JobTransition_Tabs[i].Name
+                                                @if (i == 1)
+                                                {
+                                                    <span class="btn-notification Tab1Count">@Model.Tab1Count</span>
+                                                }
+                                                @if (i == 2)
+                                                {
+                                                    <span class="btn-notification Tab2Count">@Model.Tab2Count</span>
+                                                }
+                                                @if (i == 3)
+                                                {
+                                                    <span class="btn-notification Tab3Count">@Model.Tab3Count</span>
+                                                }
+                                                @if (i == 4)
+                                                {
+                                                    <span class="btn-notification Tab4Count">@Model.Tab4Count</span>
+                                                }
+                                            </span>
+                                        </div>
+                                    }
+                                }
+                                else if (Model.JobTransition_Tabs[i].Code == 1000)
+                                {
+                                    <div class="tab-items low">
+                                        <span class="btn-title more" onclick="ontabClick('more',@Model.JobTransition_Tabs[i].Code,'@Model.JobTransition_Tabs[i].Name')">
+                                            @Model.JobTransition_Tabs[i].Name
+                                            <span class="btn-notification MoreCount">@Model.MoreCount</span>
+                                        </span>
+                                    </div>
+                                }
+                            }
+                            @*<div class="tab-items">
+            <span class="btn-title  all active" onclick="ontabClick('all',@Model.JobTransition_Tabs[0].Code,'@Model.JobTransition_Tabs[0].Name')">
+                @Model.JobTransition_Tabs[0].Name
+                <span class="btn-notification AllTabCount">@Model.AllTabCount</span>
+            </span>
+        </div>
+
+        <div class="tab-items high">
+            <span class="btn-title tab1" onclick="ontabClick('tab1',@Model.JobTransition_Tabs[1].Code,'@Model.JobTransition_Tabs[1].Name')">
+                @Model.JobTransition_Tabs[1].Name
+                <span class="btn-notification Tab1Count">@Model.Tab1Count</span>
+            </span>
+        </div>
+
+        <div class="tab-items medium">
+            <span class="btn-title tab2" onclick="ontabClick('tab2',@Model.JobTransition_Tabs[2].Code,'@Model.JobTransition_Tabs[2].Name')">
+                @Model.JobTransition_Tabs[2].Name
+                <span class="btn-notification Tab2Count">@Model.Tab2Count</span>
+            </span>
+        </div>
+        <div class="tab-items high">
+            <span class="btn-title tab3" onclick="ontabClick('tab3',@Model.JobTransition_Tabs[3].Code,'@Model.JobTransition_Tabs[3].Name')">
+                @Model.JobTransition_Tabs[3].Name
+                <span class="btn-notification Tab3Count">@Model.Tab3Count</span>
+            </span>
+        </div>
+
+        <div class="tab-items low">
+            <span class="btn-title tab4" onclick="ontabClick('tab4',@Model.JobTransition_Tabs[4].Code,'@Model.JobTransition_Tabs[4].Name')">
+                @Model.JobTransition_Tabs[4].Name
+                <span class="btn-notification Tab4Count">@Model.Tab4Count</span>
+            </span>
+        </div>
+        <div class="tab-items low">
+            <span class="btn-title more" onclick="ontabClick('more',@Model.JobTransition_Tabs[5].Code,'@Model.JobTransition_Tabs[5].Name')">
+                @Model.JobTransition_Tabs[5].Name
+                <span class="btn-notification MoreCount">@Model.MoreCount</span>
+            </span>
+        </div>*@
+
+
+
+
+
+
+                            <div class="tab-items select-option">
+                                <div class="form-group filter-combobox">
+                                    @Html.DropDownListFor(m => m.Filter.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm filterDropDown", @onchange = "onFilterDropdownChange(this)" })
+
+                                </div>
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel" onclick="onExportToExcelClick()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div id="jobTransition-Confirm-Approval-Pending-List">
+                        @await Html.PartialAsync("_JobTransitionConfirmList", Model)
+                    </div>
+
+
+
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.SliderFilter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

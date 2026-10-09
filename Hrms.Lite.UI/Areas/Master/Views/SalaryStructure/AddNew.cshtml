@@ -1,0 +1,819 @@
+﻿@model Hrms.Lite.Shared.Master.SalaryStructureMaster
+@{
+    ViewData["Title"] = "AddNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Master/salaryStructure.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('Name');
+         if ('@CurrentUserRoleActions.Create' == 'False')
+            DisableAllElements('#kt_content');
+    });
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "salary-structure-save" }))
+{
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Salary Band </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "SalaryStructure", new { Area = "Master" })">Salary Band List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Salary Band
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+    <!--begin::Wrapper-->
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <!--begin::Header-->
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                @Html.HiddenFor(m => m.Mode)
+
+                <div class="card card-custom height-100per footer-row-fixed pb-0">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="row my-3">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    @*<input type="text" class="form-control form-control-sm"
+                    placeholder="Name">*@
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Name", @onblur = "validate(this,'SName')" })
+                                </div>
+                                <span id="SName"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Short Name</label>
+                                    @*<input type="text" class="form-control form-control-sm"
+                    placeholder="Short Name">*@
+                                    @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", @onblur = "validate(this,'SShortName')", @maxlength = 5 })
+                                </div>
+                                <span id="SShortName"></span>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label>Salary Band Type</label>
+                                    @*<select class="form-control form-control-sm " id="exampleSelects">
+                        <option>..Select..</option>
+                        <option>Demo</option>
+                        <option>Demo</option>
+                    </select>*@
+                                    @Html.DropDownListFor(m => m.SalaryStructureType.Code, (SelectList)ViewBag.SalryStructureType, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'SType')", @onchange = "onSalaryStructureTypeChange(this)" })
+                                </div>
+                                <span id="SType"></span>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label>Wage Type</label>
+                                    @*<select class="form-control form-control-sm " id="exampleSelects">
+                        <option>..Select..</option>
+                        <option>Demo</option>
+                        <option>Demo</option>
+                    </select>*@
+                                    @Html.DropDownListFor(m => m.WageType.Code, (SelectList)ViewBag.WageType, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'SWageType')" })
+                                </div>
+
+                                <span id="SWageType"></span>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label>Wage Grade</label>
+
+                                    @Html.DropDownListFor(m => m.WageGrade.Code, (SelectList)ViewBag.WageGrade, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'SWageGrade')" })
+                                </div>
+
+                                <span id="SWageGrade"></span>
+                            </div>
+                            <div class="col-md-4" d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div>Active</div>
+                                    <label class="switch">
+                                        @Html.CheckBoxFor(m => m.Active)
+                                        <span class="slider round"></span>
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="personal-details-left mt-0">
+                                    <ul class="nav nav-tabs exittab" role="tablist">
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link active" data-bs-toggle="tab"
+                                               href="#tabs-1" role="tab">Allowance</a>
+                                        </li>
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-2"
+                                               role="tab">Deductions</a>
+                                        </li>
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-3"
+                                               role="tab">Provision And Perks</a>
+                                        </li>
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-4"
+                                               role="tab">Basic,HRA and LTA Settings</a>
+                                        </li>
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-5"
+                                               role="tab">CCA Settings</a>
+                                        </li>
+                                        <li class="nav-item exititem">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-6"
+                                               role="tab">Assured Bonus</a>
+                                        </li>
+
+                                    </ul><!-- Tab panes -->
+                                    <div class="tab-content  "
+                                         style="display: block ; position: relative; top: 5px;">
+                                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table id="allwTable">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Fixed Allowance</th>
+                                                                    <th scope="col">Applicable</th>
+                                                                    <th scope="col" class="formulaTypeCol hide">Based On</th>
+                                                                    <th scope="col" id="FAllwAmtOrPer">Amount</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.FixedAllowance != null && Model.FixedAllowance.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.FixedAllowance.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Allowance">
+                                                                                @Model.FixedAllowance[i].Name
+                                                                                @Html.HiddenFor(m => m.FixedAllowance[i].Code)
+                                                                            </td>
+                                                                            <td data-label="Applicable">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                                                                                        @Html.CheckBoxFor(m => m.FixedAllowance[i].Applicable, new { @class = "allowance_appl" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td data-label="Based On" class="formulaTypeDropdown hide">
+                                                                                @Html.DropDownListFor(m => m.FixedAllowance[i].FormulaType.Code, (SelectList)ViewBag.FormulaTyp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onFormulaTypeChange(this," + i + ")" })
+                                                                            </td>
+                                                                            <td data-label="Amount">
+                                                                                @*@if (@Model.FixedAllowance[i].Code != 4 || @Model.FixedAllowance[i].Code != 5 || @Model.FixedAllowance[i].Code != 34)*@
+                                                                                @if (@Model.FixedAllowance[i].Code != 2 && @Model.FixedAllowance[i].Code != 3 && @Model.FixedAllowance[i].Code != 34)
+
+                                                                                {
+                                                                                    @Html.TextBoxFor(m => m.FixedAllowance[i].Amount,
+                                                                                               new
+                                                                                               {
+                                                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                                                   @placeholder = "Amount/%",
+                                                                                                   @maxlength = 8,
+                                                                                                   @onkeypress = "return onlyAmount(event);"
+                                                                                               })
+                                                                                }
+                                                                                else
+                                                                                { @Html.TextBoxFor(m => m.FixedAllowance[i].Amount,
+                                                                                   new
+                                                                                   {
+                                                                                       @class = "form-control form-control-sm Fdpercent",
+                                                                                       @placeholder = "Amount/%",
+                                                                                       @maxlength = 8,
+                                                                                       @onkeypress = "return onlyAmount(event);",
+                                                                                       @readonly = "readonly"
+
+                                                                                   })}
+
+
+
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                        Your Company
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Other Applicable Allowance</th>
+                                                                    <th scope="col">Applicable</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.VariableAllowance != null && Model.VariableAllowance.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.VariableAllowance.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Variable Allowance">@Html.HiddenFor(m => m.VariableAllowance[i].Code)@Model.VariableAllowance[i].Name</td>
+                                                                            <td data-label="Applicable">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                        @*<input type="checkbox"
+                                                        name="Checkboxes16">*@
+                                                                                        @Html.CheckBoxFor(m => m.VariableAllowance[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                            </td>
+
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <!-- <new? -->
+
+
+                                        </div>
+                                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Fixed Deduction</th>
+                                                                    <th scope="col">Applicable</th>
+                                                                    <th scope="col" id="FDedAmtOrPer">Amount</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.FixedDeduction != null && Model.FixedDeduction.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.FixedDeduction.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Deduction">@Html.HiddenFor(m => m.FixedDeduction[i].Code)@Model.FixedDeduction[i].Name</td>
+                                                                            <td data-label="Applicable">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                        @*<input type="checkbox"
+                                                        name="Checkboxes16">*@
+                                                                                        @Html.CheckBoxFor(m => m.FixedDeduction[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td data-label="Amount">
+                                                                                @*<input type="text"
+                                                class="form-control form-control-sm"
+                                                placeholder="Amount">*@
+                                                                                @Html.TextBoxFor(m => m.FixedDeduction[i].Amount, new { @class = "form-control form-control-sm", @placeholder = "Amount", @maxlength = 8, @onkeypress = "return onlyAmount(event)" })
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                        Your Company
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Other Applicable Deduction</th>
+                                                                    <th scope="col">Applicable</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.VariableDeduction != null && Model.VariableDeduction.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.VariableDeduction.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Variable Deduction"> @Html.HiddenFor(m => m.VariableDeduction[i].Code)@Model.VariableDeduction[i].Name</td>
+                                                                            <td data-label="Applicable">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                        @*<input type="checkbox"
+                                                        name="Checkboxes16">*@
+                                                                                        @Html.CheckBoxFor(m => m.VariableDeduction[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                            </td>
+
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">
+                                                                        Fixed Provision & Perks
+                                                                    </th>
+                                                                    <th scope="col">Applicable</th>
+                                                                    <th scope="col" id="FProvAmtOrPer">Amount</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.FixedProvisions != null && Model.FixedProvisions.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.FixedProvisions.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Provision & Perks">@Html.HiddenFor(m => m.FixedProvisions[i].Code)@Model.FixedProvisions[i].Name</td>
+                                                                            <td data-label="Applicable">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                        @*<input type="checkbox"
+                                                        name="Checkboxes16">*@
+                                                                                        @Html.CheckBoxFor(m => m.FixedProvisions[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td data-label="Amount">
+                                                                                @*<input type="text"
+                                                class="form-control form-control-sm"
+                                                placeholder="Amount">*@
+                                                                                @Html.TextBoxFor(m => m.FixedProvisions[i].Amount, new { @class = "form-control form-control-sm", @placeholder = "Amount", @maxlength = 8, @onkeypress = "return onlyAmount(event)" })
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                    <h5><i
+                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                        Your Company
+                    </h5>
+                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">
+                                                                        Variable Provision
+                                                                        & Perks
+                                                                    </th>
+                                                                    <th scope="col">Applicable</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.VariableProvisions != null && Model.VariableProvisions.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.VariableProvisions.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="SI">@Html.HiddenFor(m => m.VariableProvisions[i].Code)@Model.VariableProvisions[i].Name</td>
+                                                                            <td data-label="Check Item">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                        @*<input type="checkbox"
+                                                        name="Checkboxes16">*@
+                                                                                        @Html.CheckBoxFor(m => m.VariableProvisions[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                            </td>
+
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane" id="tabs-4" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab">
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>Basic (in Kerala)</label>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    @Html.TextBoxFor(m => m.BasicInKerala, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "Amount",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+
+                                                                </div>
+                                                                <span id="SBasic"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>HRA For Metro (% of Basic)</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    @Html.TextBoxFor(m => m.HRAForMetro, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SHRAForMetro"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>HRA For Non Metro (% of Basic)</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    @Html.TextBoxFor(m => m.HRAForNonMetro, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SHRAForNonMetro"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>HRA For Kerala (% of Basic)</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    @Html.TextBoxFor(m => m.HRAForKerala, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SHRAForKerala"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>LTA(% of Basic)</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+
+                                                                    @Html.TextBoxFor(m => m.LTA, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SLTA"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane" id="tabs-5" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab">
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>CCA For Metro</label>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    @Html.TextBoxFor(m => m.CCAMetro, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "Amount",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+
+                                                                </div>
+                                                                <span id="SCCAForMetro"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>CCA For Non-Metro</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    @Html.TextBoxFor(m => m.CCANonMetro, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SCCANonMetro"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-3">
+                                                            <div class="col-md-4">
+                                                                <label>CCA For Kerala</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+
+                                                                    @Html.TextBoxFor(m => m.CCAKerala, new
+                                                               {
+                                                                   @class = "form-control form-control-sm Fdpercent",
+                                                                   @placeholder = "%",
+                                                                   @maxlength = 8,
+                                                                   @onkeypress = "return onlyAmount(event);"
+                                                               })
+                                                                </div>
+                                                                <span id="SCCAKerala"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane" id="tabs-6" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">
+                                                                       Group Company
+                                                                    </th>
+                                                                    <th scope="col" id="AssuredAmt">ASD Bonus(% of Gross)</th>
+                                                                    <th scope="col" id="BlokedAmt">ASDB Blocked(in Amt)</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.AssuredBonous != null && Model.AssuredBonous.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.AssuredBonous.Count; i++)
+                                                                    {
+                                                                <tr>
+                                                                    <td data-label="Group Company">@Html.HiddenFor(m => m.AssuredBonous[i].Code)@Model.AssuredBonous[i].Name</td>
+
+                                                                    <td data-label="ASD Bonus(% of Gross)">
+                                                                        @Html.TextBoxFor(m => m.AssuredBonous[i].AssuredAmt, new { @class = "form-control form-control-sm", @placeholder = "Amount", @maxlength = 8, @onkeypress = "return onlyAmount(event)" })
+                                                                    </td>
+
+                                                                    <td data-label="ASDB Blocked(in Amt)">
+                                                                        @Html.TextBoxFor(m => m.AssuredBonous[i].BlokedAmt, new { @class = "form-control form-control-sm", @placeholder = "Amount", @maxlength = 8, @onkeypress = "return onlyAmount(event)" })
+                                                                    </td>
+
+                                                                </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <!--end: Datatable-->
+                        <div class="row my-3">
+                            <div class="col-md-6">
+                                <label>Description</label>
+                                @*<textarea class="form-control form-control-sm"
+                placeholder="Description"></textarea>*@
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-control-sm", @placeholder = "Description" })
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button id="addskilltype" type="button"
+                                        class="btn btn-default float-right mobile-full-width " onclick="SaveSalaryStructure('Save',@Model.FixedAllowance.Count)">
+                                    Save
+
+                                </button>
+                            }
+
+                            </div>
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+
+
+    </div>
+    <!--end::Wrapper-->
+
+}
+

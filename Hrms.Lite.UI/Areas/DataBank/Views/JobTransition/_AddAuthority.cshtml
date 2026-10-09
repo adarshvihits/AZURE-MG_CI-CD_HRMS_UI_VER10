@@ -1,0 +1,100 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+
+<script>
+    $(document).ready(function () {
+
+        jobTransitionReason();
+
+    });
+</script>
+<div class="step-outer step_row">
+
+    <a href="#" onclick="onProgressTabClick('growth-history')" class="step-item active">
+        Growth History
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('transition-type')" class="step-item active ">
+        Effective From
+        <span class="step-circle "></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('job-details')" class="step-item active ">
+        Job Details
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('compensation-benefits')" class="step-item active">
+        Compensation & Benifits
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('add-authority')" class="step-item active">
+        Add Authority
+        <span class="step-circle"></span>
+    </a>
+    
+    <div class="step-item">
+        Subordinates
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Document/Summary
+        <span class="step-circle"></span>
+    </div>
+</div>
+<div class="step-progress-outer">
+    <div class="row">
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table vertical-scroll-250">
+            <table id="authorityTable">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Request Type</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Current</th>
+                        <th scope="col">New</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.JobTransition_Authority != null && Model.JobTransition_Authority.Count > 0)
+                    {
+                        for (int i = 0; i < Model.JobTransition_Authority.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.HiddenFor(m => m.JobTransition_Authority[i].RequestTypeCode) @Model.JobTransition_Authority[i].RequestTypeName</td>
+                                <td>@Html.HiddenFor(m => m.JobTransition_Authority[i].LevelCode) @Model.JobTransition_Authority[i].LevelName</td>
+                                <td>@Html.HiddenFor(m => m.JobTransition_Authority[i].AuthorityCode_Old)@Model.JobTransition_Authority[i].AuthorityName_Old</td>
+                                <td style="position:relative;">
+                                    <div class="form-group ">
+
+                                        @Html.DropDownListFor(m => m.JobTransition_Authority[i].AuthorityCode_New, (SelectList)ViewBag.Aut, "--Select--", new
+                                   {
+                                       @class = "selectpicker form-control form-control-sm form-control authoritydropdn general-validation authCodeDropdn_" + i,
+                                       data_show_subtext = "true",
+                                       data_live_search = "true",
+                                       @onchange = "validateByIdForSearchDropdn('#JobTransition_Authority_" + i + "__AuthorityCode_New', 'authCode_" + i + "','.authCodeDropdn_" + i + "');jobTransitionReason();"
+                                   })
+                                    </div>
+                                    <span id="authCode_@i"></span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6 align-left">
+
+
+    </div>
+    <div class="col-md-6 align-right">
+        <button type="button" onclick="onNextClick('add-authority')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+
+</div>

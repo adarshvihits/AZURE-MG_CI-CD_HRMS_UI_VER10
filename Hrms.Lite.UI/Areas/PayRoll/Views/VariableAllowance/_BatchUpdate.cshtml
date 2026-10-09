@@ -1,0 +1,82 @@
+﻿@model Hrms.Lite.Shared.PayRoll.VariableAllowance
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Amount').focus();
+            moveCursorToEnd('Amount');
+        });
+        $(window).ready(function () {
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    if (preventENterFlag == 0)
+                        BatchUpdateClick();
+                    return false;
+                }
+            });
+        });
+    </script>
+
+@using (Html.BeginForm("BatchUpdate", "VariableAllowance", FormMethod.Post, new { @id = "BatchUpdateAllowance" }))
+{
+    <div id="BatchUpdate" class="slider-forms slider-forms-open batchUpdateDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('batchUpdateDiv');preventENterFlag = 1">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Month</label>
+                        <div class="view-details">
+
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Html.HiddenFor(m => m.EmployeeID)
+                          
+                            @Html.HiddenFor(m => m.Allowance.Name)
+                            @Html.HiddenFor(m => m.AllowanceMonth.Name)
+                            @Html.HiddenFor(m => m.AllowanceMonth.Code)
+                            @Model.AllowanceMonth.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Allowance </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.Allowance.Code)
+                            @Model.Allowance.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Amount</label>
+
+                        @*@Html.TextBoxFor(Model => Model.Amount, new { @class = "form-control form-control-sm ", @placeholder = "Amount" })*@
+                        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control form-control-sm", @placeholder = "Amount", style = "width: 100%", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)" })
+                        <span id="BatchAmt"></span>
+                        @*<input type="text"
+        class="form-control form-control-sm"
+        placeholder="Amount">*@
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="BatchUpdateClick()">
+                        Update
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

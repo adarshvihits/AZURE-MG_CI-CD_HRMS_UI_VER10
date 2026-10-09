@@ -1,0 +1,590 @@
+﻿@model Hrms.Lite.Shared.PayRoll.FullandFinalSettelment
+<hr>
+<div class="ptag">
+    <div class="row ">
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title">Salary For The Month</label>
+                <div class="view-details">
+                    @Model.Details.SalaryForTheMonth
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row my-2">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+
+
+                    <div class="ihits-table table-border  mobile-responsive-table full-final-tab new-vertical-scroll-100">
+                        <table>
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">Allowance</th>
+                                    <th scope="col">Actual Amount</th>
+                                    <th scope="col">Earnings</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Details.Allowance != null && Model.Details.Allowance.Count > 0)
+                                {
+                                    @for (int i = 0; i < Model.Details.Allowance.Count; i++)
+                                    {
+                                    <tr>
+                                        
+                                         @Html.HiddenFor(Model=>Model.Details.Allowance[i].Code)
+                                         @Html.HiddenFor(Model=>Model.Details.Allowance[i].Description)
+                                         @Html.HiddenFor(Model=>Model.Details.Allowance[i].ActualAmount)
+                                        <td data-label="Allowance">@Model.Details.Allowance[i].Description</td>
+                                        <td data-label="Actual Amount">
+                                            @Model.Details.Allowance[i].ActualAmount
+                                        </td>
+                                        <td data-label="Earnings">
+                                            @Model.Details.Allowance[i].Earning
+                                        </td>
+
+
+                                    </tr>
+                                    }
+                                }
+                                else
+                                {
+                                <tr>
+                                    <td>No data found</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- <end></end> -->
+                <div class="col-md-6">
+
+
+                    <div class="ihits-table table-border  mobile-responsive-table full-final-deduction new-vertical-scroll-100">
+                        <table>
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col"> Deduction</th>
+                                    <th scope="col">Amount</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Details.Deduction != null && Model.Details.Deduction.Count > 0)
+                                {
+                                        @for (int i = 0; i < Model.Details.Deduction.Count; i++)
+                                        {
+                                <tr>
+                                    @Html.HiddenFor(Model => Model.Details.Deduction[i].Code)
+                                    @Html.HiddenFor(Model => Model.Details.Deduction[i].Description)
+                                    @Html.HiddenFor(Model => Model.Details.Deduction[i].ActualAmount)
+
+                                    <td data-label=" Deduction"> @Model.Details.Deduction[i].Description </td>
+                                    <td data-label="Amount">
+                                        @Model.Details.Deduction[i].Earning
+
+                                    </td>
+
+
+
+                                </tr>
+                                        }
+                                }
+                                else
+                                {
+                                <tr>
+                                    <td>No data found</td>
+                                </tr>
+                                }
+                                @*<tfoot>
+            <tr style=" position: sticky; bottom: 0;"
+                class="table-light attendance-table-footer">
+                <td data-label="Allowance">
+                    <strong>
+                        Total
+                        Deduction
+                    </strong>
+                </td>
+
+                <td data-label="Actual Amount">
+                    <strong>5000</strong>
+                </td>
+
+
+
+
+
+            </tr>
+        </tfoot>*@
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ">
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Earned Gross</label>
+                <div class="view-details">
+                    @Model.Details.EarnedGross
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Total Deduction</label>
+                <div class="view-details">
+                    @Model.Details.TotalDeduction @Html.HiddenFor(m => m.Details.TotalDeduction)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Net Payable</label>
+                <div class="view-details">
+                    @Model.Details.NetPayable @Html.HiddenFor(m => m.Details.NetPayable)
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title"> Held Amount</label>
+                <div class="view-details">
+                    <a data-bs-toggle="modal"
+                       data-target=".PF_settings_applicable" type="button"
+                       type="button"
+                       class="float-left mobile-full-width mr-3">
+                        @Model.Details.HeldAmount
+                    </a>
+
+
+
+                    <div class="modal fade PF_settings_applicable"
+                         tabindex="-1" role="dialog"
+                         aria-labelledby="myLargeModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content popup "
+                                 style="height:300px ;">
+                                <div class="modal-header"
+                                     style="padding:10px">
+                                    <h5 class="modal-title"
+                                        id="exampleModalLabel">
+                                        Held Amount Details
+                                    </h5>
+                                    <button type="button" class="close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        <i aria-hidden="true"
+                                           class="ki ki-close"></i>
+                                    </button>
+                                </div>
+                                <div class="ihits-table table-border hover-color odd-even mobile-responsive-table held-amount-details new-vertical-scroll-100">
+                                    <table>
+                                        <thead>
+                                            <tr class="table-dark">
+
+                                                <th scope="col">Month</th>
+                                                <th scope="col">
+                                                    Held Amount
+                                                </th>
+                                                <th scope="col">
+                                                    Remarks
+                                                </th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.HeldAmountDetaisl != null && Model.HeldAmountDetaisl.Count > 0)
+                                            {
+
+                                                for (int i = 0; i < Model.HeldAmountDetaisl.Count; i++)
+                                                {
+                                                    <tr>
+
+                                                        <td data-label="Month">
+                                                            @Model.HeldAmountDetaisl[i].Month
+                                                        </td>
+                                                        <td data-label="Held Amount">
+                                                            @Model.HeldAmountDetaisl[i].Amount
+                                                        </td>
+                                                        <td data-label="Remarks">
+                                                            @Model.HeldAmountDetaisl[i].Remarks
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                            @*<tfoot>
+                                                <tr style=" position: sticky; bottom: 0;"
+                                                    class="table-light">
+                                                    <td data-label="Month">
+                                                        <strong>Total</strong>
+                                                    </td>
+
+                                                    <td data-label="Held Amount">
+                                                        <strong>937</strong>
+                                                    </td>
+
+
+
+                                                </tr>
+                                            </tfoot>*@
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- <end table></end> -->
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Notice Period Deduction</label>
+                <div class="view-details">
+                    <span id="npded">@Model.Details.NoticePeriodDeduction @Html.HiddenFor(m => m.Details.NoticePeriodDeduction)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Leave Encashment</label>
+                <div class="view-details">
+
+
+                    <span id="Encash">@Model.Details.LeaveEncashment @Html.HiddenFor(m => m.Details.LeaveEncashment)</span>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!--<div class="row my-2">-->
+
+        @*<div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title">Gratuity</label>
+                <div class="view-details">
+                   
+                    @Html.TextBoxFor(m => m.Details.Gratuity, new { @class = "form-control form-control-sm", @maxlength = "10", @onblur= "finalSettelment()" })
+
+                </div>
+            </div>
+        </div>*@
+
+        @*<div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title">Notice Period Deduction</label>
+                <div class="view-details">
+                    <span id="npded">@Model.Details.NoticePeriodDeduction @Html.HiddenFor(m => m.Details.NoticePeriodDeduction)</span>
+</div>
+            </div>
+        </div>*@
+        <!-- <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">TDS To Be Deducted</label>
+                <div class="view-details">24000
+                </div>
+            </div>
+        </div> -->
+
+
+
+    <!--</div>-->
+</div>
+<hr>
+<div class="ptag">
+
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="">
+                <h4>Other Additions</h4>
+            </div>
+            <div class="ihits-table table-border mobile-responsive-table other_additions_list my-4 vertical-scroll-200">
+                <table id="AllowanceTable">
+                    <thead>
+                        <tr class="table-dark">
+                            <th>
+                                Other Allowance
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            @*<th scope="col">Actions</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @*@for (int i = 0; i < Model.Details.OtherAdditions.Count; i++)
+                        {
+                            <tr id="row_OI_@i">
+                                <td data-label="Narration">
+                                    @Html.TextBoxFor(Model => Model.Details.OtherAdditions[i].Narration, new { @class = "form-control form-control-sm", @placeholder = "Narration", maxlength = "120" })
+                                    <span class="test1" id="additionname_@i"></span>
+                                </td>
+                                <td data-label="Amount">
+                                    @Html.TextBoxFor(Model => Model.Details.OtherAdditions[i].Amount, new { @class = "form-control form-control-sm othersettelmentval", @placeholder = "Amount", maxlength = "120", onblur = "finalSettelment()" })
+                                    <span class="test1" id="additionamount_@i"></span>
+                                </td>
+                                <td data-label="Actions">
+                                    <button type="button" onclick="AddRowGrid('AllowanceTable')"
+                                            class="btn btn-icon btn-default icon-only  mobile-full-width">
+                                        <i class="icon-xl fas fa-plus"></i>
+                                    </button>
+                                    <button type="button" onclick="DeleteRw('AllowanceTable',@i)"
+                                            class="btn btn-icon btn-delete icon-only mobile-full-width">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </button>
+
+
+                                </td>
+                            </tr>
+                        }*@
+                        @if (Model.Details.OtherAdditions != null && Model.Details.OtherAdditions.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.Details.OtherAdditions.Count; i++)
+                            {
+                                <tr>
+
+
+                                    <td data-label="OtherAlowance">
+
+
+                                        @Html.HiddenFor(Model => Model.Details.OtherAdditions[i].Code)
+                                        @Html.HiddenFor(Model => Model.Details.OtherAdditions[i].TrnCode)
+
+                                        @Model.Details.OtherAdditions[i].Description
+                                    </td>
+                                    @*<td data-label="Narration">
+                                        <div style="position:relative;">
+                                            @Html.TextBoxFor(Model => Model.Details.OtherAdditions[i].Narration, new { @class = "form-control form-control-sm", @placeholder = "Narration", maxlength = "120" })
+                                            <span class="test1" id="additionname_@i"></span>
+                                            </div>
+                                    </td>*@
+                                    <td data-label="Amount">
+                                        <div style="position:relative;">
+                                            @Html.TextBoxFor(Model => Model.Details.OtherAdditions[i].Amount, new { @class = "form-control form-control-sm othersettelmentval  text-right", @placeholder = "Amount", maxlength = "120", onblur = "finalSettelment()" })
+                                            <span class="test1" id="additionamount_@i"></span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="">
+                <h4>Other Deduction</h4>
+            </div>
+            <div class="ihits-table table-border mobile-responsive-table other_additions_list vertical-scroll-200 my-4">
+                <table id="DeductionTable">
+                    <thead>
+                        <tr class="table-dark">
+                            <th>
+                                Other Deduction
+                            </th>
+                            @*<th>
+                                Narration
+                            </th>*@
+                            <th>
+                                Amount
+                            </th>
+                            @*<th scope="col">Actions</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@for (int i = 0; i < Model.Details.OtherDeduction.Count; i++)
+                        {
+                            <tr id="row_OI_@i">
+                                <td data-label="Narration">
+                                    @Html.TextBoxFor(Model => Model.Details.OtherDeduction[i].Narration, new { @class = "form-control form-control-sm", @placeholder = "Narration", maxlength = "120" })
+                                    <span class="test1" id="deductionname_@i"></span>
+                                </td>
+                                <td data-label="Amount">
+                                    @Html.TextBoxFor(Model => Model.Details.OtherDeduction[i].Amount, new { @class = "form-control form-control-sm othersettelmentvaldeduction", @placeholder = "Amount", maxlength = "120",@onblur= "finalSettelment()" })
+                                    <span class="test1" id="deductionamount_@i"></span>
+                                </td>
+                                <td data-label="Actions">
+                                    <button type="button" onclick="AddRowGrid('DeductionTable')"
+                                            class="btn btn-icon btn-default icon-only  mobile-full-width">
+                                        <i class="icon-xl fas fa-plus"></i>
+                                    </button>
+                                    <button type="button" onclick="DeleteRw1('DeductionTable',@i)"
+                                            class="btn btn-icon btn-delete icon-only mobile-full-width">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </button>
+
+
+                                </td>
+                            </tr>
+                        }*@
+                        @if (Model.Details.OtherDeduction != null && Model.Details.OtherDeduction.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.Details.OtherDeduction.Count; i++)
+                            {
+                                <tr>
+
+                                    <td data-label="OtherDeduction">
+
+
+
+                                        @Html.HiddenFor(Model => Model.Details.OtherDeduction[i].Code)
+                                        @Html.HiddenFor(Model => Model.Details.OtherDeduction[i].TrnCode)
+
+
+
+                                        @Model.Details.OtherDeduction[i].Description
+                                    </td>
+                                    @*<td data-label="Narration">
+                                        <div style="position:relative;">
+                                            @Html.TextBoxFor(Model => Model.Details.OtherDeduction[i].Narration, new { @class = "form-control form-control-sm", @placeholder = "Narration", maxlength = "120" })
+                                            <span class="test1" id="deductionname_@i"></span>
+                                            </div>
+                                    </td>*@
+                                    <td data-label="Amount">
+                                        <div style="position:relative;">
+                                            @Html.TextBoxFor(Model => Model.Details.OtherDeduction[i].Amount, new { @class = "form-control form-control-sm othersettelmentvaldeduction  text-right", @placeholder = "Amount", maxlength = "120", @onblur = "finalSettelment()" })
+                                            <span class="test1" id="deductionamount_@i"></span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="col-md-12">
+            <div class="">
+                <h4 style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding-top: 10px;">Loan</h4>
+            </div>
+            <div class="ihits-table table-border mobile-responsive-table other_additions_list vertical-scroll-200 my-4">
+                <table id="DeductionTable">
+                    <thead>
+                        <tr class="table-dark">
+                            <th>
+                                Name
+                            </th>
+                            @*<th>
+                                Narration
+                            </th>*@
+                            <th>
+                                Amount
+                            </th>
+                            @*<th scope="col">Actions</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        @if (Model.Details.Loan != null && Model.Details.Loan.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.Details.Loan.Count; i++)
+                            {
+                                <tr>
+
+                                    <td data-label="OtherDeduction">
+
+
+
+                                        @Model.Details.Loan[i].Description
+                                    </td>
+                                    @*<td data-label="Narration">
+                                        <div style="position:relative;">
+                                            @Html.TextBoxFor(Model => Model.Details.OtherDeduction[i].Narration, new { @class = "form-control form-control-sm", @placeholder = "Narration", maxlength = "120" })
+                                            <span class="test1" id="deductionname_@i"></span>
+                                            </div>
+                                    </td>*@
+                                <td data-label="Amount">
+                                    @Model.Details.Loan[i].Amount
+                                </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<hr>
+
+
+
+<div class="ptag">
+
+    <div class="row ">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Remarks<span class="Mandatory">*</span></label>
+                @Html.TextAreaFor(m => m.Details.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = "120", @onblur = "validate(this,'ffRemarks')" })
+                <span id="ffRemarks"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title">
+                    Notice Period Refund
+                </label>
+                <div class="view-details">
+                    <span id="refud"> @Model.Details.NoticePeriodRefund</span>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title finalSettlementLabel">
+                    Final Settlement Amount
+                    Payable
+                </label>
+                <div class="view-details">
+                    <span id="finalsettamt"> @Model.Details.FinalSettlementAmountPayable</span>@Html.HiddenFor(m => m.Details.FinalSettlementAmountPayable)
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>

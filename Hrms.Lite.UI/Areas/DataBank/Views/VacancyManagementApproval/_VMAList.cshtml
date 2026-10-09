@@ -1,0 +1,56 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagementApproval
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border mobile-responsive-table vacancy-mrf-list pt-3">
+    @Html.HiddenFor(m => m.VacancyManagementApprovalList.Count)
+    <table class="common-table" id="VacancyManagementTable">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No </th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Vacancy Type</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Initiated By">Initiated By</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Initiated on">Initiated on </th>
+                <th scope="col">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Number Of Requirements">N/Req </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Days Left">D.L.</th>
+
+
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.VacancyManagementApprovalList != null && Model.VacancyManagementApprovalList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.VacancyManagementApprovalList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="MRF No">@Model.VacancyManagementApprovalList[i].JobCode</td>
+                        <td data-label="Job Title"><a class="slider-btn" id="EmployRewardsRecognition" onclick="getVacancyManagementDetails('@Model.VacancyManagementApprovalList[i].VacancyManagementGI')">@Model.VacancyManagementApprovalList[i].JobTitle</a></td>
+                        <td data-label="Vacancy Type">@Model.VacancyManagementApprovalList[i].VacancyType</td>
+                        <td data-label="Req by">@Model.VacancyManagementApprovalList[i].RequestedBy</td>
+                        <td data-label="Req Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagementApprovalList[i].RequestedDate))</td>
+                        <td data-label="Need by Date">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagementApprovalList[i].NeedByDate))
+                        </td>
+                        <td data-label="No of Req ">
+                            @Model.VacancyManagementApprovalList[i].NoOfRequirements
+                        </td>
+                        @if (@Model.VacancyManagementApprovalList[i].Aging < 0)
+                        {
+                            <td data-label="Days Left"><span class="text-color-low">@Model.VacancyManagementApprovalList[i].Aging</span></td>
+                        }
+                        else
+                        {
+                            <td data-label="Days Left"><span class="text-color-high">@Model.VacancyManagementApprovalList[i].Aging</span></td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+

@@ -1,0 +1,225 @@
+﻿@model Tuple<Hrms.Lite.Shared.PayRoll.Reports.SalaryReports, System.Data.DataTable>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/PayRoll/Reports/SalaryDetailedReport.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+<script>
+    function showDetails(e) {
+      
+        var wnd = $("#settings").data("kendoWindow");
+         wnd.content("loading user info...").refresh({
+            url: "@Url.Action("ChildGrid", "SalaryDetailedReport")"
+        }).center().open();
+
+    }
+
+    function saveSelectedSkills() {
+        var gridAlw = $("#allowance").data("kendoGrid");
+        var selectedItems = gridAlw.select(); // Get the selected rows
+        var count = 0;
+        var alwCodes = [];
+        selectedItems.each(function () {
+            count++;
+            var dataItem = gridAlw.dataItem(this);
+            alwCodes.push(dataItem.AllowanceCode);
+        });
+
+        // Save the selected skill codes to the hidden field
+        if (count != 0) {
+            $("#alwCodes").val(alwCodes.join(","));
+        }
+        else {
+            $("#alwCodes").val("0");
+        }
+        count = 0;
+        var gridDed = $("#deductions").data("kendoGrid");
+        var selectedDedItems = gridDed.select();
+        var dedCodes = [];
+        selectedDedItems.each(function () {
+            count++;
+            var dataItem = gridDed.dataItem(this);
+            dedCodes.push(dataItem.DeductionCode);
+        });
+
+        // Save the selected skill codes to the hidden field
+        if (count != 0) {
+            $("#dedCodes").val(dedCodes.join(","));
+        }
+        else {
+            $("#dedCodes").val("0");
+        }
+
+     
+        GetList();
+        var wnd = $("#settings").data("kendoWindow");
+        wnd.close();
+
+    }
+
+
+</script>
+
+
+@using Kendo.Mvc.UI
+@(
+Html.Kendo().Window().Name("settings")
+                .Title("Settings")
+                .LoadContentFrom("ChildGrid", "SalaryDetailedReport")
+                .Visible(false)
+                .Modal(true)
+                .Draggable(true)
+                .Width(600)
+                .Height(490)
+)
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title"> Salary Detailed Report</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Salary Detailed Report
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+
+
+
+                                <div class="tab-items">
+
+                                    <div class="row-outer pb-2 d-flex align-items-center" style="width:245px">
+                                        <label style="width:115px;display:flex; align-items:center; height:100%;">Salary Period</label>
+
+                                        <div class="form-group filter-combobox mr-10 highs mb-0 mt-2">
+                                            @Html.DropDownListFor(m => m.Item1.PayrollMonth.Code, (SelectList)ViewBag.SAP, new { @class = "form-control form-control-sm", @onchange = "GetList()" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-items">
+
+                                </div>
+
+                                <div class="form-group filter-combobox mr-10  mb-0 mt-2">
+
+                                </div>
+
+                                <div class="tab-items highs d-flex align-items-center highs">
+
+
+                                    <button type="button" onclick="showDetails()" class="btn btn-default btn-sm float-left">
+                                        Settings
+                                    </button>
+
+
+                                </div>
+                                <div class="tab-items select-option lows ">
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+
+
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                            data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </button>
+
+
+                                </div>
+                             
+                            
+                            </div>
+                        </div>
+
+                        <div id="salaryReportList">
+                            @await Html.PartialAsync("~/Areas/PayRoll/Reports/Views/SalaryDetailedReport/_SalaryReportsList.cshtml", Model)
+                        </div>
+
+
+                        <!--end: Datatable-->
+                        <!--end: Datatable-->
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+                            @*<a type="button" class="btn btn-default  mobile-full-width">
+            Print
+        </a>*@
+                            <button type="button"
+                                    class="btn btn-default float-right mobile-full-width " onclick="SalaryDetailedRptPrint()">
+                                Print
+                            </button>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <input type="hidden" id="alwCodes" name="alwCodes" value=@Model.Item1.allowanceIds />
+        <input type="hidden" id="dedCodes" name="dedCodes" value=@Model.Item1.deductionIds />
+        <div id="filterSlider">
+            @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Item1.Filter)
+        </div>
+
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+
+
+</div>

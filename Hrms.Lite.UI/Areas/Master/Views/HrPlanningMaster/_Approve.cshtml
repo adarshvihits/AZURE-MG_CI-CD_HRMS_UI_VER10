@@ -1,0 +1,104 @@
+﻿@model Hrms.Lite.Shared.Master.HRPlanningMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "HrPlanningMasterApproveOrReject" }))
+{
+    @Html.HiddenFor(m => m.GI)
+    @Html.HiddenFor(m => m.LogGI)
+    @Html.HiddenFor(m => m.EntryType)
+    <div id="gradeapprove" class="slider-forms slider-forms-open hrPlanningApproveSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('hrPlanningApproveSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Manpower Plan Approval</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Department</label>
+                        <div class="view-details">
+                            @Model.Department?.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Section
+                        </label>
+                        <div class="view-details">
+                            @Model.Section?.Name
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Grade</label>
+                        <div class="view-details">
+                            @Model.Grade?.Name
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Plan Count</label>
+                        <div class="view-details">
+                            @Model.PlanCount
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Avg Salary</label>
+                        <div class="view-details">
+                            &#8377; @Model.AvgSalary
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Total Salary</label>
+                        <div class="view-details">
+                            &#8377; @Model.TotalSalary
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Approve == true)
+                    {
+                        <button type="button"
+                                class="btn btn-danger  mobile-full-width" onclick="confirmReject('@Model.GI', '@Model.LogGI')">
+                            Reject
+                        </button>
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="confirmApprove('@Model.GI', '@Model.LogGI')">
+                            Approve
+                        </button>
+                    }
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+}

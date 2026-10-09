@@ -1,0 +1,784 @@
+﻿@model Hrms.Lite.Shared.PayRoll.FullandFinalSettelment
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/PayRoll/fullAndFinalSettelmentVerification.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "SettelmentVerification" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Full Final Settlement Verification</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted child-mute">
+                            <a href="full-final-settlement-verify-list.html">Full Final Settlement Verification List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted child-mute">
+                            Full Final Settlement Verification
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body ">
+                                <div class="profile-header position-relative box-shadow-none">
+                                    @await Html.PartialAsync("~/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.Details.ResignationDate)
+                                    @Html.HiddenFor(Model => Model.Details.LWD)
+                                    @Html.HiddenFor(Model => Model.Details.NoticePeriod)
+                                    @Html.HiddenFor(Model => Model.Details.ShortfallDays)
+                                    @Html.HiddenFor(Model => Model.Details.RecoverableAmount)
+                                    @Html.HiddenFor(Model => Model.Details.SettlementAging)
+                                    @Html.HiddenFor(Model => Model.Details.FinalSettlementAmountPayable)
+                                    @Html.HiddenFor(Model => Model.Details.NoticePeriodDeductionAfterAdjustment)
+                                    @Html.HiddenFor(Model => Model.Details.LeaveEncashment)
+                                    @Html.HiddenFor(Model => Model.Details.NoticePeriodDeduction)
+                                    @Html.HiddenFor(Model => Model.FinalSettlementGI)
+                                    @Html.HiddenFor(Model => Model.mode)
+                                    <div class="profile-header-overflow"></div>
+                                </div>
+                                <div class="ptag">
+                                    <div class="">
+                                        <h4>Resignation Details</h4>
+                                    </div>
+                                    <div class="row ">
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Resignation Date</label>
+                                                <div class="view-details">
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Details.ResignationDate))
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Last Working Date</label>
+                                                <div class="view-details">
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Details.LWD))
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="view-title">
+                                                    Notice Period Days As Per Company
+                                                    Policy
+                                                </label>
+                                                <div class="view-details">
+                                                    @Model.Details.NoticePeriod
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Notice Served Days</label>
+                                                <div class="view-details">
+                                                    @Model.Details.NoticeServedDays
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Shortfall Days</label>
+                                                <div class="view-details">
+                                                    @Model.Details.ShortfallDays
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                    <div class="row my-2">
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Recoverable Amount</label>
+                                                <div class="view-details">
+                                                    @Model.Details.RecoverableAmount
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Settlement Date</label>
+                                                <div class="view-details">
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Details.SettlementDate))
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Settlement Aging</label>
+                                                <div class="view-details">
+                                                    @Model.Details.SettlementAging
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="ptag">
+                                    <div class="">
+                                        <h4>
+                                            Leaves Eligible For
+                                            Encashment
+                                        </h4>
+                                    </div>
+                                    <div class="row">
+
+
+                                        @if (Model.Details.LeaveDetails != null && Model.Details.LeaveDetails.Count > 0)
+                                        {
+
+                                            for (int i = 0; i < Model.Details.LeaveDetails.Count; i++)
+                                            {
+                                                @Html.HiddenFor(m => m.Details.LeaveDetails[i].LeaveCount)
+                                                @Html.HiddenFor(m => m.Details.LeaveDetails[i].LeaveName)
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="view-title">@Model.Details.LeaveDetails[i].LeaveName</label>
+                                                        <div class="view-details">
+                                                            @Model.Details.LeaveDetails[i].LeaveCount
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Total Encashment Leaves</label>
+                                                <div class="view-details">
+                                                    @Model.Details.TotalEncashmentLeaves
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="ptag">
+                                    <div class="">
+                                        <h4>Adjustments</h4>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Adjusted Shortfall Days</label>
+                                                <div class="view-details">
+                                                    @Model.Details.AdjustedShortfallDays
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class=" col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">
+                                                    Notice Period Deduction After
+                                                    Adjustment
+                                                </label>
+
+                                                <div class="view-details">
+                                                    @Model.Details.NoticePeriodDeductionAfterAdjustment
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="ptag">
+                                    <div class="row ">
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Salary For The Month</label>
+                                                <div class="view-details">
+                                                    @Model.Details.SalaryForTheMonth
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+
+                                                    <div class="ihits-table table-border  mobile-responsive-table full-final-tab new-vertical-scroll-100">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Allowance</th>
+                                                                    <th scope="col">Actual Amount</th>
+                                                                    <th scope="col">Earnings</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.Details.Allowance != null && Model.Details.Allowance.Count > 0)
+                                                                {
+                                                                    @for (int i = 0; i < Model.Details.Allowance.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            @Model.Details.Allowance[i].Code
+                                                                            <td data-label="Allowance">@Model.Details.Allowance[i].Description</td>
+                                                                            <td data-label="Actual Amount">
+                                                                                @Model.Details.Allowance[i].ActualAmount
+                                                                            </td>
+                                                                            <td data-label="Earnings">
+                                                                                @Model.Details.Allowance[i].Earning
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td>No data found</td>
+                                                                    </tr>
+                                                                }
+                                                            <tfoot>
+                                                                <tr style=" position: sticky; bottom: 0;"
+                                                                    class="table-light attendance-table-footer">
+                                                                    <td data-label="Allowance">
+                                                                        <strong>
+                                                                            Total
+                                                                            Allowance
+                                                                        </strong>
+                                                                    </td>
+
+                                                                    <td data-label="Actual Amount">
+                                                                        <strong>5000</strong>
+                                                                    </td>
+
+
+                                                                    <td data-label="Earnings">
+                                                                        <strong>2600</strong>
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            </tfoot>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+
+                                                    <div class="ihits-table table-border  mobile-responsive-table full-final-deduction new-vertical-scroll-100">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col"> Deduction</th>
+                                                                    <th scope="col">Amount</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.Details.Deduction != null && Model.Details.Deduction.Count > 0)
+                                                                {
+                                                                    @for (int i = 0; i < Model.Details.Deduction.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            @Html.HiddenFor(Model => Model.Details.Deduction[i].Code)
+
+                                                                            <td data-label=" Deduction"> @Model.Details.Deduction[i].Description </td>
+                                                                            <td data-label="Amount">
+                                                                                @Model.Details.Deduction[i].ActualAmount
+
+                                                                            </td>
+
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+                                                                        <td>No data found</td>
+                                                                    </tr>
+                                                                }
+                                                                @*<tfoot>
+                                                <tr style=" position: sticky; bottom: 0;"
+                                                    class="table-light attendance-table-footer">
+                                                    <td data-label="Allowance">
+                                                        <strong>
+                                                            Total
+                                                            Deduction
+                                                        </strong>
+                                                    </td>
+
+                                                    <td data-label="Actual Amount">
+                                                        <strong>5000</strong>
+                                                    </td>
+
+
+
+
+
+                                                </tr>
+                                            </tfoot>*@
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row ">
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Earned Gross</label>
+                                                <div class="view-details">
+                                                    @Model.Details.EarnedGross
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Total Deduction</label>
+                                                <div class="view-details">
+                                                    @Model.Details.TotalDeduction
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Net Payable</label>
+                                                <div class="view-details">
+                                                    @Model.Details.NetPayable
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Held Amount</label>
+                                                <div class="view-details">
+                                                    <a data-bs-toggle="modal"
+                                                       data-target=".PF_settings_applicable" type="button"
+                                                       type="button"
+                                                       class="btn float-left mobile-full-width mr-3">
+                                                        @Model.Details.HeldAmount
+                                                    </a>
+
+                                                    <div class="modal fade PF_settings_applicable"
+                                                         tabindex="-1" role="dialog"
+                                                         aria-labelledby="myLargeModalLabel"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content popup "
+                                                                 style="height:300px ;">
+                                                                <div class="modal-header"
+                                                                     style="padding:10px">
+                                                                    <h5 class="modal-title"
+                                                                        id="exampleModalLabel">
+                                                                        Held Amount Details
+                                                                    </h5>
+                                                                    <button type="button" class="close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <i aria-hidden="true"
+                                                                           class="ki ki-close"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="ihits-table table-border hover-color odd-even mobile-responsive-table held-amount-details new-vertical-scroll-100">
+                                                                    <table>
+                                                                        <thead>
+                                                                            <tr class="table-dark">
+
+                                                                                <th scope="col">Month</th>
+                                                                                <th scope="col">
+                                                                                    Held Amount
+                                                                                </th>
+
+
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @if (Model.HeldAmountDetaisl != null && Model.HeldAmountDetaisl.Count > 0)
+                                                                            {
+
+                                                                                for (int i = 0; i < Model.HeldAmountDetaisl.Count; i++)
+                                                                                {
+                                                                                    <tr>
+
+                                                                                        <td data-label="Month">
+                                                                                            @Model.HeldAmountDetaisl[i].Month
+                                                                                        </td>
+                                                                                        <td data-label="Held Amount">
+                                                                                            @Model.HeldAmountDetaisl[i].Amount
+                                                                                        </td>
+
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                            @*<tfoot>
+                                                            <tr style=" position: sticky; bottom: 0;"
+                                                                class="table-light">
+                                                                <td data-label="Month">
+                                                                    <strong>Total</strong>
+                                                                </td>
+
+                                                                <td data-label="Held Amount">
+                                                                    <strong>937</strong>
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                        </tfoot>*@
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <!-- <end table></end> -->
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Leave Encashment</label>
+                                                <div class="view-details">
+                                                    @Model.Details.LeaveEncashment
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row my-2">
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Gratuity</label>
+                                                <div class="view-details">
+                                                    @Model.Details.Gratuity
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Notice Period Deduction</label>
+                                                <div class="view-details">
+                                                    @Model.Details.NoticePeriodDeduction
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="ptag">
+
+                                    <div class="row ">
+
+                                        <div class="col-md-6">
+                                            <div class="">
+                                                <h4>Other Additions</h4>
+                                            </div>
+
+                                            <div class="ihits-table table-border  mobile-responsive-table full-final-tab new-vertical-scroll-100">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Narration</th>
+
+                                                            <th scope="col">Amount</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @if (Model.Details.OtherAdditions != null && Model.Details.OtherAdditions.Count > 0)
+                                                        {
+                                                            @for (int i = 0; i < Model.Details.OtherAdditions.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    @Html.HiddenFor(Model => Model.Details.OtherAdditions[i].Code)
+
+                                                                    <td data-label=" Narration"> @Model.Details.OtherAdditions[i].Narration </td>
+                                                                    <td data-label="Amount">
+                                                                        @Model.Details.OtherAdditions[i].Amount
+
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td>No data found</td>
+                                                            </tr>
+                                                        }
+                                                        <!-- <tfoot>
+                                    <tr style=" position: sticky; bottom: 0;"
+                                        class="table-light attendance-table-footer">
+                                        <td data-label="Allowance"><strong>Total
+                                                Allowance</strong></td>
+
+                                        <td data-label="Actual Amount">
+                                            <strong>5000</strong>
+                                        </td>
+
+
+                                        <td data-label="Earnings">
+                                            <strong>2600</strong>
+                                        </td>
+
+
+
+                                    </tr>
+                                </tfoot> -->
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-md-6">
+
+                                            <div class="">
+                                                <h4>Other Deduction</h4>
+                                            </div>
+                                            <div class="ihits-table table-border  mobile-responsive-table full-final-tab new-vertical-scroll-100">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Narration</th>
+
+                                                            <th scope="col">Amount</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+
+                                                        @if (Model.Details.OtherDeduction != null && Model.Details.OtherDeduction.Count > 0)
+                                                        {
+                                                            @for (int i = 0; i < Model.Details.OtherDeduction.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    @Html.HiddenFor(Model => Model.Details.OtherDeduction[i].Code)
+
+                                                                    <td data-label="Narration"> @Model.Details.OtherDeduction[i].Narration </td>
+                                                                    <td data-label="Amount">
+                                                                        @Model.Details.OtherDeduction[i].Amount
+
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td>No data found</td>
+                                                            </tr>
+                                                        }
+                                                        <!-- <tfoot>
+                                    <tr style=" position: sticky; bottom: 0;"
+                                        class="table-light attendance-table-footer">
+                                        <td data-label="Allowance"><strong>Total
+                                                Allowance</strong></td>
+
+                                        <td data-label="Actual Amount">
+                                            <strong>5000</strong>
+                                        </td>
+
+
+                                        <td data-label="Earnings">
+                                            <strong>2600</strong>
+                                        </td>
+
+
+
+                                    </tr>
+                                </tfoot> -->
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <hr>
+
+
+
+                                <div class="ptag">
+
+                                    <div class="row ">
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">
+                                                    Final Settlement Amount
+                                                    Payable
+                                                </label>
+                                                <div class="view-details">
+                                                    @Model.Details.FinalSettlementAmountPayable
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="ptag">
+                                    <div class="">
+                                        <h4>Full & Final Settlement Done By</h4>
+                                    </div>
+                                    <div class="row">
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">User</label>
+                                                <div class="view-details">
+                                                    Sandra (IHS196)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="view-title">Date & Time</label>
+                                                <div class="view-details">
+                                                    12-mar-2022
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="view-title">Remarks</label>
+                                                <div class="view-details">
+                                                    Demo
+                                                </div>
+                                                <!-- <textarea class="form-control form-control-sm"
+                            placeholder="Remarks"></textarea> -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row my-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="">Verification Comments</label>
+                                                @Html.TextAreaFor(m => m.Details.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = "120" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <footer></footer> -->
+
+                            </div>
+                            <div class="row card-footer-bottom-fixed">
+
+                                <div class="col-md-12 align-right">
+                                    <a type="button" class="btn btn-default  mobile-full-width" onclick="confirmVerification()">
+                                        Verify
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!--end::Row-->
+        <!--begin::Row-->
+        <!--end::Row-->
+        <!--end::Dashboard-->
+    </div>
+    <!--end::Container-->
+}

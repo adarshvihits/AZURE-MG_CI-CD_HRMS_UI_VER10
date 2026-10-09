@@ -1,0 +1,43 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EditEmployeeInfoApprove
+@*<script src="~/js/settings.js"></script>*@
+<script src="~/js/tooltip.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table employee-edit-approval-pending">
+    @Html.HiddenFor(m => m.EditInfoList.Count)
+    <table id="EditEmpInfoApprove" @*class="common-table"*@>
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+
+                <th scope="col" data-bs-toggle="tooltip" title="Date Of Join">DOJ</th>
+                <th scope="col">Edit Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.EditInfoList != null && Model.EditInfoList.Count > 0)
+            {
+                for (int i = 0; i < Model.EditInfoList.Count; i++)
+                {
+                    <tr>
+                        @Html.HiddenFor(m => m.EditInfoList[i].EmployeeGI)
+                        @Html.HiddenFor(m => m.EditInfoList[i].LogGI)
+                        @Html.HiddenFor(m => m.EditInfoList[i].MakerChecker)
+                        <td data-label="SL:NO">@Model.EditInfoList[i].EmployeeID</td>
+                        <td data-label="Candidate Name">
+                            <a onclick="onApproveClick('@Model.EditInfoList[i].EmployeeGI','@Model.EditInfoList[i].LogGI',@i)">@Model.EditInfoList[i].FullName</a>
+                        </td>
+                        <td data-label="Designation">@Model.EditInfoList[i].Designation</td>
+                        <td data-label="Department">@Model.EditInfoList[i].Department</td>
+                        <td data-label="Location">@Model.EditInfoList[i].Location</td>
+                        <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EditInfoList[i].ExpectedDOJ))</td>
+                        <td data-label="Edit Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EditInfoList[i].EditDate))</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

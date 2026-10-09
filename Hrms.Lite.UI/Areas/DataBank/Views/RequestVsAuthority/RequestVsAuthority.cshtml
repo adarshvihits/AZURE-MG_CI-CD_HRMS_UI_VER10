@@ -1,0 +1,119 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RequestVsAuthority
+@{
+    ViewData["Title"] = "RequestVsAuthority";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/DataBank/requestvsAuthority.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    var EmpGI;
+    $(document).ready(function () {
+        EmpGI = '@Model.EmployeeGI';
+        /*alert(EmpGI);*/
+    });
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#BatchUpdate_RequestType_Code').focus();        
+    }
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Request vs Authority</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "RequestVsAuthority", new { Area = "DataBank" })" class="">Request vs Authority List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Request vs Authority
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+                    <div class="profile-header position-relative box-shadow-none mb-2">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                        @Html.HiddenFor(m => m.EmployeeGI)
+                        <div class="profile-header-overflow"></div>
+                    </div>
+
+                    <!--begin: Search Form-->
+                    <div class="page_white mt-5">
+                        <div class="row mb-4 ">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Request Type</label>
+                                    @Html.DropDownListFor(m => m.BatchUpdate.RequestType.Code, (SelectList)ViewBag.Rqt, new { @class = "form-control form-control-sm", @onchange = "onRequestTypeChange(this,'" + Model.EmployeeGI + "')" })
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                        </div>
+                        <!-- Table Section -->
+
+                        <div id="LevelList">
+
+                            @await Html.PartialAsync("_LevelList", Model)
+
+                        </div>
+
+                        <div id="LogList">
+
+                            @await Html.PartialAsync("_LogList", Model)
+
+                        </div>
+
+
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+            </div>
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

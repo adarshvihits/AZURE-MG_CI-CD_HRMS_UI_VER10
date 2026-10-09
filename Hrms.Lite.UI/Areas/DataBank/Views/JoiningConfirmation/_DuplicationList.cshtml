@@ -1,0 +1,118 @@
+﻿@model Hrms.Lite.Shared.General.EmployeeHeader
+<script>
+    $(document).ready(function () {
+        debugger
+        var actStatus = '@Model.ActiveStatus';
+          if ('@Model.TypeCode' == 6) {
+            if (actStatus != 'True')
+                $('#popupHeader').html('The EmployeeID provided is already associated with another resigned employee.Please verify and make any necessary corrections to proceed ?')
+            else
+                $('#popupHeader').html('The EmployeeID provided is already associated with another active employee. Please verify and make any necessary corrections to proceed.')
+        }
+        if ('@Model.TypeCode' == 5) {
+            if (actStatus != 'True')
+                $('#popupHeader').html('The Aadhar number provided is already associated with another resigned employee. Do you want to proceed ?')
+            else
+                $('#popupHeader').html('The Aadhar number provided is already associated with another active employee. Please verify and make any necessary corrections to proceed.')
+        }
+        else if ('@Model.TypeCode' == 4) {
+            if (actStatus != 'True')
+                $('#popupHeader').html('The PAN number provided is already associated with another resigned employee. Do you want to proceed ?')
+            else
+                $('#popupHeader').html('The PAN number provided is already associated with another active employee. Please verify and make any necessary corrections to proceed.')
+
+        }
+
+          else if ('@Model.TypeCode' == 3) {
+            if (actStatus != 'True')
+                $('#popupHeader').html('The Account number provided is already associated with another resigned employee. Do you want to proceed ?')
+            else
+                $('#popupHeader').html('The Account number provided is already associated with another active employee. Please verify and make any necessary corrections to proceed.')
+
+        }
+              else if ('@Model.TypeCode' == 1) {
+            if (actStatus != 'True')
+                $('#popupHeader').html('The Mobile number provided is already associated with another resigned employee. Do you want to proceed ?')
+            else
+                $('#popupHeader').html('The Mobile number provided is already associated with another active employee. Please verify and make any necessary corrections to proceed.')
+
+        }
+
+
+    });
+</script>
+<div class="ihits-table table-border odd-even  mobile-responsive-table duplicate_list">
+
+    <table>
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Status</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+
+            <tr>
+                <td data-label="ID">
+                    @Model.EmployeeId
+                </td>
+                <td data-label="Name"> @Model.EmployeeName </td>
+                <td data-label="Designation">@Model.Designation.Name</td>
+                <td data-label="Department">@Model.Department.Name</td>
+                <td data-label="Location">@Model.Location.Name</td>
+                <td data-label="Gross Salary">
+                    @if (Model.ActiveStatus == true)
+                    {
+                        <span>Active</span>
+                    }
+                    else
+                    {
+                        <span>Resigned</span>
+                    }
+                </td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+    @if ((Model.ActiveStatus == true)||(Model.TypeCode==6))
+    {
+        <div class="row my-7 text-right" style="position: absolute;bottom: 0;right: 0;">
+            <div class="col-md-12 ">
+
+                <button type="button" class="btn btn-default  mobile-full-width" onclick="CloseDuplicationPopup()">
+                    OK
+                </button>
+            </div>
+
+
+        </div>
+    }
+    else
+    {
+        <div class="row my-7 text-right"style="position: absolute;bottom: 0;right: 0;">
+            <div class="col-md-12 ">
+                <button type="button" class="btn btn-default  mobile-full-width" onclick="CloseDuplicationPopup()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-default  mobile-full-width" onclick="DuplicationOkClick()">
+                    OK
+                </button>
+            </div>
+
+
+        </div>
+    }
+</div>

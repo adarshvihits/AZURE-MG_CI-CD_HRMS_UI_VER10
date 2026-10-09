@@ -1,0 +1,103 @@
+﻿@model Hrms.Lite.Shared.DataBank.WorkUnitVsAuthoritySettings
+<script>
+    $(document).ready(function () {
+        $('.authoritydropdn').selectpicker();
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "reqVsAuthSave" }))
+{
+    <div>
+
+        <div class="ihits-table table-border  mobile-responsive-table request_authority_enroll  ">
+
+            <table id="addleveltable">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Level</th>
+                        <th scope="col">Authority</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.WorkUnitAuth != null && Model.WorkUnitAuth.Count > 0)
+                    {
+                        for (int i = 0; i < Model.WorkUnitAuth.Count; i++)
+                        {@Html.HiddenFor(m => m.WorkUnitCode)
+
+                        <tr id="row_OI_@i">
+                            <td data-label="Level">
+
+                                @Html.HiddenFor(m => m.WorkUnitAuth.Count)
+                                @Html.HiddenFor(m => m.WorkUnitAuth[i].LevelCode)
+                                @Html.HiddenFor(m => m.WorkUnitAuth[i].LevelName)
+                                @Html.HiddenFor(m => m.WorkUnitAuth[i].RequestTypeCode, new { @class = "reqCode" })
+                                @Html.HiddenFor(m => m.WorkUnitAuth[i].RequestTypeName, new { @class = "reqName" })
+                                <span id="lvlName_@i">@Model.WorkUnitAuth[i].LevelName</span>
+                            </td>
+                            <td data-label="ID" style="position:relative;">
+                                <div class="form-group ">
+
+
+                                    @Html.HiddenFor(m => m.WorkUnitAuth[i].AuthorityName, new { @class = "popupAuthName_" + i })
+                                    @Html.HiddenFor(m => m.WorkUnitAuth[i].AuthorityCode)
+                                    @Html.DropDownListFor(m => m.WorkUnitAuth[i].AuthorityCode, (SelectList)ViewBag.Auth, "--Select--", new
+                               {
+                                   @class = "selectpicker form-control form-control-sm form-control authoritydropdn general-validation authCodeDropdn_" + i,
+                                   data_show_subtext = "true",
+                                   data_live_search = "true",
+                                   onchange = "OnAuthorityDropdownChange(" + i + ",this)"
+                               })
+
+                                </div>
+                                <span id="authCode_@i"></span>
+                            </td>
+                            <td>
+                                @if (Model.WorkUnitAuth[i].RequestTypeCode == 2 && Model.WorkUnitAuth.Count == i + 1)
+                                {
+                                    <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                       class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('addleveltable')">
+                                        <i class="fa fa-plus"
+                                           aria-hidden="true"></i>
+                                    </a>
+                                    @if (Model.WorkUnitAuth[i].AuthorityCode == 0 || Model.WorkUnitAuth.Count==1)
+                                    {
+                                        <a id="#objDel_@i" data-bs-toggle="tooltip"
+                                           title="" data-bs-original-title="Delete"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete delObj hide" onclick="DeleteResultRow(@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="#objDel_@i" data-bs-toggle="tooltip"
+                                           title="" data-bs-original-title="Delete"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete delObj" onclick="DeleteResultRow(@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                       class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('addleveltable')">
+                                        <i class="fa fa-plus"
+                                           aria-hidden="true"></i>
+                                    </a>
+                                    <a id="#objDel_@i" data-bs-toggle="tooltip"
+                                       title="" data-bs-original-title="Delete"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete delObj hide" onclick="DeleteResultRow(@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

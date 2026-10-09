@@ -1,0 +1,306 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntryPaging
+@*<script src="~/js/settings.js"></script>*@
+
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+        fillData();
+    });
+</script>*@
+
+
+
+
+<style>
+    /* .dataTables_scrollFoot tfoot {
+        display: none !important;
+    }*/
+    #daily-attendance-entry-list-table tfoot {
+        display: none !important;
+    }
+
+    .dataTables_sizing {
+        height: 20px !important;
+    }
+
+    .attendance-table-footer {
+        background-color: #d0d5d9;
+        color: #000;
+        position: sticky;
+        bottom: 0;
+    }
+
+    .ihits-table.table-border table thead tr th {
+        padding: 10px 7px;
+        padding: 12px 12px;
+        font-weight: 500;
+    }
+
+    .sevenday th, td {
+        padding: 10px 2px !important;
+        font-size: 12px;
+    }
+
+    .ihits-table.table-border table thead tr th {
+        padding: 12px 6px !important;
+    }
+
+
+    table, td {
+        border: 1px solid #F6F7F9 !important;
+    }
+
+   
+    .sorting {
+        cursor: pointer;
+    }
+
+
+    .ihits-table.table-border table tbody tr td {
+        padding: 10px 4px !important;
+       
+    }
+
+
+
+
+
+
+
+
+
+
+</style>
+<script>
+    $(document).ready(function () {
+
+         $('.AllCount').html(@Model.AllCount);
+        $('.AbsenteesamCount').html(@Model.AbsenteesamCount);
+        $('.LeaveCount').html(@Model.LeaveCount);
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        fillData();
+    });
+</script>
+
+
+
+<div class="ihits-table table-border mobile-responsive-table daily-attendance-entry-lists">
+    @Html.HiddenFor(m => m.DailyAttendanceList.Count)
+    <table id="daily-attendance-entry-list-table" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                @*<th scope="col" class="newdaily">
+                    <a href="@Url.Action("DailyAttendanceEditList", "DailyAttendanceEntry", new { HeaderDate = @Model.DailyAttendanceList[0].Day1_Date })">1</a>
+
+
+                </th>*@
+                <th scope="col"  onclick="OnDateClick(0)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day1_Date) 1</th>
+                <th scope="col" onclick="OnDateClick(1)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day2_Date) 2</th>
+                <th scope="col" onclick="OnDateClick(2)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day3_Date) 3</th>
+                <th scope="col" onclick="OnDateClick(3)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day4_Date) 4</th>
+                <th scope="col" onclick="OnDateClick(4)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day5_Date) 5</th>
+                <th scope="col" onclick="OnDateClick(5)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day6_Date) 6</th>
+                <th scope="col" onclick="OnDateClick(6)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day7_Date) 7</th>
+                <th scope="col" onclick="OnDateClick(7)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day8_Date) 8</th>
+                <th scope="col" onclick="OnDateClick(8)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day9_Date) 9</th>
+                <th scope="col" onclick="OnDateClick(9)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day10_Date) 10</th>
+                <th scope="col" onclick="OnDateClick(10)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day11_Date) 11</th>
+                <th scope="col" onclick="OnDateClick(11)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day12_Date) 12</th>
+                <th scope="col" onclick="OnDateClick(12)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day13_Date) 13</th>
+                <th scope="col" onclick="OnDateClick(13)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day14_Date) 14</th>
+                <th scope="col" onclick="OnDateClick(14)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day15_Date) 15</th>
+                <th scope="col" onclick="OnDateClick(15)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day16_Date) 16</th>
+                <th scope="col" onclick="OnDateClick(16)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day17_Date) 17</th>
+                <th scope="col" onclick="OnDateClick(17)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day18_Date) 18</th>
+                <th scope="col" onclick="OnDateClick(18)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day19_Date) 19</th>
+                <th scope="col" onclick="OnDateClick(19)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day20_Date) 20</th>
+                <th scope="col" onclick="OnDateClick(20)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day21_Date) 21</th>
+                <th scope="col" onclick="OnDateClick(21)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day22_Date) 22</th>
+                <th scope="col" onclick="OnDateClick(22)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day23_Date) 23</th>
+                <th scope="col" onclick="OnDateClick(23)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day24_Date) 24</th>
+                <th scope="col" onclick="OnDateClick(24)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day25_Date) 25</th>
+                <th scope="col" onclick="OnDateClick(25)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day26_Date) 26</th>
+                <th scope="col" onclick="OnDateClick(26)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day27_Date) 27</th>
+                <th scope="col" onclick="OnDateClick(27)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day28_Date) 28</th>
+                <th scope="col" onclick="OnDateClick(28)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day29_Date) 29</th>
+                <th scope="col" onclick="OnDateClick(29)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day30_Date) 30</th>
+                <th scope="col" onclick="OnDateClick(30)">@Html.HiddenFor(m=>m.DailyAttendanceList[0].Day31_Date) 31</th>
+
+        </thead>
+
+
+
+
+
+
+
+
+
+        @*@if (Model.MainList.Header != null && Model.MainList.Header.Count > 0)
+                {
+
+
+                    @for (int i = 0; i < Model.MainList.Header.Count; i++)
+                    {
+
+
+
+                        <th scope="col" class="newdaily">
+                            <a href="@Url.Action("DailyAttendanceEditList", "DailyAttendanceEntry", new { HeaderDate = Model.MainList.Header[i].Date })">@(i + 1)</a>
+
+                        </th>
+                    }
+
+
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Data != null && Model.Data.Count > 0)
+            {
+
+                @for (int i = 0; i < Model.Data.Count; i++)
+                {
+
+                    <tr>
+                        <td data-label="ID">@Model.Data[i]["Employee"].employeeID</td>
+                        <td data-label="Employee Name">
+                            <a href="@Url.Action("EmployeeWiseAttendance", "DailyAttendanceEntry",new {EmployeeGI=Guid.Parse(Model.Data[i]["Employee"].employeeGI.ToString()), Month=Model.Month.Code})">
+                                @Model.Data[i]["Employee"].fullName
+                            </a>
+                        </td>
+                        @for (int count = 0; count < Model.MainList.Header.Count; count++)
+                        {
+
+                            <td data-label="@(i+1)">
+
+                                <span data-bs-toggle="tooltip" style="color:@Model.Data[i]["Day" + (count + 1)].color">
+                                    @Model.Data[i]["Day" + (count + 1)].statusName
+                                </span>
+
+                            </td>
+                        }
+                    </tr>
+                }
+            }*@
+
+        @*<tr>
+            <td data-label="ID">IHS001</td>
+            <td data-label="Name"> <a href="employee-wise-attendance-entry.html">Antony</a></td>
+            <td data-label="1"><span data-bs-toggle="tooltip" title="Absent" class="attendance-absent">AB</span> <span class="attendance-present" data-bs-toggle="tooltip" title="Present">PR</span></td>
+            <td data-label="2"><span data-bs-toggle="tooltip" title="Absent" class="attendance-absent">AB</span> <span class="attendance-loos-of-pay" data-bs-toggle="tooltip" title="Loss of Pay">LP</span></td>
+            <td data-label="3"><span data-bs-toggle="tooltip" title="Absent" class="attendance-absent">AB</span></td>
+            <td data-label="4"><span data-bs-toggle="tooltip" title="Present" class="attendance-present">PR</span></td>
+            <td data-label="5"><span data-bs-toggle="tooltip" title="Loss of Pay" class="attendance-loos-of-pay">LP</span></td>
+            <td data-label="6">AB</td>
+            <td data-label="7">PR</td>
+            <td data-label="8">PR</td>
+            <td data-label="9">AB</td>
+            <td data-label="10">AB</td>
+            <td data-label="11">AB</td>
+            <td data-label="12">AB</td>
+            <td data-label="13">PR</td>
+            <td data-label="14">PR</td>
+            <td data-label="15">LP</td>
+            <td data-label="16">AB</td>
+            <td data-label="17">AB</td>
+            <td data-label="18">AB</td>
+            <td data-label="19">AB</td>
+            <td data-label="20">AB</td>
+            <td data-label="21">PR</td>
+            <td data-label="22">PR</td>
+            <td data-label="23">PR</td>
+            <td data-label="24">LP</td>
+            <td data-label="25">PR</td>
+            <td data-label="26">PR</td>
+            <td data-label="27">PR</td>
+            <td data-label="28">PR</td>
+            <td data-label="29">AB</td>
+            <td data-label="30">LP</td>
+            <td data-label="31">PR</td>
+        </tr>*@
+
+
+        @*</tbody>*@
+
+        <tfoot class="daily-footer">
+            @*<tr class="attendance-table-footer">
+                <td data-label="ID"></td>
+                <td data-label="Name"></td>
+                @if (Model.MainList.Header != null && Model.MainList.Header.Count > 0)
+                {
+                    @for (int i = 0; i < Model.MainList.Header.Count; i++)
+                    {
+
+                        <td scope="col">@Model.MainList.Header[i].FooterName</td>
+
+                    }
+                }
+            </tr>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr class="attendance-table-footer" id="attendance-test">
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="d1" id="news"></td>
+                <td scope="col" class="d2"id="news"></td>
+                <td scope="col" class="d3" id="news"></td>
+                <td scope="col" class="d4" id="news"></td>
+                <td scope="col" class="d5"></td>
+                <td scope="col" class="d6"></td>
+                <td scope="col" class="d7"></td>
+                <td scope="col" class="d8"></td>
+                <td scope="col" class="d9"></td>
+                <td scope="col" class="d10"></td>
+                <td scope="col" class="d11"></td>
+                <td scope="col" class="d12"></td>
+                <td scope="col" class="d13"></td>
+                <td scope="col" class="d14"></td>
+                <td scope="col" class="d15"></td>
+                <td scope="col" class="d16"></td>
+                <td scope="col" class="d17"></td>
+                <td scope="col" class="d18"></td>
+                <td scope="col" class="d19"></td>
+                <td scope="col" class="d20"></td>
+                <td scope="col" class="d21"></td>
+                <td scope="col" class="d22"></td>
+                <td scope="col" class="d23"></td>
+                <td scope="col" class="d24"></td>
+                <td scope="col" class="d25"></td>
+                <td scope="col" class="d26"></td>
+                <td scope="col" class="d27"></td>
+                <td scope="col" class="d28"></td>
+                <td scope="col" class="d29"></td>
+                <td scope="col" class="d30"></td>
+                <td scope="col" class="d31"></td>
+
+
+
+            </tr>
+        </tfoot>
+
+    </table>
+</div>
+<!-- Table Setion End -->

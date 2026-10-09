@@ -1,0 +1,220 @@
+﻿@model Hrms.Lite.Shared.Master.FireBaseImageSettings
+<script>
+    $(function () {
+    $('#ThemeColourCode').on('input', function() {
+    $('#ThemeColourCodeDisplay').css('background-color', $(this).val());
+    });
+    });
+    </script>
+    @*<script>
+
+        $(function () {
+
+            if ($("#IsSingleDeviceValidation").prop('checked') == true) {
+                $('#RestrictMultipleDeviceLogin').attr("disabled", true);
+                $('#RestrictMultipleDeviceLogin').prop("checked", false);
+
+            }
+
+            $('#IsSingleDeviceValidation').on('change', function () {
+                if ($("#IsSingleDeviceValidation").prop('checked') == true) {
+                    $('#RestrictMultipleDeviceLogin').attr("disabled", true);
+                    $('#RestrictMultipleDeviceLogin').prop("checked", false);
+
+                } else {
+                    $('#RestrictMultipleDeviceLogin').attr("disabled", false);
+                }
+
+            })
+        })
+
+    </script>*@
+
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "MobileGeneralSettings" }))
+    {
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Mobile-GeneralSettings-list vertical-scroll-400">
+            <table>
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Sl.No.</th>
+                        <th scope="col">Settings</th>
+                        <th scope="col">Action</th>
+
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        
+                        <td>1.</td>
+                        <td>Theme Colour Code</td>
+                        <td>
+                            <input type="color" id="MobileGeneralSettings_ThemeColourCode" name="MobileGeneralSettings.ThemeColourCode"
+                                   value="@Model.MobileGeneralSettings.ThemeColourCode"
+                                   class="form-control" style="width: 50%;"
+                                   data-bs-toggle="tooltip" title="Color Picker"/>
+                            <span id="ThemeColourCodeDisplay"></span>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td>Google Map Key</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MobileGeneralSettings.GoogleMapKey, new { @class = "form-control" })
+
+                            <span id="GoogleMapKey"></span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>3.</td>
+                        <td>Mobile Punching Radious</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MobileGeneralSettings.MobilePunchingRadius, new { @onkeypress = "return onlyNumberKey(event)", @class = "form-control", @style = "width: 45%;" })
+
+                            <span id="MobilePunchingRadius"></span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>4.</td>
+                        <td> Is Single Device Validation</td>
+                        <td>
+
+                            <div class="checkbox-inline justify-content-between chk-single">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.MobileGeneralSettings.IsSingleDeviceValidation, new { @id = "IsSingleDeviceValidation" })
+                                    <span id="IsSingleDeviceValidation"></span>
+                                </label>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>5.</td>
+                        <td>MobileApp Restriction Based On</td>
+                        <td>
+                            <label></label>
+                            @Html.DropDownListFor(model => model.MobileGeneralSettings.MobileAppRestrictionBasedOn,
+                new List<SelectListItem> {
+                         new SelectListItem { Text = "Settings Only" },
+                          new SelectListItem { Text = "Settings and Shift" },
+
+                },
+                new { @class = "form-control form-control-sm", @style = "width: 45%;" })
+                            <span id="MobileAppRestrictionBasedOn"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>6.</td>
+                        <td>Maximum Mobile Punch</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MobileGeneralSettings.MaximumMobilePunch, new { @onkeypress = "return onlyNumberKey(event)", @maxlength = "5", @class = "form-control", @style = "width: 45%;" })
+                            <span id="MaximumMobilePunch"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>7.</td>
+                        <td>Enable Firebase Notification</td>
+                        <td>
+
+                            <div class="checkbox-inline justify-content-betweeen ">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.MobileGeneralSettings.EnableFirebaseNotification)
+                                    <span id="EnableFirebaseNotification"></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>8.</td>
+                        <td>Digital Id Format</td>
+                        <td>
+                            <label></label>
+                            @Html.DropDownListFor(model => model.MobileGeneralSettings.DigitalIdFromat,
+                new List<SelectListItem> {
+                         new SelectListItem { Text = "Format 1" },
+                         new SelectListItem { Text = "Format 2" },
+                         new SelectListItem { Text = "Format 3" },
+                         new SelectListItem { Text = "Format 4" },
+                         new SelectListItem { Text = "Format 5" },
+
+                },
+                new { @class = "form-control form-control-sm", @style = "width: 50%;" })
+                            <span id="DigitalIdFormat"></span>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>9.</td>
+                        <td>Directory List Based On</td>
+                        <td>
+                            <label></label>
+                            @Html.DropDownListFor(model => model.MobileGeneralSettings.DirectoryListBasedOn,
+                new List<SelectListItem> {
+                         new SelectListItem { Text = "My Team and Repotees" },
+                         new SelectListItem { Text = "Company" },
+                         new SelectListItem { Text = "Location" },
+                         new SelectListItem { Text = "Department" },
+                         new SelectListItem { Text = "My Team" },
+                         new SelectListItem { Text = "My Repotees" },
+                         new SelectListItem { Text = "Core Team" },
+                         new SelectListItem { Text = "Circle" },
+
+                },
+                new { @class = "form-control form-control-sm", @style = "width: 50%;" })
+                            <span id="DirectoryListBasedOn"></span>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>10.</td>
+                        <td>Blood Bank List Based On</td>
+                        <td>
+                            <label></label>
+                            @Html.DropDownListFor(model => model.MobileGeneralSettings.BloodBankListBasedOn,
+                new List<SelectListItem> {
+                          new SelectListItem { Text = "My Team and Repotees" },
+                         new SelectListItem { Text = "Company" },
+                         new SelectListItem { Text = "Location" },
+                         new SelectListItem { Text = "Department" },
+                         new SelectListItem { Text = "My Team" },
+                         new SelectListItem { Text = "My Repotees" },
+                         new SelectListItem { Text = "Core Team" },
+                         new SelectListItem { Text = "Circle" },
+
+                },
+                new { @class = "form-control form-control-sm", @style = "width: 50%;" })
+                            <span id="BloodBankListBasedOn"></span>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button" onclick="SaveMobileSettings()"
+                            class="btn btn-default  mobile-full-width">
+                        Save
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    }

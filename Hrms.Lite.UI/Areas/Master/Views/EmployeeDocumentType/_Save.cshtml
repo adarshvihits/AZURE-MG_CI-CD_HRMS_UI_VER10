@@ -1,0 +1,133 @@
+﻿@model Hrms.Lite.Shared.Master.EmployeeDocumentType
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "EmployeeDocumentType", FormMethod.Post, new { id = "employeeDocumentTypeSave" }))
+{
+    <div id="addregion" class="slider-forms slider-forms-open employeeDocumentTypeSaveclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('employeeDocumentTypeSaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Employee Document Type
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm EDTName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'RegionName')", maxlength = "120" })
+                            <span id="EDTName"></span>
+                            @*<span id="RegionName" class="error-message is-invalid"></span>*@
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm EDTShortName", @placeholder = "Short Name", @onblur = "validate(this,'RegionShortName')", maxlength = "5" })
+                            <span id="EDTShortName"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row my-3">
+
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Document Type
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.DropDownListFor(Model => Model.DocumentType.Code, (SelectList)ViewBag.DocumentTypeDropdown, "--Select Document Type--", new { @class = "form-control form-control-sm Cname",  @onblur = "validate(this,'DocumentTypeName')" })
+                            <span id="DocumentTypeName"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('EMPLOYEEDOCUMENTTYPE','@Model.Code')">
+
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "Activeinactivereg" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        @if (Model.Mode == "Create")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm", @placeholder = "Description", maxlength = "250" })
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.DisplayFor(Model => Model.Description)
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "Create")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

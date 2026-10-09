@@ -1,0 +1,125 @@
+﻿@model Hrms.Lite.Shared.PayRoll.EmployeeVsInsuranceDetails
+    <script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm("Save", "Allowance", FormMethod.Post, new { id = "InsuranceDetailsSave" }))
+{
+<div id="empattendancesettings" class="slider-forms slider-forms-open addInsuranceDetails">
+    <div class="slider-inner-style">
+        <div class="slider-form-close">
+            <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('addInsuranceDetails')"></i>
+        </div>
+        <h4>
+            Add New Insurance Details
+        </h4>
+
+
+
+
+
+        <div class="row my-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Policy </label>
+
+                    <div class="form-group filter-combobox mt-0">              
+                        
+                        @Html.HiddenFor(m => m.EmployeeGI)
+                        @Html.HiddenFor(m => m.InsurancePolicy.Code)
+                        @Model.InsurancePolicy.Name
+                        @*@Html.DropDownListFor(m => m.InsurancePolicy.Code, (SelectList)ViewBag.Policy, "--Select--", new { @class = "form-control form-control-sm"})*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Company </label>
+                    <div class="form-group filter-combobox mt-0">
+                      @Html.HiddenFor(m => m.InsurancePolicy.InsuranceCompany.Code)
+                      @Model.InsurancePolicy.InsuranceCompany.Name
+                        @*@Html.DropDownListFor(m => m.InsurancePolicy.InsuranceCompany.Code, (SelectList)ViewBag.Company, "--Select--", new { @class = "form-control form-control-sm", @style = "width: 200px;" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Policy Number </label><span class="Mandatory">*</span>         
+                    @Html.TextBoxFor(m => m.PolicyNumber, new { @class = "form-control form-control-sm", @placeholder = "Policy Number",@onblur= "validate(this,'pNumber')" })
+                    <span id="pNumber"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Start Date </label><span class="Mandatory">*</span>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Start Date",@onchange= "validate(this,'stDate');compareStartDateAndMaturityDate()" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                        <span id="stDate"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Maturity Date </label><span class="Mandatory">*</span>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.MaturityDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Maturity Date",@onchange= "validate(this,'mDate');compareStartDateAndMaturityDate()" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                        <span id="mDate"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Principal Amount </label><span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PrincipalAmount, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Principal Amount", @onkeypress = "return onlyNumberKey(event)",@onblur="validate(this,'prAmt')" })
+                    <span id="prAmt"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Premium Amount </label><span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PremiumAmount, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Premium Amount", @onkeypress = "return onlyNumberKey(event)",@onblur="validate(this,'prmAmt')" })
+                    <span id="prmAmt"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+
+
+            <div class="col-md-12">
+                <label>Remarks</label>                
+                @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks" })
+            </div>
+        </div>
+
+
+
+
+        <div class="row card-footer-bottom-fixed border-none">
+            <div class="col-md-12 align-right">
+                <a type="button"
+                   class="btn btn-default  mobile-full-width" onclick="onInsuranceDetailsSaveClick()">
+                    Save
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+}

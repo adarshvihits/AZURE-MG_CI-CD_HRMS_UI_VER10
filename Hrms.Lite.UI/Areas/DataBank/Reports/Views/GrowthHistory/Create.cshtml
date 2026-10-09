@@ -1,0 +1,307 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Hrms.Lite.Shared.DataBank.DTO.EmployeeProfile
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Account.Login CurrentUser = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Account.Login>(Context.Session.GetString("User"));
+}
+<script src="~/scripts/DataBank/Reports/growthHistory.js"></script>
+<script>
+    $(document).ready(function () {
+          salVisible = @CurrentUser.authUser.SalaryVisibility;
+        fillData();
+    });
+</script>
+<style>
+
+
+
+
+
+
+    table.fold-table > tbody > tr.view td,
+    table.fold-table > tbody > tr.view th {
+        cursor: pointer;
+    }
+
+        table.fold-table > tbody > tr.view td:first-child,
+        table.fold-table > tbody > tr.view th:first-child {
+            position: relative;
+            padding-left: 20px;
+        }
+
+            table.fold-table > tbody > tr.view td:first-child:before,
+            table.fold-table > tbody > tr.view th:first-child:before {
+                position: absolute;
+                top: 50%;
+                left: 5px;
+                width: 9px;
+                height: 16px;
+                margin-top: -8px;
+                font: 16px fontawesome;
+                color: #999;
+                content: "";
+                transition: all 0.3s ease;
+            }
+
+
+
+
+    table.fold-table > tbody > tr.view.open {
+        color: white;
+    }
+
+        table.fold-table > tbody > tr.view.open td:first-child:before,
+        table.fold-table > tbody > tr.view.open th:first-child:before {
+            transform: rotate(-180deg);
+            color: #333;
+        }
+
+    table.fold-table > tbody > tr.fold {
+        display: none;
+    }
+
+        table.fold-table > tbody > tr.fold.open {
+            display: table-row;
+        }
+
+    .fold-content {
+        padding: 0.5em;
+    }
+
+        .fold-content h3 {
+            margin-top: 0;
+        }
+
+        .fold-content > table {
+            border: 2px solid #ccc;
+        }
+
+    .icon-color-add {
+        color: #0068ff !important;
+    }
+
+
+    .new-close-add:before {
+        color: red !important;
+        font-size: 13px !important;
+    }
+
+    .new-close-tickss {
+        color: green !important;
+        font-size: 13px !important;
+    }
+
+    .career_history {
+        position: sticky;
+        top: 0px;
+        z-index: 10;
+    }
+</style>
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Career History</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "GrowthHistory", new { Area = "DataBank" })" class="">Career History</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Career History
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+
+<div class="card card-custom height-100per footer-row-fixed">
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-xl-12 col-md-12">
+                <!---- profile section----->
+
+                <div class="profile-header position-relative box-shadow-none mb-2 gutter-b">
+
+
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+                    <input data-val="true" data-val-required="The EmployeeGI field is required." id="EmployeeGI" name="EmployeeGI" type="hidden" value="6e3333d8-44be-4d35-b39b-51208a42c961">
+                    <div class="profile-header-overflow"></div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+
+                    <div class="panel-body" style="padding-top:5px;">
+
+                        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table   Career-History-main-table-list  " style="display:block; height:500px; overflow-x:hidden; overflow-y:scroll;">
+
+
+
+
+
+                            <table class="fold-table">
+                                <thead>
+                                    <tr class="table-dark career_history">
+                                        <th>Transition Type</th>
+                                        @*<th>Reason</th>*@
+                                        <th>Effective Date</th>
+                                        <th>Order Date</th>
+                                        <th>PR Applicable</th>
+                                        @if (CurrentUser.authUser.SalaryVisibility != 0)
+                                        {
+                                            <th>Gross Pay</th>
+                                        }
+                                            <th></th>
+
+
+                                        </tr>
+                                </thead>
+                                <tbody style="overflow-x:hidden;">
+                                    @if (Model != null && Model.GrowthHistory != null && Model.GrowthHistory.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.GrowthHistory.Count; i++)
+                                        {
+
+
+                                    <tr class="view_@i expand-btn">
+                                        <td>
+                                            @Html.HiddenFor(m => m.GrowthHistory[i].EmployeeGI)
+                                            @Html.HiddenFor(m => m.GrowthHistory[i].HistoryGI)
+                                            @Model.GrowthHistory[i].TransitionType
+                                        </td>
+                                        @*<td class="pcs">@Model.GrowthHistory[i].ReasonsName</td>*@
+                                        <td class="cur">@Model.GrowthHistory[i].EffectiveDate_</td>
+                                        <td>@Model.GrowthHistory[i].OrderDate</td>
+                                        <td class="per">@Model.GrowthHistory[i].PRApplicable</td>
+                                        @if (CurrentUser.authUser.SalaryVisibility != 0)
+                                        {
+                                            <td class="per">@Model.GrowthHistory[i].GrossPay</td>
+                                            <td class="view icon_@i" onclick="Expand(@i)">
+                                                <i class="fa fa-plus-circle icon-color-add  cursor-pointer" aria-hidden="true"></i>
+                                                <i class="fa fa-minus-circle hide  icon-color-add  cursor-pointer  " aria-hidden="true"></i>
+                                            </td>
+                                        }
+                                        </tr>
+                                            <tr class="fold">
+                                                <td colspan="7">
+                                                    <div class="fold-content" id="InnerList_@i">
+
+
+
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+
+
+    //$(function () {
+    //    $(".fold-table .view").on("click", function () {
+    //        let elem = document.getElementsByClassName("view1");
+
+    //        let isMainPresent = elem[0].classList.contains("open");
+    //        if (isMainPresent) {
+    //            $('.fa-plus-circle').removeClass('hide');
+    //            $('.fa-minus-circle').addClass('hide');
+    //        }
+    //        else {
+    //            $('.fa-plus-circle').addClass('hide');
+    //            $('.fa-minus-circle').removeClass('hide');
+    //        }
+    //        $('.view1')
+    //            .toggleClass("open")
+    //            .next(".fold")
+    //            .toggleClass("open");
+    //    });
+    //});
+
+
+</script>

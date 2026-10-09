@@ -1,0 +1,95 @@
+﻿@model Hrms.Lite.Shared.Master.AccountsHead
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border odd-even vertical-scroll-90-per mobile-responsive-table allowance-deduction-accounthead-list">
+    @Html.HiddenFor(model => Model.TabName)
+    @Html.HiddenFor(model => Model.AccountsHeadTablist.Count)
+    <table id="AllowDedtable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col"> Name</th>
+
+                <th scope="col" class="text-left">Type</th>
+                <th scope="col" class="text-left">Ledger Code</th>
+                <th scope="col" class="text-left">Ledger Name</th>
+
+
+                <th scope="col">Action</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.AccountsHeadTablist != null && Model.AccountsHeadTablist.Count > 0)
+                {
+                    for (int i = 0; i < Model.AccountsHeadTablist.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(m => m.TabName)
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(m => m.AccountsHeadTablist[i].Code)
+                            @Html.HiddenFor(m => m.AccountsHeadTablist[i].Name)
+                            @Html.HiddenFor(model => Model.GI)
+                            <td data-label="Name"> @Model.AccountsHeadTablist[i].Name </td>
+
+                            <td data-label="Type">
+                                @Model.AccountsHeadTablist[i].AllowanceType
+                            </td>
+                            <td data-label="Ledger Code">
+                                @Model.AccountsHeadTablist[i].AccountsHeadUserCode
+                            </td>
+
+                            <td data-label="Ledger">
+
+
+                                <div class="form-group">
+
+                                    <span id="amtLabel2_@i">@Model.AccountsHeadTablist[i].LedgerName</span><span id="amtTxtbox2_@i" class="hide">
+                                        @Html.DropDownListFor(Model => Model.AccountsHeadTablist[i].Ledger, (SelectList)ViewBag.AccountHead, "--Select Ledger--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'accounthead')", @style = "width:100%;" })
+                                        <span id="accounthead"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+
+
+                            <td data-label="Edit">
+                                <span id="editbt2_@i">
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="ceedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onEditClick(@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                </span>
+
+
+                                <span id="updateCancel2_@i" class="hide">
+                                    <a data-bs-toggle="tooltip" title="Update"
+                                       id="cupdate"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onUpdateClick(@i)">
+                                        <i class="icon-xl fas fa-sync-alt"></i>
+                                    </a>
+                                    <a data-bs-toggle="tooltip" title="Update"
+                                       id="ccancel"
+                                       class="btn btn-icon btn-cancel icon-only" onclick="onCancelClick(@i)">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </a>
+                                </span>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

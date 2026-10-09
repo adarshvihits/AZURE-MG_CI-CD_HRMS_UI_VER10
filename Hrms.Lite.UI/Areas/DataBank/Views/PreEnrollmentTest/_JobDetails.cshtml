@@ -1,0 +1,306 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        OnCompanyChange($('#JobDetails_Company_Code'), 'company')
+    });
+
+
+
+</script>
+
+
+ <div class="step-outer step_row">
+
+
+        <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+            Personal Info
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item active">
+            Job Details
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Compensation
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Address
+            <span class="step-circle"></span>
+        </a>
+
+    </div>
+
+
+
+
+ <div class="step-progress-outer">
+     <div class="step-left col-md-12">
+         <h3>
+             Job Details
+         </h3>
+         <div class="row my-3">
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Company</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Company.Code, (SelectList)ViewBag.Company, "--Select Company--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'company');OnCompanyChange(this,'company');" })
+                     <span id="company"></span>
+
+                 </div>
+             </div>
+             @if (Model.FormName == "DirectOfferFromActiveVancyTab")
+             {
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Location</label><span class="Mandatory">*</span>
+                         @Html.HiddenFor(m => m.JobDetails.Location.Code)
+                         @Html.DropDownListFor(m => m.JobDetails.Location.Code, (SelectList)ViewBag.Loc, "--Select Location--", new
+                    { @class = "form-control form-control-sm", @disabled = "true" })
+
+                     </div>
+                 </div>
+             }
+             else
+             {
+
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Location</label><span class="Mandatory">*</span>
+
+                         @Html.DropDownListFor(m => m.JobDetails.Location.Code, (SelectList)ViewBag.Loc, "--Select Location--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'location');onSalaryStructureChange(); fillMinCTC();" })
+                         <span id="location"></span>
+                     </div>
+                 </div>
+             }
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Division</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Division.Code, (SelectList)ViewBag.Division, "--Select Division--", new { @class = "form-control form-control-sm" })
+                     <span id="division"></span>
+
+                 </div>
+             </div>
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Section</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Section.Code, (SelectList)ViewBag.Section, "--Select Section--", new { @class = "form-control form-control-sm" })
+                     <span id="division"></span>
+
+                 </div>
+             </div>
+
+         </div>
+         <div class="row my-3">
+             @if (Model.FormName == "DirectOfferFromActiveVancyTab")
+             {
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Department</label><span class="Mandatory">*</span>
+                         @Html.HiddenFor(m => m.JobDetails.Department.Code)
+                         @Html.DropDownListFor(m => m.JobDetails.Department.Code, (SelectList)ViewBag.Dep, "--Select Department--", new
+                    { @class = "form-control form-control-sm", @disabled = "true" , @onchange = "onSalaryStructureChange();"})
+                         <span id="department"></span>
+                     </div>
+                 </div>
+             }
+             else
+                                     {
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Department</label><span class="Mandatory">*</span>
+                         @Html.DropDownListFor(m => m.JobDetails.Department.Code, (SelectList)ViewBag.Dep, "--Select Department--", new
+                    { @class = "form-control form-control-sm", @onchange = "validate(this, 'department');onSalaryStructureChange();" })
+                         <span id="department"></span>
+                     </div>
+                 </div>
+             }
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Sub.Department</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.SubDepartment.Code, (SelectList)ViewBag.SubDepartment, "--Select Sub.Department--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'SubDepartment')" })
+                     <span id="SubDepartment"></span>
+                 </div>
+             </div>
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Designation</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Grade.Code, (SelectList)ViewBag.Gra, "--Select Designation--", new { @class = "form-control form-control-sm", @onchange = "onGradeChange(this,'grade')" })
+                     <span id="grade"></span>
+
+                 </div>
+             </div>
+             @if (Model.FormName == "DirectOfferFromActiveVancyTab")
+             {
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Fun.Designation</label><span class="Mandatory">*</span>
+                         @Html.HiddenFor(m => m.JobDetails.Designation.Code)
+                         @Html.DropDownListFor(m => m.JobDetails.Designation.Code, (SelectList)ViewBag.Des, "--Select Fun.Designation--", new
+                         { @class = "form-control form-control-sm", @disabled = "true" })
+
+
+                     </div>
+                 </div>
+             }
+             else
+                         {
+                 <div class="col-md-3">
+                     <div class="form-group">
+                         <label>Fun.Designation</label><span class="Mandatory">*</span>
+
+                         @Html.DropDownListFor(m => m.JobDetails.Designation.Code, (SelectList)ViewBag.Des, "--Select Fun.Designation--",
+                        new { @class = "form-control form-control-sm", @onchange = "validate(this,'designation');fillNoticeperiod(this)" })
+                         <span id="designation"></span>
+
+                     </div>
+                 </div>
+             }
+
+
+         </div>
+         <div class="row my-3">
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Category</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Category.Code, (SelectList)ViewBag.Cat, "--Select Category--", new { @class = "form-control form-control-sm", @onchange = "onCategoryChange(this)" })
+                     <span id="category"></span>
+
+                 </div>
+             </div>
+
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Wage Grade</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.WageGrade.Code, (SelectList)ViewBag.WageGrade, "--Select Wage Grade--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'wageGrade');OnWageGradeChange(this,'wageGrade'); fillMinCTC();" })
+                     <span id="wageGrade"></span>
+                 </div>
+             </div>
+
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Payroll Group</label><span class="Mandatory">*</span>
+                     @Html.DropDownListFor(m => m.JobDetails.PayrollGroup.Code, (SelectList)ViewBag.Pay, "--Select Payroll Group--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'payrollgroup')" })
+                     <span id="payrollgroup"></span>
+                 </div>
+             </div>
+
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Employment Status</label><span class="Mandatory">*</span>
+
+                     @Html.DropDownListFor(m => m.JobDetails.EmploymentType.Code, (SelectList)ViewBag.EmploymentType, "--Select  Employment Status--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Function')" })
+                     <span id="employmentType"></span>
+                 </div>
+             </div>
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Function</label>
+
+                     @Html.DropDownListFor(m => m.JobDetails.Function.Code, (SelectList)ViewBag.Function, "--Select Function--", new { @class = "form-control form-control-sm", @onchange = "validate(this,function')" })
+                     <span id="vdagroup"></span>
+                 </div>
+             </div>
+             <div class="col-md-3">
+                 <div class="form-group">
+                     <label>Work Location</label>
+
+                     @Html.DropDownListFor(m => m.JobDetails.WorkLocation.Code, (SelectList)ViewBag.Wlo, "--Select Work Location--", new { @class = "form-control form-control-sm", @onchange = "validate(this,workLocation')" })
+                     <span id="vdagroup"></span>
+                 </div>
+             </div>
+             @*<div class="col-md-3">
+                 <div class="form-group">
+                     <label>VDA Group</label>
+
+                     @Html.DropDownListFor(m => m.JobDetails.VDAGroup.Code, (SelectList)ViewBag.VDAGroup, "--Select VDA Group--", new { @class = "form-control form-control-sm", @onchange = "validate(this,vdagroup');onSalaryStructureChange();" })
+                     <span id="vdagroup"></span>
+                 </div>
+             </div>*@
+             <div class="col-md-3 renewaldiv">
+                 <div class="form-group">
+                     <label label id="renewal">Renewal Date</label><span class="Mandatory">*</span>
+                     <div class="input-group date" id="renewaldt">
+
+                         @Html.TextBoxFor(m => m.BasicInfo.RenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 renewaldatepicker", @readonly = "true", @placeholder = "Renewal Date", @onchange = "validateDOR(this,'dor')", onclick = "$('.renewaldatepicker').datepicker('show');" })
+
+                         <div class="input-group-append">
+                             <span class="input-group-text">
+                                 <i class="la la-calendar"></i>
+                             </span>
+                         </div>
+                     </div>
+                     <span id="dor"></span>
+                 </div>
+             </div>
+
+
+
+
+             <div class="col-md-3">
+                 <div class="form-group">
+                     @if (Model.FiledValidations !=null&& Model.FiledValidations.Count>0)
+                     {
+                         if (Model.FiledValidations[4].Applicability == true)
+                         {
+                         <label>Notice Period (In Days)</label><span class="Mandatory">*</span>
+
+                         @Html.TextBoxFor(m => m.JobDetails.NoticePeriod, new { @class = "form-control form-control-sm", @maxlength = 3, @placeholder = "Notice period", @onblur = "validate(this,'nop')", @onkeypress = "return onlyNumberKey(event)" })
+                         <span id="nop"></span>
+                         }
+                     }
+                     else
+                     {
+                         <label>Notice Period (In Days)</label>
+
+                         @Html.TextBoxFor(m => m.JobDetails.NoticePeriod, new { @class = "form-control form-control-sm", @maxlength = 3, @placeholder = "Notice period", @onkeypress = "return onlyNumberKey(event)" })
+                         <span id="nop"></span>
+                     }
+                 </div>
+             </div>
+
+
+
+         </div>
+
+
+
+         </div>
+
+     </div>
+
+
+
+
+
+
+ <div class="row card-footer-bottom-fixed">
+     <div class="col-md-6">
+         <button type="button" onclick="PopUp_Preview()"
+                 class="btn btn-default float-left mobile-full-width">
+             Salary Details
+         </button>
+
+     </div>
+     <div class="col-md-6">
+         <button type="button" onclick="onNextClick('preEnroll_jobdetails','Compensation')"
+                 class="btn btn-default float-right mobile-full-width">
+             Next
+         </button>
+     </div>
+ </div>
+

@@ -1,0 +1,226 @@
+﻿@model Hrms.Lite.Shared.DashBoard.SuccessionDashboard
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/DashBoard/successionDashboard.js"></script>
+
+<style>
+    .card.card-custom > .card-body {
+        padding: 6px 30px 75px 20px !important;
+    }
+
+    .tab-content > .active {
+        display: block !important;
+    }
+
+    .tab-content {
+        background-color: #fff;
+        /* border: solid 1px #2ba659; */
+        width: 100%;
+        padding: 10px;
+        display: block;
+        position: relative;
+        top: 0px;
+    }
+
+    .nav-item {
+        margin-bottom: 10px !important;
+        border-radius: 30px !important;
+        color: #000 !important;
+        text-align: center;
+        display: flex !important;
+        justify-content: center;
+    }
+
+
+    .nav-link.active {
+        border: 1px solid #000000 !important;
+    }
+
+    .nav.nav-tabs .nav-item {
+        margin-right: 0.25rem;
+        padding: 5px;
+    }
+
+    .card {
+        background-color: white !important;
+        box-shadow: rgba(99, 94, 102, 0.2) 0px -1px 15px 0px !important;
+        border-radius: 10px !important;
+    }
+
+    .table thead th {
+        font-size: 10px;
+        padding: 10px 10px;
+    }
+
+    .table-box-co td {
+        padding: 5px 10px !important;
+        font-size: 10px;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Succession Planning</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Succession Planning
+                    </li>
+                </ul>
+
+
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per h-100 footer-row-fixed p-0">
+
+                <div class="card-body p-0">
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+
+                            <div class="card">
+                                <div class="card-body" style=" padding: 8px 20px; height: 260px;">
+                                    <h4 style=" font-size: 14px; width: 100%; text-align: center;">Role Exposure Level</h4>
+
+                                    <div class="d-flex justify-content-center">
+
+                                        @await Html.PartialAsync("_RiskDiagram")
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-9">
+
+                            <div class="card" style=" height: 262px; padding: 7px 20px; ">
+
+                                <div class="d-flex justify-content-between" style="padding: 5px 20px 0px 20px; ">
+                                    <h4 class="ClassfnTitle" style=" font-size: 14px; width: 100%; ">Exposure by Department</h4>
+                                    <select id="Classifn" class="form-control form-control-sm float-right" onchange="onClassificationDropdownChange()" style="width: 200px;">
+                                        <option value="Department">Department</option>
+                                        <option value="Region">Region</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="card-body classfnChart" style=" justify-content: center; padding: 10px 20px;">
+
+                                    @await Html.PartialAsync("_ClassifnDiagram", Model.ClassifnDiagram)
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-12 mt-3">
+
+                            <div class="card">
+                                <div class="card-body" style=" padding: 5px 5px; ">
+
+                                    <div class=" table-card ">
+                                        @await Html.PartialAsync("_PlanningGrid", Model)
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+
+
+<div class="modal fade notif_popup" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title notif_popup_head">Successor List
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+

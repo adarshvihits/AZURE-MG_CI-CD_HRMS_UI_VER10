@@ -1,0 +1,190 @@
+﻿
+@model Hrms.Lite.Shared.Master.ApproverRole
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/Master/ApproverRole.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/Multiselectdropdown.js"></script>
+@*<script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('Name');
+        });
+    </script>*@
+
+<script>
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+        if ($('#ApplicabilityCode').val() != 4 && $('#Mode').val()!= "CREATE") {
+            $('#Div_Applicability').show();
+        }
+
+    });
+</script>
+<style>
+    .multiselect-native-select .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm("Save", "ApproverRole", FormMethod.Post, new { id = "ApproverRolesave" }))
+{
+
+    <div id="addApproverRole" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Role Matrix Settings</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.ApplicabilityCode)
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.DropDownListFor(m => m.Role.Code, (SelectList)ViewBag.Role,
+                                                 new { @class = "form-control form-control-sm", @disabled = "true" })
+                                @Html.HiddenFor(model => Model.Role.Code)
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.Role.Code, (SelectList)ViewBag.Role, "Select",
+                                           new { @class = "form-control form-control-sm", @onchange = "onRoleChange(this,'ApproverRoleName')" })
+                            }
+                            <span id="ApproverRoleName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Country</label>
+                            @Html.DropDownListFor(m => m.Country.Code, (SelectList)ViewBag.Country, "Select", new { @class = "form-control form-control-sm", @onchange = "onCountryChange(this,'country')" })
+                            <span id="country"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6" style="display: none;" id="Div_Applicability">
+                        <div class="form-group">
+                            <label id="ApplicabilityName">@Model.ApplicabilityName </label>
+                            @Html.DropDownListFor(m => m.Applicability.Code, (SelectList)ViewBag.Applicability, "Select", new { @class = "form-control form-control-sm", @id = "ApplicabilityDropdown" })
+
+                            <span id="applicability"></span>
+                        </div>
+
+                    </div>
+                </div>
+                @*<div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <div class="form-control  form-control-sm Departmentdiv">
+                                    @Html.ListBoxFor(Model => Model.Departments, (SelectList)ViewBag.Department, new
+                               {
+                                   @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                                   placeholder = "Select Department",
+                                   @multiple = "multiple",
+                                   @onchange = "validateMultiselect('Departments', 'department','Departmentdiv')"
+                               })
+                                </div><span id="department"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Section</label>
+                                <div class="form-control  form-control-sm Sectiondiv">
+                                    @Html.ListBoxFor(Model => Model.Sections, (SelectList)ViewBag.Section, new
+                               {
+                                   @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                                   placeholder = "Select Section",
+                                   @multiple = "multiple",
+                                   @onchange = "validateMultiselect('Sections', 'section','Sectiondiv')"
+                               })
+                                </div><span id="section"></span>
+                            </div>
+
+                        </div>
+                    </div>*@
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="view-title">
+                            Authority
+                        </label>
+                        <div class="view-details">
+                            @Html.DropDownListFor(m => Model.Employee.Code, (SelectList)ViewBag.Authority, "Select Employee", new Dictionary<string, object>
+    {
+    { "class", "selectpicker form-control form-control-sm" },
+    { "data-live-search", "true" } })
+
+                        </div>
+                    </div>
+                    <span id="authority"></span>
+                </div>
+
+                @*<div class="row my-3">
+
+
+                        <div class="col-md-12 d-flex align-items-center">
+                            <div class="d-flex align-items-center">
+                                Active
+                            </div>
+                            <label class="switch">
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "activeinactiveApproverRole" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div>
+                        </div>
+
+
+                    </div>*@
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveApproverRole('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveApproverRole('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DataBank.DTO.HRPlanning>
+@using Kendo.Mvc.UI
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+
+@*<div id="chartdiv">*@
+    <div class="demo-section wide">
+        @(Html.Kendo().Chart(Model)
+        .Name("chart2").HtmlAttributes(new { style = "width: 100%; height: 350px;" })
+        //.Title("Gross domestic product growth /GDP annual %/")
+        .Legend(legend => legend
+            .Position(ChartLegendPosition.Top)
+        )
+        .ChartArea(chartArea => chartArea
+            .Background("transparent")
+        )
+        .Series(series =>
+        {
+            series
+                .Column(model => model.PlannedManPower)
+                .Color("#007eff")
+                .Name("Planned Manpower");
+            series
+               .Column(model => model.CurrentManPower)
+               .Stack(true)
+               .Color("#ef955f")
+               .Name("Current Manpower");
+           
+        })
+        .CategoryAxis(axis => axis
+            .Name("label-axis")
+            .Categories(model => model.Combination2Name)
+        )       
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Format("{0}%")
+            .Template("#= series.name #: #= value #")
+        )
+    )
+    </div>
+@*</div>*@
+
+

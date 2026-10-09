@@ -1,0 +1,5 @@
+﻿$('.multiselectDropdownField').multiselect({
+    includeSelectAllOption: true,
+
+
+});

@@ -1,0 +1,929 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<style>
+
+    .profile-header-bis-new {
+        width: 300px;
+        height: 600px;
+        position: relative;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: rgba(99, 94, 102, 0.2) 0px -1px 15px 0px;
+    }
+
+
+    .k-map .k-i-marker-custom-marker {
+        background-image: url('/images/icons/locationIN.png');
+        background-size: 30px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .k-map .k-i-marker-marker-out {
+        background-image: url('/images/icons/locationOUT.png');
+        /*     background-image: url('/images/icons/locationIN.png');*/
+        background-size: 30px;
+        width: 30px;
+        height: 30px;
+    }
+
+
+    .top-head-pad {
+        padding: 10px;
+        padding-top: 56px;
+    }
+
+    .employee-profile-photo {
+        background-color: white;
+        width: 150px;
+        height: 150px;
+        display: flex;
+        margin: 6px;
+        border-radius: 91px;
+        position: absolute;
+        margin-left: 75px;
+        top: -59px;
+        box-shadow: rgba(99, 94, 102, 0.2) 0px -1px 15px 0px;
+    }
+
+    .profile-picker-emp {
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+
+
+
+    .name-head {
+        padding-top: 10px;
+        color: #002F5D;
+        padding-left: 19px;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+
+
+
+    .new-pad-data {
+        padding-left: 10px;
+    }
+
+
+    .Personal-inf-text {
+        font-size: 16px;
+        font-weight: 600;
+        margin-left: 10px;
+        color: #01172D;
+        padding-top: 10px;
+    }
+
+    .pad-2 {
+        padding-top: 10px;
+    }
+
+    .data-align-center {
+        padding-top: 100px;
+        padding-left: 20px;
+    }
+
+
+
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+        /*background-color: #fff4ce;*/
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .k-tooltip {
+        background-color: lightsteelblue;
+    }
+
+   
+
+
+
+</style>
+<script>
+
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+
+
+
+
+    $(document).ready(function () {
+
+    });
+
+      // var options = map.options;
+       // console.log(map);
+   // });
+    var firstReset = true;
+    function changeIcon(e){
+        var map = $("#map").getKendoMap();
+       // console.log(e.marker.dataItem.punchingStatus);
+        if (e.marker.dataItem.punchingStatus == 'In')
+        {
+
+            e.marker.options.shape = 'custom-marker';
+        }
+        else
+        {
+            e.marker.options.shape = 'marker-out';
+        }
+
+        if (firstReset) {
+
+            firstReset = false;
+            map.center([e.marker.dataItem.latitude, e.marker.dataItem.longitude]).zoom(13);
+        }
+
+        //var map = $("#map").data("kendoMap");
+        //map.center([32.7758, -96.7966]).zoom(10);
+
+      // console.log(e.marker.element)
+       // console.log(e);
+    }
+
+
+    function sortData(e){
+        var axis = e.sender.options.categoryAxis;
+       // console.log(axis);
+      //  axis.categories = axis.categories.sort();
+    }
+    function sortGrowthData(e) {
+        var axis = e.sender.options.categoryAxis;
+       // console.log(axis);
+          axis.categories = axis.categories.sort();
+    }
+    function toggleHandler(e) {
+        e.preventDefault();
+        var visual = e.visual;
+        var transform = null;
+        if (e.show) {
+            transform = kendo.geometry.transform().scale(1.5, 1.5, visual.rect().center());
+        }
+        visual.transform(transform);
+    }
+
+    function markerVisual(e) {
+        var src = '@Url.Content("~/images/icons/rewards.png")';
+        var image = new kendo.drawing.Image(src, e.rect);
+        return image;
+    }
+
+</script>
+<script type="x-kendo/tmp" id="tmp">
+    Value
+    <br>
+    \\#= kendo.format("<div><b>${\\#=(dataItem.balance)\\#}</b>-${\\#=(dataItem.date)\\#}<br><i>Test</i></div>", value) \\#
+</script>
+<script>
+    function LeaveClick(e) {
+        var empCode = $('#employee').val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 70, EmployeeCode: empCode },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=70&EmployeeCode=' + empCode;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    function RewardClick(e) {
+        debugger;
+        var empCode = $('#employee').val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 71, EmployeeCode: empCode },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=71&EmployeeCode=' + empCode;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    function SkillClick(e) {
+        var empCode = $('#employee').val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 72, EmployeeCode: empCode },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=72&EmployeeCode=' + empCode;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script id="empData" type="text/x-kendo-template">
+            <div class=" d-flex flex-column flex-column-fluid" >
+          <!--begin::Entry-->
+          <div>
+              <!--begin::Container-->
+              <div>
+                  <!--begin::Dashboard-->
+                  <!--begin::Row-->
+
+
+                  <div class="row height-100per">
+
+
+
+       <div class="row   top-head-pad">
+
+                          <div class="col-md-12">
+
+
+                              <div class="col-md-6">
+
+                                  <div class="profile-header-bis-new">
+                                      <div class="employee-profile-photo">
+                                          <img id="proPic" class="profile-picker-emp">
+
+                                      </div>
+                                      <div class="data-align-center">
+
+                                            <h2 id="fullName" class="name-head">@Model.fullName</h2>
+
+
+
+                                          <div class=" new-pad-data">
+
+                                              <h1 class="Personal-inf-text">Personal Information</h1>
+
+                                              <div class="row new-pad-data">
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Date of birth
+                                                          </label>
+                                                          <div id="dob" class="view-details">
+                                                           @Model.dob
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Date of Hire
+                                                          </label>
+                                                          <div id="doj" class="view-details">
+                                                             @Model.doj
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+
+                                                  <div class="col-md-6 ">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Resignation
+                                                          </label>
+                                                          <div id="dot" class="view-details">
+                                                               @Model.dot
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+
+                                              </div>
+                                          </div>
+
+
+
+
+                                          <!--Second row starts-->
+
+                                          <div class=" new-pad-data">
+
+                                              <h1 class="Personal-inf-text   pad-2">Current Position</h1>
+
+                                              <div class="row   new-pad-data">
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Department
+                                                          </label>
+                                                           <div id="department" class="view-details">
+                                                            @Model.department
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Designation
+                                                          </label>
+                                                          <div id="designation" class="view-details">
+                                                               @Model.designation
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Location
+                                                          </label>
+                                                          <div id="location" class="view-details">
+                                                               @Model.location
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                              </div>
+                                          </div>
+
+
+
+
+                                          <!--Third row starts-->
+
+                                          <div class=" new-pad-data">
+
+                                              <h1 class="Personal-inf-text  pad-2">Financials</h1>
+                                              <div class="row   new-pad-data">
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Gross Pay
+                                                          </label>
+                                                          <div id="grosspay" class="view-details">
+                                                                    @Model.grossPay
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              CTC
+                                                          </label>
+                                                          <div id="ctc" class="view-details">
+                                                            @Model.ctc
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+
+
+
+
+
+                                          <!--Fourth row starts-->
+
+                                          <div class=" new-pad-data   ">
+
+                                              <h1 class="Personal-inf-text  pad-2">Leave Info</h1>
+
+                                              <div class="row  new-pad-data">
+
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Leave Taken
+                                                          </label>
+                                                          <div id="leave" class="view-details">
+                                                               @Model.leave
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-6">
+                                                      <div class="row-outer">
+                                                          <label class="view-title">
+                                                              Leave Balance
+                                                          </label>
+                                                           <div id="leaveBalance" class="view-details">
+                                                           @Model.leaveBalance
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                              </div>
+                                          </div>
+
+
+
+
+                                      </div>
+
+
+                                  </div>
+
+
+
+
+                              </div>
+
+
+
+
+                          </div>
+
+                      </div>
+
+
+                  </div>
+              </div>
+          </div>
+      </div>
+
+   @* <div id="employeeInfo"  style="height:100%;font-size:1rem;">
+
+    <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-4">
+
+            <div style="font-weight:bold">Name</div>
+            </div>
+     <div  class="col-md-8">
+
+            <div id="fullName" >@Model.fullName</div>
+            </div>
+          </div>
+
+                <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-4">
+
+            <div style="font-weight:bold">Date of Birth</div>
+            </div>
+     <div  class="col-md-8">
+
+            <div id="dob" >@Model.dob</div>
+            </div>
+
+
+          </div>
+
+
+              <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-4">
+
+            <div style="font-weight:bold">Date of Hire</div>
+            </div>
+     <div  class="col-md-8">
+
+            <div id="doj" >@Model.doj</div>
+            </div>
+          </div>
+
+                <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-4">
+
+            <div style="font-weight:bold">Resignation</div>
+            </div>
+     <div  class="col-md-8">
+
+            <div id="dot" >@Model.dot</div>
+            </div>
+
+
+          </div>*@
+
+
+
+
+</script>
+
+<script id="empProData" type="text/x-kendo-template">
+    <div id="employeeProData" style="height:100%;font-size:1rem;">
+
+    <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Department</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="department" >@Model.department</div>
+            </div>
+          </div>
+
+
+              <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Designation</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="designation" >@Model.designation</div>
+            </div>
+
+
+          </div>
+
+
+
+           <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Location</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="location" >@Model.location</div>
+            </div>
+
+
+          </div>
+</script>
+
+<script id="empSalary" type="text/x-kendo-template">
+    <div id="employeeSalaryData" style="height:100%;font-size:1rem;">
+
+    <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Gross Pay</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="grossPay" >@Model.grossPay</div>
+            </div>
+          </div>
+
+
+              <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">CTC</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="ctc" >@Model.ctc</div>
+            </div>
+
+
+          </div>
+
+
+
+
+</script>
+
+<script id="empLeave" type="text/x-kendo-template">
+    <div id="employeeLeaveData" style="height:100%;font-size:1rem;">
+
+    <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Leave Taken</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="leave" >@Model.leave</div>
+            </div>
+          </div>
+
+
+              <div class="row" style="padding: 5px 0;">
+        <div  class="col-md-6">
+
+            <div style="font-weight:bold">Leave Balance</div>
+            </div>
+     <div  class="col-md-6">
+
+            <div id="leaveBalance" >@Model.leaveBalance</div>
+            </div>
+
+
+          </div>
+
+
+
+
+</script>
+
+<script id="leavemonths" type="text/x-kendo-template">
+    @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MonthWiseLeaveTrend>()
+                                        .Name("monthLeave")
+                                        .Title("").Events(e=>e.PlotAreaClick("LeaveClick"))
+                                             .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                        .Legend(legend => legend
+                                            .Position(ChartLegendPosition.Top)
+                                        )
+                                                                .DataSource(ds => ds.Read(read => read.Action("GetEmployeeLeaveTrend", "MISDashBoard").Data("getEmpCode"))
+                                                                .Group(g => g.Add(a => a.type)))
+
+                                        .Series(series =>
+                                        {
+                                            series.Line(model => model.total, categoryExpression: model => model.firstDay).Name("\\#= group.value \\#").CategoryField("firstDay").Width(5);
+
+
+                                        }).SeriesColors("\\#C40C0C", "\\#874CCC", "\\#8B322C")
+                                           .ChartArea(chartArea => chartArea
+                                        .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                        .Events(ev=>ev.DataBound("sortData"))
+                                        .CategoryAxis(axis => axis
+                                        .BaseUnit(ChartAxisBaseUnit.Months)
+                                            .Labels(labels => labels//.Rotation(45)
+                                                .DateFormats(dateFormat => dateFormat.Months("MMMM"))
+
+                                            )
+                                            .Crosshair(c => c.Visible(true))
+                                        )
+                                        .ValueAxis(axis => axis.Numeric()
+                                            .Labels(labels => labels.Format("{0:N0}"))
+                                            .MajorUnit(5)
+                                        )
+                                            .Tooltip(tooltip => tooltip
+                                               .Visible(true)
+                                                       .Template("\\#= series.name \\#: \\#= value \\#")
+                                           )
+
+                                        .ToClientTemplate()
+                )
+</script>
+
+<script id="growth" type="text/x-kendo-template">
+    @(
+        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.EmployeeMilestones>()
+                                                                            .Name("empGrowth")
+                                                                            .Title("")
+                                                                                 // .Events(ev => ev.DataBound("sortGrowthData"))
+                                                                            .Legend(legend => legend
+                                                                                .Position(ChartLegendPosition.Top)
+                                                                            )
+                                                                        .DataSource(ds => ds.Read(read => read.Action("GetEmployeeMilestones", "MISDashBoard").Data("getEmpCode")))
+                                                                            .Series(series =>
+                                                                            {
+                                                                                series.Line(model => model.gp, categoryExpression: model => model.date).Name("").CategoryField("date").Color("\\#C65BCF").Width(5)
+                                                     .Tooltip(tooltip => tooltip.
+                                                           Template("<div style='width:200px; white-space:normal;font-weight:700;'> \\#= dataItem.type \\# (\\#= kendo.toString(dataItem.date, 'dd/MMM/yyyy') \\#) </div><div style='width:200px; white-space:normal'>Reason : \\#= dataItem.name \\# </div><div style='width:200px; white-space:normal'>Department: \\#= dataItem.department \\#</div><div style='width:200px; white-space:normal'>Designation: \\#= dataItem.designation \\#</div><div style='width:200px; white-space:normal'>Location: \\#= dataItem.location \\#</div><div style='width:200px; white-space:normal'>Grade: \\#= dataItem.grade \\#</div><div style='width:200px; white-space:normal'>Increment: \\#= dataItem.balance \\#</div><div style='width:200px; white-space:normal'>Gross Pay: \\#= dataItem.gp \\#</div>").Visible(true)
+                                                     )//.Aggregate(ChartSeriesAggregate.Count);
+                                                     ;
+
+
+                                                                            }
+                    )
+                                                            .ChartArea(ch => ch.Width(950).Height(250))
+                                                            .CategoryAxis(axis => axis
+                                                            .Date()
+                                                            //.BaseUnitStep(180)
+                                                            .BaseUnit(ChartAxisBaseUnit.Fit)
+
+                                                           //.AutoBaseUnitSteps(b=>b.Years())
+                                        .Labels(labels => labels.Rotation(0)
+                                                                .DateFormats(d=>d.Days("dd-MMM-yyyy")))
+
+                                                //.Crosshair(c => c.Visible(true))
+                                            )
+                                            .ValueAxis(axis => axis.Numeric()
+                                                .Labels(labels => labels.Format("{0:N0}"))
+                                                .MajorUnit(10000)
+                                            )
+                                         @*   .Tooltip(tooltip => tooltip
+                                                .Visible(true)
+                                                .Shared(true)
+                                               // .Format("{0:N0}")
+
+                                            )
+*@
+                                            .ToClientTemplate()
+                    )
+</script>
+
+<script id="rewards" type="text/x-kendo-template">
+    @(
+            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.EmployeeRewards>()
+                                                                .Name("empReward")
+                                                                .Title("").Events(e => e.PlotAreaClick("RewardClick"))
+
+                                                                .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Top)
+                                                                )
+                                                                                            .DataSource(ds => ds.Read(read => read.Action("GetEmployeeRewards", "MISDashBoard").Data("getEmpCode")))
+                                                                .Series(series =>
+                                                                {
+                                                                    series.Line(model => model.points).Name("").CategoryField("rewardDate").Color("\\#FF6500").Width(5)
+                                                                    .Markers(markers => markers
+                                                   .Size(32)
+                                                 .Visual("markerVisual"))
+                                                      .Highlight(highlight => highlight.Toggle("toggleHandler"))
+                                                 .Tooltip(tooltip => tooltip.
+                                                  Template("<div style='width:200px; white-space:normal;font-weight:700;'> \\#= dataItem.reward \\#</div><div style='width:200px; white-space:normal'>Recommended For : \\#= dataItem.recommendedFor \\# </div><div style='width:200px; white-space:normal'>Recommended By: \\#= dataItem.recommendedName \\#</div><div style='width:200px; white-space:normal'>Points: \\#= dataItem.points \\#</div>").Visible(true)
+                                                 )
+                                                 ;
+
+
+                                                                }
+        )
+                                                .ChartArea(ch => ch.Width(950).Height(250))
+                                                .CategoryAxis(axis => axis
+                                                    .Labels(labels => labels.Rotation(0))
+                                                    .Crosshair(c => c.Visible(true))
+                                                )
+                                                .ValueAxis(axis => axis.Numeric()
+                                                    .Labels(labels => labels.Format("{0:N0}"))
+
+                                                )
+                                                .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                    .Shared(true)
+                                                    .Format("{0:N0}")
+                                                //  .Template("<div style='width:200px; white-space:normal'>\\#= series.name \\#: \\#= value \\#</div>")
+                                                )
+
+                                                .ToClientTemplate()
+                        )
+</script>
+
+<script id="skills" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.EmployeeSkills>()
+
+                                                       .Name("empSkill")
+
+                                                       .Title("").Events(e => e.PlotAreaClick("RewardClick"))
+                                                           // .Zoomable(false)
+                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                       .Legend(legend => legend
+                                                       .Position(ChartLegendPosition.Bottom)
+
+                                                       )
+                                                       .ChartArea(chartArea => chartArea
+                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetEmployeeSkills", "MISDashBoard").Data("getEmpCode")))
+                                                       .Series(series =>
+                                                       {
+                                                           series.Column(model => model.rating).Name("Skill").CategoryField("skillShrt").Color("\\#FFC94A")
+                                                         .Tooltip(tooltip => tooltip.
+                                                                         Template("(\\#= (dataItem.skill)\\# - \\#= (dataItem.rating)\\# )").Visible(true));
+                                                       })
+                                                       .CategoryAxis(axis => axis
+                                                       // .Labels(labels => labels.Rotation(45))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       //.Rotation(0)
+                                                       )
+                                                       .Max(5)
+                                                       .MajorUnit(1)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+
+<script id="maps" type="text/x-kendo-template">
+
+    @(
+        Html.Kendo().Map()
+                                .Name("map")
+
+                                .Center(9.6332, 78.8170)
+                                .Zoom(7)
+                                .Events(e => e.MarkerCreated("changeIcon"))
+
+                                .Layers(layers =>
+                                {
+                                    layers.Add()
+                            .Type(MapLayerType.Tile)
+
+                            .UrlTemplate("https:\\#= subdomain \\#.tile.openstreetmap.org/\\#= zoom \\#/\\#= x \\#/\\#= y \\#.png")
+                           .Subdomains("a", "b", "c")
+                            .Attribution("© <a href='https://osm.org/copyright'>OpenStreetMap contributors</a>");
+                                    layers.Add()
+                                    .Type(MapLayerType.Marker)
+                                    //.Shape("customMarker")
+
+                                    .DataSource(dataSource => dataSource
+                                          .Read(read => read.Action("GetEmployeeMap", "MISDashBoard"))
+
+                                    )
+
+
+                               .LocationField("latLng")
+                               .TitleField("location")
+                               .Tooltip(tooltip =>
+                                                                tooltip.Template("<div><div style='width:200px;color:black;  white-space:normal;font-weight:700;'> \\#= marker.dataItem.location \\#  </div><div style='width:200px; color:black; white-space:normal'>Time : \\#=  kendo.toString(marker.dataItem.punchingTime, 'g')  \\# </div><div style='width:200px;color:black; white-space:normal'>Status : \\#= marker.dataItem.punchingStatus \\# </div></div>"))
+                               ;
+                                }).ToClientTemplate()
+
+)
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(8)
+        .RowsHeight("180px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("")).BodyTemplateId("empData").ColSpan(2).RowSpan(9);
+
+            c.Add().Header(h => h.Text("Career Progression")).BodyTemplateId("growth").ColSpan(3).RowSpan(2);
+           c.Add().Header(h => h.Text("Leave Analysis")).BodyTemplateId("leavemonths").ColSpan(3).RowSpan(2);
+           c.Add().Header(h => h.Text("Rewards and Recognition")).BodyTemplateId("rewards").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Skills")).BodyTemplateId("skills").ColSpan(3).RowSpan(2);
+            //c.Add().Header(h => h.Text("Punching Locations")).BodyTemplateId("maps").ColSpan(6).RowSpan(2);
+
+
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

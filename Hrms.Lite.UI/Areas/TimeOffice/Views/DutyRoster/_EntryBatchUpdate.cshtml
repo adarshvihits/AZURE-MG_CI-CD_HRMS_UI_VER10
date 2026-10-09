@@ -1,0 +1,146 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        moveCursorToEnd('ShiftDetails_Code');
+        setDateHidePicker();
+    });
+</script>
+<style>
+    .datepicker .sevenday th, td {
+        padding: 4px 4px !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "dutyEntry_Batch_Form" }))
+{
+
+ 
+    <div class="slider-forms slider-forms-open dutyBatchupdate">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('dutyBatchupdate')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Month</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.Month.Code)
+                            @Model.Month.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            From
+                        </label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.From, "{0:dd-MMM-yyyy}", new
+                                                          {
+                                                              @class = "form-control kt_datepicker_11",
+                                                              @placeholder = "From",
+                                                              @readonly = "true",
+                                                        })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            To
+                        </label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.To, "{0:dd-MMM-yyyy}", new
+                            {
+                                @class = "form-control kt_datepicker_11",
+                                @placeholder = "To",
+                                @readonly = "true",
+                           @autocomplete = "off"
+                            })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Circle</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.Circle.Code)
+                            @Model.Circle.Name
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Payroll
+                            Group
+                        </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.PayrollGroup.Code)
+                            @Model.PayrollGroup.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Shift Code <span class="Mandatory">*</span></label>
+                        @Html.DropDownListFor(m => m.ShiftDetails.Code, (SelectList)ViewBag.Shift, "--Select Shift--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'dutyBatchShift');onDutyBatchShiftCHnage(this,'entry'," + Model.Month.Code + "," + Model.PayrollGroup.Code + "," + Model.Circle.Code + "," + "'" + Model.SelectedDate + "'" + ")" })
+                        <span id="dutyBatchShift"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row pt-5">
+                <div class="col-md-12" id="dutyEntryBatchList">
+                    @await Html.PartialAsync("_EntryBatchUpdateEmpList", Model)
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="onEntryBatchUpdateSaveClick()">
+                        Update
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

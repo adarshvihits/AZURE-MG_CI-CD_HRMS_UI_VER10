@@ -1,0 +1,120 @@
+﻿@model Hrms.Lite.Shared.Recruitment.BackgroundVerification
+<style>
+    .btn.btn-danger {
+        border-radius: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+</style>
+    <div class="ptag">
+        <div class="">
+            <h4>Address Details</h4>
+        </div>
+        <div class="row ">
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="view-title">Full Name</label>
+                    <div class="view-details">
+                        @Model.CandidateName
+
+                        @{
+                            Model.Mode = "BasicDetails";
+                        }
+                        @Html.HiddenFor(m => m.Mode)
+                        @Html.HiddenFor(m => m.PreEnrollGI)
+                        @Html.HiddenFor(m => m.BasicDetailsStatus)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="view-title">Address</label>
+                    <div class="view-details">
+                        @Model.Address
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="view-title">Adhar No</label>
+                    <div class="view-details">
+                        @Model.AdharNo
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="view-title">
+                        Mobile no
+                    </label>
+                    <div class="view-details">
+                        @Model.MobileNumber
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="view-details">
+                        @Model.Email
+                    </div>
+                </div>
+               
+            </div>
+
+
+
+        </div>
+        <div class="row my-2">
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="view-title">Address Verification Remarks</label>
+                    <div class="view-details">
+                        @Html.TextAreaFor(m => m.BasicDetailsStatusReason, new { @class = "form-control form-control-sm",@onblur= "validate(this,'BasicDtlsStatus')" })
+                        <span id="BasicDtlsStatus"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.BasicDetailsStatus == 1)
+                {
+                    <span class="verified_btn">Verified</span>
+                }
+                else if (Model.BasicDetailsStatus == 2)
+                {
+                    <span class="reject_btn">Rejected</span>
+                }
+
+            </div>
+     
+            <div class="col-md-6 align-right d-flex justify-content-end">
+                <div class="d-flex align-items-center  vr_btn" onclick="onBasicDetailsSave('Reject')">
+                    <a data-bs-toggle="tooltip" data-bs-original-title="Reject" class="btn_reject mr-2"  cursorshover="true">
+                    </a>  Reject
+                </div>
+                <div class="d-flex align-items-center  vr_btn" onclick="onBasicDetailsSave('Verify')">
+                    <a data-bs-toggle="tooltip" data-bs-original-title="Verify" class="btn_approve mr-2"  cursorshover="true">
+
+                    </a>
+                    Verify
+                </div>
+
+
+
+
+                @*<button type="button" class="btn btn-danger mobile-full-width mr-2" onclick="onBasicDetailsSave('Reject')">
+                    Reject
+                </button>  <button type="button" class="btn btn-default mobile-full-width" onclick="onBasicDetailsSave('Verify')">
+                    Verify
+                </button>*@
+            </div>
+        </div>
+
+    </div>

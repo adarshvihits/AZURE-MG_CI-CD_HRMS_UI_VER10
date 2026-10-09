@@ -1,0 +1,126 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.AssetAllocation
+
+
+<!--end::Global Config-->
+<!--begin::Global Theme Bundle(used by all pages)-->
+
+
+
+<!--end::Global Theme Bundle-->
+<!--begin::Page Vendors(used by this page)-->
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<script src="~/js/tooltip.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#AssetRequest_Asset_Condition_Code').focus();        
+    });
+</script>
+<!---- Added on 25- feb---->
+@*<script src="~/js/bootstrap-multiselect.js"></script>*@
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id="assetAllocReq"}))
+{
+   
+    <div id="EditAssetAllocation" class="slider-forms slider-forms-open edit-assets">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('edit-assets')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Asset Register
+                </h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">              
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        
+                        <div class="row">
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Html.HiddenFor(m => m.AssetRequest.Asset.AssetCategory.Code)
+                            @Html.HiddenFor(m => m.TrnCode)
+
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Asset Category</label>
+                                    <div class="view-details">
+                                        @Model.AssetRequest.Asset.AssetCategory.Name
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Asset Name</label><span class="Mandatory">*</span>
+                                    <div class="view-details">
+                                        @Html.DropDownListFor(m => m.Asset.Code, (SelectList)ViewBag.Asset, "--Select Asset--", new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <span id="assetname"></span>
+                            </div>
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Required Date</label>
+                                    <div class="view-details">
+                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.RequiredDate))
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Description</label>
+                                    <div class="view-details">
+                                        @Model.Description
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        <button type="button"
+                                class="btn btn-default" onclick="confirmRejectClick()">
+                            Reject
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-default" onclick="confirmApproveClick()">
+                            Issue Asset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+}
+
+
+
+
+

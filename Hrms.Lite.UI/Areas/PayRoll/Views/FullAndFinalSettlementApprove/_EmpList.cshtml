@@ -1,0 +1,57 @@
+﻿   <!-- Table Section -->
+@model Hrms.Lite.Shared.PayRoll.FullandFinalSettelment
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color  odd-even mobile-responsive-table full-finalsettlement-app pt-3">
+    @Html.HiddenFor(m => m.EmployeeList.Count)
+    <table id="FFApproveEmpList" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th >ID</th>
+                <th >Employee Name</th>
+                <th >Designation</th>
+                <th >Department</th>
+                <th >Location</th>
+                <th  data-bs-toggle="tooltip" title=""
+                    data-bs-original-title="Date Of Resignation">DOR</th>
+                <th  data-bs-toggle="tooltip" title=""
+                    data-bs-original-title="Settlement Date">Settlement Date</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.EmployeeList != null && Model.EmployeeList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.EmployeeList.Count; i++)
+                {
+            <tr>
+                <td data-label="ID">
+                    @Html.HiddenFor(m => m.EmployeeList[i].EmployeeGI)
+                    @Html.HiddenFor(m => m.EmployeeList[i].EmployeeCode)
+                    @Html.HiddenFor(m => m.EmployeeList[i].MonthCode)
+                    @Model.EmployeeList[i].EmployeeID
+                </td>
+                <td data-label="Name">
+
+                    <a href="@Url.Action("Create", "FullAndFinalSettlementApprove", new {EmployeeGI =Model.EmployeeList[i].EmployeeGI,Month=Model.EmployeeList[i].MonthCode ,  Area = "PayRoll" })">@Model.EmployeeList[i].EmployeeName</a>
+                </td>
+                <td data-label="Designation"> @Model.EmployeeList[i].Designation</td>
+                <td data-label="Department"> @Model.EmployeeList[i].Department</td>
+                <td data-label="Location"> @Model.EmployeeList[i].Location</td>
+                <td data-label="Resignation Date ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EmployeeList[i].ResignationDate))</td>
+                <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EmployeeList[i].SettlementDate))</td>
+               
+
+            </tr>
+
+                }
+            }
+
+
+
+
+
+        </tbody>
+    </table>
+</div>
+<!-- Table Setion End -->

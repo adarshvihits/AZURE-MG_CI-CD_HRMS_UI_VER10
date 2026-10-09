@@ -1,0 +1,212 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PFSettings
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/pfSettings.js"></script>
+<script>
+    $(document).ready(function () {
+        fillData();
+        
+    });
+</script>
+<script>
+
+
+   
+
+
+
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title"> PF Settings</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        PF Settings
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="form-group filter-combobox pt-2 pl-2 mr-3" style="width: 195px;">
+
+                                @Html.DropDownListFor(m => m.PFDeduction.Code, (SelectList)ViewBag.Pfd, "--select PF Deduction--", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+                                <span id="pfdeduction"></span>
+                            </div>
+
+
+
+                            <div class="form-group filter-combobox pt-2 pl-2" style="width: 151px;">
+
+                                @Html.DropDownListFor(m => m.PayrollMonth.Code, (SelectList)ViewBag.Sap, "--select Month--", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+
+                            </div>
+
+
+                            <div class="form-group filter-combobox pt-2 pl-2" style="width: 151px;">
+
+                                @Html.DropDownListFor(m => m.PFGroup.Code, (SelectList)ViewBag.PFG, "--select PF Group--", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+
+                            </div>
+
+                            <div class="tab-items select-option">
+                                <!-- <label class="lable-left">Evaluation Period</label> -->
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                   data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+                    <div id="EmployeeList">
+                        @await Html.PartialAsync("_EmployeeList", Model)
+                    </div>
+
+                    <!-- Table Setion End -->
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+
+
+                            <div class="d-flex">
+                                <a data-bs-toggle="modal" data-target=".ESI-modal-lg">
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="~/images/settings-line-icon.png" />
+
+                                        </div>
+                                        <div class="application-icon" onclick="POPUP()"> <h3 class="pt-2 pl-3"> PF General Settings</h3></div>
+                                    </div>
+                                </a>
+
+                                <a data-bs-toggle="modal" data-target=".ESI_settings_applicable" >
+                                    <div class="application-btn d-flex align-items-center pl-10">
+                                        <div class="history-btn">
+                                            <img src="~/images/add-category-icon (1).png" />
+
+                                        </div>
+                                        <div class="application-icon" onclick="POPUP1()"> <h3 class="pt-2 pl-3">  Applicable Allowance</h3></div>
+                                    </div>
+                                </a>
+                            </div>
+
+
+
+
+
+
+
+
+
+                            @*<a data-bs-toggle="modal" data-target=".bd-example-modal-lg" type="button" class="btn btn-default float-left mobile-full-width mr-3" onclick="POPUP()">
+                                    PF General Settings
+                                </a>
+                                <a data-bs-toggle="modal" data-target=".PF_settings_applicable" type="button" class="btn btn-default float-left mobile-full-width mr-3" onclick="POPUP1()">
+                                    Applicable Allowance
+                                </a>*@
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->

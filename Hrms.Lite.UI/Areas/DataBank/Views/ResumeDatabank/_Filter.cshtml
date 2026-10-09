@@ -1,0 +1,295 @@
+﻿@model Hrms.Lite.Shared.General.ResumeFilter
+    <script src="~/scripts/resumeFilter.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "BasicFilter" }))
+{
+    <div id="filterForm" class="slider-forms basicFilter">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <!-- <h4 class="mb-2">Filter</h4> -->
+            <div class="filter-slider-item-box">
+                <h3> Filter</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Applied Fun.Designation</label>
+                            @Html.HiddenFor(m => m.Tabindex)
+                            @Html.ListBoxFor(m => m.Designations, (SelectList)ViewBag.Dsg, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onDesignationChange()" })
+                            <span id="punchingmethod"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Qualification </label>
+                            @Html.ListBoxFor(m => m.Qualifications, (SelectList)ViewBag.Qualifications, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onDepartmentChange()" })
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Current Work Location</label>
+                            @Html.ListBoxFor(m => m.Locations, (SelectList)ViewBag.Loc, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onLocationChange()" })
+                            <span id="punchingmethod"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Certification </label>
+                            @Html.ListBoxFor(m => m.Certifications, (SelectList)ViewBag.CertType, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onCertificationChange()" })
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Skill </label>
+                            @Html.ListBoxFor(m => m.Skills, (SelectList)ViewBag.Skill, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onSkillChange()" })
+                            <span id="skill"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>District</label>
+                            @Html.ListBoxFor(m => m.Districts, (SelectList)ViewBag.Districts, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onDistrictChange()" })
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Marital Status</label>
+                            @Html.ListBoxFor(m => m.Maritalstatus, (SelectList)ViewBag.MaritalStatus, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onMaritalstatusChange()" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            @Html.ListBoxFor(m => m.Gender, (SelectList)ViewBag.Gender, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onGenderChange()" })
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Resume Source</label>
+                            @Html.ListBoxFor(m => m.ResumeSource, (SelectList)ViewBag.ResumeSource, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm reset", @multiple = "multiple", onchange = "onResumeSourceChange()" })
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Years of Service</label>
+                            @Html.HiddenFor(m => m.YSAboveOrBelow.Name)
+                            @*@Html.DropDownListFor(m => m.YSAboveOrBelow.Code, (SelectList)ViewBag.Operators, new { @class = "form-control-multiselect form-control-sm reset" })*@
+                            @Html.DropDownListFor(m => m.YSAboveOrBelow.Code,
+                             new List<SelectListItem> {
+                                  new SelectListItem {  Value= "1" , Text = "Less Than" },
+                                  new SelectListItem { Value = "2" , Text = "Greater Than" },
+                                  new SelectListItem { Value = "3" , Text = "Between" },
+
+                               },
+                            new { @class = "form-control form-control-sm resetdd", @onchange = "onYOSChange(this)" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <div class="form-group mt-6">
+                            <label></label>
+                            @Html.TextBoxFor(m => m.YOSFrom, new { @placeholder = "", @class = "form-control form-control-sm resetdd" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                            <div class="form-group mt-6">
+                                <label></label>
+                                @Html.TextBoxFor(m => m.YOSTo, new { @placeholder = "",@class = "form-control form-control-sm resetdd hide" })
+                            </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Age</label>
+                            @Html.HiddenFor(m => m.AgeAboveOrBelow.Name)
+                            @*@Html.DropDownListFor(m => m.AgeAboveOrBelow.Code, (SelectList)ViewBag.Operators, new { @class = "form-control-multiselect form-control-sm", @onchange = "onAgeChange(this)" })*@
+                            @Html.DropDownListFor(m => m.AgeAboveOrBelow.Code,
+                            new List<SelectListItem> {
+                                 new SelectListItem {  Value= "1" , Text = "Less Than" },
+                                 new SelectListItem { Value = "2" , Text = "Greater Than" },
+                                 new SelectListItem { Value = "3" , Text = "Between" },
+
+                              },
+                           new { @class = "form-control form-control-sm resetdd", @onchange = "onAgeChange(this)" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                        <div class="form-group mt-6">
+                            <label></label>
+                            @Html.TextBoxFor(m => m.AgeFrom, new { @placeholder = "", @class = "form-control form-control-sm resetdd" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 pl-0">
+                            <div class="form-group mt-6">
+                                <label></label>
+                                @Html.TextBoxFor(m => m.AgeTo, new { @placeholder = "", @class = "form-control form-control-sm resetdd hide" })
+                            </div>
+                        </div>
+                </div>
+
+
+                <!-- <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="radio-inline">
+                            <div class="row">
+                                <div
+                                    class="col-md-2 d-flex align-items-center">
+                                    <div
+                                        class="form-group d-flex align-items-center">
+                                        <label
+                                            style="width: 40px; display: flex; justify-content: space-between;"
+                                            class="radio-inline-label mt-1">Age
+                                            <span>:</span></label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-md-3 pr-1 d-flex align-items-center">
+                                    <div class="form-group ">
+                                        <div class="">
+                                            <label class="pr-2">From</label>
+
+                                            <input type="text"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-md-3  d-flex align-items-center">
+                                    <div class="form-group ">
+                                        <div class="">
+                                            <label class="pr-2">To</label>
+
+                                            <input type="text"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div> -->
+                <!-- <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="radio-inline">
+
+
+                            <div class="row">
+                                <div
+                                    class="col-md-2 d-flex align-items-center">
+                                    <div
+                                        class="form-group d-flex align-items-center">
+                                        <label
+                                            style="width: 40px; display: flex; justify-content: space-between;"
+                                            class="radio-inline-label mt-1">Y/S
+                                            <span>:</span></label>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-md-5 pr-1 d-flex align-items-center">
+                                    <div class="form-group ">
+                                        <label class="pr-2">From</label>
+                                        <div class="input-group date"
+                                            style="width:95% ;">
+                                            <input type="text"
+                                                class="form-control"
+                                                id="kt_datepicker_2"
+                                                readonly="readonly"
+                                                placeholder="Date">
+                                            <div class="input-group-append">
+                                                <span
+                                                    class="input-group-text">
+                                                    <i
+                                                        class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-md-5 pl-1 d-flex align-items-center">
+                                    <div class="form-group ">
+                                        <label class="pr-2">To</label>
+                                        <div class="input-group date"
+                                            style="width:95% ;">
+                                            <input type="text"
+                                                class="form-control"
+                                                id="kt_datepicker_2"
+                                                readonly="readonly"
+                                                placeholder="Date">
+                                            <div class="input-group-append">
+                                                <span
+                                                    class="input-group-text">
+                                                    <i
+                                                        class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div> -->
+
+
+            </div>
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-secondary  mobile-full-width" onclick="ApplyFilter('reset')">
+                        Reset
+                    </a>
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="ApplyFilter('apply')">
+
+                        Apply
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+    </div>
+}

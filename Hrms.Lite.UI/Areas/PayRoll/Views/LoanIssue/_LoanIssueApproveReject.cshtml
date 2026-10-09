@@ -1,0 +1,155 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanIssue
+    <script src="~/js/tooltip.js"></script>
+   
+
+    @using (Html.BeginForm("LoanIssueApproveRejectDetails", "LoanIssue", FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data", Area = "PayRoll", LoanIssueGI = Model.LoanIssueDetails.LoanIssueGI }))
+    {
+        <div class="slider-forms slider-forms-open LoanIssue_Approve">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('LoanIssue_Approve')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4>Loan Processing</h4>
+
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Loan
+                                        Type
+                                    </label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.LoanType.Name
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Purpose</label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.Pourpose
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Repayment
+                                        Method
+                                    </label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.RepaymentMethod.Name
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Loan Amount
+                                    </label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.LoanAmount
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Monthly
+                                        EMI
+                                    </label>
+                                    <div class="view-details">
+                                         @Convert.ToInt32(Model.LoanIssueDetails.MonthlyEMI)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">Tenure</label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.Tenure
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Disbursement
+                                        Date
+                                    </label>
+                                    <div class="view-details">
+                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LoanIssueDetails.DisbursementDate))
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Repayment
+                                        Start Month
+                                    </label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.PaymentStartMonth.Name
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row-outer">
+                                    <label class="view-title">
+                                        Remarks
+                                    </label>
+                                    <div class="view-details">
+                                        @Model.LoanIssueDetails.Remarks
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row card-footer-bottom-fixed">
+
+                    <div class="col-md-12 align-right">
+
+                        <a type="button" class="btn btn-danger mobile-full-width" onclick="confirmReject('@Model.LoanIssueDetails.LoanIssueGI','Reject')">
+                            Reject
+                        </a>
+                        @*<a type="button" class="btn btn-danger mobile-full-width">
+                                Approve
+                            </a>*@
+                        @*<button type="submit" class="btn btn-default ">Save</button>*@
+                        @*<a href="@Url.Action("_LoanIssueApproveReject", "LoanIssue", new { Area = "PayRoll",LoanIssueGI=Model.LoanIssueDetails.LoanIssueGI })" type="button" class="btn btn-default mr-2 float-right">
+                                Approve
+                            </a>*@
+                        <a id="approvebutton" type="button" class="btn btn-default  mobile-full-width" onclick="approveSubmit('@Model.LoanIssueDetails.LoanIssueGI','Approve')">
+                            Approve
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    }

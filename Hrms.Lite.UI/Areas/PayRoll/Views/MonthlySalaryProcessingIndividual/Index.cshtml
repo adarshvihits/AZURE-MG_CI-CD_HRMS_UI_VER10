@@ -1,0 +1,217 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryProcessing
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/PayRoll/MonthlySalaryProcessingIndividual.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#Employee_Code").find("option").eq(0).hide();
+    })
+</script>
+
+<style>
+    .form-control .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Individual - Monthly Salary Processing</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Individual - Monthly Salary Processing
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+   
+
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+
+
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="form-group col-md-2">
+                                    <label>                                                                     </label>
+                                    @*<select class="form-control form-control-sm " id="exampleSelects">
+                <option>--Select Month--</option>
+                <option>March2023</option>
+                <option>April2023</option>
+                <option>May2023</option>
+
+            </select>*@
+                                    @Html.DropDownListFor(m => m.PayrollMonth.Code, (SelectList)ViewBag.Month, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate('#PayrollMonth_Code','payrollM')", @onchange = "fillEmployeeDropdown();$('#procBtn').prop('disabled', false);" })
+                                    <span id="payrollM"></span>
+                                </div>
+
+                                <div class="pl-8 d-flex align-items-center">
+                                    <div class="radio-inline pt-4">
+                                        <label class="pr-5">
+                                            Employee  :
+                                        </label>
+                                        <label class="radio radio-outline radio-success mr-10">
+                                            @Html.RadioButtonFor(m => m.EmployeeStatus, "0", new { @onchange = "fillEmployeeDropdown();$('#procBtn').prop('disabled', false);" })
+                                            <span></span>All
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @Html.RadioButtonFor(m => m.EmployeeStatus, "1", new { @onchange = "fillEmployeeDropdown();$('#procBtn').prop('disabled', false);" })
+                                            <span></span>Resigned
+                                        </label>
+
+                                    </div>
+                                </div>
+                                @*<div class="form-group pl-5 em" style="width:250px ;">
+                                    <label> </label>
+                                  
+
+
+                                    @Html.DropDownListFor(m => m.Employee.Code, (SelectList)ViewBag.Emp, "Search by Employee Name/ID", new
+                                    {
+                                        @class = "selectpicker sliderSearchInput form-control form-control-sm",
+                                        @onchange = "validateEmployee(this,'em','empC');$('#procBtn').prop('disabled', false);",
+                                        data_show_subtext = "true",
+                                        data_live_search = "true"
+                                    })
+                                   
+                                    <span id="empC"></span>
+                                </div>*@
+
+
+
+
+                                <div class="position pl-5">
+                                    <div>
+                                        <label> </label>
+
+                                        @Html.DropDownListFor(m => m.Employee.Code, (SelectList)ViewBag.Emp, "Search by Employee Name/ID", new
+
+                                        {
+                                            @class = "selectpicker sliderSearchInput form-control form-control-sm em",
+                                            @onchange = "validateEmployee(this,'em','empC');$('#procBtn').prop('disabled', false);",
+                                            data_show_subtext = "true",
+                                       data_live_search = "true",
+                                   })
+
+                                    </div>
+                                    <span id="empC"></span>
+                                </div>
+                                <div class="tab-items pl-5 pt-3  d-flex align-items-center">
+
+                                    <button id="procBtn" type="button" class="btn btn-default btn-sm float-left" data-bs-toggle="modal" data-target="" onclick="onProcessClick()">
+                                        Process
+                                    </button>
+                                </div>
+
+
+                                <div class="tab-items select-option">
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div id="listView">
+                            <div class="page_white">
+                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" style="max-width:940px ;">
+                        <div class="modal-content popup">
+                            <div class="modal-header" style="padding:10px">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <span id="monthSpan"></span> - Salary Processing(<span id="empSpan"></span>)
+                                </h5>
+                                <div>
+
+                                    <button type="button" class="close mt-2" data-bs-dismiss="modal"
+                                            aria-label="Close" onclick="$('#procBtn').prop('disabled', false);">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="monthly-salary-pro modal-body">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade negativeSalaryPopUp" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" style=" max-width: 1300px;">
+                        <div class="modal-content popup">
+                            <div class="modal-header" style="padding:10px">
+                                <h5 class="modal-title" id="exampleModalLabel">Negative Salary List</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#negativeSalaryList').html('');">
+                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                </button>
+                            </div>
+
+                            <div class="modal-body pt-3">
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+
+   

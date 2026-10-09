@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.PayRoll.EmployeeRequestLoanIssue
+
+    <script src="~/js/tooltip.js"></script>
+    <div id="applicant" class="slider-forms slider-forms-open TrackerSlider">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('TrackerSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4 class="mb-4">Loan Request Tracking</h4>
+            </div>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/PayRoll/Views/EmployeeRequestLoanIssue/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+            <div class="add-padding">
+
+                <!----- stepper start here --->
+                <div>
+
+
+
+                    @if (Model.LoanIssueTracker != null && Model.LoanIssueTracker.Count > 0)
+                    {
+                        for (int i = Model.LoanIssueTracker.Count - 1; i >= 0; i--)
+                        {
+                            @if (Model.LoanIssueTracker[i].IssueStatus == "Rejected")
+                            {
+                                <div class="step active rejected">
+                                    <div class="v-stepper">
+                                        <div class="circle"><i class="icon-xl fas fa-times"></i></div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content ">
+                                        <div class="row-outer">
+
+                                            <label class="view-title">
+                                                @Model.LoanIssueTracker[i].Stage
+                                            </label>
+                                            <div class="view-details">
+                                                @{
+                                                    string Status = "";
+                                                }
+                                                @if (Model.LoanIssueTracker[i].IssueStatus != "")
+                                                {
+                                                    Status = Model.LoanIssueTracker[i].IssueStatus;
+                                                }
+                                                @if (Model.LoanIssueTracker[i].Authority != "")
+                                                {
+                                                    Status = Status + ", " + Model.LoanIssueTracker[i].Authority;
+                                                }
+                                                @if (Model.LoanIssueTracker[i].EntryDate != null)
+                                                {
+                                                    Status = Status + ", " + Convert.ToDateTime(Model.LoanIssueTracker[i].EntryDate).ToString("dd-MMM-yyyy");
+                                                }
+                                                @Status
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if(Model.LoanIssueTracker[i].IssueStatus != "Pending")
+                                    {
+                                <div class="step active completed">
+                                    <div class="v-stepper">
+                                        <div class="circle">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content ">
+                                        <div class="row-outer">
+
+                                            <label class="view-title">
+                                                @Model.LoanIssueTracker[i].Stage
+                                            </label>
+                                            <div class="view-details">
+                                                @{
+                                                    string Status = "";
+                                                }
+                                                @if (Model.LoanIssueTracker[i].IssueStatus != "")
+                                                {
+                                                    Status = Model.LoanIssueTracker[i].IssueStatus;
+                                                }
+                                                @if (Model.LoanIssueTracker[i].Authority != "")
+                                                {
+                                                    Status = Status + ", " + Model.LoanIssueTracker[i].Authority;
+                                                }
+                                                @if (Model.LoanIssueTracker[i].EntryDate != null)
+                                                {
+                                                    Status = Status + ", " + Convert.ToDateTime(Model.LoanIssueTracker[i].EntryDate).ToString("dd-MMM-yyyy");
+                                                }
+                                                @Status
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                                            else
+                            {
+                                <div class="step">
+                                    <div class="v-stepper">
+                                        <div class="circle">
+                                            @*<i class="fa fa-check"></i>*@
+                                        </div>
+                                        <div class="line"></div>
+                                    </div>
+
+                                    <div class="stepper-content">
+                                        <div class="row-outer">
+                                            <label class="view-title">
+                                                @Model.LoanIssueTracker[i].Stage
+
+                                            </label>
+                                            <div class="view-details">
+                                                @Model.LoanIssueTracker[i].IssueStatus
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+        </div>

@@ -1,0 +1,63 @@
+﻿@model  IEnumerable<Hrms.Lite.Shared.DataBank.DTO.HRPlanning>
+@using Kendo.Mvc.UI
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
+
+
+<!-- HTML -->
+@*<div id="chartdiv">*@
+    <div class="demo-section wide">
+        @(Html.Kendo().Chart(Model)
+        .Name("chart").HtmlAttributes(new { style = "width: 100%; height: 350px;" })
+        //.Title("Gross domestic product growth /GDP annual %/")
+        .Legend(legend => legend
+            .Position(ChartLegendPosition.Top)
+        )
+        .ChartArea(chartArea => chartArea
+            .Background("transparent")
+        )
+        .Series(series =>
+        {
+            series
+                .Column(model => model.PlannedBudget)                
+                .Color("#007eff")
+                .Name("Planned Budget");
+            series
+               .Column(model => model.CurrentGP)
+               .Stack(true)
+               .Color("#ef955f")
+               .Name("Current GP");
+            //.Axis("gross").Gap(4).Spacing(0.1);
+            //series.Column(new double[] { 4.743, 7.295, 7.175, 6.376, 8.153, 8.535, 5.247, -7.832, 4.3, 4.3 }).Name("Russian Federation");
+            //series.Column(new double[] { 0.010, -0.375, 1.161, 0.684, 3.7, 3.269, 1.083, -5.127, 3.690, 2.995 }).Name("Germany");
+            //series.Column(new double[] { 1.988, 2.733, 3.994, 3.464, 4.001, 3.939, 1.333, -2.245, 4.339, 2.727 }).Name("World");
+        })
+        .CategoryAxis(axis => axis
+            .Name("label-axis")
+            .Categories(model => model.Combination2Name)
+        )
+        //.ValueAxis(axis => axis
+        //    .Numeric("gross")
+        //        .Labels(labels => labels.Format("{0}%"))
+
+        //        // Move the label-axis all the way down the value axis
+        //        .AxisCrossingValue(0, int.MinValue)
+        //)
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Format("{0}%")
+            .Template("#= series.name #: #= value #")
+        )
+    )
+    </div>
+@*</div>*@
+
+

@@ -1,0 +1,74 @@
+﻿@model Hrms.Lite.Shared.Master.InsurancePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {   
+        $('.pendingTabCount').html("@Model.PendingCount");
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table insurance-policy-pending-list">
+    @Html.HiddenFor(m => m.InsurancePolicyList.Count)
+    <table class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Policy Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+
+                if (Model.InsurancePolicyList != null && Model.InsurancePolicyList.Count > 0)
+                {
+                    for (int i = 0; i < Model.InsurancePolicyList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.InsurancePolicyList[i].MakerChecker)
+                            <td data-label="Name">@Model.InsurancePolicyList[i].Name</td>
+                            <td data-label="Short Name">@Model.InsurancePolicyList[i].ShortName</td>
+                            <td data-label="Description">@Model.InsurancePolicyList[i].Description</td>
+
+
+
+
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only" onclick="onApproveClick('@Model.InsurancePolicyList[i].GI', '@Model.InsurancePolicyList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only" onclick="onApproveClick('@Model.InsurancePolicyList[i].GI', '@Model.InsurancePolicyList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                            </td>
+                            <!-- <second></second> -->
+                        </tr>
+                        }
+                    }
+                }
+
+                    </tbody>
+    </table>
+</div>                               

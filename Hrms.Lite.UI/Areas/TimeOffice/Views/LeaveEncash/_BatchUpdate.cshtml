@@ -1,0 +1,100 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveEncashment
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('LeaveEncashmentBatchUpDate_Value');
+        });
+        $(window).ready(function () {
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    if (preventENterFlag == 0)
+                        BatchUpdate();
+                    return false;
+                }
+            });
+        });
+    </script>
+    @using (Html.BeginForm("BatchUpdate", "LeaveEncash", FormMethod.Post, new { @id = "leaveencashBatchUpdate" }))
+    {
+
+        <div id="BatchUpdate" class="slider-forms slider-forms-open BatchUpdateLeaveEncash1">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('BatchUpdateLeaveEncash1');preventENterFlag =1">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <h4>
+                    Batch Update
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave
+                                Period
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveEncashmentBatchUpDate.LeavePeriod.Code)
+                                @Model.LeaveEncashmentBatchUpDate.LeavePeriod.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Leave Group </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveEncashmentBatchUpDate.LeaveGroup.Code)
+                                @Model.LeaveEncashmentBatchUpDate.LeaveGroup.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveEncashmentBatchUpDate.Leave.Code)
+                                @Model.LeaveEncashmentBatchUpDate.Leave.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Month
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveEncashmentBatchUpDate.Month.Code)
+                                @Model.LeaveEncashmentBatchUpDate.Month.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Encash</label>
+                            @Html.TextBoxFor(m => m.LeaveEncashmentBatchUpDate.Value, new
+                       { @class = "form-control form-control-sm", @placeholder = "Encashment", style = "width: 100%" ,
+                           @onkeypress = "return onlyAmount(event)", @maxlength="3",@onchange="validate(this,'encash_amount')" })
+                            <span id="encash_amount"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="BatchUpdate()">
+                            Update
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }

@@ -1,0 +1,137 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ExitQuestionnaireAnalysis
+
+
+<style>
+    .exit-question {
+        height:500px;
+        overflow-x:hidden;
+        overflow-y:scroll;
+        background-color:#fff;
+
+    }
+</style>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Exit-Questionnaire-Analysis-list exit-question ">
+    <table id="exitQstnAnalysisTable">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">SL. No</th>
+                <th scope="col">Questions</th>
+                <th scope="col">Total attempts</th>
+                <th scope="col">Answers</th>
+                <th scope="col">Count</th>
+                <th scope="col">Percentage</th>
+                
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @{
+                int Next_QstnCode = 0;
+                int i = 0;
+                int j = 0;
+                if (Model.ExitQuestionnaireAnalysisList != null)
+                {
+                    foreach (var itemX in Model.ExitQuestionnaireAnalysisList.GroupBy(m => new { m.QuestionCode }))
+                    {
+                        int rowspanCount = itemX.Count();
+
+                        foreach (var item in itemX)
+                        {
+                            var QuestionCode = @item.QuestionCode;
+                        <tr>
+                            @if (QuestionCode != Next_QstnCode)
+                            {
+                                Next_QstnCode = QuestionCode;
+
+                                <td rowspan="@rowspanCount" data-label="ID">@(i + 1)</td>
+                                <td rowspan="@rowspanCount">
+                                    @item.Question
+                                    @Html.HiddenFor(m => m.ExitQuestionnaireAnalysisList[i].QuestionCode)
+                                    @Html.HiddenFor(m => m.ExitQuestionnaireAnalysisList[i].QuestionGI)
+                                    @Html.HiddenFor(m => m.ExitQuestionnaireAnalysisList.Count)
+                                </td>
+
+                                <td rowspan="@rowspanCount" data-label="Employee">  @Model.ExitQuestionnaireAnalysisList[i].TotalAttempts</td>
+                                i++;
+                            }
+
+                            <td data-label="Designation">
+                                <div class="answers-spce-gap">
+                                    <div class="">
+                                        <a data-bs-toggle="modal" data-target=".bd-example-modal-lg" onclick="GetDetails(@i,@item.QuestionCode,@item.AnswerCode)">@item.Answer</a>
+                                        @Html.HiddenFor(m => m.ExitQuestionnaireAnalysisList[j].AnswerCode)
+                                        @Html.HiddenFor(m => m.ExitQuestionnaireAnalysisList[j].AnswerGI)
+                                    </div>
+                                </div>
+
+
+                            </td>
+                            <td data-label="Department">@item.Count</td>
+
+
+
+                            <td data-label="Location"> @item.Percentage%</td>
+
+                        </tr>
+                            j++;
+                        }
+                    }
+                }
+
+            }
+
+
+
+
+
+            <!--<tr>
+            <td data-label="ID">2</td>
+            <td data-label="Employee">Do you received enough traing to do you job effectively</td>
+            <td data-label="Designation">1000</td>
+            <td data-label="Department">
+                <div class="answers-spce-gap">
+                    <div class="">
+                        <a data-bs-toggle="modal" data-target=".bd-example-modal-lg">Yes</a>
+
+                    </div>
+                </div>
+                <div class="answers-spce-gap "><a href="">No</a></div>
+                <div class="answers-spce-gap ">nn</div>
+                <div class="answers-spce-gap ">yy</div>
+                <div class="answers-spce-gap ">ss</div>
+            </td>
+            <td data-label="Location">
+                <div class="answers-spce-gap">100</div>
+                <div class="answers-spce-gap ">200</div>
+                <div class="answers-spce-gap ">300</div>
+                <div class="answers-spce-gap ">400</div>
+                <div class="answers-spce-gap ">500</div>
+            </td>
+            <td data-label="Location">
+                <div class="answers-spce-gap">63%</div>
+                <div class="answers-spce-gap">33%</div>
+                <div class="answers-spce-gap">63%</div>
+                <div class="answers-spce-gap">33%</div>
+                <div class="answers-spce-gap">63%</div>
+
+
+
+
+
+            </td>-->
+            <!-- <td data-label="Evaluation Period">Evaluation A</td> -->
+            <!--</tr>-->
+            @*}
+                }*@
+
+        </tbody>
+    </table>
+
+
+
+
+
+</div>

@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.General.MenuApplicability
+ <script>
+        $(document).ready(function () {
+            if ($('#SubmoduleAllCheckBox').find('input[type="checkbox"]:checked').length == $('#SubmoduleAllCheckBox').find('input[type="checkbox"]').length - 1) {
+            $('#SubmoduleAll').prop('checked', true);
+            }
+
+        });
+</script>
+
+
+
+        <div class="ihits-table table-border user-role-sub-module-list mb-0 vertical-scroll-300">
+            <table id="SubmoduleAllCheckBox">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Menu</th>
+                        <th scope="col">Sub Menu</th>
+                        <th scope="col">
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    <input type="checkbox"
+                                           name="Checkboxes15" id="SubmoduleAll" onclick="onAllClick('SubmoduleAll','SubmoduleAllCheckBox')">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.SubMenuList != null && Model.SubMenuList.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.SubMenuList.Count; i++)
+                        {
+                            @Html.HiddenFor(m => m.SubMenuList[i].SubMenuCode)
+                            @Html.HiddenFor(m => m.SubMenuList[i].SubMenuName)
+                            @Html.HiddenFor(m => m.SubMenuList[i].MenuCode)
+                            @Html.HiddenFor(m => m.SubMenuList[i].MenuName)
+                            <tr>
+                                <td data-label="Module">@Model.SubMenuList[i].MenuName</td>
+                                <td data-label="SubModule">@Model.SubMenuList[i].SubMenuName</td>
+                                <td data-label="Y/S">
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            @Html.CheckBoxFor(m => m.SubMenuList[i].SubMenuApplicability, new { @onclick = "onChkBoxClick(this,'SubmoduleAll','SubmoduleAllCheckBox')" })
+                                            @*, new { @onclick = "moduleChange(" + i + ")" }*@
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+<div class="row card-footer-bottom-fixed">
+
+    <div class="col-md-12 align-right">
+
+
+        <button type="button"
+                class="btn btn-default mobile-full-width"  onclick="Save()">
+            Save
+        </button>
+
+
+    </div>
+
+</div>

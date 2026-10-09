@@ -1,0 +1,82 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Report.LeaveRegister
+    @*<script src="~/js/settings.js"></script>*@
+
+    <script>
+              $('.LR_Grid_Applicability').on('click', function () {
+                debugger
+                if ($('.LR_Grid_Applicability:checked').length == $('.LR_Grid_Applicability').length) {
+                    $('.LR_Grid_All_Applicability').prop('checked', true);
+                } else {
+                    $('.LR_Grid_All_Applicability').prop('checked', false);
+                }
+            });
+      
+
+             $(document).ready(function () {
+
+       
+            if ($('.LR_Grid_Applicability:checked').length == $('.LR_Grid_Applicability').length) {
+                $('.LR_Grid_All_Applicability').prop('checked', true);
+            } else {
+                $('.LR_Grid_All_Applicability').prop('checked', false);
+            }
+        });
+       
+
+    </script>
+<div style="padding:10px;"
+     class="ihits-table table-border hover-color odd-even mobile-responsive-table emp-group-list-table vertical-scroll-250">
+
+    <br />
+    <table id="LRGridSettingsTable" class="common-table">     
+            <thead>
+                <tr class="table-light">
+                    <th scope="col"> Leave Type</th>
+                    <th scope="col">
+                        <div class="checkbox-inline justify-content-center">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                <input type="checkbox"
+                                       name="Checkboxes16" class="LR_Grid_All_Applicability" onchange="onLR_Applicability_AllClick('LR_Grid_All_Applicability','LRGridSettingsTable')">
+
+                                <span></span>
+                            </label>
+                        </div>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.GridSettings != null && Model.GridSettings.Count > 0)
+                {
+
+                    @for (int i = 0; i < Model.GridSettings.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Leave Type">
+                                @Html.HiddenFor(m => m.GridSettings[i].Name)
+                                @Html.HiddenFor(m => m.GridSettings[i].Code)
+                                @Model.GridSettings[i].Name
+                            <td data-label="Count">
+                                <div class="checkbox-inline justify-content-center">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @*<input type="checkbox"
+                                        name="Checkboxes16">*@
+                                        @Html.CheckBoxFor(m => m.GridSettings[i].Applicability, new { @class = "LR_Grid_Applicability" })
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                            </td>
+                        </tr>
+
+
+                    }
+                }
+
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-default btn-sm float-right" onclick="onGridApplyClick()">
+            Apply
+        </button>
+
+</div>

@@ -1,0 +1,123 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagement   
+ 
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script>
+     $(document).ready(function () {
+         $('.multiselectDropdownField1').multiselect({
+             includeSelectAllOption: true,
+
+
+         });
+
+        });
+
+    </script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "VacancySave" }))
+    {
+        @Html.HiddenFor(m => m.JobCode)
+        <div id="wageGradeMasterAdd" class="slider-forms slider-forms-open MRFCreate">
+            <div class="slider-inner-style">
+                <div class="slider-form-close">
+                    <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('MRFCreate')"></i>
+                </div>
+                <h4>
+                    Vacancy List
+                </h4>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="row-ithems">
+                                <label class="view-title">MRF Number</label>
+                                <div class="view-details">@Model.JobCode</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            @Html.TextBoxFor(m => m.Details.JobTitle, new { @class = "form-control form-control-sm", @maxlength = 50, @placeholder = "Job Title", @onblur = "validate(this, 'jobtitle')" })
+                            <span id="jobtitle"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+                        <label>Deadline</label>
+                        <div class="input-group date">
+
+                            @Html.TextBoxFor(m => m.Details.NeedByDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_9", @readonly = "true", @placeholder = "Deadline", @onchange = "validate(this, 'needbydate')" })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="needbydate"></span>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label>Initiated by</label>
+                            @*@Html.DropDownListFor(m => m.Details.EmployeeCode, (SelectList)ViewBag.RequestedBy, "Select Requested By", new
+                                {
+                                    @class = "selectpicker sliderSearchInput form-control form-control-sm",
+
+                                    data_show_subtext = "true",
+                                    data_live_search = "true",
+                                    @onchange = "validate(this,'recommendedBy')"
+
+                                })*@
+                            @Html.DropDownListFor(m => m.Details.EmployeeCode, (SelectList)ViewBag.RequestedBy, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'employee')" })
+                            <span id="employee"></span>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label>Designation</label>
+                            @Html.DropDownListFor(m => m.Details.Designation.Code, (SelectList)ViewBag.Designation, "--Select--", new { @class = "form-control form-control-sm", @onchange = "getVSJD(this, 'designation')" })
+                            <span id="designation"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Department</label>
+                            @Html.DropDownListFor(m => m.Details.Department.Code, (SelectList)ViewBag.Department, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'department')" })
+                            <span id="department"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="MRFRequestSliderSub">
+                    @await Html.PartialAsync("_MRFRequestSliderSub", Model)
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label>Remarks</label>
+                        @Html.TextAreaFor(m => m.Details.Description, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @onblur = "validate(this, 'remarks')" })
+                        <span id="remarks"></span>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <a type="button"
+                           class="btn btn-default  mobile-full-width" onclick="VacancySave()">
+                            Save
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }

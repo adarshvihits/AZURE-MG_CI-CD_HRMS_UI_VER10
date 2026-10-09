@@ -1,0 +1,163 @@
+﻿
+@model Hrms.Lite.Shared.Master.BonusGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "deleteBonusGroup" }))
+{
+    <div id="" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Bonus Group</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.Mode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row m-0 ">
+                    <h4 class="">Set Applicability</h4>
+                    <div class="ihits-table table-border w-100 hover-color Bonus-Group-slider-list vertical-scroll-150">
+                        <table class="mb-0">
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">Particular</th>
+                                    <th scope="col">Applicability</th>
+                                    <th scope="col">%</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Allowance != null && Model.Allowance.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Allowance.Count; i++)
+                                    {
+                                        <tr>
+                                            <td data-label="Particular">
+                                                @Html.HiddenFor(m => m.Allowance[i].AllowanceCode)
+                                                @Html.HiddenFor(m => m.Allowance[i].Allowance)
+                                                @Model.Allowance[i].Allowance
+                                            </td>
+                                            <td data-label="Applicability">
+                                                <div class="d-flex justify-content-center">
+                                                    @if (Model.Allowance[i].Applicability == true)
+                                                    {
+
+                                                        <button type="button" class="btn btn-icon btn-tick">
+                                                            <i class="icon-xl fas fa-check"></i>
+                                                        </button>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-icon btn-close">
+                                                            <i class="icon-xl fas fa-times"></i>
+
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td data-label="%">
+                                                @Model.Allowance[i].Percentage
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row my-3 mt-8">
+
+                    <div class="col-md-6">
+                        <label class="view-title">Statutory [%]</label>
+                        <div class="view-details">
+                            @Model.SatuatoryPerc
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="view-title">Non Statutory [%]</label>
+                        <div class="view-details">
+                            @Model.NonSatuatoryPerc
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+                        <label class="view-title">Limit</label>
+                        <div class="view-details">
+                            @Model.Limit
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="view-title">Eligibility Limit</label>
+                        <div class="view-details">
+                            @Model.EligibilityLimit
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="confirmDelete()">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

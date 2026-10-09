@@ -1,0 +1,177 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "Education";
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        var fileLabel = $('#fileLabel');
+        var b = document.getElementById('GetEducation_File_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            var b = document.getElementById('GetEducation_File_ActualFileName');
+            if (b.value != '') {
+                if (b.value.length > 40) {
+                    let replacemnt = '..';
+                    theSplit = b.value.slice(0, 40);
+                    //fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+                    fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+                }
+                else {
+                    //fileLabel.innerHTML = b.value;
+                    fileLabel.html(b.value)
+                }
+            }
+            else {
+                //fileLabel.innerHTML = "";
+                fileLabel.html("No File Chosen");
+
+            }
+        }
+  
+
+    
+    
+    });
+    function filechange() {
+        debugger
+        var fileLabel = $('#fileLabel');
+        var a = document.getElementById('GetEducation_File_FileData');
+        var filename = $('#GetEducation_File_FileData')[0].files[0].name;
+        if (a.value == "") {
+            //fileLabel.innerHTML = "No File Chosen";
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            debugger
+            if (filename.length > 40) {
+                //var theSplit = a.value.split('\\');
+                var theSplit = filename;
+                //theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 40);
+                //fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+                fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+            else {
+                //fileLabel.innerHTML = filename;
+                fileLabel.html(filename);
+            }
+        }
+    };
+
+</script>
+
+<style>
+    .FileUpload_FileData {
+        color: white !important;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "eduk", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+    <div id="addEducationDetails" class="slider-forms slider-forms-open edu">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('edu')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Education</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Qualification Type</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.GetEducation.EducationLogGI, new { @class = "form-control form-control-sm" })
+
+                        @Html.DropDownListFor(m => m.GetEducation.QualificationType.Code, (SelectList)ViewBag.Qty, "--Select Qualification Type--", new { @class = "form-control form-control-sm", @onchange = "onQualificationTypeChange(this,'qualificationtype')" })
+                        <span id="qualificationtype" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Qualification</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetEducation.Qualification.Code, (SelectList)ViewBag.Qua, "--Select Qualification--", new { @class = "form-control form-control-sm", @onchange = "onQualificationChange(this,'qualification')" })
+                        <span id="qualification" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Specialization of Branch</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetEducation.Specialisation.Code, (SelectList)ViewBag.Spc, "--Select Specialization of Branch--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'specialisation')" })
+                        <span id="specialisation" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>College/University</label>
+                        @Html.TextBoxFor(m => m.GetEducation.College_University, new { @class = "form-control form-control-sm", @placeholder = "College/University", @maxlength = 120 })
+                        <span id="clguniversity"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Aggregate</label>
+                        @Html.TextBoxFor(m => m.GetEducation.Aggregate, new { @class = "form-control form-control-sm", @placeholder = "Aggregate", @maxlength = 120 })
+                        <span id="aggregate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Year of Completion</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetEducation.YearOfCompletion.Code, (SelectList)ViewBag.Yoc, "--Select Year Of Completion--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'yoc')" })
+                        <span id="yoc"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                            @*<span class="Mandatory">*</span>*@
+                        </label>
+
+                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title="Only pdf, jpg, jpeg, png and bmp formats are allowed , File size less than 1 MB.">
+                            @*<div class="small-btn-group">
+
+            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+        </div>*@
+                            @Html.HiddenFor(m => m.GetEducation.File.AbsoluteUri)
+                            @Html.HiddenFor(m => m.GetEducation.File.ActualFileName)
+                            @Html.HiddenFor(m => m.GetEducation.File.FileName)
+                            @Html.TextBoxFor(m => m.GetEducation.File.FileData, new { @type = "file", @class = "FileUpload_FileData", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this);filechange()", @title = "" })
+                            @* <input class="form-control PreviewImage nofilechosen Resume_FileData" id="myFileInput" name="Details.Resume.FileData" onchange="pressed();CheckResumeExtensionSize(this)" title=" " type="file">*@
+                            <label id="fileLabel" class="nofilelabel notchlabel"></label>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="eduID" type="button" class="btn btn-default" onclick="validateAllEducationSave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

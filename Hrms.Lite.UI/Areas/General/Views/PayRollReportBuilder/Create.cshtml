@@ -1,0 +1,345 @@
+﻿
+@model Hrms.Lite.Shared.General.ReportBuilder
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/scripts/General/payrollreportbuilder.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+        $(".selectall").click(function () {
+            var checkAll = $(".selectall").prop('checked');
+            if (checkAll) {
+                $(".case").prop("checked", true);
+            } else {
+                $(".case").prop("checked", false);
+            }
+            onApplicabilityClick();
+        });
+
+        $(".case").click(function () {
+            if ($(".case").length == $(".case:checked").length) {
+                $(".selectall").prop("checked", true);
+            } else {
+                $(".selectall").prop("checked", false);
+            }
+
+        });
+    });
+</script>
+<style>
+    .salary-report {
+        font-size: 15px;
+        font-weight: 600;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                  Payroll Report Builder
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <!-- <li class="breadcrumb-item text-muted">
+                        <a href="financial-year.html">Financial Year List</a>
+                      </li> -->
+                    <li class="breadcrumb-item text-muted">
+                        Payroll Report Builder
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "fullform" }))
+{
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+        @Html.HiddenFor(m => m.ReportCode)
+        @Html.HiddenFor(m => m.Mode)
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="tab-items ">
+                                            <label>Report Type </label>
+                                            <div class="form-group filter-combobox mt-0">
+
+                                                @Html.DropDownListFor(m => m.Type.Code, (IEnumerable<SelectListItem>)ViewBag.ReportType, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'pay_Type')", @onchange = "onReportTypeChange(this);" })
+                                                <span id="pay_Type"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 finyr">
+                                        <div class="tab-items ">
+                                            <label>Financial Year  </label>
+                                            <div class="form-group filter-combobox mt-0">
+                                                @Html.DropDownListFor(m => m.FinancialYear.Code, (SelectList)ViewBag.FinancialYear, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'pay_Fyear');onReportTypeChange($('#Type_Code'))" })
+                                                <span id="pay_Fyear"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 payrb_monthdiv">
+                                        <div class="tab-items ">
+                                            <label><span class="Type_Label">Type</span>  </label>
+                                            <div class="form-group filter-combobox mt-0">
+                                                @Html.DropDownListFor(m => m.Month.Code, (IEnumerable<SelectListItem>)ViewBag.Month, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'pay_month')" })
+                                                <span id="pay_month"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="tab-items">
+                                            <label>Based On   </label>
+                                            <div class="form-group filter-combobox mt-0">
+                                                @Html.DropDownListFor(m => m.BasedOn.Code, (IEnumerable<SelectListItem>)ViewBag.BasedOn, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'pay_BasedOn')" })
+                                                <span id="pay_BasedOn"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 payrb_from_todiv hide">
+                                        <div class="row-outer pb-2">
+                                            <label>From</label>
+                                            @Html.DropDownListFor(m => m.From.Code, (IEnumerable<SelectListItem>)ViewBag.FromMonth, "--Select--", 
+                                           new { @class = "form-control form-control-sm", @onblur = "validate(this,'fromdate')", @onchange = "FromChange(this);" })
+
+                                            <span id="fromdate"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 payrb_from_todiv hide">
+                                        <div class="row-outer pb-2">
+                                            <label>To</label>
+                                            @Html.DropDownListFor(m => m.To.Code, (IEnumerable<SelectListItem>)ViewBag.ToMonth, "--Select--",
+                                          new { @class = "form-control form-control-sm", @onblur = "validate(this,'todate')",@onchange= "ToChange()" })
+                                            <span id="todate"></span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-2">
+                                        <div class="tab-items mt-2">
+                                            <label class="mr-3">Pay Selection Basis :</label>
+                                            <div class="form-group filter-combobox mt-0">
+
+                                                <div>
+
+
+                                                    <div>
+                                                        <div class="radio-inline">
+                                                            <label class="radio radio-outline radio-success">
+                                                                @Html.RadioButtonFor(m => m.PaySelectionBasis, "1")
+                                                                <span></span><div>Earned</div>
+                                                            </label>
+                                                            <label class="radio radio-outline radio-success">
+                                                                @Html.RadioButtonFor(m => m.PaySelectionBasis, "2")
+                                                                <span></span><div>Actual</div>
+                                                            </label>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row tab-style-button">
+                                    <div class="col-md-6">
+                                        @*<div class="empstatus-new pr-2 pb-3">
+
+            </div>*@<div class="tab-button-wrap pb-5 pr-3">
+
+
+                                            <div class="tab-items select-option">
+
+                                                <div class="sraech-slider mt-0">
+                                                    <div class="search-slider-inner">
+                                                        <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                                                    </div>
+                                                    <input id="searchList" type="text" class="form-control form-control-sm"
+                                                           placeholder="ID/Name" onkeyup="searchWithoutDatatable('databankLeft')">
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <!-- Table Section -->
+
+
+                                  @await Html.PartialAsync("_MasterGrid", Model) 
+
+
+
+                                        <!-- Table Setion End -->
+                                        <div class="row mt-5">
+                                            <div class="col-md-12 align-right">
+
+
+                                                @*<a data-bs-toggle="modal" data-target="" onclick="viewSavedReports()"
+                                                   class="btn btn-default float-left mobile-full-width mr-3">
+                                                    View Saved Reports
+                                                </a>*@
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6 pt-13">
+                                        <div class="d-flex">
+                                            <!-- Table Section -->
+
+                                            <div id="databank_combnGrid">
+
+                                                @await Html.PartialAsync("_CombinationGrid")
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Table Setion End -->
+                                        <div class="row mt-5">
+                                            <div class="col-md-12 align-right">
+                                               
+
+                                                <div id="filterSlider">
+                                                    @await Html.PartialAsync("_MultiSelectFilter", Model)
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row card-footer-bottom-fixed border-none">
+
+                                        <div class="col-md-6">
+                                            <a class=" ">
+                                                <div class="application-btn d-flex align-items-center">
+                                                    <div class="history-btn">
+                                                        <img src="/images/add-category-icon (1).png">
+
+                                                    </div>
+                                                    <div class="application-icon" data-bs-toggle="modal" data-target="" onclick="viewSavedReports()"> <h3 class="pt-2 pl-3"> View Saved Reports</h3></div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 align-right">
+
+                                            <a class="btn btn-default btn-edit payroll_rbfilteropen" onclick="openFilter()">
+                                                Proceed
+                                            </a>
+                                           
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+                    <end col-12></end> -->
+
+
+
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+}
+<div class="modal fade rp_savedReports" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="max-width:850px ;">
+        <div class="modal-content popup "
+             style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Saved Reports
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_SavedReports", Model)
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

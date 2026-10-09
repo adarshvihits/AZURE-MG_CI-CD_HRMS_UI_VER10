@@ -1,0 +1,730 @@
+﻿@model Hrms.Lite.Shared.Master.LeaveRule
+
+<style>
+    .ihits-table.table-border table tbody tr th {
+        padding: 2px 13px;
+    }
+    .checkbox.checkbox-outline.checkbox-primary > span {
+        background-color: transparent;
+        border-color: #7a7a91 !important;
+    }
+    .ihits-table .form-control {
+        border-color: #7a7a91 !important;
+        background-color: #fff;
+    }
+    table {
+        border-collapse: collapse !important;
+    }
+    .clubdropdown{
+        height:32px;
+    }
+        .clubdropdown .btn-multi-selection {
+           
+            border: 1px solid #7a7a91 !important;
+      
+        }
+</style>
+<script>
+    $(document).ready(function () {
+        enableDisableTextBoxes();
+        if ($('#ClubWithOtherLeaves').is(':checked')) {
+            //GetClubbingDropdowns();
+            $('.clubDropdown').removeClass('hide');
+            $('#ClubbingLeaves').multiselect('rebuild')
+        }
+    });
+
+</script>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Leave-Rule-Save" }))
+    {
+
+
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table leave-rule-list table-scroll">
+
+            <table id="LeaveRuleTable" class="layout-fixed">
+
+
+                <colgroup span="3"></colgroup>
+                <thead>
+                    <tr class="leve_scroll_chnge" @*style="background-color: var(--blue-color-theme);
+                                              color: white;"*@>
+                        <th scope="col">Category</th>
+                        <th scope="col">Condition</th>
+                        <th colspan="3" scope="colgroup">@ViewBag.LName</th>
+                    </tr>
+                </thead>
+                @if (ViewBag.LName == null)
+                {
+                    <tbody>
+                        <tr>
+                            <td valign="top" colspan="8" class="dataTables_empty">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;">
+                                <img src="/images/nodata.png"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                }
+                else
+                {
+
+
+                    <tbody>
+                        <tr>
+                            <th rowspan="8" scope="rowgroup">General Settings</th>
+                            <th scope="row">Applicability</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.Leave_Appl)
+                                        @Html.HiddenFor(Model => Model.LeaveGroup.Code)
+                                        @Html.HiddenFor(Model => Model.Leave.Code)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Opening based on</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(model => model.OpeningBased,
+                       new List<SelectListItem> {
+                                                                             new SelectListItem {  Value= "0" , Text = "--select--"},
+                                                                             new SelectListItem {  Value= "1" , Text = "Attendance" },
+                                                                             new SelectListItem {  Value= "2" , Text = "Leave Rule" },
+                         },
+                       new { @class = "form-control form-control-sm", @onchange = "onGroupByChange(this,'groupby')" })
+
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Fixed or Pro Rata basis </th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(model => model.FixedOrProDataBase,
+                       new List<SelectListItem> {
+                                                                             new SelectListItem {  Value= "0" , Text = "--select--"},
+                                                                             new SelectListItem {  Value= "1" , Text = "Fixed" },
+                                                                             new SelectListItem {  Value= "2" , Text = "Pro Rata basis" },
+                         },
+                       new { @class = "form-control form-control-sm", @onchange = "onGroupByChange(this,'groupby')" })
+
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Opening</th>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.MaxOpening, new
+                                {
+                                    @class = "form-control form-control-sm",
+                                    @placeholder = "Maximum Opening",
+                               @onkeypress = "return onlyAmount(event)",
+                               oninput = "decimalValidation(event)"
+                           })
+
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Leave Credit Frequency</th>
+                            <td>
+                                <div class="form-group">
+
+                                    @Html.DropDownListFor(model => model.LeaveCreditFreq,
+new List<SelectListItem> {
+                                                    new SelectListItem {  Value= "0" , Text = "--select--"},
+                                                    new SelectListItem {  Value= "1" , Text = "Monthly" },
+                                                    new SelectListItem {  Value= "2" , Text = "Yearly" },
+},
+new { @class = "form-control form-control-sm", @onchange = "onGroupByChange(this,'groupby')" })
+
+                                </div>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Onboarding Applicability</th>
+
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.OnboardingApplicability)
+
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Allow Leave Application in Notice Period</th>
+
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.NoticePeriodApplicability)
+
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Allow Leave Application Within 30 days from Joining Date</th>
+
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.JoiningMonthApplicability)
+
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th rowspan="3" scope="rowgroup">No: of leaves to credit</th>
+                            <th scope="row"></th>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.LeaveCreditCount, new
+                                {
+                                    @class = "form-control form-control-sm",
+                                    @placeholder = "No: of leaves to credit",
+                               @onkeypress = "return onlyAmount(event)",
+                               oninput = "decimalValidation(event)"
+                           })
+
+                            </td>
+
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th rowspan="3" scope="rowgroup">Leave Encash</th>
+                            <th scope="row">Maximum Leave employee can hold</th>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.MaxLeaveHold, new
+                                {
+                                    @class = "form-control form-control-sm",
+                                    @placeholder = "Maximum Leave employee can hold",
+                               @onkeypress = "return onlyAmount(event)",
+                               oninput = "decimalValidation(event)"
+                           })
+
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Encash applicable</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.Encashment_Appl, new { @onchange = "onEncashApplChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Encashable</th>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.EncashmentMaxLimit, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "Maximum Encashable",
+                               @onkeypress = "return onlyAmount(event)",
+                               oninput = "decimalValidation(event)"
+                           })
+
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+
+                    <tbody>
+                        <tr>
+                            <th rowspan="3" scope="rowgroup">Leave lapse</th>
+                            <th scope="row">Leave lapse applicability</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.LeavelapsAppl, new { @onchange = "onLeaveLapsApplChange()" })
+
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                            </td>
+
+
+                        </tr>
+                
+                        <tr>
+                            <th scope="row">Monthly mandatory taken</th>
+                            <td>
+                                @Html.TextBoxFor(Model => Model.MandatoryTakenlaps, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "Monthly mandatory taken",
+                               @onkeypress = "return onlyAmount(event)",
+                               oninput = "decimalValidation(event)"
+                           })
+
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+
+
+
+
+
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" scope="rowgroup">Leave Carry Forward</th>
+                            <th scope="row">Carry Forward Applicable</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.CarryForward_Appl, new { @onchange = "onCFApplChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Carry Forwardable</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.CarryForwardMaxLimit, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "Maximum carryforwadable",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th rowspan="15" scope="rowgroup">Leave Application </th>
+                            <th scope="row">Half Day Allowed</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.HalfDay_Appl)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum No. of Leaves in a Stretch</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoOfLeavesAtaTime, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "Maximum No: of Leaves in a Stretch",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Minimum No. of Leaves in an Application</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.MinNoOfLeaveAtaTime, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "Minimum No: of Leaves in an Application",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Leaves Per Month</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoofLeavesPerMonths, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "Maximum Leaves Per Month",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">No: of Leave application per year</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoOfLeaveApplPerYr, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "No: of Leave application per year",
+                                   onkeypress = "return onlyNumberKey(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Allow backdated applications</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.PreDatedApplAlwed, new { @onchange = "onPreDatesApplChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Number of backdated days</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoOfDaysPrior, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "No: of days prior",
+                                   onkeypress = "return onlyNumberKey(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Advance Application required</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.AdvanceApplRequired, new { @onchange = "onLeaveAdvanceChange();" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">No: of days in advance</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoOfDaysAdvance, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "No: of days",
+                                   onkeypress = "return onlyNumberKey(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Is an advance leave application necessary?</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.AdvleaveApplNecessary, new { @onchange = "onAdvanceLeaveNecessarychange();" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">How many days in advance should a leave request be made?</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.AdvleaveApplNecessaryDays, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "No: of days",
+                                   onkeypress = "return onlyNumberKey(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Pro Rata basis leave application applicable</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.ApplyProDataBasis, new { @onchange = "onProDataChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Number of Pro Rata Days</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.ProDataBasisNoOfLeaves, new
+                               {
+                                   @class = "form-control form-control-sm",
+
+                                   @placeholder = "No:of Pro Data Days",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Remarks Mandatory or not</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.RemarksMandatory)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Work Handover Details Mandatory or not</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.WrkHandOvrMandatory)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+                    </tbody>
+
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" scope="rowgroup">Document Attachment </th>
+                            <th scope="row">Mandatory </th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.Mandatory, new { @onchange = "onMandatoryDocApplChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">No: of leaves for Mandatory Doc</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.NoOfLeavesForMandatoryDoc, new
+                               {
+                                   @class = "form-control form-control-sm",
+                                   @placeholder = "No: of leaves for Mandatory Doc",
+                                   @onkeypress = "return onlyAmount(event)",
+                                   oninput = "decimalValidation(event)"
+                               })
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th rowspan="2" scope="rowgroup">Compound Leave </th>
+                            <th scope="row">Holiday Compound Leave (Holidays before/after ≥ 2 leave days counted as leave)</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.HolidayCompoundLeave)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Offday Compound Leave (Off-days before/after ≥ 2 leave days counted as leave)</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.OffdayCompoundLeave)
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th rowspan="1" scope="rowgroup">Leave Clubbing</th>
+                            <th scope="row">Club with other leaves </th>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-2 d-flex">
+                                        <div class="checkbox-inline ">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                @Html.CheckBoxFor(Model => Model.ClubWithOtherLeaves, new { @onchange = "GetClubbingDropdowns()" })
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-10  ">
+                                        <div class="clubdropdown">
+                                            <div class="clubDropdown hide">
+
+
+
+                                                @Html.ListBoxFor(m => m.ClubbingLeaves, (SelectList)ViewBag.ClubLeaves, new
+                                           {
+                                               @class = "multiselectDropdownFields form-control-multiselect form-control-sm",
+                                               @multiple = "multiple",
+                                               // @onchange = "onPayrollGroupChange()"
+                                           })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" scope="rowgroup">Holiday Sandwich</th>
+                            <th scope="row">Holiday Sandwich applicable</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.HolidaySandwichAppl, new { @onchange = "onHoli_SandwichChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        @*<tr>
+                            <th scope="row">Sandwich no: of leaves</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.HolidaySandwitchNoOfLeaves, new { @class = "form-control form-control-sm", @placeholder = "Sandwich no: of leaves", onkeypress = "return onlyNumberKey(event)" })
+
+                                </div>
+                            </td>
+
+
+                        </tr>*@
+
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" scope="rowgroup">Offday Sandwich</th>
+                            <th scope="row">Offday Sandwich applicable</th>
+                            <td>
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.OffdaySandwichAppl, new { @onchange = "onOffDay_SandwichChange()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        @*<tr>
+                            <th scope="row">Sandwich no: of leaves</th>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.OffdaySandwitchNoOfLeaves, new { @class = "form-control form-control-sm", @placeholder = "Sandwich no: of leaves", onkeypress = "return onlyNumberKey(event)" })
+
+                                </div>
+                            </td>
+
+
+                        </tr>*@
+
+                    </tbody>
+
+                }
+            </table>
+
+
+
+
+        </div>
+    }

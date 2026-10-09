@@ -1,0 +1,1043 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+
+@{ ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/scripts/DataBank/Enrollment.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //fillPunchingMethodDropdown();
+        $('#AttendanceSettings_ShiftDetailsIds').multiselect({
+            includeSelectAllOption: true,
+            nonSelectedText: '--Select Shift Details--',
+        });
+
+        $('#AttendanceSettings_PunchingMethodIDs').multiselect({
+            includeSelectAllOption: true,
+            nonSelectedText: '--Select Punching Method--',
+        });
+
+        fillSingleValueDropdown();
+        CTCCalculation();
+        if ('@Model.AttendanceSettings.ShiftDetailsId'== '') {
+            debugger;
+            $('#singleselect').hide();
+        }
+        else {
+            $('#multipleselect').hide();
+            $('#singleselect').show();
+        }
+        
+        const myTimeout = setTimeout(changeFocus, 500);
+
+        function changeFocus() {
+            $('#PreEnrollment_BasicInfo_Salutation_Code').focus();
+        }
+
+        //$('.selectpicker').selectpicker({
+        //    liveSearch: true,
+        //    showSubtext: true
+        //});
+    });
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id="enrollSave", enctype = "multipart/form-data",@style="height:100%" }))
+{<!--begin::Header-->
+                    <div id="kt_header" class="header header-fixed">
+                        <!--begin::Container-->
+                        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                            <!--begin::Header Menu Wrapper-->
+                            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+
+
+                                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                                    <!--begin::Header Menu-->
+                                    <h3 class="main-title">Enrollment</h3>  
+                                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                                        <li class="breadcrumb-item ">
+                                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                                <i class="icon-nm fas fa-home mt-1"></i>
+                                            </a>
+                                        </li>
+                                        <li class="breadcrumb-item text-muted">
+                                            <a href="@Url.Action("Index", "OnBoarding", new { Area = "DataBank" })" class="">OnBoarding</a>
+                                        </li>
+                                        <li class="breadcrumb-item text-muted">
+                                            Enrollment
+                                        </li>
+                                    </ul>
+                                    <!--end::Header Menu-->
+                                    </div>
+                                </div>
+                                <!--end::Header Menu Wrapper-->
+                              
+                            </div>
+                        <!--end::Container-->
+                    </div> <!--end::Header-->
+                                 
+                                                    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+                                                        <!--begin::Entry-->
+                                                        <div class="d-flex flex-column-fluid">
+                                                            <!--begin::Container-->
+                                                            <div class="container full-width">
+                                                                <!--begin::Dashboard-->
+                                                                <!--begin::Row-->
+
+
+
+                                                                <div class="card card-custom height-100per footer-row-fixed">
+                                                                  
+                                                                    <div class="card-body">
+
+                                                                        <div class="profile-header pb-12  position-relative box-shadow-none mb-2">
+                                                                            <div class="row">
+                                                                                <div class="col-md-2">
+                                                                                    <div class="image-input image-input-outline image-input-circle  float-right" id="kt_image_4"
+                                                                                         style="background-image: url(/images/blank.png)">
+                                                                                        <div class="image-input-wrapper"
+                                                                                             style="background-image: url(@Model.PreEnrollment.BasicInfo.File.AbsoluteUri)">
+                                                                                        </div>
+                                                                                        @*style="background-image: url(<?php echo Page::getMediaPath();?>users/100_1.jpg)">*@
+                                                                                        <div style="display:none">
+                                                                                            @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.File.AbsoluteUri)
+                                                                                            @Html.TextBoxFor(m => m.PreEnrollment.PreEnrollCode)
+                                                                                        </div>
+                                                                                        <label class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                                                                               data-action="change" data-bs-toggle="tooltip" title="Click to upload photo"
+                                                                                               data-bs-original-title="Change avatar">
+                                                                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                                                                            @*<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" />*@
+                                                                                            @Html.HiddenFor(m => m.EnrollGUID)
+                                                                                            @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.File.FileData, new { @type = "file", @name = "profile_avatar", onchange = "CheckImageExtensionSize(this)" })
+                                                                                            @*<input type="hidden" name="profile_avatar_remove" />*@
+                                                                                        </label>
+
+                                                                                        @*<span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                              data-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                        </span>*@
+
+                                                                                        <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                                                                              data-action="remove" data-bs-toggle="tooltip" title="Remove Photo" id="removePhoto" onclick="onRemovePhotoClick()">
+                                                                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-9 pl-10 mt-2">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-6 pr-0">
+                                                                                            <div class="form-group">
+
+                                                                                                <div class="input-group">
+                                                                                                    <div class="input-group-merge">
+                                                                                                        @*<button type="button" class="btn dropdown-toggle text-right pr-5"
+                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                            Mr
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">
+                                                Another
+                                                action
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Something
+                                                else here
+                                            </a>
+
+                                            <a class="dropdown-item" href="#">
+                                                Separated
+                                                link
+                                            </a>
+                                        </div>*@
+                                                                                                        @Html.DropDownListFor(m => m.PreEnrollment.BasicInfo.Salutation.Code, (SelectList)ViewBag.Sal, new { @class = "form-control form-control-sm" })
+                                                                                                    </div>
+                                                                                                    @*<input type="text" class="form-control form-control-sm"
+                                    placeholder="Full Name" onchange="trim(this)">*@
+                                                                                                    @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.FullName, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Full Name", @onblur = "firstLetterCaps(this,'fullname')", @onkeypress = "return onlyLettersKey(event)" })
+
+                                                                                                </div>
+                                                                                                <span id="fullname"></span>
+
+                                                                                            </div>
+                                                                                        </div>
+
+
+                                                                                    </div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group mb-0">
+                                                                                                <div class="input-group date">
+                                                                                                    @*<input type="text" class="form-control" id="kt_datepicker_2"
+                                    readonly="readonly" placeholder="DOJ" />*@
+                                                                                                    @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.AcceptedDOJ, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "DOJ", @onchange = "validateDOJ(this,'doj')" })
+                                                                                                    <div class="input-group-append">
+                                                                                                        <span class="input-group-text">
+                                                                                                            <i class="la la-calendar"></i>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <span id="doj"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group mb-0">
+                                                                                                @*<input type="text" class="form-control" placeholder="Mobile" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.MobileNo, new { @class = "form-control form-control-sm", @maxlength = 10, @placeholder = "Mobile", @onblur = "validateMobile('PreEnrollment_PermanentAddress_MobileNo','mobile')", @onkeypress = "return onlyNumberKey(event)" })
+                                                                                                <span id="mobile"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group mb-0">
+                                                                                                @*<input type="email" class="form-control form-control-sm" placeholder="E-Mail">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.MailID, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "E-Mail", @onblur = "validateEmail(this,'email')" })
+                                                                                                <span id="email"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+
+
+
+                                                                                    </div>
+
+
+
+
+
+                                                                                </div>
+                                                                            </div>
+
+
+
+                                                                            <div class="profile-header-overflow"></div>
+                                                                        </div> <!--begin::Content-->
+                                                                        <!--begin: Search Form-->
+                                                                        <!-- Table Section -->
+
+                                                                        <div class="tab-outer accordion-only">
+                                                                            <ul class="ulList">
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabOne clickOnTab" id="tabOneTitle">Personal Info</li>
+                                                                                <div id="tabOne" class="tab-content">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <div class="form-group">
+                                                                                                    <label>DOB</label><span class="Mandatory">*</span>
+                                                                                                    <div class="input-group date">
+                                                                                                        @*<input type="text" class="form-control"
+                                id="kt_datepicker_2" readonly="readonly"
+                                placeholder="DOB" />*@
+                                                                                                        @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.DOB, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "DOB", @onblur = "validateDOB(this,'dob')" })
+
+                                                                                                        <div class="input-group-append">
+                                                                                                            <span class="input-group-text">
+                                                                                                                <i class="la la-calendar"></i>
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <span id="dob"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Gender</label><span class="Mandatory">*</span>
+                                                                                                    @*<select class="form-control form-control-sm "
+                                    id="exampleSelects">
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>*@
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.BasicInfo.Gender.Code, (SelectList)ViewBag.Gen, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'gender')" })
+                                                                                                    <span id="gender"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Father's Name</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Father's Name" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.FathersName, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Father's Name", @onblur = "firstLetterCaps(this,'father')", @onkeypress = "return onlyLettersKey(event)" })
+                                                                                                <span id="father"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Aadhar Number</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Aadhar Number" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.AdharNo, new { @class = "form-control form-control-sm", @maxlength = 12, @placeholder = "Aadhar Number", @onblur = "validateAadhar('PreEnrollment_BasicInfo_AdharNo','aadhar')", @onkeypress = "return onlyNumberKey(event)" })
+                                                                                                <span id="aadhar"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <label>PAN</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="PAN" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.PanNo, new { @class = "form-control form-control-sm", @maxlength = 10, @placeholder = "PAN Number", @onblur = "validatePan('pan')" })
+                                                                                                <span id="pan"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabTwo clickOnTab" id="tabTwoTitle">
+                                                                                    Job Details
+
+                                                                                </li>
+
+                                                                                <div id="tabTwo" class="tab-content">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Category</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Category</option>
+                            <option>Category</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Category.Code, (SelectList)ViewBag.Cat, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onCategoryChange(this)" })
+                                                                                                <span id="category"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Grade</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Grade.Code, (SelectList)ViewBag.Grd, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onGradeChange(this,'grade')" })
+                                                                                                <span id="grade"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Designation</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Designation</option>
+                            <option>Designation</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Designation.Code, (SelectList)ViewBag.Dsg, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'designation')" })
+                                                                                                <span id="designation"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Department</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Department</option>
+                            <option>Department</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Department.Code, (SelectList)ViewBag.Dept, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'department')" })
+                                                                                                <span id="department"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+
+
+
+
+
+
+                                                                                    </div>
+
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Location</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Location</option>
+                            <option>Location</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Location.Code, (SelectList)ViewBag.Loc, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'location')" })
+                                                                                                <span id="location"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Payroll Group</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Payroll Group</option>
+                            <option>Payroll Group</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.PayrollGroup.Code, (SelectList)ViewBag.PayrollGrp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'payroll')" })
+                                                                                                <span id="payroll"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label id="renewal">Renewal Date</label><span class="Mandatory">*</span>
+                                                                                                <div class="input-group date">
+                                                                                                    @*<input type="text" class="form-control"
+                            id="kt_datepicker_2" readonly="readonly"
+                            placeholder="Renewal Date" />*@
+                                                                                                    @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.RenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Renewal Date", @onchange = "validateDOR(this,'dor')" })
+                                                                                                    <div class="input-group-append">
+                                                                                                        <span class="input-group-text">
+                                                                                                            <i class="la la-calendar"></i>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <span id="dor"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+
+
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Notice Period (In Days)</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Notice Period (In Days)" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.JobDetails.NoticePeriod, new { @class = "form-control form-control-sm", @maxlength = 3, @placeholder = "Notice Period (In Days)", @onblur = "validate(this,'noticeperiod')", @onkeypress = "return onlyNumberKey(event)" })
+                                                                                                <span id="noticeperiod"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <!-- Tab Start -->
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabThree clickOnTab" id="tabThreeTitle">Compensation & Benefits</li>
+                                                                                <div id="tabThree" class="tab-content ">
+
+
+                                                                                    <div class="row justify-content-md-left">
+                                                                                        <div class="col-md-auto pt-1"><label>Offered Salary</label><span class="Mandatory">*</span></div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Offered Salary" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.Compensation.OfferedSalary, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Offered Salary", @onblur = "validate(this,'salary')", @onkeypress = "return onlyNumberKey(event)", @oninput = "process(this)" })
+                                                                                                <span id="salary"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    @*@await Html.PartialAsync("_CompensationAndBenefits", Model)*@
+
+                                                                                    @*<div class="row">
+            <div class="col-md-6">
+                <div class="ihits-table table-border vertical-scroll-100 table-head-small hover-color odd-even compensationBenefits">
+                    <table>
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Allowance</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>*@
+                                                                                    @*<tr>
+                <td data-label="Allowance">Basic</td>
+                <td data-label="Type">Fixed</td>
+                <td data-label="Amount">7500</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">DA</td>
+                <td data-label="Type">Variable</td>
+                <td data-label="Amount">4500</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">HRA</td>
+                <td data-label="Type">Variable</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Incentive</td>
+                <td data-label="Type">Variable</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">PF management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Esi management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Esi management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Esi management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Esi management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>
+            <tr>
+                <td data-label="Allowance">Esi management</td>
+                <td data-label="Type">CTC Component</td>
+                <td data-label="Amount">3000</td>
+
+            </tr>*@
+
+                                                                                    @*@if (Model != null && Model.PreEnrollment!= null)
+            {
+
+                for (int i = 0; i < Model.PreEnrollment.Compensation.FixedAllowance.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => m.PreEnrollment.Compensation.FixedAllowance[i].Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => m.PreEnrollment.Compensation.FixedAllowance[i].AllowanceType)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.PreEnrollment.Compensation.FixedAllowance[i].Amount, new { @class = "form-control form-control sm" })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" align="center">No data found!</td>
+                </tr>
+            }*@
+
+                                                                                    @*</tbody>
+
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="ihits-table table-border table-head-small hover-color odd-even mt-mobile-0px mt-4 gross-salary">
+                                <table>
+
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 10px; width: 50%;">
+                                                <b>Gross Salary</b>
+                                            </td>
+                                            <td style="padding: 10px;">
+                                                <b>CTC</b>
+                                            </td>
+
+                                        </tr>
+
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ihits-table table-border table-head-small vertical-scroll-100 hover-color odd-even compensationBenefits">
+                        <table>
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">Deduction</th>
+                                    <th scope="col">Amount</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-label="Deduction">Canteen</td>
+                                    <td data-label="Amount">300</td>
+
+                                </tr>
+                                <tr>
+                                    <td data-label="Deduction">Transport</td>
+                                    <td data-label="Amount">100</td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="row justify-content-end">
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-0 mt-4">
+                                <div class="checkbox-inline">
+                                    <label class="mr-2">Statutory Deductions</label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" checked="checked"
+                                               name="Checkboxes3">
+                                        <span></span>PF
+                                    </label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="Checkboxes3">
+                                        <span></span>ESI
+                                    </label>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>*@
+
+
+
+
+
+
+                                                                                </div>
+                                                                                <!-- Tab End -->
+                                                                                <!-- Tab Start -->
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabFour clickOnTab" id="tabFourTitle">Address for Communication</li>
+                                                                                <div id="tabFour" class="tab-content">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>House</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="House" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.House, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "House", @onblur = "validate(this,'house')" })
+                                                                                                <span id="house"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Street</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Street" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.Street, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Street", @onblur = "validate(this,'street')" })
+                                                                                                <span id="street"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>City</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="City" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.City, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "City", @onblur = "validate(this,'city')" })
+                                                                                                <span id="city"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>PIN code</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="PIN code" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.PreEnrollment.PermanentAddress.PinCode, new { @class = "form-control form-control-sm", @maxlength = 6, @placeholder = "PIN code", @onblur = "validate(this,'pin')", @onkeypress = "return onlyNumberKey(event)" })
+                                                                                                <span id="pin"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Country</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Country</option>
+                            <option>Country</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.PermanentAddress.Country.Code, (SelectList)ViewBag.Cntry, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onCountryChange(this,'country')" })
+                                                                                                <span id="country"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>State</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>State</option>
+                            <option>State</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.PermanentAddress.State.Code, (SelectList)ViewBag.St, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onStateChange(this,'state')" })
+                                                                                                <span id="state"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>District</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>District</option>
+                            <option>District</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.PreEnrollment.PermanentAddress.District.Code, (SelectList)ViewBag.Dist, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onDistrictChange(this,'district')" })
+                                                                                                <span id="district"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                                <!-- Tab End -->
+                                                                                <!-- Tab Start -->
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabSix clickOnTab active" id="tabSixTitle">Attendance Settings</li>
+                                                                                <div id="tabSix" class="tab-content active">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Shift Type</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Shift Type</option>
+                            <option>Shift Type</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.AttendanceSettings.ShiftType.Code, (SelectList)ViewBag.SftType, "--Select Shift Type--", new { @class = "form-control form-control-sm", @onchange = "onShiftTypeChange(this)" })
+                                                                                                <span id="shifttype"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Shift Details</label><span class="Mandatory">*</span>
+
+                                                                                                <div id="multipleselect">
+                                                                                                    @*@Html.DropDownListFor(m => m.AttendanceSettings.ShiftDetailsIds, (SelectList)ViewBag.SftDetails, "--Select--", new { @id = "mselect", @class = "choices-multiple-remove-button-two form-control form-control-sm", @multiple = "multiple", @onchange = "validateShiftDetails()" })*@
+                                                                                                    @Html.ListBoxFor(m => m.AttendanceSettings.ShiftDetailsIds, (SelectList)ViewBag.SftDetails, new { @class = "form-control-multiselect form-control-sm JType", @multiple = "multiple", @onchange = "validateShiftDetails(this,'shiftdetails')" })
+                                                                                                </div>
+
+                                                                                                @*@Html.DropDownListFor(m => m.AttendanceSettings.ShiftDetailsIds, (SelectList)ViewBag.SftDetails, "--Select--", new { @class = "choices-multiple-remove-button-two form-control form-control-sm" , @multiple= "multiple" })*@
+                                                                                                <div id="singleselect">
+                                                                                                    @Html.DropDownListFor(m => m.AttendanceSettings.ShiftDetailsId, (SelectList)ViewBag.SftDetails, "--Select Shift Details--", new { @id = "sselect", @class = "form-control form-control-sm", @onblur = "validate(this,'shiftdetails')" })
+                                                                                                </div>
+
+                                                                                                <span id="shiftdetails"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Punching Method</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="choices-multiple-remove-button form-control form-control-sm"
+                                placeholder="Select " multiple>
+                            <option value="">Choose a Language</option>
+                            <option value="HTML">HTML</option>
+                            <option value="Jquery">Jquery</option>
+                            <option value="CSS">CSS</option>
+                            <option value="Bootstrap 3">Bootstrap 3</option>
+                            <option value="Bootstrap 4">Bootstrap 4</option>
+                            <option value="Java">Java</option>
+                            <option value="Javascript">Javascript</option>
+                            <option value="Angular">Angular</option>
+                            <option value="Python">Python</option>
+                            <option value="Hybris">Hybris</option>
+                            <option value="SQL">SQL</option>
+                            <option value="NOSQL">NOSQL</option>
+                            <option value="NodeJS">NodeJS</option>
+                        </select>*@
+                                                                                                @*<span class="punching-select" id="punchselect"></span>*@
+                                                                                                @*@Html.ListBoxFor(m => m.AttendanceSettings.PunchingMethodIDs, (SelectList)ViewBag.Punching, new { @class = "listbox", @id = "punchingdrop" })*@
+                                                                                                @*<span class="hobbies-select">
+                        </span>*@
+                                                                                                @* @Html.SpanFor(model => model.Name, new { title = "Customer name" })*@
+                                                                                                @*<select class="form-control form-control-sm "
+                          id="exampleSelects">
+                        <option>Punching Method</option>
+                        <option>Punching Method</option>
+                         </select>*@
+                                                                                                @*@Html.DropDownListFor(m => m.AttendanceSettings.PunchingMethodIDs, (SelectList)ViewBag.Punching, "--Select--", new { @class = "choices-multiple-remove-button form-control form-control-sm" , @multiple= "multiple" })*@
+                                                                                                @Html.ListBoxFor(m => m.AttendanceSettings.PunchingMethodIDs, (SelectList)ViewBag.Punching, new { @class = "form-control-multiselect form-control-sm JType", @multiple = "multiple", @onchange = "validatePunchingMethod(this,'punchingmethod')" })
+                                                                                            </div>
+                                                                                            <span id="punchingmethod"></span>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <!-- Tab End -->
+                                                                                <!-- Tab Start -->
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabSeven clickOnTab" id="tabSevenTitle">Statutory & Payment Details</li>
+                                                                                <div id="tabSeven" class="tab-content">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>PF Number</label>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="PF Number" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.StatutoryClassification.PFNumber, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "PF Number", @onchange = "trim(this)" })
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>UAN Number</label>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="UAN Number" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.StatutoryClassification.UANNumber, new { @class = "form-control form-control-sm", @maxlength = 25, @placeholder = "UAN Number", @onchange = "trim(this)" })
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>ESI Number</label>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="ESI Number" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.StatutoryClassification.ESINumber, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "ESI Number", @onchange = "trim(this)" })
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Paymode</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm " multiple="multiple"
+                                id="exampleSelects">
+                            <option>Paymode</option>
+                            <option>Paymode</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.StatutoryClassification.PaymentMode.Code, (SelectList)ViewBag.Payment, "--Select Paymode--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'payment')", @onchange = "onPaymentModeChange(this)" })
+                                                                                                <span id="payment"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    <div class="row" id="bankdetails">
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Bank Name</label><span class="Mandatory">*</span>
+                                                                                                @*<select class="form-control form-control-sm "
+                                id="exampleSelects">
+                            <option>Bank Name</option>
+                            <option>Bank Name</option>
+                        </select>*@
+                                                                                                @Html.DropDownListFor(m => m.StatutoryClassification.Bank.Code, (SelectList)ViewBag.BankName, "--Select Bank Name--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'bankname')" })
+                                                                                                <span id="bankname"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Acc No.</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Acc No." onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.StatutoryClassification.AccountNo, new { @class = "form-control form-control-sm", @maxlength = 25, @placeholder = "Acc No.", @onblur = "validate(this,'accno')" })
+                                                                                                <span id="accno"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>IFSC Code</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="IFSC Code" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.StatutoryClassification.IFSC, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "IFSC Code", @onblur = "validate(this,'ifsc')" })
+                                                                                                <span id="ifsc"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                                <!-- Tab End -->
+                                                                                <!-- Tab Start -->
+                                                                                @if (Model.AddOnClassification.AddOnClassification_Applicability == true)
+                                                                                {
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="Addon_classification clickOnTab">Add on classification</li>
+                                                                                <div id="Addon_classification" class="tab-content ">
+
+                                                                                    <div class="row">
+                                                                                        @if (Model.AddOnClassification.DivisionExists == true)
+                                                                                        {
+                                                                                            <div class="col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Division</label>
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Division.Code, (SelectList)ViewBag.Div, "--Select Division--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'division')" })
+                                                                                                    <span id="division"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.AddOnClassification.SectionExists == true)
+                                                                                        {
+                                                                                            <div class="col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Section</label>
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Section.Code, (SelectList)ViewBag.Sec, "--Select Section--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'division')" })
+                                                                                                    <span id="section"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.AddOnClassification.EmploymentTypeExists == true)
+                                                                                        {
+                                                                                            <div class="col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Employment Type</label>
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.EmploymentType.Code, (SelectList)ViewBag.Emt, "--Select Employment Type--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'division')" })
+                                                                                                    <span id="division"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                        @if (Model.AddOnClassification.WorkLocationExists == true)
+                                                                                        {
+                                                                                            <div class="col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Work Location</label>
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.WorkLocation.Code, (SelectList)ViewBag.Wlo, "--Select Work Location--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'division')" })
+                                                                                                    <span id="division"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+
+                                                                                        @if (Model.AddOnClassification.WageGradeExists == true)
+                                                                                        {
+                                                                                            <div class="col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label>Wage Grade </label>
+                                                                                                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.WageGrade.Code, (SelectList)ViewBag.Wgr, "--Select Wage Grade--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'division')" })
+                                                                                                    <span id="division"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                    </div>
+                                                                                                                                                                                                                                                                
+                                                                                
+                                                                                }
+                                                                                <!-- Tab End -->
+                                                                                <!-- Tab Start -->
+                                                                                <div class="TabMoving"></div>
+                                                                                <li class="tabEight clickOnTab" id="tabEightTitle">
+                                                                                    Generate Employee ID & Reporting Manager
+                                                                                </li>
+
+                                                                                <div id="tabEight" class="tab-content">
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="form-group rptMgr">
+                                                                                                <label>Reporting Manager</label><span class="Mandatory">*</span>
+
+                                                                                                @*@Html.DropDownListFor(m => m.EmployeeSettings.ReportingManager.Code, (SelectList)ViewBag.ReportingMgr, "--Select--", new { @class = "choices-multiple-remove-button form-control form-control-sm", @onblur = "validate(this,'reportingmanager')" })*@
+                                                                                                @Html.DropDownListFor(m => m.EmployeeSettings.ReportingManager.Code, (SelectList)ViewBag.ReportingMgr, "--Select Reporting Manager--", new
+                                                                                                {
+                                                                                                    @class = "selectpicker form-control form-control-sm",
+                                                                                                    @onchange = "validateReportingManager(this,'rptMgr','reportingmanager')",
+                                                                                               data_show_subtext = "true",
+                                                                                               data_live_search = "true"
+                                                                                           })
+                                                                                                @*<select class="selectpicker form-control form-control-sm" data-live-search="true">
+                            <option>Recommended By</option>
+                            <option data-tokens="ketchup mustard">ketchup mustard</option>
+                            <option data-tokens="mustard">mustard</option>
+                            <option data-tokens="frosting">frosting</option>
+                        </select>*@
+                                                                                            </div>
+                                                                                            <span id="reportingmanager"></span>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Employee ID</label><span class="Mandatory">*</span>
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Employee ID" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.EmployeeSettings.EmployeeID, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "Employee ID", @onblur = "validate(this,'empid')" })
+                                                                                                <span id="empid"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="form-group">
+                                                                                                <label>Punching ID</label>
+
+
+
+                                                                                                @*<input type="text" class="form-control form-control-sm"
+                        placeholder="Punching ID" onchange="trim(this)">*@
+                                                                                                @Html.TextBoxFor(m => m.EmployeeSettings.PunchingID, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "Punching ID", @onchange = "trim(this)", @onkeypress = "return onlyNumberKey(event)" })
+                                                                                                @*@Html.ValidationMessageFor(m => m.EmployeeSettings.PunchingID, "This field is required", new { @class = "text-danger" })*@
+                                                                                                <span id="punchingid"></span>
+
+
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                                <!-- Tab End -->
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                @*<button type="button"
+                        class="btn btn-default float-right mobile-full-width"
+                        onclick="validateAll()">
+                    Save
+                </button>*@
+                                                                                <button type="button"
+                                                                                        class="btn btn-default float-right mobile-full-width" onclick="validateAll()">
+                                                                                    Save
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Table Setion End -->
+
+
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <!--end::Row-->
+                                                                <!--begin::Row-->
+                                                                <!--end::Row-->
+                                                                <!--end::Dashboard-->
+                                                            </div>
+                                                            <!--end::Container-->
+                                                        </div>
+                                                        <!--end::Entry-->
+                                                    </div> <!--end::Content-->
+
+
+}

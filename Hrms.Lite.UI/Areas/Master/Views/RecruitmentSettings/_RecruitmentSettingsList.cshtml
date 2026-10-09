@@ -1,0 +1,200 @@
+﻿@model Hrms.Lite.Shared.Master.RecruitmentSettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table recruitment-approval pt-3
+                                    ">
+    <table class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Fun.Designation</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="MRF Approval Required">MRF AR.</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="No.of Interview Levels">No.of IL.</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Driving License Mandatory">D.L. Mand</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Budgeting Applicable">BA.</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="New MRF Request Permission">New MRF Req.</th>
+
+
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Document Verification Required">DV Req.</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Credit Check Required">CC Req.</th>
+                @*<th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Employment Check Required">EC Req.</th>*@
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.RecruitmentSettingsList != null && Model.RecruitmentSettingsList.Count > 0)
+                {
+                    for (int i = 0; i < Model.RecruitmentSettingsList.Count; i++)
+
+                    {
+                        <tr>
+
+                            <td data-label="Designation">
+                                @if (CurrentUserRoleActions.Create == true)
+                                {
+                                    <a id="vacancycancellation " class="slider-btn" onclick="OnJobTitleClick('@Model.RecruitmentSettingsList[i].DesignationGI')">
+                                        @Model.RecruitmentSettingsList[i].Designation.Name
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a id="vacancycancellation " class="slider-btn" onclick="OnJobTitleClick('@Model.RecruitmentSettingsList[i].DesignationGI');
+                                            swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewSlider');});">
+                                        @Model.RecruitmentSettingsList[i].Designation.Name
+                                    </a>
+                                }
+                                <div id="AddNewSlider">
+
+                                </div>
+
+                            </td>
+                            <td data-label="MRF Approval Required">
+                                @if (Model.RecruitmentSettingsList[i].MRFApprovalRequired == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+
+                            <td data-label="No.of Interview Levels">
+                                @Model.RecruitmentSettingsList[i].NoOfInterviewLevels
+                            </td>
+                            <td data-label="Driving License Mandatory">
+                                @if (Model.RecruitmentSettingsList[i].DrivingLicenseMandatory == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="Budgeting Applicable">
+                                @if (Model.RecruitmentSettingsList[i].BudgetingApplicable == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="New MRF Request Permission">
+                                @if (Model.RecruitmentSettingsList[i].NewMRFRequestPermission == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+
+
+                            <td data-label="Document Verification Required">
+                                @if (Model.RecruitmentSettingsList[i].DocumentVerificationRequired == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+
+                            <td data-label="Credit Check Required">
+                                @if (Model.RecruitmentSettingsList[i].CreditCheckRequired == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>
+                            @*<td data-label="Employment Check Required">
+                                @if (Model.RecruitmentSettingsList[i].EmploymentCheckRequired == 1)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </td>*@
+                        </tr>
+
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+

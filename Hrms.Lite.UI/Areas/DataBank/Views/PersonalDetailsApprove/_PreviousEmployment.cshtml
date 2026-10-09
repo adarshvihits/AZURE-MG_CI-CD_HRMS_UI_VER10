@@ -1,0 +1,100 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "PrevEmpSave" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                Model.TabIndex = "Previous Employment";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.ApproveMode)
+            <div class="ihits-table table-border mobile-responsive-table personal-profile-previous-employment mb-2">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Fun.Designation</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Experience</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Contact Person Name">Cont.Per.Name</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Contact Person Mobile">Cont.Per.Mob</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Contact Person Designation">Cont.Per.Desgn</th>
+                            <th scope="col">View File</th>
+                         
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.PreviousEmployment.Count; i++)
+                        {
+                            
+                        <tr id="row_OI_@i">
+                            <td data-label="Company Name & Address">
+
+                                @Html.HiddenFor(m => m.PreviousEmployment[i].PrevEmploymentLogGI)
+                                @Html.HiddenFor(m => m.PreviousEmployment[i].CompanyName)
+                                @Html.HiddenFor(m => m.PreviousEmployment[i].flag)
+                                @Html.DisplayFor(m => m.PreviousEmployment[i].CompanyName)
+
+                            </td>
+                            <td data-label="Location">
+
+                                @Html.DisplayFor(m => m.PreviousEmployment[i].Location)
+                            </td>
+                            <td data-label="Designation">
+
+                                @Html.DisplayFor(m => m.PreviousEmployment[i].Designation)
+                            </td>
+                            <td data-label="From">
+                                <div class="input-group date">
+
+                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Fromdate))
+                                </div>
+                            </td>
+                            <td data-label="To">
+                                <div class="input-group date">
+
+                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Todate))
+                                </div>
+                            </td>
+                            <td data-label="Experience">
+                                @Html.DisplayFor(m => m.PreviousEmployment[i].Experience)
+                            </td>
+                            <td data-label="ContanctPersonName"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonName)</td>
+                            <td data-label="ContanctPersonNumber"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonNumber)</td>
+                            <td data-label="ContanctPersonDesigantion"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonDesigantion)</td>
+                            <td data-label="View File">
+
+                                <button data-bs-toggle="tooltip" title="View File" type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="DocumentView('@Model.EmployeeGI','PreviousEmplr')" data-bs-original-title="">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </button>
+                                <div class="row">
+                                    <div class="col-md-12 align-right">
+                                        <button type="button" id="PreviousEmploymentLabel_@i"
+                                                class="btn btn-default mobile-full-width hide">
+                                            Test
+                                        </button>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" id="PreviousEmploymentRejectbtnId_@i"
+                                           class="btn_reject" onclick="PersonalProfilePreviousEmploymentApprove(@i,'REJECT')">
+
+                                        </a>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="PreviousEmploymentApprovebtnId_@i"
+                                           class="btn_approve" onclick="PersonalProfilePreviousEmploymentApprove(@i,'APPROVE')">
+
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                           
+                        </tr>                          
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,113 @@
+﻿
+
+
+@model Hrms.Lite.Shared.Master.ExitInterviewQuestionnaire
+    <script src="~/js/tooltip.js"></script>
+<script>
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    })
+</script>
+@using (Html.BeginForm("SavePossibleResult", "ExitQuestionnaire", FormMethod.Post, new { id = "PossibleResultsave" }))
+{ 
+ 
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table exitpopup-questionaire-list vertical-scroll-200 p-3">
+    @{var abc = 0;}
+    <table id="possibleResults" class="layout-fixed">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Sl. No</th>
+                <th scope="col">Objective Possible Results</th>
+
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (int i = 0; i < Model.Results.Count; i++)
+
+            {
+                abc = i;
+                <tr id="row_OI_@i">
+
+                    <td data-label="Sl. No" id="grid_slno">@(i+1)</td>
+                    <td data-label="Objective Possible Results">
+                        <div class="form-group">
+                            @Html.HiddenFor(model => Model.Results[i].ResultCode)
+                            @Html.TextBoxFor(Model => Model.Results[i].Name, new { @class = "form-control form-control-sm", @placeholder = "Objective Possible Results" })
+
+                        </div>
+                    </td>
+                   
+                    <td data-label="Actions">
+                        @if (Model.Results.Count == (i + 1) || Model.Results.Count == 1)
+                        {
+                            <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                               class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('possibleResults')">
+                                <i class="fa fa-plus"
+                                   aria-hidden="true"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                               class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('possibleResults')">
+                                <i class="fa fa-plus"
+                                   aria-hidden="true"></i>
+                            </a>
+                        }
+                        @if (Model.Results[i].InUse != 1)@*if inuse==0 then no delete button(already in use)*@
+                        {
+
+                            <a data-bs-toggle="tooltip"
+                               title="" data-bs-original-title="Delete"
+                               class="btn btn-icon  icon-only mobile-full-width btn-delete delObj" onclick="DeleteResultRow(@i)">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+
+                        }
+                        else if (i == 0)
+                        {
+                            <a id="objDel_@i" data-bs-toggle="tooltip"
+                               title="" data-bs-original-title="Delete"
+                               class="btn btn-icon  icon-only mobile-full-width btn-delete hide delObj" onclick="DeleteResultRow(@i)">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+
+
+
+
+
+
+
+                    </td>
+                </tr>
+            }
+
+
+
+
+        </tbody>
+    </table>
+</div>
+    <!-- <end table></end> -->
+
+
+<div class="row pt-3 " style="display:flex; align-items:center;"> 
+    <div class="col-md-10 align-right">
+        <span style="color:red ;" class="pt-3"> Note : Delete option will not be available for the objective results which are already in use</span>
+    </div>
+        <div class="col-md-2 align-right">
+            <button type="button"
+                    class="btn btn-default float-right mobile-full-width " onclick="SavePossibleResult()">
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+    }

@@ -1,0 +1,171 @@
+﻿@model Hrms.Lite.Shared.Master.Asset
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Delete", "AssetMaster", FormMethod.Post, new { @id = "DeleteAsset" }))
+{
+    <div id="AssetsMasterDelete" class="slider-forms slider-forms-open DeleteDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('DeleteDiv')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Asset</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Name</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Name)
+                            @Html.HiddenFor(model => Model.Name)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.ShortName)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.HiddenFor(model => Model.Mode)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Short Name</label>
+                        <div class="view-details"> @Html.DisplayFor(model => Model.ShortName)</div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Category</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.AssetCategory.Name)</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Asset Code</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.AssetCode)</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Date of Purchase</label>
+                        <div class="view-details">
+                            @*@Html.DisplayFor(model => Model.DateOfPurchase)*@
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.DateOfPurchase))
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Brand</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.Brand)</div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Model No / Serial No</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.ModelNo)</div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Asset Cost</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.Cost)</div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Issuing Department</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.IssuingDepartment.Name)</div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Condition</label>
+                        <div class="view-details">@Html.DisplayFor(model => Model.Condition.Name)</div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <div class="row-outer">
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        @Html.DisplayFor(model => Model.Description)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Delete == true)
+                    {
+                        <a type="button"
+                           data-bs-toggle="tooltip" title="Delete"
+                           data-bs-original-title="Delete"
+                           class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI','@Model.LogGI')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </a>
+                    }
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+}

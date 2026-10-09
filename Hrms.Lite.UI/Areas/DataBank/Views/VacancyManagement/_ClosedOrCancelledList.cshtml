@@ -1,0 +1,139 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagement
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#tb1').html("@Model.Tab1Count");
+        $('#tb2').html("@Model.Tab2Count");
+        $('#tb3').html("@Model.Tab3Count");
+        $('#tb4').html("@Model.Tab4Count");
+        $('#tb5').html("@Model.Tab5Count");
+    });
+</script>
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<div class="ihits-table table-border odd-even mobile-responsive-table cancel_vacancy_list">
+    @Html.HiddenFor(m => m.VacancyManagement_List.Count)
+    @*active-vacancy-list*@
+    <table id="ActivevacancyTbl" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No.</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Vacancy Type</th>
+                <th scope="col">Location</th>
+                <th scope="col">Region</th>
+                @*<th scope="col" data-bs-toggle="tooltip" title="Requested Date">Req Date</th>*@
+                <th scope="col" data-bs-toggle="tooltip" title="Deadline">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Number of Requirements">N/Req</th>
+                <th data-bs-toggle="tooltip" title="Mapped Resumes">Resumes</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.VacancyManagement_List != null && Model.VacancyManagement_List.Count > 0)
+            {
+
+
+                for (int i = 0; i < Model.VacancyManagement_List.Count; i++)
+
+                {
+                    <tr>
+
+                        @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementGI)
+                        @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementCode)
+                        <td data-label="Code">@Model.VacancyManagement_List[i].JobCode</td>
+                        <td data-label="Job Title">
+                            <a id="applicantshortlisted" onclick="getApproveDetails('@Model.VacancyManagement_List[i].VacancyManagementGI',2)">
+                                @Model.VacancyManagement_List[i].JobTitle
+                            </a>
+                        </td>
+
+
+                        @if (Model.VacancyManagement_List[i].VacancyType == "New MRF" || Model.VacancyManagement_List[i].VacancyType == "HR Budget")
+                        {
+                            <td data-label="Code">@Model.VacancyManagement_List[i].VacancyType</td>
+                        }
+                        else
+                        {
+                            <td data-label="Code">
+                                <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                   type="button" class=" float-left" onclick="onVacancyTypeClick('@Model.VacancyManagement_List[i].VacancyManagementGI')">
+                                    @Model.VacancyManagement_List[i].VacancyType
+                                </a>
+                            </td>
+
+                        }
+
+                        <td data-label="Location">@Model.VacancyManagement_List[i].Location</td>
+                        <td data-label="Region">@Model.VacancyManagement_List[i].Region</td>
+                        @*<td data-label="Requsted Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].RequestedDate))</td>*@
+                        <td data-label="Need by Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].NeedByDate))</td>
+                        <td data-label="No of Requirements"> @Model.VacancyManagement_List[i].NoOfRequirements</td>
+
+                        <td data-label="Mapped Resumes">
+
+                            <a data-bs-toggle="modal" data-target=".resumemodal"
+                               type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyManagement_List[i].VacancyManagementGI')">
+                                @Model.VacancyManagement_List[i].MappedResumes
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:970px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Resignation Details
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade resumemodal" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:1100px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mapped Resumes
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-bodyyy modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

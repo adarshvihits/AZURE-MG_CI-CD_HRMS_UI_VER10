@@ -1,0 +1,104 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingReplyGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "TrainingReplyGroup", FormMethod.Post, new { id = "TrainingReplaygroupSave" }))
+{
+    <div id="addregion" class="slider-forms slider-forms-open ReplaySaveclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('ReplaySaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Training Reply Group
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm RName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'ReplaygroupName')", maxlength = "120" })
+                            <span id="ReplaygroupName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Type : <span></span>
+
+                        </label>
+                        <div class=" d-flex align-items-center   pr-8" id="radio">
+
+                            <label>
+                                @Html.HiddenFor(model => model.Type,"1")
+
+                                <span class="mr-2"></span>Objective
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-4 d-flex align-items-center">
+
+                        <div class="d-flex align-items-center">
+                            <div>Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('REPLAYGROUP', '@Model.Code')">
+
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(m => m.Active, new { @id = "activeInactivereplaygroup" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveReplaygroup('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveReplaygroup('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}

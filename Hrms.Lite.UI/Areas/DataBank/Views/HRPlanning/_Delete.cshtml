@@ -1,0 +1,99 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.HRPlanning
+    <script src="~/js/tooltip.js"></script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", id = "Delete-HRPlanning" }))
+    {
+        <div id="hrPlanningDelete" class="slider-forms slider-forms-open delete">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('delete')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4>Resource Planning</h4>
+                <div class="row mb-4">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Planning Name</label>
+                            @Html.HiddenFor(m => m.HRPlanningName.Code)
+                            <div class="view-details">@Html.DisplayFor(mbox => Model.HRPlanningName.Name)</div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">@Html.DisplayFor(m => m.Combination1Label)</label>
+                            @Html.HiddenFor(m => m.Combination1.Code)
+                            <div class="view-details">@Html.DisplayFor(m => m.Combination1.Name)</div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Planning Period From</label>
+                            <div class="view-details">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.FromDateAddNew))
+                            </div>
+                            </div>
+                        </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Planning Period To</label>
+                            <div class="view-details">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ToDateAddNew))
+                            </div>
+                            </div>
+                        </div>
+                </div>
+
+
+                <div class="ihits-table table-border mobile-responsive-table hr-planning-list vertical-scroll-200">
+                    <table>
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">@Html.DisplayFor(m => m.Combination2Label)</th>
+                                <th scope="col">Manpower</th>
+                                <th scope="col">Budget</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.HRPlanningSettingsList != null && Model.HRPlanningSettingsList.Count > 0)
+                            {
+                                for (int i = 0; i < Model.HRPlanningSettingsList.Count; i++)
+                                {
+                                    <tr>
+                                      
+
+                                        <td data-label="Combination2">
+                                            @Html.DisplayFor(m => m.HRPlanningSettingsList[i].Combination2TrnName)
+
+                                                                                @Html.HiddenFor(m => m.HRPlanningSettingsList[i].Combination2TrnCode)
+                                                                            </td>
+                                        <td data-label="Manpower">@Html.DisplayFor(m => m.HRPlanningSettingsList[i].ManPower)</td>
+                                        <td data-label="Budget">@Html.DisplayFor(m => m.HRPlanningSettingsList[i].Budget)</td>
+                                    </tr>
+
+
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row card-footer-bottom-fixed">
+
+                    <div class="col-md-12 align-right">
+
+                        <a data-bs-toggle="tooltip" data-bs-original-title="Delete" type="button" class="btn btn-icon btn-delete big-btn float-none"><i class="icon-xl far fa-trash-alt" onclick="DeleteHRPlanningClick()"></i></a>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    }

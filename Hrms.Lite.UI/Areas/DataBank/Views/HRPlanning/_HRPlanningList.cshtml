@@ -1,0 +1,117 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.HRPlanning
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+<div class="ihits-table table-border odd-even mobile-responsive-table planning-list-summary ">
+    @Html.HiddenFor(m=>m.HRPlanningList.Count)
+    <table id="hrPlanningTrnTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" class="main_Combination2Label">@Model.Combination2Label</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Current Manpower">Cur MP</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Planned Manpower">Pl MP</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Manpower Variance">MP Var</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Employees in Notice Period">N/P</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Current Gross Pay">Cur GP</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Planned Budget">Pl Bud</th>
+                <th scope="col"data-bs-toggle="tooltip"title="Budget Variance">Bud Var</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.HRPlanningList != null && Model.HRPlanningList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.HRPlanningList.Count; i++)
+                {
+
+                    <tr>
+                        <td data-label="Combination2">@Model.HRPlanningList[i].Combination2Name</td>
+                        <td data-label="Current Manpower">@Model.HRPlanningList[i].CurrentManPower</td>
+                        <td data-label="Planned Manpower">@Model.HRPlanningList[i].PlannedManPower</td>
+                        @if (Model.HRPlanningList[i].CurrentManPower > Model.HRPlanningList[i].PlannedManPower)
+                        {
+                            <td data-label="Manpower Variance"><span class="text-color-low">@Model.HRPlanningList[i].ManPowerVariance</span></td>
+                        }
+                        else
+                        {
+                            <td data-label="Manpower Variance"><span class="text-color-high">@Model.HRPlanningList[i].ManPowerVariance</span></td>
+                        }
+                        <td data-label="Notice Period Employees">
+                            <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                               type="button" class="btn btn-sm float-left" onclick="OnNoticePerdEmpClick('@Model.HRPlanningNameMain.Code','@Model.Combination1Code','@Model.HRPlanningList[i].Combination2Code')">
+                                @Model.HRPlanningList[i].NoticePeriodEmployees
+                            </a>
+
+
+
+
+
+
+
+                        </td>
+                        <td data-label="Current GP">@Model.HRPlanningList[i].CurrentGP</td>
+                        <td data-label="Planned Budget">@Model.HRPlanningList[i].PlannedBudget</td>
+                        @if (Model.HRPlanningList[i].CurrentGP > Model.HRPlanningList[i].PlannedBudget)
+                        {
+                            <td data-label="Budget Variance"><span class="text-color-low">@Model.HRPlanningList[i].BudgetVariance</span></td>
+                        }
+                        else
+                        {
+                            <td data-label="Budget Variance"><span class="text-color-high">@Model.HRPlanningList[i].BudgetVariance</span></td>
+                        }
+                        <td data-label="Action">
+                            <div class="d-flex justify-content-center">
+                                <a id="hrPlanningEdit" data-bs-toggle="tooltip" class="btn btn-icon btn-edit icon-only" data-bs-original-title="Edit" onclick="onCombination2Click(@Model.HRPlanningNameMain.Code,@Model.Combination1Code,@Model.HRPlanningList[i].Combination2Code, 'edit')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+
+                                <a id="hrPlanningDelete" data-bs-toggle="tooltip" class="btn btn-icon  icon-only mobile-full-width  btn-delete" data-bs-original-title="Delete" onclick="onCombination2Click(@Model.HRPlanningNameMain.Code,@Model.Combination1Code,@Model.HRPlanningList[i].Combination2Code, 'delete')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            </div>
+                           
+
+
+                        </td>
+                    </tr>
+
+
+                }
+            }
+
+
+
+        </tbody>
+
+    </table>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Notice Period Employees
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

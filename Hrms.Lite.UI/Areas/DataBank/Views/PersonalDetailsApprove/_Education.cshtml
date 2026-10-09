@@ -1,0 +1,91 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "EducationSave" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                Model.TabIndex = "Education";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.ApproveMode)
+            <div class="ihits-table table-border mobile-responsive-table personal-profile-education-section mb-2">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Qualification Type</th>
+                            <th scope="col">Qualification</th>
+                            <th scope="col">Specialization of Branch</th>
+                            <th scope="col">Year of Completion</th>
+                            <th scope="col">College/University</th>
+                            <th scope="col">Aggregate</th>
+                            <th scope="col">View File</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @Html.HiddenFor(m => m.EmployeeGI)
+
+                        @for (int i = 0; i < Model.Education.Count; i++)
+                        {
+                           
+                        <tr id="row_OI_@i">
+                            <td data-label="Qualification Type">
+                                @Html.HiddenFor(m => m.Education[i].EducationLogGI)
+                                @Html.HiddenFor(m => m.Education[i].flag)
+                                @Html.DisplayFor(m => m.Education[i].QualificationTypeName)
+
+                            </td>
+                            <td data-label="Qualofication">
+
+                                @Html.DisplayFor(m => m.Education[i].QualificationName)
+                            </td>
+                            <td data-label="Field of Study">
+
+                                @Html.DisplayFor(m => m.Education[i].SpecialisationName)
+                            </td>
+                            <td data-label="Year of Completion">
+
+                                @Html.DisplayFor(m => m.Education[i].YearOfCompletionName)
+                            </td>
+                            <td data-label="Year of Completion">
+
+                                @Html.DisplayFor(m => m.Education[i].College_University)
+                            </td>
+                            <td data-label="Year of Completion">
+
+                                @Html.DisplayFor(m => m.Education[i].Aggregate)
+                            </td>
+                            <td data-label="View File">
+
+                                <button data-bs-toggle="tooltip" title="View File" type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="DocumentView('@Model.EmployeeGI','Edu')" data-bs-original-title="">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </button>
+                            </td>
+                            <td data-label="Year of Completion">
+                                <div class="row">
+                                    <div class="col-md-12 align-right">                                       
+                                        <button type="button" id="EducationLabel_@i"
+                                                class="btn btn-default mobile-full-width hide">
+                                            Test
+                                        </button>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" id="EducationRejectbtnId_@i"
+                                           class="btn_reject" onclick="PersonalProfileEducationApprove(@i,'REJECT')">
+
+                                        </a>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="EducationApprovebtnId_@i"
+                                           class="btn_approve" onclick="PersonalProfileEducationApprove(@i,'APPROVE')">
+
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}

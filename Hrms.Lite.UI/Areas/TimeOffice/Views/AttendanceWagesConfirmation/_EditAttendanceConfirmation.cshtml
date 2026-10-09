@@ -1,0 +1,243 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.AttendanceWagesConfirmation
+
+
+
+<div id="EmployRewardsRecognition" class="slider-forms slider-forms-open EditconfirmationSlider">
+    <div class="slider-inner-style">
+        <div class="slider-form-close" onclick="CloseSlider('EditconfirmationSlider')">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </div>
+        <h4 class="mb-4">Wages Confirmation</h4>
+        <div class="profile-header position-relative pb-12 mb-5"
+             style="padding-bottom: 2px !important; padding-top: 5px !important;">
+            <div class="row">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.Details.EmployeeHeader)
+
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+        <div class="reward-section border-none">
+
+
+
+            @Html.HiddenFor(Model => Model.Details.EmployeeGI)
+
+
+            @if (Model.TabValues == "Holiday")
+            {
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">Holiday Worked</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(Model => Model.TabValues)
+
+                                @if (Model.Details.ActualValue != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.Details.ActualValue)
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Confirmed Days</label>
+                            @if (Model.Details.ConfirmedValues != 0)
+                            {
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+                            else
+                            {
+                                Model.Details.ConfirmedValues = 0;
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else if (Model.TabValues == "OffDay")
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">OffDay Worked</label>
+                            <div class="view-details">
+                                @if (Model.Details.ActualValue != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.Details.ActualValue)
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Confirmed Days</label>
+                            @if (Model.Details.ConfirmedValues != 0)
+                            {
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+                            else
+                            {
+                                Model.Details.ConfirmedValues = 0;
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.TabValues == "OTHours")
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">OT Hours</label>
+                            <div class="view-details">
+                                @if (Model.Details.ActualValue != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.Details.ActualValue)
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Confirmed OT</label>
+                            @if (Model.Details.ConfirmedValues != 0)
+                            {
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+                            else
+                            {
+                                Model.Details.ConfirmedValues = 0;
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm " })
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.TabValues == "LessHours")
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">Less Hours</label>
+                            <div class="view-details">
+                                @if (Model.Details.ActualValue != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.Details.ActualValue)
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Confirmed Less Hours</label>
+                            @if (Model.Details.ConfirmedValues != 0)
+                            {
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm ", @onblur = "validate(this,'confValues')" })
+                            }
+                            else
+                            {
+                                Model.Details.ConfirmedValues = 0;
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm ", @onblur = "validate(this,'confValues')" })
+                            }
+
+                            <span id="confValues"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            else
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">Amount</label>
+                            <div class="view-details">
+                                @if (Model.Details.ActualValue != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.Details.ActualValue)
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Confirmed Amount</label>
+                            @if (Model.Details.ConfirmedValues != 0)
+                            {
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm ", @onblur = "validate(this,'confValues')" })
+                            }
+                            else
+                            {
+                                Model.Details.ConfirmedValues = 0;
+                                @Html.TextBoxFor(Model => Model.Details.ConfirmedValues, new { @class = "form-control form-control-sm ", @onblur = "validate(this,'confValues')" })
+                            }
+
+                            <span id="confValues"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Remarks</label>
+                    @Html.TextAreaFor(Model => Model.Details.Remarks, new { @class = "form-control form-control-sm remark", @onblur = "validate(this,'rmrks')" })
+                    <span id="rmrks"></span>
+                </div>
+            </div>
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+
+                    <button class="btn btn-default float-right mobile-full-width" onclick="OnSliderSaveClick('@Model.Details.EmployeeGI', '@Model.TabValues')">
+                        Save
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

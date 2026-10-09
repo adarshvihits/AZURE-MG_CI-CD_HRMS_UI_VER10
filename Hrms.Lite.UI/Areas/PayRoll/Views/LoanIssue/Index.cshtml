@@ -1,0 +1,372 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanIssue
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/PayRoll/loanIssue.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+
+<script src="~/js/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+         $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+         $('.Tab2Count').html("@Model.Tab2Count");
+          $('.Tab3Count').html("@Model.Tab3Count");
+    $('.MoreCount').html("@Model.MoreCount");
+        $('.PendingTabCount').html("@Model.PendingTabCount");
+
+        $('.search-profile-details').hide(300);
+
+
+    });
+
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Loan Processing </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Loan Processing
+                    </li>
+                </ul>
+            </div>
+        </div>
+     
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <div class="container full-width">
+            <div class="card card-custom height-100per footer-row-fixed">
+                <div class="card-body">
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items low">
+                                <span href="loan-issue-list.html" class="btn-title active all" onclick="tabClick('all', 0, '@Model.LoanIssueListTabs[0].Name')">
+                                    @Model.LoanIssueListTabs[0].Name
+                                    <span class="btn-notification AllTabCount">@Model.AllTabCount</span>
+                                </span>
+                            </div>
+                            @if (Model.LoanIssueListTabs.Count >= 3)
+                            {
+                                @if (Model.LoanIssueListTabs[1].Name != null)
+                                {
+                                    @if (@Model.LoanIssueListTabs[1].Code == 1000)
+                                    {
+                                        <div class="tab-items medium">
+                                            <span class="btn-title tab2" onclick="tabClick('tab2',1,'@Model.LoanIssueListTabs[2].Name')">
+                                                @Model.LoanIssueListTabs[2].Name
+                                                @if (@Model.LoanIssueListTabs[2].Code == 1001)
+                                                {
+                                                    <span class="btn-notification PendingTabCount">@Model.PendingTabCount</span>
+                                                }
+                                            </span>
+                                        </div>
+                                    }
+                                }
+                            }
+
+                            <div class="tab-items low">
+                                <span class="btn-title  tab3" onclick="tabClick('tab3', 2, '@Model.LoanIssueListTabs[0].Name')">
+                                    Bulk Upload
+                                </span>
+                            </div>
+
+
+
+
+
+                            @*@if (Model.LoanIssueListTabs.Count >= 5)
+            {
+
+                @if (Model.LoanIssueListTabs[3].Name != null)
+                {
+                    <div class="tab-items medium">
+                        <span class="btn-title tab3" onclick="tabClick('tab3',@Model.LoanIssueListTabs[3].Code,'@Model.LoanIssueListTabs[3].Name')">
+                            @Model.LoanIssueListTabs[3].Name
+                            @if (@Model.LoanIssueListTabs[3].Code == 1000)
+                            {
+                                <span class="btn-notification">@Model.MoreCount</span>
+
+                            }
+                            else
+                            {
+                                <span class="btn-notification">@Model.Tab3Count</span>
+                            }
+                        </span>
+                    </div>
+                    @if (@Model.LoanIssueListTabs[3].Code == 1000)
+                    {
+                        <div class="tab-items medium">
+                            <span class="btn-title tab4" onclick="tabClick('tab4',@Model.LoanIssueListTabs[4].Code,'@Model.LoanIssueListTabs[3].Name')">
+                                @Model.LoanIssueListTabs[4].Name
+                                @if (@Model.LoanIssueListTabs[5].Code == 1001)
+                                {
+                                    <span class="btn-notification">@Model.PendingTabCount</span>
+
+                                }
+
+                            </span>
+                        </div>
+                    }
+                }
+            }
+            @if (Model.LoanIssueListTabs.Count >= 6)
+            {
+
+                @if (Model.LoanIssueListTabs[4].Name != null)
+                {
+                    <div class="tab-items medium">
+                        <span class="btn-title tab4" onclick="tabClick('tab4',@Model.LoanIssueListTabs[5].Code,'@Model.LoanIssueListTabs[4].Name')">
+                            @Model.LoanIssueListTabs[4].Name
+                            @if (@Model.LoanIssueListTabs[4].Code == 1000)
+                            {
+                                <span class="btn-notification">@Model.MoreCount</span>
+                                <span class="btn-title tab5" onclick="tabClick('tab5',@Model.LoanIssueListTabs[5].Code,'@Model.LoanIssueListTabs[5].Name')">
+                                    @Model.LoanIssueListTabs[5].Name
+                                    @if (@Model.LoanIssueListTabs[6].Code == 1001)
+                                    {
+                                        <span class="btn-notification">@Model.PendingTabCount</span>
+
+                                    }
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="btn-notification">@Model.Tab2Count</span>
+                            }
+                        </span>
+                    </div>
+                }
+            }*@
+
+
+                            <!--</div>-->
+
+
+
+
+
+
+
+
+                            <div class="tab-items select-option">
+                                <div class="dropoption form-group filter-combobox filterList mr-5">
+                                    @Html.DropDownListFor(m => m.LoanSettingsCode, (SelectList)ViewBag.LoanSettings, "All", new { @class = "form-control form-control-sm filterDropDown asstCat", @onchange = "tabClick('all', 0, $('#LoanSettingsCode option:selected').text(),this)" })
+                                </div>
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class=" loanexcelex  btn btn-excel float-left"
+                                   data-bs-original-title="Export to Excel" onclick="onExportToExcelClick()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                                <a type="button" data-bs-toggle="tooltip" title="Import From Excel" onclick="ImportFromExcelPopUp()"
+                                        class="loanbulk hide btn btn-excel float-left" >
+                                    <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content popup">
+                                    <div class="modal-header" style="padding:10px">
+                                        <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatched').html('');$('#Excel_FileData').val()">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body pt-3">
+                                        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex popupformcontrols", enctype = "multipart/form-data", @id = "LoanDataBulkUpload" }))
+                                        {
+                                            <div class="row ">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Loan Type</label><span class="Mandatory">*</span>
+
+                                                        @Html.DropDownListFor(m => m.LoanIssueRequest.LoanType.Code, (SelectList)ViewBag.LoanType, "--Select LoanType--", new { @class = "form-control form-control-sm popupformcontrols", @onchange = "onLoanTypeTwoChange()" })
+                                                        <span id="loanType"></span>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Purpose</label><span class="Mandatory">*</span>
+
+                                                        @Html.TextBoxFor(m => m.LoanIssueRequest.Pourpose, new { @class = "form-control form-control-sm popupformcontrols", @placeholder = "Purpose", maxlength = "120", @autocomplete = "off", @onblur = "validateById('#LoanIssueRequest_Pourpose', 'purpose')" })
+                                                        <span id="purpose"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Repayment Method</label><span class="Mandatory">*</span>
+
+                                                        @Html.DropDownListFor(m => m.LoanIssueRequest.RepaymentMethod.Code, (SelectList)ViewBag.RepaymentMethod, "Select Repayment Method", new { @class = "form-control form-control-sm popupformcontrols", @onchange = "repaymentMethodChange()" })
+                                                        <span id="repaymentMethod"></span>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <label>Disbursement Date</label><span class="Mandatory">*</span>
+                                                    <div class="input-group date">
+
+                                                        @Html.TextBoxFor(m => m.LoanIssueRequest.DisbursementDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 popupformcontrols", @readonly = "readonly", @placeholder = "Disbursement Date", onchange = "onDisbursementDateChange()" })
+
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">
+                                                                <i class="la la-calendar"></i>
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                    <span id="disbursementDate"></span>
+                                                </div>
+
+
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Repayment Start Month</label><span class="Mandatory">*</span>
+                                                        @Html.DropDownListFor(m => m.LoanIssueRequest.RepaymentStartMonth.Code, (SelectList)ViewBag.RepaymentStartMonth, "Select Month", new { @class = "form-control form-control-sm popupformcontrols", @onchange = "validateById('#LoanIssueRequest_RepaymentStartMonth_Code', 'repaymentStartMonth')" })
+                                                        <span id="repaymentStartMonth"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <label>Remarks</label>
+                                                    <div class="form-group">
+
+                                                        @Html.TextAreaFor(m => m.LoanIssueRequest.Remarks, new { @class = "form-control form-control-sm popupformcontrols", @placeholder = "Remarks", maxlength = "250", @autocomplete = "off" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="colums_list pb-1" style="font-size:11px;">
+                                                Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                Employee ID,
+                                                Employee Name,Amount,EMI
+                                                <span id="fieldName"></span><br />
+                                                @*Columns Needed :- Employee ID, Employee Name, Amount*@
+                                            </div>
+                                            <div class="colums_list pb-1" style="font-size:11px;">
+                                                NOTE: Bulk-uploaded data will be Approved by default
+                                                <span id="fieldName"></span><br />
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="file-upload-form-group">
+                                                        <label for="formFileMultiple" class="form-label">
+                                                            Attach
+                                                            File
+                                                            <span class="Mandatory">*</span>
+                                                        </label>
+
+                                                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 1 MB.">
+                                                            <div class="small-btn-group">
+
+                                                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                            </div>
+                                                            <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                            @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                            @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                        <div id="Unmatched">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+               
+
+                        <div id="allList">
+                            @await Html.PartialAsync("_AllList")
+                        </div>
+                        <div id="ApproveSlider">
+                            @*@await Html.PartialAsync("_LoanIssueApproveReject", Model)*@
+                        </div>
+                        <div id="editSlider" class="hide">
+                            @await Html.PartialAsync("_EditLoanIssue", Model)
+                        </div>
+                        <div id="addNewLoan">
+                            @await Html.PartialAsync("_AddNew", Model)
+                        </div>
+                        <div class="addNewAssets row row card-footer-bottom-fixed">
+                            <div class="col-md-12">
+                                <a id="addNewAssets" type="button"
+                                   class="btn btn-default float-right mobile-full-width slider-btn">
+                                    New Request
+                                </a>
+                                <div id="">
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+            </div>-->
+            <!--end: Datatable-->
+            <div id="filterSlider">
+                @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+            </div>
+
+            <!--</div>-->
+
+        </div>
+        <!--end::Row-->
+        <!--begin::Row-->
+        <!--end::Row-->
+        <!--end::Dashboard-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+    </div>
+</div>
+
+
+
+

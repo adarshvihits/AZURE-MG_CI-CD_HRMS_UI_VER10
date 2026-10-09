@@ -1,0 +1,91 @@
+@model Hrms.Lite.Shared.DataBank.DTO.PositionManager
+@{
+    var statusPill = (Model.Status ?? "").ToUpper() == "FILLED" ? "pill-success" : (Model.Status ?? "").ToUpper() == "VACANT" ? "pill-warning" : "pill-neutral";
+    var employeeHistory = Model.EmployeeHistoryList ?? new List<Hrms.Lite.Shared.DataBank.DTO.PositionEmployeeHistory>();
+    var reportsToHistory = Model.ReportsToHistoryList ?? new List<Hrms.Lite.Shared.DataBank.DTO.PositionReportsToHistory>();
+}
+<div id="PositionDetailsSlider" class="slider-forms PositionDetails pm-drawer">
+    <div class="slider-inner-style">
+        <div class="pm-drawer-head">
+            <h4>Position Details</h4>
+            <button type="button" class="pm-drawer-close" onclick="closePositionDetails()" title="Close">
+                <i class="ki ki-close icon-xs"></i>
+            </button>
+        </div>
+
+        <div class="pm-drawer-body">
+
+            <!-- Position summary -->
+            <div class="pm-detail-tag">Position &middot; @Model.PositionNo</div>
+            <div class="pm-detail-title">@Model.PositionName</div>
+            <div class="pm-detail-meta">
+                @Model.DepartmentName &middot; @Model.SectionName &middot; @Model.BranchName &middot; @Model.GradeName
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Status))
+            {
+                <div class="mt-2"><span class="pill @statusPill">@Model.Status</span></div>
+            }
+
+            <div class="pm-divider"></div>
+
+            <!-- Employee history -->
+            <div class="pm-block-label">Employee History</div>
+            @if (employeeHistory.Count == 0)
+            {
+                <div class="pm-notes-box">No employees have been assigned to this position yet.</div>
+            }
+            else
+            {
+                @foreach (var item in employeeHistory)
+                {
+                    <div class="pm-history-row">
+                        <div class="pm-history-name">
+                            @item.EmployeeName
+                            @if (!string.IsNullOrEmpty(item.EmployeeID))
+                            {
+                                <span class="pm-history-id">@item.EmployeeID</span>
+                            }
+                            @if (item.IsCurrent)
+                            {
+                                <span class="pill pill-success pm-pill-small">Current</span>
+                            }
+                        </div>
+                        <div class="pm-history-date">
+                            @item.FromDate.ToString("dd MMM yyyy") &ndash; @(item.ToDate.HasValue ? item.ToDate.Value.ToString("dd MMM yyyy") : (item.IsCurrent ? "Present" : "—"))
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="pm-divider"></div>
+
+            <!-- Reports-to history -->
+            <div class="pm-block-label">Reports-To Position History</div>
+            @if (reportsToHistory.Count == 0)
+            {
+                <div class="pm-notes-box">No reporting position has been set for this position.</div>
+            }
+            else
+            {
+                @foreach (var item in reportsToHistory)
+                {
+                    <div class="pm-history-row pm-history-block">
+                        <div class="pm-history-top">
+                            <div class="pm-history-name">
+                                @item.ReportsTo
+                                @if (item.IsCurrent)
+                                {
+                                    <span class="pill pill-accent pm-pill-small">Current</span>
+                                }
+                            </div>
+                            <div class="pm-history-date">
+                                @item.FromDate.ToString("dd MMM yyyy") &ndash; @(item.ToDate.HasValue ? item.ToDate.Value.ToString("dd MMM yyyy") : "Present")
+                            </div>
+                        </div>
+                        <div class="pm-history-held">Held by: @(string.IsNullOrEmpty(item.HeldBy) ? "Not on record" : item.HeldBy)</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

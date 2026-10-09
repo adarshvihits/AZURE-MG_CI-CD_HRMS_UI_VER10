@@ -1,0 +1,113 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.InductionTraining
+    <script src="~/js/settings.js"></script>
+    <script>
+    $(document).ready(function () {
+
+          
+        // Handle click on "Select all" control
+        $('#InductionAllCheckbox').on('click', function () {
+            var table = $('#InductionTable').DataTable();
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        debugger
+
+        //var table2 = $('#InductionTable').DataTable();
+        //table2.$('.InductionApplicability').on('click', function () {
+        //    if (table2.$('.InductionApplicability:checked').length == table2.$('.InductionApplicability').length) {
+        //        $('#InductionAllCheckbox').prop('checked', true);
+        //    } else {
+        //        $('#InductionAllCheckbox').prop('checked', false);
+        //    }
+        //});
+
+        });
+
+
+
+    </script>
+<div class="ihits-table table-border mobile-responsive-table induction-list">
+    @Html.HiddenFor(m=>m.InductionTrainingList.Count)
+    <table id="InductionTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+
+                <th scope="col">Department</th>
+                <th scope="col">Location </th>
+
+                <th scope="col">DOJ</th>
+
+                <th scope="col">
+
+                    <div class="checkbox-inline">
+                        <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary ">
+                            @*<input type="checkbox" name="Checkboxes16" id="all_HR_App_Checkbox" onchange="onHR_Applicability_AllClick('all_HR_App_Checkbox','HRAttendanceApprovalTable')">*@
+                            <input type="checkbox" name="Checkboxes16" class="SelectAll" id="InductionAllCheckbox" onchange="OnCheckBoxAllClick('InductionAllCheckbox','InductionTable')">
+
+                            <span></span>
+                        </label>
+
+                    </div>
+                </th>
+
+
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.InductionTrainingList != null && Model.InductionTrainingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.InductionTrainingList.Count; i++)
+                {
+                    <tr>
+                      
+                      
+                        <td data-label="ID">
+                            @Html.HiddenFor(Model => Model.InductionTrainingList[i].EmployeeGuid)
+                            @Html.HiddenFor(Model => Model.InductionTrainingList[i].EmployeeCode)
+                            @Html.HiddenFor(Model => Model.InductionTrainingList[i].EmpId)
+                            @Html.HiddenFor(Model => Model.InductionTrainingList[i].EmployeeName)
+                            @Model.InductionTrainingList[i].EmpId
+                        </td>
+                        <td data-label="Employee Name">@Model.InductionTrainingList[i].EmployeeName</td>
+                        <td data-label="Designaion">@Model.InductionTrainingList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.InductionTrainingList[i].Department.Name</td>
+                        <td data-label="Location">@Model.InductionTrainingList[i].Location.Name</td>
+                        <td data-label="DOJ">
+                         @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.InductionTrainingList[i].DOJ))
+                        </td>
+
+
+                        <td data-label="Select">
+
+                            @*@{
+                                var id = "HRAttendanceApprovalList_" + i + "__Applicable";
+                                var name = "HRAttendanceApprovalList[" + i + "].Applicable";
+                            }*@
+
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                   @Html.CheckBoxFor(model=>model.InductionTrainingList[i].Applicability, new { @class = "InductionApplicability",@onchange = "onChkBoxClick(this,'InductionAllCheckbox','InductionTable')" })
+
+
+                                    <span></span>
+                                </label>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

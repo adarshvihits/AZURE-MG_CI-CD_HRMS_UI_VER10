@@ -1,0 +1,228 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryAdvance
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/SalaryAdvanceIssue.js"></script>
+
+
+
+<script>
+    debugger;
+    $(document).ready(function () {
+        $("#ListType[value='1']").prop("checked", true).trigger("change");
+        fillData();
+
+    });
+</script>
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Salary Advance Issue</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Salary Advance Issue
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "SalaryAdvanceIssue", enctype = "multipart/form-data" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+                                <div class="tab-items ml-5 pr-0 border-none  ">
+                                    <label>Payroll Group</label>
+                                    <div class="form-group filter-combobox mr-2" style="width: 140px;">
+
+                                        @Html.DropDownListFor(m => m.PayrollGroupCode, (SelectList)ViewBag.PayrollGroup, "--Payroll Group--", new { @class = "form-control form-control-sm", @onchange = "onPayrollGroupChange();GetList();" })
+                                        <span id="PayrollGroup"></span>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items ml-5 pr-0 border-none ">
+                                    <label>Month</label>
+                                    <div class="form-group filter-combobox mr-2" style="width: 140px;">
+
+                                        @Html.DropDownListFor(m => m.MonthCode, (SelectList)ViewBag.Month, "--Month--", new { @class = "form-control form-control-sm", @onchange = "GetList();" })
+                                        <span id="Month"></span>
+                                    </div>
+
+                                </div>
+                                <div class="tab-items ml-5 pr-0 border-none ">
+                                    <label>Loan Type</label><span class="Mandatory">*</span>
+                                    <div class="form-group filter-combobox mr-10">
+
+                                        @Html.DropDownListFor(m => m.LoanTypeCode, (SelectList)ViewBag.LoanType, "--LoanType--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'Type')" })
+                                        <span id="Type"></span>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items border-none d-flex align-items-center mt-5">
+                                    <div>
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-success">
+
+                                                @Html.RadioButtonFor(m => m.ListType, "1", new { @onchange = "GetList()" })
+                                                <span></span>Issue Pending
+                                            </label>
+                                            <label class="radio radio-outline radio-success">
+                       
+                                                @Html.RadioButtonFor(m => m.ListType, "2", new { @onchange = "GetList()" })
+                                                <span></span>Pending Approvals
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <batch updates></batch> -->
+
+                                <div class="tab-items select-option d-flex">
+
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel"
+                                       class="btn btn-excel mr-0" onclick="onExportToExcelClick()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    }
+                    <div id="sliderView"></div>
+                    <div id="ListView">
+                        @await Html.PartialAsync("_List")
+                    </div>
+                    <div id="ListViewApprovalPending">
+   
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog ">
+                            <div class="modal-content popup">
+                                <div class="modal-header" style="padding:10px">
+                                    <h5 class="modal-title" id="exampleModalLabel">Salary Advance Issue</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label>Remarks</label>
+
+                                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @maxlength = "250" })
+                                </div>
+
+                                <div class="card border-none" style="margin-top: 10px;">
+
+                                    <div class="col-md-12 align-right pb-4">
+                                    
+                                        <a type="button" class="btn btn-default  mobile-full-width" onclick="onSubmit('APPROVE')">
+                                            Issue
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-6">
+                            <div class="d-flex responsive-center">
+                                <a onclick="TransactionHistory()">
+                                    <div class="application-btn d-flex align-items-center pr-3 ">
+                                        <div class="history-btn">
+                                            <img src="/images/Icon awesome-history.png">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+
+                            <button id="btnSalAdvSave" data-bs-toggle="modal" data-target="" type="button" class="btn btn-default float-right mobile-full-width salBtns" onclick="OnClickSaveLoanIssue()">
+                                Save
+                            </button>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+

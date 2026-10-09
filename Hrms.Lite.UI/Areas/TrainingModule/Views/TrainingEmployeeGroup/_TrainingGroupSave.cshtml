@@ -1,0 +1,228 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingEmployeeGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/scripts/commonValidators.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('Name');
+
+        $('.chk-training').click
+            (function () {
+                if ($(this).closest('td').find("input").is(":checked")) {
+                    $(this).closest('td').find("input").attr("checked", true)
+                    $(this).closest('td').next('td').find("input").attr("disabled", false)
+                    $(this).closest('td').next('td').next('td').find("select").attr("disabled", false)
+                } else {
+                    $(this).closest('td').find("input").attr("checked", false)
+                    $(this).closest('td').next('td').find("input").prop("checked", false)
+                    $(this).closest('td').next('td').find("input").prop("disabled", "disabled")
+                    $(this).closest('td').next('td').next('td').find("select").attr("disabled", true)
+                    $(this).closest('td').next('td').next('td').find("select").val("")
+                }
+
+            })
+    });
+</script>
+
+<style>
+    .slider-forms {
+        width: 715px;
+    }
+    .bootstrap-select .dropdown-menu {
+        width:  max-content !important;
+    }
+    .form-control .btn.dropdown-toggle{
+        border:none !important;
+    }
+</style>
+@using (Html.BeginForm("Save", "TrainingGroup", FormMethod.Post, new { id = "TrainingGroupSave" }))
+{
+    <div id="sectionedit" class="slider-forms slider-forms-open TrainingGroupSaveclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseFormSlider('TrainingGroupSaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Training Employee Group
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm dName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'trainingGroupName')", maxlength = "120" })
+                            <span id="TrainingGroupName"></span>
+
+
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm dName" })
+
+
+                        </div>
+                        <span id="shortname"></span>
+                    </div>*@
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Descriptiion
+                            </label>
+                            @Html.TextBoxFor(Model => Model.Description, new { @class = "form-control form-control-sm dName" })
+
+
+                        </div>
+                        <span id="Descriptiion"></span>
+                    </div>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-4 d-flex align-items-center">
+
+                        <div class="d-flex align-items-center">
+                            <div>Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('TRAININGEMPLOYEEGROUP', '@Model.Code')">
+
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(m => m.Active, new { @id = "traininggroup" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ihits-table table-border mobile-responsive-table  training_group">
+                    <table>
+                        <thead>
+                            <tr class="table-gray">
+                                <th scope="col"> Training </th>
+                                <th scope="col">Applicability</th>
+                                <th scope="col">Mandatory</th>
+                                <th scope="col">Training Duration</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @Html.HiddenFor(m => m.TrainingsList.Count)
+                            @if (Model.TrainingsList != null)
+                            {
+                                @for (int i = 0; i < Model.TrainingsList.Count; i++)
+                                {
+
+                                    <tr>
+                                        <td data-label="Name">
+                                            @Html.HiddenFor(m => m.TrainingsList[i].TrainingCode)
+                                            @Model.TrainingsList[i].Name
+                                        </td>
+
+                                        <td data-label="Point">
+
+                                            <div class="checkbox-inline justify-content-center chk-training">
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                    @Html.CheckBoxFor(m => m.TrainingsList[i].Applicability)
+
+
+                                                    <span></span>
+                                                </label>
+                                            </div>
+
+
+                                        </td>
+                                        <td data-label="Point">
+                                            <div class="checkbox-inline justify-content-center">
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                    @if (Model.Mode == "MODIFY" && Model.TrainingsList[i].Applicability)
+                                                    {
+                                                        @Html.CheckBoxFor(m => m.TrainingsList[i].Mandatory)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBoxFor(m => m.TrainingsList[i].Mandatory, new { @disabled = "disabled" })
+                                                    }
+                                                    <span></span>
+                                                </label>
+                                            </div>
+
+
+                                        </td>
+                                        <td data-label="Point">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @if (Model.Mode == "MODIFY" && Model.TrainingsList[i].TrainingDuration.Code > 0)
+                                                    {
+                                                        @Html.DropDownListFor(m => m.TrainingsList[i].TrainingDuration.Code, (SelectList)ViewBag.TrainingDuration, "--Select--")
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(m => m.TrainingsList[i].TrainingDuration.Code, (SelectList)ViewBag.TrainingDuration, "--Select--", new { @disabled = "disabled" })
+                                                    }
+                                                    <span id="Traininggroupcode"></span>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+
+
+                                    </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveTrainingGroup('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveTrainingGroup('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+
+
+

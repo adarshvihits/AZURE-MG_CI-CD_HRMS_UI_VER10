@@ -1,0 +1,913 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<style>
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .k-card:nth-child(1) {
+        background-color: #1C5CF9 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+       
+    }
+
+
+
+    .k-card:nth-child(6) {
+        background-color: #F6635C !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+    }
+
+
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+</script>
+
+
+
+<script>
+
+    function onGenderSeriesClick(e) {
+        //console.log(e);
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 26, type: 'Gender', age: e.Category },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=26&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Gender&name=' + e.dataItem.name + '&age=' + e.category;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+    function onGenderSeriesHover(e) {
+        $("#genderJoins").css("cursor", "pointer");
+    }
+    function onSeriesBHClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 27, type: 'HIRES', age: e.dataItem.type },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=27&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=HIRES&age=' + e.dataItem.type;
+
+
+                // $("#MisDashBoard").html(result);
+                // $("#joiningCount").html(result.joiningCount);
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+    function onSeriesOver(e) {
+        $("#monthResignation").css("cursor", "pointer");
+    }
+    function onSeriesBHOver(e) {
+        $("#bHires").css("cursor", "pointer");
+    }
+
+    function onSeriesAGEClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        var age = e.category
+        if (age == '60+') {
+            age = '60-100';
+        }
+        else {
+            age = age.replace(' Year', '');
+        }
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 28, type: 'AGE', age: age },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=28&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=AGE&age=' + age + '&name=Age ' + e.category;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    function onSeriesAGEOver(e) {
+        $("#joinsAge").css("cursor", "pointer");
+    }
+
+    function onSeriesDepClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 29, type: 'Department', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=29&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Department&name=' + e.dataItem.depName + '&age=' + e.dataItem.code;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onDepSeriesHover(e) {
+        $("#joinsDepartment").css("cursor", "pointer");
+    }
+
+    function onSeriesLocClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 30, type: 'Location', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=30&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Location&name=' + e.dataItem.depName + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onLocSeriesHover(e) {
+        $("#joinsLocation").css("cursor", "pointer");
+    }
+
+    function onDivSeriesClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 31, type: 'Division', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=31&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Division&name=' + e.dataItem.locName + '&age=' + e.dataItem.code;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onDivSeriesHover(e) {
+        $("#joinsDivision").css("cursor", "pointer");
+    }
+
+    function onGrdSeriesClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 32, type: 'Grade', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=32&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Grade&name=' + e.dataItem.locName + '&age=' + e.dataItem.code;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onGrdSeriesHover(e) {
+        $("#joinsGrade").css("cursor", "pointer");
+    }
+    function onCatSeriesClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 33, type: 'Category', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=33&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Category&name=' + e.dataItem.locName + '&age=' + e.dataItem.code;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onCatSeriesHover(e) {
+        $("#joinsCategory").css("cursor", "pointer");
+    }
+    function onRegSeriesClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var from = $("#From").val();
+        var to = $("#To").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 34, type: 'Region', age: e.dataItem.code },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=34&from=' + from + '&to=' + to + '&groupCom=' + groupCom + '&type=Region&name=' + e.dataItem.locName + '&age=' + e.dataItem.code;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+
+    }
+    function onRegSeriesHover(e) {
+        $("#joinsRegion").css("cursor", "pointer");
+    }
+</script>
+
+<script id="avgJoinCount" type="text/x-kendo-template">
+    <div id="avgJoin" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;font-weight: 700;">@Model.averageJoinersCount </div>
+</script>
+
+<script id="joiningCount" type="text/x-kendo-template">
+    <div id="hiresCount" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;font-weight: 700">@Model.joiningCount </div>
+
+</script>
+<script id="badHires" type="text/x-kendo-template">
+    <div id="badJoins" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;font-weight: 700">@Model.badHires </div>
+
+</script>
+<script id="badHiresG" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.BadHires>()
+                                                          .Name("bHires")
+                                                          .Title("")
+                                                              .Events(E => E.SeriesClick("onSeriesBHClick")
+                                                                              .SeriesHover("onSeriesBHOver"))
+                                                          .Legend(legend => legend
+
+                                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+                                                          .Visible(true)
+                                                          )
+                                                          .ChartArea(chart => chart
+                                                          .Background("transparent")
+
+
+                                                          )
+                                                          .DataSource(ds =>
+                                                          {
+                                                              ds.Read(read => read.Action("GetBadHires", "MISDashBoard").Data("getParam"));
+
+
+                                                          }
+                                                          )
+                                                          .Series(series => series
+
+                                                          .Donut(model => model.total, model => model.type).HoleSize(40).Size(40)
+                                                          .ColorField("color")
+                                                          .Labels(labels => labels
+
+                                                          .Background("transparent")
+
+                                                          .Visible(true)
+                                                          )
+
+
+                                                                  )
+
+                                                               .HtmlAttributes(new { style = "height:100%;width:100%;" })
+                                                              .SeriesColors("\\#735bf7", "\\#a8a0fd")
+
+                                                              .ToClientTemplate()
+                                                          )
+
+
+
+</script>
+<script id="joinersByGender" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersCountList>()
+                                                      .Name("genderJoins")
+                                                      .Title("")
+                                                      .Events(E => E.SeriesClick("onGenderSeriesClick")
+                                                                      .SeriesHover("onGenderSeriesHover"))
+                                                      .Legend(legend => legend
+
+                                                     .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                      
+
+
+                                                      .Visible(true)
+                                                      )
+                                                      .ChartArea(chart => chart
+                                                      .Background("transparent")
+
+
+                                                      )
+                                                      .DataSource(ds =>
+                                                      {
+                                                          ds.Read(read => read.Action("GetGenderJoinersCount", "MISDashBoard").Data("getParam"));
+
+
+                                                      }
+                                                      )
+                                                      .Series(series => series
+
+                                                      .Donut(model => model.genJCount, model => model.name).HoleSize(40).Size(40)
+
+                                                      .Labels(labels => labels
+                                                      
+                                                      .Background("transparent")
+
+                                                      .Visible(true)
+                                                      )
+
+
+                                                          ).SeriesColors("\\#85E6C5", "\\#279EFF")
+
+                                                           .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+
+                                                          .ToClientTemplate()
+                                                      )
+
+
+
+</script>
+
+<script id="monthresignation" type="text/x-kendo-template">
+    @(
+                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MonthWiseTerminationList>()
+                                        .Name("monthResignation")
+                                        .Title("")
+
+                                        .Legend(legend => legend
+                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                        )
+                                                .DataSource(ds => ds.Read(read => read.Action("GetResignationMonthwiseCount", "MISDashBoard")))
+                                        .Series(series =>
+                                        {
+                                            series.Line(model => model.ejocount).Name("Joining").CategoryField("monthName").Color("\\#F86F03").Width(5);
+
+
+                                        })
+                                        .ChartArea(ch => ch.Width(850).Height(250))
+                                        .CategoryAxis(axis => axis
+                                            .Labels(labels => labels.Rotation(0))
+                                        //.Crosshair(c => c.Visible(true))
+                                        )
+                                        .ValueAxis(axis => axis.Numeric()
+                                            .Labels(labels => labels.Format("{0:N0}"))
+                                        //.MajorUnit(500)
+                                        )
+                                        .Tooltip(tooltip => tooltip
+                                            .Visible(true)
+                                            .Shared(true)
+                                            .Format("{0:N0}")
+                                        )
+
+                                        .ToClientTemplate()
+                )
+</script>
+
+<script id="joinsbyAge" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AgeBandJoinersCountList>()
+
+                                                       .Name("joinsAge")
+
+                                                       .Title("")
+                                                            .Events(E => E.SeriesClick("onSeriesAGEClick")
+                                                                                  .SeriesHover("onSeriesAGEOver"))
+
+                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                       .Legend(legend => legend
+                                                       .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                       )
+                                                       .ChartArea(chartArea => chartArea
+                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                       .DataSource(ds => ds.Read(read => read.Action("GetJoinersageBandCount", "MISDashBoard").Data("getParam")))
+                                                       .Series(series =>
+                                                       {
+                                                           series.Column(model => model.total).Name("Year").CategoryField("years").Color("\\#5C4B99");
+
+                                                       })
+                                                       .CategoryAxis(axis => axis
+                                                       //.Labels(labels => labels.Rotation(0))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       //.Rotation(0)
+                                                       )
+                                                       //.MajorUnit(500)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+<script id="joinsbyDepartment" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersDepartmentCountList>()
+
+                                                               .Name("joinsDepartment")
+
+                                                                       .Events(E => E.SeriesClick("onSeriesDepClick")
+                                                                              .SeriesHover("onDepSeriesHover"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetJoinersDepartmentCount", "MISDashBoard").Data("getParam")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.depCount).Name("Department").CategoryField("shrtName").Color("\\#A2FF86")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.depName)\\# - \\#= (dataItem.depCount)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+<script id="joinsbyLocation" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersLocationCountList>()
+
+                                                                      .Name("joinsLocation")
+
+                                                              .Title("")
+
+                                                                    .Events(E => E.SeriesClick("onSeriesLocClick")
+                                                                                  .SeriesHover("onLocSeriesHover"))
+
+                                                                  .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                              .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                              )
+                                                              .ChartArea(chartArea => chartArea
+                                                              .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                      .DataSource(ds => ds.Read(read => read.Action("GetJoinersLocationCount", "MISDashBoard").Data("getParam")))
+                                                              .Series(series =>
+                                                              {
+                                                                  series.Column(model => model.locCount).Name("Grade").CategoryField("shrtName").Color("\\#4E4FEB")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.locName)\\# - \\#= (dataItem.locCount)\\# )").Visible(true));
+
+                                                              })
+                                                              .CategoryAxis(axis => axis
+                                                              //  .Labels(labels => labels.Rotation(45))
+                                                              .MajorGridLines(lines => lines.Visible(false))
+                                                              .Line(line => line.Visible(false))
+                                                              )
+                                                              .ValueAxis(axis => axis.Numeric()
+                                                              .Labels(labels => labels
+                                                              .Format("{0:N0}")
+                                                              //.Rotation(0)
+                                                              )
+                                                              //.MajorUnit(500)
+
+                                                              .Line(line => line.Visible(false))
+                                                              )
+                                                              .RenderAs(RenderingMode.Canvas)
+                                                              .Tooltip(tooltip => tooltip
+                                                              .Visible(true)
+                                                              .Format("{0:N0}")
+                                                              )
+                                                              .ToClientTemplate()
+                                                              )
+
+
+
+
+</script>
+
+<script id="joinsbyDivision" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersDivisionCountList>()
+
+                                                                          .Name("joinsDivision")
+
+                                                                                  .Events(E => E.SeriesClick("onDivSeriesClick")
+                                                                          .SeriesHover("onDivSeriesHover"))
+
+                                                                  .Title("")
+
+                                                                      .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                  .Legend(legend => legend
+                                                                         .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                  )
+                                                                  .ChartArea(chartArea => chartArea
+                                                                  .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                          .DataSource(ds => ds.Read(read => read.Action("GetJoinersDivisionCount", "MISDashBoard").Data("getParam")))
+                                                                  .Series(series =>
+                                                                  {
+                                                                      series.Column(model => model.locCount).Name("Division").CategoryField("shrtName").Color("\\#468B97")
+                                                                          .Tooltip(tooltip => tooltip.
+                                                                                             Template("(\\#= (dataItem.locName)\\# - \\#= (dataItem.locCount)\\# )").Visible(true));
+
+                                                                  })
+                                                                  .CategoryAxis(axis => axis
+                                                                  // .Labels(labels => labels.Rotation(45))
+                                                                  .MajorGridLines(lines => lines.Visible(false))
+                                                                  .Line(line => line.Visible(false))
+                                                                  )
+                                                                  .ValueAxis(axis => axis.Numeric()
+                                                                  .Labels(labels => labels
+                                                                  .Format("{0:N0}")
+                                                                  //.Rotation(0)
+                                                                  )
+                                                                  //.MajorUnit(500)
+
+                                                                  .Line(line => line.Visible(false))
+                                                                  )
+                                                                  .RenderAs(RenderingMode.Canvas)
+                                                                  .Tooltip(tooltip => tooltip
+                                                                  .Visible(true)
+                                                                  .Format("{0:N0}")
+                                                                  )
+                                                                  .ToClientTemplate()
+                                                                  )
+
+
+
+
+</script>
+
+<script id="joinsbyGrade" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersGradeCountList>()
+
+                                                                              .Name("joinsGrade")
+                                                                                   .Events(E => E.SeriesClick("onGrdSeriesClick")
+                                                                              .SeriesHover("onGrdSeriesHover"))
+                                                                      .Title("")
+
+                                                                          .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                      .Legend(legend => legend
+                                                                            .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                      )
+                                                                      .ChartArea(chartArea => chartArea
+                                                                      .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                              .DataSource(ds => ds.Read(read => read.Action("GetJoinersGradeCount", "MISDashBoard").Data("getParam")))
+                                                                      .Series(series =>
+                                                                      {
+                                                                          series.Column(model => model.locCount).Name("Grade").CategoryField("shrtName").Color("\\#FF52A2")
+                                                                              .Tooltip(tooltip => tooltip.
+                                                                                                 Template("(\\#= (dataItem.locName)\\# - \\#= (dataItem.locCount)\\# )").Visible(true));
+
+                                                                      })
+                                                                      .CategoryAxis(axis => axis
+                                                                      // .Labels(labels => labels.Rotation(45))
+                                                                      .MajorGridLines(lines => lines.Visible(false))
+                                                                      .Line(line => line.Visible(false))
+                                                                      )
+                                                                      .ValueAxis(axis => axis.Numeric()
+                                                                      .Labels(labels => labels
+                                                                      .Format("{0:N0}")
+                                                                      //.Rotation(0)
+                                                                      )
+                                                                      //.MajorUnit(500)
+
+                                                                      .Line(line => line.Visible(false))
+                                                                      )
+                                                                      .RenderAs(RenderingMode.Canvas)
+                                                                      .Tooltip(tooltip => tooltip
+                                                                      .Visible(true)
+                                                                      .Format("{0:N0}")
+                                                                      )
+                                                                      .ToClientTemplate()
+                                                                      )
+
+
+
+
+</script>
+
+<script id="joinsbyCategory" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersCategoryCountList>()
+
+                                                                                      .Name("joinsCategory")
+
+                                                                          .Title("")
+                                                                                .Events(E => E.SeriesClick("onCatSeriesClick")
+                                                                                  .SeriesHover("onCatSeriesHover"))
+
+                                                                              .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                          .Legend(legend => legend
+                                                                                .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                          )
+                                                                          .ChartArea(chartArea => chartArea
+                                                                          .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                      .DataSource(ds => ds.Read(read => read.Action("GetJoinersCategoryCount", "MISDashBoard").Data("getParam")))
+                                                                          .Series(series =>
+                                                                          {
+                                                                              series.Column(model => model.locCount).Name("Category").CategoryField("shrtName").Color("\\#793FDF")
+                                                                              .Tooltip(tooltip => tooltip.
+                                                                                                 Template("(\\#= (dataItem.locName)\\# - \\#= (dataItem.locCount)\\# )").Visible(true));
+
+                                                                          })
+                                                                          .CategoryAxis(axis => axis
+                                                                          // .Labels(labels => labels.Rotation(45))
+                                                                          .MajorGridLines(lines => lines.Visible(false))
+                                                                          .Line(line => line.Visible(false))
+                                                                          )
+                                                                          .ValueAxis(axis => axis.Numeric()
+                                                                          .Labels(labels => labels
+                                                                          .Format("{0:N0}")
+                                                                          //.Rotation(0)
+                                                                          )
+                                                                          //.MajorUnit(500)
+
+                                                                          .Line(line => line.Visible(false))
+                                                                          )
+                                                                          .RenderAs(RenderingMode.Canvas)
+                                                                          .Tooltip(tooltip => tooltip
+                                                                          .Visible(true)
+                                                                          .Format("{0:N0}")
+                                                                          )
+                                                                          .ToClientTemplate()
+                                                                          )
+
+
+
+
+</script>
+
+<script id="joinsbyRegion" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GenderJoinersRegionCountList>()
+
+                                                                                              .Name("joinsRegion")
+
+                                                                                                    .Events(E => E.SeriesClick("onRegSeriesClick")
+                                                                                      .SeriesHover("onRegSeriesHover"))
+
+                                                                              .Title("")
+
+                                                                                  .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                              .Legend(legend => legend
+                                                                                     .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                              )
+                                                                              .ChartArea(chartArea => chartArea
+                                                                              .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                              .DataSource(ds => ds.Read(read => read.Action("GetJoinersRegionCount", "MISDashBoard").Data("getParam")))
+                                                                              .Series(series =>
+                                                                              {
+                                                                                  series.Column(model => model.locCount).Name("Region").CategoryField("shrtName").Color("\\#BB2525")
+                                                                              .Tooltip(tooltip => tooltip.
+                                                                                                 Template("(\\#= (dataItem.locName)\\# - \\#= (dataItem.locCount)\\# )").Visible(true));
+
+                                                                              })
+                                                                              .CategoryAxis(axis => axis
+                                                                              //  .Labels(labels => labels.Rotation(45))
+                                                                              .MajorGridLines(lines => lines.Visible(false))
+                                                                              .Line(line => line.Visible(false))
+                                                                              )
+                                                                              .ValueAxis(axis => axis.Numeric()
+                                                                              .Labels(labels => labels
+                                                                              .Format("{0:N0}")
+                                                                              //.Rotation(0)
+                                                                              )
+                                                                              //.MajorUnit(500)
+
+                                                                              .Line(line => line.Visible(false))
+                                                                              )
+                                                                              .RenderAs(RenderingMode.Canvas)
+                                                                              .Tooltip(tooltip => tooltip
+                                                                              .Visible(true)
+                                                                              .Format("{0:N0}")
+                                                                              )
+                                                                              .ToClientTemplate()
+                                                                              )
+
+
+
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+
+
+
+            c.Add().Header(h => h.Text("Hires")).BodyTemplateId("joiningCount").ColSpan(2).RowSpan(1);
+            
+            //c.Add().Header(h => h.Text("Bad Hires  (Left within " + @Model.badHireDays + " days)")).BodyTemplateId("badHires").ColSpan(1).RowSpan(1);
+
+
+            c.Add().Header(h => h.Text("Bad Hires (Left within " + @Model.badHireDays + " days)")).BodyTemplateId("badHiresG").ColSpan(2).RowSpan(2);
+
+
+            c.Add().Header(h => h.Text("Hires by Gender")).BodyTemplateId("joinersByGender").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires Trend Rolling 12 Months")).BodyTemplateId("monthresignation").ColSpan(4).RowSpan(2);
+
+            c.Add().Header(h => h.Text("Hires By Age Banding")).BodyTemplateId("joinsbyAge").ColSpan(2).RowSpan(2);
+
+
+            c.Add().Header(h => h.Text("Avg. Joins Per Month")).BodyTemplateId("avgJoinCount").ColSpan(2).RowSpan(1);
+
+
+            c.Add().Header(h => h.Text("Hires By Department")).BodyTemplateId("joinsbyDepartment").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires By Location")).BodyTemplateId("joinsbyLocation").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires By Division")).BodyTemplateId("joinsbyDivision").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires By Grade")).BodyTemplateId("joinsbyGrade").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires By Category")).BodyTemplateId("joinsbyCategory").ColSpan(2).RowSpan(2);
+            c.Add().Header(h => h.Text("Hires By Region")).BodyTemplateId("joinsbyRegion").ColSpan(2).RowSpan(2);
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )
+

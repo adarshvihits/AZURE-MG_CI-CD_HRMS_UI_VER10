@@ -1,0 +1,121 @@
+﻿@model Hrms.Lite.Shared.Master.FireBaseImageSettings
+    <script src="~/js/tooltip.js"></script>
+
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+@using (Html.BeginForm("Save", "HrSettingsSignature", FormMethod.Post, new { id = "FireBaseImageSave" , enctype = "multipart/form-data" }))
+{
+    <div id="designationedit" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+
+            <div class="location-slider">
+                <h4>
+                    FireBase Image Settings
+                </h4>
+            </div>
+
+            <div class="add-padding">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">
+                                Name
+                                <span class="Mandatory"></span>
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.Attachment.AbsoluteUri)
+                                @Html.HiddenFor(m => m.Code)
+                                @Html.DisplayFor(m => m.Name, new { @class = "form-control form-control-sm", @onblur = "validate(this,'Name')", maxlength = "120" })
+
+                            </div>
+
+
+                        </div>
+                        <span id="Name"></span>
+                    </div>
+                    <div class="col-md-6 ">
+
+                        <div class="file-upload-form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                Attach
+                                File
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only jpeg files are
+                                            allowed , File size less than 1 MB.">
+                                <div class="small-btn-group">
+
+                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="previewDocument('@Model.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+
+                                </div>
+                                @*<input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="http://192.168.1.250:8049/cloudimage/Documents/99410b4c-d38b-49df-8fda-3d0fb3e5e109.jpg">*@
+                                @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                @Html.TextBoxFor(model => model.Attachment.FileData, null, new { type = "file", @class = "form-control PreviewImage file2", @onchange = "CheckImageExtensionSize(this)", title = "" })
+
+                            </div>
+
+
+                        </div>
+                        <!--<div class="file-upload-form-group">
+            <label for="formFileMultiple" class="form-label">
+                Attachment
+                <span class="Mandatory"></span>
+            </label>
+
+
+
+            <div class="small-btn-group">
+
+                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="previewDocument('@Model.Attachment.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+
+            </div>
+
+            @* <input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+
+
+
+
+
+        <!--</div>-->
+                    </div>   
+
+                </div>
+
+
+
+               
+
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                      <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                                    Save
+                                </button>
+                       
+                        @*@if (Model.Mode == "MODIFY")
+                        {
+
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save(0)">
+                                    Modify
+                                </button>
+                            }
+                        }*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

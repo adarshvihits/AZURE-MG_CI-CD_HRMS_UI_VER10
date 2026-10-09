@@ -1,0 +1,81 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagement
+@using Kendo.Mvc.UI
+
+<div id="chartStatus" @*style="height: 100px; width: 200px;"*@>
+
+
+
+
+    @*@(Html.Kendo().Chart<Hrms.Lite.Shared.DataBank.DTO.VacancyManagement>()
+            .Name("chartResume")
+            .Title(title => title
+              .Text("Resume")
+                .Font("bold 16px Arial, Helvetica, sans-serif")
+                 .Align(ChartTextAlignment.Center)
+                 //.Margin(m => m.Left(30))
+                .Visible(false)
+            )
+            .Legend(legend => legend
+                .Visible(false)
+            )
+            .ChartArea(chart => chart
+                .Background("transparent")
+                .Height(300) // Adjusted height
+                .Width(300)  // Adjusted width
+
+            )
+            .Series(series =>
+            {
+                series.Donut(Model.GraphResume.Select(SkillGraph => new
+                {
+                    category = SkillGraph.JobCode,
+                    value = SkillGraph.MappedResumes,
+                }).ToArray())
+                .Overlay(o => o.Gradient(ChartSeriesGradient.RoundedBevel));
+            })
+            .SeriesColors(new string[] { "#201E43", "#134B70", "#508C9B", "#40534C", "#677D6A", "#FF8343" })
+            .Tooltip(tooltip => tooltip
+                .Template("${ category } - ${ value }%")
+                .Visible(true)
+            )
+        )*@
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DataBank.DTO.VacancyManagement>()
+    .Name("resume")
+    .ChartArea(area => area.Height(150).Width(350))
+    .Title(" ")
+    .Legend(legend => legend
+        .Position(ChartLegendPosition.Bottom)
+    )
+    .Series(series =>
+    {
+        series.Column(Model.GraphResume.Select(SkillGraph => new
+        {
+            category = SkillGraph.JobCode,
+            value = SkillGraph.MappedResumes,
+        }).ToArray())
+        .Name("No of Resume")
+        .Color("#295F98");
+    })
+    .CategoryAxis(axis => axis
+        .Categories(model => model.JobCode)
+        .Labels(labels => labels.Padding(10, 15, 0, 0))
+        .MajorGridLines(lines => lines.Visible(false))
+        .Line(line => line.Visible(false))
+    )
+    .ValueAxis(axis => axis
+        .Numeric()
+        .Line(line => line.Visible(false))
+        .Visible(true)
+        .Max(100)
+        .MajorUnit(25)
+    )
+     .Tooltip(tooltip => tooltip
+        .Template("#= dataItem.category # - #= dataItem.value #")
+        .Visible(true)
+    )
+)
+
+
+
+</div>

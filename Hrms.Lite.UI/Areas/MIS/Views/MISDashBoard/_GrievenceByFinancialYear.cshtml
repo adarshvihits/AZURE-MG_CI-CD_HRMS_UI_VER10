@@ -1,0 +1,512 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+
+
+    function onSeriesTotalOver(e) {
+        $("#grvByFy").css("cursor", "pointer");
+    }
+    function onSeriesTotalClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYear = $("#finYear").val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 42, type: 'Total', GrievanceCatid: e.dataItem.grievanceCatID},
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=42&groupCom=' + groupCom + '&financialYr=' + financialYear + '&type=Total&GrievanceCatid=' + e.dataItem.grievanceCatID;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    //
+    function onSeriesCompletedTotalOver(e) {
+        $("#grvByCompleyedFy").css("cursor", "pointer");
+    }
+    function onSeriesCompletedTotalClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYear = $("#finYear").val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 42, type: 'Completed', GrievanceCatid: e.dataItem.grievanceCatID },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=42&groupCom=' + groupCom + '&financialYr=' + financialYear + '&type=Completed&GrievanceCatid=' + e.dataItem.grievanceCatID;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    //
+    function onSeriesAcceptedTotalOver(e) {
+        $("#grvByAcceptedFy").css("cursor", "pointer");
+    }
+    function onSeriesAcceptedTotalClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYear = $("#finYear").val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 42, type: 'Accepted', GrievanceCatid: e.dataItem.grievanceCatID },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=42&groupCom=' + groupCom + '&financialYr=' + financialYear + '&type=Accepted&GrievanceCatid=' + e.dataItem.grievanceCatID;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    //
+
+    function onSeriesNonAcceptedTotalOver(e) {
+        $("#grvByNonAcceptedFy").css("cursor", "pointer");
+    }
+    function onSeriesNonAcceptedTotalClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYear = $("#finYear").val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 42, type: 'NonAccepted', GrievanceCatid: e.dataItem.grievanceCatID },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=42&groupCom=' + groupCom + '&financialYr=' + financialYear + '&type=NonAccepted&GrievanceCatid=' + e.dataItem.grievanceCatID;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    //
+
+
+    function onSeriesRejectedTotalOver(e) {
+        $("#grvByRejectedFy").css("cursor", "pointer");
+    }
+    function onSeriesRejectedTotalClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+        var financialYear = $("#finYear").val()
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 42, type: 'Rejected', GrievanceCatid: e.dataItem.grievanceCatID },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=42&groupCom=' + groupCom + '&financialYr=' + financialYear + '&type=Rejected&GrievanceCatid=' + e.dataItem.grievanceCatID;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+</script>
+<script id="GrievanceByFinancialYear" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByFy")
+
+                                                                      .Events(E => E.SeriesClick("onSeriesTotalClick")
+                                                             .SeriesHover("onSeriesTotalOver"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievance", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance Category").CategoryField("shortname").Color("\\#694F8E")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+    @*@(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByFy")
+
+                                                           //.Events(E => E.SeriesClick("onSeriesDepClick")
+                                                           //      .SeriesHover("onDepSeriesHover"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom)
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievance", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance").CategoryField("name").Color("\\#89CFF0");
+                                                                        // .Tooltip(tooltip => tooltip.
+                                                                                        //    Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )*@
+
+</script>
+<script id="GrievanceCompletedByFinancialYear" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByCompleyedFy")
+        .Events(E => E.SeriesClick("onSeriesCompletedTotalClick")
+                                                                .SeriesHover("onSeriesCompletedTotalOver"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievanceCompleted", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance Category").CategoryField("shortname").Color("\\#ADD899")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+
+
+</script>
+
+<script id="GrievanceAcceptedByFinancialYear" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByAcceptedFy")
+
+                                                                     .Events(E => E.SeriesClick("onSeriesAcceptedTotalClick")
+                                                                .SeriesHover("onSeriesAcceptedTotalOver"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievanceAccepted", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance Category").CategoryField("shortname").Color("\\#AF47D2")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+
+
+</script>
+
+
+
+
+<script id="GrievanceNonAcceptedByFinancialYear" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByNonAcceptedFy")
+
+
+                                                              .Events(E => E.SeriesClick("onSeriesNonAcceptedTotalClick")
+                                                                .SeriesHover("onSeriesNonAcceptedTotalOver"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievanceNonAccepted", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance Category").CategoryField("shortname").Color("\\#6FDCE3")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+
+
+</script>
+
+<script id="GrievanceRejectedByFinancialYear" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISGrievence>()
+
+                                                               .Name("grvByRejectedFy")
+
+
+                                                              .Events(E => E.SeriesClick("onSeriesRejectedTotalClick")
+                                                                .SeriesHover("onSeriesRejectedTotalOver"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetGrievanceRejected", "MISDashBoard").Data("getParams")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.count).Name("Grievance Category").CategoryField("shortname").Color("\\#C73659")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.count)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+
+
+</script>
+
+
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Total")).BodyTemplateId("GrievanceByFinancialYear").ColSpan(4).RowSpan(4);
+            c.Add().Header(h => h.Text("Completed")).BodyTemplateId("GrievanceCompletedByFinancialYear").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Accepted")).BodyTemplateId("GrievanceAcceptedByFinancialYear").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Non-Accepted")).BodyTemplateId("GrievanceNonAcceptedByFinancialYear").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Rejected")).BodyTemplateId("GrievanceRejectedByFinancialYear").ColSpan(4).RowSpan(2);
+
+        })
+
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

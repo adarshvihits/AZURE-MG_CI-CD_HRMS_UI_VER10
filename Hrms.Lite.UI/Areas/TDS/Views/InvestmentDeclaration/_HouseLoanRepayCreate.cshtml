@@ -1,0 +1,196 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    Model.TabIndex = "House Loan Repayment";
+}
+
+
+
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "pada" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGuid)
+
+
+    <div id="addHLRepayDetails" class="slider-forms slider-forms-open repay new-slider-expand">
+        <div class="slider-inner-style new-inner-style ">
+            <div class="slider-form-close" onclick="CloseSlider('repay')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <div class="location-slider">
+                <h3>House Loan Repayment Details</h3>
+            </div>
+           <div class="add-padding">
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Address of House</label><span class="Mandatory">*</span>
+                           @Html.HiddenFor(m => m.HLRepayDetails.TrnCode)
+                           @Html.HiddenFor(m => m.SliderName)
+                           @Html.TextBoxFor(m => m.HLRepayDetails.HouseAddress, new { @class = "form-control", placeholder = "Name", @maxlength = 120, @onchange = "validate(this,'address')" })
+                           <span id="address" class="text-danger"></span>
+                       </div>
+                   </div>
+
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Location Status</label><span class="Mandatory">*</span>
+                           @Html.DropDownListFor(m => m.HLRepayDetails.LocationStatus.Code, (SelectList)ViewBag.LocationStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'locationstatus')" })
+                           <span id="locationstatus" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+
+               </div>
+            
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Ownership Status</label><span class="Mandatory">*</span>
+                           @Html.DropDownListFor(m => m.HLRepayDetails.OwnerStatus.Code, (SelectList)ViewBag.OwnerStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "HLOwnerStausChange(this,'ownerstatus')" })
+                           <span id="ownerstatus" class="text-danger"></span>
+                       </div>
+                   </div>
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Percentage</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.Percentage, new { @class = "form-control", placeholder = "Percentage", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'percentage')" })
+                           <span id="percentage" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+               </div>
+           
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Purpose</label><span class="Mandatory">*</span>
+                           @Html.DropDownListFor(m => m.HLRepayDetails.Purpose.Code, (SelectList)ViewBag.Purpose, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'purpose')" })
+                           <span id="purpose" class="text-danger"></span>
+                       </div>
+                   </div>
+
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Date of Loan</label><span class="Mandatory">*</span>
+                           <div class="input-group date">
+                               @Html.TextBoxFor(m => m.HLRepayDetails.DateofLoan, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Loan", @onchange = "validate(this,'dateofloan')" })
+                               <div class="input-group-append">
+                                   <span class="input-group-text">
+                                       <i class="la la-calendar"></i>
+                                   </span>
+                               </div>
+                           </div>
+                           <span id="dateofloan" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+
+               </div>
+            
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Date of Completion</label><span class="Mandatory">*</span>
+                           <div class="input-group date">
+                               @Html.TextBoxFor(m => m.HLRepayDetails.DateofCompletion, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Completion", @onchange = "validate(this,'dateofcmptn')" })
+                               <div class="input-group-append">
+                                   <span class="input-group-text">
+                                       <i class="la la-calendar"></i>
+                                   </span>
+                               </div>
+
+                           </div>
+                           <span id="dateofcmptn" class="text-danger"></span>
+                       </div>
+                   </div>
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Principle Amount</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.PrincipalAmt, new { @class = "form-control", placeholder = "Principle Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'principleamt')" })
+                           <span id="principleamt" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+
+               </div>
+            
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Interest</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.Interest, new { @class = "form-control", placeholder = "Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "HLInterestChange(this,'interest')" })
+                           <span id="interest" class="text-danger"></span>
+                       </div>
+                   </div>
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Pre EMI Interest</label>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.PreEMIInterest, new { @class = "form-control", placeholder = "Pre EMI Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "HLInterestChange()" })
+                       </div>
+                   </div>
+
+
+               </div>
+          
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Total Interest</label>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.TotalInterest, new { @class = "form-control", placeholder = "Total Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @readonly = true })
+                       </div>
+                   </div>
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Name of Bank</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.NameofBank, new { @class = "form-control", placeholder = "Name of Bank", @maxlength = 120, @onchange = "validate(this,'nameofbank')" })
+                           <span id="nameofbank" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+               </div>
+            
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>PAN of Bank</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.PANofBank, new { @class = "form-control", placeholder = "PAN of Bank", @maxlength = 10, @onblur = "validatePan('HLRepayDetails_PANofBank','panofbank')", @onchange = "validate(this,'panofbank')" })
+                           <span id="panofbank" class="text-danger"></span>
+                       </div>
+                   </div>
+
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label>Address of Bank</label><span class="Mandatory">*</span>
+                           @Html.TextBoxFor(m => m.HLRepayDetails.BankAddress, new { @class = "form-control", placeholder = "Address of Bank", @maxlength = 120, @onchange = "validate(this,'bankaddress')" })
+                           <span id="bankaddress" class="text-danger"></span>
+                       </div>
+                   </div>
+
+
+
+               </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        @Html.TextBoxFor(m => m.HLRepayDetails.Remarks, new { @class = "form-control", placeholder = "Remarks", @maxlength = 120 })
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="HLRepayid" type="button" class="btn btn-default" onclick="HouseLoanRepaySave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+}

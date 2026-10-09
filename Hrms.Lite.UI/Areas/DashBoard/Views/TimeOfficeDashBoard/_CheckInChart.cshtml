@@ -1,0 +1,55 @@
+﻿@using Kendo.Mvc.UI
+
+
+<style>
+
+    .wide p {
+        display: none;
+    }
+
+</style>
+<div class="demo-section wide">
+    
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoard>()
+        .Name("Age")
+        .HtmlAttributes(new { style = "width: 100%; height: 270px;" })
+        .ChartArea(chartArea => chartArea
+            .Background("transparent"))
+        .Title(title => title
+            .Text("")
+            .Position(ChartTitlePosition.Bottom)
+        )
+        .Legend(legend => legend
+            .Visible(true).Position(ChartLegendPosition.Right)
+        ).Events(events =>
+        {
+            events.LegendItemClick("function(e) { e.preventDefault(); }");
+        })
+        .SeriesDefaults(series =>
+            series.Pie().StartAngle(150).Padding(35)
+
+        )
+        .Series(series =>
+        {
+
+
+            series.Pie(new dynamic[] {
+                new { category = Model.Today_Check_In_Time_Status[0].Type, value = Model.Today_Check_In_Time_Status[0].count, color = "#36B9EA" },
+                new { category = Model.Today_Check_In_Time_Status[1].Type, value = Model.Today_Check_In_Time_Status[1].count, color = "#FB337B" },
+                new { category = Model.Today_Check_In_Time_Status[2].Type, value = Model.Today_Check_In_Time_Status[2].count, color = "#44DABE" },
+                new { category = Model.Today_Check_In_Time_Status[3].Type, value = Model.Today_Check_In_Time_Status[3].count, color = "#FCC103" },
+            });
+
+
+        })
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Template("#= category # : #= value #")
+        ).RenderAs(RenderingMode.Canvas)
+
+    )
+
+
+
+
+</div>

@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.Master.WageGradeMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "WageGrade", FormMethod.Post, new { id = "WageGradeId" }))
+{
+    <div id="wageGradeMasterAdd" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Wage Grade</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm wName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'WageGradeName')", maxlength = "120" })
+                            <span id="WageGradeName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm wShtName", @placeholder = "ShortName", @onblur = "validate(this,'WageGradeShortName')", maxlength = "5" })
+                            <span id="WageGradeShortName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Minimum CTC for Metro 
+                                <span class="Mandatory">*</span>
+                            </label>
+                            
+                            @Html.TextBoxFor(Model => Model.Metro, new { @class = "form-control form-control-sm wName", @placeholder = "Minimum CTC for Metro", @onblur = "OnlycapitalizeFirstLetter(this,'WageGradeName')", maxlength = "20" })
+                            <span id="MetroCTC"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Minimum CTC for Non Metro
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.NonMetro, new { @class = "form-control form-control-sm wShtName", @placeholder = "Minimum CTC for Non Metro", @onblur = "validate(this,'WageGradeShortName')", maxlength = "20" })
+                            <span id="NonMetroCTC"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12 mt-2 mb-2">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                Active
+                            </div>
+                            <label class="switch" @*onchange="ActiveInactiveValidationWage('WAGE_GRADE', '@Model.Code')"*@>
+                                @Html.HiddenFor(m=>Model.Code)
+                                @Html.CheckBoxFor(Model => Model.Active,new { @id= "wageActive" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        @if (Model.Mode == "CREATE")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm wDescription", @placeholder = "Description", maxlength = "250" })
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.DisplayFor(Model => Model.Description)
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveWageGrade('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveWageGrade('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

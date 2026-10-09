@@ -1,0 +1,163 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingQuestions
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/commonValidators.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "Section", FormMethod.Post, new { id = "QuestionSave" }))
+{
+    <div id="sectionedit" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Training Questions </h4>
+            </div>
+            <div class="add-padding">
+
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-12">
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Question<span class="Mandatory">*</span></label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm secDescription", @placeholder = "Question", maxlength = "250" })
+                                <span id="A"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label>Question<span class="Mandatory">*</span></label>
+
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm secDescription", @placeholder = "Question", maxlength = "250" })
+                                @*@Html.DisplayFor(Model => Model.Description)*@
+                                @Html.HiddenFor(model => Model.Description)
+                                <span id="A"></span>
+                            }
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Training
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        @Html.DropDownListFor(m => m.TrainingCode.Code, (SelectList)ViewBag.Training, "--Select--", new { @class = "form-control form-control-sm", @onchange = "fillData();validate(this,'Trainingcode')" })
+                        <span id="Trainingcode"></span>
+                        @*@Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm secName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'sectionName')", maxlength = "120" })*@
+                    </div>
+                </div>
+
+
+                <div class="row my-3">
+                    @Html.HiddenFor(model => Model.Mode)
+                    @Html.HiddenFor(model => Model.LogGI)
+                    @Html.HiddenFor(model => Model.GI)
+
+
+
+                    <div class="col-md-12 d-flex align-items-center">
+
+                        <div class="d-flex align-items-end">
+
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('SECTION','@Model.Code')">
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "ActiveinactiveSectiom" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="row my-3">
+
+
+
+
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Training  Reply Group
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.DropDownListFor(m => m.ReplygroupCode.Code, (SelectList)ViewBag.ReplyGroup, "--Select--", new { @class = "form-control form-control-sm", @onchange = "OnTraingReplyGroupChange(this,'Type')" })
+                            <span id="ReplyGroupcode"></span>
+                            @*@Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm secName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'sectionName')", maxlength = "120" })*@
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Training  Reply
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.DropDownListFor(m => m.ReplyCode.Code, (SelectList)ViewBag.Reply, "--Select--", new { @class = "form-control form-control-sm"})
+                            <span id="Replycode"></span>
+                            @*@Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm secName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'sectionName')", maxlength = "120" })*@
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveQuestion('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveQuestion('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

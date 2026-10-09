@@ -1,0 +1,191 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.WalkInInterView
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/js/settings.js"></script>
+<script src="~/scripts/DataBank/walkInInterview.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Walk In Interview</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Walk In Interview
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+
+
+                            <div class="tab-items select-option mb-2">
+
+
+
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+
+                                </div>
+
+
+
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                        data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table walk-in-interview pt-1">
+                        <table class="common-table">
+                            <thead>
+                             
+                                <tr class="table-dark">
+
+                                    <th scope="col">
+                                        MRF No
+                                        @Html.HiddenFor(m => Model.VacancyList.Count)
+                                    </th>
+                                    <th scope="col">Job Title</th>
+                                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="">Initiated On</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Number of Requirements ">N/Req </th>
+                                    <th scope="col">Location </th>
+                                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Days Left ">D.L.</th>
+                                    <th scope="col">Resumes </th>
+
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.VacancyList != null && Model.VacancyList.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.VacancyList.Count; i++)
+                                    {
+                                        <tr>
+
+                                            <td data-label="MRF No">@Model.VacancyList[i].JobCode @Html.HiddenFor(m => m.VacancyList[i].VacancyManagementGI)</td>
+                                            <td data-label="Job Title">
+                                                <a href="@Url.Action("Create", "WalkInInterview", new { Area = "DataBank",VacancyManagementGI= Model.VacancyList[i].VacancyManagementGI })" id=" " class="">
+                                                    @Model.VacancyList[i].JobTitle
+                                                </a>
+
+                                            </td>
+                                            <td data-label="Requested Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyList[i].RequestedDate))</td>
+                                            <td data-label="Need By Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyList[i].NeedByDate))</td>
+                                            <td data-label="Number of Requirements">@Model.VacancyList[i].NoOfRequirements</td>
+                                            <td data-label="Location">@Model.VacancyList[i].Location</td>
+                                            <td data-label="Days Left">@Model.VacancyList[i].Aging </td>
+                                            <td data-label="Resumes">
+                                                <a data-bs-toggle="modal" data-target=".resumemodal"
+                                                   type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyList[i].VacancyManagementGI')">
+                                                    @Model.VacancyList[i].MappedResumes
+                                                </a>
+                                            </td>
+
+                                        </tr>
+
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <!--end: Datatable-->
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="slider-over-flow"></div>
+<!--end::Content-->
+<div class="modal fade resumemodal" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:970px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mapped Resumes
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-bodyyy">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

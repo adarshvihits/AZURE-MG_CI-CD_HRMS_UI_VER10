@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    Model.TabIndex = "Landlord Details";
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "pada" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGuid)
+
+    <div id="addLandlordDetails" class="slider-forms slider-forms-open land">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('land')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Landlord Details</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.TextBoxFor(m => m.LandlordDetails.Name, new { @class = "form-control", placeholder = "Name", @maxlength = 120, @onkeypress = "return onlyLettersKey(event)", @onchange = "validate(this,'landlordname')" })
+                        <span id="landlordname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Address</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.LandlordDetails.Address, new { @class = "form-control", placeholder = "Address", @maxlength = 120, @onchange = "validate(this,'address')" })
+                        <span id="address" class="text-danger"></span>
+                    </div>
+            
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>From</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.LandlordDetails.From.Code, (SelectList)ViewBag.From, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'from')" })
+                        <span id="from" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>To</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.LandlordDetails.To.Code, (SelectList)ViewBag.To, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'to')" })
+                        <span id="to" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Pan</label>
+                        @Html.TextBoxFor(m => m.LandlordDetails.Pan, new { @class = "form-control", placeholder = "Pan", @maxlength = 10 })
+                        <span id="pan" class="text-danger"></span>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="landid" type="button" class="btn btn-default" onclick="LandlordAddtoGrid('@Model.SliderName','@Model.LandlordDetails.Rowid')">Add</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

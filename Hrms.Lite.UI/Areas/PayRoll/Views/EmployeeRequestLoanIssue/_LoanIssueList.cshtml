@@ -1,0 +1,226 @@
+﻿@model Hrms.Lite.Shared.PayRoll.EmployeeRequestLoanIssue
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+
+
+        $.fn.DataTable.ext.pager.numbers_length = 5;
+
+        dataTable = $('#LoanIssueTable').DataTable({
+
+            "paging": true,
+
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "pagingType": 'full_numbers',
+            "scrollY": '60vh',
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+
+            "ordering": false,
+            "autoWidth": false,
+
+
+
+
+
+            "scrollCollapse": false,
+
+            "dom": '<t><"my-wrapper"<"my-inner2"l><"my-inner1"i><"my-inner3"p>>',
+
+
+            language: {
+
+                emptyTable: '<div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div >',
+
+                zeroRecords: '<div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div >',
+
+                sLengthMenu: "_MENU_",
+                paginate: {
+                    //next: '&#8594;', // or '→'
+                    //previous: '&#8592;' // or '←' 
+
+                    next: '<img src="/images/icons/Icon awesome-arrow-right-1.png">',
+                    previous: '<img src="/images/icons/Icon awesome-arrow-right.png">',
+                    first: '<img src="/images/icons/Icon metro-next-1.png">',
+                    last: '<img src="/images/icons/Icon metro-next.png">'
+
+                    //next: '<span class="glyphicon glyphicon-menu-right"></span>',
+                    //previous: '<span class="glyphicon glyphicon-menu-left"></span>'
+
+                }
+            }
+
+
+
+        });
+
+
+        //  $(".intro, .demo, .end").css('background', 'green');
+
+
+
+        $('.ihits-table table').removeClass("dataTable no-footer");
+
+
+        $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.next').attr("title", "Next");
+        $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.previous').attr("title", "Previous");
+        $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.first').attr("title", "First");
+        $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.last').attr("title", "Last");
+
+        $(".ihits-table table tr th").removeAttr('style');
+
+
+        $("#dataTableSearch").on("keyup search input paste cut", function () {
+            dataTable.search(this.value).draw();
+
+
+
+
+        });
+
+        $('.search-slider-inner').click(function () {
+            //dataTable.search('').draw();
+            $('#dataTableSearch').val('');
+            $('#dataTableSearch').focus();
+        });
+        debugger;
+        var info = dataTable.page.info();
+
+        dataTable.on('draw', function () {
+
+
+
+            $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.next').attr("title", "Next");
+            $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.previous').attr("title", "Previous");
+            $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.first').attr("title", "First");
+            $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.last').attr("title", "Last");
+
+        });
+
+        /*}, 100);*/
+
+
+        dataTable.page(currentPage).draw(false);
+
+    });
+
+
+    $(document).ready(() => {
+        //const myTable = $('#moduleAllCheckBox').dataTable({
+        //    stateSave: true
+        //});
+        var myTable = $('#LoanIssueTable').dataTable();
+        var allPagesCheckboxes = myTable.fnGetNodes();
+
+        $('#moduleAll').click(function () {
+
+            debugger;
+            var active = $('#moduleAll').prop("checked") ? 1 : 0;
+            if (active == 0) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', false);
+            }
+            if (active == 1) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', true);
+
+            }
+        });
+    });
+
+</script>
+
+
+
+<div class="ihits-table table-border odd-even  mobile-responsive-table loan_request_issue_list1">
+    @Html.HiddenFor(m => m.LoanIssueList.Count)
+    <table id="LoanIssueTable">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+
+                <th  toolt scope="col">Gross Salary</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Requested Date">Req. Date</th>
+                <th scope="col">Loan Type</th>
+                <th scope="col">Loan Purpose</th>
+                <th scope="col">Repayment Method</th>
+                <th scope="col">Loan Amount</th>
+                <th scope="col">Monthly EMI</th>
+                <th scope="col">Tenure</th>
+                <th scope="col">Tracker</th>
+                @*<th>
+                    <div class="checkbox-inline pl-1">
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            <input id="moduleAll" type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+
+                </th>*@
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.LoanIssueList != null && Model.LoanIssueList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.LoanIssueList.Count; i++)
+                    {
+                    
+                                               
+            <tr>
+                <td data-label="ID">
+                    @Html.HiddenFor(m => m.LoanIssueList[i].EmployeeGI)
+                    @Html.HiddenFor(m => m.LoanIssueList[i].RequestCode)
+                    @Model.LoanIssueList[i].EmployeeID
+                </td>
+                <td data-label="Name">
+                  
+                    <a href="@Url.Action("Create", "EmployeeRequestLoanIssue", new { Area = "PayRoll",RequestGI=@Model.LoanIssueList[i].RequestGI,EmployeeGI=@Model.LoanIssueList[i].EmployeeGI })">@Model.LoanIssueList[i].EmployeeName</a>
+                </td>
+
+                <td data-label="Gross Salary">@Model.LoanIssueList[i].GrossSalary</td>
+                <td data-label="Requested Date"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LoanIssueList[i].RequestedDate))</td>
+                <td data-label="LoanType"> @Model.LoanIssueList[i].LoanType </td>
+                <td data-label="Purpose"> @Model.LoanIssueList[i].Purpose </td>
+                <td data-label="Repayment Method"> @Model.LoanIssueList[i].RepaymentMethod </td>
+                <td data-label="Requested Amount"> @Model.LoanIssueList[i].LoanAmount </td>
+                <td data-label="Monthly EMI"> @Model.LoanIssueList[i].MonthlyEMI </td>
+                <td data-label="Tenure"> @Model.LoanIssueList[i].Tenure  </td>
+
+
+
+                <td data-label="Tracker">
+
+                    <a id="applicant " onclick="GetLoanIssueTracker('@Model.LoanIssueList[i].RequestGI','@Model.LoanIssueList[i].EmployeeGI')">
+                        <i class="icon-xl la la-arrow-circle-right"></i>
+                    </a>
+                </td>
+
+                @*<td data-label="Y/S">
+                    <div class="checkbox-inline pl-1">
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            @Html.CheckBoxFor(m => m.LoanIssueList[i].Applicable, new { @onclick = "onChkBoxClick(this,'moduleAll','LoanIssueTable')" })
+                            <span></span>
+                        </label>
+                    </div>
+                </td>*@
+            </tr>
+                    }
+                }
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,139 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+
+
+    <script>
+        function firstLetterCapsC(input, spanId) {
+            if (!input.value) return;
+
+            // Convert to lowercase first, then capitalize each word
+            input.value = input.value
+                .toLowerCase()
+                .replace(/\b\w/g, function (char) {
+                    return char.toUpperCase();
+                });
+
+            // Optional validation message clear
+            if (spanId) {
+                document.getElementById(spanId).innerHTML = "";
+            }
+        }
+    </script>
+
+@using (Html.BeginForm(null,null, FormMethod.Post, new { @id = "ContactDetails" }))
+{
+<div class="row">
+    @{
+        Model.TabIndex = "Contactdetails";
+    }
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+
+    <div class="col-md-6">
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label>Personal Mobile</label><span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.ContactDetails.PersonalMobile, new { @class = "form-control form-control-sm", @placeholder = "Personal Mobile", @maxlength = 10, @onblur = "validateMobile(this,'pmobile')", @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="pmobile"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label>Personal Email</label><span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.ContactDetails.PersonalEmail, new { @class = "form-control form-control-sm", @placeholder = "Personal Email", @maxlength = 120, @onblur = "validateEmail(this,'pemail')" })
+                    <span id="pemail"></span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label>Office Number</label>
+                    @*<span class="Mandatory">*</span>*@
+                    @Html.TextBoxFor(m => m.ContactDetails.OfficeMobile, new { @class = "form-control form-control-sm", @placeholder = "Office Number", @maxlength = 10, @*@onblur = "validateMobile(this,'omobile')",*@ @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="omobile"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label>Office Email</label>
+                    @*<span class="Mandatory">*</span>*@
+                    @Html.TextBoxFor(m => m.ContactDetails.OfficeEmail, new { @class = "form-control form-control-sm", @placeholder = "Office Email", @maxlength = 120,@onblur= "validateEmailIDWithoutMandatory(this,'oemail')" @*, @onblur = "validateEmail(this,'oemail')"*@ })
+                    <span id="oemail"></span>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <div class="form-group">
+                        <label>Emergency Contact Person</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.ContactDetails.EmergencyContactPerson, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Emergency Contact Person", @onblur = "firstLetterCapsC(this,'econtactperson')", @onkeypress = "return onlyLettersKey(event)" })
+                        <span id="econtactperson"></span>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Emergency Contact Number</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.ContactDetails.EmergencyContactNumber, new { @class = "form-control form-control-sm", @maxlength = 15, @placeholder = "Emergency Contact Number", @onblur = "validateFifteenDigitMobileNumber(this,'econtactnumber')", @onkeypress = "return onlyNumberKey(event)" })
+                        <span id="econtactnumber"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Relation</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.ContactDetails.Relation.Code, (SelectList)ViewBag.Con, "--Select Relation--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'relation')" })
+                        <span id="relation"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div id="contactFooter" class="col-md-6">
+            @if (Model.ContactDetailsApprovalPending == false)
+            {
+                <label 
+                        class=" new_approval_pend_btn">
+                    Approval Pending
+                </label>
+            }
+
+
+        </div>
+        <div class="col-md-6">
+            <button type="button" onclick="validateAllContactDetails()"
+                    class="btn btn-default float-right">
+                Save
+            </button>
+        </div>
+    </div>
+}

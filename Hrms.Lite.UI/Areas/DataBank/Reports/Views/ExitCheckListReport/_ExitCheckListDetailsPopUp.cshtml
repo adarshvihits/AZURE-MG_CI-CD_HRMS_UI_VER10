@@ -1,0 +1,86 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ExitCheckListReport
+@*<script src="~/js/settings.js"></script>*@
+<script src="~/js/tooltip.js"></script>
+<script src="~/scripts/DataBank/Reports/exitCheckListReport.js"></script>
+
+<script>
+    
+    $(document).ready(function () {
+        $('.search-slider-inner').click(function () {
+
+            $('.pop-up').val('');
+            $('.pop-up').focus();
+            dataTable.search('').draw();
+        });
+    });
+
+
+</script>
+<div class="row tab-style-button mb-2">
+    <div class="tab-button-wrap row">
+        <div class="tab-items col-md-2">
+            <div class="form-group">
+
+
+                <label class="view-title" id="EmployeeId">ID</label>
+                <div class="view-details"> @Model.ID</div>
+
+
+            </div>
+        </div>
+        <div class="tab-items col-md-3">
+            <div class="form-group">
+
+
+                <label class="view-title">Employee Name</label>
+                <div class="view-details">@Model.EmployeeName</div>
+
+
+            </div>
+        </div>
+        <div class="tab-items col-md-3">
+            <div class="form-group">
+
+
+                <label class="view-title">Verified User</label>
+                <div class="view-details">@Model.VerifiedUser</div>
+
+
+            </div>
+        </div>
+        <div class="tab-items col-md-3">
+            <div class="form-group">
+
+
+                <label class="view-title">Entry Date</label>
+                <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EntryDate))</div>
+
+
+            </div>
+        </div>
+
+        <div class="tab-items select-option col-md-1 ">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search" onclick="onSearchClick()"></i>
+                </div>
+                <input type="text" id="searchList" class="form-control form-control-sm pop-up dataTableSearchPopup"
+                       placeholder="Search by Item" onkeyup="searchRows()">
+            </div>
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" style="    margin-top: 8px;
+                            margin-left: 5px;"
+               data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+
+
+    </div>
+</div>
+
+<div id="ExitList">
+    @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/ExitCheckListReport/_ExitdetailsPopUpList.cshtml", Model)
+</div>

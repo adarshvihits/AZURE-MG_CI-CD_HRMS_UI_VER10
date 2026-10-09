@@ -1,0 +1,217 @@
+@model Hrms.Lite.Shared.Master.JobMaster
+@{
+    string formTitle = Model.Mode == "MODIFY" ? "Edit Job — " + Model.Name : "Add New Job";
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/Multiselectdropdown.js"></script>
+<script>
+    $(document).ready(function () {
+        moveCursorToEnd('Name');
+    });
+</script>
+<style>
+    .multiselect-native-select .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm("Save", "JobMaster", FormMethod.Post, new { id = "jobMasterSave" }))
+{
+    <div id="addJobMaster" class="slider-forms slider-forms-open AddNewOrEdit jm-slider">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>@formTitle</h4>
+            </div>
+
+            <div class="add-padding">
+                @Html.HiddenFor(model => Model.Mode)
+                @Html.HiddenFor(model => Model.GI)
+                @Html.HiddenFor(model => Model.LogGI)
+                @Html.HiddenFor(model => Model.Code)
+
+                <div class="jm-form-card">
+                    <div class="jm-section-title">Job Details</div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Job Code</label>
+                                <div class="view-details">@(Model.Mode == "MODIFY" ? Model.JobCode : "")</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Position Title</label>
+                                <span class="Mandatory">*</span>
+                                @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "e.g. Senior Sales Executive – Retail", @onblur = "validate(this,'JobNameVal')", maxlength = "120" })
+                                <span id="JobNameVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.Department.Code, (SelectList)ViewBag.DepartmentDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobDepartmentVal')" })
+                                <span id="JobDepartmentVal"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Section</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.Section.Code, (SelectList)ViewBag.SectionDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobSectionVal')" })
+                                <span id="JobSectionVal"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Business Type</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.BusinessType.Code, (SelectList)ViewBag.BusinessTypeDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobBusinessTypeVal')" })
+                                <span id="JobBusinessTypeVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Grade(s)</label>
+                                <span class="Mandatory">*</span>
+                                <div class="jm-field-hint">Select every grade this job can be filled at.</div>
+                                <div class="form-control  form-control-sm JobGradeDiv">
+                                    @Html.ListBoxFor(Model => Model.Grades, (SelectList)ViewBag.GradeDropDown, new
+                               {
+                                   @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                                   placeholder = "Select Grade",
+                                   @multiple = "multiple",
+                                   @onchange = "validateMultiselect('Grades', 'JobGradeVal','JobGradeDiv')"
+                               })
+                                </div><span id="JobGradeVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Work Mode</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.WorkMode.Code, (SelectList)ViewBag.WorkModeDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobWorkModeVal')" })
+                                <span id="JobWorkModeVal"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Employment Type</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.EmploymentType.Code, (SelectList)ViewBag.EmploymentTypeDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobEmploymentTypeVal')" })
+                                <span id="JobEmploymentTypeVal"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Level of Experience</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.ExperienceLevel.Code, (SelectList)ViewBag.ExperienceLevelDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobExperienceVal')" })
+                                <span id="JobExperienceVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Educational Qualification(s)</label>
+                                <span class="Mandatory">*</span>
+                                <div class="jm-field-hint">Select every qualification that's acceptable for this job.</div>
+                                <div class="form-control  form-control-sm JobQualificationDiv">
+                                    @Html.ListBoxFor(Model => Model.Qualifications, (SelectList)ViewBag.QualificationDropDown, new
+                               {
+                                   @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                                   placeholder = "Select Qualification",
+                                   @multiple = "multiple",
+                                   @onchange = "validateMultiselect('Qualifications', 'JobQualificationVal','JobQualificationDiv')"
+                               })
+                                </div><span id="JobQualificationVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Preferred Industry</label>
+                                <span class="Mandatory">*</span>
+                                @Html.DropDownListFor(m => m.Industry.Code, (SelectList)ViewBag.IndustryDropDown, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JobIndustryVal')" })
+                                <span id="JobIndustryVal"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Salary Range</label>
+                                <span class="Mandatory">*</span>
+                                @Html.TextBoxFor(Model => Model.SalaryRange, new { @class = "form-control form-control-sm", @placeholder = "e.g. ₹25,000 – ₹35,000 per month", @onblur = "validate(this,'JobSalaryRangeVal')", maxlength = "200" })
+                                <span id="JobSalaryRangeVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <label class="mb-0">Skill <span class="Mandatory">*</span></label>
+                                    <button type="button" class="btn btn-secondary btn-sm jm-ai-btn">
+                                        <i class="fas fa-magic"></i> Suggest with AI
+                                    </button>
+                                </div>
+                                @Html.TextAreaFor(Model => Model.Skill, new { @class = "form-control form-control-sm", @placeholder = "Key skills for this role", @onblur = "validate(this,'JobSkillVal')", rows = "2", maxlength = "1000" })
+                                <span id="JobSkillVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Job Description</label>
+                                <span class="Mandatory">*</span>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm", @placeholder = "Describe the role, responsibilities and expectations", @onblur = "validate(this,'JobDescriptionVal')", rows = "4", maxlength = "4000" })
+                                <span id="JobDescriptionVal"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="d-flex align-items-center">
+                                <div> Active</div>
+                                <label class="switch">
+                                    @Html.CheckBoxFor(model => model.Active, new { @id = "activeInactiveJob" })
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        <button type="button" class="btn btn-secondary mobile-full-width mr-2" onclick="CloseSlider('AddNewOrEdit')">
+                            Cancel
+                        </button>
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveJobMaster('Submit for Approval')">
+                                    Submit for Approval
+                                </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

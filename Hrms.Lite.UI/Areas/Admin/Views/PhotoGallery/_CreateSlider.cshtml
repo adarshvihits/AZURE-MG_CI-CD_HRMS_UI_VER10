@@ -1,0 +1,349 @@
+﻿
+@model Hrms.Lite.Shared.Admin.PhotoGallery
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/scripts/Admin/PhotoGallery.js"></script>
+<!-- Custom CSS to handle image and description layout -->
+<style>
+    .image-preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 135px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+    .description-input {
+        width: 100%;
+        margin-bottom: 10px;
+        height: 70px;
+        border-radius: 4px;
+        /* width: 360px; */
+        margin-left: 0;
+        border: 1px solid #cdc8c8;
+    }
+    
+
+    .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 2px 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+</style>
+<style>
+
+    .commentbox {
+        height: 37px;
+        border-radius: 8px;
+        width: 100%;
+        margin-left: 0;
+    
+    }
+
+    .gallery_icon {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+    }
+
+    .gallery_flex {
+        margin-left: 60px;
+    }
+
+    .gallery_icon img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .photos_font {
+        font-size: 13px;
+        color: #505050;
+        padding-left: 5px;
+    }
+
+    .slider_width {
+        width: 727px
+    }
+</style>
+
+<script>
+
+    /* function previewImages(event) {
+         const files = event.target.files;
+         const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+         // Clear the current preview images
+         imagePreviewContainer.innerHTML = '';
+         debugger;
+         // Loop through all selected files
+         for (let i = 0; i < files.length; i++) {
+             const file = files[i];
+
+             if (!file.type.startsWith('image/')) {
+                 continue; // Skip non-image files
+             }
+
+             const reader = new FileReader();
+
+             reader.onload = function (e) {
+                 // Create a div to hold the image and the remove button
+                 const imageContainer = document.createElement('div');
+                 imageContainer.style.position = 'relative';
+                 imageContainer.style.width = '170px';
+                 imageContainer.style.height = '150px';
+
+                 const DesContainer = document.createElement('div');
+                 DesContainer.style.display = 'block';
+                 DesContainer.id = 'des_div'
+                 // Create the image element
+                 const img = document.createElement('img');
+                 img.src = e.target.result;
+                 img.style.width = '100%';
+                 img.style.height = '100%';
+                 img.style.objectFit = 'cover';
+
+                 // Create the remove button
+                 const removeButton = document.createElement('button');
+                 removeButton.innerText = 'X';
+                 removeButton.style.position = 'absolute';
+                 removeButton.style.top = '2px';
+                 removeButton.style.right = '2px';
+                 removeButton.style.background = 'black';
+                 removeButton.style.color = 'white';
+                 removeButton.style.border = 'none';
+                 removeButton.style.padding = '2px';
+                 removeButton.style.cursor = 'pointer';
+
+                 //// Create the description input
+                 //const descriptionInput = document.createElement('input');
+                 //descriptionInput.type = 'text';
+                 //descriptionInput.name = 'Descriptions';
+                 //descriptionInput.placeholder = 'Enter description';
+                 //descriptionInput.style.width = '100%';
+                 //descriptionInput.style.marginBottom = '10px';
+                 //descriptionInput.onkeypress = function (e) {
+                 //    if (e.key === 'Enter') {
+                 //        e.preventDefault();  // Prevent removing image when Enter is pressed
+                 //    }
+                 //};
+
+
+                 const DescContainer = document.createElement('div');
+                 DescContainer.id = 'desc_div'
+
+                 // Create the description textarea (allows multiple lines)
+                 const descriptionInput = document.createElement('textarea');
+                 descriptionInput.name = 'Descriptions';
+                 descriptionInput.placeholder = 'Enter description';
+                 descriptionInput.rows = 3;  // Default rows for textarea
+                 descriptionInput.style.width = '100%';
+                 descriptionInput.style.marginBottom = '10px';
+
+                 removeButton.onclick = function () {
+                     // Remove the image from the preview container
+                     imageContainer.remove();
+                     //textarea.remove();
+
+
+                     // Remove the file from the input (remove it from the FileList)
+                     removeImageFromInput(i);
+                 };
+
+                 // Append the image and the remove button to the image container
+                 //imageContainer.appendChild(DesContainer);
+                 imageContainer.appendChild(img);
+                 imageContainer.appendChild(removeButton);
+
+                 DescContainer.appendChild(descriptionInput);
+
+                 imageContainer.appendChild(DescContainer);
+
+                 DesContainer.appendChild(imageContainer);
+                 // Add the textarea to a div or any container element
+                 //var container = document.getElementById("image_des");
+                 //container.appendChild(textarea);
+
+
+
+                 // Append the image container to the preview container
+                 imagePreviewContainer.appendChild(DesContainer);
+             };
+
+             reader.readAsDataURL(file);
+         }
+     }
+     */
+    function removeImageFromInput(index) {
+        const imageInput = document.getElementById('fileInput');
+        const dataTransfer = new DataTransfer();
+
+        // Re-add all files except the one at the removed index
+        for (let i = 0; i < imageInput.files.length; i++) {
+            if (i !== index) {
+                dataTransfer.items.add(imageInput.files[i]);
+            }
+        }
+
+        // Update the file input with the new FileList
+        imageInput.files = dataTransfer.files;
+    }
+    function CloseSlider(id) {
+        $("." + id).removeClass('slider-forms-open');
+        $(".slider-forms").removeClass('slider_width');
+        $(".form-overlay").remove();
+    }
+
+</script>
+
+<script>
+    function previewImages(event) {
+        const files = event.target.files;
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+        // Clear the current preview images
+        imagePreviewContainer.innerHTML = '';
+
+        // Loop through all selected files
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith('image/')) {
+                continue; // Skip non-image files
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Create a container for the image, description input, and remove button
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('image-container');
+
+                // Create the image element
+                const img = document.createElement('img');
+                img.src = e.target.result;
+
+                // Create the description textarea
+                const descriptionInput = document.createElement('textarea');
+                descriptionInput.name = 'Descriptions';
+                descriptionInput.placeholder = 'Enter description';
+                descriptionInput.rows = 3;
+                descriptionInput.classList.add('description-input');
+
+                // Create the remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.classList.add('remove-btn');
+                removeBtn.innerText = 'X';
+                removeBtn.onclick = function () {
+                    imagePreviewContainer.removeChild(imageContainer);
+                };
+
+                // Append the image, description input, and remove button to the image container
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(descriptionInput);
+                imageContainer.appendChild(removeBtn);
+
+                // Append the image container to the preview container
+                imagePreviewContainer.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+@using (Html.BeginForm("Upload", "PhotoGallery", FormMethod.Post, new { id = "PhotoGallerysave", enctype = "multipart/form-data" }))
+{
+    <div id="addbankname" class="slider-forms slider-forms-open AddNewDiv slider_width">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4> Photo Gallery </h4>
+            </div>
+
+
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <span class="Mandatory">*</span>
+
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.PhotoGalleryGI)
+
+                            @Html.TextBoxFor(m => m.Description, new { @class = "form-control commentbox postDesc", placeholder = "Write your post here...." })
+                            <span id="description"></span>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+                <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 30px;">
+                    <!-- Preview images will be appended here -->
+
+
+                </div>
+                <div id="image_des" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                <div class="row">
+                    <div class="col-md-6">
+
+                       
+
+                    </div>
+
+
+
+                    <div class="col-md-6 pt-2 text-right d-flex align-items-center justify-content-between" >
+                        <div class="d-flex align-items-center " style="padding:10px;">
+                            <div class="gallery_icon d-flex" onclick="$('#fileInput').trigger('click')">
+                                <img src="/images/icons/Icon ionic-md-photos.svg"><span class="photos_font">Photos</span>
+                            </div>
+                            @*<input accept=".jpg, .jpeg" class="input-file hide uploadImg" id="fileInput" name="Files" type="file">*@
+                            <input accept=".jpg, .jpeg" id="fileInput" type="file" name="Files" multiple style="display:none;" onchange="previewImages(event)" />
+                            @Html.HiddenFor(m => m.FileNames)
+
+                        </div>
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                            Upload
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}

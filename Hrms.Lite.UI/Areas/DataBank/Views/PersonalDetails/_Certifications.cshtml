@@ -1,0 +1,137 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table certification-list-tab mb-2">
+            <table id="education">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Certification</th>
+                        <th scope="col">Registration Number</th>
+
+
+                        <th scope="col">Valid From</th>
+                        @*<th scope="col">Mode</th>*@
+                        <th scope="col">Valid To</th>
+                        <th scope="col">Renewal</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.HiddenFor(m => m.EmployeeGI)
+
+                    @if (Model.Certifications != null && Model.Certifications.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.Certifications.Count; i++)
+                        {
+                            @*@if (Model.Certifications[i].CertificateLogGI != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                                {*@
+                    <tr id="row_OI_@i">
+                        <td data-label="Qualification Type">
+                            @*@Html.HiddenFor(m => m.Certifications[i].CertificateLogGI)*@
+                            @Html.DisplayFor(m => m.Certifications[i].Certificate)
+
+                        </td>
+                        <td data-label="Registration Number">
+
+                            @Html.DisplayFor(m => m.Certifications[i].RegistrationNo)
+                        </td>
+
+
+                        <td data-label="Issued By">
+
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Issued))
+                        </td>
+
+                        <td data-label="Validity">
+
+
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].ValidTo))
+                        </td>
+                        <td data-label="Renewal">
+
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Renewaldate))
+                        </td>
+                        <td data-label="Edit">
+                            <div class="small-btn-group">
+                                <a id="addEducationDetails" type="button"
+                                   class="btn btn-icon btn-default icon-only" data-bs-toggle="tooltip" data-placement="top" title="Edit" onclick="onCertificateSave('@Model.Certifications[i].CertificationCode')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+                                <a type="button"
+                                   class="btn btn-icon btn-delete icon-only" data-bs-toggle="tooltip" data-placement="top" title="Delete" onclick="onCertificateDelete('@Model.Certifications[i].CertificationCode')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+      
+                                <a>
+                                    @if (Model.Certifications[i].DocCount > 1)
+                                    {
+                                        <i onclick="GetCertificateDocPopUp('@Model.Certifications[i].LogCode')"
+                                           title="Click Here To View Document"
+                                           class="far fa-eye"></i>
+                                    }
+                                    else 
+                                    {
+
+                                        <button data-bs-toggle="tooltip"
+                                                title="View File"
+                                                data-placement="top"
+                                                type="button"
+                                                class="btn btn-icon btn-eye icon-only pr-2"
+                                                onclick="ViewDocument('@Model.Certifications[i].CertificateDocCode','Certi')">
+                                            <i class="icon-xl far fa-eye"></i>
+                                        </button>
+
+                                    }
+
+                                    <span>@Model.Certifications[i].DocCount</span>
+                                </a>
+                           
+</div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>No table data</td>
+                        </tr>
+                    }
+
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.CertificationApprovalPending == false)
+        {
+            <label class="new_approval_pend_btn">
+                Approval Pending
+            </label>
+        }
+
+
+    </div>
+    <div class="col-md-6 ">
+        <button id="addEducationDetails" type="button" class="btn btn-default float-right " onclick="onCertificateSave()">
+            <i class="icon-nm fas fa-plus"></i>Add
+            New
+        </button>
+        <div id="certificatesave" class="hide">
+
+            @await Html.PartialAsync("_CertificationSave", Model)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,261 @@
+﻿@model Tuple<Hrms.Lite.Shared.DataBank.Reports.SkillMatrix, System.Data.DataTable>
+
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+
+<script>
+
+
+    function applyCellColor(value, field,skill) {
+       if(value>0)
+       {
+            return "<a href='/DataBank/SkillMatrixEmployeeList?skill=" + skill + "&rating=" + field + "' >" + value + "</a>";
+       }
+       else
+       {
+           return value;
+       }
+          
+    }
+
+    function GetList() {
+
+        $('#Report').data('kendoGrid').dataSource.read();
+
+        //refresh will re-render items in grid from the current datasource
+        $('#Report').data('kendoGrid').refresh();
+
+
+       
+
+
+    }
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+        var tabIndex = 0;
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+
+
+        var type = $('#Type').val();
+
+
+        temp["searchValue"] = searchValue;
+
+
+        return { filter1: temp, type: type };
+    }
+    </script>
+
+<div id="grid" style="width:60%;">
+   
+
+    @(
+        Html.Kendo().Grid<dynamic>()
+                                        .Name("Report")
+                                        .Columns(columns =>
+                                        {
+
+                                            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+                                            {
+                                                if (column.ColumnName != "SkillCode")
+                                                {
+                                                    if (column.ColumnName != "Skill")
+                                                    {
+
+
+                                                        var value = column.ColumnName.Replace(" ", "");
+
+                                                        if (column.ColumnName == "Being Developed")
+                                                        {
+                                                            ;
+                                                        }
+
+                                                columns.Bound(column.ColumnName).HtmlAttributes(new { style = "text-align: center;" })
+                        .ClientTemplate("#= applyCellColor(data." + value + ",'" + value + "',data.SkillCode) #");
+                      
+
+
+                                        }
+                                            else
+                                            {
+                                                columns.Bound(column.ColumnName);
+                                            }
+                                        }
+
+                                    }
+
+
+                                })
+                        //.ToolBar(tools => tools.Excel())
+
+                        .Scrollable(scrollable => scrollable.Height(410))
+
+      
+                      
+        .Pageable(pager => pager.Numeric(true).PreviousNext(true).Info(true).PageSizes(new[] { 10, 25 }).ButtonCount(5))
+        
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+            {
+                var field = model.Field(column.ColumnName, column.DataType);
+               
+            }
+
+        })
+        .Read(read => read.Action("GetList", "SkillMatrixCount").Data("employeeParam"))
+        )
+        )
+
+
+
+
+
+    <style>
+
+        .k-header,
+        .column-header,
+        .group-header,
+        .column-cell {
+            text-align: center !important;
+            vertical-align: middle;
+            border-right: 1px solid #c4c4c4; /* Add vertical line */
+            padding: 5px; /* Adjust padding as needed */
+            position: relative; /* Enable relative positioning for pseudo-elements */
+        }
+
+            .k-grid a{
+            border-bottom: 1px solid #656875;
+        }
+            
+            .k-header::after,
+            .group-header:before,
+            .column-header:after,
+            .column-cell:after {
+                text-align: center !important;
+                vertical-align: middle;
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 1px;
+                background-color: #e6eef7; /* Color of the vertical line */
+            }
+
+        .k-grid-header-wrap tr {
+            border-bottom: 1px solid #c4c4c4;
+        }
+
+        .k-grid th {
+            white-space: normal;
+        }
+
+
+        .normalcolor {
+            background-color: sandybrown !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .greencolor {
+            background-color: lightgreen !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .yellowcolor {
+            background-color: lightgoldenrodyellow !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .bluecolor {
+            background-color: cornflowerblue !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .redcolor {
+            background-color: #f7764f !important;
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        .k-grid td {
+            padding: 10px 3px !important;
+        }
+
+        .k-grid-header-locked table thead tr {
+            height: 86px !important;
+        }
+
+        .k-grid-header-wrap table thead tr {
+            height: 30px !important;
+        }
+
+        .k-grid th {
+            /*border-color: rgba(55, 60, 65, 0.5) !important;*/
+            border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+        }
+
+        .k-grid {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+
+            .k-grid a {
+                color: #3699FF;
+            }
+
+
+            .k-grid .k-grid-content-locked, .k-grid .k-grid-content-locked td, .k-grid .k-grid-header-locked, .k-grid .k-grid-header-locked .k-header {
+                border-color: rgba(55, 60, 65, 0.5);
+            }
+
+            .k-grid .k-grid-content, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked, .k-grid td {
+                /*  border-color: rgba(55, 60, 65, 0.5) !important;*/
+                border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+            }
+
+                .k-grid .k-grid-header-locked .k-header {
+                    border-color: rgba(55, 60, 65, 0.5) !important;
+                }
+
+        .k-grid-content table tbody tr {
+            border-bottom: 1px solid #F6F7F9;
+            border-collapse: collapse;
+        }
+
+        .k-grid table {
+            border-collapse: collapse !important;
+        }
+
+        .branch {
+            font-weight: 600 !important;
+        }
+
+        .k-grid td, .k-grid th {
+            font-weight: revert;
+        }
+
+    </style>
+
+
+
+</div>

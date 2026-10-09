@@ -1,0 +1,113 @@
+﻿@model Hrms.Lite.Shared.Master.NightAllowancePurpose
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.multiselectDropdownField').multiselect({
+            includeSelectAllOption: true,
+            /*  enableFiltering: true,*/
+            enableCaseInsensitiveFiltering: true,
+            includeFilterClearBtn: false,
+            includeSelectAllOption: false,
+
+
+
+        });
+    });
+</script>
+
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "nightShiftpurpose_Save" }))
+    {
+        <div id="addbankname" class="slider-forms slider-forms-open AddNewDiv">
+            <div class="slider-inner-style new-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <div class="location-slider">
+                    <h4>Night Allowance Purpose</h4>
+                </div>
+                <div class="add-padding">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Name
+                                    <span class="Mandatory">*</span>
+                                </label>
+
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.PurposeGi)
+                                @Html.HiddenFor(model => Model.PurposeCode)
+                                @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "validate(this,'purposeName')", maxlength = "128" })
+                                <span id="purposeName"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Short Name
+                                    <span class="Mandatory">*</span>
+                                </label>
+                                @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", @onblur = "validate(this,'purposeShortName')", maxlength = "64" })
+                                <span id="purposeShortName"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Applicable Departments
+                                    <span class="Mandatory">*</span>
+                                </label>
+                                <div class="form-group deptdiv">
+                                    @Html.ListBoxFor(Model => Model.DptCode, (SelectList)ViewBag.Departments, new
+                               {
+                                   @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                                   @multiple = "multiple",
+                                   //onchange = "onValueClick(this)",
+                                   data_db_filter = "true",
+                                   @onchange = "validateMultiselect('DptCode','dptDropdown','deptdiv')"
+
+                               })
+                                </div>
+                                <span id="dptDropdown"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row my-3">
+
+                        <div class="col-md-12">
+
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", maxlength = "250" })
+
+                        </div>
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SavePurpose('Save')">
+                                    Save
+                                </button>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SavePurpose('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }

@@ -1,0 +1,206 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.OndutyWfhSettings
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/OndutyWfhSettings.js"></script>
+<script>
+    $(document).ready(function () {
+        fillData();
+        //$('#BtnSaveSetting').hide();
+        //$("#LeaveGroup_Code").removeClass("hide");
+    });
+</script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Onduty/WFH Settings
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Onduty/WFH Settings
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "odWfhSettingsUpload", enctype = "multipart/form-data" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+
+
+                                <div class="tab-items medium">
+                                    <span class="btn-title Employeewise active" onclick="OnTabClick('Employeewise','MonthlyLimit')">
+                                        Monthly Limit
+                                    </span>
+                                </div>
+                                <div class="tab-items high">
+                                    <span class="btn-title Settings" onclick="OnTabClick('Settings','OtherSettings')">
+                                        Other Settings
+                                    </span>
+                                </div>
+
+
+                                <div class="tab-items select-option d-flex">
+                                    <div class="row-outer " id="LveDrop" style=" padding-right: 20px;">
+                                        <div class="form-group">
+
+
+                                            @Html.DropDownListFor(Model => Model.LeaveGroup.Code, (SelectList)ViewBag.LeaveGrp, "--Select Leave Group--", new { @class = "form-control form-control-sm Cname", @onchange = "GetOtherDetails();validate(this,'LeaveGp')" })
+                                            @Html.HiddenFor(Model => Model.LeaveGroup.Code)
+
+                                            <span id="LeaveGp"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="sraech-slider" id="searchDiv">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel"
+                                       class="btn btn-excel mr-0" onclick="onExportToExcelClick()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                    <div id="ImpExel">
+                                        <button type="button" data-bs-toggle="tooltip" title="Import From Excel"
+                                                class="btn btn-excel ml-0 import" onclick="ImportExcel()">
+                                            <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content popup">
+                                            <div class="modal-header" style="padding:10px">
+                                                <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatched').html('');$('#Excel_FileData').val()">
+                                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body pt-3">
+
+                                                <div class="colums_list pb-1">
+                                                    Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                    Employee ID,
+                                                    Employee Name,
+                                                    OD,
+                                                    WFH
+                                                    <br />
+                                                    @*Columns Needed :- Employee ID, Employee Name, Amount*@
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="file-upload-form-group">
+                                                            <label for="formFileMultiple" class="form-label">
+                                                                Attach
+                                                                File
+                                                                <span class="Mandatory">*</span>
+                                                            </label>
+
+                                                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only .xlsx files are
+                                            allowed , File size less than 1 MB.">
+                                                                <div class="small-btn-group">
+
+                                                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                                </div>
+                                                                <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                                @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                                @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+
+                                                            </div>
+
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div id="Unmatched">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                    <div id="OtherSettingsDetailsID">
+
+                    </div>
+                    <div id="EmployeesSettingList">
+
+                        @await Html.PartialAsync("_EmployeesSettingList", Model)
+
+                    </div>
+                    <div class="row card-footer-bottom-fixed" id="BtnSaveSetting">
+
+                        <div class="col-md-12 align-right">
+                            <button type="button"
+                                    class="btn btn-default float-right mobile-full-width" onclick="OnLeaveRuleSaveClick()">
+                                Save
+                            </button>
+
+                        </div>
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

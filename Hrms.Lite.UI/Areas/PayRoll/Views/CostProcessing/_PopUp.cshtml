@@ -1,0 +1,89 @@
+﻿@model Hrms.Lite.Shared.PayRoll.CostProcessing
+
+
+<script src="~/js/settings.js"></script>
+<script>
+
+    $(".search-slider-inner").click(function () {
+        $(".form-control").toggleClass('field-width-big')
+    });
+
+</script>
+<style>
+    .dataTables_scrollBody {
+        height: 30vh !important;
+    }
+</style>
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap align-items-center">
+
+
+
+        <div class="tab-items">
+            <label>
+                <span class="Mandatory">Employees Cost center allocation pending!*</span>
+            </label>
+        </div>
+
+        <div class="tab-items select-option ">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+            <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                    data-bs-original-title="Export to Excel" onclick="ExportToExcelPendingList()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  ">
+    @*<div class="ihits-table table-border hover-color odd-even mobile-responsive-table  vertical-scroll-300" ">*@
+    @*<div style="padding:0px 10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  vertical-scroll-300">*@
+    <br>
+    <table id="PopUptable" class="common-table">
+        @Html.HiddenFor(Model => Model.EmployeePendingList.Count)
+        <thead>
+
+
+            <tr class="table-dark">
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Location</th>
+                <th>Department</th>
+                <th>Fun.Designation</th>
+                <th>DOJ</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @if (Model.EmployeePendingList != null && Model.EmployeePendingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.EmployeePendingList.Count; i++)
+                {
+
+                    <tr>
+                        <td data-label="EmployeeID">@Model.EmployeePendingList[i].EmployeeID</td>
+                        <td data-label="EmployeeName">@Model.EmployeePendingList[i].EmployeeName</td>
+                        <td data-label="Location">@Model.EmployeePendingList[i].Location</td>
+                        <td data-label="Department">@Model.EmployeePendingList[i].Department</td>
+                        <td data-label="Designation">@Model.EmployeePendingList[i].Designation</td>
+                        <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EmployeePendingList[i].DOJ))</td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,138 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.SlabDeductionConfirmation
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+
+<div class="ihits-table table-border odd-even  mobile-responsive-table DeductionConfirmation_list">
+    @Html.HiddenFor(m => m.SlabDeductionConfirmationList.Count)
+    <table id="SlabBasedConfirmation" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Gross Pay</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Remarks</th>
+                <th scope="col"></th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @if (Model.SlabDeductionConfirmationList != null && Model.SlabDeductionConfirmationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.SlabDeductionConfirmationList.Count; i++)
+                {
+
+
+
+
+                    <tr>
+                        <td data-label="ID">
+                            @Model.SlabDeductionConfirmationList[i].EmployeeID
+
+                            @Html.HiddenFor(m => m.SlabDeductionConfirmationList[i].EmployeeGI)
+                            @Html.HiddenFor(m => m.SlabDeductionConfirmationList[i].EmployeeID)
+                            @Html.HiddenFor(m => m.SlabDeductionConfirmationList[i].Amount)
+                            @Html.HiddenFor(m => m.SlabDeductionConfirmationList[i].EmployeeCode)
+                            @Html.HiddenFor(m => m.SlabDeductionConfirmationList[i].Remarks)
+                        </td>
+                        <td data-label="Name"> @Model.SlabDeductionConfirmationList[i].EmployeeName </td>
+                        <td data-label="Designation">@Model.SlabDeductionConfirmationList[i].Designation</td>
+                        <td data-label="Department">@Model.SlabDeductionConfirmationList[i].Department</td>
+                        <td data-label="Location">@Model.SlabDeductionConfirmationList[i].Location</td>
+                        <td data-label="Location">@Model.SlabDeductionConfirmationList[i].GrossPay</td>
+
+                        <td data-label="Amount" id="row_@i">
+                            <span id="hideAmount_@i">@Model.SlabDeductionConfirmationList[i].Amount</span>
+
+
+                          
+                            @{ 
+                                var amountid = "SlabDeductionConfirmationList_" + i + "__Amount";
+                                var amountname = "SlabDeductionConfirmationList[" + i + "].Amount";
+
+                                var Remarkid = "SlabDeductionConfirmationList_" + i + "__Remarks";
+                                var Remarkname = "SlabDeductionConfirmationList[" + i + "].Remarks";
+
+                            }
+                            <span id="AmountTxtbox_@i" class="hide">
+                                <input id="@amountid" class="form-control form-control-sm amountNew_@i" name="@amountname" type="text" placeholder="Amount" onkeypress = "return onlyAmount(event)">
+                            </span>
+
+                        </td>
+                        <td>
+                            <span id="remarkBox_@i" class="">@Model.SlabDeductionConfirmationList[i].Remarks</span>
+                            <span id="remarkTxtbox_@i" class="hide">
+                            
+                                <input id="@Remarkid" class="form-control form-control-sm remarkNew_@i" name="@Remarkname" type="text" placeholder="Remarks" onpaste="return false">
+                            </span>
+
+                        </td>
+
+
+                        <td data-label="Action">
+
+
+
+
+
+                            @*<span id="edit_' + i + '"> <a onmouseenter="tooltipHover()" onclick="onEditClick(' + i + ')" data-bs-toggle="tooltip" title="Edit" type="button" class="btn btn-icon btn-edit icon-only">
+                                <i class="icon-xl fas fa-pencil-alt"></i></a></span>
+                            <span id="updatecancel_' + i + '" class="hide">
+                            <a onmouseenter="tooltipHover()" type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update icon-only " onclick="onUpdateClick(' + i + ',' + " '" + d.data[i].employeeCode + "' " + ')">
+                            <i class="icon-xl fas fa-sync-alt"></i> </a><a onmouseenter="tooltipHover()" type="button" data-bs-toggle="tooltip" title="Cancel" class="btn btn-icon btn-cancel icon-only " onclick="onCancelClick(' + i + ')"> 
+                            <i class="icon-xl fas fa-times"></i></a></span>'*@
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="small-btn-group hide" id="updatecancel_@i">
+                                <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only">
+                                    <i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick('@i', '@Model.SlabDeductionConfirmationList[i].EmployeeCode')"></i>
+                                </button>
+
+                                <button type="button" data-bs-toggle="tooltip"
+                                        title="Cancel"
+                                        class="btn btn-icon btn-delete icon-only btn-bg-info " onclick="onCancelClick(@i)">
+                                    <i class="icon-xl fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <div class="small-btn-group" id="edit_@i">
+                                <a data-bs-toggle="tooltip" title="Edit" type="button"
+                                   class="btn btn-icon btn-edit icon-only" onclick="onEditClick(@i,'@Model.SlabDeductionConfirmationList[i].Amount')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+
+
+
+                    </tr>
+
+
+
+                }
+            }
+
+
+
+        </tbody>
+    </table>
+</div>

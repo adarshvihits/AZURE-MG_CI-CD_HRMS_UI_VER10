@@ -1,0 +1,57 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyCancellation
+    <script src="~/js/settings.js"></script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table  vacancy-cancellation-report pt-1">
+
+        <table id="CancellationListTable" class="common-table">
+            @Html.HiddenFor(m=>Model.VacancyStatusReport.Count)
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">MRF Code</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Deadline</th>     
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Number of Requirements ">N/Req </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Mapped Resumes ">Map </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="RA Approval ">RAA</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Offer Initiated">Off.Ini</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Employee Activation">Emp.Act</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Joining Confirmation">Join.Conf</th>
+                   
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.VacancyStatusReport != null && Model.VacancyStatusReport.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.VacancyStatusReport.Count; i++)
+                    {
+                <tr>
+                    <td data-label="MRF Code">@Model.VacancyStatusReport[i].JobCode</td>
+                    <td data-label="Job Title">
+                        @Html.HiddenFor(m => Model.VacancyStatusReport[i].VacancyManagementGI)
+                        <a id="vacancycancellation " class="slider-btn" onclick="ClickOnJobTitle('@Model.VacancyStatusReport[i].VacancyManagementGI', '@Model.VacancyStatusReport[i].Status')">
+                            @Model.VacancyStatusReport[i].JobTitle
+                        </a>
+                    </td>
+                    <td data-label="Location"> @Model.VacancyStatusReport[i].LocationName</td>
+                    <td data-label="Need By Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.VacancyStatusReport[i].NeedByDate))</td>      
+
+
+                    <td data-label="Number of Requirements">@Model.VacancyStatusReport[i].NoOfRequirements</td>
+                    <td data-label="Map">@Model.VacancyStatusReport[i].MAP</td>
+                   
+                    <td data-label="RAA">@Model.VacancyStatusReport[i].RAA</td>
+                    <td data-label="Salary">@Model.VacancyStatusReport[i].OFFER</td>
+                     <td data-label="EC">@Model.VacancyStatusReport[i].EmployeeActivation</td>
+                    <td data-label="EC">@Model.VacancyStatusReport[i].JoinConfirm</td>
+                </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>

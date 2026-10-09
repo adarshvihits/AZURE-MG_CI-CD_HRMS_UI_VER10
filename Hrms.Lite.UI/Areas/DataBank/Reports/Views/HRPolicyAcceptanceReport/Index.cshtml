@@ -1,0 +1,234 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.HRPolicyAcceptanceReport
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/Reports/HRPolicyAcceptanceReport.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">HR Policy Acceptance Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        HR Policy Acceptance Report
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+                            <div class="tab-items">
+                                <!-- <label></label> -->
+                                <div class="form-group filter-combobox mt-0">
+
+                                    <select class="form-control form-control-sm " id="PorEtype"
+                                            style="width:170px ;" onchange="GetList()">
+                                        <option value="1">Policy Wise</option>
+                                        <option value="2">Employee Wise</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <!-- <label></label> -->
+                                <div class="form-group filter-combobox mt-0" style=" width: 225px;">
+
+                                    @Html.DropDownListFor(m => m.PolicyOrEmp, (SelectList)ViewBag.Policy, "ALL", new { @class = "form-control form-control-sm policy", @onchange = "GetList()"})
+                                    <div class="selectpickerDiv hide">
+                                        @Html.DropDownListFor(m => m.PolicyOrEmp, (SelectList)ViewBag.Emp, "Search by Employee name/ID", new
+                                        {
+                                            @class = "selectpicker sliderSearchInput form-control form-control-sm ",
+                                            @onchange = "GetList()",
+                                            data_show_subtext = "true",
+                                            data_live_search = "true"
+                                        })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <!-- <label></label> -->
+                                <div class="form-group filter-combobox mt-0">
+                                    <select class="form-control form-control-sm " id="Acc"
+                                            style="width:170px ;" onchange="GetList()">
+                                        <option value="0">All</option>
+                                        <option value="1">Accepted</option>
+                                        <option value="2">Not Accepted</option>
+
+
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="tab-items select-option high">
+
+                                <div class="button-group float-left ">
+                                    <button data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                            type="button" class="btn btn-default btn-sm float-left mr-10">
+                                        Group Summary
+                                    </button>
+                                </div>
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                        data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+
+                                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" style="max-width:1000px;">
+                                        <div class="modal-content popup">
+                                            <div class="modal-header" style="padding:10px">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    Policy Acceptance Group
+                                                    Summary
+                                                </h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                                </button>
+                                            </div>
+                                            <div style="padding:10px;"
+                                                 class="ihits-table table-border hover-color odd-even mobile-responsive-table policy-accept-popup vertical-scroll-250">
+
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Policies</th>
+                                                            <th scope="col">Category</th>
+                                                            <th scope="col">Total Applicable Employee</th>
+                                                            <th scope="col">Accepted</th>
+                                                            <th scope="col">Not Accepted</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model != null && Model.GroupSummary != null && Model.GroupSummary.Count > 0)
+                                                        {
+                                                            for (int i = 0; i < Model.GroupSummary.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Policies">@Model.GroupSummary[i].Policy</td>
+                                                                    <td data-label="Category">
+                                                                        @Model.GroupSummary[i].PolicyCategory
+
+                                                                    </td>
+                                                                    <td data-label="Total Applicable Employee">@Model.GroupSummary[i].TotEmpCount </td>
+                                                                    <td data-label="Accepted">@Model.GroupSummary[i].Accepted</td>
+                                                                    <td data-label="Not Accepted">@Model.GroupSummary[i].NotAccepted</td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+
+
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div id="ListView">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/HRPolicyAcceptanceReport/_List.cshtml", Model)
+                    </div>
+
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.filter)
+                    </div>
+
+                    <!--end: Datatable-->
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-left">
+                            <!-- <a type="button"
+                class="btn btn-default  mobile-full-width">
+                Save
+            </a> -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="slider-over-flow"></div>
+<!--end::Content-->

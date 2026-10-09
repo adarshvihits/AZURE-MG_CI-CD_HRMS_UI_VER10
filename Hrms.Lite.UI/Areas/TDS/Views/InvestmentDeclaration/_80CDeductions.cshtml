@@ -1,0 +1,181 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "deduction" }))
+{
+
+
+    <style>
+        .form-control {
+            height: calc(1.0em + 1.3rem + 2px) !important;
+        }
+
+
+
+        .ihits-table .form-control {
+            color: tomato;
+            font-weight: 500;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table  eighty-g-tble-list  mb-2 Investmen-Under-Section-list ">
+                <table id="family">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Deduction</th>
+                            <th class="text-right" scope="col">Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @if (Model.EightyCDeductionList != null)
+                        {
+                            @for (int i = 0; i < Model.EightyCDeductionList.Count; i++)
+                            {
+
+                                <tr id="row_OI_@i">
+
+                                    <td data-label="slno">
+
+                                        @(i + 1)
+                                    </td>
+                                    <td data-label="deduction">
+                                        @Html.HiddenFor(m => Model.EightyCDeductionList[i].InvestmentCode)
+                                        @Html.DisplayFor(m => Model.EightyCDeductionList[i].InvestmentName)
+                                    </td>
+                                    <td data-label="Amount">
+
+                                        @Html.TextBoxFor(m => Model.EightyCDeductionList[i].Amount, new { @class = "form-control", placeholder = "Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })
+                                    </td>
+
+
+
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" onclick="DeductionSave()"
+                    class="btn btn-default float-right">
+                Save
+            </button>
+        </div>
+    </div>
+}
+<div class="accoding-new-color-change">LIC</div>
+<div id="tablic" class="row">
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table Investment-Under-Section-LIC mb-2">
+            <table id="family">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Sl.No.</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Relationship</th>
+                        <th scope="col">Policy Taken Date</th>
+                        <th scope="col">Policy No.</th>
+                        <th class="text-right" scope="col">Annual Premium</th>
+                        <th class="text-right" scope="col">Sum Assured</th>
+                        <th scope="col">Remarks</th>
+                        <th scope="col">Edit</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.LICList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.LICList.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+                                <td data-label="SlNo">
+                                    @(i+1)
+                                </td>
+                                <td data-label="Name">
+
+                                    @Html.DisplayFor(m => m.LICList[i].Name)
+                                </td>
+
+                                <td data-label="Relationship">
+
+                                    @Html.DisplayFor(m => m.LICList[i].RelationShipName)
+                                </td>
+                                <td data-label="PolicyTakenDate">
+                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LICList[i].PolicyTakenDate))
+
+                                </td>
+                                <td data-label="PolicyNo">
+
+                                    @Html.DisplayFor(m => m.LICList[i].PolicyNo)
+
+                                </td>
+                                <td class="text-right" data-label="PremiumAmount">
+
+                                    @Html.DisplayFor(m => m.LICList[i].PremiumAmount)
+                                </td>
+                                <td class="text-right" data-label="SumAssured">
+
+                                    @Html.DisplayFor(m => m.LICList[i].SumAssured)
+                                </td>
+                                <td data-label="Remarks">
+
+                                    @Html.DisplayFor(m => m.LICList[i].Remarks)
+                                </td>
+                                <td data-label="Edit">
+                                    <div class="small-btn-group">
+                                        <a id="addLICDetails" type="button"
+                                           class="btn btn-icon btn-icon btn-edit icon-only" data-bs-toggle="tooltip" data-placement="top" title="Edit" onclick="LICCreate('@Model.LICList[i].TrnCode')">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+
+                                        <a type="button"
+                                           class="btn btn-icon btn-delete icon-only" data-bs-toggle="tooltip" data-placement="top" title="Delete" onclick="LICDelete('@Model.LICList[i].TrnCode')">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" align="center"><em>No table data</em></td>
+                        </tr>
+                    }
+                </tbody>
+
+
+
+
+            </table>
+        </div>
+    </div>
+    <div class="row  w-100   ">
+        <div class="col-md-12 ">
+            <button id="addLICDetails" type="button" class="btn btn-default float-right add-btn-icon" onclick="LICCreate()">
+                <i class="icon-nm fas fa-plus"></i>
+
+            </button>
+            <div id="LICSave">
+
+
+            </div>
+        </div>
+    </div>
+</div>

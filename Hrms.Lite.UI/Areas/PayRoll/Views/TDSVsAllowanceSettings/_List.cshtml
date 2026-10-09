@@ -1,0 +1,48 @@
+﻿@model Hrms.Lite.Shared.PayRoll.TDSVsAllowanceSettings
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table tds-allowance-list">
+    <table id="tdsVsAllowCheckBox">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Allowance</th>
+                <th scope="col">Y/N</th>
+                <th scope="col">Component Type</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.settings != null && Model.settings.Count > 0)
+            {
+
+                for (int i = 0; i < Model.settings.Count; i++)
+                {
+                    @Html.HiddenFor(model => model.settings[i].AllowanceCode)
+                    <tr>
+                        <td data-label="Allowance">@Model.settings[i].AllowanceName</td>
+                        <td data-label="Y/N">
+                            <div class="checkbox-inline justify-content-center"id="sectionForm">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(m => m.settings[i].YN, new { @onclick = "validateCheckBox('component_" + i + "','" + i + "')" })
+                                    <span id="chck_@i"></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td data-label="Component Type">
+                            <div style="position:relative;">
+                                @Html.DropDownListFor(m => m.settings[i].ComponentType.Code, (SelectList)ViewBag.ComponentType, new { @class = "form-control form-control-sm", @onchange = "validateComponent('"+ i +"',this,'component_" + i + "')" })
+                                <span id="component_@i"></span>
+                                </div>
+</td>
+
+
+                    </tr>
+                }
+            }
+
+
+
+
+
+        </tbody>
+    </table>
+</div>

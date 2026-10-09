@@ -1,0 +1,142 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+    <script>
+        $(document).ready(function () {
+            maskAadhar(document.getElementById('BasicInfo_AdharNo'));
+        });
+    </script>
+
+    <div class="step-outer step_row">
+
+
+        <a href="#" class="step-item active">
+            Personal Info
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item ">
+            Job Details
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Compensation
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Address
+            <span class="step-circle"></span>
+        </a>
+
+    </div>
+
+    
+    <div class="step-progress-outer">
+
+        <div class="step-left col-md-12">
+            <h3>Personal Info</h3>
+            <div class="row my-3">
+
+
+
+
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>DOB</label><span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @*<input type="text" class="form-control"
+                        id="kt_datepicker_2" readonly="readonly"
+                        placeholder="DOB" />*@
+                                @Html.TextBoxFor(m => m.BasicInfo.DOB, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dobdatepicker", @readonly = "true", @placeholder = "DOB", @onchange = "validateDOB(this,'dob')", onclick = "$('.dobdatepicker').datepicker('show');" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="dob"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Gender</label><span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => m.BasicInfo.Gender.Code, (SelectList)ViewBag.Gen, "--Select Gender--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'gender')", @onblur = "validate(this,'gender')" })
+                            <span id="gender"></span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Relation</label><span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => m.BasicInfo.Relation.Code, (SelectList)ViewBag.Relation, new { @class = "form-control form-control-sm", @onchange = "onRelationChange(this,'relation')", @onblur = "validate(this,'relation')" })
+                            <span id="relation"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label id="labRel">Father's Name</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.BasicInfo.FathersName, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Father's Name", @onblur = "firstLetterCaps(this,'father')", @onkeypress = "return onlyLettersKey(event)" })
+                        <span id="father"></span>
+                    </div>
+                </div>*@
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Aadhar Number</label><span id="adharMandatory" class="Mandatory">*</span>
+                        @*<input type="text" class="form-control form-control-sm"
+                placeholder="Aadhar Number" onchange="trim(this)">*@
+                        @*@Html.TextBoxFor(m => m.BasicInfo.AdharNo, new {@class = "form-control form-control-sm", @maxlength = 12, @placeholder = "Aadhar Number", @onblur = "validateAadharPreEnroll('BasicInfo_AdharNo','aadhar','FiledValidations_2__Applicability')", @onkeypress = "return onlyNumberKey(event)", autocomplete = "new-password" })*@
+                       @Html.HiddenFor(m => m.BasicInfo.AdharNo, new { id = "hdnAadhar" })
+                       @Html.TextBoxFor(m => m.BasicInfo.AdharNo, new { @class = "form-control form-control-sm", @maxlength = 12, @placeholder = "Aadhar Number", oninput = "validateAadharNew('BasicInfo_AdharNo','aadhar',this);", onkeypress = "return onlyNumberKey(event)", autocomplete = "off", onblur = "maskAadhar(this)" })
+
+                        <span id="aadhar"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>PAN</label><span id="panMandatory" class="Mandatory">*</span>
+                        @*<input type="text" class="form-control form-control-sm"
+                placeholder="PAN" onchange="trim(this)">*@
+                        @Html.TextBoxFor(m => m.BasicInfo.PanNo, new { @*type = "password",*@@class = "form-control form-control-sm", @maxlength = 10, @placeholder = "PAN Number", @onblur = "validatePanPreEnroll('pan','FiledValidations_3__Applicability')", @onkeypress = "return spacesNotAllowed(event)", autocomplete = "new-password" })
+                        <span id="pan"></span>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="row card-footer-bottom-fixed">
+        <div class="col-md-6">
+            <button type="button" onclick="PopUp_Preview()"
+                    class="btn btn-default float-left mobile-full-width">
+                Salary Details
+            </button>
+            
+        </div>
+        <div class="col-md-6">
+            <button type="button" onclick="onNextClick('preEnroll_personal','Job-Details')"
+                    class="btn btn-default float-right mobile-full-width">
+                Next
+            </button>
+        </div>
+    </div>

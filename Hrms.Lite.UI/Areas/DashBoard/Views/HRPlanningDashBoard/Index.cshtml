@@ -1,0 +1,218 @@
+﻿@model Hrms.Lite.Shared.DashBoard.HRPlanningDashBoard
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+
+<script src="~/scripts/DashBoard/hrPlanningDashBoard.js"></script>
+<script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+
+<link href="~/css/HRPanningt.css" rel="stylesheet" />
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">HR Planning Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        HR Planning Dashboard
+                    </li>
+                </ul>
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per h-100 footer-row-fixed p-0">
+                <div class="card-body p-0">
+
+                    <div class="hrplan-heding">
+
+                        <h4 class="hrplan-clz">HR Planning</h4>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+
+                            <div class="main-headz">
+                                <div class="tab-items mt-2  ">
+
+                                    <div class="form-group pb-3" style="border-radius:8px;">
+                                        <label>Period Selection</label>
+                                        @Html.DropDownListFor(Model => Model.PlanningPeriod, (SelectList)ViewBag.period, new
+                                        {
+                                       @class = "form-control form-control-sm",
+                                       @style = "height:35px; width:240px;",
+                                            @onchange = "onPlanningChange(this)"
+                                        })
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3 mt-5">
+
+                            <div class="Currt-Month mt-6">
+                                <h4>Current Month</h4>
+                                <h4>@Model.Todate</h4>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="Currt-Month  mt-6">
+                                <span>Annual Fluctuation rate</span>
+                                <h4 class="doteded-clz">@Model.AnnualFluctuationRate%</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="Currt-Month  mt-6">
+                                <span>YTD number of leavers</span>
+                                <h4 class="doteded-clz">@Model.YTDnumberofLeavers</h4>
+
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <!--2nd row-->
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            @await Html.PartialAsync("_MonthwiseSepJoining")
+                          
+
+                        </div>
+
+                        <div class="col-md-3 div-box-centerr">
+
+                            <div class="hed-countz-box">
+                                <h4 class="main-countz">@Model.HeadCount</h4>
+                                <h5 class="curt-hecountz">Current Headcounts</h5>
+                                <div class="arow-pect">
+                                    @if (Model.HeadCount > Model.PreviousHeadCount)
+                                    {
+                                        <i class="fa fa-caret-down uparrow" aria-hidden="true"></i>
+                                    }
+                                    else
+                                    { <i class="fa fa-caret-down" aria-hidden="true"></i>}
+                                    <h5 class="mrgi-clzz">@Model.HeadCountRate%</h5>
+                                </div>
+                                <h5 class="curt-hecountz">Over previous </h5>
+                                <h5 class="curt-hecountz">Month</h5>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3 div-box-centerr">
+
+                            <div class="hed-countz-box">
+                                <h4 class="main-countz">@Model.CurrentLeavers</h4>
+                                <h5 class="curt-hecountz">Current Number of Leavers</h5>
+                                <div class="arow-pect">
+                                    @if (Model.CurrentLeavers > Model.PreviousMonthLeavers)
+                                    {
+                                        <i class="fa fa-caret-down uparrow" aria-hidden="true"></i>
+                                    }
+                                    else
+                                    { <i class="fa fa-caret-down" aria-hidden="true"></i>}
+                                    <h5 class="mrgi-clzz">@Model.CurrentLeaversRate%</h5>
+                                </div>
+
+                                <h5 class="curt-hecountz">Over previous </h5>
+                                <h5 class="curt-hecountz">Month</h5>
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="col-md-3 div-box-centerr">
+                            <div class="hed-countz-box">
+                                @await Html.PartialAsync("_WorkForceDiagram")
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <!--3nd row-->
+
+
+                    <div class="row ">
+
+                        <div class="col-md-9">
+
+                            <div class="page_white classfnChart">
+                                @await Html.PartialAsync("_SepJoiningClassifnDiagram", Model.SepJoiningClassifnDiagram)
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+
+
+

@@ -1,0 +1,96 @@
+﻿@model Hrms.Lite.Shared.DataBank.ADDeactivate
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "ADDeactivate", FormMethod.Post, new { id = "ADDeactivatesave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>AD Deactivate</h4>
+            </div>
+            <div class="add-padding">
+                <div class="profile-header position-relative box-shadow-none mb-2">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+
+
+                    <div class="profile-header-overflow"></div>
+                </div>
+                
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-0">
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.code)
+                        </div>
+                    </div>
+
+
+                    
+                </div>
+
+
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="ADDeactivateSave('Deactivate')">
+                                Deactivate
+                            </button>
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+
+                    <button type="button" class="btn btn-default  mobile-full-width" onclick="ADDeactivateSave('Activate')">
+                        Activate
+                    </button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,79 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LWFSettings
+
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+<script src="~/scripts/PayRoll/stateVsLWF.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table State-Vs-LWF-list pt-1">
+    @*@Html.HiddenFor(m => m.SkillList.Count)*@
+    <table id="Statevslwf" class="common-table ">
+        <thead>
+            @Html.HiddenFor(m=>Model.LWFSettingsList.Count)
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Employee Contribution</th>
+                <th scope="col">Employer Contribution</th>
+                <th scope="col">Month</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @*<tr>
+
+                    <td data-label="Name">kerala</td>
+                    <td data-label="employeeContribution">1200</td>
+                    <td data-label="employerContribution">5000</td>
+                    <td data-label="month">Augest</td>
+                    <td data-label="add" onclick="OnclickPopUp()">Add</td>
+
+
+
+                </tr>*@
+
+
+
+            @{
+                if (Model.LWFSettingsList != null && Model.LWFSettingsList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.LWFSettingsList.Count; i++)
+                    {
+                        <tr>
+
+                          <td data-label="Name">
+                            @Model.LWFSettingsList[i].State
+                           @Html.HiddenFor(m => m.LWFSettingsList[i].StateCode)
+                             </td>
+
+                            <td data-label="Employee">@Model.LWFSettingsList[i].ELWF</td>
+                            <td data-label="Employer">@Model.LWFSettingsList[i].MLWF</td>
+                            <td data-label="Actions">
+                                @Model.LWFSettingsList[i].Months
+                                @Html.HiddenFor(m=>Model.LWFSettingsList[i].State)
+                            </td>
+                            <td data-label="Actions">
+                                <a data-bs-toggle="tooltip" title="Edit"
+                                   id="allowanceedit"
+                                   class="btn btn-icon btn-edit icon-only ">
+                                    <i class="icon-xl fas fa-pencil-alt" onclick="GetPopUp('@Model.LWFSettingsList[i].StateCode', '@Model.LWFSettingsList[i].State',@Model.LWFSettingsList[i].DeductionCode)"></i>
+                                </a>                               
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+        </tbody>
+    </table>
+</div>

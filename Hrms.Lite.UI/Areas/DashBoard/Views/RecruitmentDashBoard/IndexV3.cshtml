@@ -1,0 +1,765 @@
+﻿@model Hrms.Lite.Shared.DashBoard.RecruitmentDashBoard
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<link href="~/css/DashBoard.css" rel="stylesheet" />
+<script src="~/scripts/DashBoard/recruitmentDashBoard.js"></script>
+<link href="" rel="stylesheet" />
+<link href="~/css/recruitmentdashboard2024.css" rel="stylesheet" />
+
+<style>
+    .warpper{
+  display:flex;
+  flex-direction: column;
+  
+}
+.tab{
+  cursor: pointer;
+  padding:10px 20px;
+  margin:0px 2px;
+  background:#000;
+  display:inline-block;
+  color:#fff;
+  border-radius:3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+    .panels {
+        min-height: 200px;
+        width: 100%;
+        overflow: hidden;
+        padding: 20px 0px;
+    }
+.panel{
+  display:none;
+  animation: fadein .8s;
+}
+
+.panel-title{
+  font-size:1.5em;
+  font-weight:bold
+}
+.radio{
+  display:none;
+}
+#one:checked ~ .panels #one-panel,
+#two:checked ~ .panels #two-panel,
+#three:checked ~ .panels #three-panel{
+  display:block
+}
+#one:checked ~ .tabs #one-tab,
+#two:checked ~ .tabs #two-tab,
+#three:checked ~ .tabs #three-tab{
+  background:#fffffff6;
+  color:#000;
+  border-top: 3px solid #000;
+}
+    .tilenewone {
+        width: 100%;
+        height: 100%;
+        background: #a289ce;
+        border-radius: 10px;
+        position: relative;
+    }
+
+       /* .tilenewone::before {
+            content: "";
+            height: 151px;
+            position: absolute;
+            width: 165px;
+            transform: rotate(8deg);
+            top: -60px;
+            right: -58px;
+            border-radius: 1.75rem;
+            background: -moz-linear-gradient(left, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+            background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgb(255 255 255 / 0%) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#26ffffff', endColorstr='#00ffffff',GradientType=1 );
+        }*/
+
+    .tile-tab-two {
+        background: #9bc7ed;
+    }
+
+    .tile-tab-three {
+        background: #86A788;
+    }
+
+    .tile-tab-four {
+        background: #ebb18c;
+    }
+
+
+
+
+    .backk-imgg {
+        right: 0px;
+        position: relative;
+        top: 0px;
+        left: 252px;
+    }
+
+    .roundicon-on-top {
+        background-color: white;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        margin: 4px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        padding: 1px 10px 1px;
+    }
+
+    .total-poad-new {
+        padding: 20px;
+        z-index: 1;
+        position: relative;
+    }
+
+    .full-hed-colr{
+        color:white;
+    }
+
+    .active-count-pad {
+        padding: 7px 15px 0px;
+    }
+
+    .count-size-colorrnew{
+        color:white;
+        font-size:18px;
+    }
+
+    .bordr-lefnew {
+        border-left: 2px solid white !important;
+        padding-left: 10px !important;
+    }
+    .graph_size{
+        width:100%;
+        height:300px;
+
+    }
+    .graph_size img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+</style>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Recruitment Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Recruitment Dashboard
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body" style=" padding:15px 50px; ">
+
+
+                    <!-- Dashboard start here -->
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+
+                            <div class="tilenewone">
+
+                                @*   <img class="backk-imgg" src="~/images/RecruitmentDashBoard/Pattern-01.svg" />*@
+
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/ACTIVEEE.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                            Active Vacancies
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+                                            <div class="count-size-colorrnew bordr-lefnew ml-3">
+
+                                                08
+                                            </div>
+                                            <div class="count-size-colorrnew bordr-lefnew ml-3">
+
+                                                200
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="tile-tab-two">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/HIREE.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                            Hire In Progress
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <div class="tile-tab-three">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/job-vacancy.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                            Posted Vacancies
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+                                            <div class="count-size-colorrnew bordr-lefnew ml-3">
+
+                                                08
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class=" tile-tab-four">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/complaint.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                            Bad Hires
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- scond tilte start here -->
+
+                    <div class="row pt-8">
+
+                        <div class="col-md-3">
+
+                            <div class="tilenewfive">
+
+                                @*   <img class="backk-imgg" src="~/images/RecruitmentDashBoard/Pattern-01.svg" />*@
+
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/JoinsPerMonth.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                          Avg.Joins Per Month
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="tilenewsix ">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/notice.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                         Notice Period Employees
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <div class="tilenewseven ">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/hiring.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                            Recruitment Hires / Direct Hires
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="tileneweight">
+
+                                <div class="total-poad-new d-flex align-items-center">
+                                    <div class="roundicon-on-top">
+                                        <img class="iconactivee-clsnew w-100" src="~/images/RecruitmentDashBoard/WaitingList.svg" />
+
+                                    </div>
+                                    <div class="active-count-pad">
+                                        <h4 class="full-hed-colr">
+                                        Waiting List
+                                        </h4>
+                                        <div class="d-flex">
+                                            <div class="count-size-colorrnew">
+
+                                                100
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Graph start here -->
+
+                    <div class="row pt-8">
+                        @*<div class="col-md-3">
+                            <div class="page_white h-100">
+                                <div class="tab-items mt-2 ">
+
+                                    <div class="form-group pb-3 d-flex justify-content-end" style="border-radius:8px;">
+
+                                        <select class="form-control form-control-sm" data-val="true" data-val-required="The Code field is required." id="ClassificationType_Code" name="ClassificationType.Code" onchange="onClassfnTypeChange(this)" style="height:35px;width:250px;">
+                                            <option value="1">Designation</option>
+                                            <option selected="selected" value="2">Location</option>
+                                            <option value="3">Region</option>
+                                            <option value="4">State</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                                <img class=" w-100" src="~/images/RecruitmentDashBoard/5f9073696123d43c03d8aa1a_pie-vs-donut-listing.gif" />
+                            </div>
+
+
+                        </div>*@
+
+                        <div class="col-md-9">
+
+
+
+
+
+                            <div class="page_white  h-100">
+
+
+
+                                <div class="">
+                                 
+                                    <div class="warpper">
+                                        <input class="radio" id="one" name="group" type="radio" checked>
+                                        <input class="radio" id="two" name="group" type="radio">
+                                        <input class="radio" id="three" name="group" type="radio">
+                                        <div class="tabs">
+                                            <label class="tab" id="one-tab" for="one">List</label>
+                                            <label class="tab" id="two-tab" for="two">Graph</label>
+                                          
+                                        </div>
+                                        <div class="panels">
+                                            <div class="panel" id="one-panel">
+
+                                                <div class="tab-items mt-2 d-flex justify-content-end">
+
+
+
+                                                    <div class="form-group pb-3" style="border-radius:8px;">
+
+                                                        <select class="form-control form-control-sm" data-val="true" data-val-required="The Code field is required." id="ClassificationType_Code" name="ClassificationType.Code" onchange="onClassfnTypeChange(this)" style="height: 35px; width:250px;">
+                                                            <option value="1">Designation</option>
+                                                            <option selected="selected" value="2">Location</option>
+                                                            <option value="3">Region</option>
+                                                            <option value="4">State</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="graph_size">
+
+                                                <img class=" w-100" src="~/images/RecruitmentDashBoard/chart01.svg" />
+                                                </div>
+                                            </div>
+                                            <div class="panel" id="two-panel">
+                                                <div class="ihits-table table-border hover-color odd-even mobile-responsive  vertical-scroll-250">
+                                                    <table class="tble-new-color-chng">
+                                                        <thead>
+                                                            <tr class="table-dark">
+
+                                                                <th class="table-radius-new-payroll" scope="col">Type</th>
+                                                                <th scope="col">Yes</th>
+                                                                <th scope="col">NO</th>
+                                                                <th class="table-radius-new-payroll-end" scope="col">Change</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <tr>
+                                                                <td data-label="Name">PF</td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('PF','YES')">12</a></td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('PF','NO')">1902</a></td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('PF','VARIANCE')">0</a></td>
+
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td data-label="Name">ESI</td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('ESI','YES')">1099</a></td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('ESI','NO')">815</a></td>
+                                                                <td data-label="Name"><a onclick="GetApplicableCountDetails('ESI','VARIANCE')">1</a></td>
+
+
+                                                            </tr>
+                                                       
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+
+
+                                    
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="page_white  h-100">
+                                <div class=" gutter-b remove-gutter" style="height: 250px;box-shadow: 0 10px 16px 0 rgb(255 255 255 / 0%), 0 6px 20px 0 rgb(255 255 255 / 8%) !important;/* border-color: #ffdeaf; */">
+                                    <!--begin::Body-->
+                                    <div class="card-body active_employee flex-grow-1 ">
+
+                                        <div class="timeoffice-dashboard-scroll">
+                                            <style>
+
+                                                .second_class a {
+                                                    position: relative;
+                                                }
+
+                                                    .second_class a li:hover .d-flex .toast-body::before {
+                                                        width: 100%;
+                                                        -webkit-transition: all 0.6s;
+                                                        transition: all 0.6s;
+                                                    }
+
+                                                .second_class li .d-flex .toast-body::before {
+                                                    content: "";
+                                                    position: absolute;
+                                                    width: 0;
+                                                    height: 100%;
+                                                    border-radius: 10px;
+                                                    top: 0px;
+                                                    left: 0;
+                                                }
+
+
+                                                .blue_hover::before {
+                                                    background-color: rgba(122, 112, 186, 0.1);
+                                                }
+
+                                                .red_hover::before {
+                                                    background-color: rgb(250 158 52 / 15%);
+                                                }
+
+                                                .rose_hover::before {
+                                                    background-color: rgb(240 71 112 / 15%);
+                                                }
+
+                                                .green_hover::before {
+                                                    background-color: #3cd18826;
+                                                }
+                                            </style>
+
+
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3 bottom_border" style="border-bottom: 1px dotted #fb5f2b87">
+
+
+
+                                                <div class="active_employee_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="/images/icons/onboarding-newwwww.svg">
+                                                    <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Offer Processing</a>
+
+                                                    <!--end::Svg Icon-->
+                                                </div>
+
+
+                                                <div>
+                                                    <span class="text-dark-75 font-weight-bolder font-size-h3">1</span>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="notification_number notification_second">
+                                                <ul class="enrolled-class pl-0 second_class">
+
+                                                    <a href="/Recruitment/OfferProcessing/OfferVerification">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body rose_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Offer Verification</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:rgb(240 71 112 / 15%); color:rgb(240 71 112);">1</div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                    <a href="/Recruitment/OfferProcessing/CreditChecking">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body red_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Credit Checking</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:rgb(250 158 52 / 15%); color:rgb(250 158 52);">  0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                    <a href="/Recruitment/OfferProcessing/EmployeementChecking">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body green_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Employment Checking</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:#3cd18826; color:#00582d;"> 0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+
+
+
+
+                                                    <a href="/Recruitment/OfferProcessing/OfferInitiation">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body green_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Offer Initiation</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:#3cd18826; color:#00582d;">  0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                    <a href="/Recruitment/OfferProcessing/OfferInitiation">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body green_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Offer Initiation</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:#3cd18826; color:#00582d;">  0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                    <a href="/Recruitment/OfferProcessing/OfferInitiation">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body green_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Offer Initiation</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:#3cd18826; color:#00582d;">  0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                    <a href="/Recruitment/OfferProcessing/OfferInitiation">
+                                                    <li class="toast default-show-toast align-items-center border-0 fade show" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="toast-body green_hover d-flex p-0 justify-content-between w-100">
+
+                                                                <div class="flex-grow">
+                                                                    <h6 class="m-0 ">Offer Initiation</h6>
+                                                                </div>
+                                                                <div class="flex-shrink-0 " style="background-color:#3cd18826; color:#00582d;">  0</div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    </a>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!--end::Body-->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,160 @@
+﻿@model Hrms.Lite.Shared.Master.FinancialYear
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/Master/FinancialYear.js"></script>
+<script src="~/js/settings.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+@using (Html.BeginForm("Save", "FinancialYear", FormMethod.Post, new { id = "FinancialYearModifY" }))
+{
+
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <!--begin::Header-->
+        <div id="kt_header" class="header header-fixed">
+            <!--begin::Container-->
+            <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                <!--begin::Header Menu Wrapper-->
+                <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                    <!--begin::Header Menu-->
+                    <div class="d-flex align-items-baseline flex-wrap mr-5">
+                        <h3 class="main-title">
+                            Financial Year
+                        </h3>
+                        <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                            <li class="breadcrumb-item ">
+                                <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item text-muted">
+                                <a href="@Url.Action("Index", "FinancialYear", new { Area = "Master" })">
+                                    Financial Year List
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item text-muted">
+                                Financial Year
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!--end::Header Menu Wrapper-->
+                <!--begin::Topbar-->
+    
+                <!--end::Topbar-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+
+
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+                        <div class="col-md-12">
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body">
+
+                                    <div class="row tab-style-button">
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Name</label>
+                                                <div class="view-details">
+                                                    @Html.HiddenFor(model => Model.Mode)
+                                                    @Html.HiddenFor(model => Model.GI)
+                                                    @Html.HiddenFor(model => Model.LogGI)
+                                                    @Html.HiddenFor(model => Model.Code)
+                                                    @Html.HiddenFor(model => Model.salaryPeriod.Code)
+                                                    @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "validate(this,'NameFinancial')", maxlength = "120" })
+                                                    <span id="NameFinancial"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Short Name</label>
+                                                <div class="view-details">
+                                                    @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "validate(this,'shortFinancial')", maxlength = "5" })
+                                                    <span id="shortFinancial"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">From</label>
+                                                <div class="view-details">
+                                                    @Html.HiddenFor(m => m.FromDate)
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.FromDate))
+                                                    @*@Html.TextBoxFor(Model => Model.FromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dop", @readonly = "true", @placeholder = "From Date", @onchange = "validate(this,'from')" })*@
+                                                    <span id="from"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">To</label>
+                                                <div class="view-details">
+                                                    @Html.HiddenFor(m => m.ToDate)
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ToDate))
+                                                    @*@Html.TextBoxFor(Model => Model.ToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dop", @readonly = "true", @placeholder = "To Date", @onchange = "validate(this,'to')" })*@
+                                                    <span id="to"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                             @await Html.PartialAsync("_CreateEditMonthGrid") 
+                                    <!-- <end table></end> -->
+                                    <div class="row card-footer-bottom-fixed border-none">
+
+                                        <div class="col-md-12 align-right">
+                                            @if (CurrentUserRoleActions.Modify == true)
+                                            {
+
+                                                <button type="button"
+                                                        class="btn btn-default  mobile-full-width" onclick="ModifyFinanciayear('Modify')">
+                                                    Modify
+                                                </button>
+                                            }
+                                            </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

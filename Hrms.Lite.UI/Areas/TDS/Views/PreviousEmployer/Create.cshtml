@@ -1,0 +1,372 @@
+﻿@model Hrms.Lite.Shared.TDS.PreviousEmployer
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TDS/PreviousEmployer.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var fileLabel = $('#fileLabel1');
+
+        var b = document.getElementById('File1_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            var b = document.getElementById('File1_ActualFileName');
+            if (b.value != '') {
+                if (b.value.length > 40) {
+                    let replacemnt = '..';
+                    theSplit = b.value.slice(0, 40);
+                    fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+                }
+                else {
+                    fileLabel.html(b.value)
+                }
+            }
+            else {
+                fileLabel.html("No File Chosen");
+
+            }
+        }
+
+
+        var fileLabel2 = $('#fileLabel2');
+        var c = document.getElementById('File2_AbsoluteUri');
+        if (c.value == null) {
+            fileLabel2.html("No File Chosen");
+        }
+        else {
+            var c = document.getElementById('File2_ActualFileName');
+            if (c.value != '') {
+                if (c.value.length > 40) {
+                    let replacemnt = '..';
+                    theSplit = c.value.slice(0, 40);
+                    fileLabel2.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+                }
+                else {
+                    fileLabel2.html(c.value)
+                }
+            }
+            else {
+                fileLabel2.html("No File Chosen");
+
+            }
+        }
+
+
+    });
+    function filechange() {
+        debugger
+        var fileLabel = $('#fileLabel1');
+        var a = document.getElementById('File1_FileData');
+        var filename = $('#File1_FileData')[0].files[0].name;
+        if (a.value == "") {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            debugger
+            if (filename.length > 40) {
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 40);
+                fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+            else {
+                fileLabel.html(filename);
+            }
+        }
+    };
+    function file2change() {
+
+        debugger
+        var fileLabel = $('#fileLabel2');
+        var a = document.getElementById('File2_FileData');
+        var filename = $('#File2_FileData')[0].files[0].name;
+        if (a.value == "") {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            debugger
+            if (filename.length > 40) {
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 40);
+                fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+            else {
+                fileLabel.html(filename);
+            }
+        }
+    };
+</script>
+
+<style>
+    .FileUpload_FileData {
+        color: white !important;
+    }
+    .btn.btn-danger {
+
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+@using (Html.BeginForm("", "", FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data", @id = "PreEmployer_Form" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Previous Employer</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "PreviousEmployer", new { Area = "TDS"})">Previous Employer List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Previous Employer Details
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <div class="profile-header position-relative box-shadow-none mb-2">
+                            <!--begin: Search Form-->
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.Employee)
+
+                            <div class="profile-header-overflow"></div>
+                        </div>
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items ml-5 pr-0 border-none select-option">
+                                    <div class="row-outer">
+                                        <div class="form-group filter-combobox mr-2" style="width: 269px;">
+                                            @Html.DropDownListFor(model => model.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, "--Select Assessment Year--", new { @class = "form-control form-control-sm"@*, @onblur= "validate(this,'Allowance_span')"*@, @onchange = "fillData();validate(this,'Assessmnt_year')", @disabled = "disabled" })
+                                            <span id="Assessmnt_year" style="bottom: -15px;"></span>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                        <div class="page_white">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Employer Name</label>
+                                        @Html.HiddenFor(m => m.Employee.EmployeeGuid)
+                                        @Html.TextBoxFor(m => m.PrevEmployerName, new { @class = "form-control", placeholder = "Employer Name", @maxlength = 120, @onchange = "validate(this,'emplyerName')" })
+                                        <span id="emplyerName"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Employer PAN</label>
+                                        @Html.TextBoxFor(m => m.PrevEmployerPAN, new { @class = "form-control", placeholder = "PAN", @maxlength = 10, @onchange = "validate(this,'pan')" })
+                                        <span id="pan" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Employer TAN</label>
+                                        @Html.TextBoxFor(m => m.PrevEmployerTAN, new { @class = "form-control", placeholder = "TAN", @maxlength = 10, @onchange = "validate(this,'tan')" })
+                                        <span id="tan"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>From Date</label>
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.PrevEmployerFromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "From Date", @onchange = "validate(this,'fromdate')" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="fromdate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>To Date</label>
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.PrevEmployerToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "To Date", @onchange = "validate(this,'todate')" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="todate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Gross Total Income</label>
+                                        @Html.TextBoxFor(m => m.GrossIncome, new { @class = "form-control", placeholder = "Gross Total Income", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'grosstotal')", @style = "text-align:right" })
+                                        <span id="grosstotal"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>PT</label>
+                                        @Html.TextBoxFor(m => m.PTDed, new { @class = "form-control", placeholder = "PT", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'PTDED')", @style = "text-align:right" })
+                                        <span id="PTDED"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>PF</label>
+                                        @Html.TextBoxFor(m => m.PFDed, new { @class = "form-control", placeholder = "PF", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'PFDED')", @style = "text-align:right" })
+                                        <span id="PFDED"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>TDS Deduction</label>
+                                        @Html.TextBoxFor(m => m.TDSDed, new { @class = "form-control", placeholder = "TDS", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'TDSDED')", @style = "text-align:right" })
+                                        <span id="TDSDED"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Remarks</label>
+                                    <div class="view-details">
+                                        @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control", placeholder = "Remarks", @maxlength = 400 })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="file-upload-form-group">
+                                        <label for="formFileMultiple" class="form-label">
+                                            Documents 1
+                                        </label>
+
+
+                                        <div class="file-upload-form mb-1">
+                                            <div class="small-btn-group">
+                                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.File1.FileName','@Model.File1.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                                            </div>
+                                            <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                @Html.HiddenFor(m => m.File1.FileExtension)
+                                                @Html.HiddenFor(m => m.File1.FileName)
+                                                @Html.HiddenFor(m => m.File1.AbsoluteUri)
+                                                @Html.HiddenFor(m => m.File1.ActualFileName)
+
+                                                @Html.TextBoxFor(m => m.File1.FileData, new { @type = "file", @class = "FileUpload_FileData", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this);filechange()", @title = "" })
+                                                <label id="fileLabel1" class="nofilelabel notchlabel"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="file-upload-form-group">
+                                        <label for="formFileMultiple" class="form-label">
+                                            Documents 2
+                                        </label>
+
+
+
+                                        <div class="file-upload-form mb-1">
+                                            <div class="small-btn-group">
+                                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument2('@Model.File2.FileName','@Model.File2.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                                            </div>
+                                            <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                @Html.HiddenFor(m => m.File2.FileExtension)
+                                                @Html.HiddenFor(m => m.File2.FileName)
+                                                @Html.HiddenFor(m => m.File2.AbsoluteUri)
+                                                @Html.HiddenFor(m => m.File2.ActualFileName)
+
+                                                @Html.TextBoxFor(m => m.File2.FileData, new { @type = "file", @class = "FileUpload_FileData", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this);file2change()", @title = "" })
+                                                <label id="fileLabel2" class="nofilelabel notchlabel"></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-12 align-right">
+                                    <button type="button" onclick="onSubmit()"
+                                            class="btn btn-default float-right mobile-full-width">
+
+                                        Save
+                                    </button>
+                                    <a class="btn btn-danger  mobile-full-width" onclick="Clear('@Model.Employee.EmployeeGuid','@Model.File1.FileName', '@Model.File2.FileName')">
+                                        Clear
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Container-->
+        </div>
+
+    </div>
+
+}

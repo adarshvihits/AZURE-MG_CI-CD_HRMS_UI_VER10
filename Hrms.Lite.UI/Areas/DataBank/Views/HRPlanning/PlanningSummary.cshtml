@@ -1,0 +1,163 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.HRPlanning
+@{
+    ViewData["Title"] = "PlanningSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="~/scripts/DataBank/hRPlanning.js"></script>
+
+
+
+
+
+
+
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Resource Planning</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Resource Planning
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+     
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items border-none">
+
+                                <div class="form-group filter-combobox mr-2">
+                                    <label>Planning Name</label>
+                                    @Html.DropDownListFor(m => m.HRPlanningNameMain.Code, (SelectList)ViewBag.PlanningName, new { @class = "form-control form-control-sm", @style = "width: 200px;", @onchange = "onHRPlanningNameChange(this,'summary')" })
+@Html.HiddenFor(m=>m.Region.Code)
+@Html.HiddenFor(m=>m.State.Code)
+
+                                </div>
+                            </div>
+                            <div class="tab-items border-none d-flex align-items-center">
+
+                                <div class="row-outer">
+                                    <label class="view-title">Planning Period</label>
+                                    <div class="view-details">
+                                        <span class="planningPeriodSummary">@Model.PlanningPeriod</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-items select-option d-flex align-items-center">
+                                <div class=" d-flex align-items-center">
+                                    <div class="form-group filter-combobox mr-2">
+                                        <label>
+                                            <span class="combination1Name">@Model.Combination1Label</span>
+                                        </label>
+
+                                        @Html.DropDownListFor(m => m.Combination1Main.Code, (SelectList)ViewBag.PlanningCombination1, "--Select--", new { @class = "form-control form-control-sm", @style = "width: 170px;", @onchange = "onChartMOdeChange()" })
+                                        <span id="chart_combn1"></span>
+                                    </div>
+                                    <div class="form-group filter-combobox">
+                                        <label></label>
+
+                                            <select class="form-control form-control-sm " id="BudgetOrManpower" onchange="onChartMOdeChange()">
+                                                <option value="1">Budget</option>
+                                                <option value="2">Manpower</option>
+
+                                            </select>
+
+
+                                    </div>
+                                    <div class="pt-5">
+
+                                        <a href="@Url.Action("Index", "HRPlanning", new { Area = "Databank" })" data-bs-toggle="tooltip" title="" class="btn btn-normal float-left " data-bs-original-title="Grid View">
+                                            <i class="icon-xl far fa-list-alt"></i>
+                                        </a>
+                                        <a onclick="onGraphClick()" data-bs-toggle="tooltip" title="" class="btn btn-normal float-left" data-bs-original-title="Graph View">
+                                            <i class="icon-xl fas fa-chart-line"></i>
+                                        </a>
+                                        @*<button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="onExportToExcelClick()">
+            <i class="icon-xl far fa-file-excel"></i>
+        </button>*@
+                                    </div>
+                                    </div> 
+
+                                </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="planning-list-chart">
+                        @*@await Html.PartialAsync("_Chart")*@
+
+
+                    </div>
+
+                    <!-- ------------------------------------------------------------------ADD NEW PLANNING ----------------------------------------------------------------------------------------------------- -->
+                    <div class="row card-footer-bottom-fixed align-right">
+
+                        <div class="col-md-12">
+
+                            <a id="addPlanning" type="button"
+                               class="btn btn-default mobile-full-width slider-btn" onclick="onAddPlanningClick()">
+                                Add Planning
+                            </a>
+
+
+                        </div>
+
+                    </div>
+                    <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="create">
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

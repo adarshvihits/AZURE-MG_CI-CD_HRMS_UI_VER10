@@ -1,0 +1,144 @@
+﻿@model Hrms.Lite.Shared.Master.JobTransitionReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/multiselect.js"></script>
+<script src="~/js/Multiselectdropdown.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+<style>
+    .dropdown-toggle {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm("Save", "JobTransitionReason", FormMethod.Post, new { id = "JobTransitionReasonsave" }))
+{
+    <div id="jobtransitionmaster" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Job Transition Reason
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Name
+
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm JName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'JobTransitionReasonName')", maxlength = "120" })
+                        <span id="JobTransitionReasonName"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Short Name
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm JShtName", @placeholder = "ShortName", maxlength = "5", @onblur = "validate(this,'JobTransitionReasonShortName')" })
+                        <span id="JobTransitionReasonShortName"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2" id="kt_image_4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Transition Type
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @*@Html.ListBoxFor(Model => Model.JobTransitionsTypes, (SelectList)ViewBag.Type, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm JType", @multiple = "multiple", data_placeholder = "Select Transition Type" , @onchange = "validate(this,'ReasonType')" })*@
+                        <div class="form-control  form-control-sm  JobTransTyp JType">
+                            @Html.ListBoxFor(Model => Model.JobTransitionsTypes, (SelectList)ViewBag.Type, new { @class = "multiselectDropdownField form-control-multiselect", @multiple = "multiple", data_placeholder = "Select Transition Type", @onchange = "validateJobTansitionReason(this,'ReasonType','JobTransTyp')" })
+                        </div>
+
+
+                        @*@Html.ListBoxFor(m => m.JobTransitionsTypes, (SelectList)ViewBag.Type, new { @class = "multiselectDropdownField form-control form-control-sm JType", @multiple = "multiple", data_placeholder = "Select Transition Type", @onblur = "validate(this,'JobTransitionReasonType')" })
+                            <span id="JobTransitionReasonType"></span>*@
+
+                    </div>
+                    <span id="ReasonType"></span>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div> Active</div>
+                        <label class="switch" onchange="ActiveInactiveValidationTransition('JOBTRANSITION REASON',@Model.Code)">
+                            @Html.CheckBoxFor(Model => Model.Active, new { @class = "activeCheckbox" ,@id="activetransition"})
+
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+                    <div class="view-details">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm JDescription descText", @placeholder = "Description", maxlength = "250" })
+                            @*<span id="JobTransitionReasonDes"></span>*@
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.DisplayFor(Model => Model.Description)
+                                @*<span id="JobTransitionReasonDes" class="text-danger"></span>*@
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="JobTransitionReasonSave('CREATE','','','Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="JobTransitionReasonSave('MODIFY','Model.LogGI','Model.GI','Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+
+                    </div>
+            </div>
+        </div>
+    </div>
+}

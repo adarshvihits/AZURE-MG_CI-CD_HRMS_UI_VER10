@@ -1,0 +1,55 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.PunchingRegularizationApproval
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border mobile-responsive-table  pt-3">
+    @Html.HiddenFor(m => m.PunchingRegularizationApprovalList.Count)
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID </th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Applied ON</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">No of Days</th>
+                <th scope="col">Reason </th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.PunchingRegularizationApprovalList != null && Model.PunchingRegularizationApprovalList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.PunchingRegularizationApprovalList.Count; i++)
+                {
+
+                    <tr>
+                        @Html.HiddenFor(m => Model.PunchingRegularizationApprovalList[i].EmployeeCode)
+                        @Html.HiddenFor(m => Model.PunchingRegularizationApprovalList[i].PunchRegularizationGI)
+                        <td data-label="ID">@Model.PunchingRegularizationApprovalList[i].ID</td>
+                        <td data-label="Employee Name">@Model.PunchingRegularizationApprovalList[i].EmployeeName</td>
+                        <td data-label="Applied ON">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PunchingRegularizationApprovalList[i].AppliedOn))
+                        </td>
+                        <td data-label="From">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PunchingRegularizationApprovalList[i].Date))
+                        </td>
+                        <td data-label="To">@Model.PunchingRegularizationApprovalList[i].INTime</td>
+                        <td data-label="No of Days">@Model.PunchingRegularizationApprovalList[i].OutTime</td>
+                        <td data-label="Reason">@Model.PunchingRegularizationApprovalList[i].Reason</td>
+                        <td data-label="Action">
+                            <div>
+                                <a data-bs-toggle="tooltip" title="Approve" class="btn_approve" onclick="confirmApproveIconClick('@Model.PunchingRegularizationApprovalList[i].PunchRegularizationGI')"></a>
+                                <a data-bs-toggle="tooltip" title="Reject" class="btn_reject" onclick="OnRejectClick('@Model.PunchingRegularizationApprovalList[i].PunchRegularizationGI')"></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+
+
+    </table>
+</div>

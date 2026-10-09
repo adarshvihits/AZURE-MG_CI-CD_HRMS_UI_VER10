@@ -1,0 +1,435 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.EditEmployeeInfo
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script src="~/js/jquery.min.js"></script>
+    <script>
+
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        moveCursorToEnd('EmployeeSettings_EmployeeID');
+        }
+
+    $(document).ready(function () {
+        
+        if ($('#StatutoryClassification_PaymentMode_Code').val() == '2') {            
+            $('.bankDiv').css('display', 'none');
+        }
+    });
+    </script>
+ <style>
+     .tab-content label{
+         padding-bottom:10px;
+     }
+ </style>
+<script src="~/scripts/DataBank/editEmployeeInfo.js"></script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id= "editEmployeesave", enctype = "multipart/form-data" }))
+{
+    <!--begin::Header-->
+
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Edit Employee Info</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "EditEmployeeInfo", new { Area = "DataBank" })" class="">Edit Employee Info List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Edit Employee Info
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->           
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+
+
+
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body pb-13">
+                        <!--begin: Search Form-->
+                        <div class="profile-header position-relative box-shadow-none mb-2">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+
+                        <div class="tab-outer accordion-only">
+                            <ul class="ulList">
+                                <!-- Tab Start -->
+                                <div class="TabMoving"></div>
+                                <li class="tabOne clickOnTab active">Personal Info</li>
+                                <div id="tabOne" class="tab-content active">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label>Employee ID</label>
+
+                                                    @Html.TextBoxFor(m => m.EmployeeSettings.EmployeeID, new { @class = "form-control form-control-sm", @placeholder = "Employee ID", @maxlength = 20 })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Salutation</label>
+
+                                                @Html.DropDownListFor(m => m.EmployeeBasicInfo.Salutation.Code, (SelectList)ViewBag.Salutation, "--Select--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Employee Name</label>
+
+                                                @Html.TextBoxFor(m => m.EmployeeBasicInfo.FullName, new { @class = "form-control form-control-sm", @placeholder = "Employee Name", @maxlength = 120 })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Gender</label>
+
+                                                @Html.DropDownListFor(m => m.EmployeeBasicInfo.Gender.Code, (SelectList)ViewBag.Gender, "--Select--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>DOJ</label>
+                                                <div class="input-group date">
+
+                                                    @Html.TextBoxFor(m => m.EmployeeBasicInfo.AcceptedDOJ, "{0:dd-MMM-yyyy}", new
+                                                    {
+                                                        @class = "form-control kt_datepicker_2",
+                                                        @readonly = "readonly",
+                                                   @placeholder = "DOJ",
+                                                        @onchange = "onChangeDOJ(this,'" + Model.EmployeeHeader.EmployeeGuid + "')"
+                                               })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Group Date Of Joining</label>
+                                                <div class="input-group date">
+
+                                                    @Html.TextBoxFor(m => m.EmployeeBasicInfo.GroupDOJ, "{0:dd-MMM-yyyy}", new
+                                                    {
+                                                        @class = "form-control kt_datepicker_2",
+                                                        @readonly = "readonly",
+                                                   @placeholder = "Group Date Of Joining",
+                                                    })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Date Of Confirmation</label>
+                                                <div class="input-group date">
+
+                                                    @Html.TextBoxFor(m => m.EmployeeBasicInfo.ConfirmationDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "DOC" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>DOB</label>
+                                                <div class="input-group date">
+
+                                                    @Html.TextBoxFor(m => m.EmployeeBasicInfo.DOB, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "DOB" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="addrFooter" class="col-md-6">
+                                        @if (Model.PersonalApprovalPending == false)
+                                        {
+
+                                            <label class="new_approval_pend_btn">
+                                                Approval Pending
+                                            </label>
+                                        }
+
+
+                                    </div>
+                                </div>
+                                <!-- Tab End -->
+                                <!-- Tab Start -->
+                                <div class="TabMoving"></div>
+                                <li class="tabTwo clickOnTab">Statutory Details</li>
+                                <div id="tabTwo" class="tab-content">
+                                    <div class="row justify-content-between">
+                                        <div class="col-6">
+                                            <label><b>PF Applicable: @Model.StatutoryClassification.PFApplicability</b></label>
+                                            @Html.HiddenFor(m => m.StatutoryClassification.PFApplicability)
+
+
+                                            <div class="row ">
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>PF Group</label>
+                                                        @Html.DropDownListFor(m => m.StatutoryClassification.PFGroup.Code, (SelectList)ViewBag.PFGroup, "--Select PF Group--", new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>PF Number</label>
+
+                                                        @Html.TextBoxFor(m => m.StatutoryClassification.PFNumber, new { @class = "form-control form-control-sm", @placeholder = "PF Number", @maxlength = 22 })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>UAN Number</label>
+
+                                                        @Html.TextBoxFor(m => m.StatutoryClassification.UANNumber, new { @class = "form-control form-control-sm", @placeholder = "UAN Number", @maxlength = 25 })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>PF Enroll Date</label>
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBoxFor(m => m.StatutoryClassification.PFEnrollDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "PF Enroll Date" })
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-6">
+                                            <label><b>ESI Applicable: @Model.StatutoryClassification.ESIApplicability</b></label>
+                                            @Html.HiddenFor(m => m.StatutoryClassification.ESIApplicability)
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>ESI Group</label>
+
+                                                        @Html.DropDownListFor(m => m.StatutoryClassification.ESIGroup.Code, (SelectList)ViewBag.ESIGroup, "--Select ESI Group--", new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>ESI Number</label>
+
+                                                        @Html.TextBoxFor(m => m.StatutoryClassification.ESINumber, new { @class = "form-control form-control-sm", @placeholder = "ESI Number", @maxlength = 20 })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>ESI Enroll Date</label>
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBoxFor(m => m.StatutoryClassification.ESIEnrollDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "ESI Enroll Date" })
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="la la-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row justify-content-between">
+
+                                        <div class="col-6">
+                                            <label><b>PT Applicable: @Model.StatutoryClassification.PTApplicability</b></label>
+                                            @Html.HiddenFor(m => m.StatutoryClassification.PTApplicability)
+
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>PT Group</label>
+                                                        @Html.DropDownListFor(m => m.StatutoryClassification.PTGroup.Code, (SelectList)ViewBag.PTGroup, "--Select PT Group--", new { @class = "form-control form-control-sm" })
+
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div id="addrFooter" class="col-md-6">
+                                        @if (Model.StatutoryApprovalPending == false)
+                                        {
+
+                                            <label class="new_approval_pend_btn">
+                                                Approval Pending
+                                            </label>
+                                        }
+
+
+                                    </div>
+                                </div>
+                                    <div class="TabMoving"></div>
+                                 <li class="tabThree clickOnTab">Payment Details</li>
+                                 <div id="tabThree" class="tab-content">
+                                     <div class="row">
+                                         <div class="col-md-2">
+                                             <div class="form-group">
+                                                 <label>Paymode</label>
+                                                 @Html.DropDownListFor(m => m.StatutoryClassification.PaymentMode.Code, (SelectList)ViewBag.PayMode, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onPayModeChange(this)" })
+                                             </div>
+                                         </div>
+
+                                         <div class="col-md-2 bankDiv">
+                                             <div class="form-group">
+                                                 <label>Bank Name</label>
+                                                 @Html.DropDownListFor(m => m.StatutoryClassification.Bank.Code, (SelectList)ViewBag.Bank, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'Bname')", @onchange = "onBankChange()" })
+                                                 <span id="Bname"></span>
+                                             </div>
+                                         </div>
+                                         <div  class="col-md-3 bankDiv">
+                                             <div class="form-group">
+                                                 <label>Bank Branch</label>
+                                                 @Html.TextBoxFor(m => m.StatutoryClassification.BankBranch, new { @class = "form-control form-control-sm", @placeholder = "Bank Branch", @maxlength = 25, @onblur = "validate(this,'BBranch')" })
+                                                 <span id="BBranch"></span>
+                                             </div>
+                                         </div>
+                                         <div  class="col-md-3 bankDiv">
+                                             <div class="form-group">
+                                                 <label>Acc. No</label>
+                                                 @Html.TextBoxFor(m => m.StatutoryClassification.AccountNo, new { @class = "form-control form-control-sm", @placeholder = "Account Number", @maxlength = 25, @onblur = "validate(this,'AcNo')", @onchange = "onAccountNumValidation(this)" })
+                                                 <span id="AcNo"></span>
+                                                 <h4><span class="colums_list pb-0" id="AccountNoValidation"></span></h4>
+                                             </div>
+                                         </div>
+
+                                         <div class="col-md-2 bankDiv">
+                                             <div class="form-group">
+                                                 <label>IFSC Code</label>
+                                                 @Html.TextBoxFor(m => m.StatutoryClassification.IFSC, new { @class = "form-control form-control-sm", @placeholder = "IFSC Code", @maxlength = 20, @onblur = "validate(this,'ifsc')" })
+                                                 <span id="ifsc"></span>
+                                             </div>
+                                         </div>
+
+                                     </div>
+
+                                     <div id="addrFooter" class="col-md-6">
+                                         @if (Model.PaymentApprovalPending == false)
+                                         {
+
+                                             <label class="new_approval_pend_btn">
+                                                 Approval Pending
+                                             </label>
+                                         }
+
+
+                                     </div>
+                                 </div>
+                                <!-- Tab End -->
+                                <!-- Tab Start -->
+                                <!-- Tab End -->
+                            </ul>
+                        </div>
+
+                        <!-- Table Setion End -->
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-6">
+                                @*<input type="email" class="form-control form-control-sm" placeholder="Remarks">*@
+                                @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks" })
+                            </div>
+                            <div class="col-md-6">
+                                @if (Model.PersonalApprovalPending == true && Model.StatutoryApprovalPending == true && Model.PaymentApprovalPending == true)
+                                {
+
+                                    <button href="#" type="button"
+                                            class="btn btn-default float-right mobile-full-width" onclick="Save()">
+                                        Save
+                                    </button>
+                                }
+                                </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

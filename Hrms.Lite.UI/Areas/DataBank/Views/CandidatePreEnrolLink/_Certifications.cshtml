@@ -1,0 +1,99 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "certificateApprove" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                Model.TabIndex = "Certifications";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.ApproveMode)
+            <div class="ihits-table table-border mobile-responsive-table certification-list-tab mb-2">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Certification</th>
+                            <th scope="col">Registration Number</th>
+                            <th scope="col">Certification Type</th>
+                            <th scope="col">Issued By</th>
+                            <th scope="col">Issued</th>
+                            <th scope="col">Mode</th>
+                            <th scope="col">Validity</th>
+                            <th scope="col">Renewal</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @Html.HiddenFor(m => m.EmployeeGI)
+
+                        @for (int i = 0; i < Model.Certifications.Count; i++)
+                        {
+
+                        <tr id="row_OI_@i">
+                            <td data-label="Certification">
+                                @Html.HiddenFor(m => m.Certifications[i].CertificateLogGI)
+                                @Html.HiddenFor(m => m.Certifications[i].flag)
+                                @Html.DisplayFor(m => m.Certifications[i].Certificate)
+                                @*@Html.DisplayFor(m => m.Certifications.Count)*@
+
+                            </td>
+                            <td data-label="Registration Number">
+
+                                @Html.DisplayFor(m => m.Certifications[i].RegistrationNo)
+                            </td>
+                            <td data-label="Certification Type">
+
+                                @Html.DisplayFor(m => m.Certifications[i].CertificateType.Name)
+                            </td>
+
+                            <td data-label="Issued By">
+
+                                @Html.DisplayFor(m => m.Certifications[i].IssuedBy)
+                            </td>
+                            <td data-label="Issued">
+
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Issued))
+                            </td>
+                            <td data-label="Mode">
+
+                                @Html.DisplayFor(m => m.Certifications[i].CertificateMode.Name)
+                            </td>
+                            <td data-label="Validity">
+
+                                @Html.DisplayFor(m => m.Certifications[i].CertificateValidity.Name)
+                            </td>
+                            <td data-label="Renewal">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Renewaldate))
+                            </td>
+                            <td data-label="Year of Completion">
+                                <div class="row">
+                                    <div class="col-md-12 align-right">
+                                        <button data-bs-toggle="tooltip" title="View File" type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="showDocument('@Model.Certifications[i].File.FileName', '@Model.Certifications[i].File.AbsoluteUri')" data-bs-original-title="">
+                                            <i class="icon-xl far fa-eye"></i>
+                                        </button>
+                                        <button type="button" id="CertificationLabel_@i"
+                                                class="btn btn-default mobile-full-width hide">
+                                            Test
+                                        </button>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" id="CertificationRejectbtnId_@i"
+                                           class="btn_reject" onclick="PersonalProfileCertificateApprove(@i,'REJECT')">
+
+                                        </a>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="CertificationApprovebtnId_@i"
+                                           class="btn_approve" onclick="PersonalProfileCertificateApprove(@i,'APPROVE')">
+
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}

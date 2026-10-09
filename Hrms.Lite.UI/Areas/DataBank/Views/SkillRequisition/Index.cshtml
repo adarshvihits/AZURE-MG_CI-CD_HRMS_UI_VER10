@@ -1,0 +1,140 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.SkillRequisition
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/PayRoll/loanClosure.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/skillRequisition.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Skill Requisition</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Skill Requisition
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    @*<div class="mobile-tab-section">
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Select Skill Type</label>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                    <!--begin: Search Form-->
+                    @using (Html.BeginForm("Create", "SkillRequisition", FormMethod.Post, new { @class = "display-flex", @id = "RequisitionSave" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+
+                                <div class="form-group filter-combobox pt-2 pl-2 mr-3" style="width: 195px;">
+
+                                    @Html.DropDownListFor(m => m.SkillTypeCode, (SelectList)ViewBag.SkillType, "--select Skill Type--", new { @class = "form-control form-control-sm", @onchange = "getRequisitionList();validate(this,'skilltype')" })
+                                    <span id="skilltype"></span>
+                                </div>
+
+
+
+                                <div class="form-group filter-combobox pt-2 pl-2" style="width: 151px;">
+
+                                    @Html.DropDownListFor(m => m.SkillProficiencyCode, (SelectList)ViewBag.SkillProficiency, "--select Skill Proficiency--", new { @class = "form-control form-control-sm", @onchange = "getRequisitionList();validate(this,'skillproficiency')" })
+                                    <span id="skillproficiency"></span>
+                                </div>
+
+
+                                <div class="tab-items select-option">
+                                    <!-- <label class="lable-left">Evaluation Period</label> -->
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <!-- Table Section -->
+
+                        <div id="RequisitionList">
+                            @await Html.PartialAsync("RequisitionList", Model)
+                        </div>
+                        <div id="loanClosureList" class="hide">
+                            @await Html.PartialAsync("_List")
+                        </div>
+                        <!-- Table Setion End -->
+                        <!--end: Datatable-->
+                        @*<div id="filterSlider">*@
+                        @*@await Html.PartialAsync("_Filter", Model.Filter)*@
+                        @*@await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>*@
+                    }
+                  
+                </div>
+            </div>
+            <div class="row row card-footer-bottom-fixed align-right">
+
+                <div class="col-md-12">
+                    <button class="btn btn-default  mobile-full-width" type="button" onclick="SaveRequisition()">
+                        Save
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->

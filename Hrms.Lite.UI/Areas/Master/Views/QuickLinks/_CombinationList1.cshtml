@@ -1,0 +1,71 @@
+﻿@model Hrms.Lite.Shared.Master.QuickLinks
+@Html.HiddenFor(model => model.Combinations1.Count)
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table policies-circular-console vertical-scroll-250">
+    <table id="combination1tblID">
+        <thead>
+            <tr class="table-dark">
+                @if (ViewBag.CombinationName == "Employee")
+        {
+            <th id="cmb1tID" scope="col">ID</th>
+        }
+        @if (ViewBag.CombinationName != "--Select--")
+        {
+            <th id="cmb1theadID" scope="col">@ViewBag.CombinationName</th>
+        }
+        else
+        {
+            <th scope="col"></th>
+        }
+                
+
+                <th scope="col">
+                    <div class="checkbox-inline justify-content-center">
+                        <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                            <input type="checkbox"
+                                   name="Checkboxes15" id="combination1All" onclick="onAllClick('combination1All','combination1tblID')">
+                            <span></span>
+                        </label>
+                    </div>
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody id="combination1tblbodyID">
+            <div id="smallspinnerouter1">
+                <div id="smallspinnerinner1">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+            </div>
+            @if (Model.Combinations1 != null && Model.Combinations1.Count > 0)
+            {
+                for (int i = 0; i < Model.Combinations1.Count; i++)
+                {
+                    @Html.HiddenFor(Model => Model.Combinations1[i].Code);
+                    @Html.HiddenFor(Model => Model.Combinations1[i].Name);
+                    @Html.HiddenFor(Model => Model.Combinations1[i].EmployeeID);
+                    <tr>
+                        @if (ViewBag.CombinationName == "Employee")
+                        {
+                            <td data-label="ID">@Model.Combinations1[i].EmployeeID</td>
+                        }
+                        <td data-label="Employee Name">@Model.Combinations1[i].Name</td>
+                        <td data-label="Action">
+                            <div class="checkbox-inline justify-content-center">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.Combinations1[i].Applicable, new { @onclick = "onChkBoxClick(this,'combination1All','combination1tblID')" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

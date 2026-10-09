@@ -1,0 +1,390 @@
+﻿
+@model Hrms.Lite.Shared.Master.CoffLeaveRule
+
+<script src="~/js/bootstrap-timepicker.js"></script>
+
+<style>
+    [aria-expanded="true"] i {
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        transform: rotate(90deg);
+      
+    }
+    .newday{
+        cursor:pointer;
+    }
+
+</style>
+
+<style>
+    .ihits-table.table-border table tbody tr th {
+        padding: 2px 13px;
+    }
+
+    .checkbox.checkbox-outline.checkbox-primary > span {
+        background-color: transparent;
+        border-color: #7a7a91 !important;
+    }
+
+    .ihits-table .form-control {
+        border-color: #7a7a91 !important;
+        background-color: #fff;
+    }
+
+    table {
+        border-collapse: collapse !important;
+    }
+
+    .clubdropdown {
+        height: 32px;
+    }
+
+        .clubdropdown .btn-multi-selection {
+            border: 1px solid #7a7a91 !important;
+        }
+</style>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //document.getElementById("myCheckBox").disabled = true;
+        if ('@Model.CoffCreditApprovalRequired'!='True') {
+            $('.order1').addClass('hide');
+        }              
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        /*enableDisableTextBoxes();*/
+
+        $('.multiselectDropdownLeave').multiselect({
+            includeSelectAllOption: true,
+            /*  enableFiltering: true,*/
+            enableCaseInsensitiveFiltering: true,
+            includeFilterClearBtn: false,
+            
+
+
+
+        });
+
+
+
+        if ($('#ClubWithOtherLeaves').is(':checked')) {
+            //GetClubbingDropdowns();
+            $('.clubDropdown').removeClass('hide');
+            $('#ClubbingLeaves').multiselect('rebuild')
+        }
+    });
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "COff-Rule-Save" }))
+{
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table coff-rule-list vertical-scroll-370">
+        @*@Html.HiddenFor(m => m.)*@
+        <table id="coffruleTable">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Condition</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <!--<tr>
+        <td data-label="Name">Hours to work for coff eligibility</td>
+
+        <td data-label="Short Name">
+
+            <div class="form-group">
+
+                <div class="input-group timepicker">-->
+                @*@Html.TextBoxFor(Model => Model.HoursToWork, new { @class = "form-control form-control-sm kt_timepicker_2", @placeholder = "Hours To Work" })*@
+                <!--<div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-clock-o"></i>
+                    </span>
+                </div>
+            </div>
+            <span id="SStartTime"></span>
+        </div>
+
+    </td>-->
+                <!-- <second></second> -->
+                <!--</tr>-->
+
+
+                <tr>
+                    <td data-label="Name">Applicable for offday</td>
+
+
+                    <td data-label="Short Name">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.OffdayApplicable)                                <span></span>
+                            </label>
+                        </div>
+
+                    </td>
+
+
+
+                    <!-- <second></second> -->
+                </tr>
+
+
+                <tr>
+                    <td data-label="Name">Applicable for Public Holiday</td>
+
+                    <td data-label="Short Name">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.PublicHolidayApplicable)                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+
+
+                    <!-- <second></second> -->
+                </tr>
+                <tr>
+                    <td data-label="Name">Applicable for Festival Holiday</td>
+
+                    <td data-label="Short Name">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.FestivalHolidayApplicable)                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+
+
+                    <!-- <second></second> -->
+                </tr>
+                <tr>
+                    <td data-label="Name">Applicable for Restricted Holiday</td>
+
+                    <td data-label="Short Name">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.RestrictedHolidayApplicable)                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+
+
+                    <!-- <second></second> -->
+                </tr>
+
+
+                <tr>
+                    <td data-label="Name">Expiry period</td>
+
+                    <td data-label="Short Name">
+                        <div class="form-group">
+
+                            <input id="Mode" name="Mode" type="hidden" value="">
+                            @Html.TextBoxFor(Model => Model.ExpiryPeriod, new { @class = "form-control form-control-sm", @placeholder = "Expiry Period" })
+                        </div>
+                    </td>
+
+
+
+                    <!-- <second></second> -->
+                </tr>
+
+
+
+
+                @*<tr data-bs-toggle="collapse" data-target="#Monday" class="accordion-toggle collapsed" aria-expanded="false">
+            <td data-label="Particular">
+                <div class="newday">
+                    <i class="fa fa-chevron-right newfa" aria-hidden="true"></i>Coff credit Approvel required
+                </div>
+            </td>
+
+            <td data-label="Applicability">
+                <div class="checkbox-inline ">
+                    <label class="checkbox checkbox-outline checkbox-success">
+                        @Html.CheckBoxFor(m => m.CoffCreditApprovalRequired, new { @class = "parentCheck_0" })
+
+                        <span></span>
+                    </label>
+                </div>
+            </td>
+
+        </tr>*@
+
+
+                @*<tr>
+            <td data-label="Name">HRMS</td>
+
+            <td data-label="Short Name" class="hiddenRow p-0">
+                <div class="checkbox-inline">
+                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                        @Html.CheckBoxFor(Model => Model.HRMSApprovalRequired)
+                        <span></span>
+                    </label>
+                </div>
+            </td>
+
+
+
+
+        </tr>*@
+
+                @*<tr>
+            <td data-label="Name">Essp(Reporting manager)</td>
+
+            <td data-label="Short Name">
+                <div class="checkbox-inline">
+                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                        @Html.CheckBoxFor(Model => Model.ESSPApprovalRequired)
+                        <span></span>
+                    </label>
+                </div>
+            </td>
+
+
+
+
+        </tr>*@
+
+
+                <tr>
+                    <td>
+
+
+                        <div class="newday">
+                            Coff credit Approval required
+                        </div>
+                    </td>
+                    <td>
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.CoffCreditApprovalRequired, new { @onclick = "CoffCreditApprovalRequiredClick()" })
+                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr class=" order1">
+                    <td>HRMS</td>
+                    <td>
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.HRMSApprovalRequired)
+                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr class=" order1">
+                    <td>Essp(Reporting manager)</td>
+                    <td>
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(Model => Model.ESSPApprovalRequired)
+                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td rowspan="1" scope="rowgroup">Club with other leaves</td>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-2 d-flex">
+                                <div class="checkbox-inline ">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.ClubWithOtherLeaves, new { @onchange = "GetClubbingDropdowns()" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10  ">
+                                <div class="clubdropdown">
+                                    <div class="clubDropdown hide">
+
+
+
+                                        @Html.ListBoxFor(m => m.ClubbingLeaves, (SelectList)ViewBag.ClubLeaves, new
+                                   {
+                                       @class = "multiselectDropdownLeave form-control-multiselect form-control-sm",
+                                       @multiple = "multiple",
+                                       // @onchange = "onPayrollGroupChange()"
+                                   })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@*<table class="table">
+
+    <tbody>
+        <tr data-bs-toggle="collapse" data-target=".order1">
+            <td>&gt;</td>
+            <td>1001</td>
+            <td>9/29/2016</td>
+            <td>$126.27</td>
+        </tr>
+        <tr class="collapse order1">
+            <td>1</td>
+            <td></td>
+            <td>Shirt</td>
+            <td>$12.27</td>
+        </tr>
+        <tr class="collapse order1">
+            <td>1</td>
+            <td></td>
+            <td>Shoes</td>
+            <td>$62.27</td>
+        </tr>
+        <tr data-bs-toggle="collapse" data-target=".order2">
+            <td>&gt;</td>
+            <td>1002</td>
+            <td>9/27/2016</td>
+            <td>$92.15</td>
+        </tr>
+        <tr class="collapse order2">
+            <td>2</td>
+            <td></td>
+            <td>Item</td>
+            <td>$12.27</td>
+        </tr>
+        <tr class="collapse order2">
+            <td>2</td>
+            <td></td>
+            <td>Item</td>
+            <td>$62.27</td>
+        </tr>
+        <tr>
+            <td>&gt;</td>
+            <td>1003</td>
+            <td>9/01/2016</td>
+            <td>$23.55</td>
+        </tr>
+    </tbody>
+</table>*@

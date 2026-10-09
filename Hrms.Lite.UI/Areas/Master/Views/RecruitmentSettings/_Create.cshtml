@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.Master.RecruitmentSettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+@using (Html.BeginForm("Save", "RecruitmentSettings", FormMethod.Post, new { @id = "Recruitment_Save" }))
+{
+    <div id="vacancycancellation" class="slider-forms slider-forms-open AddNew">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNew')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4 class="mb-4"> Recruitment Settings</h4>
+
+
+
+            <!----- stepper start here --->
+            <div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Designation
+                            </label>
+                            <div class="view-details">
+                                @Model.Designation.Name
+                            @*@ViewBag.JobTitle*@
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row my-2">
+
+                <div class="col-md-12">
+                    <div id="detailsList">
+                        @await Html.PartialAsync("_SettingsDetailsList", Model)
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed ">
+
+                <div class="col-md-12 align-right">
+
+                    @if (CurrentUserRoleActions.Create == true)
+                    {
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="OnSaveClick()">
+                            Save
+                        </button>
+                    }
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <!--end::Row-->
+    <!--begin::Row-->
+    <!--end::Row-->
+    <!--end::Dashboard-->
+</div>
+}

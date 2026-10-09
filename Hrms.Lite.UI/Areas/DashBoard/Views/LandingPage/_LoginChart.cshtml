@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DashBoard.LoginDetailDiagram>
+@using Kendo.Mvc.UI
+
+
+@(Html.Kendo().Chart(Model)
+    .Name("chart1")
+    .ChartArea(area => area.Height(450).Width(500))
+    .Title("Logins")
+    .Legend(legend => legend.Visible(false).Position(ChartLegendPosition.Bottom))
+    .Series(series =>
+    {
+        foreach (var loginDetail in Model) // Loop through each LoginDetailDiagram
+        {
+            series.Column(new dynamic[] {
+                new { category = "HRMS", value = loginDetail.hrmsCount, color = "#2A629A" },
+                new { category = "ESSP", value = loginDetail.esspCount,color = "#2185b4" },
+                new { category = "Mobile", value = loginDetail.mobileCount ,color = "#FFDA78"}
+            })
+            .Name(loginDetail.FullName) // Naming the series by the user's full name
+            .Spacing(.1); // Adjust spacing between bars
+        }
+    })
+    .CategoryAxis(axis => axis
+        .Categories("HRMS", "ESSP", "Mobile")
+        .Labels(labels => labels.Padding(10, 20, 20, 0))
+        .MajorGridLines(lines => lines.Visible(false))
+        .Line(line => line.Visible(false))
+    )
+    .ValueAxis(axis => axis
+        .Numeric()
+        .Line(line => line.Visible(false))
+        .Visible(true).Max(100).MajorUnit(10)
+    )
+    .Tooltip(tooltip => tooltip
+        .Visible(true)
+        .Template("#= category #: #= value #")// Customize the tooltip to show the category and value
+    )
+)

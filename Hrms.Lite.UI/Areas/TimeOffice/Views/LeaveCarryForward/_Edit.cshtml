@@ -1,0 +1,224 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCarryForward
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('LeaveCFDetails_CF');
+  
+    });
+    $(window).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (preventENterFlag == 0)
+                    EmployeeWiseLeaveCarryForwardSave();
+                return false;
+            }
+        });
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "editCarryForwardSlider" }))
+{
+    <div id="physicallocationedit" class="slider-forms slider-forms-open editLeaveCarryForwardSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('editLeaveCarryForwardSlider');preventENterFlag =1">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Leave Carry Forward
+            </h4>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    @Html.HiddenFor(m => m.EmployeeGI)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Leave
+                            Group
+                        </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.LeaveCFDetails.LeaveGroup.Code)
+                            @Model.LeaveCFDetails.LeaveGroup.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Leave </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.LeaveCFDetails.Leave.Code)
+                            @Model.LeaveCFDetails.Leave.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Leave Period
+                            From
+                        </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.LeaveCFDetails.LeavePeriodFrom.Code)
+                            @Model.LeaveCFDetails.LeavePeriodFrom.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Leave Period
+                            To
+                        </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.LeaveCFDetails.LeavePeriodTo.Code)
+                            @Model.LeaveCFDetails.LeavePeriodTo.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Month</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.LeaveCFDetails.Month.Code)
+                            @Model.LeaveCFDetails.Month.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Opening
+                        </label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.Opening
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Credit
+                        </label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.Credit
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Taken</label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.Taken
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Debit</label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.Debit
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Encashment
+                        </label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.EnCashment
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Balance
+                        </label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.Balance
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            CF
+                            Max
+                            Limit
+                        </label>
+                        <div class="view-details">
+                            @Model.LeaveCFDetails.MaxLimit
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+
+                        <label class="view-title">
+                            Carry
+                            Forward
+                        </label><span class="Mandatory">*</span>
+          
+                        @Html.TextBoxFor(m => m.LeaveCFDetails.CF, new { @class = "form-control form-control-sm LeaveCarryfwd", @maxlength = "3", @placeholder = "Carry Forward", @onblur = "validate(this,'carryfwd')", @onkeypress = "return onlyAmount(event)" })
+                        <span id="carryfwd"></span>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="row-outer">
+                        <label class="view-title">Remarks</label>
+                        @*<textarea class="form-control form-control-sm"
+                            placeholder="Remarks"></textarea>*@
+                        @Html.TextAreaFor(m => m.LeaveCFDetails.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks" })
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="EmployeeWiseLeaveCarryForwardSave()">
+                        Modify
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

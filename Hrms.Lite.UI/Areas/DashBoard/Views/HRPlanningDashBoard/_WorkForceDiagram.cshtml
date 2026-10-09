@@ -1,0 +1,68 @@
+﻿@model Hrms.Lite.Shared.DashBoard.HRPlanningDashBoard
+@using Kendo.Mvc.UI
+<style>
+    #summarychart #chart1 {
+        position: relative;
+        top: -30px;
+    }
+
+   #chart1.k-chart text {
+        fill: #FFFFFF !important; /* Force white color */   
+        font-weight:800 !important;
+        font-size:30px !important;
+    }
+   
+</style>
+<div id="summarychart">
+
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DashBoard.HRPlanningDashBoard>()
+    .Name("chart1")
+    .Legend(legend => legend
+    .Visible(false))
+
+    .ChartArea(chart => chart
+        .Background("transparent")
+        .Height(260) // Adjusted height
+        .Width(260)  // Adjusted width
+
+    )
+
+    .Series(series =>
+    {
+        series.Donut(new dynamic[] {
+            new {category = "Exit",value = Model.CurrentLeavers},
+            new {category = "New",value =  Model.NewJoineeCount}
+
+
+        }).HoleSize(70);
+        
+        
+    })
+
+.SeriesColors(new string[] { "#7ce5d3", "#e16a30" })
+
+ .Tooltip(tooltip => tooltip
+     .Visible(true)
+     .Template("#= category #: #= value #")
+ )
+ .Events(events => events
+        .Render("onChartRender") // Bind render event to custom function
+    )
+)
+
+</div>
+<script type="text/javascript">
+    // Function to add a custom label in the center of the donut chart
+    function onChartRender(e) {
+        var chart = e.sender;
+       
+        // Set the total value directly from your model or data
+        var total = @Model.NewJoineeCount-@Model.CurrentLeavers; // Replace with your total value
+
+        // Create a label in the center of the donut
+        var centerLabel = new kendo.drawing.Text(total, [110, 134])
+       
+        chart.surface.draw(centerLabel);
+    }
+</script>

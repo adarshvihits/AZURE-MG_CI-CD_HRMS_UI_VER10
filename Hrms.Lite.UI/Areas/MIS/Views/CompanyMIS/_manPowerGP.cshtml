@@ -1,0 +1,119 @@
+﻿@using Kendo.Mvc.UI;
+@model IEnumerable<Hrms.Lite.Shared.DashBoard.PayrollDashBoardDiagram>
+
+<style>
+
+    .wide p {
+        display: none;
+    }
+</style>
+
+<div class="demo-section wide">
+    @(Html.Kendo().Chart(Model)
+        .Name("chart")
+        .HtmlAttributes(new { style = "width: 100%; height: 250px;" })
+        .Title(title => title
+        .Text("Last 6 months Manpower and Gross Pay Comparison")
+        //.Align(ChartTextAlignment.Right)
+        )
+        .Legend(legend => legend
+        .Position(ChartLegendPosition.Right).Padding(padding => padding.Left(70))
+        ).Events(events =>
+        {
+            events.LegendItemClick("function(e) { e.preventDefault(); }");
+        })
+        .Series(series =>
+        {
+            series
+            .Line(model => model.Manpower)
+            .Color("#ff1c1c")
+            .Name("Manpower")
+            .Axis("manpower");
+            series
+            .Bar(model => model.GrossPay)
+            .Color("#007eff")
+            .Name("Grosspay")
+            .Axis("gross").Gap(4).Spacing(0.1);
+        })
+        .CategoryAxis(axis => axis
+        .Categories(model => model.Month)
+      
+        .AxisCrossingValue(32, 0, 32)
+        .Justify(true)
+        )
+        .ValueAxis(axis => axis
+        .Numeric("gross")
+        .Color("#007eff")
+        .Visible(true).Title("GrossPay").MajorUnit(CalculateMajorUnit(Model))
+        )
+        .ValueAxis(axis => axis
+        .Numeric("manpower")
+        .Visible(true).Title("ManPower")
+        )
+        .Tooltip(tooltip => tooltip
+        .Visible(true)
+        .Format("{0}")
+        .Template("#= value #")
+        ).RenderAs(RenderingMode.Canvas)
+        )
+
+</div>
+@functions {
+    public static double CalculateMajorUnit(IEnumerable<Hrms.Lite.Shared.DashBoard.PayrollDashBoardDiagram> data)
+    {
+        // Step 1: Determine the range of your data
+        var grosspayList = new int[data.Count()];
+        int i = 0;
+        foreach (var item in data)
+        {
+            grosspayList[i] = item.GrossPay;
+            i++;
+        }
+        var minValue = grosspayList.Min();
+        var maxValue = grosspayList.Max();
+        double range = maxValue - minValue;
+        double majorUnit = 1;
+        if (range < 10000)
+        {
+            majorUnit = 400;
+        }
+        else if (range < 100000)
+        {
+            majorUnit = 4000;
+        }
+        else if (range < 1000000)
+        {
+            majorUnit = 40000;
+        }
+        else if (range < 10000000)
+        {
+            majorUnit = 400000;
+        }
+        else if (range < 100000000)
+        {
+            majorUnit = 4000000;
+        }
+        else if (range < 1000000000)
+        {
+            majorUnit = 40000000;
+        }
+        else if (range < 10000000000)
+        {
+            majorUnit = 400000000;
+        }
+        else if (range < 100000000000)
+        {
+            majorUnit = 4000000000;
+        }
+        else if (range < 1000000000000)
+        {
+            majorUnit = 40000000000;
+        }
+
+
+
+        return majorUnit;
+    }
+}
+
+

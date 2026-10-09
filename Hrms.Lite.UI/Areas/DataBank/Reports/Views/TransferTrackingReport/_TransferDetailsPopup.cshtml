@@ -1,0 +1,162 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.TransferTrackingReport
+
+@*<script src="~/js/bootstrap-datepicker.js"></script>*@
+
+<style>
+
+    .popup {
+        margin: 2% auto;
+        padding: 10px;
+    }
+
+    .pro_ph {
+        padding: 6px !important;
+        border-radius: 10px;
+    }
+
+    .image-input .image-input-wrapper {
+        width: 50px;
+        height: 50px;
+    }
+
+
+    .scond-divsprate {
+        border-radius: 10px;
+        border: 1px solid lightgrey;
+        padding: 10px;
+    }
+
+    /*.page-scroll-new {
+        overflow-y: scroll;
+        height: 510px;
+        display: block;
+        overflow-x: hidden;
+        padding-right: 10px;
+    }*/
+
+
+</style>
+
+
+    <!--begin::Dashboard-->
+    <!--begin::Row-->
+
+<div class="page-scroll-new popup_header  ">
+
+    <div class="profile-header position-relative pb-12 mb-5" style=" padding: 3px 20px !important;">
+        <!--begin: Search Form-->
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+        <div class="profile-header-overflow"></div>
+    </div>
+    <div class="scond-divsprate">
+
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">Request ID</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.RequestID, new { @class = "form-control form-control-sm",  @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">Status</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.Status, new { @class = "form-control form-control-sm",  @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">New Functional Designation</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewFuncDesignation, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">New Department</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewDepartment, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">New Location</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewLocation, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">New Group Company</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewGroupCompany, new { @class = "form-control form-control-sm",@readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">New Function</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewFunction, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">New Sub Department</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.NewSubDepartment, new { @class = "form-control form-control-sm",@readonly = true })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="scond-divsprate mt-3">
+
+        <div class="ihits-table table-border odd-even mobile-responsive-table vertical-scroll-180">
+            <table id="PH_ApprovalTable" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">ID</th>
+                        <th scope="col">Authority</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Action Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.EmpTransferDetailsList != null && Model.EmpTransferDetailsList.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.EmpTransferDetailsList.Count; i++)
+                            {
+                                @Html.HiddenFor(m => m.EmpTransferDetailsList.Count)
+                    <tr>
+                        <td data-label="ID">@Model.EmpTransferDetailsList[i].EmployeeID</td>
+                        <td data-label="Authority">@Model.EmpTransferDetailsList[i].Authority</td>
+                        <td data-label="Level">@Model.EmpTransferDetailsList[i].Level</td>
+                        <td data-label="Action">@Model.EmpTransferDetailsList[i].Action</td>
+                        <td data-label="Action Time"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmpTransferDetailsList[i].ActionTime))</td>
+                    </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+
+                                    <div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 30vh;"><img src="/images/nodata.png" style="width:130px;" /></div>
+                                </td>
+                            </tr>
+                        }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

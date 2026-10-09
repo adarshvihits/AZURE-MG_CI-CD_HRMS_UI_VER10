@@ -1,0 +1,86 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.BankStatement
+   
+    <div class="row" style="padding:10px;">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="view-title">Description</label>
+
+                <div class="view-details">@ViewBag.Desc</div>
+
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Month</label>
+
+                <div class="view-details">@ViewBag.MName</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-7 d-flex justify-content-end " style="height: 100%;">
+
+            <button data-bs-toggle="tooltip" title=""
+                    class="btn btn-excel"
+                    data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp('@ViewBag.Desc','@ViewBag.Type','@ViewBag.code')">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>
+        </div>
+
+    </div>
+
+
+    <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table act-table vertical-scroll-250">
+        @Html.HiddenFor(m => m.EmployeeList.Count)
+        <table id="PopUpAccountStatemntTable">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Amount</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.EmployeeList != null && Model.EmployeeList.Count > 0)
+                {
+                    for (int i = 0; i < Model.EmployeeList.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="ID">
+                                @Model.EmployeeList[i].EmployeeID
+                            </td>
+                            <td data-label="Employee Name">
+                                @Model.EmployeeList[i].EmployeeName
+
+                            </td>
+                            <td data-label="Designation">@Model.EmployeeList[i].Designation</td>
+                            <td data-label="Department">
+                                @Model.EmployeeList[i].Department
+                            </td>
+                            <td data-label="Location">@Model.EmployeeList[i].Location</td>
+                            <td data-label="Amount">@Model.EmployeeList[i].Amount</td>
+
+
+
+                        </tr>
+
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+    </div>

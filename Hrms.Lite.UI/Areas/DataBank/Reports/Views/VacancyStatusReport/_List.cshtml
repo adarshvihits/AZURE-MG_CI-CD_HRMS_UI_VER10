@@ -1,0 +1,66 @@
+@model Hrms.Lite.Shared.DataBank.Reports.RecruitmentReports
+<script src="~/js/settings.js"></script>
+@{
+    // priority pill colour: Medium = accent (blue), Low = neutral, High / Urgent = danger
+    Func<string, string> priorityClass = priority =>
+    {
+        switch ((priority ?? "").Trim().ToUpper())
+        {
+            case "HIGH":
+            case "URGENT":
+            case "CRITICAL":
+                return "pill-danger";
+            case "MEDIUM":
+                return "pill-accent";
+            default:
+                return "pill-neutral";
+        }
+    };
+}
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table vacancy_status_report vt-list">
+
+    @Html.HiddenFor(m => m.VacancyStatusReport.Count)
+    <table id="JoiningReportTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" class="vt-col-position">Position</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Vacancy Type</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Manager</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.VacancyStatusReport != null && Model.VacancyStatusReport.Count > 0)
+            {
+                foreach (var item in Model.VacancyStatusReport)
+                {
+                    var created = item.RequestedDate == DateTime.MinValue ? "" : item.RequestedDate.ToString("yyyy-MM-dd");
+                    <tr data-created="@created" data-branch="@item.LocationName">
+                        <td data-label="Position">
+                            <div class="cell-primary">@(string.IsNullOrEmpty(item.JobTitle) ? item.Designation : item.JobTitle)</div>
+                        </td>
+                        <td data-label="Branch">@item.LocationName</td>
+                        <td data-label="Department">@item.Department</td>
+                        <td data-label="Section">@item.Section</td>
+                        <td data-label="Grade">@item.Grade</td>
+                        <td data-label="Vacancy Type">@item.VacancyType</td>
+                        <td data-label="Created On" class="vt-date">@(item.RequestedDate == DateTime.MinValue ? "" : item.RequestedDate.ToString("dd MMM yyyy"))</td>
+                        <td data-label="Priority">
+                            @if (!string.IsNullOrWhiteSpace(item.Priority))
+                            {
+                                <span class="pill @priorityClass(item.Priority)">@item.Priority</span>
+                            }
+                        </td>
+                        <td data-label="Manager">@item.Manager</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

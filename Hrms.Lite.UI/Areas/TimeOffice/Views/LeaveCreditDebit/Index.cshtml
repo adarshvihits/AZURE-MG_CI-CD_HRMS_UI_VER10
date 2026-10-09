@@ -1,0 +1,263 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCreditDebit
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/leaveCreditDebit.js"></script>
+<script>
+    $(document).ready(function () {
+        fillData();
+    });
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Leave Credit/Debit</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Leave Credit/Debit
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+   
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "CreditDebitUpload", enctype = "multipart/form-data" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items ml-2 pr-0 border-none select-option">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod, "--Leave Period--", new
+                                   { @class = "form-control form-control-sm Lcrperiod", id = "LeavePeriodDropdown",
+                                       @onchange = "validate(this,'leaveperiod');fillLeaveMonth(this.value)" })
+                                        <span id="leaveperiod"></span>
+                                    </div>
+                                   
+                                </div>
+                                <div class="tab-items pr-0 border-none ">
+                                    <div class="form-group filter-combobox mr-2" style="width: 120px;">
+                                        @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Month--", new
+                                   {
+                                       @class = "form-control form-control-sm LcrMonth",
+                                       @onchange = "validate(this,'month');fillData()"
+                                   })
+                                        <span id="month"></span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items pr-0 border-none ">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.LeaveGroup.Code, (SelectList)ViewBag.group, "--Leave Group--", new
+                                   {
+                                       @class = "form-control form-control-sm LcrMonth",
+                                       @onchange = "validate(this,'group');fillData()"
+                                   })
+                                        <span id="group"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="tab-items pr-0 border-none ">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.Leave.Code, (SelectList)ViewBag.Leave, "--Leave--", new
+                                   {
+                                       @class = "form-control form-control-sm LcrLeave",
+                                       @onchange =
+                            "validate(this,'leave');fillData()"
+                                   })
+                                        <span id="leave"></span>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items pr-0 border-none ">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.DebitCredit.Code, (SelectList)ViewBag.LeaveIncrement, "--Leave Inc--", new
+                                   {
+                                       @class = "form-control form-control-sm LcrIncremnt"
+                            ,
+                                       @onchange = "validate(this,'debitcredit');fillData()"
+                                   })
+                                        <span id="debitcredit"></span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="tab-items select-option">
+
+
+                                    <div class="button-group float-left  batchleave mr-4">
+
+                                        <button id="BatchUpdate" type="button"
+                                                class="btn btn-default btn-sm " onclick="sliderChange()">
+                                            Batch Update
+                                        </button>
+
+                                    </div>
+                                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content popup">
+                                                <div class="modal-header" style="padding:10px">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatchedlist').html('');$('#Excel_FileData').val()">
+                                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                                    </button>
+                                                </div>
+
+                                                <div class="modal-body pt-3">
+                                                    <div class="colums_list pb-1">
+                                                        Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                        Employee ID,
+                                                        Employee Name,
+                                                        Count<br />
+                                                        @*Columns Needed :- Employee ID, Employee Name, Count*@
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="file-upload-form-group">
+                                                                <label for="formFileMultiple" class="form-label">
+                                                                    Attach
+                                                                    File
+                                                                    <span class="Mandatory">*</span>
+                                                                </label>
+
+                                                                <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 1 MB.">
+                                                                    <div class="small-btn-group">
+
+                                                                        <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                                    </div>
+                                                                    <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                                    @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                                    @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+                                                                </div>
+
+
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div id="Unmatchedlist">
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel" onclick="ExportToExcel()"
+                                       class="btn btn-excel mr-0">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                    <button type="button" data-bs-toggle="tooltip" title="Import From Excel" onclick="validateCreditDebitDropdowns()"
+                                            class="btn btn-excel ml-0 import">
+                                        <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    }
+                        <!-- Table Section -->
+                        <div id="LeaveCreditDebitList">
+                            @await Html.PartialAsync("_LeaveCreditDebitList")
+                        </div>
+                        <div id="editLeaveCreditDebit"></div>
+                        <div id="bupdate1">
+
+                        </div>
+
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-6">
+                                <div class="d-flex responsive-center">
+                                    <a href="@Url.Action("History","LeaveCreditDebit", new { Area="TimeOffice"})">
+                                        <div class="application-btn d-flex align-items-center pr-3 ">
+                                            <div class="history-btn">
+                                                <img src="/images/Icon awesome-history.png">
+
+                                            </div>
+                                            <div class="application-icon"> <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                                        </div>
+                                    </a>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="filterSlider">
+                            @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                        </div>
+                    </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

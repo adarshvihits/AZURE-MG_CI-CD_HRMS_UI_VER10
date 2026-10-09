@@ -1,0 +1,73 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.IndustryBenchmarkSalary
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('WageGradeList_0__Amount');
+        });
+    </script>
+    @using (Html.BeginForm("Create", "IndustryBenchmarkSalary", FormMethod.Post, new { id = "Save-IndustryBenchmarkSalary" }))
+    {
+        <div id="addBenchmark" class="slider-forms slider-forms-open addBenchmarkSalarySlider">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('addBenchmarkSalarySlider')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4>Benchmark Salary</h4>
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="ihits-table table-border industry-benchmark-salary-slider-list">
+                            <table>
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">Wage Grade</th>
+                                        <th scope="col">Benchmark Salary (GP)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.WageGradeList != null && Model.WageGradeList.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.WageGradeList.Count; i++)
+                                        {
+                                            <tr>
+                                                <td data-label="Wage Grade">
+                                                    @Html.HiddenFor(m => m.WageGradeList[i].Code)
+                                                    @Model.WageGradeList[i].Name
+                                                </td>
+                                                <td data-label="Benchmark Salary (GP)">
+                                                    <div class="form-group">
+                                                        @*<input type="text" class="form-control form-control-sm" placeholder="">*@
+                                                        @Html.TextBoxFor(m => m.WageGradeList[i].Amount, new { @class = "form-control form-control-sm",@maxlength=8, onkeypress = "return onlyNumberKey(event)", @oninput = "RestrictCharacters(this)" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        <button type="button" class="btn btn-default " onclick="SaveIndustryBenchmarkSalary()">Save</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    }

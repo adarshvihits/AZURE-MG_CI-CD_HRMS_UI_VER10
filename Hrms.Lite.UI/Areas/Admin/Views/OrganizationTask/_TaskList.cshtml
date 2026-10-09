@@ -1,0 +1,58 @@
+﻿@model Hrms.Lite.Shared.Admin.OrganizationTask
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/scripts/Admin/organizationTask.js"></script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Organization-Task-List pt-1">
+    @Html.HiddenFor(m => m.OrganizationTaskList.Count)
+
+
+    <table id="StudentTable" class="common-table l">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Task Description</th>
+                <th scope="col"> A.Date</th>
+                <th scope="col">A.To</th>
+                <th scope="col">EDC</th>
+                <th scope="col">Status</th>
+                <th scope="col">Supervisor</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.OrganizationTaskList != null && Model.OrganizationTaskList.Count > 0)
+            {
+                for (int i = 0; i < Model.OrganizationTaskList.Count; i++)
+                {
+            <tr>
+                @Html.HiddenFor(m => m.OrganizationTaskList[i].TaskCode)
+
+
+                <td data-label="Task"><a onclick="OnTaskClick('@Model.OrganizationTaskList[i].TaskCode','@Model.OrganizationTaskList[i].Task')">@Model.OrganizationTaskList[i].Task</a></td>
+
+                <td data-label="A.Date">  @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OrganizationTaskList[i].Assigneddate))</td>
+                <td data-label="A.To">@Model.OrganizationTaskList[i].Employee.Name</td>
+                
+                <td data-label="EDC">  @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OrganizationTaskList[i].EDC))</td>
+                <td data-label="Status">@Model.OrganizationTaskList[i].Status</td>
+                <td data-label="Supervisor">@Model.OrganizationTaskList[i].EmployeeSupervisor.Name</td>
+                <td data-label="Actions">
+                    <div>
+                        
+                        <a data-bs-toggle="tooltip" title="Delete"
+                           class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.OrganizationTaskList[i].TaskCode', 'DELETE')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </a>
+
+                    </div>
+                </td>
+            </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+
+</div>

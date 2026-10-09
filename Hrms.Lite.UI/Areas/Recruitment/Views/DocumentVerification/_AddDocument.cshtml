@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+<script>
+        $(document).ready(function () {
+            debugger;
+            moveCursorToEnd('SliderDocumentName');
+        });
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "otherDocumentsSave", enctype = "multipart/form-data" }))
+{
+    <div id="addNewDocument" class="slider-forms slider-forms-open addnewDoc">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('addnewDoc')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Other Documents</h4>
+            @Html.HiddenFor(m => m.EmployeeGI)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Name</label>
+                        <span class="Mandatory">*</span>
+                        @*<input type="text" class="form-control form-control-sm" placeholder="Document Name">*@
+                        @Html.TextBoxFor(m => m.SliderDocumentName, new { @class = "form-control form-control-sm", @placeholder = "Document Name", @onblur = "validate(this,'DocName')", @maxlength = 120 })
+                        <span id="DocName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Type</label>
+                        <span class="Mandatory">*</span>
+                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                <option>Document Type 1</option>
+                                <option>Document Type 2</option>
+                                <option>Document Type 3</option>
+                                <option>Document Type 4</option>
+                                <option>Document Type 5</option>
+                            </select>*@
+                        @Html.DropDownListFor(m => m.SliderDocumentType.Code, (SelectList)ViewBag.DocumentType, "--Select Document Type--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'DocType')" })
+                        <span id="DocType"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        @*<textarea class="form-control form-control-sm " placeholder="Description"></textarea>*@
+                        @Html.TextAreaFor(m => m.SliderDescription, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = 250 })
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="file-upload-wrap">
+                        <div class="image-input image-input-outline float-right" id="kt_image_4">
+                            <div class="image-input-wrapper"
+                                 style="background-image: url(<?php echo Page::getMediaPath();?>users/100_1.jpg)">
+                            </div>
+
+                            <div class="file-upload-outer" data-action="change" data-bs-toggle="tooltip" title=""
+                                 data-bs-original-title="Upload Document">
+
+                                @*<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" />*@
+
+                                @Html.TextBoxFor(m => m.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)" })
+                                <input type="hidden" name="profile_avatar_remove" />
+                                <i class="icon-xl fas fa-cloud-upload-alt"></i>
+                            </div>
+
+                            <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow file-remove-btn"
+                                  data-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+
+                    <button type="button" class="btn btn-default" onclick="validateAll('Create')">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

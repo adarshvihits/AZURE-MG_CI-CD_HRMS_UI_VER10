@@ -1,0 +1,166 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+<script src="~/js/settings.js"></script>
+<script>
+        $(document).ready(function () {
+            $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentPendCount").html(@Model.PreenrollmentPendingCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+            $(".OverDueCount").html(@Model.OverDueCount);
+            $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+            $(".documentsCount").html(@Model.JoiningConfCount);
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table onboardingdocList">
+    <table id="PendingList" class="common-table">
+        @Html.HiddenFor(m => m.OnBoardingList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl:No</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Aadhar</th>
+
+                <th data-bs-toggle="tooltip" data-bs-original-title="Driving License" scope="col">DL</th>
+                <th scope="col">PAN</th>
+                <th scope="col">Passport</th>
+                <th scope="col">Others</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                {
+
+            <tr>
+                <td data-label="SL:NO">@(i + 1)</td>
+                @Html.HiddenFor(m => m.OnBoardingList[i])
+                @Html.HiddenFor(m => m.OnBoardingList[i].CandidateName)
+                @Html.HiddenFor(m => m.OnBoardingList.Count)
+                @*<td data-label="ID">@Model.OnBoardingList[i].EmpId</td>*@               
+
+
+
+                @if (Model.UserVsMenuTab[4].Applicable == true)
+                {
+                    <td data-label="Employee Name">
+                        <a onclick="onEmployeeClick('@Model.OnBoardingList[i].PreEnrollGI','OnBoarding','OnBoarding List')">@Model.OnBoardingList[i].CandidateName</a>
+                    </td>
+                }
+                else
+                {
+                    <td data-label="Employee Name">
+                        <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                    </td>
+                }
+
+
+
+
+
+
+
+
+
+                <td data-label="Fun.Designation">@Model.OnBoardingList[i].Designation.Name</td>
+                <td data-label="Department">@Model.OnBoardingList[i].Department.Name</td>
+
+                <td data-label="Location">@Model.OnBoardingList[i].Location.Name</td>
+
+                <td data-label="Aadhar">
+                    @if (Model.OnBoardingList[i].Aadhar)
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-tick border-radius">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    }
+                    else
+                    {
+
+                        <button type="button"
+                                class="btn btn-icon btn-close border-radius">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    }
+                </td>
+                <td data-label="PAN">
+                    @if (Model.OnBoardingList[i].PAN)
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-tick border-radius">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-close border-radius">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    }
+                </td>
+                <td data-label="Driving License">
+                    @if (Model.OnBoardingList[i].DrivingLicense)
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-tick border-radius">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-close border-radius">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    }
+                </td>
+                <td data-label="Passport">
+                    @if (Model.OnBoardingList[i].Passport)
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-tick border-radius">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    }
+                    else
+                    {
+
+                        <button type="button"
+                                class="btn btn-icon btn-close border-radius">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    }
+                </td>
+                <td data-label="Others">
+                    @if (Model.OnBoardingList[i].Others)
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-tick border-radius">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn btn-icon btn-close border-radius">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    }
+                </td>
+
+            </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>

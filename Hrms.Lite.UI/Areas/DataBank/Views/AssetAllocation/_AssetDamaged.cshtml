@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.AssetAllocation
+    <script src="~/js/settings.js"></script>
+    <script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+        $('.Tab2Count').html("@Model.Tab2Count");
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.MoreTabCount').html("@Model.MoreTabCount");
+        $('.PendingTabCount').html("@Model.PendingTabCount");
+
+        //$('#damagedTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+        //$(".dataTables_filter").addClass("dataTables_filter_trn");
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+    });
+    </script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table asset-not-allocation">
+        @Html.HiddenFor(m => m.AssetList.Count)
+        <table id="damagedTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">SlNo</th>
+                    <th scope="col">Asset Code</th>
+                    <th scope="col">Asset Category</th>
+                    <th scope="col">Asset Name</th>
+                    <th scope="col">Issuing Department</th>
+                    <th scope="col">Condition</th>
+                    <th scope="col">Specifications</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.AssetList != null && Model.AssetList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.AssetList.Count; i++)
+                    {
+
+                        <tr>
+                            <td data-label="SlNo">@(i+1)</td>
+                            <td data-label="Asset Code">
+
+                                <a id="AssetNotAllocations" class="slider-btn" onclick="onAssetClick('@Model.AssetList[i].AssetCode')">@Model.AssetList[i].AssetCode</a>
+
+
+
+                            </td>
+                            <td data-label="Asset Category">@Model.AssetList[i].AssetCategory.Name</td>
+                            <td data-label="Asset Name">@Model.AssetList[i].AssetName</td>
+                            <td data-label="Issuing Department">@Model.AssetList[i].IssuingDepartment.Name</td>
+                            <td data-label="Condition">@Model.AssetList[i].Condition.Name</td>
+                            <td data-label="Specifications">
+                                @Model.AssetList[i].Specification
+
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>

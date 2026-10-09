@@ -1,0 +1,203 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Reports.RecruitmentReports
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+
+<script src="~/scripts/Recruitment/Reports/recruitmentTransactionHistory.js"></script>
+
+
+
+
+
+<style>
+    .sliderSearchInput {
+        width:250px !important;
+    }
+</style>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Recruitment Transaction History</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Recruitment Transaction History
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+
+
+                            <div class="tab-items ">
+
+                                <div>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-success">
+                                            @Html.RadioButtonFor(m => m.BasedOn, "1", new { @onchange = "GetList()" })
+                                            <span></span>User Wise
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input type="radio" name="radios15">*@
+                                            @Html.RadioButtonFor(m => m.BasedOn, "2", new { @onchange = "GetList()" })
+                                            <span></span>Menu Wise
+                                        </label>
+
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input type="radio" name="radios15">*@
+                                            @Html.RadioButtonFor(m => m.BasedOn, "3", new { @onchange = "GetList()" })
+                                            <span></span>Candidate Wise
+                                        </label>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-items d-flex mt-2">
+
+                                <div class="row-outer pb-2 mr-5">
+
+
+                                    <div class="input-group date" style="width: 150px;">
+                                        @Html.TextBoxFor(Model => Model.FromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "From", onchange = "GetList()" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="fromdate"></span>
+                                </div>
+                                <div class="row-outer pb-2">
+
+
+                                    <div class="input-group date" style="width: 150px;">
+                                        @Html.TextBoxFor(Model => Model.ToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "To", onchange = "GetList()" })
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="todate"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-items usrDropdown">
+
+                                <div>
+                                    @*@Html.DropDownListFor(m => m.UserDropdown, (SelectList)ViewBag.Usr, "--Select--", new { @class = "form-control form-control-sm", @style = "width: 140px;" })*@
+
+                                    @Html.DropDownListFor(m => m.UserDropdown, (SelectList)ViewBag.Usr, "Search by Employee name", new
+                               {
+                                   @class = "selectpicker sliderSearchInput form-control form-control-sm",
+                                   @onchange = "GetList()",
+                             
+                                          data_show_subtext = "true",
+                                   data_live_search = "true"
+                               })
+                                </div>
+
+                            </div>
+                            <div class="tab-items mnDropdown hide">
+
+                                <div>
+                                    @Html.DropDownListFor(m => m.MenuDropdown, (SelectList)ViewBag.Menu, "--Select--", new { @class = "form-control form-control-sm" ,@onchange = "GetList()" })
+
+                                   
+                                </div>
+
+                            </div>
+
+                            <div class="tab-items select-option mb-2">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="RefNo/Candidate Name">
+                                </div>
+                                @*<div data-bs-toggle="tooltip" data-bs-original-title="Filter"
+                 class="filter-button">
+                <i class="fas fa-filter"></i>
+            </div>*@
+
+
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                        data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div id="ListView">
+                        @await Html.PartialAsync("_List.cshtml", Model)
+                    </div>
+
+
+
+                    <!--end: Datatable-->
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

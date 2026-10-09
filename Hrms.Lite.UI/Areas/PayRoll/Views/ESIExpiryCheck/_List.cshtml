@@ -1,0 +1,101 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ESIExpiryCheck
+<script src="~/js/settings.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+
+@*<script>
+        $(document).ready(function () {
+            if ($('#moduleAllCheckBox').find('input[type="checkbox"]:checked').length == $('#moduleAllCheckBox').find('input[type="checkbox"]').length - 1) {
+                $('#moduleAll').prop('checked', true);
+            }
+
+        });
+    </script>*@
+
+
+
+<script>
+   
+      $(document).ready(() => {
+        //const myTable = $('#moduleAllCheckBox').dataTable({
+        //    stateSave: true
+        //});
+        var myTable = $('#moduleAllCheckBox').dataTable();
+        var allPagesCheckboxes = myTable.fnGetNodes();
+
+        $('#moduleAll').click(function () {
+         
+            debugger;
+            var active = $('#moduleAll').prop("checked") ? 1 : 0;
+            if (active == 0) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', false);                         
+            }
+            if (active == 1) {
+                $('input[type="checkbox"]', allPagesCheckboxes).prop('checked', true);
+                             
+            }
+        });
+    });
+
+  
+   
+</script>
+
+
+<div class="ihits-table table-border odd-even mobile-responsive-table EsiExpiryCheck-list">
+    @Html.HiddenFor(m => m.ESIExpiryCheckList.Count)
+    <table id="moduleAllCheckBox" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">ESI Salary</th>
+                <th>
+                    <div class="checkbox-inline pl-1">
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            @*<input id="moduleAll" type="checkbox" onchange="onAllClick('moduleAll','moduleAllCheckBox')">*@
+                            <input id="moduleAll" type="checkbox">
+
+                            <span></span>
+                        </label>
+                    </div>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.ESIExpiryCheckList != null && Model.ESIExpiryCheckList.Count > 0)
+            {
+                for (int i = 0; i < Model.ESIExpiryCheckList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="ID">
+                            @Model.ESIExpiryCheckList[i].ID
+
+                            @Html.HiddenFor(m => m.ESIExpiryCheckList[i].EmployeeGUID)
+                            @Html.HiddenFor(m => m.ESIExpiryCheckList[i].EmployeeCode)
+                        </td>
+                      
+                        <td data-label="EmployeeName">@Model.ESIExpiryCheckList[i].EmployeeName</td>
+                        <td data-label="Designation">@Model.ESIExpiryCheckList[i].Designation</td>
+                        <td data-label="Department">@Model.ESIExpiryCheckList[i].Department</td>
+                        <td data-label="Location">@Model.ESIExpiryCheckList[i].Location</td>
+                        <td data-label="Gross Salary">@Model.ESIExpiryCheckList[i].GrossSalary</td>
+                        <td data-label="Y/S">
+                            <div class="checkbox-inline pl-1">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.ESIExpiryCheckList[i].Applicable, new { @onclick = "onChkBoxClick(this,'moduleAll','moduleAllCheckBox')" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

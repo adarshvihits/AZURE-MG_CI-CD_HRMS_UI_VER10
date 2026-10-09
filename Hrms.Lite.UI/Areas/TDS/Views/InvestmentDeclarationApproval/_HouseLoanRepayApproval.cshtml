@@ -1,0 +1,324 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+
+<style>
+
+    .grid-border-new {
+        margin-top: 10px;
+    }
+
+    .header-adress {
+        font-weight: 800;
+        color: black;
+    }
+
+    .btn.btn-icon.btn-edited.icon-only i::before {
+        color: white !important;
+        font-size: 11px !important;
+        line-height: 14px;
+    }
+
+
+
+    .btn.btn-icon.btn-view.icon-only i::before {
+        color: white !important;
+        font-size: 11px !important;
+        line-height: 14px;
+    }
+</style>
+<div class="accoding-new-color-change">Self Occupied House Loan Repayment - Actual Details</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table Self-OccupiedHouse-Loan-Repayment mb-2">
+            <table id="otherIncome">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Address of House</th>
+                        <th scope="col">Principle Amount</th>
+                        <th scope="col">Interest</th>
+                        <th scope="col">Name of Bank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.HLRepayActualList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.HLRepayActualList.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+
+
+                                <td data-label="NatureofIncome">
+
+                                    @Html.DisplayFor(m => m.HLRepayActualList[i].HouseAddress)
+                                </td>
+
+
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.HLRepayActualList[i].PrincipalAmt)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.HLRepayActualList[i].Interest)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.HLRepayActualList[i].NameofBank)
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" align="center"><em>No table data</em></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "HouseLoanRepay" }))
+{
+
+    @Html.HiddenFor(m => m.EmployeeGuid)
+    @Html.HiddenFor(m => m.AssessmentYear.Code)
+<div class="top-hed-new">
+    <div class="accoding-new-color-change " style="margin-left:-15px;">Self Occupied House Loan Repayment - Approval</div>
+
+    @if (Model.HLRepayList != null && Model.HLRepayList.Count > 0)
+    {
+
+        for (int i = 0; i < Model.HLRepayList.Count; i++)
+        {
+<div class="grid-border-new">
+    <div class="row ">
+
+        <div class="col-md-2">
+            <div class="form-group">
+                @*<h5 class="header-adress">Address of House</h5>*@
+
+                <label class="view-title">Address of House</label>
+                <div class="view-details">
+                    @Html.HiddenFor(m => Model.HLRepayList[i].flag)
+                    @Html.HiddenFor(m => Model.HLRepayList[i].TrnCode)
+                    @Html.TextBoxFor(m => m.HLRepayList[i].HouseAddress, new { @class = "form-control", placeholder = "Name", @maxlength = 120 })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Location Status</label>
+                <div class="view-details">
+                    @Html.DropDownListFor(m => m.HLRepayList[i].LocationStatus.Code, (SelectList)ViewBag.LocationStatus, "--Select--", new { @class = "form-control form-control-sm" })
+                    <span id="locationstatus" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">
+                    Ownership Status
+                </label>
+                <div class="view-details">
+                    @Html.DropDownListFor(m => m.HLRepayList[i].OwnerStatus.Code, (SelectList)ViewBag.OwnerStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "HLOwnerStausChange('" + i + "',this,'ownerstatus')" })
+                    <span id="ownerstatus" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Percentage</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].Percentage, new { @class = "form-control", placeholder = "Percentage", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="percentage" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Purpose</label>
+                <div class="view-details">
+                    @Html.DropDownListFor(m => m.HLRepayList[i].Purpose.Code, (SelectList)ViewBag.Purpose, "--Select--", new { @class = "form-control form-control-sm" })
+                    <span id="purpose" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Date of Loan</label>
+                <div class="view-details input-group date">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].DateofLoan, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Loan" })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="dateofloan" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-3">
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Date of Completion	</label>
+                <div class="view-details input-group date">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].DateofCompletion, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date of Completion" })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">Principal Amount</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].PrincipalAmt, new { @class = "form-control", placeholder = "Principle Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="principleamt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">
+                    Interest
+                </label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].Interest, new { @class = "form-control", placeholder = "Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "HLInterestChange('" + i + "',this,'interest')" })
+                    <span id="interest" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	Pre EMI Interest</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].PreEMIInterest, new { @class = "form-control", placeholder = "Pre EMI Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "HLInterestChange('" + i + "')" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	Total Interest</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].TotalInterest, new { @class = "form-control", placeholder = "Total Interest", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @readonly = true })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	Name of Bank</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].NameofBank, new { @class = "form-control", placeholder = "Name of Bank", @maxlength = 120 })
+                    <span id="nameofbank" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="row my-3">
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	PAN of Bank</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].PANofBank, new { @class = "form-control", placeholder = "PAN of Bank", @maxlength = 10, @onblur = "validatePan('HLRepayList_' + i + '__PANofBank','lpanofbank_' + i)", @onchange = "validatePan('HLRepayList_' + i + '__PANofBank','lpanofbank_' + i)" })
+                    <span id="lpanofbank" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	Address of Bank</label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].BankAddress, new { @class = "form-control", placeholder = "Address of Bank", @maxlength = 120 })
+                    <span id="bankaddress" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">
+                    Remarks
+                </label>
+                <div class="view-details">
+                    @Html.TextBoxFor(m => m.HLRepayList[i].Remarks, new { @class = "form-control", placeholder = "Remarks", @maxlength = 120 })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">
+                    Action
+                </label>
+                <div class="view-details">
+
+                    <a data-bs-toggle="tooltip" title="" id="designationedit" class="btn btn-icon btn-view icon-only " onclick="GetUploadDocumentPopUp('LoanRepay','@Model.HLRepayList[i].TrnCode')" data-bs-original-title="view" style="background-color:#007bff !important; width: 40px !important; height: 25px; ">
+                        <i class=" fas far fa-eye mr-1"></i>
+                        <span>@Model.HLRepayList[i].RepayDocCount </span>
+                    </a>
+
+                    <a data-bs-toggle="modal" data-bs-original-title="Reject" id="HLRepaybtnId_@i" class="btn_reject" onclick="RejectionPopUp(@i,'HLRepay')">  </a>
+
+                    <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="ApprovebtnId_@i" class="btn_approve" onclick="HLRepayApproval(@i,'Approved','HLRepay')"></a>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="view-title">	Status</label>
+                <div class="view-details" style="font-weight:600; color:@Model.HLRepayList[i].StatusColor">
+                    @Model.HLRepayList[i].ApprovalStatus
+                </div>
+                
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+         
+
+        
+
+        }
+
+    }
+    else
+    {
+        <div class="row " style="height:100%;">
+            <div class="new-dataaa-found">
+                No Data Found
+            </div>
+
+        </div>
+    }
+</div>
+
+}

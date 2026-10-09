@@ -1,0 +1,97 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingEmployeeGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/settings.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even training_emlpoyee_group mobile-responsive-table  ">
+    @Html.HiddenFor(m => m.TrainingEmployeeGroupList.Count)
+    @Html.HiddenFor(model => Model.GI)
+    @Html.HiddenFor(model => Model.LogGI)
+    <table id="SectionTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                @*<th scope="col">Short Name</th>*@
+                <th scope="col">Training</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.TrainingEmployeeGroupList != null && Model.TrainingEmployeeGroupList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.TrainingEmployeeGroupList.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Name">@Model.TrainingEmployeeGroupList[i].Name</td>
+                            @Html.HiddenFor(m => m.TrainingEmployeeGroupList[i].EditActive)
+                            @Html.HiddenFor(model => Model.TrainingEmployeeGroupList[i].Code)
+                            @*<td data-label="Short Name">@Model.TrainingEmployeeGroupList[i].ShortName</td>*@
+                            <td data-label="Trainings">@Model.TrainingEmployeeGroupList[i].Training</td>
+                            <td data-label="Actions">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addregion"
+                                           class="btn btn-icon btn-edit icon-only " onclick="onAddNewOrEditClick('MODIFY', '@Model.TrainingEmployeeGroupList[i].GI', '@Model.TrainingEmployeeGroupList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addregion"
+                                           class="btn btn-icon btn-edit icon-only " onclick="onAddNewOrEditClick('MODIFY', '@Model.TrainingEmployeeGroupList[i].GI', '@Model.TrainingEmployeeGroupList[i].LogGI',@i);
+                                           swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#newRequestSlider');});">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <!-- delete Slider  start-->
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="id=deleteregion"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.TrainingEmployeeGroupList[i].GI','@Model.TrainingEmployeeGroupList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="id=deleteregion"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.TrainingEmployeeGroupList[i].GI', '@Model.TrainingEmployeeGroupList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+        </tbody>
+    </table>
+</div>

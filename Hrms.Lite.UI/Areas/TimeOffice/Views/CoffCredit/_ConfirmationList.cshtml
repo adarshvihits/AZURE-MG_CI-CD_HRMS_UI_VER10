@@ -1,0 +1,146 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.CoffCredit
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".pendingTabCount").html(@Model.PendingCount);
+        $(".ConfirmedTabCount").html(@Model.ConfirmedCount);
+
+        $('.CoffConfirmation_Status').on('click', function () {
+                    debugger
+            if ($('.CoffConfirmation_Status:checked').length == $('.CoffConfirmation_Status').length) {
+                $('#Coff_Checkbox').prop('checked', true);
+                    } else {
+                $('#Coff_Checkbox').prop('checked', false);
+                    }
+                });
+
+
+
+
+    });
+
+</script>
+
+<div class="ihits-table table-border mobile-responsive-table Coff-Credit-Approval-list">
+    @Html.HiddenFor(m => m.ConfirmationList.Count)
+    <table id="coffCreditTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+
+                <th scope="col">Location </th>
+                <th scope="col">Date Worked</th>
+                <th scope="col">IN</th>
+                <th scope="col">OUT </th>
+                <th scope="col">Total Time</th>
+                <th scope="col">Opening</th>
+                <th data-bs-toggle="tooltip" title="Attendance Status" scope="col">Att.Status</th>
+                @if (Model.TabValues == "APPROVAL_PENDING")
+                {
+                    <th scope="col">
+
+                        <div class="checkbox-inline justify-content-center">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary ">
+
+                                <input type="checkbox" name="Checkboxes16" id="Coff_Checkbox" onchange="OnCheckBoxAllClick('Coff_Checkbox','coffCreditTable')">
+
+                                <span></span>
+                            </label>
+
+                        </div>
+
+                    </th>
+
+                }
+                else
+                {
+                    <th scope="col">Status</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.ConfirmationList != null && Model.ConfirmationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ConfirmationList.Count; i++)
+                {
+            <tr>
+
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].EmployeeID)
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].EmployeeGI)
+                @Html.HiddenFor(Model => Model.ConfirmationList[i].EmployeeCode)
+
+
+
+                <td data-label="ID">@Model.ConfirmationList[i].EmployeeID</td>
+                <td data-label="Employee Name">@Model.ConfirmationList[i].EmployeeName</td>
+                <td data-label="Designaion">@Model.ConfirmationList[i].Designation.Name</td>
+                <td data-label="Department">@Model.ConfirmationList[i].Department.Name</td>
+                <td data-label="Location">@Model.ConfirmationList[i].Location.Name</td>
+
+
+
+                <td data-label="Date Worked">
+                    @Html.HiddenFor(Model => Model.ConfirmationList[i].DateWorked)
+                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ConfirmationList[i].DateWorked))
+
+                </td>
+
+                <td data-label="IN">
+
+                    @Model.ConfirmationList[i].IN
+                </td>
+                <td data-label="OUT">
+
+                    @Model.ConfirmationList[i].OUT
+                </td>
+                <td data-label="Total Time">
+
+                    @Model.ConfirmationList[i].TotalTime
+                </td>
+                <td data-label="Opening">
+
+                    @Model.ConfirmationList[i].Opening
+                </td>
+                <td data-label="Status">
+                    @Html.HiddenFor(Model => Model.ConfirmationList[i].AttendanceStatus)
+                    @Model.ConfirmationList[i].AttendanceStatus
+                </td>
+                @if (Model.TabValues == "APPROVAL_PENDING")
+                {
+                    <td data-label="Select">
+
+                        @{
+                            var id = "ConfirmationList_" + i + "__ConfirmationStatus";
+                            var name = "ConfirmationList[" + i + "].ConfirmationStatus";
+                        }
+                        <div class="checkbox-inline justify-content-center">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                @Html.CheckBoxFor(m => m.ConfirmationList[i].ConfirmationStatus, new { @class = "CoffConfirmation_Status" })
+
+                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        @Model.ConfirmationList[i].Status
+                    </td>
+                }
+
+            </tr>
+
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

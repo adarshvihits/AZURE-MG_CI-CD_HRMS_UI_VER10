@@ -1,0 +1,119 @@
+﻿@model Hrms.Lite.Shared.Master.SubProduct
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "SubProduct", FormMethod.Post, new { id = "SubProductsave" }))
+{
+    <div id="SubProductedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>SubProduct</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm SubProductName", @placeholder = "SubProduct Name", @onblur = "OnlycapitalizeFirstLetter(this,'SubProductName')", maxlength = "120" })
+                            <span id="SubProductName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm SubProductShortName", @placeholder = "Short Name", @onblur = "validate(this,'SubProductShortName')", maxlength = "5" })
+
+                            <span id="SubProductShortName"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('DPT','@Model.Code')"*@>
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "ActiveinactiveSubProduct" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm SubProductDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm SubProductDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SubProductSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SubProductSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

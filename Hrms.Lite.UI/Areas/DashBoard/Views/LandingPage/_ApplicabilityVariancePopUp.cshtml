@@ -1,0 +1,167 @@
+﻿@model Hrms.Lite.Shared.DashBoard.PayRollDashBoardNew
+<script src="~/js/settings.js"></script>
+<style>
+    .dataTables_scrollBody {
+        height: 28vh !important;
+    }
+</style>
+<script>
+
+    $(".search-slider-inner").click(function () {
+        $(".form-control").toggleClass('field-width-big')
+    });
+
+</script>
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+        <div class="tab-items">
+
+        </div>
+
+
+
+        <div class="tab-items select-option high">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+            @*<div class="sraech-slider">
+
+
+
+                    <div class="search-slider-inner">
+                        <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                    </div>
+                    <input id="searchList" type="text" class="form-control form-control-sm"
+                           placeholder="ID/Name" onkeyup="EmployeeSearch('pfEsiVarianceTable')">
+                </div>*@
+
+
+            <button data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel" onclick="ExportToExcelApplicabilityCount()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>
+
+        </div>
+
+
+    </div>
+</div>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table esiabblicablelist_variance_popup ">
+    @Html.HiddenFor(m => m.ESI_PF_PT_Variance_Applicable.Count)
+    <input type="hidden" id="pfOREsiGrp" />
+    <input type="hidden" id="pfOREsiType" />
+    <input type="hidden" id="pfOREsiSubType" />
+
+    <table id="pfEsiVarianceTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID </th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">
+                    Designation
+                </th>
+                <th scope="col">
+                    Department
+
+                </th>
+                <th scope="col">
+                    Location
+
+                </th>
+                @if (Model.ApplicableType == "PF" || Model.ApplicableType == "ESI" || Model.ApplicableType == "PT")
+                {
+
+                    <th scope="col">
+                        Change Done By
+                    </th>
+
+                    <th scope="col">
+                        New <span class="pfOREsi"></span> Grp
+                    </th>
+                    <th scope="col">
+                        Old <span class="pfOREsi"></span> Grp
+                    </th>
+                }
+                else
+                {
+                    <th scope="col">
+                        Group Name
+                    </th>
+                }
+                <th scope="col">
+                    Old Appli.
+                </th>
+                <th scope="col">
+                    New Appli.
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ESI_PF_PT_Variance_Applicable != null && Model.ESI_PF_PT_Variance_Applicable.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ESI_PF_PT_Variance_Applicable.Count; i++)
+                {
+                    <tr>
+                        <td data-label="ID ">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].EmployeeID
+                        </td>
+                        <td data-label="Employee Name">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].FullName
+                        </td>
+                        <td data-label="Designation">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].Designation
+                        </td>
+                        <td data-label="Department">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].Department
+                        </td>
+                        <td data-label="Location">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].Location
+                        </td>
+                        @if (Model.ApplicableType == "PF" || Model.ApplicableType == "ESI" || Model.ApplicableType == "PT")
+                        {
+
+                            <td data-label="Change Done By">
+                                @Model.ESI_PF_PT_Variance_Applicable[i].ChangeDoneBy
+                            </td>
+
+                            <td data-label="Old PF Grp">
+                                @Model.ESI_PF_PT_Variance_Applicable[i].OldGroupName
+                            </td>
+                            <td data-label="New PF Grp">
+                                @Model.ESI_PF_PT_Variance_Applicable[i].NewGroupName
+                            </td>
+                        }
+                        else
+                        {
+                            <td data-label="Group Name">
+                                @Model.ESI_PF_PT_Variance_Applicable[i].GroupName
+                            </td>
+                        }
+                        <td data-label="Old Appli.">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].OldApplicable
+                        </td>
+                        <td data-label="New Appli.">
+                            @Model.ESI_PF_PT_Variance_Applicable[i].NewApplicable
+                        </td>
+
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

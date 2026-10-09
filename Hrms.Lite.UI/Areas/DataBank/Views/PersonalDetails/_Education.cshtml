@@ -1,0 +1,110 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+<div class="row">
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table personal-details-education-section mb-2">
+            <table id="education">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Qualification Type</th>
+                        <th scope="col">Qualification</th>
+                        <th scope="col">Specialization of Branch</th>
+                        <th scope="col">College/University</th>
+                        <th scope="col">Aggregate</th>
+                        <th scope="col">Year of Completion</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.HiddenFor(m => m.EmployeeGI)
+
+                    @for (int i = 0; i < Model.Education.Count; i++)
+                    {
+                        @if (Model.Education[i].EducationLogGI !=Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                        {
+                    <tr id="row_OI_@i">
+                        <td data-label="Qualification Type">
+                            @Html.HiddenFor(m => m.Education[i].EducationLogGI)
+                            @Html.DisplayFor(m => m.Education[i].QualificationTypeName)
+
+                        </td>
+                        <td data-label="Qualofication">
+
+                            @Html.DisplayFor(m => m.Education[i].QualificationName)
+                        </td>
+                        <td data-label="Field of Study">
+
+                            @Html.DisplayFor(m => m.Education[i].SpecialisationName)
+                        </td>
+                        <td data-label="Field of Study">
+
+                            @Html.DisplayFor(m => m.Education[i].College_University)
+                        </td>
+                        <td data-label="Year of Completion">
+
+                            @Html.DisplayFor(m => m.Education[i].Aggregate)
+                        </td>
+                        <td data-label="Year of Completion">
+
+                            @Html.DisplayFor(m => m.Education[i].YearOfCompletionName)
+                        </td>
+
+                        <td data-label="Edit">
+                            <div class="small-btn-group">
+                                <a id="addEducationDetails" type="button"
+                                   class="btn btn-icon btn-default slider-btn icon-only" data-bs-toggle="tooltip" data-placement="top" title="Edit" onclick="onEducationSave('@Model.Education[i].EducationLogGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+                                <a type="button"
+                                   class="btn btn-icon btn-delete icon-only" data-bs-toggle="tooltip" data-placement="top" title="Delete" onclick="onEducationDelete('@Model.Education[i].EducationLogGI')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                                <button data-bs-toggle="tooltip" title="View File" data-placement="top"  type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="ViewDocument('@Model.Education[i].EducationLogCode','Edu')" data-bs-original-title="">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No table data</td>
+                            </tr>
+                        }
+
+                    }
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.EducationApprovalPending == false)
+        {
+            <label class="new_approval_pend_btn">
+                Approval Pending
+            </label>
+        }
+
+
+    </div>
+    <div class="col-md-6 ">
+        <button id="addEducationDetails" type="button" class="btn btn-default float-right" onclick="onEducationSave()">
+            <i class="icon-nm fas fa-plus"></i>Add
+            New
+        </button>
+        <div id="educationSav">
+
+           
+        </div>
+    </div>
+</div>

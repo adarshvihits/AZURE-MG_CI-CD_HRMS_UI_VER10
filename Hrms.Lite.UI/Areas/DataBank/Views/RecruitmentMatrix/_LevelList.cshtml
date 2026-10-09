@@ -1,0 +1,91 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.RecruitmentMatrix
+
+<style>
+    .form-control:disabled {
+        border-color: #EBEBFD;
+        background-color: #f6f6f6;
+        color: gray !important;
+    }
+
+    .btn.dropdown-toggle:disabled {
+        border-color: #EBEBFD !important;
+        background-color: #ebe8e8 !important;
+        color: #585050 !important;
+    }
+</style>
+
+<div class="ihits-table table-border odd-even mobile-responsive-table role_slider_list">
+    @Html.HiddenFor(m => Model.ApprovalRoleList.Count)
+    <table id="RoleMappingTable" class="common-table RoleMapping">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl No.</th>
+                <th scope="col">Level</th>
+                <th scope="col">Recruitment Role</th>
+                <th scope="col">Role or Employee</th>
+                <th scope="col">Role</th>
+                <th scope="col">Employee</th>
+              
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ApprovalRoleList != null && Model.ApprovalRoleList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApprovalRoleList.Count; i++)
+                {
+
+            <tr id="PanelMapping_@i">
+
+                <td>
+                    <span id="PanelMappingslno@(i+1)">@(i + 1)</span>
+                </td>
+                <td>
+                    @Html.HiddenFor(m => m.ApprovalRoleList[i].Level.Code)
+                    @Html.DisplayFor(m => m.ApprovalRoleList[i].Level.Name)
+                </td>
+                <td>
+
+                    @Html.DropDownListFor(m => m.ApprovalRoleList[i].RecruitmentRole.Code, (SelectList)ViewBag.RecruitmentRole, new { @class = "form-control role-select", required = "required",@*@onChange = "rolechange(" + i + ")"*@})
+
+                    <input type="hidden" id="RoleCodeTemp_@i"  />
+
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.ApprovalRoleList[i].RoleOrEmp.Code, new SelectList(ViewBag.RoleOrEmp, "Value", "Text"), "Select", new { @class = "form-control role-select", required = "required", @onChange = "rolechange(" + i + ")" })
+
+                    <input type="hidden" id="RoleCodeTemp_@i"  />
+                </td>
+                <td>
+
+                    @Html.DropDownListFor(m => m.ApprovalRoleList[i].Role.Code, (SelectList)ViewBag.Role, new { @class = "form-control role-select Role", required = "required", @disabled = true @*@onChange = "rolechange(" + i + ")"*@})
+
+                    <input type="hidden" id="RoleCodeTemp_@i"  />
+
+                </td>
+                <td>
+                    @Html.HiddenFor(m => m.ApprovalRoleList[i].EmployeeName)
+                    @Html.ListBoxFor(m => m.ApprovalRoleList[i].EmployeeCode, (SelectList)ViewBag.ResponsiblePerson, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm ResponsiblePerson_Employee", @multiple = "multiple", @onchange = "validateMultiselect('ResponsiblePersons','responsibleperson','respPerson')", data_db_filter = "true", @disabled = true })
+                    <input type="hidden" id="RoleCodeTemp_@i"/>
+                </td>
+                @*<td>
+
+                    @if (i == Model.ApprovalRoleList.Count - 1 && i > 0)
+                    {
+                        <a data-bs-toggle="tooltip" title="" class="btn btn-icon  icon-only mobile-full-width btn-delete" data-bs-original-title="Delete" onclick="DeleteLevel('@Model.ApprovalRoleList[i].Level.Code')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </a>
+                    }
+                </td>*@
+            </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+
+

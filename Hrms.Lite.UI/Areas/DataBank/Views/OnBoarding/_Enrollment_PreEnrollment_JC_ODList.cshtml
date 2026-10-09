@@ -1,0 +1,183 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+
+            $(document).ready(function () {
+            $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentPendCount").html(@Model.PreenrollmentPendingCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+            $(".OverDueCount").html(@Model.OverDueCount);
+                $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+                $(".documentsCount").html(@Model.JoiningConfCount);
+                debugger
+                if (@Model.TabIndex == 3) {
+                    $('.onboarding').addClass('emp_active_list')
+                    $('.emp_active_list').removeClass('onboarding');
+                }
+                else {
+                    $('.emp_active_list').addClass('onboarding');
+                    $('.onboarding').removeClass('emp_active_list')
+                }
+
+        });
+
+    
+
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table onboarding">
+    <table id="PreEnrollmentJCODList" class="common-table">
+        @Html.HiddenFor(m => m.OnBoardingList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl:No</th>
+                <th scope="col">Applicant ID</th>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Mobile Number</th>
+                <th scope="col">Due days</th>
+                <th scope="col" data-bs-toggle="tooltip" data-placement="right" title="Expected DOJ">E:DOJ</th>
+                <th scope="col">Checklist</th>
+                @if (Model.TabIndex == 3)
+                {
+                    <th scope="col">Action</th>
+                }
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+            {
+                for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                {
+            <tr>
+
+                <td data-label="SL:NO">@(i + 1)</td>
+                <td data-label="Applicant ID">@Model.OnBoardingList[i].ApplicantID</td>
+                @if (Model.OnBoardingList[i].PendingStatus == "Preenrollment Approval")
+                {
+                    @if (Model.UserVsMenuTab[1].Applicable == true)
+                    {
+                        <td data-label="Candidate Name">
+                            @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "GetPreEnrollmentApproval", "OnBoarding", new { preEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)
+
+                        </td>
+                    }
+                    else
+                    {
+                        <td data-label="Candidate Name">
+                            <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                        </td>
+                    }
+                }
+                else if (Model.OnBoardingList[i].PendingStatus == "Joining Confirmation" || Model.OnBoardingList[i].PendingStatus == "Rejoin Confirmation")
+                {
+                    @if (Model.UserVsMenuTab[5].Applicable == true)
+                    {
+                        <td data-label="Candidate Name">
+
+                            @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "Create", "JoiningConfirmation", new { EnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)
+                        </td>
+                    }
+                    else
+                    {
+                        <td data-label="Candidate Name">
+                            <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                        </td>
+                    }
+                }
+                else
+                {
+                    if (Model.TabIndex == 3)
+                    {
+                        @if (Model.UserVsMenuTab[2].Applicable == true)
+                        {
+                            <td data-label="Candidate Name">
+
+                                @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "Create", "EnrollmentTest", new { EnrollGI = @Model.OnBoardingList[i].PreEnrollGI, Breadcrumb = "OnBoarding", BreadcrumbName = "OnBoarding List" }, null)
+                            </td>
+                        }
+                        else
+                        {
+                            <td data-label="Candidate Name">
+                                <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                            </td>
+                        }
+                    }
+                    if (Model.TabIndex == 6)
+                    {
+                        @if (Model.UserVsMenuTab[6].Applicable == true)
+                        {
+                            <td data-label="Candidate Name">
+
+                                @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "Create", "EnrollmentTest", new { EnrollGI = @Model.OnBoardingList[i].PreEnrollGI, Breadcrumb = "OnBoarding", BreadcrumbName = "OnBoarding List" }, null)
+                            </td>
+                        }
+                        else
+                        {
+                            <td data-label="Candidate Name">
+                                <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                            </td>
+                        }
+                    }
+                    if (Model.TabIndex == 1)
+                    {
+                        @if (Model.UserVsMenuTab[1].Applicable == true)
+                        {
+                            <td data-label="Candidate Name">
+
+                                @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "ApplicantDetails", "PreEnrollmentTest", new { ApplicantGI = @Model.OnBoardingList[i].PreEnrollGI, Breadcrumb = "OnBoarding", BreadcrumbName = "OnBoarding List" }, null)
+                            </td>
+                        }
+                        else
+                        {
+                            <td data-label="Candidate Name">
+                                <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                            </td>
+                        }
+                    }
+                }
+
+                <td data-label="Fun.Designation"> @Model.OnBoardingList[i].Designation.Name</td>
+                <td data-label="Department"> @Model.OnBoardingList[i].Department.Name</td>
+                <td data-label="Location"> @Model.OnBoardingList[i].Location.Name</td>
+                <td data-label="Location"> @Model.OnBoardingList[i].MobileNumber</td>
+                <td data-label="Due Days"> @Model.OnBoardingList[i].DueDays</td>
+                <td data-label="E:DOJ">
+                    @*@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OnBoardingList[i].ExpectedDOJ))*@
+                    @(
+            Model.OnBoardingList[i].ExpectedDOJ != DateTime.MinValue
+                ? @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.OnBoardingList[i].ExpectedDOJ))
+                : "")
+                </td>
+                @if (Model.UserVsMenuTab[3].Applicable == true)
+                {
+                    <td data-label="Checklist">@Html.ActionLink(@Model.OnBoardingList[i].CheckList, "GetCheckList", "OnBoarding", new { PreEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)</td>
+                }
+                else
+                {
+                    <td data-label="Checklist">
+                        <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CheckList</a>
+                    </td>
+                }
+                @if (Model.TabIndex == 3)
+                {
+                    <td>
+                        <a data-bs-toggle="tooltip" title="" class="btn_reject" data-bs-original-title="Reject" onclick="RejectEnroll('@Model.OnBoardingList[i].PreEnrollGI')"> </a>
+                    </td>
+                }
+
+
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

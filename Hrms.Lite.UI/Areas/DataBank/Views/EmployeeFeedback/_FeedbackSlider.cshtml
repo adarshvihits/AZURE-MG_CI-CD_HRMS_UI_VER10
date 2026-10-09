@@ -1,0 +1,143 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeFeedback
+
+    <script src="~/js/tooltip.js"></script>
+
+    <script src="~/scripts/DataBank/ResignationDelete.js?v=1"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('ResignationDeleteDetails_Reason');
+        });
+
+
+    </script>
+    @using (Html.BeginForm(null,null , FormMethod.Post, new { @id = "FeedbackSlider" }))
+    {
+        <div id="resignationdelete" class="slider-forms slider-forms-open Feedback">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('Feedback')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4 class="mb-4">Employee Feedback</h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+
+
+                <div class="reward-section border-none">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Subject</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                    @Html.HiddenFor(Model => Model.FeedbackCode)
+                                    @Model.Subject
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer pb-2">
+                                <label class="view-title">Entry Date</label>
+                                <div class="view-details">
+
+                                    @Model.EntryDate
+                                </div>
+                                <span id="EntryDate"></span>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                    <div class="row ">
+
+                        <div class="col-md-12">
+                            <label class="view-title">Feedback</label>
+                            @*<textarea class="form-control form-control-sm"
+                placeholder="Remarks"></textarea>*@
+                            <div class="view-details">
+
+                                @Html.DisplayFor(Model => Model.Feedback)
+                            </div>
+
+
+                            @*@Html.HiddenFor(Model => Model.ResignationDeleteDetails.Reason)*@
+                        </div>
+                        <span id="DeleteReason"></span>
+                    </div>
+                    <div class="row my-3">
+
+                        @if (Model.radiomode == 0)
+                        {
+                            <div class="col-md-12 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+
+                                    <div> Read</div>
+                                    <label class="switch" onchange="ActiveInactiveValidation('EmployeeFeedback','@Model.FeedbackCode')">
+
+                                        @Html.CheckBoxFor(model => model.radiostatus, new { @id = "Activeinactivetrmode"})
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-12 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+
+                                    <div> Read</div>
+                                    <label class="switch" onchange="ActiveInactiveValidation('EmployeeFeedback','@Model.FeedbackCode')">
+
+                                        @Html.CheckBoxFor(model => model.radiostatus, new { @id = "Activeinactivetrmode", @readonly = "true" })
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+
+
+
+                    </div>
+                   
+
+
+
+
+                    @if (Model.radiomode == 0)
+                    {
+                        <div class="row card-footer-bottom-fixed border-none">
+
+                            <div class="col-md-12 align-right">
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Feedbacksave()">
+                                    Save
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    }
+                </div>
+
+
+
+
+            </div>
+        </div>
+    }

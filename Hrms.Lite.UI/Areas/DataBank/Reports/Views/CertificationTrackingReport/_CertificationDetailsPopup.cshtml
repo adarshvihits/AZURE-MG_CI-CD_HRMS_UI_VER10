@@ -1,0 +1,173 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.CertificationTrackingReport
+@*<script src="~/js/bootstrap-datepicker.js"></script>*@
+
+<style>
+
+    .popup {
+        margin: 2% auto;
+        padding: 10px;
+    }
+
+    .pro_ph {
+        padding: 6px !important;
+        border-radius: 10px;
+    }
+
+    .image-input .image-input-wrapper {
+        width: 50px;
+        height: 50px;
+    }
+
+
+    .scond-divsprate {
+        border-radius: 10px;
+        border: 1px solid lightgrey;
+        padding: 10px;
+    }
+
+    /*.page-scroll-new {
+        overflow-y: scroll;
+        height: 510px;
+        display: block;
+        overflow-x: hidden;
+        padding-right: 10px;
+    }*/
+
+
+</style>
+
+
+<!--begin::Dashboard-->
+<!--begin::Row-->
+
+<div class="page-scroll-new popup_header  ">
+
+    <div class="profile-header position-relative pb-12 mb-5" style=" padding: 3px 20px !important;">
+        <!--begin: Search Form-->
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+        <div class="profile-header-overflow"></div>
+    </div>
+    <div class="scond-divsprate">
+
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">Request ID</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.RequestID, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">Register No.</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.RegisterNo, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">Apply Date</label>
+            </div>
+            <div class="col-md-3">
+                @*@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ApplyDate))*@
+                @Html.TextBoxFor(Model => Model.ApplyDate, "{0:dd-MMM-yyyy}", new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">Exam Date</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.ExamDate, "{0:dd-MMM-yyyy}", new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">Exam</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.Exam, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">Exam Status</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.ExamStatus, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">CPE Program</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.IsCpeProgram, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+            <div class="col-md-3">
+                <label class="size-fontss">Exam Fee</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.ExamFee, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+        <div class=" row ">
+            <div class="col-md-3">
+                <label class="size-fontss">Status</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(Model => Model.Status, new { @class = "form-control form-control-sm", @readonly = true })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="scond-divsprate mt-3">
+
+        <div class="ihits-table table-border odd-even mobile-responsive-table vertical-scroll-180">
+            <table id="PH_ApprovalTable" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">ID</th>
+                        <th scope="col">Authority</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Comments</th>
+                        <th scope="col">Action Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.EmpCertificationDetailsList != null && Model.EmpCertificationDetailsList.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.EmpCertificationDetailsList.Count; i++)
+                        {
+                            @Html.HiddenFor(m => m.EmpCertificationDetailsList.Count)
+                    <tr>
+                        <td data-label="ID">@Model.EmpCertificationDetailsList[i].EmployeeID</td>
+                        <td data-label="Authority">@Model.EmpCertificationDetailsList[i].Authority</td>
+                        <td data-label="Level">@Model.EmpCertificationDetailsList[i].Level</td>
+                        <td data-label="Action">@Model.EmpCertificationDetailsList[i].Action</td>
+                        <td data-label="Action">@Model.EmpCertificationDetailsList[i].Comments</td>
+                        <td data-label="Action Time"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmpCertificationDetailsList[i].ActionTime))</td>
+                    </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+
+                                <div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 30vh;"><img src="/images/nodata.png" style="width:130px;" /></div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

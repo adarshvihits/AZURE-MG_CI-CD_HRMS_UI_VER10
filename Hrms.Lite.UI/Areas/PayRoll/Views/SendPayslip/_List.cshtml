@@ -1,0 +1,95 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.SendPayslip
+@*<script>
+        $(document).ready(function () {
+            debugger;
+            //fillData();
+
+        });
+    </script>*@
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table notsendpaysliptable_list">
+    @Html.HiddenFor(m => m.SendPaySlipList.Count)
+    <table id="PaySlip_Gnrtn_Table" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Category</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Payroll Group">Payroll Grp</th>
+                <th scope="col">LOP</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Gross Allowance">Gross Allow</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Gross Deduction">Gross Ded</th>
+                <th scope="col">Advance</th>
+                <th scope="col">Net Pay</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Email</th>
+                @if (Model.Type == "0")
+                { 
+                    <th scope="col">
+                        <div class="checkbox-inline d-flex justify-content-center" style=" padding-left: 16px; ">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                <input type="checkbox"
+                                       name="Checkboxes15" id="SelectAll" onclick="onAllClick('SelectAll','PaySlip_Gnrtn_Table')">
+                                <span></span>
+                            </label>
+                        </div>
+            
+                    </th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.SendPaySlipList != null && Model.SendPaySlipList.Count > 0)
+            {
+                for (int i = 0; i < Model.SendPaySlipList.Count; i++)
+                {
+                    <tr>
+                        <td>
+                        @Html.HiddenFor(m =>m.SendPaySlipList[i].EmployeeGI)
+                        @Model.SendPaySlipList[i].EmployeeID</td>
+                        <td>@Model.SendPaySlipList[i].EmployeeName</td>
+                        <td>@Model.SendPaySlipList[i].Designation</td>
+                        <td>@Model.SendPaySlipList[i].Department</td>
+                        <td>@Model.SendPaySlipList[i].Location</td>
+                        <td>@Model.SendPaySlipList[i].Category</td>
+                        <td>@Model.SendPaySlipList[i].PayrollGroup</td>
+                        <td>@Model.SendPaySlipList[i].LOP</td>
+                        <td>@Model.SendPaySlipList[i].GrossAllowance</td>
+                        <td>@Model.SendPaySlipList[i].GrossDeduction</td>
+                        <td>@Model.SendPaySlipList[i].Advance</td>
+                        <td>@Model.SendPaySlipList[i].NetPay</td>
+                        <td>@Model.SendPaySlipList[i].PaymentMode</td>
+                        <td>@Model.SendPaySlipList[i].Email</td>
+                         @if (Model.Type == "0")
+                         {
+                            <td>
+
+                                <div class="form-group">
+                                    <div class="checkbox-inline d-flex justify-content-end">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            @*<input data-val="true" data-val-required="The HrmsUser field is required." id="SendPaySlipList_' + i + '__YN" name="SendPaySlipList[' + i + '].YN" type="checkbox" value="true" onchange="onCheckboxChange(this,' + i + ')" checked="' + d.data[i].yn + '">*@
+                                            @Html.CheckBoxFor(m => m.SendPaySlipList[i].YN)
+                                            <span></span>
+                                        </label>
+                                        <label class="checkbox checkbox-outline checkbox-success"></label>
+                                    </div>
+                                </div>
+                            
+                            
+                            </td>
+                         }
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+
+
+

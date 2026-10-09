@@ -1,0 +1,147 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        if ('@Model.SliderTitle' != "Passport")
+            moveCursorToEnd('NameInDrivingLicense');
+        else
+            moveCursorToEnd('NameInPassport');
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id="LicenseOrPassportSave",enctype = "multipart/form-data" }))
+{
+
+    <div id="DrivingLicenseFileEdit" class="slider-forms slider-forms-open uploadLicenseOrPassport">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('uploadLicenseOrPassport')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>@Model.SliderTitle</h4>
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.SliderTitle)
+            @Html.HiddenFor(m => m.Mode)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name in Document</label>
+                        @if (Model.SliderTitle != "Passport")
+                        {
+                            @Html.TextBoxFor(m => m.NameInDrivingLicense, new { @class = "form-control form-control-sm", @placeholder = "Name in Document", @maxlength = 120, @onblur = "validateById('#NameInDrivingLicense', 'NameValidation')" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.NameInPassport, new { @class = "form-control form-control-sm", @placeholder = "Name in Document", @maxlength = 120, @onblur = "validateById('#NameInPassport', 'NameValidation')" })
+                        }
+                    </div>
+                    <span id="NameValidation"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Number</label>
+                        @if (Model.SliderTitle != "Passport")
+                        {
+                            @Html.TextBoxFor(m => m.DrivingLicenseNumber, new { @class = "form-control form-control-sm", @placeholder = "Number",@maxlength = 20, @onblur = "validateById('#DrivingLicenseNumber', 'DocNumber')" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.PassportNumber, new { @class = "form-control form-control-sm", @placeholder = "Number", @maxlength = 20, @onblur = "validateById('#PassportNumber', 'DocNumber')" })
+                        }
+                    </div>
+                    <span id="DocNumber"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Valid From</label>
+                        <div class="input-group date">
+                           
+                            @if (Model.SliderTitle != "Passport")
+                            {
+                                @Html.TextBoxFor(m => m.DrivingLicenseValidFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", @readonly = "true", @placeholder = "Valid From",@onchange= "validateFromDate(this,'FromDate','DrivingLicenseValidTo')" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.PassportValidFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", @readonly = "true", @placeholder = "Valid From", @onchange = "validateFromDate(this,'FromDate','PassportValidTo')" })
+                            }
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="FromDate"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Valid To</label>
+                        <div class="input-group date">
+                           
+                            @if (Model.SliderTitle != "Passport")
+                            {
+                                @Html.TextBoxFor(m => m.DrivingLicenseValidTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Valid To",@onchange= "validateToDate(this,'ToDate','DrivingLicenseValidFrom')" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.PassportValidTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Valid To", @onchange = "validateToDate(this,'ToDate','PassportValidFrom')" })
+                            }
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                         <span id="ToDate"></span>
+                    </div>
+                </div>
+               
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, jpg, jpeg, png and bmp formats are allowed , File size less than 1 MB.">
+                            <div class="small-btn-group">
+
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                            </div>
+                            @Html.HiddenFor(m => m.File.fdata)
+                            @Html.TextBoxFor(m => m.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)", @title = "" })
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    @if (Model.SliderTitle != "Passport")
+                    {
+                        <a data-bs-toggle="tooltip" title="" data-bs-original-title="View" class="btn btn-icon btn-view" 
+                           onclick="displayDoc('IDENTITY','DL' )"><i class="icon-xl far fa-eye"></i></a>
+
+                    }
+                   else {                        
+                    <a data-bs-toggle="tooltip" title="" data-bs-original-title="View" class="btn btn-icon btn-view" onclick="displayDoc('IDENTITY','Passport')"><i class="icon-xl far fa-eye"></i></a>
+                    }
+                    <a data-bs-toggle="tooltip" data-bs-original-title="Delete" class="btn btn-icon btn-delete" onclick="DeleteIdentityDocuments()"><i class="icon-xl far fa-trash-alt"></i></a>
+                    <button type="button" class="btn btn-default " onclick="validateDrivingLicenseOrPassport()">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

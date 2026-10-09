@@ -1,0 +1,87 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ApplicantTracking
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.Tab6Count').html("@Model.Tab6Count");
+        $('.Tab7Count').html("@Model.Tab7Count");
+
+    });
+
+</script>
+<style>
+    .view_btn_appli {
+        width: 18px;
+        height: 18px;
+        background: url(/images/icons/viewappli.svg);
+        background-size: contain;
+        color: white;
+        display: inline-block;
+        background-repeat: no-repeat;
+        margin: 2px;
+    }
+</style>
+<div class="ihits-table table-border odd-even mobile-responsive-table  offer_rejected_list">
+    @Html.HiddenFor(m => Model.ApplicantTrackingList.Count)
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Applicant ID">Appli. ID</th>
+                <th scope="col">Applicant Name</th>
+                <th scope="col">MRF No.</th>
+                <th scope="col">Job Title</th>                      
+                <th scope="col">Location</th>             
+                <th scope="col" data-bs-toggle="tooltip" title="Uploaded Resume">U. Resume</th>
+                <th scope="col" data-bs-toggle="tooltip" title="System Generated Resume">S. Resume</th>
+                <th scope="col" >Offer Letter</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ApplicantTrackingList != null && Model.ApplicantTrackingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApplicantTrackingList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Applicant ID">@Model.ApplicantTrackingList[i].RefNo</td>
+                        <td data-label="Applicant Name">@Model.ApplicantTrackingList[i].ApplicantName</td>
+                        <td data-label="MRF No.">@Model.ApplicantTrackingList[i].JobCode</td>
+                        <td data-label="Job Title">@Html.HiddenFor(m => m.ApplicantTrackingList[i].ResumeDataBankGI)@Model.ApplicantTrackingList[i].JobTitle</td>                                                                     
+                        <td data-label="Required Location ">@Model.ApplicantTrackingList[i].Location</td>                                                
+                        <td data-label="View">
+                            <a data-bs-toggle="tooltip" title="" class="view_btn_appli" title="Resume Uploaded By Candidate" onclick="showDocument('@Model.ApplicantTrackingList[i].ResumeFile','@Model.ApplicantTrackingList[i].Resume')" cursorshover="true"> </a>
+                        </td>
+                        <td data-label="View">
+                            <a data-bs-toggle="tooltip" title="" class="view_btn_appli" title="Resume Uploaded By Candidate" onclick="viewResume('@Model.ApplicantTrackingList[i].ResumeDataBankGI')" cursorshover="true"> </a>
+                        </td>                        <td data-label="View">
+                            <a data-bs-toggle="tooltip" title="" class="view_btn_appli" title="Resume Uploaded By Candidate" onclick="showDocument('@Model.ApplicantTrackingList[i].Offerletter','@Model.ApplicantTrackingList[i].offerLetterAbsoluteuri')" cursorshover="true"> </a>
+                        </td>
+                                                     <td data-label="Actions" >
+                                                         <div style=" display: flex; align-items: center;">
+
+                                                             @*<a data-bs-toggle="tooltip" title="" class="btn_reject" onclick="onActionsClick('@Model.ApplicantTrackingList[i].PreEnrollGI','Reject')" data-bs-original-title="Cancel" cursorshover="true"> </a>*@
+                                                             @*<a onclick="onActionsClick('@Model.ApplicantTrackingList[i].PreEnrollGI','Reject')">
+            <i class="icon-xl la la-arrow-circle-right"></i>
+        </a>*@
+
+
+                                                             <a data-bs-toggle="tooltip" title="" class="btn_reject" onclick="onActionsClick('@Model.ApplicantTrackingList[i].PreEnrollGI','Reject')" data-bs-original-title="Reject" cursorshover="true"> </a>
+                                                             <a onclick="onActionsClick('@Model.ApplicantTrackingList[i].PreEnrollGI','Revise')" style="margin-left: 12px;" data-bs-toggle="tooltip" data-bs-original-title="Reinitiate">
+                                                                 @*<i class="icon-xl la la-arrow-circle-right"></i>*@
+                                                                 <img src="~/images/menuicon/Group 1.svg" style="width: 20px; height: 20px;" />
+                                                             </a>
+                                                         </div>
+
+
+                                                     </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

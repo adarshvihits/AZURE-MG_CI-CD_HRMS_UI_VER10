@@ -1,0 +1,864 @@
+﻿@model Hrms.Lite.Shared.DashBoard.PayRollDashBoardNew
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/New-Payroll-dashboard.css" rel="stylesheet" />
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/DashBoard/payRollDashboard.js"></script>
+
+<script>
+    $(document).ready(function () {
+        GetApplicabilityCount()
+        onClassificationDropdownChange()
+    });
+</script>
+
+
+<style>
+
+    .new-tile-count a:not([href]):not([class]){
+        color: white;
+    }
+    .tile-value-count h1 {
+        padding-top:10px;
+    }
+    .tile-value-count  {
+        padding-left: 14px;
+    }
+    .tile-value-count h4 {
+        padding-top: 15px;
+    }
+    .new-tile-box {
+        padding: 20px 5px;
+    }
+    .new-tile-box-2 {
+        padding: 20px 5px;
+    } .new-tile-box-3 {
+        padding: 20px 5px;
+    }
+</style>
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Payroll Dashboard
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home" , new { Area="" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Payroll Dashboard
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+            <div class="row height-100per">
+
+
+
+
+
+                <div class="col-md-12">
+
+                    <div class="card card-custom height-100per">
+                        <div class="card-body h-100 " >
+                          
+
+
+
+                                <div class=" common_space row">
+
+                                    <div class="col-md-9">
+
+                                        <div class="row">
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" onclick="onLabelClick('FandFPending','fandfpendingPopup')">
+                                                    <div class="new-tile-box">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <div class="icon-with-set">
+                                                                    <img class="icon-withz" src="~/images/icons/f & f pending.svg" />
+                                                                </div>
+
+                                                            </div>
+                                                            <div>
+
+
+                                                                <h1 class="new-tile-headz">F & F Pending </h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.FandFPendingCount</h1>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                       
+                                                        <div class="wave-box">
+
+                                                        </div>
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" onclick="onLabelClick('SalaryVariance','salaryvariencePopup')">
+                                                    <div class="new-tile-box-2">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <div class="icon-with-set">
+                                                                    <img class="icon-withz" src="~/images/icons/Increment.svg" />
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">Increment Given</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.SalaryVariance</h1>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+
+
+
+                                                        </div>
+                                                </a>
+                                            </div>
+
+
+
+
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" onclick="onLabelClick('OutstandingLoanBalance','outstandloanbalancePopup')">
+                                                    <div class="new-tile-box-3">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/loannn.svg" />
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">Loan Outstanding</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.LoanBalance</h1>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                      
+
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" href="@Url.Action("Index","LoanConfirmation",new { Area = "PayRoll"})">
+                                                    <div class="new-tile-box-3      tile-color-10">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/whf icon.svg" />
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">Loan Confirmation</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.LoanConfirmation</h1>
+                                                                </div>
+                                                            </div>
+                                                         
+
+                                                        </div>
+                                                      
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+
+
+
+
+
+                                        </div>
+
+
+
+                                        <!--  SECOND TILE-CARD START-->
+
+
+                                        <div class="row second-full-tile-pad   ">
+
+
+                                            <div class="col-md-3  ">
+                                                <a class="step-item" onclick="onLabelClick('AcNoVariance','AccNoVariancePopUp')">
+                                                    <div class="new-tile-box rose-wave  tile-color-4">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/account change.svg" />
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">A/C No Change</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.AccNoVariance</h1>
+                                                                </div>
+                                                            </div>
+                                                        
+
+                                                        </div>
+
+                                                     
+
+
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" onclick="ClickOnLabel()">
+                                                    <div class="new-tile-box-2 light-blue-wave  tile-color-5">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/hold sala.svg" />
+                                                            </div>
+                                                            <div>
+                                                            <h1 class="new-tile-headz">Salary Hold</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.SalaryHold</h1>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+
+
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" @*onclick="onLabelClick('AcNoVariance','AccNoVariancePopUp')"*@>
+                                                    <div class="new-tile-box-3   yellow-wave tile-color-6  ">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/less hour.svg" />
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">TDS-Regime</h1>
+                                                                <div class="tile-value-count" style="color:white;">
+                                                                    <h4 class="new-tile-count"><a onclick="onLabelClick('TdsOldRegime', 'tds_payroll_popup');$('#tds_payrollPopUpHead').html('TDS Old Regime')">Old-@Model.TDSOld</a>/<a onclick="onLabelClick('TdsNewRegime', 'tds_payroll_popup');$('#tds_payrollPopUpHead').html('TDS New Regime')">New-@Model.TDSNew</a></h4>
+                                                                </div>
+                                                            </div>
+                                                          
+                                                        </div>
+
+
+                                                     
+
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+                                            <div class="col-md-3 ">
+                                                <a class="step-item" onclick="onLabelClick('ActivePayrollEmployees', 'tds_payroll_popup');$('#tds_payrollPopUpHead').html('Active Payroll Employees')">
+                                                    <div class="new-tile-box-3  tile-color-8  ">
+                                                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                            <div class="new-tile-iconz">
+                                                                <img class="icon-withz" src="~/images/icons/demoo 22 icon.svg" />
+                                                            </div>
+                                                            <div>
+                                                                <h1 class="new-tile-headz">Active Payroll Employees</h1>
+                                                                <div class="tile-value-count">
+                                                                    <h1 class="new-tile-count">@Model.ActivePayrollEmployee</h1>
+                                                                </div>
+                                                            </div>
+                                                         
+                                                        </div>
+                                                     
+
+
+                                                    </div>
+                                                </a>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+                                    <!-- Notifications START-->
+
+                                    <div class="col-md-3">
+
+
+                                        <div class="Notifications-main-head">
+                                            <div class="notificatiobn_new">
+
+
+                                                <div class="d-flex notification-padd">
+
+
+                                                    <div class="right_notification">
+                                                        <img class="notification_img  new-top-notification-icon-color-chng" ">
+                                                    </div>
+                                                    <div class="notification-text-color">Notifications</div>
+                                                </div>
+                                            </div>
+                                            <div class="common_scroll-new">
+
+                                                @if (Model != null && Model.DashBoardNotificationList.Count > 0)
+                                                {
+                                                    for (int i = 0; i < Model.DashBoardNotificationList.Count; i++)
+                                                    {
+
+                                                        if (Model.DashBoardNotificationList[i].Type == "PAN No missing" || Model.DashBoardNotificationList[i].Type == "PF UAN missing" || Model.DashBoardNotificationList[i].Type == "PF group missing" | Model.DashBoardNotificationList[i].Type == "Bank A/c No Missing" || Model.DashBoardNotificationList[i].Type == "IFSC missing" || Model.DashBoardNotificationList[i].Type == "ESI group missing" || Model.DashBoardNotificationList[i].Type == "ESI No missing"
+                                                            || Model.DashBoardNotificationList[i].Type == "Employment PF variance" || Model.DashBoardNotificationList[i].Type == "Employer Contribution to EPS variance" || Model.DashBoardNotificationList[i].Type == "Employer contribution to EPF variance" || Model.DashBoardNotificationList[i].Type == "Employee Maximum Limit variance" || Model.DashBoardNotificationList[i].Type == "Employer Maximum Limit variance" || Model.DashBoardNotificationList[i].Type == "Bank A/C No Duplication")
+
+
+
+
+                                                        //if (Model.DashBoardNotificationList[i].Type == "PAN No missing" || Model.DashBoardNotificationList[i].Type == "PF UAN missing" || Model.DashBoardNotificationList[i + 1].Type == "PF group missing" || Model.DashBoardNotificationList[i].Type == "Bank A/c No Missing" || Model.DashBoardNotificationList[i].Type == "IFSC missing" || Model.DashBoardNotificationList[i].Type == "ESI group missing" || Model.DashBoardNotificationList[i].Type == "ESI No missing")
+                                                        {
+
+                                                            <div class="notifi-common-space notifi-border-back-box">
+                                                                <a onclick="OnNotificationCLick('@Model.DashBoardNotificationList[i].Type')">
+                                                                    <div class="row">
+                                                                        <div class="col-md-10">
+                                                                            <div class="d-flex align-items-center h-100">
+                                                                                <div class="dots back_new">
+
+                                                                                </div>
+                                                                                <div class="notifi-textz back_white">@Model.DashBoardNotificationList[i].Type</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="notifi-slide-count back_new">
+                                                                                <div class="white_count">@Model.DashBoardNotificationList[i].count</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="notifi-common-space notifi-border-back-box">
+                                                                <a href="@Model.DashBoardNotificationList[i].Action">
+                                                                    <div class="row">
+                                                                        <div class="col-md-10">
+                                                                            <div class="d-flex align-items-center h-100">
+                                                                                <div class="dots back_new">
+
+                                                                                </div>
+                                                                                <div class="notifi-textz back_white">@Model.DashBoardNotificationList[i].Type</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="notifi-slide-count back_new">
+                                                                                <div class="white_count">@Model.DashBoardNotificationList[i].count</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                        }
+
+
+
+                                                    }
+                                                }
+
+
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                <!--  GRAPH TILE-CARD START-->
+
+
+                                <div class="row second-full-tile-pad" style="padding-left:6px;">
+
+                                    <div class="col-md-12 col-lg-7 ">
+                                        <h1 class="Attedance-tble-headingz">Month Wise Salary Comparison</h1>
+                                        <select id="classification" class="form-control form-control-sm float-right" onchange="onClassificationDropdownChange()" style="width: 200px; height: 25px; margin:5px 5px 0px 0px ">
+                                            <option value="GROSSPAY">Gross Pay / Net Pay</option>
+                                            <option value="ALLOWANCES">Gross Allowances</option>
+                                            <option value="DEDUCTIONS">Gross Deductions</option>
+                                            <option value="PROVISIONS">Provisions and Perks</option>
+                                            <option value="VARIABLEPAY">Variable Pay</option>
+
+                                        </select>
+                                        <div class="Graph-tile-box ">
+
+                                            <div class="graph-img-1 chartView">
+                                                @*<img class="graph-img" src="/images/icons/payroll graph.svg">*@
+                                                @*@await Html.PartialAsync("_SalaryChart")*@
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="col-md-12 col-lg-5">
+                                        <h1 class="Attedance-tble-headingz"> Applicability Count</h1>
+
+
+                                        <div id="applCountList"></div>
+
+
+
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+                          
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+
+
+
+
+    <div class="modal fade payDash_FandFPending" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:30px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        F & F Pending Count
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  fandfpendingPopup"></div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade payDash_PFYes" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        PF Applicable
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  pfYesPopup"></div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade payDash_PFNo" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1090px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        PF Not Applicable
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body  pfNoPopup pt-0"></div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="modal fade payDash_PFVar" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        PF Variance
+
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  pfVarPopup"></div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade payDash_ESINo" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        ESI Not Applicable
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  esiNoPopup"></div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade payDash_ESIYes" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        ESI Applicable
+
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body  esiYesPopup"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade payDash_ESIVar" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        ESI  Variance
+
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  esiVarPopup"></div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade payDash_SAlVariance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Salary Variance
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body  salaryvariencePopup"></div>
+
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade payDash_loanbalance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Loan Balance
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body  outstandloanbalancePopup"></div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade payDash_AccNoVariance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " @*style="height:445px ;"*@>
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Account Number Variance
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body  AccNoVariancePopUp"></div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade bd-example-modal-lg1" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:1000px;">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel_ID">
+                    </h5>
+                    <button type="button" class="close"
+                            data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true"
+                           class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body1">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade applCountPopUp" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 1120px;">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="applCountPopUpHead">
+                    </h5>
+                    <button type="button" class="close"
+                            data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true"
+                           class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade tds_payroll_popup" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 1120px;">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="tds_payrollPopUpHead">
+                    </h5>
+                    <button type="button" class="close"
+                            data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true"
+                           class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>

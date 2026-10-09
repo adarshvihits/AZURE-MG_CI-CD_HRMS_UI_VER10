@@ -1,0 +1,50 @@
+﻿@using Kendo.Mvc.UI
+@model  IEnumerable<Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoardList>
+    @section HeadContent {
+    <style>
+                #chart {
+                    background: center no-repeat url('
+        @Url.Content("~/Content/shared/styles/world-map.png")
+                ')
+                }
+
+
+                .wide p {display:none;}
+    </style>
+    }
+
+    <div class="demo-section wide">
+        @(Html.Kendo().Chart(Model)
+            .Name("chart")
+            //.Title("Gross domestic product growth \n /GDP annual %/")
+            //.Legend(legend => legend
+            //    .Position(ChartLegendPosition.Bottom)
+            //)
+            .HtmlAttributes(new { style = "width:100%; height: 250px;" })
+            .ChartArea(chartArea => chartArea
+            .Background("transparent")
+            )
+            .SeriesDefaults(seriesDefaults =>
+            seriesDefaults.Line().Style(ChartLineStyle.Smooth)
+            )
+            .Series(series => {
+                series.Line(model => model.count)
+                .CategoryField("Date");
+                //.Labels(labels => labels.Format("{0}%").Visible(true));
+
+            })
+            .CategoryAxis(axis => axis
+            .Categories(model => model.Date)
+            .MajorGridLines(lines => lines.Visible(false))
+            )
+            .ValueAxis(axis => axis
+                //.Numeric().Labels(labels => labels.Format("{0}%"))
+                //.Line(line => line.Visible(false))
+                .AxisCrossingValue(-10)
+            )
+            .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Format("{0}")
+            ).RenderAs(RenderingMode.Canvas)
+            )
+    </div>

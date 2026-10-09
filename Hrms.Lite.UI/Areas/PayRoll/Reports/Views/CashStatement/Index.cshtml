@@ -1,0 +1,143 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.CashStatement
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/Reports/CashStatement.js"></script>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Cash Statement </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Cash Statement
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <div class="topbar">
+
+
+            </div>
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                   
+                            <div class="row tab-style-button">
+                                <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+                                    <div class="tab-items">
+                                        <label>Month</label>
+                                        <div class="form-group filter-combobox mt-0">
+
+                                            @Html.DropDownListFor(m => m.PayrollMonth.Code, (SelectList)ViewBag.month, new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="tab-items select-option high">
+
+                                        <div class="sraech-slider">
+                                            <div class="search-slider-inner">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                                   placeholder="ID/Name">
+                                        </div>
+                                        <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                            <i class="fas fa-filter"></i>
+                                            <i class="fas fa-check"></i>
+
+
+                                        </div>
+
+
+
+
+                                        <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                                data-bs-original-title="Export to Excel">
+                                            <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                        </button>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        
+                        <div id="ListView">
+                            @await Html.PartialAsync("~/Areas/PayRoll/Reports/Views/CashStatement/_List.cshtml", Model)
+                        </div>
+                            <div id="filterSlider">
+                                @await Html.PartialAsync("~/Views/Shared/_FilterMultiSelect.cshtml", Model.filter)
+                            </div>
+
+                        <!--end: Datatable-->
+                        <!-- <div class="row card-footer-bottom-fixed ">
+
+
+
+    </div> -->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+
+
+</div>

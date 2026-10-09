@@ -1,0 +1,424 @@
+﻿@model Hrms.Lite.Shared.DashBoard.LandingPage
+
+<style>
+    .blue_hover::before {
+        background-color: rgba(122, 112, 186, 0.1);
+    }
+    .red_hover::before {
+        background-color: rgb(250 158 52 / 15%);
+    }
+    .rose_hover::before {
+        background-color: rgb(240 71 112 / 15%);
+    }
+    .green_hover::before {
+        background-color: #3cd18826;
+    }
+    .high_class {
+        background-color: #f04770;
+        color: #fff;
+        padding: 2px 5px;
+        font-size: 9px;
+        border-radius: 4px;
+         margin-left: 10px; 
+         margin-right: 0px !important; 
+    }
+    .medium_class {
+        background-color: #ff7f15;
+        color: #fff;
+        padding: 2px 5px;
+        font-size: 9px;
+        border-radius: 4px;
+        margin-left: 10px;
+        margin-right: 0px !important;
+    }
+
+    .low_class {
+        background-color: #ffc107;
+        color: #fff;
+        padding: 2px 5px;
+        font-size: 9px;
+        border-radius: 4px;
+        margin-left: 10px;
+        margin-right: 0px !important;
+    }
+
+    /*.new-high-class {
+        font-size: 10px;*/
+        /* padding: 0px 6px; */
+        /*background-color: #f04770;
+        height: 16px;
+        width: 16px;
+        border-radius: 0px;
+        color: white;
+        position: absolute;
+        top: 13px;
+        right: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }*/
+
+
+
+
+</style>
+    <div class="notification_number databank_notificationpage">
+        <ul class="enrolled-class pl-0">
+
+            @if (Model != null && Model.DatabankNotificationList.Count > 0)
+            {
+                int[] codes = { 10 };
+                for (int i = 0; i < Model.DatabankNotificationList.Count; i = i + 1)
+                {
+                   
+                    if (codes.Contains(Model.DatabankNotificationList[i].Code))
+                    {
+                        @if (Model.DatabankNotificationList[i].Priority == "HIGH")
+                        {
+
+                           
+                            <a onclick="GetDataBankNotificationPopUp(@Model.DatabankNotificationList[i].Code,'@Model.DatabankNotificationList[i].Type')">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+                                
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                            <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+                                        </div>
+
+                                        @*<div class="col-md-2">
+                                          
+                                        </div>*@ 
+                                        <div class="col-md-2">
+                                            <div class="dropdown icon-dropdown pad-bt-r ">
+                                                <div class="high_class">H</div>
+                                                <div class="btn_notification btn_second_child" style="background-color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Model.DatabankNotificationList[i].count</div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex align-items-center p-0 ">
+
+                                        @*<div class="flex-grow-1 d-flex align-items-center">
+
+
+
+
+        </div>*@
+
+                                    </div>
+                                <div class="flex-shrink-0">
+                                   
+                                </div>
+                            </li>
+                            </a>
+                        }
+                        else if (Model.DatabankNotificationList[i].Priority == "MEDIUM")
+                        {
+                            <a onclick="GetDataBankNotificationPopUp(@Model.DatabankNotificationList[i].Code,'@Model.DatabankNotificationList[i].Type')">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+
+                                <div class="row">
+                                    <div class="8">
+                                        <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                        <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+                                    </div>
+
+                                    @*<div class="2">
+                                       
+                                    </div>*@
+                                    <div class="4">
+                                        <div class="dropdown icon-dropdown pad-bt-r ">
+                                            <div class="medium_class">Medium</div>
+                                            <div class="btn_notification btn_second_child" style="color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Model.DatabankNotificationList[i].count</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="d-flex align-items-center">
+
+                                    @*<div class="flex-grow-1 d-flex align-items-center">
+
+
+
+
+            </div>*@
+
+                                </div>
+                                <div class="flex-shrink-0">
+
+                                </div>
+                            </li>
+                            </a>
+                        }
+                        else
+                        {
+                            <a onclick="GetDataBankNotificationPopUp(@Model.DatabankNotificationList[i].Code,'@Model.DatabankNotificationList[i].Type')">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+
+                                <div class="row d-flex justify-content-center w-100" style="align-items:center;">
+                                    <div class="col-md-8 d-flex" style="align-items:center;">
+                                        <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                        <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+
+                                    </div>
+
+                                    @*<div class="col-md-2 d-flex justify-content-center" style="align-items:center;">
+                                      
+                                    </div>*@
+
+                                    <div class="col-md-4">
+                                        <div class="dropdown icon-dropdown pad-bt-r "  >
+                                            <div class="btn_notification btn_second_child" style="background-color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                @Model.DatabankNotificationList[i].count
+
+                                                                                        <div class="low_class">L</div>
+                                                                                    </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                                @*<div class="d-flex align-items-center">
+
+                                   
+                                    <div class="flex-grow-1 d-flex align-items-center">
+
+                                       
+                                       
+
+                                    </div>
+
+                                </div>*@
+                                @*<div class="flex-shrink-0">
+                                  
+                                </div>*@
+                            </li>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+
+                        @*<li class="d-flex align-items-center gap-2">
+                        <span class="b-primary bg-primary"></span>
+                        <div class="flex-grow-1">
+                            <a href="">
+                                <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type </h5>
+                            </a>
+
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown icon-dropdown">
+                                <div class="btn_notification" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Model.DatabankNotificationList[i].count</div>
+
+                            </div>
+                        </div>
+                    </li>*@
+
+
+                        @if (Model.DatabankNotificationList[i].Priority == "HIGH")
+                        {
+
+
+                            <a href="@Model.DatabankNotificationList[i].Action">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+
+                                <div class="row d-flex justify-content-center w-100"style="align-items:center;">
+                                    <div class="col-md-8 d-flex"style="align-items:center;">
+
+                                        <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                        <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+
+                                    </div>
+
+                                    @*<div class="col-md-2 d-flex justify-content-center"style="align-items:center;">
+                                   
+                                    </div>*@
+                                    <div class="col-md-4">
+                                        <div class="dropdown icon-dropdown pad-bt-r ">
+                                            <div class="btn_notification btn_second_child d-flex justify-content-center ml-2" style="background-color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Model.DatabankNotificationList[i].count
+                                                <div class="high_class">H</div>
+                                            
+                                            </div>
+                                            
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                                @*<div class="d-flex align-items-center">
+                                
+
+                                    <div class="flex-grow-1 d-flex align-items-center">
+
+                                       
+                                   
+
+                                    </div>
+
+                                </div>*@
+                                @*<div class="flex-shrink-0">
+                                    
+                                </div>*@
+                            </li>
+                            </a>
+                        }
+                        else if (Model.DatabankNotificationList[i].Priority == "MEDIUM")
+                        {
+                            <a href="@Model.DatabankNotificationList[i].Action">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+
+                                <div class="row d-flex justify-content-center w-100" style="align-items:center;">
+                                    <div class="col-md-8 d-flex" style="align-items:center;">
+                                        <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                        <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+
+                                    </div>
+
+                                    @*<div class="col-md-2 d-flex justify-content-center" style="align-items:center;">
+                                       
+
+                                    </div>*@
+
+                                    <div class="col-md-4">
+                                        <div class="dropdown icon-dropdown pad-bt-r " >
+                                            <div class="btn_notification btn_second_child d-flex justify-content-center ml-2" style="background-color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                @Model.DatabankNotificationList[i].count
+
+                                                                                        <div class="medium_class">M</div>
+
+                                                                                    </div>
+
+                                          
+
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                @*<div class="d-flex align-items-center">
+                                  
+                                    <div class="flex-grow-1 d-flex align-items-center">
+
+                                      
+                                      
+
+                                    </div>
+
+                                </div>*@
+                                @*<div class="flex-shrink-0">
+                                   
+                                </div>*@
+                            </li>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Model.DatabankNotificationList[i].Action">
+                            <li class="d-flex align-items-center gap-2 justify-content-between">
+
+                                <div class="row d-flex justify-content-center w-100" style="align-items:center;">
+                                    <div class="col-md-8 d-flex" style="align-items:center;">
+                                        <span class="  @Model.DatabankNotificationList[i].lightcolourclass" style="border: 1px solid @Model.DatabankNotificationList[i].colour ; background-color: @Model.DatabankNotificationList[i].colour ;"></span>
+                                        <h5 class="text-truncate">@Model.DatabankNotificationList[i].Type</h5>
+                                    </div>
+
+                                    @*<div class="col-md-2 d-flex justify-content-center" style="align-items:center;">
+                                       
+
+                                    </div>*@
+
+                                    <div class="col-md-4">
+                                        
+                                        <div class="dropdown icon-dropdown pad-bt-r " >
+                                            <div class="btn_notification btn_second_child" style="background-color: @Model.DatabankNotificationList[i].colour;" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                @Model.DatabankNotificationList[i].count
+
+                                                                                        <div class="low_class">L</div>
+
+                                                                                    </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    </div>
+
+                                    @*<div class="d-flex align-items-center">
+
+                                        <div class="flex-grow-1 d-flex align-items-center">
+
+
+
+
+                                        </div>
+
+                                    </div>*@
+                                    @*<div class="flex-shrink-0">
+                                      
+                                    </div>*@
+</li>
+                            </a>
+                        }
+                        @*<li class="d-flex align-items-center gap-2">
+                        <span class="b-third bg-third"></span>
+                        <div class="flex-grow-1">
+                            <a href="">
+                                <h5 class="text-truncate">Design from A to Z</h5>
+                            </a>
+
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown icon-dropdown">
+                                <div class="btn_notification btn_third_child" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">80</div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="d-flex align-items-center gap-2">
+                        <span class="b-fourth bg-fourth"></span>
+                        <div class="flex-grow-1">
+                            <a href="">
+                                <h5 class="text-truncate">Design from A to Z</h5>
+                            </a>
+
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown icon-dropdown">
+                                <div class="btn_notification btn_fourth_child" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">20</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-center gap-2">
+                        <span class="b-five bg-five"></span>
+                        <div class="flex-grow-1">
+                            <a href="">
+                                <h5 class="text-truncate">Design from A to Z</h5>
+                            </a>
+
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown icon-dropdown">
+                                <div class="btn_notification btn_five_child" id="userdropdown12" type="button" data-bs-toggle="dropdown" aria-expanded="false">10</div>
+                            </div>
+                        </div>
+                    </li>*@
+
+                    }
+                }
+            }
+            </ul>
+    </div>

@@ -1,0 +1,297 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/DataBank/documentUpload.js" asp-append-version="true"></script>
+<script src="~/js/jquery.min.js"></script>
+<style>
+    .view_btn_appli {
+        width: 18px;
+        height: 18px;
+        background: url(/images/icons/viewappli.svg);
+        background-size: contain;
+        color: white;
+        display: inline-block;
+        background-repeat: no-repeat;
+        margin: 2px;
+    }
+    .driving-license-details span.date {
+     
+        width: 42%;
+    
+    }
+    .passport-details span.date {
+    
+        width: 42%;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Document Folder</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        @if (Model.BreadCrumb == "DocumentUpload")
+                        {
+                            <a href="@Url.Action("Index", Model.BreadCrumb, new { Area = "DataBank" })" class="">@Model.BreadCrumbName</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", Model.BreadCrumb, new { Area = "DataBank" })" class="">@Model.BreadCrumbName</a>
+                        }
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Employee Document Folder
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--begin::Topbar-->
+        
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            @Html.HiddenFor(m => m.EmployeeGI)
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body pb-13">
+                    <!--begin: Search Form-->
+                    <div class="profile-header position-relative box-shadow-none mb-5">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                        @Html.HiddenFor(m => m.EmployeeGI)
+                        <div class="profile-header-overflow"></div>
+                    </div>
+
+
+                    <div class="document-card-outer">
+                        <div class="document-cards aadhar-card">
+                            <div class="d-flex ">
+
+                                <i class="fa fa-th-large document-icon" aria-hidden="true"></i>
+                                @*<i class="fa fa-clipboard document-icon" aria-hidden="true"></i>*@
+                                <h2 class="ahar-text">Aadhar </h2>
+                            </div>
+                            @*<div class="aadhar-card-top"><img src="/images/aadhar-card-header.jpg"></div>*@
+                            <div class="aadhar-details-outer">
+
+                                <div class="aadhar-details">
+                                    <span class="aadhar-number">
+                                        @{ var aadhar = Model.AadharNumber;
+                                            if (!string.IsNullOrEmpty(aadhar) && aadhar.Length == 12)
+                                            { @("********" + aadhar.Substring(8)) }
+                                        }
+                                    </span>
+                                    @*<span class="aadhar-number">@Model.AadharNumber</span>*@
+                                    <span class="aadhar-name">@Model.NameInAadhar</span>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex justify-content-between new-doctype">
+                                <span class="date">Issue Date: @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AadharIssueDate == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.AadharIssueDate))</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="small-btn-group">
+
+
+
+                                        <button type="button" id="AadharFileEdit" class="btn btn-icon btn-edit mr-2" data-bs-toggle="tooltip" data-bs-original-title="Edit" onclick="EditAadharOrPan('Aadhaar')">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </button>
+
+
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="view_btn_appli" data-bs-original-title="View File" onclick="displayDoc('IDENTITY','Aadhar')" cursorshover="true"> </a>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="document-cards pan-card-details">
+                            <div class="d-flex ">
+
+                                <i class="fa fa-th-large document-icon" aria-hidden="true"></i>
+                                @*<i class="fa fa-clipboard document-icon" aria-hidden="true"></i>*@
+                                <h2 class="ahar-text">PAN </h2>
+                            </div>
+                            <div class="aadhar-details pancard-pt">
+
+                                <span class="pan-number">@Model.PANNumber</span>
+                                <span class="pan-name">@Model.NameInPAN</span>
+
+                            </div>
+                            <div class="btn-section d-flex justify-content-between new-doctype">
+                                <span class="date">Issue Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PANIssueDate == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.PANIssueDate))</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="small-btn-group">
+
+                                        <button type="button" id="PanFileEdit" class="btn btn-icon btn-edit " data-bs-toggle="tooltip" data-bs-original-title="Edit" onclick="EditAadharOrPan('Pan')">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </button>
+
+
+
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="view_btn_appli" data-bs-original-title="View File" onclick="displayDoc('IDENTITY','Pan')" cursorshover="true"> </a>
+                                </div> </div>
+                            </div>
+
+
+
+
+
+                        <div class="document-cards driving-license-details">
+                            <div class="d-flex ">
+
+                                <i class="fa fa-th-large document-icon" aria-hidden="true"></i>
+                                @*<i class="fa fa-clipboard document-icon" aria-hidden="true"></i>*@
+                                <h2 class="ahar-text">Driving License </h2>
+                            </div>
+                            <div class="pancard-pt">
+                                <span class="license-number">@Model.DrivingLicenseNumber</span>
+                                <span class="license-name">@Model.NameInDrivingLicense</span>
+
+                            </div>
+                            <div class="new-doctype">
+                                <span class="date">Valid From: <br>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DrivingLicenseValidFrom == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.DrivingLicenseValidFrom))</span>
+                                <span class="date">Valid To: <br>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DrivingLicenseValidTo == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.DrivingLicenseValidTo))</span>
+                               
+                                
+                                
+                                
+                                <div class="d-flex align-items-center">
+                                    <div class="btn-section d-flex ">
+                                        <div class="small-btn-group">
+                                            <button type="button" id="DrivingLicenseFileEdit" class="btn btn-icon btn-edit" data-bs-toggle="tooltip" data-bs-original-title="Edit" onclick="EditDrivingLicenseOrPassport('Driving License')">
+                                                <i class="icon-xl fas fa-pencil-alt"></i>
+                                            </button>
+
+
+                                        </div>
+                                        <a data-bs-toggle="tooltip" title="" class="view_btn_appli" data-bs-original-title="View File" onclick="displayDoc('IDENTITY','DL')" cursorshover="true"> </a>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="document-cards passport-details">
+                            <div class="d-flex ">
+
+                                <i class="fa fa-th-large document-icon" aria-hidden="true"></i>
+                                @*<i class="fa fa-clipboard document-icon" aria-hidden="true"></i>*@
+                                <h2 class="ahar-text">Passport </h2>
+                            </div>
+                            <div class="pancard-pt">
+                                <span class="passport-number">@Model.PassportNumber</span>
+                                <span class="passport-name">@Model.NameInPassport</span>
+
+                            </div>
+                            <div class="new-doctype">
+                                <span class="date">Valid From:<br> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PassportValidFrom == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.PassportValidFrom))</span>
+                                <span class="date">Valid To:<br> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PassportValidTo == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.PassportValidTo))</span>
+                                <div class="btn-section d-flex ">
+                                    <div class="small-btn-group">
+                                        <button type="button" id="PassportFileEdit" class="btn btn-icon btn-edit" data-bs-toggle="tooltip" data-bs-original-title="Edit" onclick="EditDrivingLicenseOrPassport('Passport')">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </button>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="view_btn_appli" data-bs-original-title="View File" onclick="displayDoc('IDENTITY','Passport')" cursorshover="true"> </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    @*<new section></new>*@
+
+
+
+
+                    <div id="aadharOrPanUpload" class="hide">
+
+                    </div>
+                    <div id="licenseOrPassport" class="hide">
+
+                    </div>
+                    <!-- Table Section -->
+
+
+                    <div class="pb-5 d-flex justify-content-between">
+                        <div>
+                            <h6>Other Documents</h6>
+                        </div>
+
+                        <div class="round-icon">
+                            <i class="fa fa-plus new-plus" aria-hidden="true" onclick="onAddNewClick('@Model.EmployeeGI')"></i>
+                        </div>
+
+                    </div>
+                    <div id="OtherDocsList">
+                        @await Html.PartialAsync("_OtherDocumentsList")
+                    </div>
+
+                  
+
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                            @*<button id="addNewDocument" type="button"
+                        class="btn btn-default float-right mobile-full-width slider-btn" onclick="onAddNewClick('@Model.EmployeeGI')">
+                    Add New
+                </button>*@
+
+
+
+                            @*<div id="addDocument">
+
+                </div>*@
+                        </div>
+
+                    </div>
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="slider-over-flow"></div>
+<!--end::Content-->

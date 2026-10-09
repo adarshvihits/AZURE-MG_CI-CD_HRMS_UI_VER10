@@ -1,0 +1,484 @@
+﻿
+@model Hrms.Lite.Shared.Master.Allowance
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/custom.js"></script>
+
+@using (Html.BeginForm("Delete", "Allowance", FormMethod.Post, new { @id = "deleteAllowance" }))
+{
+    <div id="allowancedelete" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Allowance</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.LogGI)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.Mode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Allowance Type</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => model.AllowanceTypeCbo.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Applicable For
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => model.ApplicableFor.Name)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Display Order</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => model.DisplayOrder)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Salary Component
+                            </label>
+                            <div class="view-details">
+                                @if (Model.SalaryComponent == true)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row ">
+
+                    <div class="col-md-6">
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Display Type</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => model.DisplayType.Name)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row m-0 ">
+                    <h4 class="">Set Applicability</h4>
+                    <div class="ihits-table table-border w-100 hover-color odd-even vertical-scroll-150   allowance-master-new">
+                        <table class="mb-0">
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">Particular</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Applicability</th>
+                                    <th scope="col">%</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Deduction_SetApplicability != null && Model.Deduction_SetApplicability.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Deduction_SetApplicability.Count; i++)
+                                    {
+                                        <tr>
+                                            <td data-label="Particular">
+                                                @Html.HiddenFor(m => m.Deduction_SetApplicability[i].Particular)
+                                                @Html.HiddenFor(m => m.Deduction_SetApplicability[i].Type)
+                                                @Html.HiddenFor(m => m.Deduction_SetApplicability[i].DeductionCode)
+                                                @Model.Deduction_SetApplicability[i].Particular
+                                            </td>
+                                            <td data-label="Type">@Model.Deduction_SetApplicability[i].Type</td>
+                                            <td data-label="Applicability">
+                                                <div class="d-flex justify-content-center">
+                                                    @if (Model.Deduction_SetApplicability[i].Applicability == true)
+                                                    {
+
+                                                        <button type="button" class="btn btn-icon btn-tick">
+                                                            <i class="icon-xl fas fa-check"></i>
+                                                        </button>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-icon btn-close">
+                                                            <i class="icon-xl fas fa-times"></i>
+
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td data-label="%">
+                                                @Model.Deduction_SetApplicability[i].Percentage
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI','@Model.LogGI')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+@*<div id="allowancedelete" class="slider-forms">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Allowance</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Name</label>
+                        <div class="view-details">
+                            Demo
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Short
+                            Name
+                        </label>
+                        <div class="view-details">
+                            Demo1
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Allowance
+                            Type
+                        </label>
+                        <div class="view-details">
+                            Demo
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Applicable
+                            For
+                        </label>
+                        <div class="view-details">
+                            Demo1
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Display
+                            Order
+                        </label>
+                        <div class="view-details">
+                            Demo
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Salary
+                            Component
+
+
+                        </label>
+                        <div class="view-details">
+                            <button type="button"
+                                    class="btn btn-icon btn-close border-radius">
+                                <i class="icon-xl fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <label class="view-title">Active</label>
+                    <div class="view-details">
+                        <button type="button"
+                                class="btn btn-icon btn-tick">
+                            <i class="icon-xl fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row m-0 ">
+                <h4 class="">Set Applicability</h4>
+                <div class="ihits-table table-border w-100 hover-color odd-even  vertical-scroll-250 allow hover-color odd-even compensationBenefits allowance-master-slider">
+                    <table>
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">Particular</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Applicability</th>
+                                <th scope="col">%</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Particular">Lop</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-tick "><i class="icon-xl fas fa-check"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Particular">Late</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Particular">PF</td>
+                                <td data-label="Type">Deduction</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Particular">ESI</td>
+                                <td data-label="Type">Deduction</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-tick "><i class="icon-xl fas fa-check"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Particular">Lop</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Particular">Lop</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Particular">Lop</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Particular">Lop</td>
+                                <td data-label="Type">Lop</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Particular">ESI</td>
+                                <td data-label="Type">Deduction</td>
+                                <td data-label="Applicability">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="button" class="btn btn-icon btn-tick "><i class="icon-xl fas fa-check"></i></button>
+                                    </div>
+                                </td>
+                                <td data-label="%">
+                                    10%
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        Lorem ipsum
+                        dolor sit amet, consectetur
+                        adipiscing elit. Cras sed est metus.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+
+                    <button type="button"
+                            data-bs-toggle="tooltip" title=""
+                            data-bs-original-title="Delete"
+                            class="btn btn-icon btn-delete big-btn float-none">
+                        <i class="icon-xl far fa-trash-alt"></i>
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>*@

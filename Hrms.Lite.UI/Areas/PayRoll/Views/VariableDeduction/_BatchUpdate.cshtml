@@ -1,0 +1,72 @@
+﻿@model Hrms.Lite.Shared.PayRoll.VariableDeduction
+<script>
+    $(document).ready(function () {
+        debugger;        
+        moveCursorToEnd('VariableDeductionBatchUpDate_Amount');
+    });
+    $(window).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (preventENterFlag == 0)
+                    BatchUpdate();
+                return false;
+            }
+        });
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "VariableDeductionBatchUpdate1" }))
+{
+
+    <div id="BatchUpdate" class="slider-forms slider-forms-open batchupdatevariablededuction">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('batchupdatevariablededuction');preventENterFlag=1">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Month</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.DeductionMonth.Code)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Model.DeductionMonth.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Deduction</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.Deduction.Code)
+                            @Model.Deduction.Name
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        @Html.TextBoxFor(m => m.VariableDeductionBatchUpDate.Amount, new { @class = "form-control form-control-sm", @placeholder = "Amount", style = "width: 100%", @onkeypress = "return onlyNumberKey(event)" })
+                        <span id="dedBatchAmt"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button" onclick="BatchUpdate()"
+                            class="btn btn-default  mobile-full-width">
+                        Update
+                    </button>
+                </div>
+            </div>
+            </div>
+        </div>
+  
+}

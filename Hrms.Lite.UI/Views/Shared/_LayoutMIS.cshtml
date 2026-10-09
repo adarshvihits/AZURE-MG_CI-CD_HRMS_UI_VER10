@@ -1,0 +1,362 @@
+﻿<!DOCTYPE html>
+<style>
+    .version {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        position: relative;
+    }
+
+        .version label {
+            width: 38px;
+            color: #000000;
+            z-index: 1010;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            position: absolute;
+            top: 28px;
+            right: 530px;
+        }
+</style>
+<html>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Account.Login CurrentUser = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Account.Login>(Context.Session.GetString("User"));
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+   
+    <title>
+
+        @CurrentUser.authUser.CompanyName | HRMS
+    </title>
+    <environment names="Development,Docker">
+        <meta name="description" content="No subheader example" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <link href="~/css/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Global Theme Styles-->
+        <!--begin::Layout Themes(used by all pages)-->
+
+        <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/mobile-responsive.css" rel="stylesheet" />
+      
+        <link href="~/css/responsive.css" rel="stylesheet" />
+
+    </environment>
+    <environment names="Staging,Production">
+        <meta name="description" content="No subheader example" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <link href="~/css/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Global Theme Styles-->
+        <!--begin::Layout Themes(used by all pages)-->
+
+        <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/mobile-responsive.css" rel="stylesheet" />
+      
+        <link href="~/css/responsive.css" rel="stylesheet" />
+        <!--end::Layout Themes-->
+       
+
+
+    </environment>
+
+</head>
+
+<body id="" class="aside-fixed aside-minimize aside-minimize-hoverable ">
+
+
+
+    <div class="main-outer-div">
+        <div class="main-outer-div-inner">
+
+
+            <div class="spinner-outer">
+                <div class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+            </div>
+
+            <div class="dropdown logOutMenu d-flex align-items-center">
+                <!--begin::Toggle-->
+                <div class="topbar-item" data-bs-toggle="dropdown" data-offset="10px,0px" aria-expanded="false">
+                    <div class="d-flex align-items-center pr-5 ">
+
+
+
+                        @if (@CurrentUser.authUser.ImageUrl != "")
+                        {
+                            <div class="employee-profile-img ml-5" style="margin-right:10px">
+                                <img src="@CurrentUser.authUser.ImageUrl">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="employee-profile-img ml-5" style=" background-color: #989ca9; color: #fff; display: flex; text-align: center; justify-content: center; align-items: center;">
+                                <span class="profile-name-leter-chg" style="font-size:23px;">
+                                    @CurrentUser.authUser.AvatarLetter
+                                </span>
+
+                            </div>
+                        }
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg top-3">
+                    <form>
+                        <!--begin::Header-->
+                        <div class="login-wrap">
+                            <div class="login-profile-top">
+                                @if (@CurrentUser.authUser.ImageUrl != "")
+                                {
+                                    <div class="login-profile-image">
+                                        <img src="@CurrentUser.authUser.ImageUrl">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="employee-profile-img" style=" background-color: #989ca9; color: #fff; display: flex; text-align: center; justify-content: center; align-items: center;">
+                                        <span class="profile-name-leter-chg" style="font-size:23px;">
+                                            @CurrentUser.authUser.AvatarLetter
+                                        </span>
+
+                                    </div>
+                                }
+                                <div class="login-profile-more-details">
+                                    <span class="username">@CurrentUser.authUser.EmployeeName (@CurrentUser.authUser.EmployeeID)</span>
+                                    <span class="other-details">@CurrentUser.authUser.Designation</span>
+                                    <a class="other-details" style="cursor:pointer;" data-bs-toggle="modal" data-target=".hd-example-modal-lg" onclick="GetUserRoleDetails(@CurrentUser.authUser.UserRoleCode)">@Html.Hidden(CurrentUser.authUser.UserRole) @CurrentUser.authUser.UserRole</a>
+
+                                    <div class="Group-company-name">@CurrentUser.authUser.GroupCompanyName</div>
+                                </div>
+
+
+                            </div>
+                            <div class="login-button-outer col-md-12 text-center">
+                                <div class="sign-out" onclick="logOut()">Log Out</div>
+                                <a onclick="changePwd()">Change Password</a>
+                            </div>
+
+                            <div class="color-theme-picker">
+                                <div class="color-item blue-theme" onclick="changeTheme('blue-theme')"></div>
+                                <div class="color-item magenta-theme" onclick="changeTheme('magenta-theme')"></div>
+                                <div class="color-item green-theme" onclick="changeTheme('green-theme')"></div>
+                                <div class="color-item gray-theme" onclick="changeTheme('gray-theme')"></div>
+                            </div>
+
+
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
+
+                <div class="d-flex align-items-center">
+                    <!--begin::Aside Mobile Toggle-->
+                    <button class="btn p-0 burger-icon burger-icon-left" id="kt_aside_mobile_toggle">
+                        <span></span>
+                    </button>
+                    <!--end::Aside Mobile Toggle-->
+                    <!--begin::Header Menu Mobile Toggle-->
+                    <button class="btn p-0 burger-icon ml-4" id="kt_header_mobile_toggle">
+                        <span>
+
+                        </span>
+                    </button>
+                    <!--end::Header Menu Mobile Toggle-->
+
+                </div>
+
+            </div>
+            <!--end::Header Mobile-->
+            <div class="d-flex flex-column flex-root">
+                <!--begin::Page-->
+                <div class="d-flex flex-row flex-column-fluid page">
+                    <!--begin::Aside-->
+                    <!--end::Aside-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+
+                        @RenderBody()
+
+
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Page-->
+            </div>
+            <!--end::Main-->
+        </div>
+    </div>
+
+
+
+
+    <environment names="Development,Docker">
+       
+        <script src="~/js/jquery.min.js"></script>
+    
+        <script src="~/js/plugins.bundle.js"></script>
+        <script src="~/js/prismjs.bundle.js"></script>
+        <script src="~/js/scripts.bundle.js"></script>
+     
+       
+        <script src="~/js/bootstrap-datepicker.js"></script>
+
+        <script src="~/scripts/common.js"></script>
+      
+       
+        <script src="~/js/kendo/kendo.all.min.js"></script>
+        <script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+    
+
+        <!--end::Page Scripts-->
+
+    </environment>
+    <environment names="Staging,Production">
+        
+        <script src="~/js/jquery.min.js"></script>
+        <!--end::Global Config-->
+        <!--begin::Global Theme Bundle(used by all pages)-->
+        <script src="~/js/plugins.bundle.js"></script>
+        <script src="~/js/prismjs.bundle.js"></script>
+        <script src="~/js/scripts.bundle.js"></script>
+  
+      
+        <script src="~/js/bootstrap-datepicker.js"></script>
+
+        <script src="~/scripts/common.js"></script>
+       
+        <!---- Added on 25- feb---->
+        @*<script src="~/js/bootstrap-multiselect.js"></script>*@
+       
+        <script src="~/js/kendo.all.min.js"></script>
+        <script src="~/js/kendo.aspnetmvc.min.js"></script>
+        @*<script src="~/js/settings.js"></script>*@
+
+        <!--end::Page Scripts-->
+    </environment>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+
+<script>
+
+    loginStateChanged = true;
+    window.addEventListener('pageshow', (event) => {
+        var isBackNavigation = event.persisted ||
+            (typeof window.performance != 'undefined' && window.performance.navigation.type === 2);
+        // If the navigation type is a back navigation, and the login
+        // State has changed, refresh the window
+        if (isBackNavigation && loginStateChanged) {
+            window.location.reload(); // reload the page
+        }
+    });
+    window.addEventListener('unload', (event) => {
+        $('.authenticationnn').addClass('hide');
+    });
+
+
+
+     if ('@TempData["Message"]' != "")
+        swal.fire('@TempData["Message"]');
+
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            $('.spinner-outer').show();
+        }
+        else {
+            $('.spinner-outer').hide();
+        }
+    }
+
+
+    function logOut() {
+        $.ajax({
+
+            type: 'GET',
+            url: '/Account/Logout',
+            dataType: 'json',
+            success: function (result) {
+                debugger;
+                if (result == true) {
+                    if (window.history && window.history.pushState) {
+                        window.history.pushState('', '', window.location.pathname);
+                        //window.history.go(-(history.length - 1));
+                    }
+                    loginStateChanged = false;
+                    $('.authenticationnn').addClass('hide');
+                    window.location.reload();
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+            }
+        });
+
+
+        var url = "/Account/Logout";
+        window.location.href = url;
+    }
+
+
+
+</script>
+
+<style>
+    .highlight {
+        background-color: #cee9ff;
+    }
+</style>
+
+
+
+
+
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("kt_aside");
+        if (x.style.display === "none") {
+            x.style.left = "0px";
+            /* x.style.width = "280px";*/
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+            x.style.left = "-280px";
+        }
+    }
+
+    function onBodyClick() {
+        $('#kt_aside').css('display', 'none');
+        searchInput.classList.remove("active");
+        $('#msd').val('');
+    }
+
+</script>
+

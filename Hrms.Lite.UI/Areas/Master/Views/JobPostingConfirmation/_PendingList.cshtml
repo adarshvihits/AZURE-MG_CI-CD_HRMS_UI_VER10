@@ -1,0 +1,49 @@
+@model Hrms.Lite.Shared.Master.JobPostingConfirmationViewModel
+@{
+    var list = Model.Vacancies ?? new List<Hrms.Lite.Shared.Master.JobPostingConfirmation>();
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tb1').html("@Model.PendingCount");
+        $('#tb2').html("@Model.ConfirmedCount");
+    });
+</script>
+
+<div class="ihits-table table-border odd-even mobile-responsive-table new-tble-pad-tp">
+    <input type="hidden" id="JobPostingConfirmationList_Count" value="@list.Count" />
+    <table id="JPCPendingTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Branch</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Vacancy Source</th>
+                <th scope="col">Priority</th>
+                <th scope="col" class="text-center">Plan Count</th>
+                <th scope="col" class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < list.Count; i++)
+            {
+                <tr>
+                    <td data-label="Branch">@list[i].BranchName</td>
+                    <td data-label="Department">@list[i].DepartmentName</td>
+                    <td data-label="Section">@list[i].SectionName</td>
+                    <td data-label="Grade">@list[i].GradeName</td>
+                    <td data-label="Vacancy Source">@list[i].VacancySource</td>
+                    <td data-label="Priority">
+                        <span class="jpc-pill jpc-pill-@((list[i].PriorityName ?? "").ToLower())">@list[i].PriorityName</span>
+                    </td>
+                    <td data-label="Plan Count" class="text-center">@list[i].PlanCount</td>
+                    <td data-label="Action" class="text-center">
+                        <a class="btn btn-default" onclick="OpenVacancySlider(@list[i].VacancySourceCode, @list[i].SourceTranactionCode)">Proceed</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

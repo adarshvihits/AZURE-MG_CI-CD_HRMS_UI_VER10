@@ -1,0 +1,170 @@
+﻿@model Hrms.Lite.Shared.DataBank.CommitmentsGiven
+
+
+<script>
+    $(function () {
+        $(".committed-date").datepicker({
+            dateFormat: "dd-M-yy", // or "dd-mm-yy" if preferred
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+</script>
+
+
+<script>
+    searchClick = 0;
+    function onSearchClick() {
+        debugger;
+        if (searchClick == 0) {
+            searchClick = 1;
+            $('.dataTableSearchPopup').addClass('field-width-big');
+            CursorFocusOnSearch();
+        }
+        else {
+            searchClick = 0;
+            $('.dataTableSearchPopup').removeClass('field-width-big');
+        }
+    }
+
+    $(document).ready(function () {
+        $('.search-slider-inner').click(function () {
+
+            $('.pop-up').val('');
+            $('.pop-up').focus();
+            dataTable.search('').draw();
+        });
+    });
+</script>
+<style>
+    .select-option .sraech-slider i, .select-option .filter-button i {
+        z-index: 10;
+        position: relative;
+        top: 8px;
+    }
+</style>
+
+@using (Html.BeginForm("Save", "CommitmentsGiven", FormMethod.Post, new { id = "CommitmentsGivenSave" }))
+{
+
+    <div class="row" style="padding:5px 16px;">
+        @Html.HiddenFor(Model => Model.EmployeeCode)
+        <div class="col-md-6">
+            <div class="form-group">
+
+                <label class="view-title">Employee Name & ID </label>
+                <div class="view-details">@Model.EmployeeName</div>
+
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-6 d-flex justify-content-end">
+
+            <div class="tab-items select-option  align-items-center">
+                <div class="sraech-slider ">
+                    <div class="search-slider-inner1">
+                        <i class="fa fa-search" onclick="onSearchClick()"></i>
+                    </div>
+                    <input type="text" id="searchList" class="form-control form-control-sm pop-up dataTableSearchPopup"
+                           placeholder="Search by Item" onkeyup="searchRows()">
+                </div>
+
+
+                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left mt-2" style="    
+                            margin-left: 5px;"
+                   data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                    <i class="icon-xl far fa-file-excel"></i>
+                </a>
+            </div>
+        </div>
+        <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table commitments_given  vertical-scroll-200">
+            <table id="CommitmentsGivenDetailsTable">
+
+                <thead>
+                    <tr class="table-light">
+
+                        <th scope="col">Sl.No.</th>
+                        <th scope="col">Commitment</th>
+                        <th scope="col">Commitment Type</th>
+                        <th scope="col">Committed Date</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.CommitmentsGivenPopUpDetails != null && Model.CommitmentsGivenPopUpDetails.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.CommitmentsGivenPopUpDetails.Count; i++)
+                        {
+                    <tr>
+                        <td data-label="Sl.No.">
+
+                            @Html.HiddenFor(m => m.CommitmentsGivenPopUpDetails[i].Commitment)
+                            @Html.HiddenFor(m => m.CommitmentsGivenPopUpDetails[i].CommitmentType)
+
+                            @Model.CommitmentsGivenPopUpDetails[i].SlNo
+                        </td>
+                       
+                        <td data-label="Commitment">@Model.CommitmentsGivenPopUpDetails[i].Commitment</td>
+                        <td data-label="CommitmentType">@Model.CommitmentsGivenPopUpDetails[i].CommitmentType</td>
+                        @*<td data-label="CommittedDate">@Model.CommitmentsGivenPopUpDetails[i].CommittedDate</td>
+        <td data-label="Description">@Model.CommitmentsGivenPopUpDetails[i].Description</td>*@
+                        <td data-label="Committed Date">
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => Model.CommitmentsGivenPopUpDetails[i].CommittedDate, "{0:dd-MMM-yyyy}", new
+                           {
+                               @class = "form-control form-control-sm committed-date",
+                               @placeholder = "Committed Date"
+                           })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td data-label="Description">
+                            @Html.TextBoxFor(m => Model.CommitmentsGivenPopUpDetails[i].Description, new
+                       {
+                           @class = "form-control form-control-sm",
+                           maxlength = "500",
+                           placeholder = "Enter description"
+                       })
+                        </td>
+
+                    </tr>
+
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+
+            </table>
+
+            <div class="mt-3 text-right">
+                <button type="button" class="btn btn-default float-right mobile-full-width" onclick="SaveCommitmentsGiven()">
+                    Save
+                </button>
+            </div>
+
+
+        </div>
+
+    </div>
+
+}

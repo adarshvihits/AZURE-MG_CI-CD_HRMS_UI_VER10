@@ -1,0 +1,251 @@
+﻿@model Hrms.Lite.Shared.PayRoll.EmployeeRequestLoanIssue
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/EmployeeRequestLoanIssue.js" asp-append-version="true"></script>
+
+
+@*<script>
+        $(document).ready(function () {
+            /*GetList();*/
+
+            ('.salBtns').show();
+            ('.loanBtns').hide();
+
+        });
+    </script>*@
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title"> Employee Request Loan Issue</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                     Employee Request Loan Issue
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "EmpRequestLoanIssue", enctype = "multipart/form-data" }))
+                            {
+                                <div class="tab-items mt-2">
+                                    <label>Payroll Group</label>
+                                    <div class="form-group filter-combobox mt-0" style="width:160px;">
+
+                                        @Html.DropDownListFor(m => m.PayrollGroupCode, (SelectList)ViewBag.PayrollGroup, "--Payroll Group--", new { @class = "form-control form-control-sm", @onchange = "onPayrollGroupChange();GetList_LoanIssue();" })
+                                        <span id="PayrollGroup"></span>
+                                    </div>
+                                </div>
+
+                                <div class="tab-items ml-2">
+                                    <label>Loan Type</label>
+                                    <div class="form-group filter-combobox mr-10" style="width:160px;">
+
+                                        @Html.DropDownListFor(m => m.LoanTypeCode, (SelectList)ViewBag.LoanType, "--All--", new { @class = "form-control form-control-sm", @onchange = "GetList_LoanIssue();" })
+                                        <span id="Type"></span>
+                                    </div>
+
+                                </div>
+                                @*<div class="tab-items mt-2">
+                                    <label>Repayment Month</label><span class="Mandatory">*</span>
+                                    <div class="form-group filter-combobox mt-0" style="width:160px;">
+
+                                        @Html.DropDownListFor(m => m.MonthCode, (SelectList)ViewBag.Month, "--Month--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'Month')" })
+                                        <span id="Month"></span>
+                                    </div>
+                                </div>*@
+
+                            }
+
+
+
+                            <div class="tab-items select-option srch-fli-exp-pad">
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <button data-bs-toggle="tooltip" title="Export to Excel"
+                                        class="btn btn-excel mr-0">
+                                    <i class="icon-xl far fa-file-excel" onclick="onExportToExcelClick()"></i>
+                                </button>
+                                @*<button type="button" data-bs-toggle="tooltip" title="Import From Excel" onclick="validateSalaryRecoveryDropdowns()"
+                            class="btn btn-excel ml-0 import">
+                        <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                    </button>*@
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div id="LoanListView">
+                        @await Html.PartialAsync("_LoanIssueList")
+
+                    </div>
+                    <div id="LoanTracker">
+
+
+                    </div>
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog ">
+                            <div class="modal-content popup">
+                                <div class="modal-header" style="padding:10px">
+                                    <h5 class="modal-title" id="exampleModalLabel">Employee Request Loan Issue</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label>Remarks</label>
+
+                                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @maxlength = "250" })
+                                </div>
+
+                                <div class="card border-none" style="margin-top: 10px;">
+
+                                    <div class="col-md-12 align-right pb-4">
+                                        @*<a type="button" class="btn btn-danger  mobile-full-width" onclick="onSubmit('REJECT')">
+                                Reject
+                            </a>*@
+                                        <a type="button" class="btn btn-default  mobile-full-width" onclick="SaveLoanIssue()">
+                                            Issue
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @*<div class="row card-footer-bottom-fixed">
+            <div class="col-md-6">
+                <div class="d-flex responsive-center">
+                    <a href="@Url.Action("TransactionHistory","EmployeeRequestLoanIssue", new { Area="Payroll"})">
+                        <div class="application-btn d-flex align-items-center pr-3 ">
+                            <div class="history-btn">
+                                <img src="/images/Icon awesome-history.png">
+
+                            </div>
+                            <div class="application-icon"> <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                        </div>
+                    </a>
+
+
+                </div>
+            </div>
+            <div class="col-md-6">
+
+
+                <button id="btnLoanIssueSave" type="button" class="btn btn-default float-right mobile-full-width" onclick="SaveLoanIssue()">
+                    Save
+                </button>
+
+
+
+            </div>
+        </div>*@
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-6">
+                            <div class="d-flex responsive-center">
+                                <a onclick="TransactionHistory()">
+                                    <div class="application-btn d-flex align-items-center pr-3 ">
+                                        <div class="history-btn">
+                                            <img src="/images/Icon awesome-history.png">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+
+                            <button id="btnLoanIssueSave" data-bs-toggle="modal" data-target="" type="button" class="btn btn-default float-right mobile-full-width " onclick="OnClickSaveLoanIssueValidate()">
+                                Save
+                            </button>
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+
+    <div id="filterSlider">
+        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter);
+    </div>
+
+</div>
+

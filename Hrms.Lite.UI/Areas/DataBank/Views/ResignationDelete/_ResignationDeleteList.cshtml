@@ -1,0 +1,82 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        //$('#ResignationDeleteTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table resignation-delete">
+    @Html.HiddenFor(m => m.ResignationList.Count)
+    <table id="ResignationDeleteTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th data-bs-toggle="tooltip" title="Date Of Joining" scope="col">DOJ</th>
+                <th data-bs-toggle="tooltip" title="Years Of Service" scope="col"> Y/S</th>
+                <th data-bs-toggle="tooltip" title="Last Working Date" scope="col">LWD</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Stage</th>
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ResignationList != null && Model.ResignationList.Count > 0)
+            {
+                for (int i = 0; i < Model.ResignationList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="ID">@Model.ResignationList[i].EmployeeID</td>
+                        <td data-label="Employee Name">
+                            @Model.ResignationList[i].EmployeeName
+                        </td>
+                        <td data-label="Fun.Designation">@Model.ResignationList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.ResignationList[i].Department.Name </td>
+                        <td data-label="Location">@Model.ResignationList[i].Location.Name</td>
+                        <td data-label="Date Of Joining">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].DOJ))</td>
+                        <td data-label="Years Of Service">@Model.ResignationList[i].YOS</td>
+                        <td data-label="Last Working Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].LWD))</td>
+                        <td data-label="Reason">@Model.ResignationList[i].Reason</td>
+                        <td data-label="Stage">@Model.ResignationList[i].Stage</td>
+
+
+                        <td data-label="Action">
+                            <a data-bs-toggle="tooltip" title="" id="banknamedelete" type="button" class="btn btn-icon  icon-only mobile-full-width  btn-delete" data-bs-original-title="Delete" onclick="onDeleteClick('@Model.ResignationList[i].EmployeeGI','@Model.ResignationList[i].ResignationGI')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="11"> No data found</td></tr>
+            }
+
+
+
+
+        </tbody>
+    </table>
+</div>

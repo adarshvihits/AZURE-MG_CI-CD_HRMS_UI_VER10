@@ -1,0 +1,127 @@
+﻿@model Hrms.Lite.Shared.Admin.DocumentsFolder
+
+<script src="~/scripts/Admin/documentsFolder.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Create", "DocumentsFolder", FormMethod.Post, new { @id = "documentsFolderSave" }))
+{
+    @Html.HiddenFor(model => Model.Mode)
+    @Html.HiddenFor(model => Model.DocumentCode)
+    @Html.HiddenFor(model => Model.DocumentCategoryCode)
+    <div id="addDocFolder" class="slider-forms slider-forms-open documentsFolderSaveclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('documentsFolderSaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Documents Folder
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Category
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.DropDownListFor(Model => Model.CategoryDropdown.Code, (SelectList)ViewBag.DocumentCategory, " Select  Category ", new { @class = "form-control form-control-sm", @onchange = "OnCategorySelect()" })
+
+                            <span id="DocumentCategoryDD"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Document Name
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.DocumentName, new { @class = "form-control form-control-sm DocumentName", @placeholder = "File Name", maxlength = "25" })
+                            <span id="DocumentNameSpan"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Description:
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm Description", @placeholder = "Description", @onchange = "validate(this,'Description')", maxlength = "120" })
+                            <span id="DescriptionSpan"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="file-upload-form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                Attach
+                                File
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            <div class="file-upload-form mb-4" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 1 MB.">
+                                <div class="small-btn-group">
+
+                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                </div>
+                                @Html.HiddenFor(Model => Model.File.AbsoluteUri)
+                                @Html.HiddenFor(Model => Model.File.FileName)
+                                @Html.HiddenFor(Model => Model.File.ActualFileName)
+                                @Html.HiddenFor(Model => Model.File.FileExtension)
+                                @Html.TextBoxFor(Model => Model.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)", @title = "" })
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                        <div id="ParametersListDiv" >
+                            @await Html.PartialAsync("_ParametersList", Model)
+                        </div>
+                   
+                </div>
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            @if (Model.Mode == "Create")
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DocSave('Save')">
+                                    Save
+                                </button>
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <a data-bs-toggle="tooltip" title="" data-bs-original-title="View" type="button" class="btn btn-icon btn-view" onclick="showDocument('@Model.File.FileName', '@Model.File.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></a>
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Delete" type="button" class="btn btn-icon btn-delete" onclick="confirmDelete('DELETE','@Model.DocumentCategoryCode','@Model.DocumentGI')"><i class="icon-xl far fa-trash-alt"></i></a>
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DocSave('Modify')">
+                                    Modify
+                                </button>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+        </div>
+    </div>
+}

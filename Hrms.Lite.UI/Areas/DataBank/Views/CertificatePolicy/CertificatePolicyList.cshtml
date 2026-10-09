@@ -1,0 +1,66 @@
+﻿@model Hrms.Lite.Shared.DataBank.CertificatePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table FunctionalState-list pt-1">
+    @Html.HiddenFor(m => m.CertificatePolicyList.Count)
+    @Html.HiddenFor(m => m.CertificateCode)
+    <table id="FunctionalStateTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Validity</th>
+                <th scope="col">Maximum Reimbursement</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.CertificatePolicyList != null && Model.CertificatePolicyList.Count > 0)
+                {
+                    for (int i = 0; i < Model.CertificatePolicyList.Count; i++)
+
+                    {
+
+
+                        <tr>
+
+
+                            <td data-label="Name">@Model.CertificatePolicyList[i].Name</td>
+                            <td data-label="Short Name">@Model.CertificatePolicyList[i].ShortName</td>
+                            <td data-label="Category">@Model.CertificatePolicyList[i].CategoryName</td>
+                            <td data-label="Validity">@Model.CertificatePolicyList[i].Validity</td>
+                            <td data-label="MaximumReimbursement">@Model.CertificatePolicyList[i].MaximumReimbursement</td>
+                            <td data-label="Actions">
+                                <div>
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="categoryedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY','@Model.CertificatePolicyList[i].CertificateCode')">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deletecategory"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('DELETE','@Model.CertificatePolicyList[i].CertificateCode')">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

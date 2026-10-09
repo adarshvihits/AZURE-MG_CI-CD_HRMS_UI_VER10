@@ -1,0 +1,430 @@
+﻿@model Hrms.Lite.Shared.Master.KeyPosition
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approveKeyPosition" }))
+{
+    <div id="approvekeyposition" class="slider-forms slider-forms-open ApproveDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('ApproveDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Key Position</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.LogGI)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Key
+                                Position Code
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.KeyPositionCodeDesc)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Designation
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Designation.Name)
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Years of Service
+                            </label>
+
+
+                            @if (Model.YSAboveOrBelow.Code == 3)
+
+                            {
+                                <div class="view-details">
+                                    @Html.DisplayFor(model => Model.YSAboveOrBelow.Name)
+                                    Between<span>  @Html.DisplayFor(model => Model.YOSFrom)</span>-
+                                    <span>  @Html.DisplayFor(model => Model.YOSTo) </span>
+                                </div>
+                            }
+
+                            else
+                            {
+                                <div class="view-details">
+                                    @Html.DisplayFor(model => Model.YSAboveOrBelow.Name)
+                                    <span>  @Html.DisplayFor(model => Model.YOSFrom)</span>
+                                    @*<span>  @Html.DisplayFor(model => Model.YOSTo) </span>*@
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Age
+                            </label>
+
+                            @if (Model.AgeAboveOrBelow.Code == 3)
+                            {
+                                <div class="view-details">
+                                    @Html.DisplayFor(model => Model.AgeAboveOrBelow.Name)
+                                    Between<span>  @Html.DisplayFor(model => Model.AgeFrom) </span>-
+                                    <span>  @Html.DisplayFor(model => Model.AgeTo) </span>
+                                </div>
+                            }
+
+                            else
+                            {
+
+                                <div class="view-details">
+                                    @Html.DisplayFor(model => Model.AgeAboveOrBelow.Name)
+                                    <span>  @Html.DisplayFor(model => Model.AgeFrom) </span>
+                                    @*<span>  @Html.DisplayFor(model => Model.AgeTo) </span>*@
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Gender
+                            </label>
+                            <div class="view-details">
+
+                                @Html.DisplayFor(model => Model.Gender.Name)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row-outer">
+                            <label class="view-title">
+                               Key Position Risk
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.KeyPositionRisk.Name)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="row my-2">
+                    <div class="col-md-6">
+                        <div class="ihits-table table-border mobile-responsive-table key-position-entry-two vertical-scroll-100">
+                            <table>
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">
+                                            Skill
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Skills != null && Model.Skills.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.Skills.Count; i++)
+
+                                            {
+                                                @if (Model.Skills[i].APPLICABILITY == true)
+                                                {
+                                                    <tr>
+                                                        <td data-label="ID">
+
+
+                                                            @Html.DisplayFor(Model => Model.Skills[i].NAME)
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="ihits-table table-border  mobile-responsive-table key-position-entry-two vertical-scroll-100">
+                            <table>
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">
+                                            Skill
+                                            Proficiency
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.SkillProficiency != null && Model.SkillProficiency.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.SkillProficiency.Count; i++)
+
+                                            {
+
+                                                @if (Model.SkillProficiency[i].APPLICABILITY == true)
+                                                {
+                                                    <tr>
+                                                        <td data-label="ID">
+                                                            @Html.DisplayFor(Model => Model.SkillProficiency[i].NAME)
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-md-12">
+                        <div class="ihits-table table-border mobile-responsive-table key-position-entry-two vertical-scroll-100">
+                            <table>
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">
+                                            Qualification
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Education != null && Model.Education.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.Education.Count; i++)
+
+                                            {
+                                                @if (Model.Education[i].APPLICABILITY == true)
+                                                {
+
+                                                    <tr>
+                                                        <td data-label="ID">
+                                                            @Html.DisplayFor(Model => Model.Education[i].NAME)
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-md-12">
+                        <div class="ihits-table table-border  mobile-responsive-table language-kry-position vertical-scroll-100">
+                            <table>
+                                <thead>
+                                    <tr class="table-light">
+                                        <th scope="col">
+                                            Languages
+                                        </th>
+                                        <th scope="col">
+                                            Read
+                                        </th>
+                                        <th scope="col">
+                                            Write
+                                        </th>
+                                        <th scope="col">
+                                            Speak
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Languages != null && Model.Languages.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.Languages.Count; i++)
+
+                                            {
+
+                                                <tr>
+                                                    <td data-label="ID">
+                                                        @Html.DisplayFor(Model => Model.Languages[i].NAME)
+                                                    </td>
+                                                    <td data-label="Employee Name">
+                                                        @if (Model.Languages[i].Read == true)
+                                                        {
+
+                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                <i class="icon-xl fas fa-check"></i>
+                                                            </button>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                            </button>
+                                                        }
+
+
+                                                    </td>
+                                                    <td data-label="ID">
+                                                        @if (Model.Languages[i].Write == true)
+                                                        {
+
+                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                <i class="icon-xl fas fa-check"></i>
+                                                            </button>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                            </button>
+                                                        }
+                                                    </td>
+                                                    <td data-label="ID">
+                                                        @if (Model.Languages[i].Speak == true)
+                                                        {
+
+                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                <i class="icon-xl fas fa-check"></i>
+                                                            </button>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                            </button>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(Model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                            <button type="button"
+                                    class="btn btn-danger  mobile-full-width" onclick="return confirmReject('@Model.GI','@Model.LogGI')">
+                                Reject
+                            </button>
+                            <button type="button"
+                                    class="btn btn-default  mobile-full-width" onclick="return confirmApprove('@Model.GI','@Model.LogGI')">
+                                Approve
+                            </button>
+                        }
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,154 @@
+﻿@model Hrms.Lite.Shared.Master.DueClearanceSettings
+@*<link href="~/css/custom.css" rel="stylesheet" />*@
+@*<script src="~/js/Multiselectdropdown.js"></script>*@
+<style>
+    .multiselect-filter {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: white;
+    }
+
+        .multiselect-filter .input-group {
+            padding: 5px;
+            margin: 0px;
+            border-radius: 2px;
+        }
+
+    .multiselect-search {
+        border-radius: 5px !important;
+        height: 26px;
+    }
+    .multiselect-native-select .btn.dropdown-toggle{
+        border:none !important;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.multiselectDropdownField ').multiselect({
+            includeSelectAllOption: true,
+            /*  enableFiltering: true,*/
+            enableCaseInsensitiveFiltering: true,
+            includeFilterClearBtn: false,
+            includeSelectAllOption: false,
+
+        });
+    });
+</script>
+@using (Html.BeginForm("Save", "DueClearanceSettings", FormMethod.Post, new { id = "DueClearanceSettingsSave" }))
+{
+    @Html.HiddenFor(Model=>Model.ParameterGI)
+    @Html.HiddenFor(Model=>Model.Mode)
+    <div id="addskilltype" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Dues Clearance Settings
+            </h4>
+            <div class="row my-3">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Parameter</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(Model => Model.ParameterName, new { @class = "form-control form-control-sm", maxlength = "250", @placeholder = "Parameter",@onblur= "validate(this,'paramname')" })
+                        <span id="paramname"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Applicable Department</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(Model => Model.Department.Code, (SelectList)ViewBag.Dept, "--select--", new { @class = "form-control form-control-sm filterDropDown", @onchange = "onDepartmentChange(this,'department');validate(this,'department')"})
+                        <span id="department"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+                    @*<div class="form-group">
+            <label>Responsible Person </label>
+            <div class="form-control  form-control-sm">
+                @Html.ListBoxFor(Model => Model.ResponsiblePersons, (SelectList)ViewBag.ResponsiblePerson, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm respPerson", @multiple = "multiple", @onchange = "validateMultiselect('ResponsiblePerson','respPerson','respoperson')", data_db_filter = "true" })
+                <span id="respoperson"></span>
+            </div>
+        </div>*@
+                    <div class="form-group">
+                        <label>Responsible Person</label><span class="Mandatory">*</span>
+
+                        <div class="form-control  form-control-sm respPerson">
+                            @Html.ListBoxFor(Model => Model.ResponsiblePersons, (SelectList)ViewBag.ResponsiblePerson, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm", @multiple = "multiple", @onchange = "validateMultiselect('ResponsiblePersons','responsibleperson','respPerson')", data_db_filter = "true" })
+                        </div>
+                    </div>
+                    <span id="responsibleperson"></span>
+
+
+                    @*<div class="form-group">
+                        <label>Responsible Person</label>
+
+                        @Html.DropDownListFor(Model => Model.ResponsiblePersons, (SelectList)ViewBag.ResponsiblePerson, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm respPerson", @multiple = "multiple", @onchange = "validateMultiselect('ResponsiblePersons','responsibleperson','respPerson')", data_db_filter = "true" })
+                        <span id="responsibleperson"></span>
+                    </div>*@
+
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <div class="d-flex align-items-center">
+                            <label>Default Settings </label>
+                            <div class="checkbox-inline pl-3">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.DefaultSettings)
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <a type="button" onclick="DueClearanceSettingsSave('Create')"
+                           class="btn btn-default  mobile-full-width">
+                            Save
+                        </a>
+                    }
+                else
+                {
+                <a type="button" onclick="DueClearanceSettingsSave('Modify')"
+                   class="btn btn-default  mobile-full-width">
+                    Modify
+                </a>
+                }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,226 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.OverTimeApproval
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/dailyOTConfirmation.js"></script>
+<script>
+    $(document).ready(function () {
+        fillData();
+
+      
+    });
+
+
+    function ApplyFilter(mode) {
+        debugger
+
+        if (mode == 'apply') {
+            /* showSpinner();*/
+            if (filterApplicable >= 1) {
+                fillData();
+                CloseSlider('basicFilter');
+                $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+                fillData();
+                CloseSlider('basicFilter');
+                $('#filterForm').addClass('filter-apply');
+            }
+
+        }
+        else {
+            /* showSpinner();*/
+            filterApplicable = 1;
+            $('.reset').val('');
+            $('#Optional_Filter_EmploymentStatus_Code').val(0);
+            $('#filterForm').removeClass('filter-apply');
+            fillData();
+            //    CloseSlider('basicFilter');
+        }
+    }
+
+
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Daily Overtime Confirmation</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Daily Overtime Confirmation List
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+                
+                    <div class="card-body">
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+                                <div class="tab-items">
+                                    @using (Html.BeginForm("Save", "DailyOTConfirmation", FormMethod.Post, new { @id = "dailyOtSave" }))
+                                    {
+                                        <div class="row-outer pb-2">
+                                            <label>Date</label>
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(m => m.Date, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Date", @onchange = "fillData()" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="testOT" class="hide">                                            
+                                            <table id="overtimeApprovalTableTwo">
+                                                <thead>
+                                                    <tr class="table-dark">
+
+                                                        <th scope="col">ID </th>
+                                                        <th scope="col">Employee Name </th>
+                                                        <th scope="col">Fun.Designation</th>
+                                                        <th scope="col">Department</th>
+                                                        <th scope="col">Location</th>
+                                                        <th scope="col">Shift</th>
+                                                        <th scope="col">IN</th>
+                                                        <th scope="col">OUT</th>
+                                                        <th scope="col">Total Time</th>
+                                                        <th scope="col">COT Hours</th>
+                                                        <th scope="col">COT Minutes</th>
+
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                       
+                                    }
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div class="tab-items select-option">
+
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                            data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </button>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <!-- Table Section -->
+
+                        <div id="listView">
+                            @await Html.PartialAsync("_List")
+                        </div>
+
+                        <!-- Table Setion End -->
+
+                        <div class="row card-footer-bottom-fixed">
+
+                            <div class="col-md-6 float-left-btn">
+
+
+                                @*<button id="defultsettings" type="button" class="btn btn-default" onclick="window.location.href='/TimeOffice/DailyOTConfirmation/ApprovedList'">Approved List</button>*@
+
+                                <div class="application-btn d-flex align-items-center">
+                                    <div class="">
+                                        <img  class="approvelistcls">
+
+                                    </div>
+                                    <div class="application-icon" onclick="window.location.href='/TimeOffice/DailyOTConfirmation/ApprovedList'"> <h3 class="pt-2 pl-2">Approved List</h3></div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                            </div>
+                            <div class="col-md-6 align-right">
+                                <a id="addApplicableAllowance" type="button" class="btn btn-default mobile-full-width" onclick="Save()">
+                                    Confirm
+                                </a>
+                            </div>
+
+                        </div>
+                        <!--end: Datatable-->
+                    </div>                
+            </div>
+
+            <div id="filterSlider">
+                @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

@@ -1,0 +1,328 @@
+﻿@model Hrms.Lite.Shared.Admin.PhotoGallery
+<script src="~/scripts/Admin/PhotoGallery.js"></script>
+
+<script src="~/js/jquery.min.js"></script>
+
+@{
+    ViewData["Title"] = "AddNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .commentbox {
+        height: 45px;
+        border-radius: 8px;
+        width: 100%;
+         margin-left: 0; 
+     
+    }
+
+    .gallery_icon {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+    }
+
+    .gallery_flex {
+        margin-left: 60px;
+    }
+
+    .gallery_icon img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .photos_font {
+        font-size: 13px;
+        color: #505050;
+        padding-left: 5px;
+    }
+
+</style>
+
+<script>
+
+    function previewImages(event) {
+        const files = event.target.files;
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+        // Clear the current preview images
+        imagePreviewContainer.innerHTML = '';
+        debugger;
+        // Loop through all selected files
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith('image/')) {
+                continue; // Skip non-image files
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Create a div to hold the image and the remove button
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = 'relative';
+                imageContainer.style.width = '227px';
+                imageContainer.style.height = '227px';
+
+                // Create the image element
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+
+                // Create the remove button
+                const removeButton = document.createElement('button');
+                removeButton.innerText = 'X';
+                removeButton.style.position = 'absolute';
+                removeButton.style.top = '2px';
+                removeButton.style.right = '2px';
+                removeButton.style.background = 'black';
+                removeButton.style.color = 'white';
+                removeButton.style.border = 'none';
+                removeButton.style.padding = '2px';
+                removeButton.style.cursor = 'pointer';
+
+                //// Create the description input
+                //const descriptionInput = document.createElement('input');
+                //descriptionInput.type = 'text';
+                //descriptionInput.name = 'Descriptions';
+                //descriptionInput.placeholder = 'Enter description';
+                //descriptionInput.style.width = '100%';
+                //descriptionInput.style.marginBottom = '10px';
+                //descriptionInput.onkeypress = function (e) {
+                //    if (e.key === 'Enter') {
+                //        e.preventDefault();  // Prevent removing image when Enter is pressed
+                //    }
+                //};
+
+                // Create the description textarea (allows multiple lines)
+                const descriptionInput = document.createElement('textarea');
+                descriptionInput.name = 'Descriptions';
+                descriptionInput.placeholder = 'Enter description';
+                descriptionInput.rows = 3;  // Default rows for textarea
+                descriptionInput.style.width = '100%';
+                descriptionInput.style.marginBottom = '10px';
+
+                removeButton.onclick = function () {
+                    // Remove the image from the preview container
+                    imageContainer.remove();
+                    //textarea.remove();
+
+
+                    // Remove the file from the input (remove it from the FileList)
+                    removeImageFromInput(i);
+                };
+
+                // Append the image and the remove button to the image container
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(removeButton);
+                imageContainer.appendChild(descriptionInput);
+
+                // Add the textarea to a div or any container element
+                //var container = document.getElementById("image_des");
+                //container.appendChild(textarea);
+
+              
+
+                // Append the image container to the preview container
+                imagePreviewContainer.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImageFromInput(index) {
+        const imageInput = document.getElementById('fileInput');
+        const dataTransfer = new DataTransfer();
+
+        // Re-add all files except the one at the removed index
+        for (let i = 0; i < imageInput.files.length; i++) {
+            if (i !== index) {
+                dataTransfer.items.add(imageInput.files[i]);
+            }
+        }
+
+        // Update the file input with the new FileList
+        imageInput.files = dataTransfer.files;
+    }
+
+  
+</script>
+@using (Html.BeginForm("Upload", null, FormMethod.Post, new { id = "PhotoGallerysave", enctype = "multipart/form-data" }))
+{
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <!--begin::Header-->
+        <div id="kt_header" class="header header-fixed">
+            <!--begin::Container-->
+            <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                <!--begin::Header Menu Wrapper-->
+                <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                    <!--begin::Header Menu-->
+                    <div class="d-flex align-items-baseline flex-wrap mr-5">
+                        <h3 class="main-title">
+                            Photo Gallery
+                        </h3>
+                        <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                            <li class="breadcrumb-item ">
+                                <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item text-muted">
+                                <a href="@Url.Action("Index", "PhotoGallery", new { Area = "Admin" })" class="">
+                                    @*<i class="icon-nm fas fa-home mt-1"></i>*@
+                                    Photo Gallery List
+                                </a>
+                            </li>
+                            @*<li class="breadcrumb-item text-muted">
+                                    <a href="_FinancialYearList">Financial Year List</a>
+                                </li>*@
+                            <li class="breadcrumb-item text-muted">
+                                Photo Gallery
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!--end::Header Menu Wrapper-->
+                <!--begin::Topbar-->
+                <!--<div class="topbar">-->
+                <!--begin::User-->
+                <!-- <div class="topbar-item">
+                    <div
+                        class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2">
+                        <span
+                            class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
+                        <span
+                            class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Sean</span>
+
+                    </div>
+                </div> -->
+                <!--end::User-->
+                <!--</div>-->
+                <!--end::Topbar-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+
+
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+
+                        <div class="col-md-12">
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body  ">
+                                    <div class="page_white">
+
+                                        <div class="row tab-style-button">
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Name</label>
+                                                    <span class="Mandatory">*</span>
+                                                    @Html.HiddenFor(model => Model.Mode)
+                                                    @Html.HiddenFor(model => Model.PhotoGalleryGI)
+
+                                                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control commentbox postDesc", placeholder = "Write your post here...." })
+                                                    <span id="description"></span>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+
+
+
+                                        <!--<input id="fileInput" type="file" name="Files" multiple style="display:none;" onchange="updateFileNames()" />-->
+                                        <!-- Textbox to display file names (readonly) -->
+                                        <!--@Html.TextBoxFor(m => m.FileNames, new { @readonly = "readonly", placeholder = "No files selected" })-->
+                                        <!-- Button to trigger file selection -->
+                                        <!--<button type="button" onclick="document.getElementById('fileInput').click()">Select Files</button>-->
+                                        <!-- Submit button -->
+                                        <!--<button type="submit">Upload</button>-->
+                                        @*<div id="imgPreviewDiv" class="preview-images-zone row hide">
+
+            <div class="preview-image preview-show-2">
+                <div class="image-cancel" data-no="2" onclick="RemoveImg()">X</div>
+                <div class="image-zone post_img"><img class="imgPreview" src=""></div>
+                <div class="tools-edit-image"><a href="javascript:void(0)" data-no="2" class="btn btn-light btn-edit-image" onclick="previewImgSocialWall()">Preview</a></div>
+            </div>
+
+        </div>*@
+
+                                        <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+                                            <!-- Preview images will be appended here -->
+
+
+                                        </div>
+                                        <div id="image_des" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 70px;"></div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <div class="d-flex align-items-center " style="padding:10px;">
+                                                    <div class="gallery_icon d-flex" onclick="$('#fileInput').trigger('click')">
+                                                        <img src="/images/icons/Icon ionic-md-photos.svg"><span class="photos_font">Photos</span>
+                                                    </div>
+                                                    @*<input accept=".jpg, .jpeg" class="input-file hide uploadImg" id="fileInput" name="Files" type="file">*@
+                                                    <input accept=".jpg, .jpeg" id="fileInput" type="file" name="Files" multiple style="display:none;" onchange="previewImages(event)" />
+                                                    @Html.HiddenFor(m => m.FileNames)
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <div class="col-md-6 pt-2 text-right">
+
+                                                @*<button type="submit">Upload</button>*@
+                                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                                                    Upload
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- <end table></end> -->
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+                    <!--end::Row-->
+                    <!--end::Dashboard-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+        </div>
+    </div>
+}

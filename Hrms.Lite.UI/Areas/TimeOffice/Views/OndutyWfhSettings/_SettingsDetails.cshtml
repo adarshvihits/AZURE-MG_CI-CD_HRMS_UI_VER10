@@ -1,0 +1,208 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.OndutyWfhSettings
+
+<style>
+    .ihits-table.table-border table tbody tr th {
+        padding: 2px 13px;
+    }
+
+    .checkbox.checkbox-outline.checkbox-primary > span {
+        background-color: transparent;
+        border-color: #7a7a91 !important;
+    }
+
+    .ihits-table .form-control {
+        border-color: #7a7a91 !important;
+        background-color: #fff;
+    }
+
+    table {
+        border-collapse: collapse !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        enableDisableTextBoxes();
+
+    });
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Other-Settings-Save" }))
+{
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table ">
+
+        <table id="OtherSettingsTable" class="layout-fixed">
+
+
+            <colgroup span="3"></colgroup>
+            <thead>
+                <tr class="leve_scroll_chnge" @*style="background-color: var(--blue-color-theme);
+                                              color: white;"*@>
+                    <th scope="col">Category</th>
+                    <th scope="col">Condition</th>
+                    <th colspan="3" scope="colgroup">Settings</th>
+                </tr>
+            </thead>
+
+            @if (Model.LeaveGroup.Code != 0)
+            {
+                <tbody>
+                    <tr>
+                        <th rowspan="15" scope="rowgroup">OnDuty </th>
+                        <th scope="row">Remarks Mandatory or not</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.OdRemarksMandatory)
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">Allow backdated applications</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.OdPreDatedApplAlwed, new { @onchange = "onOdPreDatesApplChange()" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Number of backdated days</th>
+                        <td>
+                            <div class="form-group">
+                                @Html.TextBoxFor(Model => Model.OdNoOfDaysPrior, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "No: of days prior",
+                               onkeypress = "return onlyNumberKey(event)"
+                           })
+
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Advance Application required</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.OdAdvanceApplRequired, new { @onchange = "onOdAdvanceChange();" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">No: of days in advance</th>
+                        <td>
+                            <div class="form-group">
+                                @Html.TextBoxFor(Model => Model.OdNoOfDaysAdvance, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "No: of days",
+                               onkeypress = "return onlyNumberKey(event)"
+                           })
+
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th rowspan="15" scope="rowgroup">Work From Home </th>
+                        <th scope="row">Remarks Mandatory or not</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.WfhRemarksMandatory)
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+
+                    <tr>
+                        <th scope="row">Allow backdated applications</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.WfhPreDatedApplAlwed, new { @onchange = "onWfhPreDatesApplChange()" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Number of backdated days</th>
+                        <td>
+                            <div class="form-group">
+                                @Html.TextBoxFor(Model => Model.WfhNoOfDaysPrior, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "No: of days prior",
+                               onkeypress = "return onlyNumberKey(event)"
+                           })
+
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Advance Application required</th>
+                        <td>
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(Model => Model.WfhAdvanceApplRequired, new { @onchange = "onWfhAdvanceChange();" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">No: of days in advance</th>
+                        <td>
+                            <div class="form-group">
+                                @Html.TextBoxFor(Model => Model.WfhNoOfDaysAdvance, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "No: of days",
+                               onkeypress = "return onlyNumberKey(event)"
+                           })
+
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            }
+        </table>
+
+
+
+
+    </div>
+}

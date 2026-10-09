@@ -1,0 +1,85 @@
+﻿
+@model Hrms.Lite.Shared.Master.Role
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+        //$('#PendingRoleTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Rolename-master-pending pt-1">
+    @Html.HiddenFor(model => Model.RoleList.Count)
+    <table id="PendingRoleTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+
+
+                if (Model.RoleList != null && Model.RoleList.Count > 0)
+                {
+                    for (int i = 0; i < Model.RoleList.Count; i++)
+
+                    {
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+
+                            <td data-label="Name">
+                                @Model.RoleList[i].Name
+                                @Html.HiddenFor(m => m.RoleList[i].MakerChecker)
+                            </td>
+                            <td data-label="Name">@Model.RoleList[i].ShortName</td>
+                            <td data-label="Name">@Model.RoleList[i].Mode</td>
+                            <td data-label="Approve">
+                               
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="Rolenameapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.RoleList[i].GI', '@Model.RoleList[i].LogGI','APPROVAL', @i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                               
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

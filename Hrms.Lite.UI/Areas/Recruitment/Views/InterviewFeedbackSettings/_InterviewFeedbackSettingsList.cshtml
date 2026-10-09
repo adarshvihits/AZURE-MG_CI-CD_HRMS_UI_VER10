@@ -1,0 +1,69 @@
+@model Hrms.Lite.Shared.Recruitment.InterviewFeedbackSettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.FirstRoundCount').html('@Model.FirstRoundCount');
+        $('.SecondRoundCount').html('@Model.SecondRoundCount');
+    });
+</script>
+<div class="ihits-table table-border odd-even mobile-responsive-table ifs-list pt-3">
+    <table id="InterviewFeedbackSettingsTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" class="ifs-col-set">Question Set</th>
+                <th scope="col" class="ifs-col-round">Round</th>
+                <th scope="col" class="ifs-col-grades">Applicable Grades</th>
+                <th scope="col" class="ifs-col-questions">Questions</th>
+                <th scope="col" class="ifs-col-action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.FeedbackSetList != null && Model.FeedbackSetList.Count > 0)
+            {
+                foreach (var item in Model.FeedbackSetList)
+                {
+                    <tr class="ifs-row" onclick="onAddOrEditFeedbackSet('MODIFY', '@item.FeedbackSetGI')">
+                        <td data-label="Question Set">
+                            <div class="cell-primary">@item.Name</div>
+                            <div class="cell-sub">@item.SetID</div>
+                        </td>
+                        <td data-label="Round"><span class="pill pill-accent">@item.RoundName</span></td>
+                        <td data-label="Applicable Grades">
+                            <div class="ifs-grade-tags">
+                                @if (item.GradeNameList != null)
+                                {
+                                    foreach (var grade in item.GradeNameList)
+                                    {
+                                        <span class="pill pill-neutral">@grade</span>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td data-label="Questions">@item.QuestionCount question(s)</td>
+                        <td data-label="Action">
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Edit Question Set" class="btn btn-icon btn-edit icon-only"
+                                   onclick="event.stopPropagation(); onAddOrEditFeedbackSet('MODIFY', '@item.FeedbackSetGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Edit Question Set" class="btn btn-icon btn-edit icon-only"
+                                   onclick="event.stopPropagation(); swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

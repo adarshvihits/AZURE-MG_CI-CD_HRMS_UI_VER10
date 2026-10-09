@@ -1,0 +1,45 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.PaySlip
+
+@Html.HiddenFor(m => m.CurrentSalaryPeriodCode)
+@if (Model.Months != null && Model.Months.Count > 0)
+{
+
+    @for (int i = 0; i < Model.Months.Count; i++)
+    {
+        if (Model.CurrentSalaryPeriodCode == Model.Months[i].SalaryPeriodCode)
+        {
+           
+                <div id="monthTab" class="box_months active" onclick="onMonthTabClick('monthTab',@i)">
+                    <p>
+                        @Model.Months[i].Month @Html.HiddenFor(m => m.Months[i].SalaryPeriodCode)
+
+                    </p>
+                    @*<span>@Model.Months[i].Month.Split(" ")[1]</span>*@
+                </div>
+            
+               
+           
+        }
+        else
+        {
+      
+                <div id="monthTab_@i" class="box_months" onclick="onMonthTabClick('monthTab_@i',@i)">
+                    <p>
+                        @Model.Months[i].Month @Html.HiddenFor(m => m.Months[i].SalaryPeriodCode)
+
+                    </p>
+                    @*<span>@Model.Months[i].Month.Split(" ")[1]</span>*@
+                </div>
+            
+              
+          
+        }
+    }
+    }
+<div class="monthselection">
+
+
+    @Html.DropDownListFor(m => m.FinancialYear.Code, (SelectList)ViewBag.FinancialYr, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onFinancialYrChange()" })
+
+
+</div>

@@ -1,0 +1,1865 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeProfile
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/js/tooltip.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+<script src="~/scripts/DataBank/employeeProfile.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.search-profile-details').hide(300);
+        //masking
+        var pan = $("#DocumentUpload_PANNumber").val();
+        var Adhar = $("#DocumentUpload_AadharNumber").val();
+        var accnt = $("#Statutory_Payment_Details_AccountNo").val();
+        $(".ep_Pan").html(mask(pan));
+        $(".ep_AdharNo").html(mask(Adhar));
+        if (accnt != "")
+            $(".ep_AccntNo").html(mask(accnt));
+
+    });
+
+</script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        @Html.HiddenFor(Model => Model.DocumentUpload.AadharNumber)
+        @Html.HiddenFor(Model => Model.DocumentUpload.PANNumber)
+        @Html.HiddenFor(Model => Model.Statutory_Payment_Details.AccountNo)
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Profile</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        @*<a href="Index.html"> Employee Profile List</a>*@
+                        @if (Model.Breadcrumb == "EmployeeProfile")
+                        {
+                            <a href="@Url.Action("Index", Model.Breadcrumb, new { Area = "DataBank" })" class="">@Model.BreadcrumbName</a>
+                        }
+                        @*else if(Model.Breadcrumb=="BloodBankReport")
+                        {
+                            <a href="@Url.Action("GetBloodBankReportList", Model.Breadcrumb, new { Area = "DataBank" })" class="">@Model.BreadcrumbName</a>
+                        }*@
+                        else
+                        {
+                            <a href="@Url.Action(Model.Breadcrumb+"List", Model.Breadcrumb, new { Area = "DataBank" })" class="">@Model.BreadcrumbName</a>
+                        }
+
+                    </li>
+                    <li class="breadcrumb-item">
+                        Employee Profile
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<div class="profile-header emp-profile padding-big " style="background-color: #102548 !important;">
+    <div class="row">
+
+        <div class="col-md-9 offset-md-2 pl-28"">
+            <div class="row">
+
+                <div class="flex-grow-1" style="position: relative; top:-14px;">
+
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <div class="d-flex mr-3 header-profile-name emp-name">
+                            <a href="#" class="header-profile-name " style="font-size: 24px;">@Model.EmployeeHeader.EmployeeName</a>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="d-flex flex-wrap justify-content-between mt-1">
+                        <div class="d-flex flex-column flex-grow-1 pr-8">
+                            <div class="d-flex flex-wrap mb-1">
+                               
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Designation" class="header-profile-email mr-4 mb-lg-0 mb-2">
+                                    <i class="fas fa-briefcase icon-nm mr-2"></i>@Model.EmployeeHeader.Designation.Name
+                                </a>
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Department" class="header-profile-email mr-4 mb-lg-0 mb-2">
+                                    <i class="fas fa-calendar-alt icon-nm mr-2"></i>@Model.EmployeeHeader.Department.Name
+                                </a>
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Location" class="header-profile-email mr-4 mb-lg-0 mb-2">
+                                    <i class="fas fa-map-marker-alt icon-nm mr-2"></i>@Model.EmployeeHeader.Location.Name
+                                </a>
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Category" class="header-profile-email mr-4 mb-lg-0 mb-2">
+                                    <i class="fas fa-network-wired icon-nm mr-2"></i>@Model.EmployeeHeader.Category.Name
+                                </a>
+                                @if (Model.EmployeeHeader.ReportingManager != "")
+                                {
+                                    <a data-bs-toggle="tooltip" data-bs-original-title="Reporting Manager" class="header-profile-email mr-4 mb-lg-0 mb-2">
+                                        <i class="fas fa-user-tie icon-nm mr-2"></i>
+
+                                        @Model.EmployeeHeader.ReportingManager
+                                    </a>
+                                }
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <div class="profile-header-overflow"></div>
+</div>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid  backgrount-white" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per position-relative z-index-1 pro-head" style="height: 100%;">
+
+                <div class="col-md-3">
+
+                    <div class="card card-custom mb-5 height-100per " style=" margin-top: -57px; background-color: transparent !important; height: 100%; ">
+
+                        <div class="card-body p-5" style="border-radius:5px;">
+
+                            <div class="">
+                                <div class="employee-detail-image">
+                                    @*<img src="images/sample-img.jpg" alt="">*@
+                                    <img src="@Model.EmployeeHeader.EmployeeAbsoluteUri" alt="">
+                                </div>
+                                <div class="employee-outer-detils pt-14">
+                                    <span><i class="far fas fa-mobile-alt icon-nm"></i> @Model.Address.PresentAddress.MobileNo</span>
+                                    <span><i class="fas fa-envelope icon-nm"></i> @Model.Address.PresentAddress.MailID</span>
+                                </div>
+                                <div class="employee-outer-detils">
+                                   
+                                    <span><i class="fas fa-calendar-alt icon-nm mr-2"></i>@Model.DOJ</span>
+                                    <span><i class="fab fa-black-tie icon-nm"> </i>@Model.YOS</span>
+                                </div>
+                                <div class="employee-outer-detils">
+                                    <span><i class="fas fa-hashtag icon-nm"></i>@Model.EmployeeHeader.EmployeeId</span>
+                                    <span><i class="fas fa-network-wired icon-nm"> </i>@Model.EmployeeHeader.Category.Name</span>
+                                    <span><i class="fab fa-black-tie icon-nm"> </i>@Model.EmployeeHeader.Designation.Name</span>
+                                    <span><i class="fas fa-id-card-alt icon-nm"> </i>@Model.EmployeeHeader.Department.Name</span>
+                                    <span><i class="fas fa-map-marker-alt icon-nm"> </i>@Model.EmployeeHeader.Location.Name</span>
+                                </div>
+                                <div class="employee-outer-detils border-none">
+                                    <h4>Reporting Manager</h4>
+                                    <div class="employee-manager-img"><img src="@Model.ReportingManagerAbsoluteUri" alt=""></div>
+                                    <div class="employee-manager-detils-content">
+
+                                        <span><b>@Model.ReportingManeger</b></span>
+                                        <span>@Model.ReportingManegerDesignation</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+                <div class="col-md-9">
+
+                    <div class="personal-details-left">
+
+                        <div class="tab-outer accodiaton-only">
+                            <ul class="ulList">
+                                <!-- Personal Tab -->
+                                <li class="tabOne clickOnTab active">Personal</li>
+                                <div id="tabOne" class="tab-content active tab-content-scroller">
+                                    <div class="row">
+                                        <div class="col-md-12">
+
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i> Address</h5>
+                                            <div class="two-col">
+                                                <div class="col-100per">
+                                                    <h4>Permanent Address</h4>
+
+                                                    <div class="row-outer">
+                                                        <label class="view-title">House Number, Building</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.House</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Street, Area</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.Street</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Locality, City</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.City</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Pin Code</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.PinCode</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Country</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.Country.Name</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">State</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.State.Name</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">District</label>
+                                                        <div class="view-details">@Model.Address.PermanentAddress.District.Name</div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-100per">
+                                                    <h4>Present Address</h4>
+
+                                                    <div class="row-outer">
+                                                        <label class="view-title">House Number, Building</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.House</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Street, Area</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.Street</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Locality, City</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.City</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Pin Code</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.PinCode</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">Country</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.Country.Name</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">State</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.State.Name</div>
+                                                    </div>
+                                                    <div class="row-outer">
+                                                        <label class="view-title">District</label>
+                                                        <div class="view-details">@Model.Address.PresentAddress.District.Name</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>Contact Details</h5>
+
+                                            <div class="three-col">
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Personal Mobile</label>
+                                                    <div class="view-details">@Model.ContactDetails.PersonalMobile</div>
+                                                </div>
+
+
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Personal Email</label>
+                                                    <div class="view-details">@Model.ContactDetails.PersonalEmail</div>
+                                                </div>
+
+
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Emergency Contact Person</label>
+                                                    <div class="view-details">@Model.ContactDetails.EmergencyContactPerson</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Emergency Contact Number</label>
+                                                    <div class="view-details">@Model.ContactDetails.EmergencyContactNumber</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Relation</label>
+                                                    <div class="view-details">@Model.ContactDetails.Relation.Name</div>
+                                                </div>
+
+
+                                            </div>
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>Personal Info</h5>
+                                            <div class="three-col">
+                                                <div class="row-outer">
+                                                    <label class="view-title">Gender</label>
+                                                    <div class="view-details">@Model.EmployeeBasicInfo.Gender.Name</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">DOB</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.EmployeeBasicInfo.DOB))</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Blood Group</label>
+                                                    <div class="view-details">@Model.PersonalInfo.BloodGroup.Name</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Marital Status</label>
+                                                    <div class="view-details">@Model.PersonalInfo.MaritalStatus.Name</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">DOW</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PersonalInfo.wedding))</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Religious View</label>
+                                                    <div class="view-details">@Model.PersonalInfo.ReligiousView.Name</div>
+                                                </div>
+
+
+
+                                            </div>
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>Family Details</h5>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="ihits-table table-border hover-color mobile-responsive-table personal-details-family-section mb-5">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Relation</th>
+                                                                    <th scope="col">Date of Birth</th>
+                                                                    <th scope="col">Occupation</th>
+                                                                    @*<th scope="col">Status</th>*@
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.FamilyDetails != null && Model.FamilyDetails.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.FamilyDetails.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Name">
+                                                                                <label>@Model.FamilyDetails[i].Name</label>
+
+                                                                            </td>
+                                                                            <td data-label="Relation">
+                                                                                <label>@Model.FamilyDetails[i].RelationName</label>
+
+                                                                            </td>
+                                                                            <td data-label="Date of Birth">
+                                                                                <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.FamilyDetails[i].DateOfBirth))</label>
+
+
+
+                                                                            </td>
+                                                                            <td data-label="Occupation">
+                                                                                <label>@Model.FamilyDetails[i].Occupation</label>
+
+                                                                            </td>
+                                                                            @*<td data-label="Status">
+                                                                                <label>@Model.FamilyDetails[i].StatusName</label>
+
+                                                                            </td>*@
+
+                                                                        </tr>
+
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr><td colspan="5"> No Data Found</td></tr>
+                                                                }
+
+
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>Hobbies</h5>
+                                            <div class="three-col">
+                                                <div class="row-outer">
+                                                    <label class="view-title">Hobbies</label>
+                                                    <div class="view-details">
+                                                        @Model.Hobbies
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Personal Tab -->
+                                <!-- Knowledge Base Tab -->
+                                <li class="tabContactDetails clickOnTab">Knowledge Base                                                </li>
+                                <div id="tabContactDetails" class="tab-content tab-content-scroller">
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Education</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table personal-details-education-section mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Qualification Type</th>
+                                                            <th scope="col">Qualification</th>
+                                                            <th scope="col">Specialization of Branch</th>
+                                                            <th scope="col">Year of Completion</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.Education != null && Model.Education.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.Education.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Qualification Type">
+                                                                        <label>@Model.Education[i].QualificationTypeName</label>
+
+                                                                    </td>
+                                                                    <td data-label="Qualofication">
+                                                                        <label>@Model.Education[i].QualificationName</label>
+
+                                                                    </td>
+                                                                    <td data-label="Field of Study">
+                                                                        <label>@Model.Education[i].SpecialisationName</label>
+
+                                                                    </td>
+                                                                    <td data-label="Year of Completion">
+                                                                        <label>@Model.Education[i].YearOfCompletionName</label>
+
+                                                                    </td>
+
+
+
+                                                                </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Skills</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table personal-details-education-section mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Skill</th>
+                                                            <th scope="col">Skill Proficiency</th>
+                                                            <th scope="col">Skill Type</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.Skills != null && Model.Skills.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.Skills.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Skill">
+                                                                        <label>@Model.Skills[i].Skill.Name</label>
+
+                                                                    </td>
+                                                                    <td data-label="Skill Proficiency">
+                                                                        <label>@Model.Skills[i].SkillProficiency.Name</label>
+
+                                                                    </td>
+                                                                    <td data-label="Skill Type">
+                                                                        <label>@Model.Skills[i].SkillType.Name</label>
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="3"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Certifications</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table certification-list-tab mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Certification</th>
+                                                            <th scope="col">Field of Certification</th>
+                                                            <th scope="col">Issued by</th>
+                                                            <th scope="col">Issued Date</th>
+                                                            <th scope="col">Mode</th>
+                                                            <th scope="col">Validity</th>
+                                                            <th scope="col">Renewal Date</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.Certifications != null && Model.Certifications.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.Certifications.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Certicication">
+                                                                        <label>@Model.Certifications[i].Certificate</label>
+
+                                                                    </td>
+                                                                    <td data-label="Field of Certification">
+                                                                        <label>@Model.Certifications[i].CertificateType.Name</label>
+
+                                                                    </td>
+                                                                    <td data-label="Issued by">
+                                                                        <label>@Model.Certifications[i].IssuedBy</label>
+
+                                                                    </td>
+
+                                                                    <td data-label="Issued Date">
+                                                                        <label>
+                                                                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Issued))
+
+                                                                        </label>
+                                                                    </td>
+                                                                    <td data-label="Mode">
+                                                                        <label>@Model.Certifications[i].CertificateMode.Name</label>
+
+                                                                    </td>
+                                                                    <td data-label="Validity">
+                                                                        <label>@Model.Certifications[i].CertificateValidity.Name</label>
+
+                                                                    </td>
+                                                                    <td data-label="Renewal Date">
+                                                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Renewaldate))
+
+                                                                    </td>
+
+                                                                </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="7"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Previous Employment</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table personal-details-previous-employment ">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Company Name</th>
+                                                            <th scope="col">Location</th>
+                                                            <th scope="col">Designation</th>
+                                                            <th scope="col">From</th>
+                                                            <th scope="col">To</th>
+                                                            <th scope="col">Experience</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.PreviousEmployment != null && Model.PreviousEmployment.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.PreviousEmployment.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Company Name & Address">
+                                                                        <label>@Model.PreviousEmployment[i].CompanyName</label>
+                                                                    </td>
+                                                                    <td data-label="Location">
+                                                                        <label>@Model.PreviousEmployment[i].Location</label>
+
+                                                                    </td>
+                                                                    <td data-label="Designation">
+                                                                        <label>@Model.PreviousEmployment[i].Designation</label>
+
+                                                                    </td>
+                                                                    <td data-label="From">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Fromdate))</label>
+
+                                                                    </td>
+                                                                    <td data-label="To">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Todate))</label>
+
+                                                                    </td>
+                                                                    <td data-label="Experience">
+                                                                        <label>@Model.PreviousEmployment[i].Experience</label>
+
+                                                                    </td>
+
+
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Languages</h5>
+                                    <div class="three-col">
+                                        <div class="row-outer">
+                                            <label class="view-title">Languages</label>
+                                            <div class="view-details">
+                                                @Model.Languages
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Knowledge Base Tab -->
+                                <!-- Compensation Tab -->
+
+
+
+
+
+                                <li class="tabTwo clickOnTab">Compensation </li>
+                                <div id="tabTwo" class="tab-content tab-content-scroller">
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Compensation & Benefits</h5>
+                                    @*<div class="card card-custom height-100per">
+
+                                        <div class="card-body">*@
+                                    <!--begin: Search Form-->
+                                    <!-- <div class="row tab-style-button">
+                                        <div class="tab-button-wrap">
+
+
+
+
+
+
+                                            <div class="tab-items select-option">
+
+                                                <div class="sraech-slider">
+                                                    <div class="search-slider-inner">
+                                                        <i class="fa fa-search"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        placeholder="ID/Name">
+                                                </div>
+
+                                                <div class="filter-button" data-bs-toggle="tooltip" title="Filter">
+                                                    <i class="fas fa-filter"></i>
+                                                </div>
+                                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel">
+                                                    <i class="icon-xl far fa-file-excel"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div> -->
+                                    <!-- Table Section -->
+
+                                    <div class="ihits-table table-border hover-color mobile-responsive-table c-structure-table  mb-6 compensation-style">
+                                        <table>
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <th scope="col">Fixed Pay Elements </th>
+
+                                                    <th scope="col">Monthly Amount</th>
+                                                    <th scope="col">Annual Amount </th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    @if (Model.CompensationStructureReport.CompensationStructure_Details != null && Model.CompensationStructureReport.CompensationStructure_Details.Count > 0)
+                                                    {
+
+                                                        for (int i = 0; i < Model.CompensationStructureReport.CompensationStructure_Details.Count; i++)
+                                                        {
+                                                            @if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Gross Pay (Total)")
+                                                            {
+
+                                                                <tr class="table-gross">
+
+
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+                                                            }
+
+
+
+
+                                                            else if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Fixed Pay (Total)")
+                                                            {
+                                                                <tr class="table-fixed">
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+
+                                                            else if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Employer contributions to Retiral/Welfare schemes")
+                                                            {
+                                                                <tr class="table-fixed">
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+
+
+
+                                                            else if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Other Benefits")
+                                                            {
+                                                                <tr class="table-fixed">
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+
+                                                            else if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Variable Pay (Total)")
+                                                            {
+                                                                <tr class="table-fixed">
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+
+
+
+                                                            else if (@Model.CompensationStructureReport.CompensationStructure_Details[i].Description == "Cost to the Company_CTC")
+                                                            {
+                                                                <tr class="table-fixed">
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+
+
+                                                            else
+                                                            {
+                                                                <tr>
+
+
+                                                                    <td data-label="Fixed Pay Elements">@Model.CompensationStructureReport.CompensationStructure_Details[i].Description</td>
+
+                                                                    <td data-label="Monthly Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].MonthlyAmount</td>
+                                                                    <td data-label="Annual Amount">@Model.CompensationStructureReport.CompensationStructure_Details[i].AnualAmount</td>
+
+
+                                                                </tr>
+
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Table Setion End -->
+                                    <!--end: Datatable-->
+                                    @*</div>
+                                        </div>*@
+                                    @*<div class="three-col ">
+                                            <div class="row-outer">
+                                                <label class="view-title">Effect from</label>
+                                                <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Compensation.EffectFrom))</div>
+                                            </div>
+                                        </div>*@
+
+                                    @*<div class="row">
+                                            <div class="col-md-6">
+                                                <div class="ihits-table table-border vertical-scroll-150 table-head-small hover-color odd-even compensationBenefits">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Allowance</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.FixedAllowance != null && Model.Compensation.FixedAllowance.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.FixedAllowance.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Allowance">@Model.Compensation.FixedAllowance[i].Name</td>
+                                                                        <td data-label="Type">@Model.Compensation.FixedAllowance[i].AllowanceType</td>
+                                                                        <td data-label="Amount">@Model.Compensation.FixedAllowance[i].Amount</td>
+
+                                                                    </tr>
+
+
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr><td colspan="5"> No Data Found</td></tr>
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="ihits-table table-border table-head-small vertical-scroll-150 hover-color odd-even compensationBenefits">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Deduction</th>
+                                                                <th scope="col">Amount</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.FixedDeduction != null && Model.Compensation.FixedDeduction.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.FixedDeduction.Count; i++)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td data-label="Deduction">@Model.Compensation.FixedDeduction[i].Name</td>
+                                                                        <td data-label="Amount">@Model.Compensation.FixedDeduction[i].Amount</td>
+
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr><td colspan="5"> No Data Found</td></tr>
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="four-col border-none">
+                                            <div class="row-outer">
+                                                <label class="view-title">Gross Salary</label>
+                                                <div class="view-details">@Model.Compensation.GrossSalary</div>
+                                            </div>
+                                            <div class="row-outer">
+                                                <label class="view-title">CTC</label>
+                                                <div class="view-details">@Model.Compensation.CTC</div>
+                                            </div>
+
+                                            <div class="row-outer">
+                                                <label class="view-title">PF</label>
+                                                  <div class="view-details">
+                                                      @if (Model.Compensation.PF == true)
+                                                      {
+                                                      <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                                                      }
+                                                      else
+                                                      {
+                                                      <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                                      }
+                                                  </div>
+                                            </div>
+
+                                            <div class="row-outer">
+                                                <label class="view-title">ESI</label>
+                                                  <div class="view-details">
+                                                      @if (Model.Compensation.ESI == true)
+                                                      {
+                                                      <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                                                      }
+                                                      else
+                                                      {
+                                                      <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                                                      }
+                                                  </div>
+                                            </div>
+                                        </div>*@
+
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <!-- Compensation Tab -->
+                                <!-- Career Tab -->
+                                <li class="tabThree clickOnTab">Career</li>
+                                <div id="tabThree" class="tab-content tab-content-scroller">
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Career Progression</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border table-head-small mobile-responsive-table ">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Type</th>
+                                                            <th scope="col">Effective Date</th>
+                                                            <th scope="col">Department</th>
+                                                            <th scope="col">Designation</th>
+                                                            <th scope="col">Location</th>
+                                                            <th scope="col">Category</th>
+                                                            <th scope="col" style="text-align: right;">
+                                                                Gross Pay
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.GrowthHistory != null && Model.GrowthHistory.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.GrowthHistory.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Type ">@Model.GrowthHistory[i].TransitionType</td>
+                                                                    <td data-label="Effective Date">
+                                                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.GrowthHistory[i].EffectiveDate))
+
+                                                                    </td>
+                                                                    <td data-label="Department">@Model.GrowthHistory[i].Department</td>
+                                                                    <td data-label="Designation">@Model.GrowthHistory[i].Designation</td>
+                                                                    <td data-label="Location">@Model.GrowthHistory[i].Location</td>
+                                                                    <td data-label="Category">@Model.GrowthHistory[i].Category</td>
+                                                                    <td data-label="Gross Pay" align="right">
+                                                                        @Model.GrowthHistory[i].GrossPay
+                                                                    </td>
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <!-- Career Tab -->
+                                <!-- Documents Tab -->
+                                <li class="tabFive clickOnTab">Documents</li>
+                                <div id="tabFive" class="tab-content tab-content-scroller">
+                                    <div class="four-col border-none ">
+
+                                        <div class="row-outer">
+                                            <div class="card-details-view">
+                                                <h3>Aadhar</h3>
+                                                <div class="card-content">
+                                                    <span class="data-items ep_AdharNo">@Model.DocumentUpload.AadharNumber</span>
+                                                    <span class="data-items">@Model.DocumentUpload.NameInAadhar</span>
+                                                    <span class="data-items">Issue Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.AadharIssueDate))</span>
+                                                    <div class="btn-section right-10">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View/Download Card" class="btn btn-icon btn-secondary " onclick="ViewFile('@Model.DocumentUpload.Docurl')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <div class="card-details-view">
+                                                <h3>Pan</h3>
+                                                <div class="card-content">
+                                                    <span class="data-items ep_Pan">@Model.DocumentUpload.PANNumber</span>
+                                                    <span class="data-items">@Model.DocumentUpload.NameInPAN</span>
+                                                    <span class="data-items">Issue Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.PANIssueDate))</span>
+                                                    <div class="btn-section right-10">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View/Download Card" class="btn btn-icon btn-secondary" onclick="ViewFile('@Model.DocumentUpload.Docurl')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <div class="card-details-view">
+                                                <h3>Driving License</h3>
+                                                <div class="card-content">
+                                                    <span class="data-items">@Model.DocumentUpload.DrivingLicenseNumber</span>
+                                                    <span class="data-items">@Model.DocumentUpload.NameInDrivingLicense</span>
+                                                    <span class="data-items">Issue Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.DrivingLicenseValidFrom))</span>
+                                                    <span class="data-items">Exp Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.DrivingLicenseValidTo))</span>
+                                                    <div class="btn-section right-10">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View/Download Card" class="btn btn-icon btn-secondary" onclick="ViewFile('@Model.DocumentUpload.Docurl')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <div class="card-details-view">
+                                                <h3>Passport</h3>
+                                                <div class="card-content">
+                                                    <span class="data-items">@Model.DocumentUpload.PassportNumber</span>
+                                                    <span class="data-items">@Model.DocumentUpload.NameInPassport</span>
+                                                    <span class="data-items">Issue Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.PassportValidFrom))</span>
+                                                    <span class="data-items">Exp Date:@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.PassportValidTo))</span>
+                                                    <div class="btn-section right-10">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View/Download Card" class="btn btn-icon btn-secondary" onclick="ViewFile('@Model.DocumentUpload.Docurl')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Other Documents</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table personal-details-education-section mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Document Name</th>
+                                                            <th scope="col">Document Type</th>
+                                                            <th scope="col">Description</th>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">View</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.DocumentUpload.OtherDocList != null && Model.DocumentUpload.OtherDocList.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.DocumentUpload.OtherDocList.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Document Name">
+                                                                        <label>@Model.DocumentUpload.OtherDocList[i].OtherDocumentName</label>
+
+                                                                    </td>
+                                                                    <td data-label="Document Type">
+                                                                        <label>@Model.DocumentUpload.OtherDocList[i].OtherDocumentType</label>
+
+                                                                    </td>
+                                                                    <td data-label="Description">
+                                                                        <label>@Model.DocumentUpload.OtherDocList[i].OtherDocumentDescription</label>
+
+                                                                    </td>
+                                                                    <td data-label="Date">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DocumentUpload.OtherDocList[i].OtherDocumentDate))</label>
+
+                                                                    </td>
+                                                                    <td data-label="View">
+                                                                        <div class="small-btn-group">
+                                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View/Download Card" class="btn btn-icon btn-secondary" onclick="ViewFile('@Model.DocumentUpload.Docurl')"><i class="icon-xl far fa-eye black"></i></button>
+                                                                        </div>
+
+                                                                    </td>
+
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- Documents Tab -->
+                                <!-- Job Tab -->
+                                <li class="tabSix clickOnTab">Job                                                </li>
+                                <div id="tabSix" class="tab-content tab-content-scroller">
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Request vs Authority</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table mt-2 request-authority-two">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Request Type</th>
+                                                            <th scope="col">Authority Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.AuthorityLogDetails != null && Model.AuthorityLogDetails.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.AuthorityLogDetails.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Request Type">@Model.AuthorityLogDetails[i].RequestName</td>
+                                                                    <td data-label="Authority Details">@Model.AuthorityLogDetails[i].AuthorityDetails</td>
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Job details</h5>
+                                    <div class="four-col">
+                                        <div class="row-outer">
+                                            <label class="view-title">Grade</label>
+                                            <div class="view-details">@Model.Job_Details.Grade.Name</div>
+                                        </div>
+                                        <div class="row-outer">
+                                            <label class="view-title">Payroll Group</label>
+                                            <div class="view-details">@Model.Job_Details.PayrollGroup.Name</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">Renewal Date</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Job_Details.RenewalDate))</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">Notice Period</label>
+                                            <div class="view-details">@Model.Job_Details.NoticePeriod</div>
+                                        </div>
+                                    </div>
+
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Statutory & Payment Details</h5>
+                                    <div class="four-col border-none">
+                                        <div class="row-outer">
+                                            <label class="view-title">PF Number</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.PFNumber</div>
+                                        </div>
+                                        <div class="row-outer">
+                                            <label class="view-title">UAN Number</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.UANNumber</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">ESI Number</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.ESINumber</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">Paymode</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.PaymentMode.Name</div>
+                                        </div>
+
+
+                                        <div class="row-outer">
+                                            <label class="view-title">Bank Name</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.Bank.Name</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">Acc No.</label>
+                                            <div class="view-details ep_AccntNo">@Model.Statutory_Payment_Details.AccountNo</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">IFSC Code</label>
+                                            <div class="view-details">@Model.Statutory_Payment_Details.IFSC</div>
+                                        </div>
+
+                                        <div class="row-outer">
+                                            <label class="view-title">PF Enroll Date</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Statutory_Payment_Details.PFEnrollDate))</div>
+                                        </div>
+                                        <div class="row-outer">
+                                            <label class="view-title">ESI Enroll Date</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Statutory_Payment_Details.ESIEnrollDate))</div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <!-- Job Tab -->
+                                <!-- Job Tab -->
+                                <li class="tabSeven clickOnTab">Att & Sal                                                </li>
+                                <div id="tabSeven" class="tab-content tab-content-scroller">
+                                    <div class="row mb-2">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Financial Year</label>
+                                                @Html.HiddenFor(Model => Model.EmployeeHeader.EmployeeGuid)
+                                                @*@Html.DropDownListFor(m => m.FinancialYear.Code, (SelectList)ViewBag.FinancialYear, "--FinancialYear--", new { @class = "form-control form-control-sm", @onchange = "OnFinancialYearSelect()" })*@
+                                                @Html.DropDownListFor(m => m.FinancialYear.Code, (SelectList)ViewBag.FinancialYear, new { @class = "form-control form-control-sm", @onchange = "OnFinancialYearSelect()" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Attendance</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table attendance-tab-table mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Month</th>
+                                                            <th scope="col">Total Days</th>
+                                                            <th scope="col">Present Days</th>
+                                                            <th scope="col">Holidays</th>
+                                                            <th scope="col">LOP Days</th>
+                                                            <th scope="col">Leave</th>
+                                                            <th scope="col">Attendance %</th>
+                                                            <th scope="col">View</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.Attendance != null && Model.Attendance.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.Attendance.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Month">
+                                                                        <label>@Model.Attendance[i].Month</label>
+
+                                                                    </td>
+                                                                    <td data-label="Total Days">
+                                                                        <label>@Model.Attendance[i].TOTALDAYS</label>
+
+                                                                    </td>
+                                                                    <td data-label="Present Days">
+                                                                        <label>@Model.Attendance[i].PRESENTDAYS</label>
+
+                                                                    </td>
+                                                                    <td data-label="Holidays">
+                                                                        <label>@Model.Attendance[i].HOLIDAYS</label>
+                                                                    </td>
+                                                                    <td data-label="LOP Days">
+                                                                        <label>@Model.Attendance[i].LOP</label>
+                                                                    </td>
+                                                                    <td data-label="Leave">
+                                                                        <label>@Model.Attendance[i].LEAVE</label>
+                                                                    </td>
+                                                                    <td data-label="Attendance %">
+                                                                        <label>@Model.Attendance[i].ATT_PERCENTAGE</label>
+                                                                    </td>
+                                                                    <td data-label="View">
+                                                                        <div class="small-btn-group">
+                                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Attendance Card" class="btn btn-icon btn-secondary"><i class="icon-xl far fa-eye black"></i></button>
+                                                                        </div>
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Salary</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table personal-details-previous-employment ">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Salary Period</th>
+                                                            <th scope="col">Gross Pay</th>
+                                                            <th scope="col">Gross Deduction</th>
+                                                            <th scope="col">Net Pay</th>
+                                                            <th scope="col">LOP Amount</th>
+                                                            <th scope="col">View</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.Salary != null && Model.Salary.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.Salary.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Salary Period">
+                                                                        <label>@Model.Salary[i].SalaryPeriod</label>
+                                                                    </td>
+                                                                    <td data-label="Gross Pay">
+                                                                        <label>@Model.Salary[i].GrossPay</label>
+
+                                                                    </td>
+                                                                    <td data-label="Gross Deduction">
+                                                                        <label>@Model.Salary[i].GrossDeduction</label>
+
+                                                                    </td>
+                                                                    <td data-label="Net Pay">
+                                                                        <label>@Model.Salary[i].NetPay</label>
+
+                                                                    </td>
+                                                                    <td data-label="LOP Amount">
+                                                                        <label>@Model.Salary[i].LOPAmount</label>
+
+                                                                    </td>
+                                                                    <td data-label="View">
+                                                                        <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Payslip" class="btn btn-icon btn-secondary"><i class="icon-xl far fa-eye black"></i></button>
+
+                                                                    </td>
+
+
+                                                                </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Job Tab -->
+                                <!-- Job Tab -->
+                                <li class="tabNine clickOnTab">Assets                                                </li>
+                                <div id="tabNine" class="tab-content tab-content-scroller">
+
+                                    @if (Model.AssetRequest != null && Model.AssetRequest.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.AssetRequest.Count; i++)
+                                        {
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>@Model.AssetRequest[i].Asset.AssetCategory.Name</h5>
+                                            <div class="four-col">
+                                                <div class="row-outer">
+                                                    <label class="view-title">Asset Code</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.AssetCode</div>
+                                                </div>
+
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Asset Name</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.AssetName</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Issuing Department</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.IssuingDepartment.Name</div>
+                                                </div>
+
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Date of Purchase</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest[i].Asset.DateOfPurchase))</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Asset Cost</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.Cost</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">IModel No/Serial No</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.ModelNo</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Condition</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.Condition.Name</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Brand</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.Brand</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Specification</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.Specification</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Issued Date</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest[i].AssetIssueDate))</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Due Date</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest[i].AssetDueDate))</div>
+                                                </div>
+                                                @*<div class="row-outer">
+                                                        <label class="view-title">Return Date</label>
+                                                        <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest[i].AssetReturnDate))<div>
+                                                    </div>*@
+                                                <div class="row-outer">
+                                                    <label class="view-title">Return Date</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest[i].AssetReturnDate))</div>
+                                                </div>
+
+                                                <div class="row-outer">
+                                                    <label class="view-title">Status</label>
+                                                    <div class="view-details">@Model.AssetRequest[i].Asset.Status</div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="5"> No Data Found</td></tr>
+                                    }
+                                </div>
+
+
+                                <!-- Job Tab -->
+                                <!-- Job Tab -->
+
+
+
+                                <li class="tabEight clickOnTab">Rewards                                                </li>
+                                <div id="tabEight" class="tab-content tab-content-scroller">
+                                    @if (Model.RewardsRequest != null && Model.RewardsRequest.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.RewardsRequest.Count; i++)
+                                        {
+                                            <h5><i class="fas fa-briefcase icon-md mr-2"></i>@Model.RewardsRequest[i].Rewards.Name</h5>
+                                            <div class="four-col">
+                                                <div class="row-outer">
+                                                    <label class="view-title">Point Criteria</label>
+                                                    <div class="view-details">@Model.RewardsRequest[i].PointCriteria.Name</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Points Achieved</label>
+                                                    <div class="view-details">@Model.RewardsRequest[i].PointCriteria.Points</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Reward Date</label>
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.RewardsRequest[i].RewardDate))</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Recommended by</label>
+                                                    <div class="view-details">@Model.RewardsRequest[i].RecommendedEmpName</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Recommended For</label>
+                                                    <div class="view-details">@Model.RewardsRequest[i].RecommendedFor</div>
+                                                </div>
+                                                <div class="row-outer">
+                                                    <label class="view-title">Attach File</label>
+                                                    <div class="view-details">
+                                                        @*<a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width">*@
+                                                        <button data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="ViewFile('@Model.RewardsRequest[i].File.AbsoluteUri')">
+                                                            <i class="icon-xl far fa-eye"></i>View File
+                                                        </button>
+                                                        @*</a>*@
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="5"> No Data Found</td></tr>
+                                    }
+                                </div>
+                                <!-- Job Tab -->
+                                <!-- Job Tab -->
+                                <li class="tabTen clickOnTab">More                                                </li>
+                                <div id="tabTen" class="tab-content tab-content-scroller">
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Disciplinary Incidents</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table disciplinary-incidents-table mb-5">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Incident</th>
+                                                            <th scope="col">Incident Type</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Incident Date" scope="col">Inci.Date</th>
+                                                            <th scope="col">Reported By</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Reported Date" scope="col">Rep.Date</th>
+                                                            <th scope="col">Action Taken</th>
+                                                            <th scope="col">Incident Narration</th>
+                                                            <th scope="col">View</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.IncidentsAction != null && Model.IncidentsAction.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.IncidentsAction.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Incident">
+                                                                        <label>@Model.IncidentsAction[i].Incidents.Incident</label>
+                                                                    </td>
+                                                                    <td data-label="Incident Type">
+                                                                        <label>@Model.IncidentsAction[i].Incidents.IncidentType</label>
+                                                                    </td>
+                                                                    <td data-label="Incident Date">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.IncidentsAction[i].Incidents.Incidentdate))</label>
+                                                                    </td>
+                                                                    <td data-label="Reported By">
+                                                                        <label>@Model.IncidentsAction[i].Incidents.ReportedBy</label>
+                                                                    </td>
+                                                                    <td data-label="Reported Date">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.IncidentsAction[i].Incidents.Reporteddate))</label>
+                                                                    </td>
+                                                                    <td data-label="Action Taken">
+                                                                        <label>@Model.IncidentsAction[i].Incidents.ActionTaken</label>
+                                                                    </td>
+                                                                    <td data-label="Incident Narration">
+                                                                        <label>@Model.IncidentsAction[i].Incidents.Narration</label>
+                                                                    </td>
+                                                                    <td data-label="View File">
+                                                                        <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View File" class="btn btn-icon btn-secondary" onclick="ViewFile('@Model.IncidentsAction[i].Incidents.FileUri')">
+                                                                            <i class="icon-xl far fa-eye black"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Training</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table employee-details-training-list">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th scope="col">Training Name</th>
+                                                            <th scope="col">Type</th>
+                                                            <th scope="col">Attended Date</th>
+                                                            <th scope="col">Trainer</th>
+                                                            <th scope="col">Duration</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Training Mode" scope="col">Mode</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Post Assessment Score" scope="col">Score</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.TrainingLog != null && Model.TrainingLog.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.TrainingLog.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Training Name">
+                                                                        <label>@Model.TrainingLog[i].TrainingRequest.TrainingName.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Type">
+                                                                        <label>@Model.TrainingLog[i].TrainingRequest.Type</label>
+                                                                    </td>
+                                                                    <td data-label="Attended Date">
+                                                                        <label>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.TrainingLog[i].TrainingRequest.AttendedDate))</label>
+                                                                    </td>
+                                                                    <td data-label="Trainer">
+                                                                        <label>@Model.TrainingLog[i].TrainingRequest.Trainer</label>
+                                                                    </td>
+                                                                    <td data-label="Duration">
+                                                                        <label>@Model.TrainingLog[i].TrainingRequest.Duration</label>
+                                                                    </td>
+                                                                    <td data-label="Training Mode">
+                                                                        <label>@Model.TrainingLog[i].TrainingRequest.Mode.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Score">
+                                                                        <label>@Model.TrainingLog[i].PostAssessmentScore</label>
+                                                                    </td>
+                                                                </tr>
+
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5><i class="fas fa-briefcase icon-md mr-2"></i>Appraisal</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="ihits-table table-border mobile-responsive-table employee-details-apprisal-list">
+                                                <table>
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Evaluation Period" scope="col">Eval.Period</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Appraisal Type" scope="col">Type</th>
+                                                            <th scope="col">Self Score</th>
+                                                            <th scope="col">Appraiser Name</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Appraiser Score" scope="col">Appr.Score</th>
+                                                            <th scope="col">Reviewer Name</th>
+                                                            <th data-bs-toggle="tooltip" data-bs-original-title="Reviewer Score" scope="col">Rev.Score</th>
+                                                            <th scope="col">Recommendation</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.AppraisalLog != null && Model.AppraisalLog.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.AppraisalLog.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Evaluation Period">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.EvaluationPeriod.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Appraisal Type">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.AppraisalType.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Self Score">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.SelfScore</label>
+                                                                    </td>
+                                                                    <td data-label="Appraiser Name">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.Appraiser.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Appraiser Score">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.AppraiserScore</label>
+                                                                    </td>
+                                                                    <td data-label="Reviewer Name">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.Reviewer.Name</label>
+                                                                    </td>
+                                                                    <td data-label="Reviewer Score">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.ReviewerScore</label>
+                                                                    </td>
+                                                                    <td data-label="Recommendation">
+                                                                        <label>@Model.AppraisalLog[i].AppraisalRequest.Recommendation.Name</label>
+                                                                    </td>
+                                                                </tr>
+
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="5"> No Data Found</td></tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Job Tab -->
+
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->
+@*</div>*@
+@*</div>*@
+@*</body>*@ <!--end::Body-->
+@*}*@

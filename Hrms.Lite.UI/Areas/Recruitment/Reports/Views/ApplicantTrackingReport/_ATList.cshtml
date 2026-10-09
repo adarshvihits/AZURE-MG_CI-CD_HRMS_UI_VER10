@@ -1,0 +1,434 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Reports.RecruitmentReports
+   
+
+    <script>
+        $(document).ready(function () {
+
+
+
+
+            debugger;
+           var filter1 = $('#BasicFilter').serialize();
+
+            var temp = filter1;
+
+
+            /*  $('#JoiningReportTable').html('');*/
+            var dataTable = $("#applicantTrackingTable").DataTable({
+
+                "pagingType": 'full_numbers',
+                "destroy": 'true',
+                "ajax": {
+                    "url": "/Recruitment/ApplicantTrackingReport/GetApplicantTrackingList",
+                    "type": "POST",
+
+
+                    "datatype": "json",
+
+
+                    'data':
+
+                        function (d) {
+                            temp = '';
+
+
+
+
+                            var start = d.start;
+
+                            var searchValue = $('#dataTableSearch').val();
+
+
+                            temp = filter1 + '&draw=' + d.draw + '&start=' + d.start + '&length=' + d.length + '&searchValue=' + searchValue + '&dummy=dummy';
+
+
+
+                            d.filter = temp;
+
+
+                            return JSON.stringify(d);
+                        },
+
+               
+                   
+                               
+                   
+                               
+                                
+
+
+                    "dataSrc": function (d) {
+
+                        $('#ApplicantTrackingReport_Count').val(d.recordsTotal);
+
+                        for (var i = 0, ien = d.data.length; i < ien; i++) {
+
+                            d.data[i].refNumber = '<input type="hidden" id="ResumeDataBankGI_' + i + '" name="ResumeDataBankGI[' + i + ']" value="' + d.data[i].resumeDataBankGI + '">' + d.data[i].refNumber
+                            d.data[i].candidate = '<a onclick="GetDetails(' + d.data[i].resumeDataBankCode + ',' + i+ ')">' + d.data[i].candidate+'</a>';
+                            if (d.data[i].sl != true) {
+                                d.data[i].sl = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i></button>'
+
+                            }
+                            else {
+                                d.data[i].sl = '<button type="button" class="btn btn-icon btn-tick"> <i class="icon-xl fas fa-check"></i> </button >'
+                                  
+                            }
+                            if (d.data[i].ie != true) {
+                                d.data[i].ie = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].ie = '<button type="button" class="btn btn-icon btn-tick"> <i class="icon-xl fas fa-check"></i></button >'
+
+                            }
+                            if (d.data[i].raa != true) {
+                                d.data[i].raa = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].raa = '<button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>'
+
+                            }
+                            if (d.data[i].salary != true) {
+                                d.data[i].salary = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].salary = '<button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>'
+
+                            }
+                            if (d.data[i].cc != true) {
+                                d.data[i].cc = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].cc = '<button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check" ></i></button>'
+
+                            }
+                            if (d.data[i].ec != true) {
+                                d.data[i].ec = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].ec = '<button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>'
+
+                            }
+                            if (d.data[i].offer != true) {
+                                d.data[i].offer = '<button type = "button" class="btn btn-icon btn-close"> <i class="icon-xl fas fa-times"></i> </button>'
+
+                            }
+                            else {
+                                d.data[i].offer = '<button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>'
+
+                            }
+                        }
+
+                        return d.data;
+                    }
+
+                },
+
+                "columns": [
+
+                    { "data": "refNumber","width":"10%"},
+                    { "data": "candidate", "width": "13%"},
+                    { "data": "jobTitle", "width": "13%" },
+                    { "data": "jobCode", "width": "9%"},
+                    { "data": "locationName", "width": "8%" },
+                    { "data": "resumeSource", "width": "11%" },
+                    { "data": "sl", "width": "5%" },
+                    { "data": "ie", "width": "5%"},
+                    { "data": "raa", "width": "5%" },
+                    { "data": "salary", "width": "6%" },
+                    { "data": "cc", "width": "5%" },
+                    { "data": "ec", "width": "5%" },
+                    { "data": "offer", "width": "5%"},
+
+                ],
+
+
+
+
+
+
+                /* "dom": '<t><"my-wrapper"<"my-inner2"l><"my-inner1"i><"my-inner3"p>>',*/
+                "dom": 'rt<"bottom"><"my-wrapper"<"my-inner2"l><"my-inner1"i><"my-inner3"p>>',
+
+                "serverSide": "true",
+                "scrollY": '52vh',
+                "sScrollX": "100%",
+                "sScrollXInner": "100%",
+
+                "order": [0, "asc"],
+                "processing": "true",
+                "language": {
+                    processing: '<img width="100%" src="/images/Loader_img1 (7).gif">',
+                    emptyTable: '<div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                    zeroRecords: '<div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                    sLengthMenu: "_MENU_",
+                    paginate: {
+
+
+                        next: '<img width="100%" src="/images/icons/Icon awesome-arrow-right-1.png" >',
+                        previous: '<img src="/images/icons/Icon awesome-arrow-right.png">',
+                        first: '<img src="/images/icons/Icon metro-next-1.png">',
+                        last: '<img src="/images/icons/Icon metro-next.png">'
+
+
+
+
+                    }
+                }
+
+
+
+            });
+
+
+
+            $('.ihits-table table').removeClass("dataTable no-footer");
+
+
+            $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.next').attr("title", "Next");
+            $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.previous').attr("title", "Previous");
+            $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.first').attr("title", "First");
+            $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.last').attr("title", "Last");
+
+
+            $("#dataTableSearch").on("keyup search input paste cut", function () {
+                dataTable.search(this.value).draw();
+                $('#noDataFound').css("display", 'none');
+
+            });
+
+            $('.search-slider-inner').click(function () {
+                dataTable.search('').draw();
+                $('#dataTableSearch').val('');
+                $('#dataTableSearch').focus();
+            });
+
+            dataTable.on('draw', function () {
+                $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.next').attr("title", "Next");
+                $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.previous').attr("title", "Previous");
+                $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.first').attr("title", "First");
+                $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.last').attr("title", "Last");
+
+            });
+
+            $.fn.DataTable.ext.pager.numbers_length = 5;
+
+
+
+
+
+        });
+    </script>
+
+
+<script>
+    function ExportToExcel() {
+
+        debugger;
+      
+        var totalrecords = $('#ApplicantTrackingReport_Count').val();
+
+
+        if (totalrecords > 0) {
+            url = "/Recruitment/ApplicantTrackingReport/ExportToExcel?totalRecords=" + totalrecords;
+            window.location.href = url;
+        }
+        else {
+            swal.fire("No data found to export");
+        }
+
+    }
+    function GetDetails(ResumeDatabankCode, i) {
+        debugger
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/Recruitment/ApplicantTrackingReport/GetApplicantTrackingFileDetails',
+            dataType: 'html',
+            data: { ResumeDatabankCode: ResumeDatabankCode, ResumeDataBankGI: $('#ResumeDataBankGI_'+i).val()},
+            success: function (result) {
+                $('body').append('<div class="form-overlay"></div>');
+                $('#sliderView').html('');
+                $('#sliderView').html(result);
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+    }
+    function viewResume(GI) {
+        debugger;
+        var url = "/DataBank/ApplicantTracking/ResumeView";       
+        window.open(url + '?ResumeGI=' + GI, '_blank');
+    }
+</script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table  applicant-track-report  pt-1">
+
+    @Html.HiddenFor(m => m.ApplicantTrackingReport.Count)
+
+    <table id="applicantTrackingTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Application Number">Appli No</th>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">MRF Code</th>
+                <th scope="col">Location</th>
+                <th scope="col">Source</th>
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Screening / Shortlisted">SL </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Interview and Evaluation">I & E </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="RA Approval">RAA</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Salary Split Up">Salary</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Credit Checking">CC</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Background Verification">BG</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Offer Initiation">Offer</th>
+
+
+
+            </tr>
+        </thead>
+        @*<tbody>
+                @if (Model != null && Model.ApplicantTrackingReport != null && Model.ApplicantTrackingReport.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ApplicantTrackingReport.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Appli No">@Model.ApplicantTrackingReport[i].RefNumber</td>
+                            <td data-label="Candidate Name">@Model.ApplicantTrackingReport[i].Candidate</td>
+                            <td data-label="Job Title"> @Model.ApplicantTrackingReport[i].JobTitle</td>
+                            <td data-label="MRF Code">@Model.ApplicantTrackingReport[i].JobCode</td>
+                            <td data-label="Location">@Model.ApplicantTrackingReport[i].LocationName</td>
+
+                            <td data-label="SL">
+                                @if (@Model.ApplicantTrackingReport[i].SL != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="I & E">
+                                @if (@Model.ApplicantTrackingReport[i].IE != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="RAA">
+                                @if (@Model.ApplicantTrackingReport[i].RAA != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="Verify">
+                                @if (@Model.ApplicantTrackingReport[i].SALARY != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="CC">
+                                @if (@Model.ApplicantTrackingReport[i].CC != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="EC">
+                                @if (@Model.ApplicantTrackingReport[i].EC != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td data-label="Offer">
+                                @if (@Model.ApplicantTrackingReport[i].OFFER != true)
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                }
+                            </td>
+
+
+
+                        </tr>
+                    }
+                }
+            </tbody>*@
+    </table>
+</div>

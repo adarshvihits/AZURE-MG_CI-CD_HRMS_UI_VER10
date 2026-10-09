@@ -1,0 +1,55 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.EConsoleSubmissionReport
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+
+<div class="ihits-table table-border hover-color odd-even EConsoleSubmissionReport-list">
+    @Html.HiddenFor(m => m.EConsoleSubmissionReportList.Count)
+    @Html.HiddenFor(m => m.ConsoleCode)
+
+    <table id="FormIVReport_Table" class="common-table">
+
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">SubmittedDate</th>
+                <th scope="col">PDF</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.EConsoleSubmissionReportList != null && Model.EConsoleSubmissionReportList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.EConsoleSubmissionReportList.Count; i++)
+                {
+
+
+                    <tr>
+
+                        @Html.HiddenFor(m => m.EConsoleSubmissionReportList[i].EmployeeCode)
+                        <td data-label="ID">@Model.EConsoleSubmissionReportList[i].ID</td>
+                        <td data-label="Employee Name">@Model.EConsoleSubmissionReportList[i].EmployeeName</td>
+                        <td data-label="Department">@Model.EConsoleSubmissionReportList[i].Department</td>
+                        <td data-label="Location">@Model.EConsoleSubmissionReportList[i].Location</td>
+                        <td data-label="SubmittedDate"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EConsoleSubmissionReportList[i].SubmittedDate))</td>
+                        <td data-label="PDF">
+                            <a onmouseenter="tooltipHover()" onclick="onDownloadClick( '@Model.EConsoleSubmissionReportList[i].EmployeeCode')" data-bs-toggle="tooltip" title="Download" type="button" class="btn   icon-only"><i class="fa fa-download" aria-hidden="true" style="    font-size: 22px !important;"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+

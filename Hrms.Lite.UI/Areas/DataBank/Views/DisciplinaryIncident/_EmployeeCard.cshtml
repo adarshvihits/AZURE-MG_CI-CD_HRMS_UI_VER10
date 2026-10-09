@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.General.EmployeeHeader
+<script>
+   $(document).ready(function () {
+       debugger
+        $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+                    document.getElementById('myImage').src = '@Model.EmployeeAbsoluteUri';
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.FileName');
+                        debugger
+                        document.getElementById('myImage').src = mimeType + data;
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+   })
+
+</script>
+<div class="search-profile-details">
+
+    <div class="search-profile-img-outer">
+        <div class="search-profile-img">
+            <img src="" id="myImage">
+        </div>
+        <div class="search-frofile-content">
+            <span class="search-profile-title">@Model.EmployeeName</span></span>
+
+            <span class="search-profile-designation">@Model.EmployeeId</span>
+
+        </div>
+
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted text-hover-primary">Designation:</span>
+        <span class="font-weight-bold mr-2">@Model.Designation.Name</span>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted text-hover-primary">Department:</span>
+        <span class="font-weight-bold mr-2">
+            @Model.Department.Name
+        </span>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted text-hover-primary">Location:</span>
+        <span class="font-weight-bold mr-2">
+            @Model.Location.Name
+        </span>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted text-hover-primary">Category:</span>
+        <span class="font-weight-bold mr-2">
+            @Model.Category.Name
+        </span>
+    </div>
+
+    <div class="button-group mt-4">
+        <a href="@Url.Action("Create", "DisciplinaryIncident", new { Area = "Databank", EmployeeGI=Model.EmployeeGuid })" type="button" class="btn btn-default mr-2 float-right">
+            Proceed
+        </a>
+        <button type="button" class="btn btn-secondary searchProfileSliderClose" onclick="CloseCard()">
+            Cancel
+        </button>
+    </div>
+</div>

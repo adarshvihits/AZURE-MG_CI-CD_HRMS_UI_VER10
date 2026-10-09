@@ -1,0 +1,212 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TraineeCost
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+<script src="~/scripts/TrainingModule/TraineeCost.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Trainee Cost</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Trainee Cost
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+
+
+                            <div class="tab-items ">
+                                <div class="tab-items mt-2">
+                                    <label>Select Schedule</label>
+                                    <div class="form-group filter-combobox mt-0">
+                                        @Html.DropDownListFor(m => m.TrnStatus, (SelectList)ViewBag.Schedule, "--Select--", new { @class = "form-control form-control-sm", @onchange = "ScheduleList()" })
+                                        <span id="Schedule"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="tab-items select-option  d-flex align-items-center">
+
+                                <div class="tab-items ">
+
+
+
+                                </div>
+
+
+
+
+
+                                <div class="tab-items ">
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+
+
+
+                                    <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+
+                                    @*<button data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                            <i class="icon-xl far fa-file-excel"></i>
+                        </button>*@
+
+                                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                       data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+
+
+                    <div id="filterSlider">
+                        @*@await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)*@
+                    </div>
+
+                    <div id="Listview">
+                        @await Html.PartialAsync("~/Areas/TrainingModule/Views/TraineeCost/_TrnParticipantList.cshtml")
+                    </div>
+
+                    <div id="EditLoanIssueSlider">
+
+                    </div>
+                    <div id="updateSlider">
+
+                    </div>
+
+                    @*Table section*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="row card-footer-bottom-fixed ">
+                        <div class="col-md-6 ">
+                            @*<button id="" type="button" class=" btn btn-default btn-sm" onclick="DeleteAll()">
+                    Delete all
+                </button>*@
+
+                        </div>
+                        <div class="col-md-6 text-right">
+                            @*<button id="filterForm" type="button" class="slider-btn btn btn-default btn-sm" onclick="validateAll()">
+                    Add Employee
+                </button>*@
+                            <a class="btn btn-default btn-edit " id="" onclick="Batchupdate()">
+                               Batch Update
+                            </a>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->
+
+
+
+<div class="modal fade bd-example-modal-lg" id="dutyRostershiftPopUP" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:980px;">
+        <div class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Employee Selection</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

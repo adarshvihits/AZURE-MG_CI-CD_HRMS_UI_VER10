@@ -1,0 +1,57 @@
+﻿@model Hrms.Lite.Shared.Master.DutyRosterLock
+<style>
+        .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+            visibility: hidden !important;
+        }
+    </style>
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table duty_roster_lock pt-1 vertical-scroll-450">
+    @Html.HiddenFor(m => m.Details.Count)
+    <table id="DutyRosterLockTable">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Circle</th>
+                <th scope="col">Lock Date</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.Details != null && Model.Details.Count > 0)
+                {
+                    for (int i = 0; i < Model.Details.Count; i++)
+
+                    {
+                        <tr>
+
+                            <td data-label="Name">
+                                @Html.HiddenFor(m => m.Details[i].Circle.Code)
+                                @Model.Details[i].Circle.Name
+                            </td>
+                            <td data-label="Short Name">
+                                <div class="input-group date" style="width:250px;">
+                                    @Html.TextBoxFor(m => m.Details[i].LockDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_12", @readonly = "true", @placeholder = "Lock Date" })
+                                    @*@Html.TextBoxFor(m => m.LockDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_12", @readonly = "true", @placeholder = "Lock Date" })*@
+                                    @Html.HiddenFor(m => m.Month.Code)
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

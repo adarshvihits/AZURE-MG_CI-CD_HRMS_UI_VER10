@@ -1,0 +1,116 @@
+﻿
+@model Hrms.Lite.Shared.Master.FieldOfStudy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+        //$('#FieldOfStudyTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table specializationbranch-master-list pt-1">
+    @Html.HiddenFor(m => m.FieldOfStudyList.Count)
+    <table id="FieldOfStudyTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @{
+                if (Model.FieldOfStudyList != null && Model.FieldOfStudyList.Count > 0)
+                {
+                    for (int i = 0; i < Model.FieldOfStudyList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.FieldOfStudyList[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Active)
+                            <td data-label="Name">@Model.FieldOfStudyList[i].Name</td>
+                            <td data-label="Short Name">@Model.FieldOfStudyList[i].ShortName</td>
+                            <td data-label="Actions">
+                                <div>
+
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+
+
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="specializationbranchedit"
+                                           class="btn btn-icon btn-edit icon-only ">
+                                            <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY','@Model.FieldOfStudyList[i].GI','@Model.FieldOfStudyList[i].LogGI',@i)"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="specializationbranchedit"
+                                           class="btn btn-icon btn-edit icon-only ">
+                                            <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY', '@Model.FieldOfStudyList[i].GI', '@Model.FieldOfStudyList[i].LogGI',@i);
+                                            swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});"></i>
+                                        </a>
+                                    }
+
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="specializationdelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete">
+                                            <i class="icon-xl far fa-trash-alt" onclick="onDeleteClick('@Model.FieldOfStudyList[i].GI', '@Model.FieldOfStudyList[i].LogGI', 'DELETE',@i)"></i>
+                                        </a>
+                                    }
+                                    else
+                                    { 
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="specializationdelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete">
+                                            <i class="icon-xl far fa-trash-alt" onclick="onDeleteClick('@Model.FieldOfStudyList[i].GI', '@Model.FieldOfStudyList[i].LogGI', 'DELETE',@i);
+                                            swal.fire(MasterPersmissionMsg);"></i>
+                                        </a>
+                                    }
+                                    </div>
+
+
+
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

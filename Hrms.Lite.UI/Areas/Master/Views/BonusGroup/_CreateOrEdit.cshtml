@@ -1,0 +1,179 @@
+﻿@model Hrms.Lite.Shared.Master.BonusGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script>
+    $(document).ready(function () {       
+        moveCursorToEnd('Name');
+    });
+</script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "BonusGroupSave" }))
+{
+    <div id="" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('AddNewOrEdit')"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Bonus Group
+                </h4>
+            </div>
+            <div class="add-padding">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name</label><span class="Mandatory">*</span>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'BGName')", maxlength = "120" })
+                            <span id="BGName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                            </label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", @onblur = "validate(this,'BGShort')", maxlength = "5" })
+                            <span id="BGShort"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row m-0 ">
+                    <h4 class="pt-3">Set Applicability</h4>
+                    <div class="ihits-table table-border w-100 hover-color odd-even vertical-scroll-150  Bonus-Group-slider-list">
+                        <table class="mb-0">
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">Particular</th>
+                                    <th scope="col">Applicability</th>
+                                    <th scope="col">%</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Allowance != null && Model.Allowance.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Allowance.Count; i++)
+                                    {
+                                        <tr>
+
+
+                                            <td data-label="Particular">
+                                                @Html.HiddenFor(m => m.Allowance[i].AllowanceCode)
+                                                @Html.HiddenFor(m => m.Allowance[i].Allowance)
+                                                @*@Html.HiddenFor(m => m.Allowance[i].Applicability)*@
+                                                @Model.Allowance[i].Allowance
+                                            </td>
+                                            <td data-label="Applicability">
+                                                <div class="checkbox-inline justify-content-center">
+                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                        @Html.CheckBoxFor(m => m.Allowance[i].Applicability, new { @class = "applCheckbox" })
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td data-label="%">
+                                                @*<input type="text" class="form-control form-control-sm" placeholder="">*@
+                                                @Html.TextBoxFor(m => m.Allowance[i].Percentage, new { @class = "form-control form-control-sm", @placeholder = "" })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="row my-3 mt-8">
+
+                    <div class="col-md-6">
+                        <label>Statutory [%]</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(Model => Model.SatuatoryPerc, new { @class = "form-control form-control-sm", @placeholder = "Statutory", @onblur = "validate(this,'BGSatuatoryPerc')" })
+                        <span id="BGSatuatoryPerc"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Non Statutory [%]</label>
+                        @Html.TextBoxFor(Model => Model.NonSatuatoryPerc, new { @class = "form-control form-control-sm", @placeholder = "Non Statutory", @onblur = "validate(this,'BGNonSatuatoryPerc')" })
+                        <span id="BGNonSatuatoryPerc"></span>
+                    </div>
+                </div>
+                <div class="row my-3">
+                  
+                        <div class="col-md-6">
+                            <label>Minimum Limit</label>
+                            @Html.TextBoxFor(Model => Model.EligibilityLimit, new { @class = "form-control form-control-sm", @placeholder = "Eligibility Limit", @onblur = "validate(this,'BGEligibilityLimit')" })
+                            <span id="BGEligibilityLimit"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Maximum Limit</label>
+                            @Html.TextBoxFor(Model => Model.Limit, new { @class = "form-control form-control-sm", @placeholder = "Limit", @onblur = "validate(this,'BGLimit')" })
+                            <span id="BGLimit"></span>
+                        </div>
+                    </div>
+                   
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm ADescription", @placeholder = "Description", maxlength = "250" })
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(Model => Model.Description)
+                                @Html.DisplayFor(Model => Model.Description)
+
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

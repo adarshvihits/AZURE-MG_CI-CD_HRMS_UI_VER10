@@ -1,0 +1,338 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+
+<style>
+    .grid-border-new {
+        margin-top: 10px;
+    }
+
+    .header-adress {
+        font-weight: 800;
+        color: black;
+    }
+
+    .attach-icon-color .btn.btn-icon.btn-edited.icon-only i::before {
+        color: white !important;
+        font-size: 11px !important;
+        line-height: 14px;
+    }
+
+    .attach-icon-color .btn.btn-icon.btn-view.icon-only i::before {
+        color: white !important;
+        font-size: 11px !important;
+        line-height: 14px;
+    }
+</style>
+
+<div class="row">
+    <div class="accoding-new-color-change">Let Out - Actual Details</div>
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table  letouthouse-tble-list mb-2">
+            <table id="otherIncome">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Address of House</th>
+                        <th scope="col">Rental Income</th>
+                        <th scope="col">Principle Amount</th>
+                        <th scope="col">Interest</th>
+                        <th scope="col">Name of Bank</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LetOutActualList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.LetOutActualList.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+
+
+                                <td data-label="NatureofIncome">
+
+                                    @Html.DisplayFor(m => m.LetOutActualList[i].HouseAddress)
+                                </td>
+
+                                <td data-label="Amount">
+
+                                    @Html.DisplayFor(m => m.LetOutActualList[i].RentalIncome)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.LetOutActualList[i].PrincipalAmt)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.LetOutActualList[i].Interest)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.LetOutActualList[i].NameofBank)
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" align="center"><em>No table data</em></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "LetOutIncome" }))
+{
+  
+    @Html.HiddenFor(m => m.EmployeeGuid)
+    @Html.HiddenFor(m => m.AssessmentYear.Code)
+    <div class="top-hed-new">
+        <div class="accoding-new-color-change " style="margin-left:-15px;">Let Out - Approval</div>
+        @if (Model.LetOutList != null && Model.LetOutList.Count > 0)
+        {
+
+            for (int i = 0; i < Model.LetOutList.Count; i++)
+            {
+
+
+
+                <div class="grid-border-new">
+                    <div class="row ">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+
+                                <label class="view-title">Address of House</label>
+                                <div class="view-details">
+
+                                    @Html.DisplayFor(m => m.LetOutList[i].HouseAddress)
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	OwnerShip Status</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].OwnerStatusName)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">
+                                    Percentage
+                                </label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].Percentage)
+                                    
+                                    <span id="percentage_@i"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Purpose</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].PurposeName)
+                                  
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Date of Loan</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].LoanDate)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Date of Completion</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].CompletionDate)
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Date of Let Out	</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].LetOutDate)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Rental Income</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].RentalIncome)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">
+                                    Municipal Tax
+                                </label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].MunicipalTax)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">Principal Amount</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].PrincipalAmt)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Interest</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].Interest)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Pre EMI</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].PreEMIInterest)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Total Interest</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].TotalInterest)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">	Name of Bank</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].NameofBank)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">
+                                    PAN of Bank
+                                </label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].PANofBank)
+
+                                    <span id="lpanofbank_@i" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">
+                                    Address of Bank
+                                </label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].BankAddress)
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="view-title">
+                                    Remarks
+                                </label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(m => m.LetOutList[i].Remarks)
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="view-title ">
+                                    Action
+                                </label>
+                                <div class="view-details attach-icon-color">
+
+                                    <a data-bs-toggle="tooltip" title="" id="designationedit" class="btn btn-icon btn-view icon-only " onclick="GetUploadDocumentPopUp('ACT_IFHP',0)" data-bs-original-title="view" style="background-color:#007bff !important; width: 36px; height: 25px; ">
+                                        <i class=" fas far fa-eye mr-1"></i>
+                                        <span>@Model.LetOutList[i].LetOutDocCount </span>
+                                    </a>
+                                  
+
+                                </div>
+                                <div class="view-details">
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="view-title">	Status</label>
+                                <div class="view-details">
+                                    @Model.LetOutList[i].ApprovalStatus
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="row " style="height:100%;">
+                <div class="new-dataaa-found">
+
+                    No Data Found
+                </div>
+            </div>
+        }
+    </div>
+
+}
+
+
+
+
+

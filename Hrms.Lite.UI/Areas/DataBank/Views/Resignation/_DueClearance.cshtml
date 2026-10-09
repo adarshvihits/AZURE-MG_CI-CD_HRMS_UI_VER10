@@ -1,0 +1,154 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+
+<script>
+    $(document).ready(function () {
+        //onSkipClick('ResignationDetails_SkipDuesClearance', 'Accptance_DueList');
+        $('.DefaultSettings').on('click', function () {
+            debugger
+            if ($('.DefaultSettings:checked').length == $('.DefaultSettings').length) {
+                $('#ResignationDetails_SkipDuesClearance').prop('checked', false);
+            }
+            else if ($('.DefaultSettings:checked').length > 0)
+            {
+                $('#ResignationDetails_SkipDuesClearance').prop('checked', false);
+            }
+
+            if ($('.DefaultSettings:checked').length == 0) {
+                $('#ResignationDetails_SkipDuesClearance').prop('checked', true);
+            }
+        });
+        debugger
+        fillresponsiblepersons();
+
+
+    });
+
+    function fillresponsiblepersons() {
+     
+            for (let i = 0; i <@Model.DueClearanceSettings.Count; i++) {
+
+
+
+                var $ResignResponsibleDropdown = $('#DueClearanceSettings_' + i + '__ResponsiblePersons');
+
+                // Append all options to the select element
+                $ResignResponsibleDropdown.append($ResignResponsibleDropdown.find('option'));
+
+                // Move selected options to the top
+                $ResignResponsibleDropdown.find('option:selected').prependTo($ResignResponsibleDropdown);
+
+                // Initialize the Bootstrap Multiselect plugin
+                $ResignResponsibleDropdown.multiselect({
+                    includeSelectAllOption: true,
+                    /*  enableFiltering: true,*/
+                    enableCaseInsensitiveFiltering: true,
+                    includeFilterClearBtn: false,
+                    includeSelectAllOption: false,
+                    numberDisplayed: -1,
+
+
+                });
+            }
+        }
+   
+
+</script>
+<div class="skipdue-head">
+    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+        
+        @Html.CheckBoxFor(m=>m.ResignationDetails.SkipDuesClearance, new { @class= "atleastonecheck" ,@onclick= "onSkipClick('ResignationDetails_SkipDuesClearance','Accptance_DueList')" })
+
+        <span></span>
+    </label>
+    <h2 class="skip-clear-check mb-0">Skip Dues Clearance</h2>
+
+
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <div class="ihits-table table-border mobile-responsive-table mb-2  skip-dues-list  vertical-scroll-250">
+            <table id="Accptance_DueList">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">SL.No</th>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Authority</th>
+                        <th scope="col">Dues Applicable</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.DueClearanceSettings != null && Model.DueClearanceSettings.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.DueClearanceSettings.Count; i++)
+                        {
+
+                          <tr>
+                      
+                              <td data-label="sl.no">
+                                  @(i+1)
+                                  @Html.HiddenFor(m => m.DueClearanceSettings[i].ParameterCode)
+                                  @Html.HiddenFor(m => m.DueClearanceSettings[i].Department.Code)
+                                  @Html.HiddenFor(m => m.DueClearanceSettings[i].ParameterName)
+                              </td>
+                        <td data-label="parameter">@Model.DueClearanceSettings[i].ParameterName </td>
+                        <td data-label="Department">@Model.DueClearanceSettings[i].Department.Name</td>
+                        <td data-label="dropdown">
+                            <div class="form-group">
+                                @Html.ListBoxFor(Model => Model.DueClearanceSettings[i].ResponsiblePersons,
+                               new SelectList(Model.DueClearanceSettings[i].ResponsiblePersonDropdown, "Code", "Name", "--Select--"), new { @class = "ResignResponsible form-control-multiselect ra_responsible", @multiple = "multiple" })
+
+                            </div>
+                        </td>
+                        <td data-label="Checkbox">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted justify-content-center" >
+                                
+                                @Html.CheckBoxFor(m => m.DueClearanceSettings[i].DefaultSettings, new { @class = "atleastonecheck DefaultSettings" })
+                                <span></span>
+                            </label>
+                        </td>
+                    </tr>
+
+
+                        }
+                    }
+
+                        </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="ihits-table table-border mobile-responsive-table mb-2 resignation-pending-list  vertical-scroll-250">
+            <table>
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Pending List</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ApprovalPendingDetails != null && Model.ApprovalPendingDetails.Count > 0)
+                    {
+
+                    for (int i = 0; i < Model.ApprovalPendingDetails.Count; i++)
+                    {
+                    <tr>
+
+                        <td data-label="Pending List">
+                            @Model.ApprovalPendingDetails[i].Description
+                        </td>
+                        <td data-label="Count">@Model.ApprovalPendingDetails[i].PendingCount</td>
+                    </tr>
+                    }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

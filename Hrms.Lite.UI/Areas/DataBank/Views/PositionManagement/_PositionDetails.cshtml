@@ -1,0 +1,75 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PositionManagement
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script src="~/js/settings.js"></script>
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive  position_details_list">
+    @Html.HiddenFor(m => m.PositionDetailedList.Count)
+    @Html.HiddenFor(m => m.type)
+
+    <table class="common-table">
+        <thead>
+            <tr class="table-color-new ">
+
+                <th scope="col">Position</th>
+                <th scope="col">Location</th>
+                <th scope="col">Department</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Approve Status</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.PositionDetailedList != null && Model.PositionDetailedList.Count > 0)
+            {
+                for (int i = 0; i < Model.PositionDetailedList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Position">
+                            @Model.PositionDetailedList[i].Name
+
+
+
+
+
+                            @Html.HiddenFor(Model => Model.PositionDetailedList[i].Code)
+                            @Html.HiddenFor(Model => Model.PositionDetailedList[i].GI)
+
+                        </td>
+
+                        <td data-label="Location">@Model.PositionDetailedList[i].Location.Name</td>
+                        <td data-label="Department">@Model.PositionDetailedList[i].Department.Name</td>
+                        <td data-label="Fun.Designation">@Model.PositionDetailedList[i].Designation.Name</td>
+                        <td data-label="Approve Status">@Model.PositionDetailedList[i].ApproveStatus</td>
+                        <td data-label="Actions">
+                            @if (CurrentUserRoleActions.Delete == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Delete"
+                                   id="banknamedelete"
+                                   class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.PositionDetailedList[i].GI', '@Model.PositionDetailedList[i].Code','DELETE',@i)">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Delete"
+                                   id="banknamedelete"
+                                   class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.PositionDetailedList[i].GI', '@Model.PositionDetailedList[i].Code', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+                        </td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

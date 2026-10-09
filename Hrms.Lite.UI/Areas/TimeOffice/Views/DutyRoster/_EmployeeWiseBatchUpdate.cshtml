@@ -1,0 +1,113 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#Batch_From').focus();
+        $('#Batch_From').datepicker('hide');
+        $('.kt_datepicker_11').datepicker('remove');
+        setDateHidePicker();
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "dutyEmp_Batch_Form" ,onsubmit="return validateBatchUpdate()"}))
+{
+
+    <div class="slider-forms slider-forms-open dutyEmpBatch">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('dutyEmpBatch')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row-outer">
+                        <label class="view-title">Month</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Model.Month.Name
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>From</label>
+                        <span class="Mandatory">*</span>
+                        <div class="input-group date">
+                       
+                            @Html.TextBoxFor(m => m.Batch_From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_11", @placeholder = "From",
+                           @autocomplete = "off", @readonly=true, @onchange = "validate(this,'fromdate')"
+                           , @onclick= "$('#Batch_From').datepicker('show');"                       
+                       })
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                            <span id="fromdate"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                        <label>To</label>
+                        <span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.Batch_To, "{0:dd-MMM-yyyy}", new
+                       {
+                           @class = "form-control kt_datepicker_11 dtTo",
+                           @placeholder = "To",
+                           @autocomplete = "off",
+                           @onchange = "validate(this,'todate')"
+                           
+                       })
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                            <span id="todate"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Shift Code </label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.ShiftDetails.Code, (SelectList)ViewBag.EmployeeWiseShift, "Select Shift", new { @class = "form-control form-control-sm", @onchange = "validate(this,'empBatchShift')" })
+                        <span id="empBatchShift"></span>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="onEmpWiseBatchSAveClick('@Model.EmployeeGI')">
+                        Update
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

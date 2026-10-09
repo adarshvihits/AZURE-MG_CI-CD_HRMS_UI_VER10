@@ -1,0 +1,197 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.AttritionReport
+<style>
+    .dataTables_scrollFootInner{
+        width:auto !important;
+    }
+</style>
+    <script>
+
+
+
+        $(document).ready(function () {
+
+
+
+
+
+            //$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            //    $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+            //});
+            /* setTimeout(function () {*/
+
+            $.fn.DataTable.ext.pager.numbers_length = 5;
+
+            var dataTable = $('.common-table').DataTable({
+
+                "paging": true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pagingType": 'full_numbers',
+                //"pagingType": 'full_numbers_no_ellipses',
+                "scrollY": '48vh',
+                "sScrollX": "100%",
+                "sScrollXInner": "100%",
+
+                "ordering": false,
+                "autoWidth": false,
+
+
+
+
+
+                "scrollCollapse": false,
+
+                // "dom": '<"top" if>rt<"bottom" lp>',
+                "dom": '<t><"my-wrapper"<"my-inner2"l><"my-inner1"i><"my-inner3"p>>',
+
+
+                language: {
+
+                    emptyTable: '<div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                    zeroRecords: '<div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                    sLengthMenu: "_MENU_",
+                    paginate: {
+                        //next: '&#8594;', // or '→'
+                        //previous: '&#8592;' // or '←'
+
+                        next: '<img src="/images/icons/Icon awesome-arrow-right-1.png">',
+                        previous: '<img src="/images/icons/Icon awesome-arrow-right.png">',
+                        first: '<img src="/images/icons/Icon metro-next-1.png">',
+                        last: '<img src="/images/icons/Icon metro-next.png">'
+
+                        //next: '<span class="glyphicon glyphicon-menu-right"></span>',
+                        //previous: '<span class="glyphicon glyphicon-menu-left"></span>'
+
+                    }
+                }
+
+
+
+            });
+
+
+            //  $(".intro, .demo, .end").css('background', 'green');
+
+
+
+            $('.ihits-table table').removeClass("dataTable no-footer");
+
+
+            $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.next').attr("title", "Next");
+            $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.previous').attr("title", "Previous");
+            $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.first').attr("title", "First");
+            $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.last').attr("title", "Last");
+
+            $(".ihits-table table tr th").removeAttr('style');
+
+
+            $("#dataTableSearch").on("keyup search input paste cut", function () {
+                dataTable.search(this.value).draw();
+
+
+
+
+            });
+
+            $('.search-slider-inner').click(function () {
+                dataTable.search('').draw();
+                $('#dataTableSearch').val('');
+                $('#dataTableSearch').focus();
+            });
+
+            var info = dataTable.page.info();
+
+            dataTable.on('draw', function () {
+
+
+
+                $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.next').attr("title", "Next");
+                $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.previous').attr("title", "Previous");
+                $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.first').attr("title", "First");
+                $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+                $('.paginate_button.last').attr("title", "Last");
+
+            });
+
+            /*}, 100);*/
+
+
+
+
+        });
+
+
+
+
+    </script>
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table attrition-report-table">
+        @Html.HiddenFor(m => m.Rows.Count)
+        <table id="AttritionTable" class="common-table">
+            <thead >
+                @if (Model.Head != null && Model.Head.Count > 0)
+            {
+
+
+                <tr class="table-dark">
+                    <th scope="col">@Model.Head[0]</th>
+                    <th scope="col">@Model.Head[1]</th>
+                    <th scope="col">@Model.Head[2]</th>
+                    <th scope="col">@Model.Head[3]</th>
+                    <th scope="col">@Model.Head[4]</th>
+                    <th scope="col">Attrition Rate</th>
+
+
+                </tr>
+
+            }
+            </thead>
+            <tbody>
+                @if (Model.Rows != null && Model.Rows.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.Rows.Count; i++)
+                    {
+
+                        <tr>
+                            <td data-label="Department">@Model.Rows[i].Columns[0]</td>
+                            <td data-label="Opening">
+                                @Model.Rows[i].Columns[1]
+                            </td>
+                            <td data-label="Joining">@Model.Rows[i].Columns[2]</td>
+                            <td data-label="Separation">@Model.Rows[i].Columns[3] </td>
+                            <td data-label="Closing">@Model.Rows[i].Columns[4]</td>
+                            <td data-label="Attrition Rate">@Model.Rows[i].Columns[5]</td>
+
+
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+
+                <tr class="attrition-report-list-table-footer">
+                    <td data-label="ID" style="width:30%;"></td>
+                    <td data-label="1">@Model.FooterRows[0].Columns[0]</td>
+                    <td data-label="2">@Model.FooterRows[0].Columns[1]</td>
+                    <td data-label="3">@Model.FooterRows[0].Columns[2]</td>
+                    <td data-label="4">@Model.FooterRows[0].Columns[3]</td>
+                    <td data-label="5">@Model.FooterRows[0].Columns[4]</td>
+
+                </tr>
+
+            </tfoot>
+
+
+           
+        </table>
+    </div>

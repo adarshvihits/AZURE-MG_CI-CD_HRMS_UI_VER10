@@ -1,0 +1,99 @@
+﻿@model Hrms.Lite.Shared.Master.Cluster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+        //$('#PendingGradeTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table cluster-pending pt-1">
+    @Html.HiddenFor(m => m.ClusterList.Count)
+    <table id="PendingClusterTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Country</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+                if (Model.ClusterList != null && Model.ClusterList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ClusterList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.ClusterList[i].MakerChecker)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+
+                            <td data-label="Name">@Model.ClusterList[i].Name</td>
+                            <td data-label="ShortName">@Model.ClusterList[i].ShortName</td>
+                            <td data-label="Country">@Model.ClusterList[i].Country?.Name</td>
+                          
+
+                            <td data-label="Entry Type">@Model.ClusterList[i].Mode</td>
+                            <td data-label="Approve">
+
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="clusterapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.ClusterList[i].GI','@Model.ClusterList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="clusterapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.ClusterList[i].GI', '@Model.ClusterList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                    <!-- Approve Slider -->
+                                    <!-- Approve Slider end-->
+                                </td>
+                            <!-- <second></second> -->
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

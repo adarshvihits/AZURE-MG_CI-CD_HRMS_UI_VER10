@@ -1,0 +1,249 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@*@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+@using Kendo.Mvc.UI
+
+<script>
+function onSeriesYearlyCostHover(e) {
+        $("#yearlyTr").css("cursor", "pointer");
+    }
+    function onSeriesphtrHover(e) {
+        $("#perHeadTr").css("cursor", "pointer");
+    }
+    function onSeriesEmpCountHover(e) {
+        $("#empCount").css("cursor", "pointer");
+    }
+    function onSeriesTrCountHover(e) {
+        $("#trCount").css("cursor", "pointer");
+    }
+    function onSeriesTrCountClick(e) {
+        var financialYr = $("#finYear").val();
+        //var code = $("#Code").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 131, code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=131&financialYr=' + financialYr + '&name=' + e.dataItem.fullname + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function onSeriesYearlyCostClick(e) {
+       // var financialYr = $("#finYear").val();
+        //var code = $("#Code").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 132, code: e.dataItem.code },
+
+            success: function (result) {
+                window.location.href = '/MIS/MISDashBoard?id=132&name=' + e.dataItem.name + '&code=' + e.dataItem.code;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+
+    }
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        if (axis.categories != undefined) {
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+    }
+</script>
+
+<script id="yearlytr" type="text/x-kendo-template">
+    @(
+        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.YearlyTrainingCost>()
+                                                            .Name("yearlyTr")
+                                                        .Title("")
+                                                           .Events(e => e.SeriesHover("onSeriesYearlyCostHover")
+                                                           .SeriesClick("onSeriesYearlyCostClick")
+                                                           )
+                                                        .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Top)
+                                                        )
+                                                                            .DataSource(ds => ds.Read(read => read.Action("GetYearlyTrainingCost", "MISDashBoard").Data("getTrainingVal")))
+                                                        .Series(series =>
+                                                        {
+                                                            //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                                series.Column(model => model.trainingexpense).Name("Yearly Training Cost").CategoryField("name").Color("\\#89CFF0").Spacing(0)
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                         Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.trainingexpense)\\# )").Visible(true));
+                                                                series.Column(model => model.allotedamount).Name("Yearly Alloted Cost").CategoryField("name").Color("\\#f5a6d3").Spacing(0)
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                             Template("(\\#= (dataItem.name)\\# - \\#= (dataItem.allotedamount)\\# )").Visible(true));
+                                                    })
+                                                    .ChartArea(ch => ch.Width(550).Height(250))
+                                                    .CategoryAxis(axis => axis
+                                                        .Labels(labels => labels.Rotation(0))
+                                                        .Crosshair(c => c.Visible(true))
+                                                    )
+                                                    .ValueAxis(axis => axis.Numeric()
+                                                        .Labels(labels => labels.Format("{0:N0}"))
+
+                                                    )
+                                                    .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Shared(true)
+                                                        .Format("{0:N0}")
+                                                    )
+
+                                                    .ToClientTemplate()
+                            )
+</script>
+
+<script id="perheadtr" type="text/x-kendo-template">
+    @(
+            Html.Kendo().Chart<Hrms.Lite.Shared.MIS.PerHeadTrainingCost>()
+                                                                .Name("perHeadTr")
+                                                            .Title("")
+                                                               .Events(e => e.SeriesHover("onSeriesphtrHover")
+                                                               //.SeriesClick("onSeriesDptClick")
+                                                               )
+                                                            .Legend(legend => legend
+                                                                .Position(ChartLegendPosition.Top)
+                                                            )
+                                                                                .DataSource(ds => ds.Read(read => read.Action("GetPerHeadTrainingCost", "MISDashBoard").Data("getTrainingVal")))
+                                                            .Series(series =>
+                                                            {
+                                                                //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                                series.Column(model => model.perheadexpense).Name("Per Head Training Cost").CategoryField("name").Color("\\#89CFF0").Spacing(0)
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                             Template("(\\#= (dataItem.fullname)\\# - \\#= (dataItem.perheadexpense)\\# )").Visible(true));
+                                                                })
+                                                        .ChartArea(ch => ch.Width(550).Height(250))
+                                                        .CategoryAxis(axis => axis
+                                                            .Labels(labels => labels.Rotation(0))
+                                                            .Crosshair(c => c.Visible(true))
+                                                        )
+                                                        .ValueAxis(axis => axis.Numeric()
+                                                            .Labels(labels => labels.Format("{0:N0}"))
+
+                                                        )
+                                                        .Tooltip(tooltip => tooltip
+                                                            .Visible(true)
+                                                            .Shared(true)
+                                                            .Format("{0:N0}")
+                                                        )
+
+                                                        .ToClientTemplate()
+                                )
+</script>
+
+<script id="empcount" type="text/x-kendo-template">
+    @(
+                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.TrainingEmployeeCount>()
+                                                                    .Name("empCount")
+                                                                .Title("")
+                                                                   .Events(e => e.SeriesHover("onSeriesEmpCountHover")
+                                                                               .SeriesClick("onSeriesTrCountClick")
+                                                                       )
+                                                                .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Top)
+                                                                )
+                                                                                    .DataSource(ds => ds.Read(read => read.Action("GetTrainingEmployeeCount", "MISDashBoard").Data("getTrainingVal")))
+                                                                .Series(series =>
+                                                                {
+                                                                    //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                                    series.Column(model => model.traineecount).Name("Training Employee Count").CategoryField("name").Color("\\#89CFF0")
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                                     Template("(\\#= (dataItem.fullname)\\# - \\#= (dataItem.traineecount)\\# )").Visible(true));
+                                                                })
+                                                            .ChartArea(ch => ch.Width(550).Height(250))
+                                                            .CategoryAxis(axis => axis
+                                                                .Labels(labels => labels.Rotation(0))
+                                                                .Crosshair(c => c.Visible(true))
+                                                            )
+                                                            .ValueAxis(axis => axis.Numeric()
+                                                                .Labels(labels => labels.Format("{0:N0}"))
+
+                                                            )
+                                                            .Tooltip(tooltip => tooltip
+                                                                .Visible(true)
+                                                                .Shared(true)
+                                                                .Format("{0:N0}")
+                                                            )
+
+                                                            .ToClientTemplate()
+                                    )
+</script>
+
+<script id="trcount" type="text/x-kendo-template">
+    @(
+                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MonthlyTrainings>()
+                                                                        .Name("trCount")
+                                                                    .Title("")
+                                                                       .Events(e => e.DataBound("sortData").SeriesHover("onSeriesTrCountHover")
+                                                                       )
+                                                                    .Legend(legend => legend
+                                                                        .Position(ChartLegendPosition.Top)
+                                                                    )
+                                                                                        .DataSource(ds => ds.Read(read => read.Action("GetMonthlyTrainings", "MISDashBoard").Data("getTrainingVal")))
+                                                                    .Series(series =>
+                                                                    {
+                                                                        //series.Line(model => model.count).Name("Transition Count").CategoryField("department").Color("\\#6cf57e");
+                                                                        series.Column(model => model.trainingcount).Name("Training Count").CategoryField("month").Color("\\#89CFF0")
+                                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                         Template("(\\#= (dataItem.month)\\# - \\#= (dataItem.trainingcount)\\# )").Visible(true));
+                                                                    })
+                                                                .ChartArea(ch => ch.Width(550).Height(250))
+                                                                .CategoryAxis(axis => axis
+                                                                    .Labels(labels => labels.Rotation(0))
+                                                                    .Crosshair(c => c.Visible(true))
+                                                                )
+                                                                .ValueAxis(axis => axis.Numeric()
+                                                                    .Labels(labels => labels.Format("{0:N0}"))
+
+                                                                )
+                                                                .Tooltip(tooltip => tooltip
+                                                                    .Visible(true)
+                                                                    .Shared(true)
+                                                                    .Format("{0:N0}")
+                                                                )
+
+                                                                .ToClientTemplate()
+                                        )
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(6)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Yearly Training Expense")).BodyTemplateId("yearlytr").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Per Head Training Expense")).BodyTemplateId("perheadtr").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Training Employee Count")).BodyTemplateId("empcount").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Training Count")).BodyTemplateId("trcount").ColSpan(3).RowSpan(2);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

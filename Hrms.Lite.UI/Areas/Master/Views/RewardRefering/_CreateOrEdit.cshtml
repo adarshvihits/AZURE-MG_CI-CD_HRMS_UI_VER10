@@ -1,0 +1,121 @@
+﻿@model Hrms.Lite.Shared.Master.RewardRefering
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+
+@using (Html.BeginForm("Save", "RewardRefering", FormMethod.Post, new { id = "RewardReferingSave" }))
+{
+    <div id="RewardType" class="slider-forms slider-forms-open Rewardclose">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('Rewardclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>P2P Type </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm sName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'RtypeName')", maxlength = 120 })
+                            <span id="RtypeName"></span>
+
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm sShtName", @placeholder = "Short Name", @onblur = "validate(this,'RTypeShortName')", maxlength = 5 })
+                            <span id="RTypeShortName"></span>
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div>Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('RewardRefering', '@Model.Code')">
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "activeinactiveReward" })
+                             
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        @*<label class="view-title">Description</label>*@
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm sDescription", @placeholder = "Description", maxlength = 250 })
+                                <span id="RTypeDescription"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                <div class="view-details">
+
+                                    @Html.DisplayFor(Model => Model.Description)
+                                    @Html.HiddenFor(model => Model.Description)
+                                </div>
+                            }
+                            <span id="RTypeDescription" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveClick('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveClick('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

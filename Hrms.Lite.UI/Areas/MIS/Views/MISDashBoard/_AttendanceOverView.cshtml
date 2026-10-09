@@ -1,0 +1,350 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+    flag=0;
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        if (axis.categories != undefined) {
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+    }
+    function onRender(e) {
+        if(flag==0)
+        {
+        $("#attDate").parent().parent().find(".k-card-title").html("1" + " " + $("#monthTab").find("p").text())
+        flag=1;
+        }
+        else
+        {
+            ;
+        }
+    }
+    function plotClick(e) {
+        var currntLp = $("#CurrentSalaryPeriodCode").val();
+        var gc = $("#GroupCompanyCode").val();
+        $("#hdnMonth").val(currntLp);
+        $("#hdnList").val(e.category);
+        $("#hdnDay").val(e.category);
+        var attDate = $("#attDate").data("kendoChart");
+        attDate.dataSource.read();
+        $("#attDate").parent().parent().find(".k-card-title").html(e.category + " " + $(".box_months.active").find("p").text())
+    }
+    function axisClick(e)
+    {
+              
+
+    }
+    function onSeriesHover(e) {
+        $("#attDate").css("cursor", "pointer");
+    }
+    function onSeriesClick(e) {
+     var month=   $("#hdnMonth").val();
+      var day=  $("#hdnList").val();
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 60, type: 'Month',month: month,day:day },
+
+            success: function (result) {
+                
+
+                window.location.href = '/MIS/MISDashBoard?id=60&type=att&name=' + e.dataItem.punchingDate + '&month=' + month +'&day='+day;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    $(document).ready(function () {
+        
+        var currntLp = $("#CurrentSalaryPeriodCode").val();
+        $("#hdnMonth").val(currntLp);
+      
+    });
+
+</script>
+
+<style>
+
+    div.k-tooltip.k-chart-tooltip {
+        margin-left: -50px;
+        margin-top: -50px;
+    }
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+
+
+    #tilelayout1 .k-card:nth-child(1) {
+        background-color: #7865e5 !important;
+        border-radius: 10px 10px 10px 10px;
+        height:130px;
+    }
+
+    #tilelayout1 .k-tilelayout-item:first-child .k-card-header {
+        background-color: #7865e5 !important;
+        border-radius: 10px 10px 0px 0px;
+        color: #fff !important;
+    }
+
+    #tilelayout1 .k-card:nth-child(2) {
+        background-color: #138df0 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 130px;
+    }
+
+    #tilelayout1 .k-card:nth-child(3) {
+        background-color: #f33757 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 130px;
+    }
+
+    #tilelayout1 .k-card:nth-child(4) {
+        background-color: #15294c !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 130px;
+    }
+
+    #tilelayout1.earlyOut{
+        color:#fff !important;
+    }
+    #tilelayout1{
+        margin-bottom:22px;
+    }
+
+</style>
+
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div style="margin-bottom:10px;">
+                    <input type="hidden" id="hdnDay" value="1" />
+                    <script id="Eo" type="text/x-kendo-template">
+            <div id="earlyOut" style="color: \\#fff ; height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight:700;">@Model.earlyOut </div>
+                    </script>
+
+                    <script id="Li" type="text/x-kendo-template">
+            <div id="lateIn" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight:700;">@Model.lateIn </div>
+
+                    </script>
+                    <script id="Ovt" type="text/x-kendo-template">
+            <div id="ot" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight:700;">@Model.ot </div>
+
+                    </script>
+                    <script id="toth" type="text/x-kendo-template">
+            <div id="th" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight:700;">@Model.th </div>
+
+                    </script>
+                </div>
+        <script id="attMonths" type="text/x-kendo-template">
+            @(
+                                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AttendanceDayWise>()
+                                                            .Name("monthAtt")
+                                                            .Title("")
+                                                            // .Events(e => e.DataBound("sortData"))
+                                                            .Events(e=>e.SeriesClick("axisClick")
+                                                            .PlotAreaClick("plotClick"))
+                                                            .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                            )
+                                                                                .DataSource(ds => ds.Read(read => read.Action("GetAttendanceDayWise", "MISDashBoard").Data("getSalPeriod")))
+                                                            .Series(series =>
+                                                            {
+                                                                series.Line(model => model.hours).Name("Hours").CategoryField("day").Color("\\#ff6700").Width(5);
+
+
+                                                            })
+                                                            .ChartArea(ch => ch.Width(850).Height(350))
+                                                            .CategoryAxis(axis => axis
+                                                                .Labels(labels => labels.Rotation(0))
+                                                                .Crosshair(c => c.Visible(true))
+                                                            )
+                                                            .ValueAxis(axis => axis.Numeric()
+                                                                .Labels(labels => labels.Format("{0:N0}"))
+                                                            //.MajorUnit(1000)
+                                                            )
+                                                            .Tooltip(tooltip => tooltip
+                                                                .Visible(true)
+                                                                .Shared(true)
+                                                                
+                                                                .Format("{0:N0}")
+                                                            )
+
+                                                            .ToClientTemplate()
+                                    )
+        </script>
+
+        <script id="catagory" type="text/x-kendo-template">
+            @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AttendanceDateWise>()
+                                                                  .Name("attDate")
+                                                                  .Events(e=>e.SeriesClick("onSeriesClick")
+                                                                  .SeriesHover("onSeriesHover"))
+                                                              .Title("")
+                                                              .Events(e=>e.Render("onRender"))
+                                                              .Legend(legend => legend
+
+                                                              .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                              .Visible(true)
+                                                              )
+                                                              .ChartArea(chart => chart
+                                                              .Background("transparent")
+
+
+                                                              )
+                                                              .DataSource(ds =>
+                                                              {
+                                                                      ds.Read(read => read.Action("GetAttendanceDateWise", "MISDashBoard").Data("getParamForAtt"));
+
+                                                              }
+                                                              )
+                                                              .Series(series => series
+
+                                                              .Donut(model => model.total, model => model.category).HoleSize(40).Size(40)
+                                                                  .ColorField("color")
+                                                              .Labels(labels => labels
+                                                              .Template("\\#= dataItem.category \\# - \\#= dataItem.total \\#").Visible(true)
+                                                              .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                              .Background("transparent")
+
+                                                              .Visible(true)
+                                                              )
+                               .Tooltip(tooltip => tooltip.Template("\\#= dataItem.category \\# - \\#= dataItem.total \\# ").Visible(true))
+
+
+                                                                  )
+
+                                                                   .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+
+                                                                  .ToClientTemplate()
+                                                              )
+
+
+
+        </script>
+            </div>
+        </div>
+        <div id="monthsDiv" class="s_slip_container">
+
+
+            @await Html.PartialAsync("~/Areas/MIS/Views/MISDashBoard/_Months.cshtml", Model)
+
+        
+
+
+
+        </div>
+
+
+
+
+        <div class="row">
+
+
+            <div class="col-xl-4 col-md-4">
+
+                <!------------- search emplyee here ------------------>
+                
+
+                <!------------- search emplyee here ------------------>
+
+            </div>
+            <div class="col-xl-8 col-md-8">
+
+              
+
+            </div>
+        </div>
+
+    
+
+
+
+
+
+
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout1")
+        .Columns(12)
+        .RowsHeight("100px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Early out")).BodyTemplateId("Eo").ColSpan(3).RowSpan(1);
+            c.Add().Header(h => h.Text("Late in")).BodyTemplateId("Li").ColSpan(3).RowSpan(1);
+            c.Add().Header(h => h.Text("Over Time")).BodyTemplateId("Ovt").ColSpan(3).RowSpan(1);
+            c.Add().Header(h => h.Text("Total hrs")).BodyTemplateId("toth").ColSpan(3).RowSpan(1);
+
+           
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )
+
+
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+          
+          
+            c.Add().Header(h => h.Text("Total Working Hours")).BodyTemplateId("attMonths").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Leaves By Catagory")).BodyTemplateId("catagory").ColSpan(6).RowSpan(3);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

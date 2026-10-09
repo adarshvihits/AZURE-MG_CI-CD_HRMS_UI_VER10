@@ -1,0 +1,921 @@
+﻿@model Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoardNew
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<style>
+    .main-outer-div {
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+
+    .main-outer-div-inner {
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+</style>*@
+
+<link href="~/css/New-dashboard-time-office.css" rel="stylesheet" />
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/DashBoard/timeOfficedashboard.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        GetWorkStatus('v3');
+        GetTimeOfficeNotifications('v3');
+        GetGraph();
+    });
+</script>
+
+<style>
+    .tile-value-count {
+        color: white;
+        padding-left: 5px;
+        padding-bottom: -12px;
+         margin-top: 0px; 
+        font-size: 25px !important;
+    }
+   
+    .new-tile-headz {
+     
+        padding: 0px 10px 0px;
+    }
+    .tile-value-count {
+        padding: 0px 5px 0px;
+    }
+    .new-tile-box {
+        padding: 20px 5px;
+    }
+
+    .new-tile-box-2 {
+        padding: 20px 5px;
+    }
+
+    .new-tile-box-3 {
+        padding: 20px 5px;
+    }
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Time Office Dashboard
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home" , new { Area="" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Time Office Dashboard
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+
+
+
+
+
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+
+
+
+
+
+
+
+            <div class="card card-custom height-100per  ">
+
+
+
+                <div class="card-body h-100 ">
+                    <div class=" common_space row">
+
+                        <div class="col-md-9">
+
+                            <div class="row">
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('ContinousAbsenteesim','timeDash_absenteesimPopup')">
+                                        <div class="new-tile-box">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <div class="icon-with-set">
+                                                        <img class="icon-withz" src="~/images/icons/Continues Absentees-icon-new.svg" />
+                                                    </div>
+
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Continuous Absenteeism</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.ContinousAbsenteesim</h1>
+                                                    </div>
+                                                </div>
+                                           
+                                            </div>
+
+                                            
+
+                                            <div class="wave-box">
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('PendingReg','PendingRegularization')">
+                                        <div class="new-tile-box-2">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <div class="icon-with-set">
+                                                        <img class="icon-withz" src="~/images/icons/Pending Regularization-icon.svg" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Pending Regularization</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.PendingReg</h1>
+                                                    </div>
+                                                </div>
+                                              
+
+                                            </div>
+                                          
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+
+
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('UN AUTHORISED LOP','unauthorisedlopPopup')">
+                                        <div class="new-tile-box-3">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/laptop_windows icon.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Unauthorized Absence</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.UnauthorisedAbsence</h1>
+                                                    </div>
+                                                </div>
+                                              
+                                            </div>
+                                          
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('WFH Leaves','wfhleaves')">
+                                        <div class="new-tile-box-3      tile-color-10">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/whf icon.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Work From Home</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.WFHLeaves</h1>
+                                                    </div>
+                                                </div>
+                                             
+                                            </div>
+                                         
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+
+
+
+                            <!--  SECOND TILE-CARD START-->
+
+
+                            <div class="row second-full-tile-pad   ">
+
+
+                                <div class="col-md-3  ">
+                                    <a class="step-item" onclick="onLabelClickNew('Upcoming Leaves','timeDash_upcomingleavesPopup')">
+                                        <div class="new-tile-box rose-wave  tile-color-4">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/Upcoming Leaves iconzz.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Upcoming Leaves </h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.UpcomingLeaves</h1>
+                                                    </div>
+
+                                                </div>
+                                              
+                                            </div>
+
+                                        
+
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('Duty Roster Variance','timeDash_dutyrosterPopup')">
+                                        <div class="new-tile-box-2 light-blue-wave  tile-color-5">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/duty roster icon.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Duty Roster Variance</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.DutyRosterVariance</h1>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                          
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+
+
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('LESSHOURS','timeDash_lesshourPopup')">
+                                        <div class="new-tile-box-3   yellow-wave tile-color-6  ">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/less hour.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">Less Hours</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.LessHours</h1>
+                                                    </div>
+                                                </div>
+                                              
+                                            </div>
+                                          
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                                <div class="col-md-3 ">
+                                    <a class="step-item" onclick="onLabelClickNew('LOP','lopTile')">
+                                        <div class="new-tile-box-3  tile-color-8  ">
+                                            <div style="display:flex; align-items:center; padding-bottom:10px;">
+                                                <div class="new-tile-iconz">
+                                                    <img class="icon-withz" src="~/images/icons/demoo 22 icon.svg" />
+                                                </div>
+                                                <div>
+                                                    <h1 class="new-tile-headz">LOP</h1>
+                                                    <div class="tile-value-count">
+                                                        <h1 class="tile-value-count">@Model.LOP</h1>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                          
+
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+                        <!-- Notifications START-->
+
+                        <div class="col-md-3">
+
+
+                            <div class="Notifications-main-head">
+                                <div class="notificatiobn_new">
+
+
+                                    <div class="d-flex notification-padd">
+
+
+                                        <div class="right_notification">
+                                            <img class="notification_img  new-top-notification-icon-color-chng">
+                                        </div>
+                                        <div class="notification-text-color">Notifications</div>
+                                    </div>
+                                </div>
+                                <div class="common_scroll-new notif">
+                                    @*@await Html.PartialAsync("_NotificationsV3")*@
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!--  GRAPH TILE-CARD START-->
+
+
+
+                    <div class="row second-full-tile-pad" style="padding-left:6px;">
+
+                        <div class="col-md-12 col-lg-6 ">
+                            <h1 class="Attedance-tble-headingz">Monthly Attendance Status</h1>
+                            <select id="classification" class="form-control form-control-sm float-right" onchange="GetGraph()" style="width: 200px; height: 25px; margin:5px 5px 10px 0px ">
+                                <option value="ABSENTEES">Absentees</option>
+                                <option value="RADAYS">RA Days</option>
+                                <option value="ONDUTY">On Duty</option>
+                                <option value="WFH">WFH</option>
+                            </select>
+
+                            <div id="chart-container" class="Graph-tile-box ">
+
+                                <div class="graph-img-1 lineGraph">
+                                    @*<img class="graph-img" src="/images/icons/Frame 51.png" />*@
+                                    @*@await Html.PartialAsync("_AttendanceChart", Model.TimeOfficeDashBoardDiagram)*@
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div class="col-md-12 col-lg-6">
+                            <h1 class="Attedance-tble-headingz">Attendance Status</h1>
+                            <div class="Graph-tile-box wrkSt">
+
+
+                                @*@await Html.PartialAsync("_AttendanceStatus")*@
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    @*<div class="footer-line-new"> </div>
+                        <div class="footer-copright-type">
+                            <h1 class="ihits-copy-rights">Copyright@2023 Ihits Technologies Pvt Ltd . ALL right reserved</h1>
+                        </div>*@
+
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+    @*<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+             aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg" style="max-width:500px;height:190px;">
+                <div class="modal-content popup">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabelauth">
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="modal fade timeDashApprPendingEmpDetails" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:450px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <span id="ApprPendingTitle"></span>
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.timeDash_ApprovalPending');m.modal('show');">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDashApprPendingEmpDetailsPopup">
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade timeDash_lessEmp" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:450px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Approval Pending
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_lessEmpPopup">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg" style="max-width:500px;height:190px;">
+            <div class="modal-content popup">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelauth">
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <end lowattendancerate start></end> -->
+
+    <div class="modal fade lowattendancerate" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Low Attendance Rate (Below 80 %)
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body lowattendanceratePopup">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade timeDash_MissingEmployeeDT" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:450px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <span id="AttndSettingsMissingTitle"></span>
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.timeDash_missing'); m.modal('show')">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body  timeDash_MissingEmployeeDTPopup">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade unauthorisedlop" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabelauthrzd">
+                        @*Unauthorized LOPs from the Month of June 2022*@
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.listunauth');m.modal('show');">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body unauthorisedlopPopup">
+                </div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade pendingreg" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabelauthrzd">
+                        Pending Regularization
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.listunauth');m.modal('show');">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body pendingregPopup">
+                </div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade timeDash_ApprovalPending" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content popup " style="height:450px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Approval Pending
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_ApprovalPendingPopup">
+
+                </div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade timeDash_missing" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content popup " style="height:370px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Attendance Settings Missing
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_missingPopup"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade timeDash_upcomingleaves" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:430px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Employees leave on next 15 days including today
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_upcomingleavesPopup">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade authorisedlop" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Authorized LOPs from the Month of June 2022
+
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body authorisedlopPopup">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade timeDash_dutyroster" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup" style="height:430px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Duty Roster Variance
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_dutyrosterPopup">
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade timeDash_absenteesim" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabelauth">
+                        Employees Absent more than 10 days
+
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_absenteesimPopup">
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade timeDash_previousmonthadjst" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Previous Month Adjustments
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_previousmonthadjstPopup">
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade timeDash_lesshour" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Less Hours
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body timeDash_lesshourPopup">
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade wfhleaves" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:430px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title">
+                        WFH
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade lopTile" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title">
+                        LOP
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body lopTilePopup">
+                </div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade notif_popup" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" style="max-width:1030px;">
+            <div class="modal-content popup " style="height:400px ;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title notif_popup_head">
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <!-- <end table></end> -->
+
+
+
+            </div>
+        </div>
+    </div>

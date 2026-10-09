@@ -1,0 +1,124 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+<style>
+    .bootstrap-select.form-control-sm .dropdown-toggle {
+        padding: 7px 13px !important;
+    }
+  
+    .form-control .btn.dropdown-toggle{
+        border:none !important;
+    }
+    .add_authority i {
+        color: #8c9eb9 !important;
+    }
+    .add_authority {
+        background-color: #3c64a1 !important;
+        color: #ffffff !important;
+        border: 1px solid #3c64a1;
+    }
+</style>
+
+<div class="step-outer step_row">
+
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+        Personal Info
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Job-Details')">
+        Job Details
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" data-bs-toggle="tooltip" data-bs-original-title="Compensation & Benefits" onclick="onStepCircleClick('Compensation')">
+        C & B
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Address')">
+        Address 
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Attendance-Settings')">
+        Attendance Settings
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('StatutoryAndPayment')">
+        Statutory & Payment
+        <span class="step-circle"></span>
+    </a>
+    @*<a href="#" class="step-item active" onclick="onStepCircleClick('Classification')">
+        Other Groupings
+        <span class="step-circle"></span>
+    </a>*@
+    <a href="#" class="step-item active">
+        ID & Manager Generation
+        <span class="step-circle"></span>
+    </a>
+</div>
+
+<div class="step-progress-outer">
+    <div class="step-left col-md-12">
+        <h3>ID & Manager Generation</h3>
+        <div class="row my-3">
+            @*<div class="col-md-5">
+                <div class="form-group ">
+                    <label>Reporting Manager</label>                  
+                    <span class="" style="padding:5px;">
+                        @Html.DropDownListFor(m => m.EmployeeSettings.ReportingManager.Code, (SelectList)ViewBag.ReportingMgr, "--Select Reporting Manager--", new
+                   {
+                       @class = "selectpicker form-control form-control-sm form-control rptMgr general-validation",
+                       //@onchange = "validateReportingManager(this,'rptMgr','reportingmanager')",
+                       data_show_subtext = "true",
+                       data_live_search = "true"
+                   })
+                    </span>
+                </div>
+                <span id="reportingmanager"></span>
+            </div>*@            
+                <div class="col-md-3   employeeIDTextBox">
+                    <div class="form-group">
+                        <label>Employee ID</label><span class="Mandatory">*</span>
+
+                        @Html.TextBoxFor(m => m.EmployeeSettings.EmployeeID, new { @class = "form-control form-control-sm", @maxlength = 20, @placeholder = "Employee ID", @onblur = "validate(this,'empid')" })
+                        <span id="empid"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 PunchingIDTextBox">
+                    <div class="form-group">
+                        <label>Punching ID</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.EmployeeSettings.PunchingID, new
+                        {
+                           @class = "form-control form-control-sm",
+                           @maxlength = 20,
+                           @placeholder = "Punching ID",@onblur= "validate(this, 'punchingid')",
+                           @onchange = "trim(this);"@*, @onkeypress = "return onlyNumberKey(event)"*@})
+                        <span id="punchingid"></span>
+                    </div>
+                </div>     
+            <div class="col-md-12">
+                <button type="button" data-bs-toggle="modal" data-target=".addAuthorityPopup" class="btn  float-right  add_authority" style="font-weight: 600; display: flex; align-items: center; background-color: transparent; color: #8c9eb9;" onclick="GetAuthorityDetails()"><i class="fa fa-plus" style="color: #fff !important;" aria-hidden="true" ></i>Add Authority</button>
+            </div>
+            </div>
+            <div class="row" id="reqvsAuthListView">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/EnrollmentTest/_RequestVsAuthorityList.cshtml", Model)
+            </div>            
+        </div>
+    </div>
+
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6">
+        <button type="button" onclick="PopUp_Preview()"
+                class="btn btn-default float-left mobile-full-width">
+            Salary Details
+        </button>
+
+    </div>
+    <div class="col-md-6">
+        <button type="button"
+                class="btn btn-default float-right mobile-full-width" onclick="Save(this)">
+            Save
+        </button>
+    </div>
+</div>

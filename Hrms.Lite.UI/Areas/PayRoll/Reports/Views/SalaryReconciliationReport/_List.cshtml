@@ -1,0 +1,65 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.SalaryReconciliation
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table salary_reconciliation_list vertical-scroll-350">
+    <table id="SalaryReconciliationReportTable">
+        <thead>
+            <tr class="table-dark">               
+                <th scope="col">Sl No.</th>
+                <th scope="col">Particulars</th>
+                <th scope="col">Head Count</th>
+                <th scope="col">Salary</th>                          
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.SalaryReconciliationDetails != null && Model.SalaryReconciliationDetails.Count > 0)
+            {
+
+                for (int i = 0; i < Model.SalaryReconciliationDetails.Count; i++)
+                {
+                    <tr>
+                      
+                        <td data-label="Sl No.">@Model.SalaryReconciliationDetails[i].Code</td>
+                            <td data-label="Particulars">
+
+                                <a href="" data-bs-toggle="modal" data-target=".sr-example-modal-lg" onclick="fillData('@Model.SalaryReconciliationDetails[i].Type',@Model.SalaryReconciliationDetails[i].BankCode);
+                            $('#allw').html('@Model.SalaryReconciliationDetails[i].Description');">
+                                    @Model.SalaryReconciliationDetails[i].Description
+                                    @Html.HiddenFor(m => m.SalaryReconciliationDetails[i].Code)
+                                    @Html.HiddenFor(m => m.SalaryReconciliationDetails[i].Type)
+                                </a>
+                                @Html.HiddenFor(m => m.SalaryReconciliationDetails.Count)
+
+
+                            </td>
+
+                   
+                       
+                        
+                        <td data-label="Head Count">
+
+                            @Model.SalaryReconciliationDetails[i].EmpCount
+
+                        </td>
+                        <td data-label="Salary">
+                            @Model.SalaryReconciliationDetails[i].Salary
+
+
+                        </td>                       
+
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>

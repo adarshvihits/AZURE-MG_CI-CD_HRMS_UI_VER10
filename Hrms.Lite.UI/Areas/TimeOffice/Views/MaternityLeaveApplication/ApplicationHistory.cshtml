@@ -1,0 +1,152 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.MaternityLeaveApplication
+
+@{
+    ViewData["Title"] = "ApplicationHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TimeOffice/maternityLeaveAppln.js"></script>
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Application History</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                   
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "MaternityLeaveApplication", new { Area = "TimeOffice" })" class="">Maternity Leave Application List</a>
+                        </li>
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Create", "MaternityLeaveApplication", new { Area = "TimeOffice",EmployeeGI=Model.LeaveApplication.EmployeeGI,employeeCode=Model.LeaveApplication.EmployeeHeader.EmployeeCode,EmployeeId=Model.LeaveApplication.EmployeeHeader.EmployeeId,EmployeeName=Model.LeaveApplication.EmployeeHeader.EmployeeName})" class=""> Maternity Leave Application</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted child-mute">
+                            Maternity Application History
+                        </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ">
+                                <span class="btn-title PendingTab active" onclick="tabClick('PendingTab', 'PENDING')">
+                                    Pending
+                                    <span class="btn-notification PendingCount">@Model.LeaveApplication.PendingCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title  ApprovedTab" onclick="tabClick('ApprovedTab', 'APPROVED')">
+                                    Approved
+                                    <span class="btn-notification ApprovedCount">@Model.LeaveApplication.ApproveCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title RejectedTab" onclick="tabClick('RejectedTab', 'REJECTED')">
+                                    Rejected
+                                    <span class="btn-notification RejectedCount">@Model.LeaveApplication.RejectedCount</span>
+                                </span>
+                            </div>
+                            <div class="tab-items medium">
+                                <span class="btn-title AllTab" onclick="tabClick('AllTab', 'ALL')">
+                                    All
+                                    <span class="btn-notification AllCount">@Model.LeaveApplication.TotalCount</span>
+                                </span>
+                            </div>
+
+                            <div class="tab-items select-option">
+
+
+                                <div class="form-group filter-combobox" style="margin-right: 10px;">
+                                    @Html.HiddenFor(m => m.LeaveApplication.EmployeeGI)
+                       
+                                    @Html.DropDownListFor(m => m.LeaveApplication.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod, new { @class = "form-control form-control-sm leaveCombo", @onchange = "validate(this,'Lperiod');$('#LeaveApplication_LeaveApplication_LeavePeriod_Code').val($('.leaveCombo').val());getList()" })
+                                    <span id="LPeriod"></span>
+                                </div>
+                                <div class="form-group filter-combobox" style="width: 220px; margin-right: 10px;">
+                                    @Html.DropDownListFor(m => m.LeaveApplication.LeaveType.Code, (SelectList)ViewBag.LeaveType, "All", new { @class = "form-control form-control-sm typecombo", @onchange = "$('#LeaveApplication_LeaveType_Code').val($('.typecombo').val());getList()" })
+                                    <span id="LType"></span>
+                                </div>
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div id="mat_list">
+                        @await Html.PartialAsync("_ApplicationHistoryList",Model)
+
+                    </div>
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->
+<!--end::Content-->

@@ -1,0 +1,73 @@
+@model Hrms.Lite.Shared.DataBank.DTO.PositionManager
+@{
+    var branchList = Model.BranchSummaryList ?? new List<Hrms.Lite.Shared.DataBank.DTO.PositionManagerBranchSummary>();
+    var maxBranchTotal = branchList.Count > 0 ? branchList.Max(x => x.Total) : 0;
+    Func<int, string> percentOf = value => maxBranchTotal > 0 ? (value * 100.0 / maxBranchTotal).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture) : "0";
+    Func<int, string> shareOf = value => Model.TotalPositions > 0 ? (value * 100 / Model.TotalPositions) + "% of total" : "0% of total";
+}
+
+<div class="stat-row pm-stat-row">
+    <div class="stat-tile">
+        <div class="stat-label">Total positions</div>
+        <div class="stat-value">@Model.TotalPositions</div>
+        @* <div class="stat-sub">matching current filters</div> *@
+    </div>
+    <div class="stat-tile tone-success">
+        <div class="stat-label">Filled</div>
+        <div class="stat-value">@Model.FilledPositions</div>
+        <div class="stat-sub">@shareOf(Model.FilledPositions)</div>
+    </div>
+    <div class="stat-tile tone-warning">
+        <div class="stat-label">Vacant</div>
+        <div class="stat-value">@Model.VacantPositions</div>
+        <div class="stat-sub">open requisitions</div>
+    </div>
+    <div class="stat-tile tone-neutral">
+        <div class="stat-label">Frozen</div>
+        <div class="stat-value">@Model.FrozenPositions</div>
+        <div class="stat-sub">on hold, not recruiting</div>
+    </div>
+    <div class="stat-tile tone-accent">
+        <div class="stat-label">Branches</div>
+        <div class="stat-value">@Model.BranchCount</div>
+        <div class="stat-sub">branches in scope</div>
+    </div>
+</div>
+
+<div class="pm-branch-card">
+    <div class="pm-section-title">Positions by branch</div>
+    <div class="pm-legend">
+        <span><i class="pm-swatch pm-filled"></i>Filled</span>
+        <span><i class="pm-swatch pm-vacant"></i>Vacant</span>
+        <span><i class="pm-swatch pm-frozen"></i>Frozen</span>
+    </div>
+
+    @if (branchList.Count > 0)
+    {
+        foreach (var branch in branchList)
+        {
+            <div class="pm-bar-row">
+                <div class="pm-bar-label" title="@branch.BranchName">@branch.BranchName</div>
+                <div class="pm-bar-track">
+                    @if (branch.Filled > 0)
+                    {
+                        <div class="pm-bar-seg pm-filled" style="width:@percentOf(branch.Filled)%" data-bs-toggle="tooltip" title="Filled: @branch.Filled"></div>
+                    }
+                    @if (branch.Vacant > 0)
+                    {
+                        <div class="pm-bar-seg pm-vacant" style="width:@percentOf(branch.Vacant)%" data-bs-toggle="tooltip" title="Vacant: @branch.Vacant"></div>
+                    }
+                    @if (branch.Frozen > 0)
+                    {
+                        <div class="pm-bar-seg pm-frozen" style="width:@percentOf(branch.Frozen)%" data-bs-toggle="tooltip" title="Frozen: @branch.Frozen"></div>
+                    }
+                </div>
+                <div class="pm-bar-total num">@branch.Total</div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="pm-empty">No positions found</div>
+    }
+</div>

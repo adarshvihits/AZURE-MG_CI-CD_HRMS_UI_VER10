@@ -1,0 +1,111 @@
+﻿
+@model Hrms.Lite.Shared.Master.CostCenter
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>
+    (Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/settings.js"></script>
+
+<script>
+        $(document).ready(function () {
+            debugger;
+           
+            $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+
+        });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Cost-center-list ">
+    <table class="common-table dt-width-fix">
+        @Html.HiddenFor(m=>Model.CostCenterList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Cost Center Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @{
+                if (Model.CostCenterList != null && Model.CostCenterList.Count > 0)
+                {
+                    for (int i = 0; i < Model.CostCenterList.Count; i++)
+
+                    {
+
+                        <tr>
+
+                            <td data-label="Code">@Model.CostCenterList[i].CostCenterUserCode</td>
+                            <td data-label="Name">@Model.CostCenterList[i].Name</td>
+                            <td data-label="Name">@Model.CostCenterList[i].ShortName</td>
+                        
+                            <td data-label="Actions">
+                                <div>
+
+                                    @Html.HiddenFor(model => Model.LogGI)
+                                    @Html.HiddenFor(model => Model.Description)
+                                    @Html.HiddenFor(model => Model.Active)
+                                    @Html.HiddenFor(m => m.CostCenterList[i].EditActive)
+                                    @Html.HiddenFor(model => Model.GI)
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="circleedit"
+                                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="circleedit"
+                                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI',@i);
+                                                swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="deletecircle"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="deletecircle"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</div>

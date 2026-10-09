@@ -1,0 +1,57 @@
+﻿@model Hrms.Lite.Shared.DashBoard.HRPlanningDashBoard
+
+<script>
+
+    function onSeriesOver(e) {
+        $("#monthResignation").css("cursor", "pointer");
+    }
+    function onSeriesClick(e) {
+        console.log(e);
+    }
+</script>
+
+@using Kendo.Mvc.UI
+
+@(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MonthWiseTerminationList>()
+                                .Name("monthResignation")
+                                .Title("")
+                                .Events(e => e.SeriesOver("onSeriesOver")
+                                     .PlotAreaClick("onSeriesClick"))
+                                .Legend(legend => legend
+    .Visible(false))
+                                            //.Legend(legend => legend
+                                            //    .Position(ChartLegendPosition.Bottom)
+
+                                            //    .Labels(x => x.Font("8px Arial,Helvetica,sans-serif"))
+
+
+                                            //)
+                                            .DataSource(ds => ds.Read(read => read.Action("GetResignationMonthwiseCount", "HRPlanningDashBoard")))
+                                .Series(series =>
+                                {
+                                    series.Line(model => model.ejocount).Name("newcomer").CategoryField("monthName").Color("#7ce5d3").Width(1);
+                                    series.Line(model => model.esepcount).Name("leaver").CategoryField("monthName").Color("#e26a05").Width(1);
+
+                                })
+                                .ChartArea(ch => ch.Width(300).Height(195))
+                                .CategoryAxis(axis => axis
+                                .Visible(false) // Ensure the axis is visible (if needed)
+                                                //.Labels(labels => labels.Rotation(0))
+                                    .MajorGridLines(lines => lines.Visible(false)) // Remove major grid lines
+                                    .MinorGridLines(lines => lines.Visible(false)) // Remove minor grid lines
+                                                                                   //.Crosshair(c => c.Visible(true))
+                                )
+                                .ValueAxis(axis => axis.Numeric()
+                                .Visible(false) // Ensure the axis is visible (if needed)
+                                                //.Labels(labels => labels.Format("{0:N0}"))
+                                 .MajorGridLines(lines => lines.Visible(false)) // Remove major grid lines
+                                 .MinorGridLines(lines => lines.Visible(false)) // Remove minor grid lines
+                                )
+                                .Tooltip(tooltip => tooltip
+                                    .Visible(true)
+                                    .Shared(true)
+                                    .Format("{0:N0}")
+                                )
+
+
+        )

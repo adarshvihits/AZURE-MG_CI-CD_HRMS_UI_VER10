@@ -1,0 +1,183 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TDS/investmentDeclaration.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    @Html.HiddenFor(m => m.EmployeeGuid)
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Investment Declaration</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "InvestmentDeclaration", new { Area = "TDS"})">Investment Declaration List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Investment Declaration
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="profile-header position-relative box-shadow-none mb-2">
+                        <!--begin: Search Form-->
+                         @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+                        <div class="profile-header-overflow"></div>
+                    </div>
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items ml-5 pr-0 border-none select-option">
+                                    <div class="row-outer">
+                                        <div class="form-group filter-combobox mr-2" style="width: 269px;">
+                                            @Html.DropDownListFor(model => model.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, "--Select Assessment Year--", new { @class = "form-control form-control-sm"@*, @onblur= "validate(this,'Allowance_span')"*@, @onchange = "fillData();validate(this,'Assessmnt_year')",@disabled = "disabled" })
+                                            <span id="Assessmnt_year" style="bottom: -15px;"></span>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                        <!-- Table Section -->
+                        <div id="SettingsEmployeeList">
+                            <div class="tab-outer accordion-only pt-7">
+                                <ul class="ulList">
+                                    <div class="TabMoving"></div>
+                                    <li class="tabOne Investment-tap-color clickOnTab active  ">House Rental</li>
+                                    <div id="tabOne" class="tab-content active ">
+
+                                        @await Html.PartialAsync("_HouseRental", Model)
+
+
+
+
+                                        @*<div class="accoding-new-color-change">House Rent Landlord Details</div>
+                                        @await Html.PartialAsync("_LandlordList", Model)*@
+
+                                    </div>
+                                    <!-- Contact Details Info Tab -->
+                                    <div class="TabMoving"></div>
+                                    <li class="tabTwo Investment-tap-color clickOnTab">Investment Under Section 80-C</li>
+                                    <div id="tabTwo" class="tab-content">
+                                        @await Html.PartialAsync("_80CDeductions", Model)
+
+
+
+                                        @*<div class="accoding-new-color-change"> LIC</div>
+                                        @await Html.PartialAsync("_LICList", Model)*@
+                                    </div>
+
+                                    <!-- Contact Details Info Tab -->
+                                    <!-- Personal Info Tab -->
+                                    <div class="TabMoving"></div>
+                                    <li class="tabThree  Investment-tap-color clickOnTab">Chapter VI A</li>
+                                    <div id="tabThree" class="tab-content">
+                                        @await Html.PartialAsync("_ChapterVIA", Model)
+                                    </div>
+                                    <!-- Personal Info Tab -->
+                                    <!-- Family Details Tab -->
+                                    @*<div class="TabMoving"></div>
+                                    <li class="tabFour clickOnTab">80G</li>
+                                    <div id="tabFour" class="tab-content">
+                                        @await Html.PartialAsync("_80GDonation", Model)
+
+
+                                    </div>*@
+
+                                    <div class="TabMoving"></div>
+                                    <li class="tabFive  Investment-tap-color clickOnTab">Self Occupied House Loan Repayment</li>
+                                    <div id="tabFive" class="tab-content">
+
+                                        @await Html.PartialAsync("_HouseLoanRepayList", Model)
+                                    </div>
+                                    <!-- Education Details Tab -->
+                                    <!-- Skills Tab -->
+                                    <div class="TabMoving"></div>
+                                    <li class="tabSix clickOnTab Investment-tap-color">Income from Let Out House Property</li>
+                                    <div id="tabSix" class="tab-content">
+
+                                        @await Html.PartialAsync("_LetOutHousePropertyList", Model)
+
+
+                                    </div>
+                                    <!-- Skills Tab -->
+                                    <!-- Skills Tab -->
+                                    <div class="TabMoving"></div>
+                                    <li class="tabSeven clickOnTab  Investment-tap-color">Other Income</li>
+                                    <div id="tabSeven" class="tab-content">
+
+                                        @await Html.PartialAsync("_OtherIncomeList", Model)
+
+                                    </div>
+                                    <!-- Skills Tab -->
+                                    <!-- Previous Employment Tab -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Table Setion End -->
+                        <div class="row card-footer-bottom-fixed">
+
+
+
+
+                        </div>
+                        <!--end: Datatable-->
+
+                    </div>
+
+                </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->

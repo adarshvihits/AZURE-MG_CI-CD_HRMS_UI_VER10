@@ -1,0 +1,109 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+
+<div class="ihits-table table-border vertical-scroll-400  mobile-responsive-table advanced-employee-wise-attendance-entry-list">
+    <table id="eaEntry_edit_Table" >
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Date</th>
+                <th scope="col">Day</th>
+                <th data-bs-toggle="tooltip" title="Shift Code" scope="col">Shift</th>
+                <th scope="col">IN</th>
+                <th scope="col">OUT</th>
+                <th data-bs-toggle="tooltip" title="Total Time" scope="col">Tot.Time</th>
+                <th data-bs-toggle="tooltip" title="First Half" scope="col">FH</th>
+                <th data-bs-toggle="tooltip" title="Second Half" scope="col">SH</th>
+                <th data-bs-toggle="tooltip" title="COFF Entitled Date" scope="col">COFF Ent.Date</th>
+                <th scope="col">Edit</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @Html.HiddenFor(m=>m.Employee_DailyAttendanceEditDetails.Count)
+            @if (Model.Employee_DailyAttendanceEditDetails != null && Model.Employee_DailyAttendanceEditDetails.Count > 0)
+            {
+                @for (int i = 0; i < Model.Employee_DailyAttendanceEditDetails.Count; i++)
+                {
+
+            <tr>
+                <td data-label="Date">
+                    @Model.Employee_DailyAttendanceEditDetails[i].Date.ToString("dd-MMM-yyyy")
+                    @Html.HiddenFor(m => m.Employee_DailyAttendanceEditDetails[i].FHType.Name)
+                    @Html.HiddenFor(m => m.Employee_DailyAttendanceEditDetails[i].SHType.Name)
+                    @{ string dte = Model.Employee_DailyAttendanceEditDetails[i].Date.ToString("dd-MMM-yyyy");}
+                    <input type="hidden" id="Employee_DailyAttendanceEditDetails_@(i)__Date" value="@dte" />
+                </td>
+                <td data-label="Day">@Model.Employee_DailyAttendanceEditDetails[i].Day</td>
+                <td data-label="Shift Code">@Model.Employee_DailyAttendanceEditDetails[i].Shift.Name</td>
+                <td data-label="IN">@Model.Employee_DailyAttendanceEditDetails[i].IN</td>
+                <td data-label="OUT">@Model.Employee_DailyAttendanceEditDetails[i].OUT</td>
+
+                <td data-label="Total Time">@Model.Employee_DailyAttendanceEditDetails[i].TotalTime</td>
+                <td data-label="FH">
+                    <span id="hideFH_@i"> @Model.Employee_DailyAttendanceEditDetails[i].FirstHalf.Name</span>
+                    <span id="FHTxtbox_@i" class="hide">
+                        @Html.DropDownListFor(m => m.Employee_DailyAttendanceEditDetails[i].FirstHalf.Code, (SelectList)ViewBag.AttendenceStatus, "Select", new
+              {
+                  @class = "form-control form-control-sm",
+                  @onchange = "validatefh(this," + i + ");"
+              })
+                    </span>
+
+                </td>
+                <td data-label="SH">
+                    <span id="hideSH_@i"> @Model.Employee_DailyAttendanceEditDetails[i].SecondHalf.Name</span>
+                    <span id="SHTxtbox_@i" class="hide">
+                        @Html.DropDownListFor(m => m.Employee_DailyAttendanceEditDetails[i].SecondHalf.Code, (SelectList)ViewBag.AttendenceStatus, "Select", new
+                   {
+                       @class = "form-control form-control-sm",
+                       @onchange = "validatesh(this," + i + ");"
+                   })
+                    </span>
+                </td>
+                <td data-label="COFF">
+
+                    <span id="hideCOFF_@i">  @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Employee_DailyAttendanceEditDetails[i].EntitleDate))</span>
+                    <span id="COFFTxtbox_@i" class="hide">
+                        @Html.DropDownListFor(m => Model.Employee_DailyAttendanceEditDetails[i].EntitleDate, (SelectList)ViewBag.COFF,
+
+                           new { @class = "form-control form-control-sm coffdropdown_" + i })
+                    </span>
+                </td>
+                <td data-label="Edit">
+                    <div class="small-btn-group" id="edit_@i">
+                        <a data-bs-toggle="tooltip" title="Edit" class="btn btn-icon btn-edit icon-only"
+                           onclick="validateEdit('@Model.EmployeeGI', '@Model.Employee_DailyAttendanceEditDetails[i].Date.ToString("yyyy-MM-dd")',
+                       @Model.EmployeeHeader.EmployeeCode,@i)"><i class="icon-xl fas fa-pencil-alt"></i></a>
+                    </div>
+                    <div class="small-btn-group hide" id="updatecancel_@i">
+                        <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only">
+                            <i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick(@i)">
+                            </i>
+                        </button>
+
+                        <button type="button" data-bs-toggle="tooltip"
+                                title="Cancel"
+                                class="btn btn-icon btn-delete icon-only btn-bg-info " onclick="onCancelClick(@i)">
+                            <i class="icon-xl fas fa-times"></i>
+                        </button>
+                    </div>
+
+                </td>
+
+            </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10"> No data</td>
+                </tr>
+            }
+
+
+
+
+
+        </tbody>
+    </table>
+</div>
+<!-- Table Setion End -->

@@ -1,0 +1,105 @@
+﻿@model Hrms.Lite.Shared.Master.VersionUpdate
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+
+@using (Html.BeginForm("Save", "VersionUpdate", FormMethod.Post, new { id = "VersionUpdateSave" }))
+{
+    <div id="VersionUpdateedit" class="slider-forms slider-forms-open AddVersionUpdateDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddVersionUpdateDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Version Update</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Version
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+
+                            @Html.DropDownListFor(Model => Model.Version.Code, (SelectList)ViewBag.AddVersionDropdown, "--Select Version--", new { @class = "form-control form-control-sm stateCountry", @onblur = "validate(this,'VersionUpdateVersion')" })
+                            <span id="VersionName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Module
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.DropDownListFor(Model => Model.Module.Code, (SelectList)ViewBag.ModuleDropdown, "--Select Module--", new { @class = "form-control form-control-sm stateCountry", @onblur = "validate(this,'VersionUpdateModule')" })
+                            <span id="ModuleName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                               Type
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.DropDownListFor(Model => Model.Type.Code, (SelectList)ViewBag.TypeDropdown, "--Select Type--", new { @class = "form-control form-control-sm stateCountry", @onblur = "validate(this,'VersionUpdateType')" })
+                            <span id="TypeName"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <div class="view-details">
+                            
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm sDescription", @placeholder = "Description", maxlength = 250 })
+                                <span id="VersionUpdateDescription"></span>
+                           
+                            <span id="VersionUpdateDescription" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="VersionUpdateSaveClick('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="VersionUpdateSaveClick('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

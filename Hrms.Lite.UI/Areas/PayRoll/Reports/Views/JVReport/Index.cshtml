@@ -1,0 +1,228 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.JVReport
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/scripts/PayRoll/Reports/JVReport.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+    
+    });
+</script>
+<style>
+    
+
+    .radio-inline .radio {
+        margin-bottom: 0;
+    }
+</style>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                   JV Report
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        JV Report
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body">
+
+
+                            @using (Html.BeginForm("ExportToExcelJVReport", "JVReport", FormMethod.Post, new
+                            {
+                                id = "ExportToExcelJVReport"
+                            }))
+                            {
+
+
+                                <div class="row tab-style-button">
+                                    <div class="col-md-6">
+                                        <div class="page_white">
+                                            <div class="row pb-5">
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label>Period</label><span class="Mandatory">*</span>
+                                                        @Html.DropDownListFor(Model => Model.PayrollMonth.Code, (SelectList)ViewBag.month, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'month')" })
+                                                        <span id="month"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label>Payroll Group</label><span class="Mandatory">*</span>
+                                                        @Html.DropDownListFor(Model => Model.PayrollGroup, (SelectList)ViewBag.PayrollGrp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'payrollgrp')" })
+                                                        <span id="payrollgrp"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                @*<div class="row my-2">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Fun.Designation</label>
+                                                            @Html.DropDownListFor(Model => Model.Designation, (SelectList)ViewBag.Dsg, "--Select--", new { @class = "form-control form-control-sm" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Department</label>
+                                                            @Html.DropDownListFor(Model => Model.Department, (SelectList)ViewBag.Dept, "--Select--", new { @class = "form-control form-control-sm" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+
+                                                        <div class="form-group">
+                                                            <label>Location</label>
+                                                            @Html.DropDownListFor(Model => Model.Location, (SelectList)ViewBag.Loc, "--Select--", new { @class = "form-control form-control-sm" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Division</label>
+                                                            @Html.DropDownListFor(Model => Model.Division, (SelectList)ViewBag.division, "--Select--", new { @class = "form-control form-control-sm" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row my-2">
+                                                  
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Region</label>
+                                                            @Html.DropDownListFor(Model => Model.Region, (SelectList)ViewBag.region, "--Select--", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+
+                                              
+
+                                                <div class="row my-2">
+
+                                                    <div class="col-md-7">
+                                                        <label style=" font-weight: 600; padding-right: 5px; padding-bottom: 4px;">Type  On :</label>
+                                                        <div class="d-flex align-items-center ">
+
+
+                                                            <div class="radio-inline">
+                                                                <label class="radio radio-outline radio-success" style="margin-right:25px;">
+                                                                    @Html.RadioButtonFor(m => m.BasedOn, "0")
+                                                                    <span></span>General
+                                                                </label>
+                                                                <label class="radio radio-outline radio-success" style="margin-right:25px;">
+
+                                                                    @Html.RadioButtonFor(m => m.BasedOn, "1")
+                                                                    <span></span>Blocked Salary
+                                                                </label>
+                                                                @*<label class="radio radio-outline radio-success">
+
+                                                                    @Html.RadioButtonFor(m => m.BasedOn, "2")
+                                                                    <span></span>Post Exit Processing
+                                                                </label>*@
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+
+
+                                                <!-- <end table></end> -->
+
+                                            </div>
+
+
+                                            <div class="row ">
+                                                <div class="col-md-12">
+                                                    <button type="button"
+                                                            class="btn btn-default float-right mobile-full-width " onclick="ExportToExcelERPJV()">
+                                                       ERP JV
+                                                    </button>
+                                                    @*<button type="button"
+                                                            class="btn btn-default float-right mobile-full-width " onclick="CreateECR()">
+                                                        Create ECR
+                                                    </button>*@
+                                                    <button type="button"
+                                                            class="btn btn-default float-right mobile-full-width " onclick="ExportToExcelJVReport()">
+                                                        Export To Excel
+                                                    </button>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <end col-6></end> -->
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                <end col-12></end> -->
+
+
+
+            </div>
+
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>

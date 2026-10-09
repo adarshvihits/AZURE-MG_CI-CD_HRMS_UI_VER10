@@ -1,0 +1,87 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RequestVsAuthority
+
+
+<script src="~/scripts/DataBank/requestvsAuthority.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#BatchUpdate_RequestAuthority_Code').selectpicker();    
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", id = "batchSaveId" }))
+{
+    <div id="requestAthorityBachUpdate" class="slider-forms slider-forms-open add-batch">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('add-batch')"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Request Type</label>
+                        <span class="Mandatory">*</span>                   
+                        @Html.DropDownListFor(m => m.BatchUpdate.RequestType.Code, (SelectList)ViewBag.Rqt, "--Select Request Type--", new { @class = "form-control form-control-sm", onchange = "validate(this,'reqtype');ontypeChange()" })
+                        <span id="reqtype"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="levelhide" class="form-group">
+                        <label>Level</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.BatchUpdate.RequestLevel.Code, (SelectList)ViewBag.Rql, "--Select Level--", new { @class = "form-control form-control-sm", onchange = "validate(this,'reqlevel')" })
+                        <span id="reqlevel"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Authority</label>
+                        <span class="Mandatory">*</span>
+
+                        <div>
+                            @Html.DropDownListFor(m => m.BatchUpdate.RequestAuthority.Code, (SelectList)ViewBag.Aut, "--Select Authority--", new
+                 {
+                     @class = "selectpicker sliderSearchInput form-control form-control-sm reqAuth",
+                     @onchange = "validateReqAuthority(this,'reqAuth','reqauthority')",
+                     data_show_subtext = "true",
+                     data_live_search = "true",
+                 })
+                        </div>
+                      
+                        @*@Html.DropDownListFor(m => m.BatchUpdate.RequestAuthority.Code, (SelectList)ViewBag.Aut, "--Select Level--", new
+                                 {
+                                     @class = "form-control form-control-sm selectpicker sliderSearchInput",
+                                     @onchange = "validate(this,'reqauthority')",
+                                data_show_subtext = "true",
+                                data_live_search = "true"
+                            })*@
+                        <span id="reqauthority"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="row container card-footer-bottom-fixed border-none">
+                <div class="text-center pb-2 w-100">
+                    <label style="font-size:12px;color:red">NOTE:- If filter is applied batch update only applicable for the applied filters</label>
+                </div>
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="RequestVsAuthorityBatchUpdateValidation()">
+                        Update
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+

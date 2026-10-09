@@ -1,0 +1,65 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.CompanyDocumentUpload
+<div id="sliderView" class="slider-container"></div>
+@Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+
+@using (Html.BeginForm("SliderSave", "CompanyDocumentUpload", FormMethod.Post, new { id = "SliderSave" }))
+{
+    <div id="" class="slider-forms slider-forms-open addslider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('addslider')"></i>
+            </div>
+            <h4>
+                Company Document Upload
+            </h4>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+            <div class="row my-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Document Name </label>
+                        @Html.DropDownListFor(m => m.CompanyDocument.Code, (SelectList)ViewBag.doc, "--Select--", new { @class = "form-control form-control-sm" })
+                        <div class="form-group filter-combobox mt-0">
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach File
+                            <span class="Mandatory">*</span>
+                        </label>
+                        <div class="file-upload-form mb-4" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 5 MB.">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                         
+                            
+                         
+                            @Html.TextBoxFor(Model => Model.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)", @title = "" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <a 
+                       class="btn btn-default  mobile-full-width" onclick="DocSave()">
+                        Save
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

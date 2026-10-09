@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.DataBank.BulkLeaveApplicablity
+<script src="~/js/tooltip.js"></script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "EmpList" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table BulkLeaveApplicablity_unmatch vertical-scroll-500">
+
+        <table id="ApplicabilityListTable">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location </th>
+                    <th scope="col">@Model.HeaderName</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.BulkLeaveApplicablityList != null && Model.BulkLeaveApplicablityList.Count > 0)
+                {
+                    for (int i = 0; i < Model.BulkLeaveApplicablityList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.BulkLeaveApplicablityList[i].EmployeeID
+                                @Html.HiddenFor(m => m.BulkLeaveApplicablityList[i].EmployeeGuid)
+                                @Html.HiddenFor(m => m.LeaveTypeCode)
+                                @Html.HiddenFor(m => m.LeaveGroupCode)
+                            </td>
+                            <td>@Model.BulkLeaveApplicablityList[i].Name </td>
+                            <td>@Model.BulkLeaveApplicablityList[i].Designation</td>
+                            <td>@Model.BulkLeaveApplicablityList[i].Department</td>
+                            <td>@Model.BulkLeaveApplicablityList[i].Location</td>
+                            <td>
+
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        @Html.CheckBoxFor(m => m.BulkLeaveApplicablityList[i].Applicable)@*, new { @onclick = "onChkBoxClick(this,'AllListTable')" })*@
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row card-footer-bottom-fixed">
+            @if (Model.BulkLeaveApplicablityList != null && Model.BulkLeaveApplicablityList.Count > 0)
+            {
+                <div class="col-md-9">
+                    <span class="row-count align-left"><b>Total Rows:<span id="rwCnt">@Model.BulkLeaveApplicablityList.Count</span></b></span>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-default float-right mobile-full-width" id="saveButton" type="button" onclick="onSaveApplicabilityClick()">
+                        Save
+                    </button>
+
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Table Setion End -->
+}

@@ -1,0 +1,148 @@
+﻿@model Hrms.Lite.Shared.Master.WageGradeMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table wage-grade-pending-list pt-1">
+    @Html.HiddenFor(m => m.WageGradeList.Count)
+    <table id="WageGradePendingTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @{
+
+
+                if (Model.WageGradeList != null && Model.WageGradeList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.WageGradeList.Count; i++)
+                    {
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.WageGradeList[i].MakerChecker)
+                            <td data-label="Name">@Model.WageGradeList[i].Name</td>
+                            <td data-label="ShortName">@Model.WageGradeList[i].ShortName</td>
+                            <td data-label="Entry Type">@Model.WageGradeList[i].EntryType</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="gradeapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.WageGradeList[i].GI','@Model.WageGradeList[i].LogGI','APPROVAL', @i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="gradeapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.WageGradeList[i].GI', '@Model.WageGradeList[i].LogGI', 'APPROVAL', @i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+        </tbody>
+    </table>
+</div>
+
+@*<div class="row card-footer-bottom-fixed">
+
+        <div class="col-md-12 align-right">
+            <a id="wageGradeMasterAdd" type="button"
+               class="btn btn-default float-right mobile-full-width slider-btn">
+                Add
+                New
+            </a>
+            <div id="wageGradeMasterAdd" class="slider-forms">
+                <div class="slider-inner-style">
+                    <div class="slider-form-close">
+                        <i class="ki ki-close icon-xs text-muted"></i>
+                    </div>
+                    <h4>
+                        Wage Grade
+                    </h4>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text"
+                                       class="form-control form-control-sm"
+                                       placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Short Name</label>
+                                <input type="text"
+                                       class="form-control form-control-sm"
+                                       placeholder="Short Name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mt-2 mb-2">
+                            <label class="switch">
+                                Active
+                                <input type="checkbox" checked="">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+
+                        <div class="col-md-12">
+                            <label>Description</label>
+                            <textarea class="form-control form-control-sm"
+                                      placeholder="Description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            <a type="button"
+                               class="btn btn-default  mobile-full-width">
+                                Save
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>*@

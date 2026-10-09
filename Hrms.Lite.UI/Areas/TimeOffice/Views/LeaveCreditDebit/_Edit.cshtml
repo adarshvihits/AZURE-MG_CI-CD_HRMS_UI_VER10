@@ -1,0 +1,206 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCreditDebit
+<script src="~/js/tooltip.js"></script>
+<script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            //if('@Model.LeaveCreditDebitEditDetils.DebitCredit.Name' == "Credit")
+                moveCursorToEnd('LeaveCreditDebitEditDetils_Value');
+        });
+
+    $(window).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (preventENterFlag == 0)
+                    EmployeeWiseLeaveCreditDebitSave('@Model.LeaveCreditDebitEditDetils.DebitCredit.Name');
+                return false;
+            }
+        });
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "editSave" }))
+{
+    @Html.HiddenFor(m => m.LeaveCreditDebitEditDetils.Leave.Code)
+    @Html.HiddenFor(m => m.LeaveCreditDebitEditDetils.DebitCredit.Code)
+    @Html.HiddenFor(m => m.LeaveCreditDebitEditDetils.LeavePeriod.Code)
+    @Html.HiddenFor(m => m.LeaveCreditDebitEditDetils.Month.Code)
+    @Html.HiddenFor(m => m.EmployeeGI)
+    @Html.HiddenFor(m => m.LeaveCreditDebitEditDetils.DebitCredit.Name)
+   
+        <div id="leaveDebitEdit" class="slider-forms slider-forms-open leavCreditDebitEdit">
+            <div class="slider-inner-style new-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('leavCreditDebitEdit');preventENterFlag = 1">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <div class="location-slider">
+                    @if (Model.LeaveCreditDebitEditDetils.DebitCredit.Name == "Credit")
+                    {
+                        <h4>
+                            Leave Credit
+                        </h4>
+                    }
+                    else
+                    {
+                        <h4>
+                            Leave Debit
+                        </h4>
+                    }
+
+                    <div class="profile-header position-relative pb-12 mb-5"
+                         style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                        <div class="row">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                        </div>
+                        <div class="profile-header-overflow"></div>
+                    </div>
+                </div>
+                <div class="add-padding">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Leave Period</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.LeavePeriod.Name
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Month</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.Month.Name
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row ">
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Type</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.DebitCredit.Name
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Leave</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.Leave.Name
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Current Balance</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.Balance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Total Taken</label>
+                                <div class="view-details">
+                                    Taken
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Applied Leave</label>
+                                <div class="view-details">
+                                    @Model.LeaveCreditDebitEditDetils.Applied
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="row-outer">
+                                @if (Model.LeaveCreditDebitEditDetils.DebitCredit.Name == "Credit")
+                                {
+                                    <label>Credit</label>
+                                    @Html.TextBoxFor(m => m.LeaveCreditDebitEditDetils.Value, new { @class = "form-control form-control-sm creditval", @placeholder = "Credit", @onblur = "validate(this,'credit')", onkeypress = "return onlyAmount(event)", @maxlength = "4" })
+                                    <span id="credit"></span>
+                                }
+                                else
+                                {<label>Debit</label>
+                                    @Html.TextBoxFor(m => m.LeaveCreditDebitEditDetils.Value, new { @class = "form-control form-control-sm debitval", @placeholder = "Debit", @onblur = "validate(this,'debit')", onkeypress = "return onlyAmount(event)", @maxlength = "4" })
+                                    <span id="debit"></span>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="row-outer">
+                                <label>Remarks</label>
+                                @Html.TextAreaFor(m => m.LeaveCreditDebitEditDetils.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @onblur = "validate(this,'remarks')", @maxlength = "250" })
+                                <span id="remarks"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <h4 class="">Log</h4>
+                    <div class="ihits-table table-border vertical-scroll-150  hover-color odd-even leave-credit-debit-list-slider">
+                        <table>
+                            <thead>
+                                <tr class="table-light">
+                                    <th scope="col">SlNo</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Count</th>
+                                    <th scope="col">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails != null && Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails.Count; i++)
+                                    {
+                                        <tr>
+
+                                            <td data-label="ID">@Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails[i].SlNo</td>
+                                            <td data-label="Employee Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails[i].LogDATE))  </td>
+                                            <td data-label="Designation">@Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails[i].TYPE</td>
+                                            <td data-label="Department">@Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails[i].Opening </td>
+                                            <td data-label="Location">@Model.LeaveCreditDebitEditDetils.LeaveCrDrLogDetails[i].Remarks</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+
+
+                    <div class="row card-footer-bottom-fixed border-none">
+                        <div class="col-md-12 align-right">
+                            <button type="button" onclick="EmployeeWiseLeaveCreditDebitSave('@Model.LeaveCreditDebitEditDetils.DebitCredit.Name')"
+                                    class="btn btn-default  mobile-full-width">
+                                Modify
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+}

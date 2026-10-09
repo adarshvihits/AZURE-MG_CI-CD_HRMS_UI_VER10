@@ -1,0 +1,96 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ResignationTracker
+
+<script src="~/js/settings.js"></script>
+
+    <div class="ihits-table table-border odd-even mobile-responsive-table Resignation-tracking-report">
+        @Html.HiddenFor(m => m.List.Count)
+        <table class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">
+                        ID
+                    </th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">
+                        Department
+                    </th>
+                    <th scope="col">
+                        Location
+                    </th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Date Of Joining">DOJ</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Resignation Date">Res. Date</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Last Working Days">Actual LWD</th>
+                    <th scope="col">Approved LWD</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Justification</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tracker</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.List != null && Model.List.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.List.Count; i++)
+                    {
+
+                <tr>
+                    <td data-label="Id">
+                        @Model.List[i].EmployeeID
+                    </td>
+                    <td data-label="Employee name">
+                        @Model.List[i].EmployeeName
+
+
+
+                    </td>
+                    <td data-label="Designation">
+                        @Model.List[i].Designation
+                    </td>
+                    <td data-label="Department">
+                        @Model.List[i].Department
+                    </td>
+                    <td data-label="location">
+                        @Model.List[i].Location
+                    </td>
+                    <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.List[i].DOJ))</td>
+
+                    <td data-label="Res.date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.List[i].ResignationDate)) </td>
+
+                    <td data-label="LWD">
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.List[i].LWD))
+                    </td>
+                    <td data-label="LWD">
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.List[i].ApprovedLWD))
+                    </td>
+                    <td data-label="LWD">
+                        @Model.List[i].Reason
+                    </td>
+                    <td data-label="LWD">
+                        @Model.List[i].Justification
+                    </td>
+                    <td data-label="Stage">  @Model.List[i].Status </td>
+                    <td data-label="Tracker">
+
+
+                        @*<a href="#" id="applicant " class="slider-btn">
+                <i class="icon-xl la la-arrow-circle-right"></i>
+            </a>*@
+
+                        <a id="applicant " onclick="GetResignationTracker('@Model.List[i].ResignationGI', '@Model.List[i].EmployeeGI')">
+                            <i class="icon-xl la la-arrow-circle-right"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                    }
+                }
+
+                    </tbody>
+        </table>
+    </div>

@@ -1,0 +1,105 @@
+﻿
+@model Hrms.Lite.Shared.Master.JoiningCheckList
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+        //$('#JoiningCheckListTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table joiningchecklist-master-list pt-1 ">
+    @Html.HiddenFor(m => m.JoiningChecklist.Count)
+    <table id="JoiningCheckListTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Items</th>
+                <th scope="col">Type</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.JoiningChecklist != null && Model.JoiningChecklist.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.JoiningChecklist.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.JoiningChecklist[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            <td data-label="Check Item">@Model.JoiningChecklist[i].Name</td>
+                            <td data-label="Type">@Model.JoiningChecklist[i].CheckListType.Name</td>
+                            <td data-label="Actions">
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editjoiningchecklist"
+                                       class="btn btn-icon btn-edit icon-only s">
+                                        <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY', '@Model.JoiningChecklist[i].GI', '@Model.JoiningChecklist[i].LogGI',@i)"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editjoiningchecklist"
+                                       class="btn btn-icon btn-edit icon-only ">
+                                        <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY', '@Model.JoiningChecklist[i].GI', '@Model.JoiningChecklist[i].LogGI',@i);
+                                        swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});"></i>
+                                    </a>
+                                }
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="joiningdelete"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.JoiningChecklist[i].GI','@Model.JoiningChecklist[i].LogGI','DELETE',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="joiningdelete"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.JoiningChecklist[i].GI', '@Model.JoiningChecklist[i].LogGI', 'DELETE',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+
+
+
+                                </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+    </table>
+</div>

@@ -1,0 +1,103 @@
+﻿<div class="row">
+    <div class="col-md-12">
+
+        <div class="ihits-table table-border mobile-responsive-table certification-list-tab mb-5">
+            <table>
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Certification</th>
+                        <th scope="col">Registration Number</th>
+
+
+                        <th scope="col">Valid From</th>
+
+                        <th scope="col">Valid To</th>
+                        <th scope="col">Renewal Date</th>
+                        <th scope="col">View File</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Certifications != null && Model.Certifications.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.Certifications.Count; i++)
+                        {
+                    <tr>
+                        <td data-label="Certicication">
+                            <label>@Model.Certifications[i].Certificate</label>
+
+                        </td>
+                        <td data-label="Registration Number">
+                            <label>@Model.Certifications[i].RegistrationNo</label>
+
+                        </td>
+
+
+
+                        <td data-label="Issued Date">
+                            <label>
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Issued))
+
+                            </label>
+                        </td>
+
+                        <td data-label="Validity">
+
+                            <label>
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].ValidTo))
+
+                            </label>
+
+                        </td>
+                        <td data-label="Renewal Date">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].Renewaldate))
+
+                        </td>
+                        @if (Model.Certifications[i].DocCount > 1)
+                        {
+
+                            <td data-label="View File">
+                                <i onclick="GetCertificateDocPopUp('@Model.Certifications[i].LogCode')" title="Click Here To View Document" class=" far fa-eye"></i>
+                                <span>@Model.Certifications[i].DocCount </span>
+                            </td>
+
+
+
+                        }
+
+                        else 
+                        {
+                        <td data-label="View File">
+                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View File" class="btn btn-icon " onclick="EmpProfileDocView('@Model.Certifications[i].CertificateDocCode','Certi')">
+                                <i class="icon-xl far fa-eye"></i>
+                                <span>@Model.Certifications[i].DocCount </span>
+                            </button>
+                            
+                        </td>
+
+                        }
+
+
+
+                    </tr>
+
+
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6"> No Data Found</td></tr>
+                    }
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

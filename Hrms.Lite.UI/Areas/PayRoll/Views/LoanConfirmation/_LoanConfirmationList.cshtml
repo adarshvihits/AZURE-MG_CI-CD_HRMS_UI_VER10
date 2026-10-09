@@ -1,0 +1,111 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanConfirmation
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+       
+        $('.PendingCount').html("@Model.PendingCount");
+        $('.ConfirmedCount').html("@Model.ConfirmedCount");
+        //$('table.common-table').DataTable({
+        //    "pageLength": 5,
+        //    "scrollY":100,
+        //     "language":
+        //    {
+        //        searchPlaceholder: "Search",
+        //    }
+        //});
+
+        //$(".dataTables_filter").addClass("dataTables_filter_trn");
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+
+    });
+</script>
+<!-- Table Section -->
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Loan_Confirmation">
+    @Html.HiddenFor(m => m.LoanConfirmationList.Count)
+    <table id="LoanConfirmationlist" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">LoanType</th>
+                <th scope="col">LoanBalance</th>
+                <th scope="col">MthlyEMI</th>
+                <th scope="col">ConfAmount</th>
+                @*<th scope="col">GI</th>*@
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.LoanConfirmationList != null && Model.LoanConfirmationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.LoanConfirmationList.Count; i++)
+                {
+                    //@Html.HiddenFor(m => m.LoanConfirmationList[i].Amount)
+                    @Html.HiddenFor(m => m.LoanMonth.Code)
+                    @Html.HiddenFor(m => m.LoanType.Code)
+
+                    <tr>
+                       
+                        <td data-label="ID">@Model.LoanConfirmationList[i].EmployeeID</td>
+                        <td data-label="Name">
+                            @Html.HiddenFor(m => m.LoanConfirmationList[i].EmployeeGI)
+                            @Html.HiddenFor(m => m.LoanConfirmationList[i].LoanIssueGI)
+                            @Html.HiddenFor(m => m.LoanConfirmationList[i].MthlyEMI)
+                            @Html.HiddenFor(m => m.LoanConfirmationList[i].ConfAmount)
+                            @Html.HiddenFor(m => m.LoanConfirmationList[i].LoanSettingsCode)
+                            @Model.LoanConfirmationList[i].EmployeeName
+                        </td>
+                        <td data-label="Designation">@Model.LoanConfirmationList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.LoanConfirmationList[i].Department.Name</td>
+                        <td data-label="Location">@Model.LoanConfirmationList[i].Location.Name</td>
+                        <td data-label="LoanType">@Model.LoanConfirmationList[i].LoanName</td>
+                        <td data-label="LoanBalance">@Model.LoanConfirmationList[i].LoanBalance</td>
+                        <td data-label="MthlyEMI">@Model.LoanConfirmationList[i].MthlyEMI</td>
+                        <td data-label="ConfAmount">@Model.LoanConfirmationList[i].ConfAmount</td>
+                        @*   <td data-label="GI">@Model.LoanConfirmationList[i].LoanIssueGI</td>*@
+
+                        <td data-label="Action">
+
+                            @* <div class="small-btn-group" id="updatecancel_@i" style="display:none">
+                                    <button type="button" data-bs-toggle="tooltip"
+                                            title="Update"
+                                            class="btn btn-icon btn-update icon-only btn-bg-info " onclick="onEditClick('@Model.LoanConfirmationList[i].LoanIssueGI')">
+                                        <i class="icon-xl fas fa-sync-alt"></i>
+                                    </button>
+
+                                </div>*@
+
+                            <div class="small-btn-group" id="edit_@i">
+                                <a data-bs-toggle="tooltip"  data-bs-original-title="Edit" type="button"
+                                        class="btn btn-icon btn-edit icon-only" onclick="onEditClick('@Model.LoanConfirmationList[i].LoanIssueGI','@Model.LoanConfirmationList[i].EmployeeGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            </div>
+
+
+
+
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+
+    <div id="editLoanConfirmation">
+
+    </div>
+</div>
+<!-- Table Setion End -->

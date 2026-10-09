@@ -1,0 +1,72 @@
+﻿@model Hrms.Lite.Shared.Master.RecruitmentSettings
+    
+    <div class="ihits-table table-border mobile-responsive-table recruitment-slider">
+        <table>
+            <thead style="visibility:visible;">
+                <tr class="table-light">
+                    <th scope="col">
+                        SlNo
+                    </th>
+                    <th scope="col">
+                        Type
+                    </th>
+                    <th scope="col">
+                        Applicability
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{ if (Model.RecruitmentSettingsList != null && Model.RecruitmentSettingsList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.RecruitmentSettingsList.Count; i++)
+                        {
+                            @if (Model.RecruitmentSettingsList[i].RecruitmentSettingsTypeCode != 8)
+                            {
+                                <tr>
+
+
+                                    <td data-label="SlNo">@(i + 1)</td>
+
+                                    <td data-label="Type">
+                                        @Html.HiddenFor(Model => Model.DesignationGI)
+                                        @Html.HiddenFor(Model => Model.RecruitmentSettingsList[i].RecruitmentSettingsTypeCode)
+                                        @Html.HiddenFor(Model => Model.Designation.Code)
+                                        @Model.RecruitmentSettingsList[i].RecruitmentSettingsTypeName
+                                    </td>
+
+                                    @if (Model.RecruitmentSettingsList[i].RecruitmentSettingsTypeCode == 2)
+                                    {
+                                        <td data-label="Applicability">
+                                            @Html.TextBoxFor(Model => Model.RecruitmentSettingsList[i].RecruitmentSettingsType, new { @class = "form-control form-control-sm", @placeholder = " No.of Interview Levels" })
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td data-label="Applicability">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted" id="">
+                                                    @Html.CheckBoxFor(m => m.RecruitmentSettingsList[i].Applicable, new
+                                               {
+                                                   @class = "REcConfirmation_Status",
+                                                   onchange = "getSelectedVal(" + @i + ")"
+                                               })
+
+                                                    @Html.HiddenFor(Model => Model.RecruitmentSettingsList[i].RecruitmentSettingsType)
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                    }
+                                </tr>
+
+                            }
+                        }
+                    }
+                }
+
+                </tbody>
+        </table>
+    </div>

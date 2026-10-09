@@ -1,0 +1,172 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.YearOfServiceReport
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/js/settings.js"></script>
+<script src="~/scripts/DataBank/Reports/YearOfServiceReport.js"></script>
+<style>
+    .exit-page {
+        position: relative;
+    }
+
+        .exit-page td {
+            position: absolute;
+            width: 100% !important;
+        }
+</style>
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title"> Classification vs Service</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Classification vs Service
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+
+                            <div class="tab-items">
+
+                                <div class="form-group filter-combobox  pl-2" style="width: 190px;">
+                                    @Html.DropDownList("Type", ViewBag.DropDownItems as List<SelectListItem>, new { @class = "form-control form-control-md", @onchange = "GetList()" })
+                                    @*@Html.DropDownListFor(m => m.option, (SelectList)ViewBag.Month, new { @class = "form-control form-control-sm", @onchange = "fillData()" })*@
+                                </div>
+                                <span id="Type" style="bottom: -20px;"></span>
+                            </div>
+
+
+                            <div class="tab-items">
+                                <div class="form-group mr-15">
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-outline-2x radio-primary mt-1">
+
+                                            @Html.RadioButtonFor(m => m.option, "Current", new { @onclick = "GetList()", @class = "form-control form-control-sm radio1" })
+                                            <span></span>  Current
+                                        </label>
+
+                                        <label class="radio radio-outline radio-outline-2x radio-primary mt-1">
+                                            @Html.RadioButtonFor(m => m.option, "History", new { @onclick = "GetList()", @class = "form-control form-control-sm radio2" })
+                                            <span></span>History
+                                        </label>
+
+                                        @*<label class="radio radio-outline radio-outline-2x radio-primary mt-1">
+                                @Html.RadioButtonFor(m => m.option, "Location", new { @onclick = "GetList()", @class = "form-control form-control-sm radio2" })
+                                <span></span>Location
+                            </label>*@
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                                    </div>
+                                    <input id="searchList" type="text" class="form-control form-control-sm"
+                                           placeholder="Search Here" onkeyup="searchRows()">
+                                </div>
+
+                                @*<div class="sraech-slider">
+                        <div class="search-slider-inner">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                               placeholder="ID/Name">
+                    </div>*@
+                                <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel">
+                                    <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                </a>
+
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div id="YearOfServiceReportList">
+                        @await Html.PartialAsync("_List.cshtml", Model)
+                    </div>
+
+
+
+                    <!--end: Datatable-->
+
+
+                    <div id="EditConfirmationSlider">
+
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.filter)
+                    </div>
+
+
+
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+
+

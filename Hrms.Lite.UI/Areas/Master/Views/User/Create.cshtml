@@ -1,0 +1,711 @@
+﻿@model Hrms.Lite.Shared.Master.User
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/Master/user.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        moveCursorToEnd('Name');
+    }
+</script>
+
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { @id = "createUser", @class = "display-flex" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">
+                        User
+                    </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "User", new { Area = "Master" })">User List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            User
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body">
+
+                                <div class="newcard">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>User ID</label><span class="Mandatory">*</span>
+                                                @Html.HiddenFor(m=>m.NonEmployeePassword)
+                                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", @placeholder = "User ID",
+                                               onkeypress = "return event.charCode != 32",
+                                               @maxlength = 120, @onblur = "validateById('#Name', 'UName')" })
+                                            </div>
+                                            <span id="UName"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>User Role</label><span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.UserRole.Code, (SelectList)ViewBag.UserR, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validateById('#UserRole_Code', 'URole')" })
+                                            </div>
+                                            <span id="URole"></span>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Mobile</label><span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control form-control-sm", @placeholder = "Mobile", @maxlength = 10, @onblur = "validateMobileNumber('Mobile', 'Mob')", @onkeypress = "return onlyNumberKey(event)" })
+                                            </div>
+                                            <span id="Mob"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Email</label><span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-sm", @placeholder = "Email", @maxlength = 120, @onblur = "validateEmailID(this, 'email')" })
+                                            </div>
+                                            <span id="email"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Active From</label><span class="Mandatory">*</span>
+                                                <div class="input-group date">
+                                                    @Html.TextBoxFor(m => m.ActiveFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Active From", @onchange = "validateById('#ActiveFrom', 'AFrom')" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span id="AFrom"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Active To</label><span class="Mandatory">*</span>
+                                                <div class="input-group date">
+                                                    @Html.TextBoxFor(m => m.ActiveTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Active To", @onchange = "validateById('#ActiveTo', 'ATo')" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span id="ATo"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 mt-6">
+                                            <div class="d-flex align-items-center">
+                                                <div> Active</div>
+                                                <label class="switch">
+                                                    @Html.CheckBoxFor(m => m.Active)
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row-outer">
+                                                <label>Remarks</label><span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = 250, @onblur = "validateById('#Remarks', 'Rem')" })
+
+                                            </div>
+                                            <span id="Rem"></span>
+
+                                        </div>
+
+                                        <div class="col-md-2 mt-5 pl-0 ">
+                                            <button type="button" class="btn btn-secondary mobile-full-width float-right view-appl" data-bs-toggle="modal" data-target="" onclick="onViewApplicableMenuClick()">
+                                                View Applicable Menus
+                                            </button>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <h6 class="mt-4">User vs Employee Applicability</h6>
+
+                                <div class="tab-outer tab-only">
+                                    <ul class="ulList">
+                                        <div class="tab-top-right">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                    @Html.CheckBoxFor(m => m.SelectAll, new { @onchange = "onSelectAllClick()" })
+                                                    <span></span>Select All
+                                                </label>
+                                                <label class="checkbox checkbox-outline checkbox-success">
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Tab Start -->
+                                        <div class="TabMoving"></div>
+                                        <li class="tabOne clickOnTab active">Job Details</li>
+                                        <div id="tabOne" class="tab-content active">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table id="dsg">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Designation</th>
+                                                                    <th scope="col">
+                                                                        <div class="checkbox-inline">
+                                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                                <input type="checkbox" name="Checkboxes15" id="allDsg" onclick="onAllClick('allDsg','dsg')">
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Designation != null && Model.UserVsEmployeeApplicability.Designation.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Designation.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Designation[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Designation[i].Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Designation[i].Applicable, new { @onchange = "onChkBoxClick(this,'allDsg','dsg')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table id="dept">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Department</th>
+                                                                    <th scope="col">
+                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                            <input type="checkbox" name="Checkboxes15" id="allDept" onclick="onAllClick('allDept','dept')">
+                                                                            <span class="mr-1"></span>
+                                                                        </label>
+
+
+
+                                                                    </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Department != null && Model.UserVsEmployeeApplicability.Department.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Department.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Department[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Department[i].Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Department[i].Applicable, new { @onclick = "onChkBoxClick(this,'allDept','dept')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+
+                                                                        </tr>
+
+                                                                    }
+                                                                }
+
+
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-three-col mb-0 vertical-scroll-250">
+                                                        <table id="loc">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Location</th>
+                                                                    <th scope="col">Region</th>
+                                                                    <th scope="col">
+                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                            <input type="checkbox" name="Checkboxes15" id="allLoc" onclick="onAllClick('allLoc','loc')">
+                                                                            <span class="mr-1"></span>
+                                                                        </label>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Location != null && Model.UserVsEmployeeApplicability.Location.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Location.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Location[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Location[i].Name</td>
+                                                                            <td data-label="Region">@Model.UserVsEmployeeApplicability.Location[i].Region.Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Location[i].Applicable, new { @onclick = "onChkBoxClick(this,'allLoc','loc')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tab End -->
+                                        <!-- Tab Start -->
+                                        <div class="TabMoving"></div>
+                                        <li class="tabTwo clickOnTab">Category</li>
+                                        <div id="tabTwo" class="tab-content">
+                                            <div class="row">
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table id="cat">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Category</th>
+                                                                    <th scope="col">
+                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                            <input type="checkbox" name="Checkboxes15" id="allCat" onclick="onAllClick('allCat','cat')">
+                                                                            <span class="mr-1"></span>
+                                                                        </label>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Category != null && Model.UserVsEmployeeApplicability.Category.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Category.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Category[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Category[i].Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Category[i].Applicable, new { @onclick = "onChkBoxClick(this,'allCat','cat')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table id="grd">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Grade</th>
+                                                                    <th scope="col">
+                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                            <input type="checkbox" name="Checkboxes15" id="allGrd" onclick="onAllClick('allGrd','grd')">
+                                                                            <span class="mr-1"></span>
+                                                                        </label>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Grade != null && Model.UserVsEmployeeApplicability.Grade.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Grade.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Grade[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Grade[i].Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Grade[i].Applicable, new { @onclick = "onChkBoxClick(this,'allGrd','grd')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table id="pay">
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">PayrollGroup</th>
+                                                                    <th scope="col">
+                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                            <input type="checkbox" name="Checkboxes15" id="allPay" onclick="onAllClick('allPay','pay')">
+                                                                            <span class="mr-1"></span>
+                                                                        </label>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.PayrollGroup != null && Model.UserVsEmployeeApplicability.PayrollGroup.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.PayrollGroup.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.PayrollGroup[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.PayrollGroup[i].Name</td>
+                                                                            <td data-label="Y/S">
+                                                                                <div class="checkbox-inline">
+                                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                                        @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                        @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.PayrollGroup[i].Applicable, new { @onclick = "onChkBoxClick(this,'allPay','pay')" })
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tab End -->
+                                        <!-- Tab Start -->
+                                        @if (Model.AddOnClassification.AddOnClassification_Applicability)
+                                        {
+
+                                            <div class="TabMoving"></div>
+                                            <li class="tabThree clickOnTab">Additional Masters</li>
+                                            <div id="tabThree" class="tab-content">
+                                                <div class="row">
+                                                    @if (Model.AddOnClassification.DivisionExists)
+                                                    {
+                                                        <div class="col-md-4">
+                                                            <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                                <table id="div">
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Division</th>
+                                                                            <th scope="col">
+                                                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                                                    <input type="checkbox" name="Checkboxes15" id="allDiv" onclick="onAllClick('allDiv','div')">
+                                                                                    <span class="mr-1"></span>
+                                                                                </label>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.UserVsEmployeeApplicability.Division != null && Model.UserVsEmployeeApplicability.Division.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.UserVsEmployeeApplicability.Division.Count; i++)
+                                                                            {
+                                                                                @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Division[i].Code)
+                                                                                <tr>
+                                                                                    <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Division[i].Name</td>
+                                                                                    <td data-label="Y/S">
+                                                                                        <div class="checkbox-inline">
+                                                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                                                @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                                @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Division[i].Applicable, new { @onclick = "onChkBoxClick(this,'allDiv','div')" })
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    </tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    @if (Model.AddOnClassification.SectionExists)
+                                                    {
+                                                        <div class="col-md-4">
+                                                            <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                                <table id="sec">
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Section</th>
+                                                                            <th scope="col">
+                                                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                                                    <input type="checkbox" name="Checkboxes15" id="allSec" onclick="onAllClick('allSec','sec')">
+                                                                                    <span class="mr-1"></span>
+                                                                                </label>
+
+
+
+                                                                            </th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.UserVsEmployeeApplicability.Section != null && Model.UserVsEmployeeApplicability.Section.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.UserVsEmployeeApplicability.Section.Count; i++)
+                                                                            {
+                                                                                @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Section[i].Code)
+                                                                                <tr>
+                                                                                    <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Section[i].Name</td>
+                                                                                    <td data-label="Y/S">
+                                                                                        <div class="checkbox-inline">
+                                                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                                                @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                                @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.Section[i].Applicable, new { @onclick = "onChkBoxClick(this,'allSec','sec')" })
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    </tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    @if (Model.AddOnClassification.EmploymentTypeExists)
+                                                    {
+                                                        <div class="col-md-4">
+                                                            <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                                <table id="empType">
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Employment Type</th>
+                                                                            <th scope="col">
+                                                                                <label class="checkbox checkbox-outline checkbox-success">
+                                                                                    <input type="checkbox" name="Checkboxes15" id="allEmpType" onclick="onAllClick('allEmpType','empType')">
+                                                                                    <span class="mr-1"></span>
+                                                                                </label>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.UserVsEmployeeApplicability.EmploymentType != null && Model.UserVsEmployeeApplicability.EmploymentType.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.UserVsEmployeeApplicability.EmploymentType.Count; i++)
+                                                                            {
+                                                                                @Html.HiddenFor(m => m.UserVsEmployeeApplicability.EmploymentType[i].Code)
+                                                                                <tr>
+                                                                                    <td data-label="Allowance">@Model.UserVsEmployeeApplicability.EmploymentType[i].Name</td>
+                                                                                    <td data-label="Y/S">
+                                                                                        <div class="checkbox-inline">
+                                                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                                                @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                                @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.EmploymentType[i].Applicable, new { @onclick = "onChkBoxClick(this,'allEmpType','empType')" })
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    </tbody>
+
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <!-- Tab End -->
+                                        }
+
+                                        <div class="TabMoving"></div>
+                                        <li class="tabFour clickOnTab">Group Company</li>
+                                        <div id="tabFour" class="tab-content">
+                                            <div class="row">
+                                                
+                                                    <div class="col-md-4">
+                                                        <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                            <table id="grpC">
+                                                                <thead>
+                                                                    <tr class="table-light">
+                                                                        <th scope="col">Group Company</th>
+                                                                        <th scope="col">
+                                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                                <input type="checkbox" name="Checkboxes15" id="allGrpCmp" onclick="onAllClick('allGrpCmp','grpC')">
+                                                                                <span class="mr-1"></span>
+                                                                            </label>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @if (Model.UserVsEmployeeApplicability.GroupCompany != null && Model.UserVsEmployeeApplicability.GroupCompany.Count > 0)
+                                                                    {
+
+                                                                        for (int i = 0; i < Model.UserVsEmployeeApplicability.GroupCompany.Count; i++)
+                                                                        {
+                                                                            @Html.HiddenFor(m => m.UserVsEmployeeApplicability.GroupCompany[i].Code)
+                                                                            <tr>
+                                                                                <td data-label="Allowance">@Model.UserVsEmployeeApplicability.GroupCompany[i].Name</td>
+                                                                                <td data-label="Y/S">
+                                                                                    <div class="checkbox-inline">
+                                                                                        <label class="checkbox checkbox-outline checkbox-success">
+                                                                                            @*<input type="checkbox" name="Checkboxes15">*@
+                                                                                            @Html.CheckBoxFor(m => m.UserVsEmployeeApplicability.GroupCompany[i].Applicable, new { @onclick = "onChkBoxClick(this,'allGrpCmp','grpC')" })
+                                                                                            <span></span>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                </tbody>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                
+                                              
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+
+
+                                <!-- <end table></end> -->
+                                <div class="row card-footer-bottom-fixed">
+
+                                    <div class="col-md-12 align-right">
+                                        <button type="button"
+                                                class="btn btn-default float-right mobile-full-width" onclick="SaveUser()">
+                                            Save
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}
+
+
+@*--APPLICABLE MENU POPUP--*@
+
+<div class="modal fade applicable-menus-popup" id="user_Applicable_Menus" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdrop" aria-hidden="true" style="display: none; padding-left: 9px;">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content pt-4 pb-4">
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="closePopUp()">
+                <i aria-hidden="true" class="ki ki-close"></i>
+            </button>
+
+            <div class="modal-body p-0">
+            </div>
+        </div>
+    </div>
+</div>
+

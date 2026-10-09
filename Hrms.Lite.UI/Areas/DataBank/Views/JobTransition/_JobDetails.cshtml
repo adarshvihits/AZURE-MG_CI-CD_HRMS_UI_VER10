@@ -1,0 +1,639 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+    <script>
+        $(document).ready(function () {
+            debugger;
+            if ($('#JobTransition_JobDetail_NewCategory_Code').val() == 1)
+                $(".newreneweltext").addClass('hide');
+        });
+    </script>
+<div class="step-outer step_row">
+
+    <a href="#" onclick="onProgressTabClick('growth-history')" class="step-item active">
+        Growth History
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('transition-type')" class="step-item active ">
+        Effective From
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item active">
+        Job Details
+        <span class="step-circle focused"></span>
+    </div>
+    <div class="step-item">
+        Compensation & Benefits
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Add Authority
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Subordinates
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Document/Summary
+        <span class="step-circle"></span>
+    </div>
+</div>
+
+
+<div class="job-transition-outer">
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ihits-table table-border table-dot mobile-responsive-table career-Progression-delete vertical-scroll-250">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">Classification</th>
+                            <th scope="col">Current</th>
+                            <th scope="col">New</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td data-label="Classifition">
+                                Location
+                                <span class="Mandatory">*</span>
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentLocation.Code)
+                            </td>
+
+                            <td data-label="Current">@Model.JobTransition_JobDetail.CurrentLocation.Name</td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewLocation.Code, (SelectList)ViewBag.Location, "Select Location", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTLOcation');NewPosition();jobTransitionReason();" })
+                                    <span id="JTLOcation"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Fun.Designation
+                                <span class="Mandatory">*</span>
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentDesignation.Code)
+                            </td>
+
+                            <td data-label="Current">@Model.JobTransition_JobDetail.CurrentDesignation.Name</td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewDesignation.Code, (SelectList)ViewBag.Designation, "Select Designation",
+                                   new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTDesignation');fillNoticeperiod(this);NewPosition();jobTransitionReason();" })
+                                    <span id="JTDesignation"></span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td data-label="Classifition">
+                                Designation
+                                <span class="Mandatory">*</span>
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentGrade.Code)
+                            </td>
+
+                            <td data-label="Current">  @Model.JobTransition_JobDetail.CurrentGrade.Name</td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewGrade.Code, (SelectList)ViewBag.Grade, "Select Grade", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTGrade');jobTransitionReason();" })
+                                    <span id="JTGrade"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Category
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentCategory.Code)
+                                @Model.JobTransition_JobDetail.CurrentCategory.Name
+                            </td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewCategory.Code, (SelectList)ViewBag.Category, "Select Category", new { @class = "form-control form-control-sm", @onchange = "onCategoryChange(this);jobTransitionReason();" })
+
+                                    <span id="JTCategory"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Department
+                                <span class="Mandatory">*</span>
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentDepartment.Code)
+                            </td>
+
+                            <td data-label="Current">@Model.JobTransition_JobDetail.CurrentDepartment.Name</td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewDepartment.Code, (SelectList)ViewBag.Department, "Select Department", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTDepartment');NewPosition();jobTransitionReason();" })
+
+                                    <span id="JTDepartment"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Sub Department
+                                <span class="Mandatory">*</span>
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentSubDepartment.Code)
+                            </td>
+
+                            <td data-label="Current">@Model.JobTransition_JobDetail.CurrentSubDepartment.Name</td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewSubDepartment.Code, (SelectList)ViewBag.SubDepartment, "Select Sub Department", new { @class = "form-control form-control-sm", @onchange = "validate(this,'subDepartment');jobTransitionReason();" })
+
+                                    <span id="JTSubDepartment"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td data-label="Classifition">
+                                Division
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentDivision.Code)
+                                @Model.JobTransition_JobDetail.CurrentDivision.Name
+                            </td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewDivision.Code, (SelectList)ViewBag.Div, "Select Division", new { @class = "form-control form-control-sm", @onchange = "validate(this,'div');jobTransitionReason();" })
+
+                                    <span id="div"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Section
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentSection.Code)
+                                @Model.JobTransition_JobDetail.CurrentSection.Name
+                            </td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewSection.Code, (SelectList)ViewBag.Sec, "Select Section", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Sec');jobTransitionReason();" })
+
+                                    <span id="Sec"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Group Company
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentGroupCompany.Code)
+                                @Model.JobTransition_JobDetail.CurrentGroupCompany.Name
+                            </td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewGroupCompany.Code, (SelectList)ViewBag.GrpCompany, "Select Group Company", new { @class = "form-control form-control-sm", @onchange = "validate(this,'GrpC');jobTransitionReason();" })
+
+                                    <span id="GrpC"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Function
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentFunction.Code)
+                                @Model.JobTransition_JobDetail.CurrentFunction.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewFunction.Code, (SelectList)ViewBag.Function, "Select Function", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Function');jobTransitionReason();" })
+
+                                <span id="JTFunction"></span>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="job-transition-outer" style="background-color: #ffffff; border: 2px solid #01877c7d;">
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+
+
+                        <div class="ihits-table  table-dot  mobile-responsive-table position-Deta ">
+                            <table>
+
+                                <tbody>
+
+
+                                    <tr>
+                                        <td data-label="Classifition">
+                                            Position
+
+                                        </td>
+                                        <td data-label="Current">
+                                            @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentPosition.Code)
+                                            @Model.JobTransition_JobDetail.CurrentPosition.Name
+                                        </td>
+                                        <td data-label="New">
+                                            <div class="form-check form-check-inline">
+                                                <div class="radio-inline">
+                                                    <label class="radio radio-outline   radio-success ">
+                                                        @Html.RadioButtonFor(m => m.JobTransition_JobDetail.PositionReplacementOrnot, false,
+                                                   new { @class = "form-check-input", @id = "PosReplacementNo", @onblur = "validate(this,'PosReplacementNo')", @onchange = "NewPosition();jobTransitionReason();" })
+
+                                                        <span></span>No
+                                                    </label>
+                                                    <label class="radio radio-outline radio-success">
+                                                        @Html.RadioButtonFor(m => m.JobTransition_JobDetail.PositionReplacementOrnot, true,
+                                                          new { @class = "form-check-input", @id = "PosReplacementYes", @onblur = "validate(this,'PosReplacementYes')", @onchange = "NewPosition();jobTransitionReason();" })
+                                                        <span></span>Yes
+                                                    </label>
+
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td data-label="New">
+                                            @Html.DropDownListFor(m => m.JobTransition_JobDetail.NewPosition.Code, (SelectList)ViewBag.Position,"--Select--", new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+                                            <span id="Position"></span>
+                                        </td>
+
+
+
+
+                                    </tr>
+
+
+
+
+
+                                </tbody>
+
+
+
+                            </table>
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <div class="col-md-6">
+            <div class="ihits-table table-border table-dot  mobile-responsive-table career-Progression-delete vertical-scroll-300">
+                <table>
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">
+                                Classification
+
+                            </th>
+                            <th scope="col">Current</th>
+                            <th scope="col">New</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr>
+                            <td data-label="Classifition">
+                                Employment Type
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentEmploymentType.Code)
+                                @Model.JobTransition_JobDetail.CurrentEmploymentType.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewEmploymentType.Code, (SelectList)ViewBag.EmpType, "Select Employment Type", new { @class = "form-control form-control-sm", @onchange = "validate(this,'EType');jobTransitionReason();" })
+
+                                <span id="EType"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Work Location
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentWorkLocation.Code)
+                                @Model.JobTransition_JobDetail.CurrentWorkLocation.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewWorkLocation.Code, (SelectList)ViewBag.WrkLoc, "Select Work Location", new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Payroll Group
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentPayrollGroup.Code)
+                                @Model.JobTransition_JobDetail.CurrentPayrollGroup.Name
+                            </td>
+                            <td data-label="New">
+                                <div style="position:relative;">
+                                    @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewPayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "Select Payroll Group", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTPayroll');jobTransitionReason();" })
+
+                                    <span id="JTPayroll"></span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Wage Grade
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentWageGrade.Code)
+                                @Model.JobTransition_JobDetail.CurrentWageGrade.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewWageGrade.Code, (SelectList)ViewBag.WageGrade, "Select Wage Grade", new { @class = "form-control form-control-sm", @onchange = "validate(this,'WGrade');onWageGradeChange();onSalaryStructureChange();jobTransitionReason();" })
+                                <span id="WGrade"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Salary Structure
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentSalaryStructure.Code)
+                                @Model.JobTransition_JobDetail.CurrentSalaryStructure.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => m.JobTransition_JobDetail.NewSalaryStructure.Code, (SelectList)ViewBag.SlryStruct, "--Select Salary Band--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'salaryStruct' );onSalaryStructureChange();jobTransitionReason();" })
+                                <span id="salaryStruct"></span>
+                            </td>
+
+                        </tr>
+                        <tr class="newreneweltext">
+                            <td data-label="Classifition">
+                                Renewal Date
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.JobTransition_JobDetail.CurrentRenewalDate))
+                            </td>
+                            <td data-label="New">
+
+                                <div class="input-group date " id="renewaldt">
+
+                                    @Html.TextBoxFor(m => m.JobTransition_JobDetail.NewRenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 renewaldatepicker", @placeholder = "Renewal Date", @onchange = "validate(this,'JTRenewal');jobTransitionReason();", onclick = "$('.renewaldatepicker').datepicker('show');" })
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <span id="JTRenewal"></span>
+
+                            </td>
+
+
+                        </tr>
+
+
+                        <tr>
+                            <td data-label="Classifition">
+                                Notice Period
+                                <span class="Mandatory">*</span>
+                            </td>
+                            <td data-label="Current">
+                                @Model.JobTransition_JobDetail.CurrentNoticePeriod
+                                (Days)
+                            </td>
+                            <td data-label="New">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.NewNoticePeriod, new { @class = "form-control", @placeholder = "Notice Period (Days)", @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'JTNotice');jobTransitionReason();" })
+                                <span id="JTNotice"></span>
+                            </td>
+
+                        </tr>
+                        @*<tr>
+                            <td data-label="Classifition">
+                                VDA Group
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentVDAGroup.Code)
+                                @Model.JobTransition_JobDetail.CurrentVDAGroup.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewVDAGroup.Code, (SelectList)ViewBag.VDAGroup, "Select VDA Group", new { @class = "form-control form-control-sm", @onchange = "validate(this,'JTvda');onSalaryStructureChange();jobTransitionReason();" })
+                                <span id="JTvda"></span>
+                            </td>
+                        </tr>*@
+                        <tr>
+                            <td data-label="Classifition">
+                                PF Group
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentPFGroup.Code)
+                                @Model.JobTransition_JobDetail.CurrentPFGroup.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewPFGroup.Code, (SelectList)ViewBag.PFGroup, "--Select--", new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+
+                                <span id="JTPayroll"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                ESI Group
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentESIGroup.Code)
+                                @Model.JobTransition_JobDetail.CurrentESIGroup.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewESIGroup.Code, (SelectList)ViewBag.ESIGroup, "--Select--", new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+
+                                <span id="JTPayroll"></span>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td data-label="Classifition">
+                                PT Group
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentPTGroup.Code)
+                                @Model.JobTransition_JobDetail.CurrentPTGroup.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewPTGroup.Code, (SelectList)ViewBag.PTGroup, "--Select--", new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+
+                                <span id="JTPayroll"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Inc.Applicable
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentIncApplicability.Code)
+                                @Model.JobTransition_JobDetail.CurrentIncApplicability.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewIncApplicability.Code, (SelectList)ViewBag.IncApplicability, "Select Inc.Applicability", new { @class = "form-control form-control-sm", @onchange = "validate(this,'incApplicability');jobTransitionReason();" })
+                                <span id="JTIncApplicability"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                                Inc.CostCenter
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentIncentiveCostCenter.Code)
+                                @Model.JobTransition_JobDetail.CurrentIncentiveCostCenter.Name
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => Model.JobTransition_JobDetail.NewIncentiveCostCenter.Code, (SelectList)ViewBag.IncentiveCostCenter, "Select Incentive Cost Center", new { @class = "form-control form-control-sm", @onchange = "validate(this,'incentiveCostCenter');jobTransitionReason();" })
+                                <span id="JTIncApplicability"></span>
+                            </td>
+
+                        </tr>
+                        @*<tr>
+                            <td data-label="Classifition">
+                                Position
+
+                            </td>
+                            <td data-label="Current">
+                                @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentPosition.Code)
+                                @Model.JobTransition_JobDetail.CurrentPosition.Name
+                            </td>
+                            <td data-label="New">
+                                <div class="form-check form-check-inline">
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline   radio-success ">
+                                            @Html.RadioButtonFor(m => m.JobTransition_JobDetail.PositionReplacementOrnot, false,
+                                       new { @class = "form-check-input", @id = "PosReplacementNo", @onblur = "validate(this,'PosReplacementNo')", @onchange = "NewPosition();jobTransitionReason();" })
+
+                                            <span></span>No
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @Html.RadioButtonFor(m => m.JobTransition_JobDetail.PositionReplacementOrnot, true,
+                                              new { @class = "form-check-input", @id = "PosReplacementYes", @onblur = "validate(this,'PosReplacementYes')", @onchange = "NewPosition();jobTransitionReason();" })
+                                            <span></span>Yes
+                                        </label>
+
+                                    </div>
+
+
+                                  
+                                   
+                                </div>
+                               
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td data-label="Classifition">
+                            </td>
+                            <td data-label="Current">
+                            </td>
+                            <td data-label="New">
+                                @Html.DropDownListFor(m => m.JobTransition_JobDetail.NewPosition.Code, (SelectList)ViewBag.Position, new { @class = "form-control form-control-sm", @onchange = "jobTransitionReason();" })
+                                <span id="Position"></span>
+                            </td>
+
+                        </tr>*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+ 
+</div>
+
+
+
+            <!-- <end table></end> -->
+            <div class="row card-footer-bottom-fixed">
+                <div class="col-md-6 align-left">
+
+
+                </div>
+                <div class="col-md-6 align-right">
+                    <button type="button" onclick="onNextClick('job-details')"
+                            class="btn btn-default float-right mobile-full-width">
+                        Next
+                    </button>
+                </div>
+
+            </div>

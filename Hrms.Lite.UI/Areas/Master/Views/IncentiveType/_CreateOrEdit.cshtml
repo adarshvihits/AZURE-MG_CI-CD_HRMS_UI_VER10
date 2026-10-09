@@ -1,0 +1,156 @@
+﻿@model Hrms.Lite.Shared.Master.IncentiveType
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+        if ($('#ProfitBased').is(':checked')) {
+            $('#Product_Sub_Group').addClass("hide");
+        } else {
+            $('#Product_Sub_Group').removeClass("hide");
+        }
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "IncentiveType", FormMethod.Post, new { id = "IncentiveTypesave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Bonus Type</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'IncentiveTypeName')", maxlength = "120" })
+                            <span id="IncentiveTypeName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'IncentiveTypeShortName')", maxlength = "5" })
+
+
+                        </div>
+                        <span id="IncentiveTypeShortName"></span>
+                    </div>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="col-md-6 align-items-center mt-4 mb-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('DPT','@Model.Code')"*@>
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "Activeinactivedpt" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="d-flex align-items-center mt-4 mb-4">
+                            <div> Profit Based or Not</div>
+                            <div class="checkbox-inline" style="margin-left:10px;">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.ProfitBased, new { @class = "ProfitBased", @onchange = "onChkBoxClick()" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="Product_Sub_Group">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Product
+                            </label>
+                            <div class="form-group filter-combobox mr-2">
+                                @Html.DropDownListFor(m => m.Product.Code, (SelectList)ViewBag.Product, "--Select Product--", new { @class = "form-control form-control-sm Product" })
+                            </div>
+                            <span id="ProductDD"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Sub Product
+                            </label>
+                            <div class="form-group filter-combobox mr-2">
+                                @Html.DropDownListFor(m => m.SubProduct.Code, (SelectList)ViewBag.SubProduct, "--Select Sub Product--", new { @class = "form-control form-control-sm SubProduct" })
+                            </div>
+                            <span id="SubProductDD"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.HiddenFor(model => Model.Description)
+
+                                @Html.DisplayFor(model => Model.Description)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="IncentiveTypeSave('Save')">
+                                Save
+                            </button>
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="IncentiveTypeSave('Modify')">
+                                Modify
+                            </button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

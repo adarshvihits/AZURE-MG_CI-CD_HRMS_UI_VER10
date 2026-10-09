@@ -1,0 +1,182 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "Certifications";
+}
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+         const fileLabel = $('#fileLabel2');
+        const actualFileName = document.getElementById('GetCertifications_File_ActualFileName')?.value;
+        // No saved file
+        fileLabel.html('');
+        // filename missing
+        if (!actualFileName) {
+            fileLabel.html("No File Chosen");
+            return;
+        }
+        //Show saved filename
+        if (actualFileName.length > 40) {
+            fileLabel.html(actualFileName.substring(0, 38) + '..');
+        } else {
+            fileLabel.html(actualFileName);
+        }
+
+    });
+    function filechange() {
+     
+        debugger
+        var fileLabel = $('#fileLabel2');
+        var a = document.getElementById('GetCertifications_File_FileData');
+        var filename = $('#GetCertifications_File_FileData')[0].files[0].name;
+        if (a.value == "") {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            debugger
+            if (filename.length > 40) {
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 40);
+                fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+            else {
+                fileLabel.html(filename);
+            }
+        }
+    };
+
+</script>
+
+<style>
+    .FileUpload_FileData {
+        color: white !important;
+    }
+    .Resume_FileData {
+        color: white !important;
+    }
+
+    .PreviewImage {
+        color: white !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "CertificateSave", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+
+    <div id="addFamilyDetails" class="slider-forms slider-forms-open cer">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('cer')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Certification</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.GetCertifications.CertificateLogGI)
+                        @Html.HiddenFor(m => m.GetCertifications.CertificationCode)
+                        @Html.HiddenFor(m => m.SliderName)
+                        @*@Html.TextBoxFor(m => m.GetCertifications.Certificate, new { @class = "form-control form-control-sm", @placeholder = "Certificate", @maxlength = 120, @onblur = "firstLetterCaps(this,'certificate')" })*@
+                        @Html.DropDownListFor(m => m.GetCertifications.certificateCode, (SelectList)ViewBag.CertificatePolicy, "--Select--", new { @class = "form-control form-control-sm" })
+                        <span id="certificate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Registration Number</label>
+                        @Html.TextBoxFor(m => m.GetCertifications.RegistrationNo, new { @class = "form-control form-control-sm", @placeholder = "Registration Number" })
+                        <span id="RegNo"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Valid From</label><span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.GetCertifications.Issued, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", placeholder = "Issued Date", @onchange = "validate(this,'issueddate')" })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span id="issueddate"></span>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row" id="renewalID">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Valid To</label><span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.GetCertifications.Renewaldate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Renewal Date", @onchange = "validateRenewalDate(this,'renewabledate')", @readonly = true })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span id="renewabledate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                        </label>
+
+             
+
+                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf,jpg,png,jpeg,doc,docx files are
+                                            allowed , File size less than 1 MB.">
+                            @if (Model.GetCertifications?.File != null)
+                            {
+                                <div class="small-btn-group">
+
+                                    @* <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="PreviewCertiDoc('@Model.GetCertifications.File.ActualFileName','@Model.GetCertifications.CertificateDocCode')"><i class="icon-xl far fa-eye"></i></button>*@
+
+                                </div>
+                            }
+                            @Html.HiddenFor(m => m.GetCertifications.File.FileName)
+                            @Html.HiddenFor(m => m.GetCertifications.CertificateDocCode)
+                            @Html.HiddenFor(m => m.GetCertifications.File.ActualFileName)
+
+                            @Html.TextBoxFor(m => m.GetCertifications.File.FileData, new
+                            {
+                                @type = "file",
+                                @name = "profile_avatar",
+                           @class = "form-control PreviewImage ",
+                           @accept = ".pdf, .png, .jpg, .jpeg, .doc, .docx ",
+                                @onchange = "filechange();CheckExtensionAndSize(this)",
+                                @title = ""
+                            })
+
+                            <label id="fileLabel2" class="nofilelabel notchlabel"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="famid" type="button" class="btn btn-default" onclick="validateAllCertificationSave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

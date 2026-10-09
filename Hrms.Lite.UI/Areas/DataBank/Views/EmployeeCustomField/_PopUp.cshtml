@@ -1,0 +1,99 @@
+﻿
+
+
+@model Hrms.Lite.Shared.DataBank.DTO.CustomField
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "CustomFieldSave" }))
+{
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table employee_custom_list vertical-scroll-200 p-3">
+        @{var abc = 0;}
+        <table id="customFieldTable" class="layout-fixed">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Custom Field</th>
+
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (int i = 0; i < Model.CustomFieldList.Count; i++)
+
+                {
+                    abc = i;
+                    <tr id="row_OI_@i">
+
+                        <td data-label="Sl. No" id="grid_slno">@(i+1)</td>
+                        <td data-label="Custom Field">
+                            <div class="form-group">
+                                @Html.HiddenFor(model => Model.CustomFieldList[i].CustomFieldCode)
+                                @Html.HiddenFor(model => Model.CustomFieldList[i].CustomFieldGI)
+                                @Html.TextBoxFor(Model => Model.CustomFieldList[i].CustomFieldName, new { @class = "form-control form-control-sm", @placeholder = "Custom Field" })
+
+                            </div>
+                        </td>
+
+                        <td data-label="Actions">
+                            @if (Model.CustomFieldList.Count == (i + 1) || Model.CustomFieldList.Count == 1)
+                            {
+                                <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                   class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('customFieldTable')">
+                                    <i class="fa fa-plus"
+                                       aria-hidden="true"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                   class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('customFieldTable')">
+                                    <i class="fa fa-plus"
+                                       aria-hidden="true"></i>
+                                </a>
+                            }
+                            
+
+                            <a data-bs-toggle="tooltip"
+                                title="" data-bs-original-title="Delete"
+                                class="btn btn-icon  icon-only mobile-full-width btn-delete delObj" onclick="DeleteResultRow(@i)">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                            
+
+
+
+
+
+
+
+                        </td>
+                    </tr>
+                }
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+    <!-- <end table></end> -->
+
+
+    <div class="row pt-3 " style="display:flex; align-items:center;">
+        @*<div class="col-md-10 align-right">
+            <span style="color:red ;" class="pt-3"> Note : Delete option will not be available for the objective results which are already in use</span>
+        </div>*@
+        <div class="col-md-12 align-right">
+            <button type="button"
+                    class="btn btn-default float-right mobile-full-width " onclick="CustomFieldSave()">
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+}

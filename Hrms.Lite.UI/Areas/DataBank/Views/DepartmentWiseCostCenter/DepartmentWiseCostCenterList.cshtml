@@ -1,0 +1,65 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DepartmentWiseCostCenter
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table departmentvshead_list  ">
+    @Html.HiddenFor(m => m.DepartmentWiseCostCenterList.Count)
+    <table id="GrievanceTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Sl. No</th>
+                <th scope="col">Department Name</th>
+                <th scope="col">Cost Center</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.DepartmentWiseCostCenterList != null && Model.DepartmentWiseCostCenterList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.DepartmentWiseCostCenterList.Count; i++)
+                {
+            <tr>
+                @Html.HiddenFor(m => Model.DepartmentWiseCostCenterList[i].DepartmentCode)
+
+                <td data-label="Sl. No">@Model.DepartmentWiseCostCenterList[i].SlNo</td>
+                <td data-label="Department Name">@Model.DepartmentWiseCostCenterList[i].DepartmentName</td>
+                @*<td data-label="Cost Center">@Model.DepartmentWiseCostCenterList[i].CostCenter</td>*@
+                <td>
+                    <span id="hideCost__@i" class="">@Model.DepartmentWiseCostCenterList[i].CostCenter</span>
+                    <span id="dropDownTxtbox_@i" class="hide">
+                        @Html.DropDownListFor(model => model.DepartmentWiseCostCenterList[i].CostDropdown.Code, (SelectList)ViewBag.CostCenterDropdown, "--Select Cost--", new{@class = "form-control form-control-sm LocArea" })
+
+                    </span>
+                </td>
+
+
+               
+
+
+                <td><span id="edit_@i" class=""> 
+                    <a data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only" data-bs-original-title="Edit"  onclick="onEditClk(@i)" >
+                    <i class="icon-xl fas fa-pencil-alt"></i></a>
+                    </span>
+                <span id="updatecancel_@i" class="hide">
+                    <a  type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-update icon-only " onclick="onUpdateClick(@i,'@Model.DepartmentWiseCostCenterList[i].DepartmentCode')" data-bs-original-title="Update"> <i class="icon-xl fas fa-sync-alt"></i> </a>
+                    <a  type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-cancel icon-only " onclick="onCancelClick(@i)" data-bs-original-title="Cancel"> <i class="icon-xl fas fa-times"></i></a>
+                    </span>
+                </td>
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

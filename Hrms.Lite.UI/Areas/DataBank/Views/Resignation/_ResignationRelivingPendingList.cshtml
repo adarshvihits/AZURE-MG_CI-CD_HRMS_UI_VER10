@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('.tab1Count').html("@Model.Count_InNoticePeriod");
+    $('.tab2Count').html("@Model.Count_ResignationAccept");
+    $('.tab3Count').html("@Model.Count_ExitChecklistPending");
+    $('.tab4Count').html("@Model.Count_RelivingPending");
+    $('.tab5Count').html("@Model.Count_RetirementDueList");
+    $('.tab6Count').html("@Model.Count_ResignationApproval");
+    $('.tab7Count').html("@Model.Count_ResignationAmendment");
+
+    });</script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table resignation_reliving_pendinglist">
+        @Html.HiddenFor(m => m.ResignationList.Count)
+        <table id="resignationRelivingTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Date Of Joining">DOJ</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Year Of Service">Y/S</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Resignation Date">Res. Date</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Last Working Days">LWD</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Tracker</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ResignationList != null && Model.ResignationList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ResignationList.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.ResignationList[i].EmployeeGI)
+                        @Html.HiddenFor(m => m.ResignationList[i].ResignationGI)
+
+                <tr>
+                    <td data-label="ID">@Model.ResignationList[i].EmployeeID</td>
+
+                    @if (Model.UserVsMenuTab[4].Applicable == true)
+                    {
+                        <td data-label="Candidate Name">
+
+                            <a onclick="onEmpRelievingClick('@Model.ResignationList[i].EmployeeGI', '@Model.ResignationList[i].ResignationGI', '@Model.ResignationList[i].DueStatus')">@Model.ResignationList[i].EmployeeName</a>
+
+                        </td>
+                    }
+                    else
+                    {
+                        <td data-label="Candidate Name">
+                            <a onclick="swal.fire(MasterPersmissionMsg)">@Model.ResignationList[i].EmployeeName</a>
+                        </td>
+                    }
+
+                    <td data-label="Designation">@Model.ResignationList[i].Designation.Name</td>
+                    <td data-label="Department">@Model.ResignationList[i].Department.Name </td>
+                    <td data-label="Location">@Model.ResignationList[i].Location.Name</td>
+                    <td data-label="Y/S">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].DOJ))</td>
+                    <td data-label="Y/S">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].YOS))</td>
+                    <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].ResignationDate))</td>
+                    <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ResignationList[i].LWD))</td>
+                    <td data-label="Reason">@Model.ResignationList[i].Reason</td>
+              
+                    <td data-label="Tracker">                      
+                        <a  onclick="GetResignationTracker('@Model.ResignationList[i].ResignationGI', '@Model.ResignationList[i].EmployeeGI')">
+                            <i class="icon-xl la la-arrow-circle-right"></i>
+                        </a>
+                    </td>
+                </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>

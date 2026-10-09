@@ -1,0 +1,67 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryAdvance
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+
+
+<div class="ihits-table table-border odd-even  mobile-responsive-table salary_advance_issue-apv-pending">
+    @Html.HiddenFor(m => m.ApprovalPendingList.Count)
+    <table id="AdvanceRequestApvPendingTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Gross Salary</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Requested Amount">Req. Amount</th>     
+                <th scope="col">Tracker</th>
+        
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ApprovalPendingList != null && Model.ApprovalPendingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApprovalPendingList.Count; i++)
+                {
+
+
+                    <tr>
+                        <td data-label="ID">
+                            @Html.HiddenFor(m => m.ApprovalPendingList[i].EmployeeGI)
+                            @Html.HiddenFor(m => m.ApprovalPendingList[i].RequestCode)
+                            @Model.ApprovalPendingList[i].EmployeeID
+                        </td>
+                        <td data-label="Name"> @Model.ApprovalPendingList[i].EmployeeName </td>
+                        <td data-label="Designation">@Model.ApprovalPendingList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.ApprovalPendingList[i].Department.Name</td>
+                        <td data-label="Location">@Model.ApprovalPendingList[i].Location.Name</td>
+                        <td data-label="Gross Salary">@Model.ApprovalPendingList[i].GrossSalary</td>
+                        <td data-label="Gross Salary">
+                            <span class="edit_@i" id="loanAmtDisplay_@i">
+                                @Model.ApprovalPendingList[i].LoanAmount
+                            </span>
+                            <span class="updatecancel_@i hide">
+                                @Html.TextBoxFor(m => m.ApprovalPendingList[i].LoanAmount, new { @class = "form-control form-control-sm text-end", @maxlength = 8, @style = "text-align: end;", @placeholder = "Amount", @onkeypress = "return onlyAmount(event)", @blur = "validate(this,'LoanAmt_'" + i + ")" })
+                            </span>
+                            <span id="LoanAmt_@i"></span>
+                        </td>
+                      
+
+                        <td data-label="Tracker">
+
+                            <a id="applicant " onclick="GetTracker('@Model.ApprovalPendingList[i].RequestGI')">
+                                <i class="icon-xl la la-arrow-circle-right"></i>
+                            </a>
+                        </td>
+         
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

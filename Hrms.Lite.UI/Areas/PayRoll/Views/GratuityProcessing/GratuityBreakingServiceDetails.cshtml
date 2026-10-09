@@ -1,0 +1,252 @@
+﻿@model Hrms.Lite.Shared.PayRoll.GratuityProcessing
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/GratuityProcessing.js"></script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Gratuity Processing</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "GratuityProcessing", new { Area = "PayRoll" })" class="">Gratuity Processing List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Breaking Service
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "SaveService" }))
+{
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+                        <div class="col-md-12">
+
+
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body">
+
+                                    <div class="profile-header position-relative box-shadow-none mb-5">
+                                        <script src="/js/custom.js"></script>
+
+                                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                        @Html.HiddenFor(Model => Model.EmployeeGI)
+
+                                        @Html.HiddenFor(m => m.EmployeeData.DOB)
+                                        @Html.HiddenFor(m => m.EmployeeData.DOC)
+                                        @Html.HiddenFor(m => m.EmployeeData.DOJ)
+                                        @Html.HiddenFor(m => m.EmployeeData.LWD)
+                                        @Html.HiddenFor(m => m.EmployeeData.ResignationDate)
+                                        @Html.HiddenFor(m => m.EmployeeData.YearsOfService)
+                                        <div class="profile-header-overflow"></div>
+                                    </div>
+
+
+
+
+                                    <div class="page_white">
+
+                                        <div class="row my-2">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label class="view-title">DOB</label>
+
+                                                    <div class="view-details">
+                                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeData.DOB))
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="view-title">Resignation Date</label>
+
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeData.ResignationDate))</div>
+                                                </div>
+                                            </div>
+
+                                            @*<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">Reason For Resignation </label>
+
+                        <div class="view-details">Demo</div>
+                    </div>
+                </div>*@
+
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="view-title">DOJ </label>
+
+                                                    <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeData.DOJ))</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="view-title">DOC </label>
+
+                                                    <div class="view-details"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeData.DOC))</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="view-title">LWD  </label>
+
+                                                    <div class="view-details"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeData.LWD))</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label class="view-title">Y/S  </label>
+
+                                                    <div class="view-details">
+                                                        @Model.EmployeeData.YearsOfService
+                                                        @Html.HiddenFor(m => m.EmployeeCode)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row my-2">
+
+
+                                        </div>
+
+
+                                    </div>
+                                    @*<div class="step-outer pb-10 step_row">
+            <div class="step-item active">
+                Breaking Service
+                <span class="step-circle"></span>
+            </div>
+            <div class="step-item ">
+                Approval
+                <span class="step-circle"></span>
+            </div>
+            <div class="step-item">
+                Payment Details
+                <span class="step-circle"></span>
+            </div>
+
+
+
+        </div>*@
+
+
+                                <div id="serviceList">
+                                    @if (Model.ProcessingStage == "1")
+                                    {
+
+                                        @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_BreakingServiceList.cshtml", Model)
+                                    }
+                                    </div>
+                                    
+
+
+
+
+                                <div id="detailsApprove">
+                                    @if (Model.ProcessingStage == "2")
+                                    {
+
+
+                                        @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_GratuitydetailsApprove.cshtml")
+                                    }
+
+                                    </div>
+
+                                    
+                                    @*<div class="hide" id="detailsApprove">
+
+                                        @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_GratuitydetailsApprove.cshtml")
+
+                                    </div>*@
+
+                                    @*<div id="detailsApprove" class="hide">
+
+            @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_GratuitydetailsApprove.cshtml")
+
+        </div>*@  
+                                <div id="paymentDetails">
+                                    @if (Model.ProcessingStage == "3")
+                                    {
+                                        @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_PaymentDetails.cshtml")
+                                    }
+                                    </div>
+
+                                    
+
+                                @*<div class="hide" id="paymentDetails">
+
+                                    @await Html.PartialAsync("~/Areas/PayRoll/Views/GratuityProcessing/_PaymentDetails.cshtml")
+                                </div>*@
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="row card-footer-bottom-fixed">
+
+                            <div class="col-md-12 align-right">
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveBreakingService('@Model.EmployeeGI')">
+                                    Save And Next
+                                </button>
+                            </div>
+
+                        </div>*@
+
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+                    <!--end::Row-->
+                    <!--end::Dashboard-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+        </div>
+        <!--end::Entry-->
+
+    </div><!--end::Entry-->
+
+
+}

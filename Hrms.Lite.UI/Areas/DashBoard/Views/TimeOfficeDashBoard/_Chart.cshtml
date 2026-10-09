@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoardDiagram>
+@using Kendo.Mvc.UI
+<div class="demo-section wide">
+    @(Html.Kendo().Chart(Model)
+        .Name("chart")
+        .Title("")
+        .Legend(legend => legend
+            //.Position(ChartLegendPosition.Top)
+            .Visible(false)
+        )
+        .ChartArea(chartArea => chartArea
+            .Background("transparent").Height(250).Width(700)
+        )
+        .SeriesDefaults(seriesDefaults =>
+            seriesDefaults.Line().Style(ChartSeriesStyle.Smooth)
+        )
+        .Series(series => {
+            series.Line(model => model.COUNT).Name("Absent").CategoryField("Date").Color("#3699FF");
+        })
+        .CategoryAxis(axis => axis
+        .Labels(labels => labels.Padding(0, 0, 0, 20))
+            .MajorGridLines(lines => lines.Visible(false))
+        )
+        .ValueAxis(axis => axis
+            .Numeric()//.Labels(labels => labels.Format("{0}%"))
+            .Line(line => line.Visible(false))
+            .AxisCrossingValue(-10).MajorUnit(CalculateMajorUnit(Model))
+        )
+        .Tooltip(tooltip => tooltip
+            .Visible(true).Template("<b>#= dataItem.FullDate #</b> <br />  Count : #= value #")
+        //.Format("{0}%")
+        )
+    )
+</div>
+@functions {
+    public static double CalculateMajorUnit(IEnumerable<Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoardDiagram> data)
+    {
+        // Step 1: Determine the range of your data
+        double majorUnit = 1;
+        if (data != null) { 
+            var absCount = new int[data.Count()];
+            int i = 0;
+            foreach (var item in data)
+            {
+                absCount[i] = item.COUNT;
+                i++;
+            }
+            var minValue = absCount.Min();
+            var maxValue = absCount.Max();
+            double range = maxValue - minValue;
+
+            if (range <= 5)
+            {
+                majorUnit = .5;
+            }
+            else if (range <= 10)
+            {
+                majorUnit = 1;
+            }
+            else if (range <= 100)
+            {
+                majorUnit = 10;
+            }
+            else if (range <= 1000)
+            {
+                majorUnit = 100;
+            }
+            else if (range <= 5000)
+            {
+                majorUnit = 500;
+            }
+            else if (range <= 10000)
+            {
+                majorUnit = 1000;
+            }
+            else if (range < 15000)
+            {
+                majorUnit = 1500;
+            }
+            else if (range < 20000)
+            {
+                majorUnit = 2000;
+            }
+
+        }
+
+        return majorUnit;
+    }
+}

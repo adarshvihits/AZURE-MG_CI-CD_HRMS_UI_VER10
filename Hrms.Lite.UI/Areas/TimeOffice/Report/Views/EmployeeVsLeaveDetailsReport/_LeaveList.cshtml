@@ -1,0 +1,104 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Report.LeaveRegister
+@if (Model.EmployeeHeader != null)
+{
+    <div class="profile-header mb-3">
+
+
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+        <div class="profile-header-overflow"></div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-7">
+        </div>
+        <div class="col-md-1">
+            <div class="tab-items select-option  ">
+                <div class="d-flex h-100 align-items-center">
+
+                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                       data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                        <i class="icon-xl far fa-file-excel"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    <div class="col-md-3"></div>
+        <div class="col-md-1">
+            <div class="tab-items select-option  ">
+                <div class="d-flex h-100 align-items-center">
+
+                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                       data-bs-original-title="Export to Excel" onclick="ExportToExcelDetails()">
+                        <i class="icon-xl far fa-file-excel"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col-md-8">
+
+
+            <div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-1 leave_list vertical-scroll-325">
+                @Html.HiddenFor(model => Model.LeaveRegisterList.Count)
+                <table id="LEAVELIST" class="common-table">
+                    <thead>
+                        <tr class="table-dark">
+
+                            <th scope="col">Leave Type</th>
+                            <th scope="col">Opening</th>
+                            <th scope="col">CF</th>
+                            <th scope="col">Credit</th>
+                            <th scope="col">Debit</th>
+                            <th scope="col">Encash</th>
+                            <th scope="col">Taken</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Applied</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+                            if (Model.LeaveRegisterList != null && Model.LeaveRegisterList.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.LeaveRegisterList.Count; i++)
+                                {
+                                    <tr>
+
+
+                                        <td data-label="Name">
+                                            <a onclick="onLeaveTypeClick(@Model.LeaveRegisterList[i].LEVCODE)">
+                                                @Model.LeaveRegisterList[i].LEAVE
+                                            </a>
+
+                                        </td>
+                                        <td data-label="Short Name"> @Model.LeaveRegisterList[i].OPENING</td>
+                                        <td data-label="Short Name"> @Model.LeaveRegisterList[i].CF</td>
+                                        <td data-label="Allowance Type"> @Model.LeaveRegisterList[i].CREDIT</td>
+                                        <td data-label="Display Order"> @Model.LeaveRegisterList[i].DEBIT</td>
+                                        <td data-label="Display Order"> @Model.LeaveRegisterList[i].SURRENDER</td>
+                                        <td data-label="Display Order"> @Model.LeaveRegisterList[i].TAKEN</td>
+                                        <td data-label="Display Order"> @Model.LeaveRegisterList[i].BALANCE</td>
+                                        <td data-label="Display Order"> @Model.LeaveRegisterList[i].APPLIED</td>
+
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4" id="leaveDetailsList">
+            @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/EmployeeVsLeaveDetailsReport/_LeaveDetailsList.cshtml", Model)
+
+        </div>
+    </div>

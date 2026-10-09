@@ -1,0 +1,198 @@
+﻿@model Hrms.Lite.Shared.Master.FinancialYear
+<script src="~/scripts/Master/FinancialYear.js"></script>
+
+
+@{
+    ViewData["Title"] = "AddNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "FinancialYearsave" }))
+{
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <!--begin::Header-->
+        <div id="kt_header" class="header header-fixed">
+            <!--begin::Container-->
+            <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                <!--begin::Header Menu Wrapper-->
+                <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                    <!--begin::Header Menu-->
+                    <div class="d-flex align-items-baseline flex-wrap mr-5">
+                        <h3 class="main-title">
+                            Financial Year
+                        </h3>
+                        <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                            <li class="breadcrumb-item ">
+                                <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item text-muted">
+                                <a href="@Url.Action("Index", "FinancialYear", new { Area = "Master" })" class="">
+                                    @*<i class="icon-nm fas fa-home mt-1"></i>*@
+                                    Financial Year List
+                                </a>
+                            </li>
+                            @*<li class="breadcrumb-item text-muted">
+            <a href="_FinancialYearList">Financial Year List</a>
+        </li>*@
+                            <li class="breadcrumb-item text-muted">
+                                Financial Year
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!--end::Header Menu Wrapper-->
+                <!--begin::Topbar-->
+                <!--<div class="topbar">-->
+                <!--begin::User-->
+                <!-- <div class="topbar-item">
+                    <div
+                        class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2">
+                        <span
+                            class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
+                        <span
+                            class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Sean</span>
+
+                    </div>
+                </div> -->
+                <!--end::User-->
+                <!--</div>-->
+                <!--end::Topbar-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+
+
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+                        
+                        <div class="col-md-12">
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body  ">
+                                    <div class="page_white">
+
+                                        <div class="row tab-style-button">
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Name</label>
+                                                    <span class="Mandatory">*</span>
+                                                    @Html.HiddenFor(model => Model.Mode)
+                                                    @Html.HiddenFor(model => Model.GI)
+                                                    @Html.HiddenFor(model => Model.LogGI)
+                                                    @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "validate(this,'NameFinancial')", maxlength = "120" })
+                                                    <span id="NameFinancial"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Short Name</label>
+                                                    <span class="Mandatory">*</span>
+                                                    @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "validate(this,'shortFinancial')", maxlength = "5" })
+                                                    <span id="shortFinancial"></span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-md-3">
+                                                <label>From</label>
+                                                <span class="Mandatory">*</span>
+                                                <div class="input-group date">
+                                                    @Html.TextBoxFor(Model => Model.FromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dop", @readonly = "true", @placeholder = "From Date", @onchange = "validate(this,'from')" })
+                                                    <span id="from"></span>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>To</label>
+                                                <span class="Mandatory">*</span>
+                                                <div class="input-group date">
+                                                    @Html.TextBoxFor(Model => Model.ToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dop", @readonly = "true", @placeholder = "To Date", @onchange = "validate(this,'to')" })
+                                                    <span id="to"></span>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 d-flex align-items-end">
+                                                <div>
+                                                    <button type="button" id="addoffdaysettings" class="btn btn-default  mobile-full-width " onclick="CheckIfAlreadyExist()">
+                                                        Proceed
+
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <div id="AddFinancialYearList">
+            
+                                    </div>
+                                    <!-- <end table></end> -->
+
+                                    <div class="row card-footer-bottom-fixed border-none">
+
+                                        <div class="col-md-12 align-right">
+                                            @if (Model.Mode == "CREATE")
+                                            {
+                                                <button class="btn btn-default mobile-full-width" type="button" onclick="OnSaveClick('Save')">
+                                                    Save
+                                                </button>
+                                            }
+                                            @*@if (Model.Mode == "MODIFY")
+                {
+                    <button type="button" class="btn btn-default  mobile-full-width" onclick="OnSaveClick('Modify')">
+                        Modify
+                    </button>
+                }*@
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+                    <!--end::Row-->
+                    <!--end::Dashboard-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+        </div>
+    </div>
+}

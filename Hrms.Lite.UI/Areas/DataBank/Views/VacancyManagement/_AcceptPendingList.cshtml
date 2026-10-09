@@ -1,0 +1,118 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagement
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#tb1').html("@Model.Tab1Count");
+        $('#tb2').html("@Model.Tab2Count");
+        $('#tb3').html("@Model.Tab3Count");
+        $('#tb4').html("@Model.Tab4Count");
+        $('#tb5').html("@Model.Tab5Count");
+    });
+</script>
+        <script src="~/js/settings.js"></script>
+        <script src="~/js/tooltip.js"></script>
+        <div class="ihits-table table-border odd-even mobile-responsive-table pending-accept-list new-tble-pad-tp">
+            @*applicant-shortlisted-list*@
+            @Html.HiddenFor(m => m.VacancyManagement_List.Count)
+            <table id="PendingAcceptTbl" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">MRF No.</th>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Vacancy Type</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Region</th>
+                        @*<th scope="col" data-bs-toggle="tooltip" title="Requested Date">Req Date</th>*@
+                        <th scope="col"data-bs-toggle="tooltip" title="Deadline">Deadline</th>
+                        <th scope="col" data-bs-toggle="tooltip" title="Number of Requirements">N/Req</th>
+                        <th scope="col" data-bs-toggle="tooltip" title="Days Left">D. L.</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.VacancyManagement_List != null && Model.VacancyManagement_List.Count > 0)
+                    {
+
+
+                        for (int i = 0; i < Model.VacancyManagement_List.Count; i++)
+
+                        {
+                            <tr>
+
+                                @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementGI)
+                                @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementCode)
+                                <td data-label="Code">@Model.VacancyManagement_List[i].JobCode</td>
+                                <td data-label="Job Title">
+                                    <a id="applicantshortlisted" class="slider-btn" onclick="getApproveDetails('@Model.VacancyManagement_List[i].VacancyManagementGI',1)">
+                                        @Model.VacancyManagement_List[i].JobTitle
+                                    </a>
+                                </td>
+                                @*<td data-label="Code">@Model.VacancyManagement_List[i].VacancyType</td>*@
+
+
+                                @if (@Model.VacancyManagement_List[i].VacancyType == "New MRF")
+                                {
+                                    <td data-label="Code">@Model.VacancyManagement_List[i].VacancyType</td>
+                                }
+                                else
+                                {
+                                    <td data-label="Code">
+                                        <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                           type="button" class="float-left" onclick="onVacancyTypeClick('@Model.VacancyManagement_List[i].VacancyManagementGI')">
+                                            @Model.VacancyManagement_List[i].VacancyType
+                                        </a>
+                                    </td>
+
+                                }
+
+
+
+                                @*<td data-label="Requsted Date"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].RequestedDate))</td>*@
+                                <td data-label="Location">@Model.VacancyManagement_List[i].Location</td>
+                                <td data-label="Region">@Model.VacancyManagement_List[i].Region</td>
+                                <td data-label="Deadline">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].NeedByDate))</td>
+                                <td data-label="No of Requirements"> @Model.VacancyManagement_List[i].NoOfRequirements</td>
+                                @if (@Model.VacancyManagement_List[i].Aging < 0)
+                                {
+                                    <td data-label="Days Left"><span class="text-color-low">@Model.VacancyManagement_List[i].Aging</span></td>
+                                }
+                                else
+                                {
+                                    <td data-label="Days Left"><span class="text-color-high">@Model.VacancyManagement_List[i].Aging</span></td>
+                                }
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1"
+             role="dialog" aria-labelledby="myLargeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width:970px;" >
+                <div id="myDiv" class="modal-content popup">
+                    <div class="modal-header" style="padding:10px">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Resignation Details
+                        </h5>
+                        <button type="button" class="close"
+                                data-bs-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true"
+                               class="ki ki-close"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+

@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.SocialWallReport
+<script src="~/scripts/DataBank/Reports/SocialWallReport.js"></script>
+
+
+@Html.HiddenFor(m => m.SocialWallCode)
+@Html.HiddenFor(m => m.MonthCode)
+<style>
+    .comment_details {
+        font-size: 11px;
+        padding-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .imgwidd {
+        width: 100% !important;
+        border-radius: 30px;
+    }
+</style>
+
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table LikesEmployee_commentdetails  vertical-scroll-200">
+    @Html.HiddenFor(m => m.CommentEmployeeDetailsList.Count)
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row-outer">
+                <div class="comment_details">
+                    @Html.DisplayFor(m => m.Name)
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="CommentEmployee">
+        <thead>
+            <tr class="table-dark">
+                <th></th>
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.CommentEmployeeDetailsList != null && Model.CommentEmployeeDetailsList.Count > 0)
+            {
+                for (int i = 0; i < Model.CommentEmployeeDetailsList.Count; i++)
+
+                {
+            <tr>
+
+                <td data-label="image"><img src=@Model.CommentEmployeeDetailsList[i].Base64string class="imgwidd"></td>
+                <td data-label="ID">@Model.CommentEmployeeDetailsList[i].EmployeeID</td>
+                <td data-label="Employee Name">@Model.CommentEmployeeDetailsList[i].FullName</td>
+                <td data-label="Comments">@Model.CommentEmployeeDetailsList[i].EmployeeComment</td>
+                <td data-label="Designation">@Model.CommentEmployeeDetailsList[i].Designation</td>
+                <td data-label="Department">@Model.CommentEmployeeDetailsList[i].Department</td>
+                <td data-label="Location">@Model.CommentEmployeeDetailsList[i].Location</td>
+            </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+
+    </table>
+</div>
+

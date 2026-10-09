@@ -1,0 +1,58 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.RecruitmentTrackerReport
+<script src="~/js/settings.js"></script>
+
+@*<style>
+        .RecruitmentProcess-lists.table-border table tbody tr td {
+            padding: 10px 10px !important;
+        }
+    </style>*@
+
+
+
+<div class="ihits-table table-border mobile-responsive-table RecruitmentProcess-lists  vertical-scroll-250 ">
+    @Html.HiddenFor(m => m.Documents.Count)
+
+
+    <table>
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl No.</th>
+                <th scope="col">Type</th>
+                <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.Documents != null && Model.Documents.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Documents.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Applicant ID">
+                            @(i+1)
+                            @Html.HiddenFor(m => m.ApplicantGI)
+                            @Html.HiddenFor(m => m.Documents[i].Type)
+                        </td>
+                        <td data-label="Type">@Model.Documents[i].FileName</td>
+                        <td data-label="View">
+                            <div class="view-details  ">
+                                <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="showDecryptDocument('@Model.ApplicantGI', '@Model.Documents[i].Type', '@Model.Documents[i].RowId')">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 30vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

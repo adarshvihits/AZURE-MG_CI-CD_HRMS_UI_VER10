@@ -1,0 +1,549 @@
+﻿@model Hrms.Lite.Shared.Master.User
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/Master/user.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+@*  NOTE  : APPROVE FOR NON EMPLOYEE AND HR USER *@
+
+@using (Html.BeginForm("ApproveRequest", "User", FormMethod.Post, new { @class = "display-flex", @id = "ApproveOrRejectNonEmp" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">
+                        User
+                    </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "User", new { Area = "Master" })">User List</a>
+
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            User
+
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body ">
+
+                                @Html.HiddenFor(m => m.LogGI)
+                                @Html.HiddenFor(m => m.UserType)
+                                @Html.HiddenFor(m => m.Mode)
+                                @Html.HiddenFor(m => m.UserMasterGI)
+                                <div class="row mb-2">
+
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">User ID</label>
+                                            <div class="view-details">@Model.Name</div>
+                                        </div>
+
+                                    </div>
+                                  
+                                    @if (Model.UserType == "HR")
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Employee Name</label>
+                                                <div class="view-details">@Model.EmployeeName</div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                        <div class="col-md-2">
+                                            <div class="row-outer">
+                                                <label class="view-title">User Role</label>
+                                                <div class="view-details">@Model.UserRole.Name</div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="row-outer">
+                                                <label class="view-title">Mobile</label>
+                                                <div class="view-details">@Model.Mobile</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row-outer">
+                                                <label class="view-title">Email</label>
+                                                <div class="view-details">@Model.Email</div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="row-outer">
+                                                <label class="view-title">User Role</label>
+                                                <div class="view-details">@Model.UserRole.Name</div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Active From</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ActiveFrom))</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Active To</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ActiveTo))</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="row-outer">
+                                            <label class="view-title">Active</label>
+                                            <div class="view-details">
+                                                @if (Model.Active)
+                                                {
+                                                    <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-icon btn-close"><i class="icon-xl fas fa-times"></i></button>
+
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Type</label>
+                                            <div class="view-details">@Model.UserType</div>
+                                        </div>
+
+                                    </div>
+                                    @if (Model.UserType != "Non Emp Users")
+                                    {
+                                        <div class="col-md-1">
+                                            <div class="row-outer">
+                                                <label class="view-title">Is Admin</label>
+                                                <div class="view-details">
+                                                    <button type="button" class="btn btn-icon btn-close"><i class="icon-xl fas fa-times"></i></button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                    <div class="col-md-3">
+                                        <div class="row-outer">
+                                            <label class="view-title">Remarks</label>
+                                            <div class="view-details">@Model.Remarks</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <h6 class="mt-2">User vs Employee Applicability</h6>
+
+                                <div class="tab-outer tab-only">
+                                    <ul class="ulList">
+                                        @*<div class="tab-top-right">
+            <div class="checkbox-inline">
+                <label class="checkbox checkbox-outline checkbox-success">
+
+                    @Html.CheckBoxFor(m => m.SelectAll, new { @disabled = "disabled" })
+                    <span></span>Select All
+                </label>
+                <label class="checkbox checkbox-outline checkbox-success">
+            </div>
+        </div>*@
+                                        <!-- Tab Start -->
+                                        <div class="TabMoving"></div>
+                                        <li class="tabOne clickOnTab active">Job Details</li>
+                                        <div id="tabOne" class="tab-content active">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Designation</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Designation != null && Model.UserVsEmployeeApplicability.Designation.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Designation.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Designation[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Designation[i].Name</td>
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Department</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Department != null && Model.UserVsEmployeeApplicability.Department.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Department.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Department[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Department[i].Name</td>
+
+                                                                        </tr>
+
+                                                                    }
+                                                                }
+
+
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-three-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Location</th>
+                                                                    <th scope="col">Region</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Location != null && Model.UserVsEmployeeApplicability.Location.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Location.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Location[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Location[i].Name</td>
+                                                                            <td data-label="Region">@Model.UserVsEmployeeApplicability.Location[i].Region.Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tab End -->
+                                        <!-- Tab Start -->
+                                        <div class="TabMoving"></div>
+                                        <li class="tabTwo clickOnTab">Category</li>
+                                        <div id="tabTwo" class="tab-content">
+                                            <div class="row">
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Category</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Category != null && Model.UserVsEmployeeApplicability.Category.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Category.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Category[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Category[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Grade</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Grade != null && Model.UserVsEmployeeApplicability.Grade.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Grade.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Grade[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Grade[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">PayrollGroup</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.PayrollGroup != null && Model.UserVsEmployeeApplicability.PayrollGroup.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.PayrollGroup.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.PayrollGroup[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.PayrollGroup[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tab End -->
+                                        <!-- Tab Start -->
+                                        <div class="TabMoving"></div>
+                                        <li class="tabThree clickOnTab">Additional Masters</li>
+                                        <div id="tabThree" class="tab-content">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Division</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Division != null && Model.UserVsEmployeeApplicability.Division.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Division.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Division[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Division[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Section</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.Section != null && Model.UserVsEmployeeApplicability.Section.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.Section.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.Section[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.Section[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border advance-user-control-two-col mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Employment Type</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.EmploymentType != null && Model.UserVsEmployeeApplicability.EmploymentType.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.EmploymentType.Count; i++)
+                                                                    {
+                                                                        @Html.HiddenFor(m => m.UserVsEmployeeApplicability.EmploymentType[i].Code)
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.EmploymentType[i].Name</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tab End -->
+
+
+
+                                        <div class="TabMoving"></div>
+                                        <li class="tabFour clickOnTab">Group Company</li>
+                                        <div id="tabFour" class="tab-content">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="ihits-table table-border full-width-table-list mb-0 vertical-scroll-250">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Division</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.UserVsEmployeeApplicability.GroupCompany != null && Model.UserVsEmployeeApplicability.GroupCompany.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.UserVsEmployeeApplicability.GroupCompany.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Allowance">@Model.UserVsEmployeeApplicability.GroupCompany[i].Name</td>
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </ul>
+                                </div>
+
+
+                                <!-- <end table></end> -->
+                                <div class="row card-footer-bottom-fixed">
+
+                                    <div class="col-md-12 align-right">
+                                        <div class="col-md-12 align-right">
+                                            @if (CurrentUserRoleActions.Approve == true)
+                                            {
+                                                <button type="button" class="btn btn-danger  mobile-full-width" onclick="confirmReject()">
+                                                    Reject
+                                                </button>
+                                                <button type="button" class="btn btn-default  mobile-full-width" onclick="confirmApprove()">
+                                                    Approve
+                                                </button>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

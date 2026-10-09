@@ -1,0 +1,232 @@
+﻿@model Hrms.Lite.Shared.Master.InsurancePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>
+    (Context.Session.GetString("UserRoleActions"));
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/Master/InsurancePolicy.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Insurance Policy
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Insurance Policy
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body p-5 pb-13 pt-0">
+
+                            <div class="mobile-tab-section">
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label>Type</label>
+                                            <select class="form-control form-control-sm "
+                                                    id="tabsDropdownAppraisalType"
+                                                    onchange="OntabClick(this)">
+                                                <option value="ACTIVE">Active</option>
+                                                <option value="INACTIVE">Inactive</option>
+                                                <option value="APPROVAL_PENDING">
+                                                    Pending
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row tab-style-button">
+                                <div class="tab-button-wrap">
+                                    <div class="tab-items">
+                                        <span class="btn-title tab1 active" onclick="OntabClick('tab1','ACTIVE')">
+                                            Active
+                                            <!--<span class="btn-notification AllTabCount">-->@*@Model.ActiveCount*@<!--</span>-->
+                                        </span>
+                                    </div>
+                                    <div class="tab-items medium">
+                                        <span class="btn-title tab2" onclick="OntabClick('tab2','INACTIVE')">
+                                            Inactive
+                                            <!--<span class="btn-notification InActiveTabCount">-->@*@Model.InactiveCount*@<!--</span>-->
+                                        </span>
+                                    </div>
+                                    <div class="tab-items low">
+                                        <span class="btn-title tab3" onclick="OntabClick('tab3','APPROVAL_PENDING')">
+                                            Pending
+                                            <span class="btn-notification pendingTabCount">@Model.PendingCount</span>
+                                        </span>
+                                    </div>
+
+
+
+                                    <div class="tab-items select-option">
+
+                                        <div class="sraech-slider">
+                                            <div class="search-slider-inner">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                                   placeholder="ID/Name">
+                                        </div>
+                                        <a data-bs-toggle="tooltip" title="Export to Excel"
+                                           class="btn btn-excel" onclick="ExportToExcel()">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+                            <div id="insurancePolicyList">
+                                @await Html.PartialAsync("_List")
+                            </div>
+                            <div class="sliderView">
+                            </div>
+                            <div class="modal fade PF_settings_applicable bd-example-modal-lg" tabindex="-1"
+                                 role="dialog" aria-labelledby="myLargeModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content popup " style="height:400px ;">
+                                        <div class="modal-header" style="padding:10px">
+                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                Insurance Company
+                                            </h5>
+                                            <button type="button" class="close"
+                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @await Html.PartialAsync("_Popup")
+                                        </div>
+                                        <!-- <end table></end> -->
+
+
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <end table></end> -->
+                            <div class="row card-footer-bottom-fixed">
+                                <div class="col-md-6">
+                                    <div class="d-flex responsive-center">
+                                        <a data-bs-toggle="modal" data-target=".PF_settings_applicable">
+                                            <div class="application-btn d-flex align-items-center pr-3 ">
+                                                <div class="history-btn">
+                                                    <img src="/images/Icon awesome-history.png">
+
+                                                </div>
+                                                <div class="application-icon"> <h3 class="pt-2 pl-3">Insurance Company </h3></div>
+                                            </div>
+                                        </a>
+
+
+                                    </div>
+                                </div>
+                                @*<div class="col-md-6">
+                                    <div class="row card-footer-bottom-fixed">
+
+                                        <div class="col-md-12 align-right">
+
+                                            <a data-bs-toggle="modal" data-target=".PF_settings_applicable"
+                                               type="button" type="button"
+                                               class="btn btn-default float-left mobile-full-width mr-3">
+                                                Insurance Company
+                                            </a>
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>*@
+                                <div class="col-md-6 align-right">
+                                    @if (CurrentUserRoleActions.Create == true)
+                                    {
+                                        <a class="btn btn-default float-right mobile-full-width " onclick="AddNewOrEditClick('CREATE')">
+                                            Add
+                                            New
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-default float-right mobile-full-width" onclick="swal.fire(MasterPersmissionMsg);">
+                                            Add
+                                            New
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->

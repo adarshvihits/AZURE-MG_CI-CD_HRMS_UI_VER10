@@ -1,0 +1,88 @@
+﻿
+
+@model Hrms.Lite.Shared.Master.CostCenter
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+       
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+        });
+</script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Cost-Center-pending-list">
+    <table class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Cost Center Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+
+                <th scope="col"> Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+                if (Model.CostCenterList != null && Model.CostCenterList.Count > 0)
+                {
+                    for (int i = 0; i < Model.CostCenterList.Count; i++)
+
+                    {
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.CostCenterList[i].MakerChecker)
+                            <td data-label="Name">@Model.CostCenterList[i].CostCenterUserCode</td>
+                            <td data-label="Name">@Model.CostCenterList[i].Name</td>
+                            <td data-label="Name">@Model.CostCenterList[i].ShortName</td>
+                       
+                            <td data-label="Name">@Model.CostCenterList[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.CostCenterList[i].GI', '@Model.CostCenterList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,160 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeVsBankDetailsApproval
+<script>
+        $(document).ready(function () {
+            debugger;
+            var b = document.getElementById('File_AbsoluteUri');
+            if (b.value == null) {
+                fileLabel.innerHTML = "No File Chosen";
+            }
+            else {
+                var b = document.getElementById('File_ActualFileName');
+                if (b.value != '') {
+
+                    let replacemnt = '..';
+                    theSplit = b.value.slice(0, 6);
+                    fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+                }
+                else {
+                    fileLabel.innerHTML = "";
+
+                }
+            }
+        });
+    $(document).ready(function () {
+    debugger;
+
+    var payMode = "@Html.Raw(Model.PayMode?.Trim() ?? "")";
+
+        if (payMode === "Cash" || payMode === "Cheque") {
+        $('.bankDiv').hide();
+    } else {
+        $('.bankDiv').show();
+    }
+});
+
+
+        window.pressed = function () {
+            debugger
+            var a = document.getElementById('File_FileData');
+            if (a.value == "") {
+                fileLabel.innerHTML = "No File Chosen";
+            }
+            else {
+                debugger
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 6);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+        };
+
+
+</script>
+
+<div id="addbankname" class="slider-forms slider-forms-open EditBankdiv">
+    <div class="slider-inner-style new-inner-style">
+        <div class="slider-form-close" onclick="CloseSlider('EditBankdiv')">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </div>
+        <div class="location-slider">
+            <h4>Employee Bank Details </h4>
+        </div>
+        <div class="profile-header position-relative pb-12 mb-5 mr-2" style="padding-bottom: 2px !important; padding-top: 5px !important; margin-left: 10px; width: auto;">
+            <div class="row">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+        <div class="add-padding">
+            <div class="row">
+                <div class="col-md-6 bankDiv">
+                    <div class="row-outer">
+                        <label class="view-title">Bank</label>
+                        <div class="view-details">
+                            @Model.BankName
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 bankDiv">
+                    <div class="row-outer">
+                        <label class="view-title">Bank Branch</label>
+                        <div class="view-details">
+                            @Model.BankBranch
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 bankDiv">
+                    <div class="row-outer">
+                        <label class="view-title">Account Number</label>
+                        <div class="view-details">
+                            @Model.AccountNo
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 bankDiv">
+                    <div class="row-outer">
+                        <label class="view-title">IFSC Code</label>
+                        <div class="view-details">
+                            @Model.IFSC
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="row card-footer-bottom-fixed border-none d-flex justify-content-between align-content-center" style="bottom: 20px;">
+
+                    <div class="col-md-6 align-left">
+
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="onApproveOrRejectClick('@Model.EmployeeGI','Approve')">
+                            Approve
+                        </button>
+
+                    </div>
+                    <div class="col-md-6 align-right">
+
+                        <button type="button" class="btn btn-danger  mobile-full-width" onclick="onApproveOrRejectClick('@Model.EmployeeGI','Reject')">
+                            Reject
+                        </button>
+
+                    </div>
+                </div>*@
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row-ithems">
+                    <div class="row-outer">
+                        <label class="view-title">PassBook</label>
+
+
+                        <div class="view-details  ">
+                            <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" class="btn btn-small btn-secondary mobile-full-width" onclick="showDecryptDocument('@Model.EmployeeGI', 'BankDetails')">
+                                <i class="icon-xl far fa-eye"></i>View File
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="row card-footer-bottom-fixed">
+
+                <div class="col-md-12 align-right" id="save_button">
+                    <a class="btn btn-danger  mobile-full-width" onclick="onApproveOrRejectClick('@Model.EmployeeGI','Reject')">
+                        Reject
+                    </a>
+                    <a class="btn btn-default  mobile-full-width" onclick="onApproveOrRejectClick('@Model.EmployeeGI','Approve')">
+                        Approve
+                    </a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

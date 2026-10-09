@@ -1,0 +1,103 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCreditDebit
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('LeaveCreditDebitBatchUpDate_Value');
+        });
+       
+        $(window).ready(function () {
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    if (preventENterFlag == 0)
+                        CreditSubmit();
+                    return false;
+                }
+            });
+        });
+    </script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "creditS" }))
+    {
+        @Html.HiddenFor(m => m.LeaveCreditDebitBatchUpDate.Leave.Code)
+        @Html.HiddenFor(m => m.LeaveCreditDebitBatchUpDate.DebitCredit.Code)
+        @Html.HiddenFor(m => m.LeaveCreditDebitBatchUpDate.LeavePeriod.Code)
+        @Html.HiddenFor(m => m.LeaveCreditDebitBatchUpDate.Month.Code)
+        @Html.HiddenFor(m => m.LeaveCreditDebitBatchUpDate.LeaveGroup.Code)
+        <div id="batchUpdate1" class="slider-forms slider-forms-open batchUpdateSlider">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('batchUpdateSlider'); preventENterFlag = 1">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <h4>
+                    Batch Update
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Leave Period</label>
+                            <div class="view-details">
+                                @Model.LeaveCreditDebitBatchUpDate.LeavePeriod.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Month</label>
+                            <div class="view-details">
+                                @Model.LeaveCreditDebitBatchUpDate.Month.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+
+                            <label class="view-title">Leave Group</label>
+                            <div class="view-details">
+                                @Model.LeaveCreditDebitBatchUpDate.LeaveGroup.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Leave </label>
+                            <div class="view-details">
+                                @Model.LeaveCreditDebitBatchUpDate.Leave.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Type </label>
+                            <div class="view-details">
+                                @Model.LeaveCreditDebitBatchUpDate.DebitCredit.Name
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Credit</label>
+                            @Html.TextBoxFor(m => m.LeaveCreditDebitBatchUpDate.Value, new { @class = "form-control form-control-sm", @placeholder = "Credit", @onblur = "validate(this,'creditbatch')", onkeypress = "return onlyAmount(event)", @maxlength = "4" })
+                            <span id="creditbatch"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <button type="button" onclick="CreditSubmit()"
+                                class="btn btn-default  mobile-full-width">
+                            Update
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }

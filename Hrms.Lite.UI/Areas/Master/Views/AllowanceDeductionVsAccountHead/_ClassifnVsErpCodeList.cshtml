@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.Master.AccountsHead
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Allowance-Deduction-erp-list ">
+    @Html.HiddenFor(m => m.ClassificationVsERPCodeList.Count)
+    <table id="AllowDedtable" class="common-table dt-width-fix">
+        <thead>
+            @Html.HiddenFor(m => m.ClassificationVsERPCodeList.Count)
+            @Html.HiddenFor(m => m.TabName)
+            <tr class="table-dark">
+                <th scope="col">SL.No</th>
+                <th scope="col">@Model.Grouping.Name</th>
+
+                <th scope="col">ERP Code</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.ClassificationVsERPCodeList != null && Model.ClassificationVsERPCodeList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ClassificationVsERPCodeList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(model => Model.ClassificationVsERPCodeList[i].ClassificationCode)
+                            @Html.HiddenFor(model => Model.ClassificationVsERPCodeList[i].MasterCode)
+                            @Html.HiddenFor(model => Model.ClassificationVsERPCodeList[i].CompanyCode)
+                            @Html.HiddenFor(m => m.TabName)
+                            <td data-label="Code">@(i+1)</td>
+                            <td data-label="Name">@Model.ClassificationVsERPCodeList[i].MasterName</td>
+                            <td data-label="ERP Code">
+
+
+                                <div class="form-group">
+                                    @*<span id="ERPCodeLablel_@i">@Model.ClassificationVsERPCodeList[i].ERPCode</span>*@
+                                    <span id="ERPCodeTxtBox_@i">
+                                        @Html.TextBoxFor(Model => Model.ClassificationVsERPCodeList[i].ERPCode, new { @class = "form-control form-control-sm ifdup_erpcode", @style = "width:100%;"
+                                       , @onchange= "onParameterChanged("+i+")"
+                                   })
+                                        <span id="accounthead"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+                            @*<td data-label="Edit">
+                                <span id="editbtERP_@i">
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onEdit_ERP_Click(@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                </span>
+
+                                <span id="CancelbtERP_@i" class="hide">
+                                    <a data-bs-toggle="tooltip" title="Cancel"
+                                       class="btn btn-icon btn-cancel icon-only" onclick="onCancel_ERP_Click(@i)">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </a>
+
+                                </span>
+
+                            </td>*@
+
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

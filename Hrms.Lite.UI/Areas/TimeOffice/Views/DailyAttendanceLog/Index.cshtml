@@ -1,0 +1,185 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceLog
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+
+<script src="~/scripts/TimeOffice/dailyAttendanceLog.js"></script>
+@*<script>
+        $(document).ready(function () {
+            $('#SelectedDate').focus();
+            $("#SelectedDate").datepicker('hide');
+        });
+    </script>*@
+
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        fillData();
+    });
+</script>
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "dailyLog_List_Form" }))
+{
+
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Daily Attendance Log</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item">
+                            Daily Attendance Log
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+
+                                <div class="tab-items">
+
+                                    <div class="row-outer pb-2">
+                                        <label>Date</label>
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.SelectedDate, "{0:dd-MMM-yyyy}", new
+                                       {
+                                           @class = "form-control kt_datepicker_2",
+                                           @placeholder = "Date",
+                                           @autocomplete = "off",
+                                           @readonly = true,
+                                           @onchange = "validate(this,'dailylog_date');"
+                                       })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="dailylog_date"></span>
+                                    </div>
+                                </div>
+                                <div class="tab-items pl-3 pt-3 lows">
+
+                                    <button type="button" class="btn btn-default btn-sm float-left" onclick="CheckifAlreadyProcessed()">
+                                        Proceed
+                                    </button>
+                                </div>
+
+                                <div class="tab-items select-option ">
+                                    <div class="button-group float-left ">
+                                        <button data-bs-toggle="modal"  type="button" class="btn btn-default btn-sm float-left" onclick="onBatchClick()">
+                                            Batch Update
+                                        </button>
+                                    </div>
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div class="filter-button slider-btn" id="filterForm" data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                        <div id="dailyLog_List">
+                            @await Html.PartialAsync("_DailyAttendanceLogList", Model)
+                        </div>
+
+                        <div class="row card-footer-bottom-fixed align-right">
+
+                            <div class="col-md-12">
+                                <button class="btn btn-default mobile-full-width" type="button" onclick="logSave()">
+                                    Save
+                                </button>
+
+
+                            </div>
+
+                        </div>
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+}
+
+<div id="filterSlider">
+    @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+</div>
+
+<div class="modal fade logBatchUpdate_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:500px;">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Batch Update </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body"></div>
+
+        </div>
+    </div>
+</div>

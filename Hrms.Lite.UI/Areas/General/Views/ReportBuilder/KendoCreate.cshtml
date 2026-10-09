@@ -1,0 +1,304 @@
+﻿
+@model Hrms.Lite.Shared.General.ReportBuilder
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.all.min.js"></script>
+
+    <script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.aspnetmvc.min.js"></script>*@
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/General/databankreportbuilder.js"></script>
+
+<script>
+
+
+    var dataItem = null;
+
+    function placeholder(element) {
+        return element.clone().addClass("k-state-hover").css("opacity", 0.65)
+    }
+
+    function onChange(e) { //change event handler implementation may differ according to the scenario
+        var grid = this.element.closest(".k-grid").data("kendoGrid");
+        var skip = grid.dataSource.skip();
+        var oldIndex = e.oldIndex + skip;
+        var newIndex = e.newIndex + skip;
+
+        if (e.action == "remove") {
+            dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+            grid.dataSource.remove(dataItem);
+        } else if (e.action == "receive" && dataItem != null) {
+            grid.dataSource.insert(newIndex, dataItem);
+            dataItem = null;
+        } else if (e.action == "sort") {
+            dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+            grid.dataSource.remove(dataItem);
+            grid.dataSource.insert(newIndex, dataItem);
+        }
+
+        grid.saveChanges();
+    }
+
+    function insertNoRecordsRow() {
+        if (!this.dataSource.data().length) {
+            this.tbody.append($("<tr class='no-drag' colspan='2'><td>No records</td></tr>"));
+        }
+    }
+</script>
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Report Builder
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <!-- <li class="breadcrumb-item text-muted">
+                        <a href="financial-year.html">Financial Year List</a>
+                      </li> -->
+                    <li class="breadcrumb-item text-muted">
+                        Report Builder
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    @using Kendo.Mvc.UI
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body ">
+
+                            <div class="row tab-style-button">
+                                <div class="col-md-6">
+                                    <div class="empstatus-new pr-2 pb-3">
+
+                                    </div>
+
+                                    <!-- Table Section -->
+                                    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table  ">
+                                    @(Html.Kendo().Grid<Hrms.Lite.Shared.General.ReportBuilderDetails>()
+.Name("grid1")
+.Columns(columns =>
+{
+    columns.Template("").Draggable(true);
+    columns.Bound(p => p.Code).Filterable(false).Hidden(true);
+    columns.Bound(p => p.Field);
+    //columns.Bound(p => p.OrderDate).Format("{0:MM/dd/yyyy}");
+    columns.Bound(p => p.FieldGroup);
+})
+.Pageable()
+//.Sortable()
+.Scrollable()
+//.Filterable()
+.HtmlAttributes(new { style = "height:450px;" })
+.DataSource(dataSource => dataSource
+.Ajax()
+
+.PageSize(20)
+.Read(read => read.Action("Data", "ReportBuilder"))
+)
+.Events(e => e.DataBound("insertNoRecordsRow"))
+            )
+
+
+
+
+                                </div>
+
+
+
+
+                                <!-- Table Setion End -->
+                                <div class="row mt-5">
+                                    <div class="col-md-12 align-right">
+
+
+                                        <a data-bs-toggle="modal" data-target="" onclick="viewSavedReports()"
+                                           class="btn btn-default float-left mobile-full-width mr-3">
+                                            View Saved Reports
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                                <div class="col-md-6">
+                                    <div class="d-flex">
+
+
+                                        <!-- Table Section -->
+
+                                        <div id="databank_combnGrid">
+
+                                          
+                                                @(Html.Kendo().Grid(Model.Details)
+.Name("grid2")
+.Columns(columns =>
+{
+    columns.Template("").Draggable(true);
+    columns.Bound(p => p.Code).Filterable(false).Hidden(true);
+    columns.Bound(p => p.Field);
+    //columns.Bound(p => p.OrderDate).Format("{0:MM/dd/yyyy}");
+    columns.Bound(p => p.FieldGroup);
+})
+.Pageable()
+//.Sortable()
+.Scrollable()
+//.Filterable()
+.HtmlAttributes(new { style = "height:450px;" })
+.DataSource(dataSource => dataSource
+.Ajax()
+.Model(model =>
+{
+    // Define your grid model
+    model.Field(p => p.Code);
+    model.Field(p => p.Field);
+    model.Field(p => p.FieldGroup);
+    // ...
+})
+ .ServerOperation(false)
+.Read(read => read.Action("DataEmpty", "ReportBuilder"))
+
+.PageSize(20)
+)
+.Events(e => e.DataBound("insertNoRecordsRow"))
+            )
+                                                @(Html.Kendo().Sortable()
+.For(".k-grid table")
+.ConnectWith(".k-grid table")
+.Filter(">tbody >tr")
+.Disabled(".no-drag") //do not allow transferring the no records row
+.Cursor("move")
+.HintHandler("$.noop")
+.PlaceholderHandler("placeholder")
+
+.Events(events => events.Change("onChange"))
+)
+
+
+
+                                            </div>
+                                        
+
+                                    </div>
+
+                                    <!-- Table Setion End -->
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 align-right">
+                                            <a class="btn btn-default btn-edit slider-btn" id="filterForm">
+                                                Proceed
+                                            </a>
+
+                                            <div id="filterSlider">
+                                                @await Html.PartialAsync("_MultiSelectFilter", Model.Filter)
+                                            </div>
+                                            @*<div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                                    <i class="fas fa-filter"></i>
+                                                    <i class="fas fa-check"></i>
+                                                </div>*@
+
+                                            <!-- Edit Slider start-->
+                                            <!-- Edit Slider  end-->
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                <end col-12></end> -->
+
+
+
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<div class="modal fade rp_savedReports" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="max-width:800px ;">
+        <div class="modal-content popup "
+             style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Saved Reports
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_SavedReports", Model)
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

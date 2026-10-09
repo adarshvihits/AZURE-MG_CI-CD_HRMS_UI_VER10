@@ -1,0 +1,147 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.RecruitmentReports
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/Reports/vacancyStatusReport.js"></script>
+<link href="~/css/hrplan.css" rel="stylesheet" type="text/css" />
+<link href="~/css/vacancyTracking.css" rel="stylesheet" type="text/css" />
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title"> Vacancy Tracking</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Vacancy Tracking
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body vt-page">
+
+                    <div class="vt-head">
+                        <div class="vt-eyebrow">Position Lifecycle</div>
+                        <h2 class="vt-title">Vacancy Tracking</h2>
+                        <div class="vt-desc">Every open and filled vacancy across New Position and Replacement flows, with posting and application status in one view.</div>
+                    </div>
+
+                    <div class="vt-toolbar">
+                        <div class="vt-filter">
+                            <label for="VacancyPeriodFilter">Period</label>
+                            <select id="VacancyPeriodFilter" class="form-control" onchange="filterVacancyTracking()">
+                                <option value="all">All Periods</option>
+                                <option value="month">This Month</option>
+                                <option value="3">Last 3 Months</option>
+                                <option value="6">Last 6 Months</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="vt-filter vt-filter-wide">
+                            <label for="VacancyBranchFilter">Branch</label>
+                            <select id="VacancyBranchFilter" class="form-control" onchange="filterVacancyTracking()">
+                                <option value="">All Branches</option>
+                                @foreach (var branch in (Model?.VacancyStatusReport ?? new List<Hrms.Lite.Shared.DataBank.Reports.VacancyStatusReport>())
+                                    .Select(x => x.LocationName).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().OrderBy(x => x))
+                                {
+                                    <option value="@branch">@branch</option>
+                                }
+                            </select>
+                        </div>
+
+                            <div class="tab-items select-option vt-actions">
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="Search position, branch, manager">
+                                </div>
+                                @*<div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>*@
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel">
+                                    <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                </a>
+
+
+
+                            </div>
+                    </div>
+
+                    <div id="joiningReportList">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/VacancyStatusReport/_List.cshtml")
+                    </div>
+
+                    <div id="groupSummary">
+
+                    </div>
+
+                    <div id="filterSlider">
+                        @*@await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.SliderFilter)*@
+                    </div>
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Group Summary</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>

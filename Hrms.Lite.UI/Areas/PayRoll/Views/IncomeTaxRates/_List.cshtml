@@ -1,0 +1,76 @@
+﻿@model Hrms.Lite.Shared.PayRoll.IncomeTaxRates
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Income-tax-rateslist">
+    <table id="incomeTaxRatesLt">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">From (Rs)</th>
+                <th scope="col">To(Rs) </th>
+                <th scope="col">Rate(%)</th>
+                @*<th scope="col">Surcharge(%)</th>*@
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Details != null && Model.Details.Count > 0)
+            {
+                for (int i = 0; i < Model.Details.Count; i++)
+                {                       
+                        <tr id="row_OI_@i">
+
+                            <td data-label=" From">
+                                <div style="position:relative;">
+                                    @Html.TextBoxFor(m => m.Details[i].SalaryFrom, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "From", @onkeypress = "return onlyNumberKey(event)", @onblur = "validateResumeDB(this,'salaryfrom_'," + i + ")" })
+                                    <span id="salaryfrom_@i" class="spanfrom"></span>
+                                </div>
+                            </td>
+                            <td data-label=" To">
+                                <div style="position:relative;">
+                                    @Html.TextBoxFor(m => m.Details[i].SalaryTo, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "To", @onkeypress = "return onlyNumberKey(event)", @onblur = "validateResumeDB(this,'salaryto_'," + i + ")" })
+                                    <span id="salaryto_@i" class="spanto"></span>
+                                </div>
+                               
+                            </td>
+
+                            <td data-label="Rate">
+                                <div style="position:relative;">
+                                    @Html.TextBoxFor(m => m.Details[i].Rate, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Rate", @onkeypress = "return onlyNumberKey(event)", @onblur = "validateResumeDB(this,'rate_'," + i + ")" })
+                                    <span id="rate_@i" class="rate"></span>
+                                </div>
+                            </td>
+                            @*<td data-label="Surcharge">
+                                @Html.TextBoxFor(m => m.Details[i].Surcharge, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Surcharge", @onkeypress = "return onlyNumberKey(event)" })
+                            </td>*@
+
+                            <td data-label="Actions">
+                                @if (Model.Details.Count == (i + 1) || Model.Details.Count == 1)
+                                {
+                                    <a id="addrowid_@i" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-edit icon-only addrowid" data-bs-original-title="Add" onclick="AddNewRow('incomeTaxRatesLt',@i)">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+                                    <a id="deleterowid_@i" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon  icon-only mobile-full-width btn-delete deleterowid" onclick="DeleteRow(@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a id="addrowid_@i" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-edit icon-only addrowid hide" data-bs-original-title="Add" onclick="AddNewRow('incomeTaxRatesLt',@i)">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+                                    <a id="deleterowid_@i" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon  icon-only mobile-full-width btn-delete deleterowid hide" onclick="DeleteRow(@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+
+
+
+                            </td>
+
+                        </tr>
+                }
+            }
+
+                    </tbody>
+    </table>
+</div>

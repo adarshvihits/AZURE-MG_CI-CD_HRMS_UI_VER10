@@ -1,0 +1,187 @@
+﻿@model Hrms.Lite.Shared.DataBank.CertificatePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var year = $('#Years').prop('checked');
+        if (year) {
+            $('.yeartxtbox').show();
+        } else {
+            $('.yeartxtbox').hide();
+        }
+    });
+</script>
+
+<style>
+    .checkboxclsz {
+        font-size: 11px;
+        /* color: #b8b8b8; */
+        color: #7C8DA7 !important;
+    }
+</style>
+@using (Html.BeginForm("Delete", "CertificatePolicy", FormMethod.Post, new { @id = "CertificatePolicyDelete" }))
+{
+    <div id="deletedistrict" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Certificate Policy</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.LogGI)
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(m => m.CertificateCode)
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Category
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.CategoryName)
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="d-flex justify-content-between">
+                <label>Life Time </label>
+                <div class="checkbox-inline"
+                     style="padding-left: 15px;">
+                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                        @Html.CheckBoxFor(m => m.LifeTime, new { @onchange = "LifeTimeClick();", @disabled = "disabled" })
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <label>Years</label>
+                <div class="checkbox-inline"
+                     style="padding-left: 15px;">
+                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                        @Html.CheckBoxFor(m => m.Years, new { @onchange = "YearClick();", @disabled = "disabled" })
+                        <span></span>
+                    </label>
+                </div>
+            </div>*@
+
+
+
+                    <div class="col-md-6 d-flex align-items-center justify-content-between">
+                        <div class="">
+                            <span class="checkboxclsz">Validity</span>
+                            <div class="d-flex justify-content-between">
+                                <label>Life Time </label>
+                                <div class="checkbox-inline" style="padding-left: 15px;">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                                        @Html.CheckBoxFor(m => m.LifeTime, new { @onchange = "LifeTimeClick();", @disabled = "disabled" })
+                                        <span></span>
+                                    </label>
+                                </div>
+
+
+                                <label class="ml-4">Years</label>
+                                <div class="checkbox-inline" style="padding-left: 15px;">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                                        @Html.CheckBoxFor(m => m.Years, new { @onchange = "YearClick();", @disabled = "disabled" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Value
+                            </label>
+                            <div class="view-details yeartxtbox">
+                                @Html.DisplayFor(model => Model.YearsValue)
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">MaximumReimbursement</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.MaximumReimbursement)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.CertificateCode')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

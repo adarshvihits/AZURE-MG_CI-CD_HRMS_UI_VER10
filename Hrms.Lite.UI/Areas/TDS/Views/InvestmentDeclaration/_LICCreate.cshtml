@@ -1,0 +1,102 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@{
+    Model.TabIndex = "LIC";
+}
+<style>
+
+    .datepicker .sevenday th, td {
+        padding: 4px 4px !important;
+    }
+</style>
+
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGuid)
+
+    <div id="addLICDetails" class="slider-forms slider-forms-open lic">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('lic')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>LIC Details</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.LICDetails.TrnCode)
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.TextBoxFor(m => m.LICDetails.Name, new { @class = "form-control", placeholder = "Name", @maxlength = 120,  @onchange = "validate(this,'licname')", @onkeypress = "return onlyLettersKey(event)" })
+                        <span id="licname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Relationship</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.LICDetails.RelationShip.Code, (SelectList)ViewBag.Relation, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'relation')" })
+                        <span id="relation" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Policy Taken Date</label><span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.LICDetails.PolicyTakenDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Policy Taken Date", @onchange = "validate(this,'policydate')" })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="policydate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Policy No.</label>
+                        @Html.TextBoxFor(m => m.LICDetails.PolicyNo, new { @class = "form-control", placeholder = "Policy No.", @maxlength = 120, @onblur = "firstLetterCapsWithOutValidation(this)" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Annual Premium</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.LICDetails.PremiumAmount, new { @class = "form-control", placeholder = "Annual Premium", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'premium')", @style = "text-align:right" })
+                        <span id="premium" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Sum Assured</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.LICDetails.SumAssured, new { @class = "form-control", placeholder = "Sum Assured", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'sumassured')", @style = "text-align:right" })
+                        <span id="sumassured" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        @Html.TextBoxFor(m => m.LICDetails.Remarks, new { @class = "form-control", placeholder = "Remarks", @maxlength = 120 })
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="licid" type="button" class="btn btn-default" onclick="LICSave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

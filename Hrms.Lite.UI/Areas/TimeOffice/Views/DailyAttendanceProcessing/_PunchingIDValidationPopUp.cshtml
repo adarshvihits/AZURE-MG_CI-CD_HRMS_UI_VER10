@@ -1,0 +1,96 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+<script src="~/js/settings.js"></script>
+<style>
+    .punching_id_missing_popup .dataTables_wrapper.no-footer .dataTables_scrollBody {
+        max-height: 30vh !important;
+        height: 30vh !important;
+    }
+    .modal-body {
+        padding: 0px 20px 20px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".search-slider-inner2").click(function () {
+            $(".srch").toggleClass('field-width-big')
+        });
+
+    });
+    
+
+
+</script>
+<div class="row tab-style-button">
+    <div class="tab-button-wrap">
+
+
+
+
+        
+
+
+        <div class="tab-items select-option">
+
+            <div class="sraech-slider mt-3">
+                <div class="search-slider-inner2">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm srch" placeholder="ID/Name">
+            </div>
+
+            @*<div id="filterForm" class="filter-button" data-bs-toggle="tooltip" title="Filter" onclick="onFilterClick('outerList')">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-check"></i>
+            </div>*@
+            <a data-bs-toggle="tooltip" title="Export to Excel"
+               class="btn btn-excel" onclick="exportToexcel_PunchingId()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+
+
+    </div>
+</div>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table  punching_id_missing_popup">
+    @Html.HiddenFor(m => m.DailtAttendance_popup.Count)
+
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Punching ID</th>
+                <th scope="col">Remarks</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.DailtAttendance_popup != null && Model.DailtAttendance_popup.Count > 0)
+            {
+
+                for (int i = 0; i < Model.DailtAttendance_popup.Count; i++)
+                {
+
+            <tr>
+
+                <td data-label="ID">@Model.DailtAttendance_popup[i].ID</td>
+                <td data-label="Name">
+                    @Model.DailtAttendance_popup[i].Name
+                </td>
+                <td data-label="Designation">@Model.DailtAttendance_popup[i].Designation</td>
+                <td data-label="Department">@Model.DailtAttendance_popup[i].Department</td>
+                <td data-label="Location">@Model.DailtAttendance_popup[i].Location</td>
+                <td data-label="Punching ID">@Model.DailtAttendance_popup[i].PunchingID</td>
+                <td data-label="Remarks">@Model.DailtAttendance_popup[i].Remarks</td>
+
+            </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+
+</div>

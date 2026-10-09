@@ -1,0 +1,500 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+
+<style>
+
+    .export-app {
+        display: table;
+        width: 100%;
+        height: 750px;
+        padding: 0;
+    }
+
+        .export-app .demo-section {
+            margin: 0 auto;
+            border: 0;
+        }
+
+    .charts-wrapper {
+        height: 250px;
+        padding: 0 0 20px;
+    }
+
+    #applications,
+    #users,
+    #referrals {
+        display: inline-block;
+        width: 50%;
+        height: 240px;
+        vertical-align: top;
+    }
+
+    #applications,
+    #referrals {
+        width: 24%;
+        height: 250px;
+    }
+
+
+
+    .demo-section.content-wrapper,
+    .demo-section.export-app {
+        display: block !important;
+    }
+
+    .demo-section.export-app {
+        height: auto;
+    }
+
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+
+
+</script>
+
+<script id="hrTimeOffice" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTimeOffice>()
+
+                                                                       .Name("hrTO")
+
+                                                                       .Title("")
+
+                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                       .Legend(legend => legend
+                                                                      .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                       )
+                                                                       .ChartArea(chartArea => chartArea
+                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                       .DataSource(ds => ds.Read(read => read.Action("GetTimeOfficeHR", "MISDashBoard").Data("getParam")))
+                                                                       .Series(series =>
+                                                                       {
+                                                                           series.Column(model => model.lateIn).Name("Late In").CategoryField("monthName")
+                                                                           .Color("\\#16cc62").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                           series.Column(model => model.earlyOut).Name("Early Out").CategoryField("monthName")
+                                                                           .Color("\\#196ee6").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));                                                                       
+
+                                                                       })
+                                                                       .CategoryAxis(axis => axis
+                                                                       .Labels(labels => labels.Rotation(0))
+                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                       .Labels(labels => labels
+                                                                       .Format("{0:N0}")
+                                                                       //.Rotation(0)
+                                                                       )
+                                                                      // .MajorUnit(100)
+
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                       .Tooltip(tooltip => tooltip
+                                                                       .Visible(true)
+
+                                                                       .Format("{0:N0}")
+                                                                       )
+                                                                       .ToClientTemplate()
+                                                                       )
+
+</script>
+<script id="hrTimeOfficeDepartment" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTODepartment>()
+
+                                                                           .Name("hrDept")
+
+                                                                           .Title("")
+
+                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                           .Legend(legend => legend
+                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                           )
+                                                                           .ChartArea(chartArea => chartArea
+                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                               .DataSource(ds => ds.Read(read => read.Action("GetTODepartmentHR", "MISDashBoard").Data("getParam")))
+                                                                           .Series(series =>
+                                                                           {
+                                                                               series.Column(model => model.lateIn).Name("Late In").CategoryField("shrtName")
+                                                                               .Color("\\#9992f7").Spacing(0)
+                                                                                .Tooltip(tooltip => tooltip.
+                                                                                     Template("(\\#= (dataItem.department)\\# - Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                   series.Column(model => model.earlyOut).Name("Early Out").CategoryField("shrtName")
+                                                                           .Color("\\#903561").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(\\#= (dataItem.department)\\# - Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                               @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                           })
+                                                                           .CategoryAxis(axis => axis
+                                                                           .Labels(labels => labels.Rotation(0))
+                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                           .Labels(labels => labels
+                                                                           .Format("{0:N0}")
+                                                                           //.Rotation(0)
+                                                                           )
+                                                                           //.MajorUnit(100)
+
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                           .Tooltip(tooltip => tooltip
+                                                                           .Visible(true)
+
+                                                                           .Format("{0:N0}")
+                                                                           )
+                                                                           .ToClientTemplate()
+                                                                           )
+
+</script>
+
+
+
+
+<script id="hrTimeOfficeLocation" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTOLocation>()
+
+                                                                               .Name("hrLoc")
+
+                                                                               .Title("")
+
+                                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                               .Legend(legend => legend
+                                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                               )
+                                                                               .ChartArea(chartArea => chartArea
+                                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                       .DataSource(ds => ds.Read(read => read.Action("GetTOLocationHR", "MISDashBoard").Data("getParam")))
+                                                                               .Series(series =>
+                                                                               {
+                                                                                   series.Column(model => model.lateIn).Name("Late In").CategoryField("location")
+                                                                                   .Color("\\#f3612d").Spacing(0)
+                                                                                    .Tooltip(tooltip => tooltip.
+                                                                                     Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                   series.Column(model => model.earlyOut).Name("Early Out").CategoryField("location")
+                                                                               .Color("\\#fba51b").Spacing(0)
+                                                                                .Tooltip(tooltip => tooltip.
+                                                                                 Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                                   @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                               })
+                                                                               .CategoryAxis(axis => axis
+                                                                               .Labels(labels => labels.Rotation(0))
+                                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                                               .Line(line => line.Visible(false))
+                                                                               )
+                                                                               .ValueAxis(axis => axis.Numeric()
+                                                                               .Labels(labels => labels
+                                                                               .Format("{0:N0}")
+                                                                               //.Rotation(0)
+                                                                               )
+                                                                               //.MajorUnit(100)
+
+                                                                               .Line(line => line.Visible(false))
+                                                                               )
+                                                                               .RenderAs(RenderingMode.Canvas)
+                                                                               .Tooltip(tooltip => tooltip
+                                                                               .Visible(true)
+
+                                                                               .Format("{0:N0}")
+                                                                               )
+                                                                               .ToClientTemplate()
+                                                                               )
+
+</script>
+
+<script id="hrTimeOfficeDivision" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTODivision>()
+
+                                                                                   .Name("hrDiv")
+
+                                                                                   .Title("")
+
+                                                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                                   .Legend(legend => legend
+                                                                                 .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                   )
+                                                                                   .ChartArea(chartArea => chartArea
+                                                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetTODivisionHR", "MISDashBoard").Data("getParam")))
+                                                                                   .Series(series =>
+                                                                                   {
+                                                                                       series.Column(model => model.lateIn).Name("Late In").CategoryField("division")
+                                                                                       .Color("\\#f1d30e").Spacing(0)
+                                                                                        .Tooltip(tooltip => tooltip.
+                                                                                         Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                           series.Column(model => model.earlyOut).Name("Early Out").CategoryField("division")
+                                                                                   .Color("\\#333333").Spacing(0)
+                                                                                    .Tooltip(tooltip => tooltip.
+                                                                                     Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                                       @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                                   })
+                                                                                   .CategoryAxis(axis => axis
+                                                                                   .Labels(labels => labels.Rotation(0))
+                                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                                   .Line(line => line.Visible(false))
+                                                                                   )
+                                                                                   .ValueAxis(axis => axis.Numeric()
+                                                                                   .Labels(labels => labels
+                                                                                   .Format("{0:N0}")
+                                                                                   //.Rotation(0)
+                                                                                   )
+                                                                                   //.MajorUnit(100)
+
+                                                                                   .Line(line => line.Visible(false))
+                                                                                   )
+                                                                                   .RenderAs(RenderingMode.Canvas)
+                                                                                   .Tooltip(tooltip => tooltip
+                                                                                   .Visible(true)
+
+                                                                                   .Format("{0:N0}")
+                                                                                   )
+                                                                                   .ToClientTemplate()
+                                                                                   )
+
+</script>
+
+<script id="hrTimeOfficeCategory" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTOCategory>()
+
+                                                                                       .Name("hrCat")
+
+                                                                                       .Title("")
+
+                                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                                       .Legend(legend => legend
+                                                                                      .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                       )
+                                                                                       .ChartArea(chartArea => chartArea
+                                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                               .DataSource(ds => ds.Read(read => read.Action("GetTOCategoryHR", "MISDashBoard").Data("getParam")))
+                                                                                       .Series(series =>
+                                                                                       {
+                                                                                           series.Column(model => model.lateIn).Name("Late In").CategoryField("category")
+                                                                                           .Color("\\#518740").Spacing(0)
+                                                                                            .Tooltip(tooltip => tooltip.
+                                                                                             Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                           series.Column(model => model.earlyOut).Name("Early Out").CategoryField("category")
+                                                                                   .Color("\\#e0cb3c").Spacing(0)
+                                                                                    .Tooltip(tooltip => tooltip.
+                                                                                     Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                                           @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                                       })
+                                                                                       .CategoryAxis(axis => axis
+                                                                                       .Labels(labels => labels.Rotation(0))
+                                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                                       .Line(line => line.Visible(false))
+                                                                                       )
+                                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                                       .Labels(labels => labels
+                                                                                       .Format("{0:N0}")
+                                                                                       //.Rotation(0)
+                                                                                       )
+                                                                                       //.MajorUnit(100)
+
+                                                                                       .Line(line => line.Visible(false))
+                                                                                       )
+                                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                                       .Tooltip(tooltip => tooltip
+                                                                                       .Visible(true)
+
+                                                                                       .Format("{0:N0}")
+                                                                                       )
+                                                                                       .ToClientTemplate()
+                                                                                       )
+
+</script>
+
+<script id="hrTimeOfficeGrade" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTOGrade>()
+
+                                                                                           .Name("hrGrd")
+
+                                                                                           .Title("")
+
+                                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                                           .Legend(legend => legend
+                                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                           )
+                                                                                           .ChartArea(chartArea => chartArea
+                                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetTOGradeHR", "MISDashBoard").Data("getParam")))
+                                                                                           .Series(series =>
+                                                                                           {
+                                                                                               series.Column(model => model.lateIn).Name("Late In").CategoryField("grade")
+                                                                                               .Color("\\#9b1d48").Spacing(0)
+                                                                                                .Tooltip(tooltip => tooltip.
+                                                                                                 Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                               series.Column(model => model.earlyOut).Name("Early Out").CategoryField("grade")
+                                                                                       .Color("\\#15789c").Spacing(0)
+                                                                                        .Tooltip(tooltip => tooltip.
+                                                                                         Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                                               @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                                           })
+                                                                                           .CategoryAxis(axis => axis
+                                                                                           .Labels(labels => labels.Rotation(0))
+                                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                                           .Line(line => line.Visible(false))
+                                                                                           )
+                                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                                           .Labels(labels => labels
+                                                                                           .Format("{0:N0}")
+                                                                                           //.Rotation(0)
+                                                                                           )
+                                                                                           //.MajorUnit(100)
+
+                                                                                           .Line(line => line.Visible(false))
+                                                                                           )
+                                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                                           .Tooltip(tooltip => tooltip
+                                                                                           .Visible(true)
+
+                                                                                           .Format("{0:N0}")
+                                                                                           )
+                                                                                           .ToClientTemplate()
+                                                                                           )
+
+</script>
+
+<script id="hrTimeOfficeRegion" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTORegion>()
+
+                                                                                       .Name("hrReg")
+
+                                                                                       .Title("")
+
+                                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                                       .Legend(legend => legend
+                                                                                     .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                       )
+                                                                                       .ChartArea(chartArea => chartArea
+                                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                               .DataSource(ds => ds.Read(read => read.Action("GetTORegionHR", "MISDashBoard").Data("getParam")))
+                                                                                       .Series(series =>
+                                                                                       {
+                                                                                           series.Column(model => model.lateIn).Name("Late In").CategoryField("region")
+                                                                                           .Color("\\#ea0001").Spacing(0)
+                                                                                            .Tooltip(tooltip => tooltip.
+                                                                                             Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                                           series.Column(model => model.earlyOut).Name("Early Out").CategoryField("region")
+                                                                                   .Color("\\#275c9e").Spacing(0)
+                                                                                    .Tooltip(tooltip => tooltip.
+                                                                                     Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                                           @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                                       })
+                                                                                       .CategoryAxis(axis => axis
+                                                                                       .Labels(labels => labels.Rotation(0))
+                                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                                       .Line(line => line.Visible(false))
+                                                                                       )
+                                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                                       .Labels(labels => labels
+                                                                                       .Format("{0:N0}")
+                                                                                       //.Rotation(0)
+                                                                                       )
+                                                                                       //.MajorUnit(100)
+
+                                                                                       .Line(line => line.Visible(false))
+                                                                                       )
+                                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                                       .Tooltip(tooltip => tooltip
+                                                                                       .Visible(true)
+
+                                                                                       .Format("{0:N0}")
+                                                                                       )
+                                                                                       .ToClientTemplate()
+                                                                                       )
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+
+            c.Add().Header(h => h.Text("Early Departures and Tardy Arrivals of Past 6 Months")).BodyTemplateId("hrTimeOffice").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Department Wise")).BodyTemplateId("hrTimeOfficeDepartment").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Location Wise")).BodyTemplateId("hrTimeOfficeLocation").ColSpan(4).RowSpan(2);
+
+
+            c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Division Wise")).BodyTemplateId("hrTimeOfficeDivision").ColSpan(4).RowSpan(2);
+            c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Category Wise")).BodyTemplateId("hrTimeOfficeCategory").ColSpan(4).RowSpan(2);
+            //c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Grade Wise")).BodyTemplateId("hrTimeOfficeGrade").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Late comers and Early Leavers Analysis Region Wise")).BodyTemplateId("hrTimeOfficeRegion").ColSpan(4).RowSpan(2);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

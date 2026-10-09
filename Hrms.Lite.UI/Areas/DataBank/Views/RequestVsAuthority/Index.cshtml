@@ -1,0 +1,283 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RequestVsAuthority
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+@*<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>*@
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/requestvsAuthority.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#RequestVsAuthorityList').removeClass('hide');
+        fillData();
+            });
+</script>
+<style>
+    .popup {
+        margin: 6% auto;
+        /* padding: 10px; */
+    }
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Request vs Authority</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Request Authority List
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "BulkUpload", enctype = "multipart/form-data" }))
+                    {
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items">
+                                    <span class="btn-title active all" onclick="tabClick('all',0,'All')">
+                                        All
+                                        <span class="btn-notification alltab">@Model.AllTabCount</span>
+                                    </span>
+                                </div>
+
+
+
+                                @*<div class="tab-items high">
+                                    <span class="btn-title tab1" onclick="tabClick('tab1',1,'Assigned')">
+                                        Assigned
+                                        <span class="btn-notification assgnd">@Model.Assigned</span>
+                                    </span>
+                                </div>
+                                <div class="tab-items medium">
+                                    <span class="btn-title tab2" onclick="tabClick('tab2',2,'Not Assigned')">
+                                        Not Assigned
+                                        <span class="btn-notification notassgnd">@Model.NotAssigned</span>
+                                    </span>
+                                </div>*@
+                                <div class="tab-items ">
+                                    <span class="btn-title tab3" onclick="tabClick('tab3',3,'Bulk Upload')">
+                                        Bulk Upload
+                                        <span class="btn-notification blkUpload">@Model.BulkUpload</span>
+                                    </span>
+                                </div>
+
+
+
+
+                                <div class="tab-items select-option  d-flex ">
+
+                                    <div class="hide d-flex bulkUploadTab">
+                                        <div class="tab-items ">
+                                            <div class="form-group " style=" width: 165px;">
+                                                @Html.DropDownListFor(m => m.RequestType.Code, (SelectList)ViewBag.ReqType, "--Select Type--", new { @class = "form-control form-control-sm ", @onchange = "ontypeBulkUploadChange();ApplyFilter('apply');validate(this,'ReqCode')" })
+                                            </div>
+                                            <span id="ReqCode"></span>
+                                        </div>
+
+                                        <div id="authLvl" class="tab-items ">
+                                            <div class="form-group " style=" width: 165px;">
+                                                @Html.DropDownListFor(m => m.AuthorityLevel.Code, (SelectList)ViewBag.AuthLevel, "--Select Level--", new { @class = "form-control form-control-sm ", @onchange = "ApplyFilter('apply');validate(this,'AuthCode')" })
+                                            </div>
+                                            <span id="AuthCode"></span>
+                                        </div>
+                                    </div>
+                                    <div id="otherTabs" class="d-flex">
+                                        <div class="tab-items highs d-flex align-items-center ">
+                                            <div class="button-group float-left ">
+                                                <button id="requestAthorityBachUpdate" type="button" class="btn btn-secondary btn-sm slider-btn batchupdate" onclick="batchUpdateClick()">
+                                                    Batch
+                                                    Update
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  mr-6" id="UnassignedDropDown">
+                                            @Html.DropDownListFor(m => m.UnassignedList, (SelectList)ViewBag.Una, new { @class = "form-control form-control-sm RUnassignedList ", @onchange = "onUnassignedFilterChange(this)" })
+                                        </div>
+                                    </div>
+
+
+                                    <div id="BatchUpdateSlider">
+
+                                        @*@await Html.PartialAsync("_BatchSave")*@
+
+                                    </div>
+
+                                    <div class="sraech-slider" onclick="CursorFocusOnSearch()">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        @*<input type="text" class="form-control form-control-sm" placeholder="ID/Name">*@
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel">
+                                        <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                    </a>
+                                    <div class="bulkUploadTab hide">
+
+                                        <button type="button" data-bs-toggle="tooltip" title="Import From Excel"
+                                                class="btn btn-excel ml-0 import" onclick="validateBulkUploadDropdowns()">
+                                            <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content popup">
+                                    <div class="modal-header" style="padding:10px">
+                                        <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatched').html('');$('#Excel_FileData').val()">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body pt-3">
+
+                                        <div class="colums_list pb-1">
+                                            Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                            Employee ID,
+                                            Employee Name,
+                                            Authority ID,
+                                            Authority Name<br />
+                                            @*Columns Needed :- Employee ID, Employee Name, Amount*@
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="file-upload-form-group">
+                                                    <label for="formFileMultiple" class="form-label">
+                                                        Attach
+                                                        File
+                                                        <span class="Mandatory">*</span>
+                                                    </label>
+
+                                                    <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 1 MB.">
+                                                        <div class="small-btn-group">
+
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                        </div>
+                                                        <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+                                                        @*<input accept=".png, .jpg, .jpeg, .pdf" id="File_FileData" name="File.FileData" onchange="CheckImageExtensionSize(this)" title="" type="file">*@
+                                                        @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div id="Unmatched">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin: Search Form-->
+                        <!-- Table Section -->
+                    }
+                        <div id="ListView">
+
+                        </div>
+
+                        <div id="RequestVsAuthorityList">
+
+                            @await Html.PartialAsync("_RequestVsAuthorityList", Model)
+
+                        </div>
+                        <div id="assignDiv" class="hide">
+                          
+                        </div>
+                        <div id="notAssignDiv" class="hide">
+                        
+                        </div>
+                        <div id="PendingList hide" class="hide">                       
+
+                        </div>
+                        <!-- Table Setion End -->
+                        <!--end: Datatable-->
+                        <div id="filterSlider">
+                            @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                        </div>
+                    </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+    <div class="row card-footer-bottom-fixed">
+        <div class="col-md-6">
+
+            <a class="pl-10" data-bs-toggle="modal" data-target="._changeAuthority">
+                <div class="application-btn d-flex align-items-center">
+                    <div class="history-btn">
+                        <img src="/images/add-category-icon (1).png">
+
+                    </div>
+                    <div class="application-icon" onclick="ChangeAuthority()"> <h3 class="pt-2 pl-3"> Change Authority</h3></div>
+                </div>
+            </a>
+
+        </div>
+       
+
+
+    </div>
+</div>
+

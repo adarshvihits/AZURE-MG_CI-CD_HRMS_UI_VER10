@@ -1,0 +1,176 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.Suspension
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script src="~/scripts/DataBank/suspension.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Header Menu-->
+                <h3 class="main-title">Suspension</h3>
+                <!--end::Header Menu-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item text-muted">
+                        Suspension
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+                                <span class="btn-title pending active" onclick="OnTabClick('pending',1)">
+                                    Pending
+                                    <span class="btn-notification PendingCount">@Model.PendingCount</span>
+                                </span>
+                            </div>
+                           
+                            <div class="tab-items high">
+                                <span class="btn-title completed" onclick="OnTabClick('completed',2)">
+                                    Completed
+                                    <span class="btn-notification CompletedCount">@Model.CompletedCount</span>
+                                </span>
+                            </div>
+                            
+                           
+
+
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+
+
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+
+
+
+                                <a class="btn btn-excel float-left export" data-bs-toggle="tooltip" title="Export To Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+
+                                </a>
+                             
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+                    <div id="ListView">
+                        @await Html.PartialAsync("_List", Model)
+                    </div>
+
+                    <div class="row row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                            <div class="d-flex  responsive-center">
+                                <a href="/DataBank/Suspension/TransactionHistory">
+                                    <div class="application-btn d-flex align-items-center  pr-3 " cursorshover="true">
+                                        <div>
+                                            <img class="leave_appli_img">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3">Transaction History </h3></div>
+                                    </div>
+                                </a>
+
+                              
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->
+<div class="modal fade helpPopUp" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:1100px;">
+        <div class="modal-content popup" style="padding:25px 20px;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Help
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>This list is displayed based on actions taken in response to disciplinary incidents, specifically involving suspensions.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

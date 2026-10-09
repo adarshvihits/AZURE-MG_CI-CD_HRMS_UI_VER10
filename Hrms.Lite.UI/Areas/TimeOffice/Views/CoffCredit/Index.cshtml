@@ -1,0 +1,195 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.CoffCredit
+ <script src="~/scripts/TimeOffice/CoffCredit.js"></script>
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+@{
+  
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        setDateHidePicker();
+    });
+</script>
+
+
+
+<!--begin::Wrapper-->
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">
+                        Coff Credit Approval
+                    </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Coff Credit Approval
+
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+
+                        <!--begin: Search Form-->
+
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+
+                                <div class="tab-items ">
+                                    <span class="btn-title active PendingTab" onclick="tabClick('PendingTab','APPROVAL_PENDING')">
+                                        Pending
+                                        <span class="btn-notification pendingTabCount">@Model.PendingCount</span>
+                                    </span>
+                                </div>
+                                <div class="tab-items high">
+                                    <span class="btn-title ConfirmedTab" onclick="tabClick('ConfirmedTab','CONFIRMED')">
+                                        Completed
+                                        <span class="btn-notification ConfirmedTabCount">@Model.ConfirmedCount</span>
+                                    </span>
+                                </div>
+
+
+
+
+                                <div class="tab-items select-option">
+                                    <div class="form-group filter-combobox mr-10">
+                                        @Html.DropDownListFor(m => Model.Month.Code, (SelectList)ViewBag.MonthCombo, new { @class = "form-control form-control-sm", @onchange = "OnMonthChange(this)"})
+                                        <span id="Mon"></span>
+                                    </div>
+                                    <div class="form-group mr-6">
+
+                                        <div class="input-group date">
+
+                                            @Html.TextBoxFor(Model => Model.From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_11", @readonly = "true", @placeholder = "From",@onchange = "getList()"})
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="fromdate"></span>
+                                    </div>
+
+                                    <div class="form-group mr-6">
+
+                                        <div class="input-group date">
+
+                                            @Html.TextBoxFor(Model => Model.To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_11", @readonly = "true", @placeholder = "To", @onchange = "getList()"})
+       
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="todate"></span>
+                                    </div>
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel">
+                                        <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                    </button>
+                            
+
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        @Html.HiddenFor(Model => Model.TabValues)
+
+                        <div id="confirmationlist">
+                            @await Html.PartialAsync("_ConfirmationList", Model)
+
+                        </div>                      
+                        <div class="row card-footer-bottom-fixed coffcreditSaveButton">
+
+                            <div class="col-md-12 align-right">
+                                @*<a class="btn btn-default float-right mobile-full-width" onclick="OnConfirmClick()">
+                                    Confirm
+                                </a>*@
+                                 <a class="btn btn-default float-right mobile-full-width" onclick="ApproveOrReject('Approve')">
+                                   Approve
+                                </a>
+                                 <a class="btn btn-danger float-right mobile-full-width" onclick="ApproveOrReject('Reject')">
+                                    Reject
+                                </a>
+                                
+                            </div>
+
+
+                        </div>
+                       
+
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+</div>
+

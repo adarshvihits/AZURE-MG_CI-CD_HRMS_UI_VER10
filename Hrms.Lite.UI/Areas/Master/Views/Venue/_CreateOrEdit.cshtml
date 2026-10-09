@@ -1,0 +1,188 @@
+﻿@model Hrms.Lite.Shared.Master.Venue
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script>
+    $(document).ready(function () {
+        moveCursorToEnd('Name');
+    });
+</script>
+<style>
+    .Venue-slidernew {
+        width: 1030px !important;
+    }
+</style>
+
+@using (Html.BeginForm("Save", "Venue", FormMethod.Post, new { id = "VenueSave" }))
+{
+    <div id="addVenueSlider" class="slider-forms Venue-slidernew slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit');$('.AddNewOrEdit').removeClass('Venue-slidernew')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+
+            <div class="venue-slider">
+                <h4>
+                    Venue
+                </h4>
+            </div>
+
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <span class="Mandatory">*</span>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm VName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'VenueName')", maxlength = "120" })
+                            <span id="VenueName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Short Name</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm VShtName", @placeholder = "Short Name", @onblur = "validate(this,'locShortName')", maxlength = "50" })
+                            <span id="locShortName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Region</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(Model => Model.Region.Code, (SelectList)ViewBag.RegionDropDown, "--Select Region--", new { @class = "form-control form-control-sm VRegion", @onblur = "validate(this,'LocRegion')" })
+                            <span id="LocRegion" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-2 mb-2 pt-5">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('VEN', '@Model.Code')"*@>
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "activeInactiveVen" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Responsible Person</label>
+                            @Html.TextBoxFor(Model => Model.ResponsiblePerson, new { @class = "form-control form-control-sm VResponsible", @placeholder = "Responsible Person", maxlength = "100" })
+                            <span id="LocResponsible"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm VDescription", @placeholder = "Description", maxlength = "250" })
+                            <span id="LocDescription" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6>
+                    Address
+                </h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Door No.& Building</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.DoorNumAndBuilding, new { @class = "form-control form-control-sm VDoorNum", @placeholder = "Door No.& Building", maxlength = "120", @onblur = "validate(this,'LocDoorNumBuilding')" })
+                            <span id="LocDoorNumBuilding"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Street</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.Street, new { @class = "form-control form-control-sm VStreet", @placeholder = "Street", maxlength = "120", @onblur = "validate(this,'LocSreet')" })
+                            <span id="LocSreet"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Area</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.AreaName, new { @class = "form-control form-control-sm VArea", @placeholder = "Area", maxlength = "120", @onblur = "validate(this,'LocArea')" })
+                            <span id="LocArea"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>State & Country</label>
+                            @Html.TextBoxFor(Model => Model.StateAndCountry, new { @class = "form-control form-control-sm VStateCountry", @placeholder = "State & Country", maxlength = "120" })
+                            <span id="LocStateCountry"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6>Communication</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Phone No</label>
+                            @Html.TextBoxFor(Model => Model.PhoneNo, new { @class = "form-control form-control-sm VPhone", @placeholder = "Phone No", maxlength = "15", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)" })
+                            <span id="LocPhone"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Fax</label>
+                            @Html.TextBoxFor(Model => Model.Fax, new { @class = "form-control form-control-sm VFax", @placeholder = "Fax", maxlength = "15", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)" })
+                            <span id="LocFax"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            @Html.TextBoxFor(Model => Model.EmailId, new { @class = "form-control form-control-sm VEmail", @placeholder = "E-mail", maxlength = "120", onchange = "validateEmail(this,'MailId')" })
+                            <span id="MailId"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Web Address</label>
+                            @Html.TextBoxFor(Model => Model.WebAdderss, new { @class = "form-control form-control-sm VWebaddress", @placeholder = "Web Address", maxlength = "120" })
+                            <span id="WebAddr"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveVenue('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveVenue('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

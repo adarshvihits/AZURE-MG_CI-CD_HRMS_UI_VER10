@@ -1,0 +1,99 @@
+﻿@model Hrms.Lite.Shared.PayRoll.AllowanceSettings.ApplicableAllowance
+@*@{
+        ViewData["Title"] = "SaveApplicableAllowance";
+
+    }*@
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "ApplicableAllowanceSave" }))
+{
+    <div id="holidaywageallowance" class="slider-forms slider-forms-open applicableAllowanceSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('applicableAllowanceSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Applicable Allowance</h4>
+            <div class="ihits-table table-border hover-color odd-even holidaywage-setting-list-allowance-slider vertical-scroll-450">
+                <table id="ApplicableAllowance">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Allowance</th>
+                            <th scope="col">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    <input type="checkbox" name="Checkboxes15" id="selectallowance" onclick="OnCheckBoxAllClick('selectallowance','ApplicableAllowance')">
+                                    <span class="mr-1"></span>
+                                </label>
+                            </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Allowance.AllowanceList != null && Model.Allowance.AllowanceList.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.Allowance.AllowanceList.Count; i++)
+                            {
+                        <tr>
+                          
+
+
+
+                            <td data-label="Allowance">@Model.Allowance.AllowanceList[i].Name</td>
+                          
+                            <td data-label="Y/S">
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Code)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Name)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].LogGI)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Mode)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].PendingCount)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Description)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Amount)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].Active)
+                                @Html.HiddenFor(m => m.Allowance.AllowanceList[i].AllowanceType)
+
+
+
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+                                        @Html.CheckBoxFor(item => item.Allowance.AllowanceList[i].Applicable, new { @class = "form-control form-control-sm all", @onchange = "onChkBoxClick(this,'selectallowance','ApplicableAllowance')" })
+                                        @*<input type="checkbox" name="Checkboxes15">*@
+
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+
+
+
+
+                            }
+                        }
+
+
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12">
+                    <a id="allowancesavebutton" type="button"
+                       class="btn btn-default float-right mobile-full-width" onclick="ApplicableAllowanceSave()">
+                        Save
+                    </a>
+                    @*<button type="submit"
+                                class="btn btn-default float-right mobile-full-width">
+                            Save
+                        </button>*@
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+}

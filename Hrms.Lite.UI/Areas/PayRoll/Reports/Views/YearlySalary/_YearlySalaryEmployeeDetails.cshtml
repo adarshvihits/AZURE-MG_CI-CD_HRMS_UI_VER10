@@ -1,0 +1,101 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.Reports.YearlySalary
+
+<style>
+    .colortd {
+        background-color: #becfe1;
+        font-weight: 600 !important;
+    }
+</style>
+<div class="profile-header position-relative box-shadow-none mb-2">
+    @if (Model.EmployeeHeader != null)
+    {
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+    }
+</div>
+<div class="ihits-table table-border  mobile-responsive-table pt-4  yearly-salary vertical-scroll-350">
+    <div class="view-year">
+        @if (Model.MainList != null)
+        {
+            @Html.HiddenFor(m => m.Data.Count)
+
+            <table id="YearlySalaryDetailsTable" class="layout-fixed">
+                <thead>
+                    <tr class="table-dark" style="position:sticky; top:0;">
+                        <th scope="col" class="">Name</th>
+                        <th scope="col" class="">Total</th>
+                        @for (int i = 3; i < Model.MainList.Header.Count; i++)
+                        {
+                            <th scope="col" class="">@Model.MainList.Header[i].FieldName</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.Data != null && Model.Data.Count > 0)
+                    {
+
+                        @for (int i = 0; i < Model.Data.Count; i++)
+                        {
+
+
+
+                            <tr>
+
+
+
+
+                                @if (Model.Data[i]["Employee"].title == "Net Pay" || Model.Data[i]["Employee"].title == "Gross Ded" || Model.Data[i]["Employee"].title == "Gross Alw" || Model.Data[i]["Employee"].title == "CTC" || Model.Data[i]["Employee"].title == "LOP Days")
+                                {
+                                    <td data-label="Name" class="colortd"> @Model.Data[i]["Employee"].title</td>
+                                    <td data-label="Total" class="colortd">@Model.Data[i]["Employee"].total</td>
+                                }
+                                else
+                                {
+                                    <td data-label="Name"> @Model.Data[i]["Employee"].title</td>
+                                    <td data-label="Total">@Model.Data[i]["Employee"].total</td>
+                                }
+
+
+
+
+
+                                @for (int j = 3; j < Model.MainList.Header.Count; j++)
+                                {
+
+                                    @if (Model.Data[i]["Employee"].title == "Net Pay" || Model.Data[i]["Employee"].title == "Gross Ded" || Model.Data[i]["Employee"].title == "Gross Alw" || Model.Data[i]["Employee"].title == "CTC" || Model.Data[i]["Employee"].title == "LOP Days")
+                                    {
+                                        <td data-label="ID" class="colortd">
+                                            @Model.Data[i][Model.MainList.Header[j].FieldName]
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td data-label="ID" class="">
+                                            @Model.Data[i][Model.MainList.Header[j].FieldName]
+
+                                        </td>
+                                    }
+
+
+
+
+                                }
+
+
+                            </tr>
+
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div>
+        }
+    </div>
+</div>

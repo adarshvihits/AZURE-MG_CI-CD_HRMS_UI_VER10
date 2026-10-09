@@ -1,0 +1,394 @@
+﻿@model Hrms.Lite.Shared.Master.Location
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+
+<style>
+
+    .loc-edit-pend {
+        width: 565px!important;
+    }
+
+
+</style>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approve" }))
+{
+    <div id="addLocationMasterApprove" class="slider-forms slider-forms-open ApproveDiv">
+        <div class="slider-inner-style  new-inner-style loc-edit-pend">
+            <div class="slider-form-close" onclick="CloseSlider('ApproveDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Location
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Mode)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.LogGI)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <div class="row-outer">
+                            <label class="view-title">Active</label>
+                            <div class="view-details">
+                                @if (Model.Active == true)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                ERP Code
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ERPCode)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6>
+                    Address
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Door No.& Building
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.DoorNumAndBuilding)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Street
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Street)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Area
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.AreaDropdown.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Location Type
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.LocationType.Name)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Region
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Region.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Country
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Country.Name)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                State
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.State.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Functional State
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.FunctionalState.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                District
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.District.Name)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6>COMMUNICATION</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                LandLine No
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.LandLineNum)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Email ID
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.EmailId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Web Address
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.WebAdderss)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6>GEO TAGGING DETAILS</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Latitude
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Latitude)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Longitude
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Longitude)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Geo Address
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.GeoAdderss)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h6>
+                    STATUTORY PARAMETERS
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                PT Group
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.PTgroup.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                ESI Group
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ESIgroup.Name)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h6>Employer Related Number</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label class="view-title">
+                                Statutory Registration/License Number</label>
+                                <div class="view-details">
+                                    @Html.DisplayFor(model => Model.StatutoryRegistration)
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Profession Tax Employer Registration</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.TaxEmployer)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Profession Tax Employee Registration</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.TaxEmployee)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Labour Welfare Fund</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.WelfareFund)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">Trade License Number</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.LicenseNumber)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">LIN Number</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.LINNumber)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="view-title">SLN</label>
+
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.SLN)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                            <button type="button" class="btn btn-danger  mobile-full-width" onclick="return confirmReject('@Model.LogGI', '@Model.GI')">
+                                Reject
+                            </button>
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="return confirmApprove('@Model.LogGI', '@Model.GI')">
+                                Approve
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

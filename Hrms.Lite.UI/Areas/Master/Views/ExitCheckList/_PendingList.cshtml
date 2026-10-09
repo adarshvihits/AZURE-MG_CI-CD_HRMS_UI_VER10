@@ -1,0 +1,86 @@
+﻿@model Hrms.Lite.Shared.Master.ExitCheckList
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+        //$('#Checklistpendingtable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table exitchecklist-master-pending pt-1">
+    @Html.HiddenFor(m => m.ExitChecklist.Count)
+    <table id="Checklistpendingtable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Check Item</th>
+                <th scope="col">Type</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.ExitChecklist != null && Model.ExitChecklist.Count > 0)
+                {
+                    for (int i = 0; i < Model.ExitChecklist.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.ExitChecklist[i].MakerChecker)
+                            <td data-label="Check Item">@Model.ExitChecklist[i].Name</td>
+                            <td data-label="Type">@Model.ExitChecklist[i].CheckListType.Name</td>
+
+                            <td data-label="Status">@Model.ExitChecklist[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="exitchecklistapprove"
+                                       class="btn btn-icon btn-tick icon-only" onclick="onApproveClick('@Model.ExitChecklist[i].GI', '@Model.ExitChecklist[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="exitchecklistapprove"
+                                       class="btn btn-icon btn-tick icon-only" onclick="onApproveClick('@Model.ExitChecklist[i].GI', '@Model.ExitChecklist[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+
+                                }
+                                <!-- Approve Slider -->
+                                <!-- Approve Slider end-->
+                            </td>
+                            <!-- <second></second> -->
+                        </tr>
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

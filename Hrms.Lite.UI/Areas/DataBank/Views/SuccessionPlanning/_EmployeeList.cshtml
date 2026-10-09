@@ -1,0 +1,116 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.SuccessionPlanning
+
+<script src="~/js/tooltip.js"></script>
+@*<script src="~/js/settings.js"></script>*@
+
+
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+        fillData();
+    });
+</script>*@
+
+
+
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table succession-list-table vertical-scroll-400 mt-2">
+    <table id="EmployeeTable">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Matching</th>
+                
+                <th scope="col">
+
+            <div class="checkbox-inline justify-content-center pl-2">
+                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary ">
+
+                    <input type="checkbox" name="Checkboxes16" id="succ_Checkbox" onchange="OnCheckBoxAllClick('succ_Checkbox','EmployeeTable')">
+
+                    <span></span>
+                </label>
+
+            </div>
+
+        </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.SuccessorEmployeeList != null && Model.SuccessorEmployeeList.Count > 0)
+                {
+                    for (int i = 0; i < Model.SuccessorEmployeeList.Count; i++)
+
+                    {
+                        <tr>
+
+                            <td data-label="ID">
+                                @Model.SuccessorEmployeeList[i].EmployeeID
+
+                                @Html.HiddenFor(Model => Model.EmployeeGI)
+                                @Html.HiddenFor(Model => Model.KeyPositionGI)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].EmployeeGI)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].KeyPositionCode)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].Matching)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].EmployeeID)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].EmployeeCode)
+                                @Html.HiddenFor(Model => Model.SuccessorEmployeeList[i].EmployeeName)
+                            </td>
+                            <td data-label="Employee Name">  @Model.SuccessorEmployeeList[i].EmployeeName</td>
+                            <td data-label="Matching">
+                                <div class="view-details">
+                                    <div class="profile-matching-line">
+                                        <div class="progress-bar">
+                                            @if (Model.SuccessorEmployeeList[i].Matching > 75)
+                                            {
+                                                <div class="high" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorEmployeeList[i].Matching"></div>
+                                            }
+                                            else if (Model.SuccessorEmployeeList[i].Matching >= 50)
+                                            {
+                                                <div class="medium" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorEmployeeList[i].Matching"></div>
+                                            }
+                                            else if (Model.SuccessorEmployeeList[i].Matching < 50)
+                                            {
+                                                <div class="low" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorEmployeeList[i].Matching"></div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-label="Count">
+                                <div class="checkbox-inline justify-content-center">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(Model => Model.SuccessorEmployeeList[i].Applicable,new { @onchange = "onChkBoxClick(this,'succ_Checkbox','EmployeeTable')" })
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                            </td>
+
+                          
+                             
+
+                        </tr>
+
+
+
+
+                    }
+                }
+            }
+
+
+
+        </tbody>
+
+
+    </table>
+</div>

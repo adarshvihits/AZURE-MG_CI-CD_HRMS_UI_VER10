@@ -1,0 +1,115 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.RenewalInformation
+<script src="~/js/tooltip.js"></script>
+
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Account.Login CurrentUser = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Account.Login>(Context.Session.GetString("User"));
+}
+
+
+<script>
+    $(document).ready(function () {
+        salVisible = @CurrentUser.authUser.SalaryVisibility;
+   
+    });
+</script>
+
+
+
+@Html.HiddenFor(m => m.EmployeeProfileSummary.Count)
+<div class="row">
+
+
+    <div class="col-md-12 d-flex justify-content-end">
+
+        <a data-bs-toggle="tooltip" title=""
+           class="btn btn-excel"
+           data-bs-original-title="Export to Excel">
+            <i class="icon-xl far fa-file-excel" onclick="onSummaryExportToExcelClick()"></i>
+        </a>
+    </div>
+
+</div>
+
+<br>
+<div style="padding:10px;"
+     class="ihits-table table-border hover-color odd-even mobile-responsive-table emp_profile-list-table vertical-scroll-200">
+    <table id="RenewalSummaryTable" style="table-layout:auto;">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Group Name</th>
+                <th scope="col">Count</th>
+                <th scope="col">%</th>
+                @if (CurrentUser.authUser.SalaryVisibility != 0)
+                {
+                    <th scope="col">Gross Pay</th>
+                    <th scope="col">%</th>
+                }
+                </tr>
+        </thead>
+        <tbody>
+            @if (Model.EmployeeProfileSummary != null && Model.EmployeeProfileSummary.Count > 0)
+            {
+
+                for (int i = 0; i < Model.EmployeeProfileSummary.Count; i++)
+                {
+            <tr>
+                <td data-label="Department">@Model.EmployeeProfileSummary[i].Name</td>
+                <td data-label="Count">
+                    @Model.EmployeeProfileSummary[i].Count
+                </td>
+                <td data-label="%">@Model.EmployeeProfileSummary[i].Count_Perc</td>
+                @if (CurrentUser.authUser.SalaryVisibility != 0)
+                {
+                    <td data-label="Gross Pay">@Model.EmployeeProfileSummary[i].CTC </td>
+                    <td data-label="%">@Model.EmployeeProfileSummary[i].CTC_Perc</td>
+                }
+                </tr>
+                }
+            }
+
+
+
+
+            @*<tr style=" position: sticky; bottom: 0;"
+                    class="table-light">
+                    <td data-label="ID"><strong></strong></td>
+
+                    <td data-label="No of days">
+                        <strong>@ViewBag.TotalCount</strong>
+                    </td>
+
+
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+
+                    <td data-label="No of days">
+                        <strong>@ViewBag.TotalCTC</strong>
+                    </td>
+
+
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+
+                </tr>*@
+
+        </tbody>
+
+
+    </table>
+    <div class="footer_renewal">
+        <div class="footer_first">
+
+        </div>
+        <div class="footer_first">      <strong>@ViewBag.TotalCount</strong> </div>
+        <div class="footer_first">  </div>
+        @if (CurrentUser.authUser.SalaryVisibility != 0)
+        {
+            <div class="footer_first">      <strong>@ViewBag.TotalCTC</strong></div>
+        }
+            <div class="footer_first"></div>
+        </div>
+</div>

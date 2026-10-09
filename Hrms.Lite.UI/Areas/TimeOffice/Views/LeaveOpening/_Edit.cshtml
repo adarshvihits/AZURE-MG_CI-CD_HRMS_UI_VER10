@@ -1,0 +1,122 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveOpening
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('LeaveOpeningEdit_OpeningEdit');
+        });
+    </script>
+<script src="~/js/tooltip.js"></script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "EmployeeWiseLeaveOpeningSave" }))
+    {
+        <!-- Edit Slider start-->
+        <div id="physicallocationedit" class="slider-forms slider-forms-open leaveOpeningEdit">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('leaveOpeningEdit')">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <h4>
+                    Leave Opening
+                </h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+                @Html.HiddenFor(m => m.EmployeeGI)
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Location</label>
+                            <div class="view-details">
+                                @Model.LeaveOpeningEdit.Location.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">DOJ</label>
+                            <div class="view-details">
+                                @*@Model.LeaveOpeningEdit.DOJ.ToShortDateString()*@
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LeaveOpeningEdit.DOJ))
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row ">
+
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave
+                                Period
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveOpeningEdit.LeavePeriod.Code)
+                                @Model.LeaveOpeningEdit.LeavePeriod.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave
+                                Group
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveOpeningEdit.LeaveGroup.Code)
+                                @Model.LeaveOpeningEdit.LeaveGroup.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Leave</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveOpeningEdit.Leave.Code)
+                                @Model.LeaveOpeningEdit.Leave.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="row-outer">
+                            <div class="form-group">
+                                <label>Opening</label>
+                                @*<input type="text"
+                                    class="form-control form-control-sm"
+                                    placeholder="Opening">*@
+                                @Html.TextBoxFor(m => m.LeaveOpeningEdit.OpeningEdit, new
+                           {
+                               @class = "form-control form-control-sm",
+                               @placeholder = "Opening",
+                               style = "width: 100%",
+                               @onkeypress = "return onlyNumberKey(event)",
+                              
+                           })
+                                <span id="opening"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="EmployeeWiseLeaveOpeningSave()">
+                            Modify
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Slider  end-->
+    }

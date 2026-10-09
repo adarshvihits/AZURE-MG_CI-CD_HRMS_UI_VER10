@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingSchedule
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script src="~/scripts/TrainingModule/TrainingSchedule.js"></script>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+ 
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Training-Schedule-list pt-1">
+    @Html.HiddenFor(model => Model.TrainingScheduleList.Count)
+    <table id="DesignationTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Training</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Head Count</th>
+                <th scope="col">Req.From</th>
+                <th scope="col">Request UpTo</th>
+                <th scope="col">Next EvalDate</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Topic</th>
+                <th scope="col">Add Topic</th>
+               
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.TrainingScheduleList != null && Model.TrainingScheduleList.Count > 0)
+                {
+                    for (int i = 0; i < Model.TrainingScheduleList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => Model.TrainingScheduleList[i].ScheduleCode)
+                            @Html.HiddenFor(model => Model.TrainingScheduleList[i].TrainingCode)
+                            <td data-label="Short Name">@Model.TrainingScheduleList[i].TrainingSubject</td>
+                            @Html.HiddenFor(model => Model.TrainingScheduleList[i].TrainingSubject)
+                            <td data-label="Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.TrainingScheduleList[i].StartDate))</td>
+                            <td data-label="Short Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.TrainingScheduleList[i].EndDate))</td>
+                            <td data-label="Short Name">@Model.TrainingScheduleList[i].HeadCount</td>
+                            <td data-label="Short Name">@Model.TrainingScheduleList[i].RequestFromName</td>
+                        
+
+                            <td data-label="Short Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}",Model.TrainingScheduleList[i].RequestUptoDate))</td>
+                            <td data-label="Short Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.TrainingScheduleList[i].Nextevaldate))</td>
+                            <td data-label="Short Name">
+                                <a data-bs-toggle="tooltip" title="Edit"
+                                   class="btn btn-icon btn-edit icon-only" onclick="Edit(@Model.TrainingScheduleList[i].ScheduleCode,'MODIFY')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                                <a data-bs-toggle="tooltip" title="Delete" id="deleteskilltype"
+                                   type="button"
+                                   class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="Delete('@Model.TrainingScheduleList[i].ScheduleCode')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            </td>
+                           
+                            <td>
+                                @Model.TrainingScheduleList[i].TopicCount
+                            </td>
+                            <td>
+                                <a data-bs-toggle="tooltip" title="Edit"
+                                   class="btn btn-icon btn-edit icon-only" onclick="AddTopic('@Model.TrainingScheduleList[i].ScheduleCode','@Model.TrainingScheduleList[i].TrainingCode')">
+                                    <i class="icon-xl fas fa-plus"></i>
+                                </a>
+                            </td>
+                            
+                           
+                        </tr>
+
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

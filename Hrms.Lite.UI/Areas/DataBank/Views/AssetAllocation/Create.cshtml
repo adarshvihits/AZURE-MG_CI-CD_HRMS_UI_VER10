@@ -1,0 +1,286 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.AssetAllocation
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/assetAllocation.js"></script>
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+</style>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex",@id="assetAllocSave" }))
+{
+
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <h3 class="main-title">
+                    Asset Register Request
+                </h3>
+                <!--end::Header Menu-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "AssetAllocation", new { Area = "DataBank" })" class="">Asset Register List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Asset Register Request
+                    </li>
+                </ul>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <div class="profile-header position-relative box-shadow-none ">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+
+                        <div class="page_white mb-0">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @*<select class="form-control form-control-sm "
+                            id="exampleSelects">
+                        <option>Asset Category</option>
+                        <option>Asset Category</option>
+                    </select>*@
+                                        <label>Asset Category</label><span class="Mandatory">*</span>
+                                        @Html.DropDownListFor(m => m.AssetRequest.Asset.AssetCategory.Code, (SelectList)ViewBag.AssetCat, "--Select Asset Category--", new { @class = "form-control form-control-sm", @onchange = "onAssetCategoryChange(this,'assetCategory')" })
+                                        <span id="assetCategory"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @*<select class="form-control form-control-sm "
+                            id="exampleSelects">
+                        <option>Asset Name</option>
+                        <option>Asset Name</option>
+                    </select>*@
+                                        <label>Asset Name</label><span class="Mandatory">*</span>
+                                        @Html.DropDownListFor(m => m.AssetRequest.AssetName.Code, (SelectList)ViewBag.Asset, "--Select Asset Name--", new { @class = "form-control form-control-sm", @onchange = "onAssetChange(this,'assetName')" })
+                                        <span id="assetName"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ihits-table table-border mobile-responsive-table mt-2 mb-4 ">
+                                <table>
+
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="Asset Code">
+                                                <strong>
+                                                    Asset Code:
+                                                </strong>
+                                                <span class="assetcode">
+                                                    @Html.DisplayFor(m => m.AssetRequest.Asset.AssetCode)
+                                                </span>
+                                            </td>
+                                            <td data-label="Asset Code">
+                                                <strong>
+                                                    Date of
+                                                    Purchase:
+                                                </strong> <span class="dop">
+
+                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetRequest.Asset.DateOfPurchase))
+                                                </span>
+                                                @*@Html.DisplayFor(m => m.AssetRequest.Asset.DateOfPurchase, "{0:dd/MMM/yyyy}")</span>*@
+                                            </td>
+                                            <td data-label="Asset Category">
+                                                <strong>Brand: </strong><span class="brd">@Html.DisplayFor(m => m.AssetRequest.Asset.Brand)</span>
+                                            </td>
+                                            <td data-label="Asset Name">
+                                                <strong>
+                                                    Model No/Serial
+                                                    No:
+                                                </strong><span class="modelno">@Html.DisplayFor(m => m.AssetRequest.Asset.ModelNo)</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td data-label="Asset Code">
+                                                <strong>
+                                                    Asset Cost:
+                                                </strong><span class="cost">@Html.DisplayFor(m => m.AssetRequest.Asset.Cost)</span>
+                                            </td>
+                                            <td data-label="Asset Code">
+                                                <strong>
+                                                    Issuing Department:
+                                                </strong><span class="issuingdept">@Html.DisplayFor(m => m.AssetRequest.Asset.IssuingDepartment.Name)</span>
+                                            </td>
+                                            <td data-label="Asset Category">
+                                                <strong>
+                                                    Condition:
+                                                </strong><span class="condition">@Html.DisplayFor(m => m.AssetRequest.Asset.Condition.Name)</span>
+                                            </td>
+                                            <td data-label="Asset Name">
+                                                <strong>Specification:</strong><span class="spec">@Html.DisplayFor(m => m.AssetRequest.Asset.Specification)</span>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <label>Issue Date</label><span class="Mandatory">*</span>
+                                    <div class="input-group date">
+                                        @*<input type="text" class="form-control kt_datepicker_2"
+                    readonly="readonly" placeholder="Asset Given Date">*@
+                                        @Html.TextBoxFor(m => m.AssetRequest.AssetIssueDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_10", @readonly = "readonly", @placeholder = "Issue Date", @onchange = "validate(this,'assetIssueDate')" })
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="assetIssueDate"></span>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Due Date</label><span class="Mandatory">*</span>
+                                    <div class="input-group date">
+                                        @*<input type="text" class="form-control kt_datepicker_2"
+                    readonly="readonly" placeholder="Asset Return Date">*@
+                                        @Html.TextBoxFor(m => m.AssetRequest.AssetDueDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Due Date", @onchange = "validateDueDate(this,'assetDueDate')" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="assetDueDate"></span>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Remarks</label>
+                                    <div class="form-group">
+                                        @*<input type="text" class="form-control form-control-sm" placeholder="Remarks">*@
+                                        @Html.TextBoxFor(m => m.AssetRequest.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @onkeyup = "RemarksLimitCheck('AssetRequest_Remarks')" })
+                                        <span id="assetRemarks"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <h6 class="main-title mb-3 mt-3 mr-0">Asset Register Log</h6>
+                        @await Html.PartialAsync("_AssetLogList", Model.AssetRequest.AssetLog)
+                        <div id="assetlog" class="hide">
+                            @await Html.PartialAsync("_AssetLog", Model)
+                        </div>
+
+
+                
+
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+                            <button type="button"
+                                    class="btn btn-default  mobile-full-width" onclick="validateAll()">
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                    </div>
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+}
+
+<script>
+    //$(window).on('pageshow', function () {
+    //    debugger;
+    //    $('#AssetRequest_Remarks').focus();
+    //});
+
+    //window.addEventListener("DOMContentLoaded", function () {
+    //    debugger;
+    //    $('#AssetRequest_Remarks').focus();
+    //});
+
+    //$(window).on('load', function () {
+    //    debugger;
+    //    $('#AssetRequest_Remarks').focus();
+    //});
+
+    //$(document).load(function () {
+    //    debugger;
+    //    $('#AssetRequest_Remarks').focus();
+    //});
+
+    //$(document).ready(function () {
+    //    debugger;
+    //    if (document.readyState != 'complete') {
+    //        $('#AssetRequest_Remarks').focus();
+    //    }
+    //});
+
+
+    const myTimeout = setTimeout(changeFocus, 1000);
+
+    function changeFocus()
+    {
+        $('#AssetRequest_Asset_AssetCategory_Code').focus();
+    }
+
+
+
+    //$(window).bind("load", function () {
+    //    debugger;
+    //    $('#AssetRequest_Remarks').focus();
+    //});
+
+
+    
+
+    //$(document).ready(function () {
+    //    debugger;
+    //    //$('#Name').focus();
+    //    moveCursorToEnd('AssetRequest_Remarks');
+    //});
+    
+   
+</script>

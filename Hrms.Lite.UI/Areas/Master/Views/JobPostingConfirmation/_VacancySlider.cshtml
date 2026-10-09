@@ -1,0 +1,130 @@
+@model Hrms.Lite.Shared.Master.JobPostingConfirmationDetails
+@{
+    bool hasJd = !string.IsNullOrWhiteSpace(Model.Qualification) || !string.IsNullOrWhiteSpace(Model.Experience)
+              || !string.IsNullOrWhiteSpace(Model.SalaryRange)
+              || !string.IsNullOrWhiteSpace(Model.SkillsRequired) || !string.IsNullOrWhiteSpace(Model.JobDescription);
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "JPCSave" }))
+{
+    <input type="hidden" name="VacancySourceCode" value="@Model.Vacancy.VacancySourceCode" />
+    <input type="hidden" name="SourceTranactionCode" value="@Model.Vacancy.SourceTranactionCode" />
+    <div class="slider-forms jpcclose">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseVacancySlider()"></i>
+            </div>
+            <h4 class="mb-4">Vacancy Details</h4>
+
+            <div class="jpc-eyebrow">Pending Vacancies &middot; @Model.Vacancy.PlanCount</div>
+            <h3 class="mb-3">@Model.Vacancy.BranchName</h3>
+            <div class="jpc-subtitle">
+                @Model.Vacancy.DepartmentName &middot; @Model.Vacancy.SectionName &middot; @Model.Vacancy.GradeName
+            </div>
+            <div class="mb-2">
+                <span class="jpc-pill jpc-pill-@((Model.Vacancy.PriorityName ?? "").ToLower())">@Model.Vacancy.PriorityName</span>
+                <span class="jpc-pill jpc-pill-source">@Model.Vacancy.VacancySource</span>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between jpc-section-title">
+                <span>Job Master Details</span>
+                <a class="btn btn-default-outline btn-sm" id="jpcViewJd" onclick="ToggleJobMasterDetails()">
+                    <i class="fas fa-caret-@(hasJd ? "down" : "up") mr-1"></i> @(hasJd ? "View" : "Hide")
+                </a>
+            </div>
+            @if (hasJd)
+            {
+            <div class="jpc-jd-box" id="jpcJdBox">
+                <div class="jpc-jm-grid">
+                    <div>
+                        <div class="jpc-jm-label">Qualification</div>
+                        <div class="jpc-jm-tile">@(string.IsNullOrWhiteSpace(Model.Qualification) ? "-" : Model.Qualification)</div>
+                    </div>
+                    <div>
+                        <div class="jpc-jm-label">Experience</div>
+                        <div class="jpc-jm-tile">@(string.IsNullOrWhiteSpace(Model.Experience) ? "-" : Model.Experience)</div>
+                    </div>
+                    <div>
+                        <div class="jpc-jm-label">Skills Required</div>
+                        <div class="jpc-jm-tile">@(string.IsNullOrWhiteSpace(Model.SkillsRequired) ? "-" : Model.SkillsRequired)</div>
+                    </div>
+                    <div>
+                        <div class="jpc-jm-label">Salary Range</div>
+                        <div class="jpc-jm-tile">@(string.IsNullOrWhiteSpace(Model.SalaryRange) ? "-" : Model.SalaryRange)</div>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.JobDescription))
+                    {
+                        <div class="jpc-jm-full">
+                            <div class="jpc-jm-label">Job Description</div>
+                            <div class="jpc-jm-tile jpc-jm-desc">@Html.Raw(Model.JobDescription)</div>
+                        </div>
+                    }
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.LastSavedBy))
+                {
+                    <div class="jpc-jm-note">
+                        From the Job Description saved for this Department, Section &amp; Grade &mdash; last saved by @Model.LastSavedBy@(Model.LastSavedOn.HasValue ? " · " + Model.LastSavedOn.Value.ToString("dd MMM yyyy") : "")
+                    </div>
+                }
+            </div>
+            }
+            else
+            {
+                <div class="jpc-jd-box" id="jpcJdBox" style="display:block;">
+                <div class="jpc-jd-empty" id="jpcJdEmpty">
+                    <div class="jpc-jd-empty-icon">&#129302;</div>
+                    <div class="jpc-jd-empty-title">No job master found</div>
+                    <div class="jpc-jd-empty-text">
+                        Create a job description for @Model.Vacancy.DepartmentName &middot; @Model.Vacancy.SectionName &middot; @Model.Vacancy.GradeName.
+                    </div>
+                    <a href="/Master/JobDescription/Create" class="btn btn-default">&#10024; Go To Job Master</a>
+                </div>
+                </div>
+            }
+
+            <div class="jpc-section-title">Confirm Posting</div>
+
+            <div class="form-group filter-combobox">
+                <label class="view-title">Post To <span class="Mandatory">*</span></label>
+                @Html.DropDownList("PostingDestinationCode",
+                    (ViewBag.PostTo as SelectList) ?? new SelectList(new List<SelectListItem>()),
+                    "Select",
+                    new
+                    {
+                        @id = "jpcPostingDestination",
+                        @class = "form-control form-control-sm",
+                        @onchange = "OnPostToChange()"
+                    })
+                <span id="jpcSourcesError"></span>
+            </div>
+
+            <div class="form-group" id="jpcPortalBox" style="display:none;">
+                <label class="view-title">Post On Which Job Portal? <span class="Mandatory">*</span></label>
+                <div class="d-flex">
+                    <label class="checkbox mr-8 mb-0">
+                        <input type="checkbox" id="jpcNaukri" name="Naukri" value="true" />
+                        <span></span>Naukri
+                    </label>
+                    <label class="checkbox mb-0">
+                        <input type="checkbox" id="jpcLinkedIn" name="LinkedIn" value="true" />
+                        <span></span>LinkedIn
+                    </label>
+                </div>
+                <span id="jpcPortalError"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="view-title">Posted By <span class="Mandatory">*</span></label>
+                <input type="text" class="form-control jpc-input" id="jpcPostedBy" name="PostedBy" maxlength="100" readonly
+                       value="@Model.PostedBy" placeholder="e.g. Divya Raghavan" />
+                <span id="jpcPostedByError"></span>
+            </div>
+
+            <div class="row card-footer-bottom-fixed">
+                <div class="view-details align-right col-md-12">
+                    <a class="btn btn-default-outline mobile-full-width" onclick="CloseVacancySlider()">Cancel</a>
+                    <a class="btn btn-default mobile-full-width" onclick="ConfirmPosting()">Confirm posting</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,100 @@
+﻿@model Hrms.Lite.Shared.Master.Activity
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Delete", "Activity", FormMethod.Post, new { @id = "DeleteActivity" }))
+{
+    <div id="deleteActivity" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Activity</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Active)
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.ShortName)
+                                @Html.HiddenFor(model => Model.LogGI)
+
+                                @Html.HiddenFor(model => Model.Mode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short
+                                Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Active</label>
+                            <div class="view-details">
+                                @if (Model.Active == true)
+                                {
+
+                                    <a type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                  
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI', '@Model.LogGI')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

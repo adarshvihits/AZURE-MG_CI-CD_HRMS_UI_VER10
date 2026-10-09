@@ -1,0 +1,306 @@
+﻿
+@model Hrms.Lite.Shared.General.ReportBuilder
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/scripts/General/databankreportbuilder.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+
+            type: 'GET',
+            url: '/General/ReportBuilder/fillEditMOdeCombinGrid',
+            dataType: 'html',
+            data: { ReportCode: $("#ReportCode").val() },
+
+            success: function (result) {
+                debugger
+                if ($($.parseHTML(result)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    $('#databank_combnGrid').html("");
+                    $('#databank_combnGrid').html(result);
+
+                }
+                hideSpinner();
+
+
+            },
+
+
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+                hideSpinner();
+
+            }
+        });
+
+
+
+
+
+    });
+</script>
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Databank Report Builder
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "ReportBuilder", new { Area = "General" })">Create Databank Report Builder</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                       Edit  Databank Report Builder
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "fullform" }))
+{
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    @Html.HiddenFor(m => m.ReportCode)
+    @Html.HiddenFor(m => m.ReportName)
+    @Html.HiddenFor(m => m.Mode)
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body ">
+
+                            <div class="row tab-style-button">
+                                <div class="col-md-6">
+                                    @*<div class="empstatus-new pr-2 pb-3">
+
+            </div>*@<div class="tab-button-wrap pb-5 pr-3">
+
+
+                                        <div class="tab-items select-option">
+
+                                            <div class="sraech-slider mt-0">
+                                                <div class="search-slider-inner">
+                                                    <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                                                </div>
+                                                <input id="searchList" type="text" class="form-control form-control-sm"
+                                                       placeholder="ID/Name" onkeyup="searchWithoutDatatable('databankLeft')">
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <!-- Table Section -->
+
+
+                                    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table report-builder-list vertical-scroll-450">
+                                        <table id="databankLeft">
+
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <th scope="col">Available Fields</th>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">
+                                                        <div class="checkbox-inline">
+                                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                                <input type="checkbox" class="selectall" />
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null && Model.Details.Count > 0)
+                                                {
+
+                                                    for (int i = 0; i < Model.Details.Count; i++)
+                                                    {
+
+                                                        <tr>
+                                                            <td data-label="Field Group">
+                                                                @Html.HiddenFor(model => Model.Details[i].Code)
+                                                                @Html.HiddenFor(model => Model.Details[i].Field)
+                                                                @Html.HiddenFor(model => Model.Details[i].FieldGroup)
+                                                                @Model.Details[i].FieldGroup
+                                                            </td>
+                                                            <td data-label="Field">@Model.Details[i].Field</td>
+                                                            <td data-label="Field">
+                                                                <div class="checkbox-inline">
+                                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                                        @Html.CheckBoxFor(m => m.Details[i].Applicability, new { @onclick = "onApplicabilityClick_EditMode(" + @i + ")", @class = "case" })
+
+                                                                        <span></span>
+                                                                    </label>
+                                                                </div>
+
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+
+
+
+
+
+                                    </div>
+
+
+
+                                    <!-- Table Setion End -->
+                                   
+
+                                </div>
+
+                                <div class="col-md-6 pt-13">
+                                    <div class="d-flex">
+                                        <!-- Table Section -->
+
+                                        <div id="databank_combnGrid">
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Table Setion End -->
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 align-right">
+                                            
+
+                                            <div id="filterSlider">
+                                                @await Html.PartialAsync("_MultiSelectFilter", Model)
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                               
+
+                                <div class="row card-footer-bottom-fixed border-none">
+
+                                    <div class="col-md-6">
+                                        <a class=" ">
+                                            <div class="application-btn d-flex align-items-center">
+                                                <div class="history-btn">
+                                                    <img src="/images/add-category-icon (1).png">
+
+                                                </div>
+                                                <div class="application-icon" data-bs-toggle="modal" data-target="" onclick="viewSavedReports()"> <h3 class="pt-2 pl-3"> View Saved Reports</h3></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 align-right">
+                                        <a class="btn btn-default btn-edit databank_rbfilteropen" id="filterForm" onclick="openFilter()">
+                                            Proceed
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                <end col-12></end> -->
+
+
+
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+}
+<div class="modal fade rp_savedReports" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="max-width:850px ;">
+        <div class="modal-content popup "
+             style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Saved Reports
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_SavedReports", Model)
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,235 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.CompanyProfile
+@{ ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+<script src="~/scripts/DataBank/companyprofile.js?v=1"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        //$('#CompanyProfileListTable').DataTable({
+        //    "pageLength": 25,
+        //    "language":
+        //    {
+        //        searchPlaceholder: "Search",
+        //    }
+        //});
+
+        //$(".dataTables_filter").addClass("dataTables_filter_trn");
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+
+
+    });
+    function ApplyFilter(mode) {
+        debugger
+        if (mode == 'apply') {
+            if (filterApplicable >= 1) {
+                $.ajax({
+
+                    type: 'POST',
+                    url: '/DataBank/CompanyProfile/ApplyFilter',
+                    dataType: 'html',
+                    data: $('#BasicFilter').serialize(),
+                    success: function (result) {
+                        debugger
+                        CloseSlider('basicFilter');
+                        if ($($.parseHTML(result)).filter(".Login_Session").length > 0) {
+                            window.location.reload();
+                        }
+                        else {
+
+                            $('#cmpProfList').html("");
+                            $('#cmpProfList').html(result);
+                            $('#cmpProfList').removeClass('hide');
+                            hideSpinner();
+                        }
+
+
+                    },
+
+
+                    error: function (xhr, textStatus, errorThrown) {
+                        $('body').html(xhr.responseText);
+                    }
+                });
+                $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+                showSpinner();
+                $.ajax({
+
+                    type: 'POST',
+                    url: '/DataBank/CompanyProfile/ApplyFilter',
+                    dataType: 'html',
+                    data: $('#BasicFilter').serialize(),
+                    success: function (result) {
+                        debugger
+                        CloseSlider('basicFilter');
+                        if ($($.parseHTML(result)).filter(".Login_Session").length > 0) {
+                            window.location.reload();
+                        }
+                        else {
+                            $('#cmpProfList').html("");
+                            $('#cmpProfList').html(result);
+
+                            $('#cmpProfList').removeClass('hide');
+                            hideSpinner();
+                        }
+
+                    },
+
+
+                    error: function (xhr, textStatus, errorThrown) {
+                        $('body').html(xhr.responseText);
+                    }
+                });
+                $('#filterForm').addClass('filter-apply');
+            }
+
+        }
+        else {
+            showSpinner();
+            filterApplicable = 1;
+            $('.reset').val('');
+            $('#Optional_Filter_EmploymentStatus_Code').val(0);
+            $('#filterForm').removeClass('filter-apply');
+            $.ajax({
+
+                type: 'POST',
+                url: '/DataBank/CompanyProfile/ApplyFilter',
+                dataType: 'html',
+                data: $('#BasicFilter').serialize(),
+                success: function (result) {
+                    debugger
+                    if ($($.parseHTML(result)).filter(".Login_Session").length > 0) {
+                        window.location.reload();
+                    }
+                    else {
+                        $('#cmpProfList').html("");
+                        $('#cmpProfList').html(result);
+                        $('#cmpProfList').removeClass('hide');
+                        hideSpinner();
+                    }
+
+
+                },
+
+
+                error: function (xhr, textStatus, errorThrown) {
+                    $('body').html(xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Company Profile</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "CompanyProfile", new { Area = "DataBank",GroupCompanyCode=Model.GrpCmpCode })" class="">
+                        Company Profile</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Company Profile List
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+      
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap pb-2">
+                            <div class="tab-items pt-3">
+                                <b> @ViewBag.Type: </b>@ViewBag.CodeName
+                            </div>
+                           
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                @*<div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>*@
+                                <a data-bs-toggle="tooltip" title="Export to Excel"
+                                   class="btn btn-excel" onclick="ExportToExcelCompanyProfileList(@ViewBag.Code,'@ViewBag.Type','@ViewBag.CodeName')">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <!-- Table Section -->
+
+                    <div id="cmpProfList">
+                        @await Html.PartialAsync("_List") 
+                    </div>
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

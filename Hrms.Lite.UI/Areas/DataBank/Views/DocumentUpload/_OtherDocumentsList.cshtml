@@ -1,0 +1,56 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+   
+<div class="ihits-table table-border  mobile-responsive-table otherdocument-upload vertical-scroll-200">
+    <table>
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Document Name</th>
+                <th scope="col">Document Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Date</th>
+                <th scope="col">View File</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.OtherDocList != null && Model.OtherDocList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.OtherDocList.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.OtherDocList[i].LogGI)
+                    @Html.HiddenFor(m => m.OtherDocList[i].EmployeeOtherDocumentGI)
+                    <tr>
+                        <td data-label="Document Name">@Model.OtherDocList[i].OtherDocumentName</td>
+                        <td data-label="Document Type">@Model.OtherDocList[i].OtherDocumentType</td>
+                        <td data-label="Description">@Model.OtherDocList[i].OtherDocumentDescription</td>
+                        <td data-label="Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.OtherDocList[i].OtherDocumentDate))</td>
+                        <td data-label="View File"><a data-bs-toggle="tooltip" title="" class="view_btn_appli" data-bs-original-title="View File" onclick="displayDoc('OTHER', 'OTHER', '@Model.OtherDocList[i].EmployeeOtherDocumentGI')" cursorshover="true"> </a></td>
+                        <td data-label="Actions">
+                            <div class="small-btn-group d-flex">
+                                <button id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only" data-bs-original-title="Edit" onclick="EditOtherDocuments('@Model.OtherDocList[i].EmployeeOtherDocumentGI','@Model.OtherDocList[i].LogGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </button>
+
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            <div id="otherDocumentEdit" class="hide">
+
+            </div>
+
+        </tbody>
+    </table>
+    <div class="row pt-5">
+        <div class="col-md-12">
+            
+            <div id="addDocument">
+
+            </div>
+        </div>
+
+    </div>
+</div>

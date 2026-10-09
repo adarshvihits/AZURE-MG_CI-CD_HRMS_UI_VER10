@@ -1,0 +1,286 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanIssue
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/PayRoll/loanIssue.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    fillSingleValueDropdown();
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#LoanIssueRequest_LoanType_Code').focus();
+    }
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data",@id="LoanIssueSave"}))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Loan Processing</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "LoanIssue", new { Area = "PayRoll" })" class="">Loan Processing List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Loan Processing
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+
+    <!--begin::Content-->
+                    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+                        <!--begin::Entry-->
+                        <div class="d-flex flex-column-fluid">
+                            <!--begin::Container-->
+                            <div class="container full-width">
+                                <!--begin::Dashboard-->
+                                <!--begin::Row-->
+                                <div class="card card-custom height-100per footer-row-fixed">
+                                    <div class="card-body">
+                                        <div class="profile-header position-relative box-shadow-none mb-2">
+                                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                            @Html.HiddenFor(m => m.EmployeeGI)
+                                            @Html.HiddenFor(m => m.CompanyLoanAmount)
+                                            @Html.HiddenFor(m => m.MaximumLimitPerEmployee)
+                                            @Html.HiddenFor(m => m.BalanceAmount)
+                                            @Html.HiddenFor(m => m.Tenure)
+
+
+                                            <div class="profile-header-overflow"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Loan Type</label><span class="Mandatory">*</span>
+                                                   
+                                                    @Html.DropDownListFor(m => m.LoanIssueRequest.LoanType.Code, 
+                                                   (SelectList)ViewBag.LoanType, "--Select LoanType--", new
+                                                   { @class = "form-control form-control-sm",@onchange = "onLoanTypeChange()" })
+                                                    <span id="loanType"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Purpose</label><span class="Mandatory">*</span>
+
+                                                    @Html.TextBoxFor(m => m.LoanIssueRequest.Pourpose, new { @class = "form-control form-control-sm", @placeholder = "Purpose", maxlength = "120", @autocomplete = "off", @onblur= "validateById('#LoanIssueRequest_Pourpose', 'purpose')" })
+                                                    <span id="purpose"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Repayment Method</label>
+                                                    @Html.HiddenFor(m => m.LoanIssueRequest.RepaymentMethod.Code)
+                                                <div class="form-group">
+                                                    <span id="repaymentMethod"></span>
+                                                </div>
+                                                    </div>
+                                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Loan Amount</label><span class="Mandatory">*</span>
+                                                   
+                                                    @Html.TextBoxFor(m => m.LoanIssueRequest.LoanAmount, new { @class = "form-control form-control-sm", @placeholder = "Loan Amount", maxlength = "8", @onblur = "autopopulateEMITenure()",  @onkeypress = "return onlyNumberKey(event)",@autocomplete = "off" })
+                                                    <span id="loanAmount"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Monthly EMI</label><span class="Mandatory">*</span>
+
+                                                    @Html.TextBoxFor(m => m.LoanIssueRequest.MonthlyEMI, new { @class = "form-control form-control-sm", @placeholder = "Monthly EMI", maxlength = "8", @onkeypress = "return onlyNumberKey(event)", @onblur = "monthlyEMIChange();compareLoanAmtAndMonthlyEmi()", @autocomplete = "off" })
+                                                    <span id="monthlyEMI"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label>Tenure</label><span class="Mandatory">*</span>
+                                                   
+                                                    @Html.TextBoxFor(m => m.LoanIssueRequest.Tenure, new { @class = "form-control form-control-sm", @onkeypress = "return onlyNumberKey(event)", @placeholder = "Tenure", maxlength = "3", @onblur = "tenureChange()", @autocomplete = "off" })
+                                                    <span id="tenure"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label>Disbursement Date</label><span class="Mandatory">*</span>
+                                                <div class="input-group date">
+                                                    @Html.HiddenFor(m=>m.EmployeeHeader.DOJ)
+                                                    @Html.TextBoxFor(m => m.LoanIssueRequest.DisbursementDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Disbursement Date",onchange="onDisbursementDateChange()" })
+
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+                                                <span id="disbursementDate"></span>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Repayment Start Month</label><span class="Mandatory">*</span>
+                                                    @Html.DropDownListFor(m => m.LoanIssueRequest.RepaymentStartMonth.Code, (SelectList)ViewBag.RepaymentStartMonth, "Select Month", new { @class = "form-control form-control-sm",@onchange= "validateById('#LoanIssueRequest_RepaymentStartMonth_Code', 'repaymentStartMonth')" })
+                                                    <span id="repaymentStartMonth"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Remarks</label>
+                                                <div class="form-group">
+                                                    
+                                                    @Html.TextAreaFor(m => m.LoanIssueRequest.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", maxlength = "250", @autocomplete = "off" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label>Principle Amount</label>
+                                                <div class="form-group">
+                                                 <span id="principleAmt">
+
+                                                    @Model.CompanyLoanAmount
+                                                 </span>   
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Principle Amount Balance</label>
+                                                <div class="form-group">
+                                                    <span id="balAmt">
+
+                                                    @Model.BalanceAmount
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Maximum Limit Per Employee</label>
+                                                <div class="form-group">
+                                                    <span id="maxLimitPerEmp">
+
+                                                        @Model.MaximumLimitPerEmployee
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<h6 class="main-title mb-3 mt-5 mr-0">Loan Issue Log</h6>*@
+                                        @*<div class="ihits-table table-border hover-color odd-even mobile-responsive-table vertical-scroll-200 loanissuetype-log-details">
+            <table>
+                <thead>
+                    <tr class="table-dark">
+                        <th data-bs-toggle="tooltip" data-bs-original-title="SlNo" scope="col">
+                            SlNo
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title=" Loan Type"
+                            scope="col">
+                            Loan Type
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Purpose" scope="col">
+                            Purpose
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Repayment Method"
+                            scope="col">
+                            Repayment Method
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Monthly EMI"
+                            scope="col">
+                            Monthly EMI
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title=" Tenure" scope="col">
+                            Tenure
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Loan Amount"
+                            scope="col">
+                            Loan Amount
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Balance"
+                            scope="col">
+                            Balance
+                        </th>
+                        <th data-bs-toggle="tooltip" data-bs-original-title="Status"
+                            scope="col">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.LoanIssueLogList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.LoanIssueLogList.Count; i++)
+                        {
+                            <tr>
+                                <td data-label="SlNo"> @Model.LoanIssueLogList[i].SlNo</td>
+                                <td data-label="Loan Type">
+                                    <a id="EditLoanIssueLogDetails" class="slider-btn" onclick="onLoanIssueLogClick('@Model.LoanIssueLogList[i].LoanIssueGI)">@Model.LoanIssueLogList[i].LoanType</a>
+                                </td>
+                                <td data-label="Purpose">@Model.LoanIssueLogList[i].Pourpose</td>
+                                <td data-label="Repayment Method">@Model.LoanIssueLogList[i].RepaymentMethod</td>
+                                <td data-label="Monthly EMI">@Model.LoanIssueLogList[i].MonthlyEMI</td>
+                                <td data-label="Loan Amount">@Model.LoanIssueLogList[i].LoanAmount</td>
+                                <td data-label="Balance">@Model.LoanIssueLogList[i].Balance</td>
+                                <td data-label="Status">@Model.LoanIssueLogList[i].Status</td>
+
+
+
+
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="5"> No Data Found</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
+                                    <div class="row card-footer-bottom-fixed">
+                                        <div class="col-md-12 align-right">
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-default " onclick="validateLoanIssue()">Save</button>
+                                            </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div id="LoanIssueLogDetailsSlider">
+                                            @*@await Html.PartialAsync("_LoanIssueLogDetails", Model)*@
+                                        </div>
+
+                                        @await Html.PartialAsync("_LoanIssueLogList", Model)
+
+                                    </div>
+                                </div>
+                                <!--end::Row-->
+                                <!--begin::Row-->
+                                <!--end::Row-->
+                                <!--end::Dashboard-->
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Entry-->
+                    </div> <!--end::Content-->
+}

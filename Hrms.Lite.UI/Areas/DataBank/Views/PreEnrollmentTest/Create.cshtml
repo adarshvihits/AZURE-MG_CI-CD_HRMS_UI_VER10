@@ -1,0 +1,178 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/DataBank/preEnrollTest.js" asp-append-version="true"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+</script>
+
+<style>
+
+    .profile-header {
+        background-color: #ffffff !important;
+        border-radius: 10px;
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        onStepCircleClick('@Model.selectedTab');
+        fillOnlyOneDropdown();
+        madatoryCheck();
+        CTCCalculation();
+    });
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#BasicInfo_Salutation_Code').focus();
+    }
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+
+                <!--begin::Header Menu-->
+                <h3 class="main-title">Salary Split up</h3>
+
+                <!--end::Header Menu-->
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    @if (Model.FormName != "OfferProcessing")
+                    {
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "OnBoarding", new { Area = "DataBank" })" class="">OnBoarding</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("OfferVerification", "OfferProcessing", new { Area = "Recruitment" })" class="">Salary Split up</a>
+                        </li>
+                    }
+                    <li class="breadcrumb-item text-muted">
+                        Salary Split up
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "", enctype = "multipart/form-data", @id = "preSave", @style = "height:100%" }))
+{
+
+
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                @Html.HiddenFor(m => m.BasicInfo.File.AbsoluteUri)
+                @Html.HiddenFor(m => m.ResumeDataBankGI)
+                @Html.HiddenFor(m => m.ApplicantTrackingCode)
+                @Html.HiddenFor(m => m.MinimumSalary)
+                @Html.HiddenFor(m => m.MaximumSalary)
+                @Html.HiddenFor(m => m.FormName)
+                @Html.HiddenFor(m => m.VacancyManagementCode)
+                @Html.HiddenFor(m => m.PreEnrollGI)
+                @Html.HiddenFor(m => m.WFTrnCode)
+                @*@Html.HiddenFor(m => m.FiledValidations)*@
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div id="preEnroll_header">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_PreEnrollmentHeader.cshtml")
+                        </div>
+
+                        <!-- Table Section -->
+                        <div id="preEnroll_personal" class="">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_PersonalInfo.cshtml")
+                        </div>
+
+                        <div id="preEnroll_jobdetails" class="hide">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_JobDetails.cshtml")
+                        </div>
+                        <div id="preEnroll_Compensation" class="hide">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_Compensation.cshtml")
+
+                        </div>
+                        <div id="preEnroll_address" class="hide">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_Address.cshtml")
+                        </div>
+                        <div id="Mandatory" class="hide">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/PreEnrollmentTest/_Mandatory.cshtml")
+                        </div>
+
+                        <!-- Table Setion End -->
+
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}
+<div class="modal fade" id="aadharDuplication" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:1000px;">
+        <div class="modal-content popup" style=" height: 250px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="popupHeader" style="color:red"></h5>
+                @*<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>*@
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="modal fade salary_summary" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Salary Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+            </div>
+
+        </div>
+    </div>
+</div>

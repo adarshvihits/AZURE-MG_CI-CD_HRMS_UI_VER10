@@ -1,0 +1,83 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.PositionManagement
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Approve", "Position", FormMethod.Post, new { @id = "ApprovePosition" }))
+{
+    <div id="wageGradeMasterDelete" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('Approve')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Position</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+
+                                @Html.HiddenFor(model => Model.GI)
+                                @Html.HiddenFor(model => Model.Code)
+                                @Html.HiddenFor(model => Model.Mode)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">
+                            Short
+                            Name
+                        </label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.ShortName)
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Remark</label>
+                        <div class="view-details">
+                            @Html.TextAreaFor(model => Model.Remark, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="return confirmApprove('@Model.GI')">
+                            Approve
+                        </button>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

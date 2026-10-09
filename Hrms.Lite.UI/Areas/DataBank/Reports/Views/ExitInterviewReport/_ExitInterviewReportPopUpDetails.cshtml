@@ -1,0 +1,117 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ExitInterviewReport
+
+<script src="~/scripts/DataBank/Reports/exitInterviewReport.js"></script>
+<script src="~/js/settings.js"></script>
+
+<script>
+    searchClick = 0;
+    function onSearchClick() {
+        debugger;
+        if (searchClick == 0) {
+            searchClick = 1;
+            $('.dataTableSearchPopup').addClass('field-width-big');
+            CursorFocusOnSearch();
+        }
+        else {
+            searchClick = 0;
+            $('.dataTableSearchPopup').removeClass('field-width-big');
+        }
+    }
+
+    $(document).ready(function () {
+        $('.search-slider-inner').click(function () {
+
+            $('.pop-up').val('');
+            $('.pop-up').focus();
+            dataTable.search('').draw();
+        });
+    });
+</script>
+<style>
+    .select-option .sraech-slider i, .select-option .filter-button i {
+        z-index: 10;
+        position: relative;
+        top: 8px;
+    }
+</style>
+
+<div class="row" style="padding:5px 16px;">
+    @Html.HiddenFor(Model => Model.EmployeeCode)
+    <div class="col-md-6">
+        <div class="form-group">
+
+            <label class="view-title">Employee Name & ID </label>
+            <div class="view-details">@Model.EmployeeName</div>
+
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-6 d-flex justify-content-end">
+
+        <div class="tab-items select-option d-flex align-items-center">
+            <div class="sraech-slider ">
+                <div class="search-slider-inner1">
+                    <i class="fa fa-search" onclick="onSearchClick()"></i>
+                </div>
+                <input type="text" id="searchList" class="form-control form-control-sm pop-up dataTableSearchPopup"
+                       placeholder="Search by Item" onkeyup="searchRows()">
+            </div>
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left mt-2" style="    margin-top: 5px;
+                            margin-left: 5px;"
+               data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+    </div>
+    <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table Exit-Interview-Details-list  vertical-scroll-200">
+        <table id="ExitInterviewDetailsTable">
+
+            <thead>
+                <tr class="table-light">
+
+                    <th scope="col">Sl.No.</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.ExitInterviewReportPopUpDetails != null && Model.ExitInterviewReportPopUpDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ExitInterviewReportPopUpDetails.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Sl.No.">@Model.ExitInterviewReportPopUpDetails[i].SlNo</td>
+                            <td data-label="Item">@Model.ExitInterviewReportPopUpDetails[i].Question</td>
+                            <td data-label="Type">@Model.ExitInterviewReportPopUpDetails[i].Type</td>
+                            <td data-label="Status">@Model.ExitInterviewReportPopUpDetails[i].Result</td>
+                            <td data-label="Remarks">@Model.ExitInterviewReportPopUpDetails[i].Remarks</td>
+                        </tr>
+
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+
+        </table>
+    </div>
+</div>
+

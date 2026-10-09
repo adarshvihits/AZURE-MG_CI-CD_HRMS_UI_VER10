@@ -1,0 +1,70 @@
+@model Hrms.Lite.Shared.Master.PlanningApproval
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/Master/planningApprovals.js?v=1"></script>
+<link href="~/css/hrplan.css" rel="stylesheet" type="text/css" />
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Planning Approvals
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Workforce Planning
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Planning Approvals
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container full-width">
+            <div class="row height-100per">
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+                        <div class="card-body">
+
+                            <div class="filter-bar">
+                                <div class="field">
+                                    <label class="field-label">Period</label>
+                                    @Html.DropDownListFor(m => m.PlanningPeriod.Code, (SelectList)ViewBag.PlanningPeriod, new { @class = "form-control form-control-sm", @onchange = "GetApprovalList()" })
+                                </div>
+                                <div class="search-wrap">
+                                    <div class="search-box">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" id="approvalSearch" placeholder="Search branch, department, section" oninput="FilterApprovalCards()" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="approvalStats">
+                                @await Html.PartialAsync("_PlanningApprovalList", Model)
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content-->

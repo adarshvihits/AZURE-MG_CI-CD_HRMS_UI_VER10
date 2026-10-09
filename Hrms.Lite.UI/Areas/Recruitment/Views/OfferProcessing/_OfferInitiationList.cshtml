@@ -1,0 +1,122 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+@*<div class="ihits-table table-border hover-color odd-even mobile-responsive-table offer-initiation pt-1">*@
+@{
+    string tableClassName = "offer-initiation";
+    @if (Model.TabName == "Offer_Acceptance_Pending")
+    {
+        tableClassName = "acceptance_pending_list";
+    }
+}
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table @tableClassName">
+    @Html.HiddenFor(m => m.OnBoardingList.Count)
+    <table id="PreEnrollmentJCODList" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Applicant ID">Appli. ID</th>
+                <th scope="col">Applicant Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Days Left">DL</th>
+                <th scope="col" data-bs-toggle="tooltip" data-placement="right" title="Expected DOJ">E:DOJ</th>
+                <th scope="col">Doc Verified </th>
+                <th scope="col" data-bs-toggle="tooltip" title="Resume Uploaded By Candidate">Resume</th>
+                @if (Model.TabName == "ALL")
+                {
+                    <th scope="col">Paused Level </th>
+                }
+                @if (Model.TabName == "Offer_Acceptance_Pending" || Model.TabName == "Offer_Accepted")
+                {
+                    <th scope="col">OfferLetter</th>
+                }
+                @if (Model.TabName == "Offer_Acceptance_Pending")
+                {
+                    <th scope="col">Actions</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+            {
+                for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                {
+                    <tr>
+
+                        <td data-label="Applicant ID">@Model.OnBoardingList[i].RefNo</td>
+                        <td data-label="Candidate Name">
+                            @if (Model.TabName == "Offer_Initiation_Pending")
+                            {
+                                @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "GetOfferInitiationDetails", "OfferProcessing", new { PreEnrollGI = @Model.OnBoardingList[i].PreEnrollGI, Tab = @Model.TabName }, null)
+                            }
+                            else
+                            {
+                                @Model.OnBoardingList[i].CandidateName
+                            }
+                        </td>
+
+
+                        <td data-label="Designation"> @Model.OnBoardingList[i].Designation.Name</td>
+                        <td data-label="Department"> @Model.OnBoardingList[i].Department.Name</td>
+                        <td data-label="Location"> @Model.OnBoardingList[i].Location.Name</td>
+                        <td data-label="Due Days"> @Model.OnBoardingList[i].DueDays</td>
+                        <td data-label="E:DOJ"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OnBoardingList[i].ExpectedDOJ))</td>
+                        <td data-label="Doc Verified">
+                            @if (Model.OnBoardingList[i].DocVerified == "Y")
+                            {
+                                <button class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+                                </button>
+                            }
+                        </td>
+                        <td data-label="View"><i class="icon-xl far fa-eye" data-bs-toggle="tooltip" title="Resume Uploaded By Candidate" onclick="showDocument('@Model.OnBoardingList[i].ResumeFileName', '@Model.OnBoardingList[i].Resume')"></i></td>
+                        @if (Model.TabName == "ALL")
+                        {
+                            <td data-label="Stage">@Model.OnBoardingList[i].Stage</td>
+                        }
+                        @if (Model.TabName == "Offer_Acceptance_Pending" || Model.TabName == "Offer_Accepted")
+                        {
+                            <td data-label="offer">
+                                <a id="applicantshortlisted" onclick="showDocument('@Model.OnBoardingList[i].OfferFileName', '@Model.OnBoardingList[i].OfferLetterAbsoluteUri')">
+                                    View
+                                </a>
+                            </td>
+                        }
+                        @if (Model.TabName == "Offer_Acceptance_Pending")
+                        {
+                            <td data-label="actions">
+                                <div class="row">
+                                    <div class="col-md-12 ">
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Accept" class="btn_approve" onclick="AcceptOrReject('@Model.OnBoardingList[i].PreEnrollGI', 'Accept')">
+
+                                        </a>
+                                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" class="btn_reject" onclick="AcceptOrReject('@Model.OnBoardingList[i].PreEnrollGI', 'Reject')">
+
+                                        </a>
+
+                                    </div>
+                                </div>
+                                @*<a id="applicantshortlisted" onclick="AcceptOrReject('@Model.OnBoardingList[i].PreEnrollGI', 'Accept')">
+                                        Accept
+                                    </a>
+                                    <a id="applicantshortlisted" onclick="AcceptOrReject('@Model.OnBoardingList[i].PreEnrollGI', 'Reject')">
+                                        Reject
+                                    </a>*@
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

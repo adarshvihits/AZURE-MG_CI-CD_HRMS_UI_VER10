@@ -1,0 +1,332 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Suspension
+@{
+    ViewData["Title"] = "Suspension";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/suspension.js"></script>
+
+<script>   
+    $(document).ready(function () {
+        debugger;
+        var salSplitCount = @Model.SuspensionSalarySplit.Count-1;
+        $('.dtPicker').datepicker('destroy');
+        InitializeDatePicker($('#SuspensionSalarySplit_' + salSplitCount + '__FromDate').val(), $('#SuspensionSalarySplit_' + salSplitCount + '__ToDate').val());
+        $('#SuspensionSalarySplitTable .form-control').attr('disabled', true);
+        $('#SuspensionSalarySplit_' + salSplitCount + '__FromDate').removeAttr('disabled');
+        $('#SuspensionSalarySplit_' + salSplitCount + '__ToDate').removeAttr('disabled');
+        $('#SuspensionSalarySplit_' + salSplitCount + '__CuttingPercentage').removeAttr('disabled');
+        $('#SuspensionSalarySplit_' + salSplitCount + '__AttendanceStatus').removeAttr('disabled');
+
+        if ($('#FromDate').val() == '' && $('#ToDate').val()=='') {
+            $('#SuspensionSalarySplitTable .form-control').val('');
+            $('#SuspensionSalarySplitTable .form-control').attr('disabled', true);
+            $('#SuspensionSalarySplitTable button').attr('disabled', true);
+        }
+    });
+</script>
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+</style>
+<!--begin::Header-->
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data", @id="SuspensionSave" }))
+{
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Suspension</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home" , new { Area="" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "Suspension" , new { Area="DataBank" })" class="">Suspension List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Suspension
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+          
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body">
+
+                            <div class="page_white mt-5">
+                                <h6 class="main-title mt-3 mb-5">@Model.Details.EmployeeName</h6>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+
+                                            <label class="view-title">Incident</label>
+                                            <div class="view-details">
+                                                @Html.HiddenFor(m => m.Details.IncidentGI)
+                                                @Model.Details.Incident
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Category</label>
+                                            <div class="view-details">
+                                                @Model.Details.Category
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Occured Date</label>
+                                            <div class="view-details">
+                                                @Model.Details.OccuredDate
+                                                <span id="incidentdate"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Reported By</label>
+                                            <div class="view-details">
+                                                @Model.Details.ReportedBy
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Reported Date</label>
+                                            <div class="view-details">
+                                                @Model.Details.ReportedDate
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">File</label>
+                                            <div class="view-details">
+                                                <a data-bs-toggle="tooltip" title="" data-bs-original-title="View" type="button" class="btn btn-icon btn-view" onclick="showDocument('@Model.Details.FileName', '@Model.Details.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="row">
+
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Action Taken</label>
+                                            <div class="view-details">
+                                                @Model.Details.ActionTaken
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="view-title">Narration</label>
+                                            <div class="view-details">
+                                                @Model.Details.Narration
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>From Date</label>
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(m => m.FromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "From Date", @onchange = "onSuspensionDateChange('#FromDate','#sFromDte');validate(this,'sFromDte')", autocomplete = "off" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="sFromDte"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>To Date</label>
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(m => m.ToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "To Date", @onchange = "onSuspensionDateChange('#ToDate','#sToDte');validate(this,'sToDte')", autocomplete = "off" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="sToDte"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                            </div>
+                            <div class="page_white mt-5">
+
+                              
+                                <h6 class="main-title mt-3 mb-3">Salary Split</h6>  
+                                <div class="row my-3">
+                                    <div class="col-md-12">
+
+
+                                        <div class="ihits-table table-border odd-even  mobile-responsive-table vertical-scroll-200 salary_split_suspension">
+                                            <table id="SuspensionSalarySplitTable">
+                                                <thead>
+                                                    <tr class="table-dark">
+                                                        <th scope="col">From Date</th>
+                                                        <th scope="col">To Date</th>
+                                                        <th scope="col">Cutting Percentage </th>
+                                                        <th scope="col">Attendance Status</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model != null && Model.SuspensionSalarySplit != null && Model.SuspensionSalarySplit.Count > 0)
+                                                    {
+                                                        for (int i = 0; i < Model.SuspensionSalarySplit.Count; i++)
+                                                        {
+                                                            <tr id="row_OI_@i">
+                                                                <td style="position:relative;">
+                                                                    <div class="input-group date">
+                                                                        @Html.TextBoxFor(m => m.SuspensionSalarySplit[i].FromDate, "{0:dd-MMM-yyyy}", new { @class = "form-control dtPicker", @placeholder = "From Date", @onchange = "", autocomplete = "off" })
+
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text">
+                                                                                <i class="la la-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <span id="frmDte_@i"></span>
+                                                                </td>
+                                                                <td style="position:relative;">
+                                                                    <div class="input-group date">
+                                                                        @Html.TextBoxFor(m => m.SuspensionSalarySplit[i].ToDate, "{0:dd-MMM-yyyy}", new { @class = "form-control dtPicker", @placeholder = "To Date", @onchange = "", autocomplete = "off" })
+
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text">
+                                                                                <i class="la la-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <span id="toDte_@i"></span>
+                                                                </td>
+                                                                <td style="position:relative;">
+                                                                    @Html.TextBoxFor(m => m.SuspensionSalarySplit[i].CuttingPercentage, new { @class = "form-control form-control-sm", @placeholder = "Cutting Percentage" })
+                                                                    <span id="cuttingPer_@i"></span>
+                                                                </td>
+                                                                <td style="position:relative;">
+                                                                    @Html.DropDownListFor(m => m.SuspensionSalarySplit[i].AttendanceStatus, (SelectList)ViewBag.AttnStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,"+"'attnStatus_"+i+"')" })
+                                                                    <span id="attnStatus_@i"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex justify-content-center">
+                                                                        @if ((i + 1) == Model.SuspensionSalarySplit.Count)
+                                                                        {
+                                                                            <button type="button" id="objAdd_@i" data-bs-toggle="tooltip" title="Add" class="btn btn-icon btn-edit icon-only addObj" cursorshover="true" onclick="AddNewResultRow('SuspensionSalarySplitTable')">
+                                                                                <i class="fa fa-plus" aria-hidden="true" cursorshover="true"></i>
+                                                                            </button>
+                                                                            <button type="button" id="objDel_@i" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon icon-only mobile-full-width btn-delete delObj" cursorshover="true" onclick="DeleteResultRow(@i)">
+                                                                                <i class="icon-xl far fa-trash-alt" cursorshover="true"></i>
+                                                                            </button>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <button type="button" id="objAdd_@i" data-bs-toggle="tooltip" title="Add" class="btn btn-icon btn-edit icon-only addObj hide" cursorshover="true" onclick="AddNewResultRow('SuspensionSalarySplitTable')">
+                                                                                <i class="fa fa-plus" aria-hidden="true" cursorshover="true"></i>
+                                                                            </button>
+                                                                            <button type="button" id="objDel_@i" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon icon-only mobile-full-width btn-delete delObj hide" cursorshover="true" onclick="DeleteResultRow(@i)">
+                                                                                <i class="icon-xl far fa-trash-alt" cursorshover="true"></i>
+                                                                            </button>
+                                                                        }
+                                                                    </div>
+
+                                                                   
+
+
+
+
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pb-5">
+                                    <div class="col-md-5">
+                                        @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks",@onblur= "validate(this,'rmks')" })
+                                        <span id="rmks"></span>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row card-footer-bottom-fixed">
+
+                                    <div class="col-md-12 align-right">
+                                        <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                                            Save
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->
+}

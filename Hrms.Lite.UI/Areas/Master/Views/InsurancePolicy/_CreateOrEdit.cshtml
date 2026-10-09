@@ -1,0 +1,124 @@
+﻿@model Hrms.Lite.Shared.Master.InsurancePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/scripts/Master/InsurancePolicy.js"></script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "InsurancePolicySave" }))
+{
+    <div id="adddeduction" class="slider-forms slider-forms-open AddDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Insurance policy
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Policy Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "Validate(this,'name')" })
+                        <span id="name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Short Name</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", @onblur = "Validate(this,'shortName')" })
+                        <span id="shortName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+
+
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Insurance Company</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(Model => Model.InsuranceCompany.Code, (SelectList)ViewBag.InsuranceCompany, "--Select--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'ICompany')" })
+                        <span id="ICompany" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-12 d-flex align-items-center">
+                        <div>Active</div>
+                    <label class="switch">
+                        @Html.HiddenFor(m => Model.Code)
+                        @Html.CheckBoxFor(model => model.Active, new { @id = "ActiveACCOUNT" })
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label>Description</label>
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm", @placeholder = "Description", maxlength = "250" })
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {                        
+                        <div class="view-details">
+
+                            @Html.DisplayFor(Model => Model.Description)
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="InsurancePolicySave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="InsurancePolicySave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,78 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.YearOfServiceReport
+
+<script src="~/js/tooltip.js"></script>
+<style>
+    .classification-service {
+        height: 530px;
+        overflow-y: scroll;
+    }
+    .classification-service table thead tr {
+        position: sticky;
+        top: 0;
+    }
+</style>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Year-Of-Service-list exit-question  classification-service">
+        <table id="yearofservicetable" class="">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">DOJ</th>
+                    <th scope="col">Classification</th>
+                    <th scope="col">Effective Date</th>
+                    <th scope="col">No. of Years</th>
+                    <th scope="col">Total Years</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    int Next_EmpCode = 0;
+                    int Next_EmpCode1 = 0;
+                    int i = 0;
+                    int j = 0;
+                    if (Model.YearOfServiceReportList != null)
+                    {
+                        foreach (var itemX in Model.YearOfServiceReportList.GroupBy(m => new { m.EmployeeCode }))
+                        {
+                            int rowspanCount = itemX.Count();
+                            foreach (var item in itemX)
+                            {
+                                {
+                                    var EmployeeCode = @item.EmployeeCode;
+                                <tr>
+                                    @if (EmployeeCode != Next_EmpCode)
+                                    {
+                                        Next_EmpCode = EmployeeCode;
+                                        <td rowspan="@rowspanCount" data-label="ID">@item.EmployeeID</td>
+                                        <td rowspan="@rowspanCount">
+                                            @item.EmployeeName
+                                            @Html.HiddenFor(m => m.YearOfServiceReportList[i].EmployeeCode)
+                                            @Html.HiddenFor(m => m.YearOfServiceReportList[i].EmployeeGI)
+                                            @Html.HiddenFor(m => m.YearOfServiceReportList.Count)
+                                        </td>
+                                        <td rowspan="@rowspanCount">
+                                            @item.Age
+                                        </td>
+                                        <td rowspan="@rowspanCount">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", item.DOJ))</td>
+
+                                    }
+                                    <td data-label="Role">@item.GroupByName</td>
+                                    <td data-label="Effective Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", item.EffectiveDate)) </td>
+                                    <td data-label="No. of Years">@item.YOS</td>
+                                    @if (EmployeeCode != Next_EmpCode1)
+                                    {
+                                        Next_EmpCode1 = EmployeeCode;
+                                        <td rowspan="@rowspanCount" data-label="Total Years">@item.Total_YOS </td>
+                                    }
+                                </tr>
+                                    j++;
+                                }
+                            }
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>

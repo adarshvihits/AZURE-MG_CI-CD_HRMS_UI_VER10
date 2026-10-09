@@ -1,0 +1,54 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.ApprovalMatrix
+
+
+
+<div class="ihits-table table-border odd-even mobile-responsive-table metrix_level_lists">
+    @Html.HiddenFor(m => Model.ApprovalRoleList.Count)
+    <table id="RoleMappingTable" class="common-table RoleMapping">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Level</th>
+                <th scope="col">Role</th>
+                <th scope="col">Actions</th>
+                @*<th></th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ApprovalRoleList != null && Model.ApprovalRoleList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApprovalRoleList.Count; i++)
+                {
+
+                    <tr id="PanelMapping_@i">
+                       
+                        <td>
+                            @Html.HiddenFor(m => Model.ApprovalRoleList[i].Level.Code)
+                            @Html.DisplayFor(m => Model.ApprovalRoleList[i].Level.Name)
+                            <span id="levelcode_@i"></span>
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => Model.ApprovalRoleList[i].Role.Code, new SelectList(ViewBag.Role, "Value", "Text", Model.ApprovalRoleList[i].Role.Code), "Select", new { @class = "form-control form-control-sm", required = "required", @onChange = "rolechange(" + i + ")" })
+                            <span id="RoleCode_@i"></span>
+                        </td>
+                        <td>
+                          
+                            @if (i == Model.ApprovalRoleList.Count - 1 && i > 0)
+                            {
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-icon  icon-only mobile-full-width btn-delete" data-bs-original-title="Delete" onclick="DeleteLevel('@Model.ApprovalRoleList[i].Level.Code')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+
+

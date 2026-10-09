@@ -1,0 +1,78 @@
+﻿@model Hrms.Lite.Shared.Master.Product
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table productList">
+    @Html.HiddenFor(m => m.ProductList.Count)
+    <table id="producttable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.ProductList != null && Model.ProductList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ProductList.Count; i++)
+
+                    {
+
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(m => m.ProductList[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            <td data-label="Name">@Model.ProductList[i].ProductName</td>
+                            <td data-label="Name">@Model.ProductList[i].ShortName</td>
+                            
+                            <td data-label="Actions">
+                                <div>
+
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="departmentedit"
+                                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.ProductList[i].GI', '@Model.ProductList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+
+
+
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="deletedepartment"
+                                           class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.ProductList[i].GI', '@Model.ProductList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

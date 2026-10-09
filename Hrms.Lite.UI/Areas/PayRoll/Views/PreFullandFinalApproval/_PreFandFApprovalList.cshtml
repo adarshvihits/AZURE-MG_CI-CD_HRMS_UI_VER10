@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PreFullandFinalSettlement
+
+<script src="~/js/tooltip.js"></script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table esi-settings-list">
+    @Html.HiddenFor(m => m.PreFullandFinalSettlementList.Count)
+    <table id="FandFListTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Res.Date</th>
+                <th scope="col">LWD</th>
+                <th scope="col">Pay Days</th>
+                <th scope="col" style="text-align:right;">Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.PreFullandFinalSettlementList != null && Model.PreFullandFinalSettlementList.Count > 0)
+                {
+                    for (int i = 0; i < Model.PreFullandFinalSettlementList.Count; i++)
+
+                    {
+                        <tr>
+
+                            <td>
+
+                                @Model.PreFullandFinalSettlementList[i].EmployeeHeader.EmployeeId
+                                @Html.HiddenFor(model => model.PreFullandFinalSettlementList[i].EmployeeHeader.EmployeeCode)
+
+                            </td>
+                            <td>
+                                <a onclick="onEditClick('@Model.PreFullandFinalSettlementList[i].EmployeeHeader.EmployeeGuid')">@Model.PreFullandFinalSettlementList[i].EmployeeHeader.EmployeeName</a>
+
+                            </td>
+
+                            <td>
+                                @Model.PreFullandFinalSettlementList[i].EmployeeHeader.Department.Name
+                            </td>
+                            <td>
+                                @Model.PreFullandFinalSettlementList[i].EmployeeHeader.Location.Name
+                            </td>
+
+                            <td data-label="rdate">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PreFullandFinalSettlementList[i].ResignationDate))</td>
+                            <td data-label="lwd">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PreFullandFinalSettlementList[i].LWD))</td>
+                            <td data-label="paydays">@Model.PreFullandFinalSettlementList[i].PayDays</td>
+                            <td data-label="release" align="right">@Model.PreFullandFinalSettlementList[i].Release</td>
+
+                        </tr>
+
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+
+
+    <div id="editEmployeefandf">
+
+    </div>
+
+
+</div>
+
+

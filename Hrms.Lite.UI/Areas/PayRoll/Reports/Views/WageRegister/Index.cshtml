@@ -1,0 +1,271 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.WageRegister
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/PayRoll/Reports/WageRegister.js"></script>
+
+
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Wage Register
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Wage Register
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body">
+
+
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "WageRegisterPDF" }))
+                            {
+
+
+                                <div class="row tab-style-button">
+                                    <div class="col-md-6">
+                                        <div class="page_white">
+                                            <div class="row pb-5">
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label>Month</label>
+                                                        @Html.DropDownListFor(Model => Model.PayrollMonth.Code, (SelectList)ViewBag.month, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'pay_month')" })
+                                                        <span id="pay_month"></span>
+                                                    </div>
+                                                </div>
+                                                @*<div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <label>Employee</label>
+                                                        @Html.DropDownListFor(Model => Model.EmployeeCode, (SelectList)ViewBag.Employee, "ALL", new { @class = "form-control form-control-sm", @onchange = "" })
+                                                        <span id="employee"></span>
+                                                    </div>
+                                                </div>*@
+                                            </div>
+
+
+                                            <div>
+
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+
+
+                                                        <div class="form-group">
+                                                            <label>Designation</label>
+                                                            @Html.DropDownListFor(m => m.Designation, (SelectList)ViewBag.Dsg, "All", new { @class = "form-control form-control-sm" })
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-5">
+
+
+
+                                                        <div class="form-group">
+                                                            <label>Department</label>
+                                                            @Html.DropDownListFor(m => m.Department, (SelectList)ViewBag.Dept, "All", new { @class = "form-control form-control-sm" })
+
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+
+                                                        <div class="form-group">
+                                                            <label>Location</label>
+                                                            @Html.DropDownListFor(m => m.Location, (SelectList)ViewBag.Loc, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Category</label>
+                                                            @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.Cat, "All", new { @class = "form-control form-control-sm" })
+
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Grade</label>
+                                                            @Html.DropDownListFor(m => m.Grade, (SelectList)ViewBag.Grd, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Payroll Group</label>
+                                                            @Html.DropDownListFor(m => m.PayrollGroup, (SelectList)ViewBag.PayrollGrp, "All", new { @class = "form-control form-control-sm" })
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Division</label>
+                                                            @Html.DropDownListFor(m => m.Division, (SelectList)ViewBag.division, "All", new { @class = "form-control form-control-sm" })
+
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Section</label>
+                                                            @Html.DropDownListFor(m => m.Section, (SelectList)ViewBag.section, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Employment Type</label>
+                                                            @Html.DropDownListFor(m => m.EmploymentType, (SelectList)ViewBag.EmploymentType, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Work Location</label>
+                                                            @Html.DropDownListFor(m => m.WorkLocation, (SelectList)ViewBag.WorkLocation, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row my-2">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Wage Type</label>
+                                                            @Html.DropDownListFor(m => m.WageType, (SelectList)ViewBag.WageType, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Salary Structure</label>
+                                                            @Html.DropDownListFor(m => m.SalaryStructure, (SelectList)ViewBag.SalaryStructure, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row my-2">
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Payment Mode</label>
+                                                            @Html.DropDownListFor(m => m.PaymentMode, (SelectList)ViewBag.PaymentMode, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label>Attendance Group</label>
+                                                            @Html.DropDownListFor(m => m.AttendanceGroup, (SelectList)ViewBag.AttendanceGroup, "All", new { @class = "form-control form-control-sm" })
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- <end table></end> -->
+
+                                            </div>
+                                            <div class="row pt-16">
+                                                <div class="col-md-12">
+                                                    <button type="button"
+                                                            class="btn btn-default float-right mobile-full-width " onclick="GetWageRegisterPDF()">
+                                                        Print
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <end col-6></end> -->
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+    <end col-12></end> -->
+
+              
+
+            </div>
+
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+
+
+
+

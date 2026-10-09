@@ -1,0 +1,204 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.LoanIssue
+
+
+
+
+
+
+            <div class="row" style="padding:5px 11px  0;">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Loan
+                            Type
+                        </label>
+                        <div class="view-details">
+                          @Model.LoanRegister_Details.LoanSettingsName
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Status
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.LoanStatus
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Principle Amount
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.PrincipleAmount
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Topup Amount
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.TopUpAmount
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @*<label class="view-title">
+                            Adjust. Amt.
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.AdjAmount
+                        </div>*@
+
+                    </div>
+                </div>
+
+                <div class="col-md-1 d-flex justify-content-end align-items-center" style="height:fit-content; ">
+
+                    <button data-bs-toggle="tooltip" title=""
+                            class="btn btn-excel"
+                            data-bs-original-title="Export to Excel">
+                        <i class="icon-xl far fa-file-excel"onclick="PopUpExportToExcel('@Model.LoanRegister_Details.EmployeeGI', '@Model.LoanRegister_Details.LoanIssueCode')"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="row pt-4" style="padding:5px 11px  0;">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Monthly EMI
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.MonthlyEMI
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Already Paid Amt.
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.AlreadyPaidAmount
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Balance Amount
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.BalanceAmount
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="view-title">
+                            Remaining Tenure
+                        </label>
+                        <div class="view-details">
+                            @Model.LoanRegister_Details.RemainingTenure
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div style="padding:10px;"
+                 class="ihits-table table-border hover-color odd-even mobile-responsive-table loan-register-popup vertical-scroll-250">
+                @Html.HiddenFor(m => m.LoanRegister_Details.info.Count)
+                <table id="LoanPopUpTable">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Date</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">C/D</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Month</th>
+                            <th scope="col">Remarks</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model.LoanRegister_Details.info != null && Model.LoanRegister_Details.info.Count > 0)
+                            {
+                                for (int i = 0; i < Model.LoanRegister_Details.info.Count; i++)
+
+                                {
+                                        <tr>
+                                            <td data-label="Date">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.LoanRegister_Details.info[i].Date))
+                                            </td>
+                                            <td data-label="Type">
+                                                @Model.LoanRegister_Details.info[i].Type
+                                            </td>
+                                            <td data-label="C/D">                                            
+                                                @if (Model.LoanRegister_Details.info[i].C_D == "C")
+                                                {
+                                                    <div class="text-color-high">
+                                                        @Model.LoanRegister_Details.info[i].CreditDebit
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-color-low">
+                                                        @Model.LoanRegister_Details.info[i].CreditDebit
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td data-label="Amount">
+                                                     @Model.LoanRegister_Details.info[i].Amount                                              
+                                            </td>
+                                            <td data-label="Month">
+                                                @Model.LoanRegister_Details.info[i].Month
+                                            </td>
+                                            <td data-label="Remarks">
+                                                @Model.LoanRegister_Details.info[i].Remarks
+                                            </td>
+
+
+
+                                        </tr>
+
+                                }
+                            }
+                        }
+
+
+
+
+
+
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+

@@ -1,0 +1,86 @@
+﻿
+
+
+@model Hrms.Lite.Shared.Master.VDAGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        @*$('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");*@
+        $('.pendingTabCount').html("@Model.PendingCount");
+        });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table vda-master-pending">
+    <table id="VDAPending" class="common-table dt-width-fix">
+        @Html.HiddenFor(m=>Model.VDAGroupList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+            
+
+                if (Model.VDAGroupList != null && Model.VDAGroupList.Count > 0)
+                {
+                    for (int i = 0; i < Model.VDAGroupList.Count; i++)
+
+                    {
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.VDAGroupList[i].MakerChecker)
+
+                            <td data-label="Name">@Model.VDAGroupList[i].Name</td>
+                            <td data-label="Name">@Model.VDAGroupList[i].ShortName</td>
+
+                            <td data-label="Name">@Model.VDAGroupList[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.VDAGroupList[i].GI', '@Model.VDAGroupList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="circleapprove"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.VDAGroupList[i].GI', '@Model.VDAGroupList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

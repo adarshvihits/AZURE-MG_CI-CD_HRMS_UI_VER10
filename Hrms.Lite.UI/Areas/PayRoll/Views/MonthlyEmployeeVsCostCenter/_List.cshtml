@@ -1,0 +1,81 @@
+﻿@model System.Data.DataSet
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@*@model System.Data.DataTable*@
+@using System.Data;
+
+
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<style>
+    .monthly_emp_vs_cost table thead tr th:last-child,
+    .monthly_emp_vs_cost table tbody tr td:last-child {
+   position:sticky;
+   right:0;
+   background-color:#fff;
+    }
+  
+</style>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table monthly_emp_vs_costs">
+
+
+
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                @*<th style="display:none;"></th>
+                <th style="display:none;"></th>*@
+                @foreach (System.Data.DataRow row in Model.Tables[0].Rows)
+                {
+
+                    <th>@row["head"].ToString()</th>
+
+                }
+                <th >Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 0;}
+            @foreach (DataRow row in Model.Tables[1].Rows)
+            {
+               
+
+
+            <tr id="CostCenterRow_@i">
+                @{int j = 0;}
+                @foreach (DataColumn col in Model.Tables[1].Columns)
+                {
+                    if (Model.Tables[1].Columns[@j].ColumnName != "employeeCode")
+                    {
+                        if (Model.Tables[1].Columns[@j].ColumnName != "employeeGI")
+                        {
+                            <td id="CostCenter[@i].@col.ColumnName" class="col_@i">@row[col.ColumnName]</td>
+                        }
+                        else
+                        {
+                            @Html.Hidden("employeeGI_"+@i, @row[col.ColumnName])
+                          }
+                    }
+                    j++;
+                }                          
+
+                <td style="position:sticky; right:0;">
+
+                    <a data-bs-toggle="tooltip" title="Edit"
+                       id="CostCenterEdit"
+                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick(@i)">
+                        <i class="icon-xl fas fa-pencil-alt"></i>
+                    </a>
+
+                </td>
+            </tr>
+                    i++;
+                }
+           
+        </tbody>
+    </table>
+</div>

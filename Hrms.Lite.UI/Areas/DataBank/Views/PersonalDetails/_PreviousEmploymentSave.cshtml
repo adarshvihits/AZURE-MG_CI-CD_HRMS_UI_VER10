@@ -1,0 +1,215 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "Previous Employment";
+}
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var fileLabel = $('#prevfileLabel');
+        var b = document.getElementById('GetPreviousEmployment_File_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            var b = document.getElementById('GetPreviousEmployment_File_ActualFileName');
+            if (b.value != '') {
+                if (b.value.length > 40) {
+                    let replacemnt = '..';
+                    theSplit = b.value.slice(0, 40);
+                  
+                    fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+                }
+                else {
+                    
+                    fileLabel.html(b.value)
+                }
+            }
+            else {
+                
+                fileLabel.html("No File Chosen");
+
+            }
+        }
+
+
+
+
+    });
+    function filechangeprev() {
+        debugger
+        var fileLabel = $('#prevfileLabel');
+        var a = document.getElementById('GetPreviousEmployment_File_FileData');
+        var filename = $('#GetPreviousEmployment_File_FileData')[0].files[0].name;
+        if (a.value == "") {
+            //fileLabel.innerHTML = "No File Chosen";
+            fileLabel.html("No File Chosen");
+        }
+        else {
+            debugger
+            if (filename.length > 40) {
+                //var theSplit = a.value.split('\\');
+                var theSplit = filename;
+                //theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '..';
+                theSplit = theSplit.slice(0, 40);
+                //fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+                fileLabel.html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+            }
+            else {
+                //fileLabel.innerHTML = filename;
+                fileLabel.html(filename);
+            }
+        }
+    };
+
+</script>
+
+<style>
+    .prev_FileData {
+        color: white !important;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "prev", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+    <div id="addPreviousEmployment" class="slider-forms slider-forms-open pre">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('pre')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Previous Employment</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Company Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.GetPreviousEmployment.PrevEmploymentLogGI, new { @class = "form-control form-control-sm", @placeholder = "prevGI" })
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.CompanyName, new { @class = "form-control", placeholder = "Company Name", @maxlength = 120, @onblur = "firstLetterCaps(this,'prvscompany')", @onkeypress = "return onlyLettersKey(event)" })
+                        <span id="prvscompany" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Location</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.Location, new { @class = "form-control", placeholder = "Location", @maxlength = 120, @onblur = "firstLetterCaps(this,'prvslocation')" })
+                        <span id="prvslocation"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group">
+                        <label>Designation</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.Designation, new { @class = "form-control", placeholder = "Designation", @maxlength = 120, @onblur = "firstLetterCaps(this,'prvsdesignation')" })
+                        <span id="prvsdesignation"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>From</label><span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.GetPreviousEmployment.Fromdate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", placeholder = "From", @onchange = "validate(this,'fromdate')", @readonly = true })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="fromdate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>To</label><span class="Mandatory">*</span>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.GetPreviousEmployment.Todate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", placeholder = "To", @onchange = "calcExp(this,'todate')", @readonly = true })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="todate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Experience</label>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.Experience, new { @class = "form-control", placeholder = "Experience", @readonly = true })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact Person Name</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.ContanctPersonName, new { @class = "form-control", placeholder = "Contact Person Name" })
+                        <span id="cont_Name"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact Person Mobile Number</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.ContanctPersonNumber, new { @class = "form-control", @maxlength = 10, placeholder = "Contact Person Mobile Number" })
+                        <span id="cont_Mob"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contact Person Designation</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetPreviousEmployment.ContanctPersonDesigantion, new { @class = "form-control", placeholder = "Contact Person Designation" })
+                        <span id="cont_Desgn"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-7">
+                <div class="col-md-12">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                        </label>
+
+                        <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title="Only pdf, jpg, jpeg, png and bmp formats are allowed,File size less than 1 MB.">
+
+                            @Html.HiddenFor(m => m.GetPreviousEmployment.File.AbsoluteUri)
+                            @Html.HiddenFor(m => m.GetPreviousEmployment.File.ActualFileName)
+                            @Html.HiddenFor(m => m.GetPreviousEmployment.File.FileName)
+                            @Html.TextBoxFor(m => m.GetPreviousEmployment.File.FileData, new { @type = "file", @class = "prev_FileData", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this);filechangeprev()", @title = "" })
+                            <label id="prevfileLabel" class="notchlabel"></label>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button type="button" class="btn btn-default" onclick="validateAllPreviousEmployment('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

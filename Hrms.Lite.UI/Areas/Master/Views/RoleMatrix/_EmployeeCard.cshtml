@@ -1,0 +1,116 @@
+﻿@*@model Hrms.Lite.Shared.General.EmployeeHeader*@
+@model Hrms.Lite.Shared.Master.RoleMatrix
+<script>
+   $(document).ready(function () {
+       debugger
+        $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+                    document.getElementById('myImage').src = '@Model.EmployeeHeader.EmployeeAbsoluteUri';
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.EmployeeHeader.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.EmployeeHeader.FileName');
+                        debugger
+                        document.getElementById('myImage').src = mimeType + data;
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+   })
+
+</script>
+@using (Html.BeginForm("Save", "Rolematrix", FormMethod.Post, new { @id = "rolematrix_save" }))
+{
+    <div class="search-profile-details">
+
+        <div class="search-profile-img-outer">
+            <div class="search-profile-img">
+                <img src="" id="myImage">
+            </div>
+            <div class="search-frofile-content">
+                <span class="search-profile-title">@Model.EmployeeHeader.EmployeeName</span>
+
+                <span class="search-profile-designation">@Model.EmployeeHeader.EmployeeId</span>
+
+            </div>
+
+        </div>
+       @*  <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted text-hover-primary">Func.Designation:</span>
+            <span class="font-weight-bold mr-2">@Model.EmployeeHeader.Designation.Name</span>
+        </div> *@
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted text-hover-primary">Department:</span>
+            <span class="font-weight-bold mr-2">
+                @Model.EmployeeHeader.Department.Name
+            </span>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted text-hover-primary">Location:</span>
+            <span class="font-weight-bold mr-2">
+                @Model.EmployeeHeader.Location.Name
+            </span>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+    <span class="text-muted text-hover-primary">Section:</span>
+    <span class="font-weight-bold mr-2">
+        @Model.Section
+    </span>
+</div>
+<div class="d-flex align-items-center justify-content-between mb-2">
+    <span class="text-muted text-hover-primary">Grade:</span>
+    <span class="font-weight-bold mr-2">
+        @Model.Grade
+    </span>
+</div>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted text-hover-primary">Category:</span>
+            <span class="font-weight-bold mr-2">
+                @Model.EmployeeHeader.Category.Name
+            </span>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted text-hover-primary">Position:</span>
+            <span class="font-weight-bold mr-2">
+                @Html.HiddenFor(m => m.EmployeeHeader.Position.Code)
+                @Model.EmployeeHeader.Position.Name
+            </span>
+        </div>
+        <div class="button-group mt-4">
+            <a type="button" class="btn btn-default mr-2 float-right" onclick="SaveAuth(@Model.EmployeeHeader.Position.Code)">
+                Save
+            </a>
+            <button type="button" class="btn btn-secondary searchProfileSliderClose" onclick="CloseCard_RoleMatrix('rolemat')">
+                Cancel
+            </button>
+        </div>
+    </div>
+}

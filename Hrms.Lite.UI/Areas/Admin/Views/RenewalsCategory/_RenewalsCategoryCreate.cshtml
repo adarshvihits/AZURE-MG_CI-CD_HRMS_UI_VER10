@@ -1,0 +1,112 @@
+﻿@model Hrms.Lite.Shared.Admin.RenewalsCategory
+
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('Name');
+    });
+</script>
+
+
+@using (Html.BeginForm("Save", "RenewalsCategory", FormMethod.Post, new { id = "RenewalsCategorySave" }))
+{
+    @Html.HiddenFor(model => Model.Mode)
+    @Html.HiddenFor(model => Model.RenewalsCategoryCode)
+
+    <div id="renewalscategoryedit" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+
+            <div class="location-slider">
+                <h4>
+                    Renewals Category
+                </h4>
+            </div>
+
+            <div class="add-padding">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'RenewalsCategoryName')", maxlength = "120" })
+                            <span id="RenewalsCategoryName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm RenShtName", @placeholder = "Short Name", @onblur = "validate(this,'RenewalsCategoryShortName')", maxlength = "5" })
+
+                            <span id="DesignationShortName"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-group pt-2">
+                            <div class="d-flex align-items-center">
+                                <div>  Active</div>
+                                <label class="switch">
+                                    @Html.HiddenFor(m => Model.Code)
+                                    @Html.CheckBoxFor(model => model.Active, new { @id = "activeInactive" })
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="row my-3">
+                        <div class="col-md-12">
+                            <label>Description</label>
+
+                            <div class="view-details">
+
+                                    @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm RenDescription", @placeholder = "Description", maxlength = "250" })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed border-none">
+                        <div class="col-md-12 align-right">
+                            @if (Model.Mode == "Create")
+                            {
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="onRenewalsCategorySaveClick('Save')">
+                                    Save
+                                </button>
+
+                            }
+
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+
+
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="onRenewalsCategorySaveClick('Modify')">
+                                    Modify
+                                </button>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+}
+

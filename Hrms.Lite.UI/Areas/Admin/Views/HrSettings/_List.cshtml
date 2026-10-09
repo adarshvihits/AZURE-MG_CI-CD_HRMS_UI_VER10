@@ -1,0 +1,115 @@
+﻿@model Hrms.Lite.Shared.Admin.HrSettings
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+        // Handle click on "Select all" control
+        $('#InductionAllCheckbox').on('click', function () {
+            var table = $('#InductionTable').DataTable();
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        debugger
+
+        //var table2 = $('#InductionTable').DataTable();
+        //table2.$('.InductionApplicability').on('click', function () {
+        //    if (table2.$('.InductionApplicability:checked').length == table2.$('.InductionApplicability').length) {
+        //        $('#InductionAllCheckbox').prop('checked', true);
+        //    } else {
+        //        $('#InductionAllCheckbox').prop('checked', false);
+        //    }
+        //});
+
+    });
+
+
+
+</script>
+<style>
+    #green-theme .topcheckbox .checkbox.checkbox-outline.checkbox-primary > input:checked ~ span:after {
+        border-color: #ffffff !important;
+    }
+    #green-theme .topcheckbox .checkbox.checkbox-outline.checkbox-primary > input:checked ~ span {
+        border-color: #ffffff !important;
+    }
+</style>
+<div class="ihits-table table-border mobile-responsive-table HrgeneralSettingsList pt-5">
+    @Html.HiddenFor(m => m.HrSettingsList.Count)
+    <table id="InductionTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Settings Name</th>
+                
+
+                <th scope="col">
+
+                    <div class="checkbox-inline topcheckbox">
+                        <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary ">
+                            @*<input type="checkbox" name="Checkboxes16" id="all_HR_App_Checkbox" onchange="onHR_Applicability_AllClick('all_HR_App_Checkbox','HRAttendanceApprovalTable')">*@
+                            <input type="checkbox" name="Checkboxes16" class="SelectAll" id="InductionAllCheckbox" onchange="OnCheckBoxAllClick('InductionAllCheckbox','InductionTable')">
+
+                            <span style="border-color:#fff;"></span>
+                        </label><span>Applicability</span>
+
+                    </div>
+                </th>
+
+
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.HrSettingsList != null && Model.HrSettingsList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.HrSettingsList.Count; i++)
+                {
+                    <tr>
+
+
+                        <td data-label="ID">
+                            @Html.HiddenFor(Model => Model.HrSettingsList[i].SettingsCode)
+                            @Model.HrSettingsList[i].SettingsName
+                        </td>
+                        
+
+                        <td data-label="Select">
+
+                            @if (Model.HrSettingsList[i].SettingsCode != 2 && Model.HrSettingsList[i].SettingsCode != 3)   // your condition here
+                            {
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(model => model.HrSettingsList[i].SettingsApplicabilty, new { @class = "InductionApplicability", @onchange = "onChkBoxClick(this,'InductionAllCheckbox','InductionTable')" })
+
+
+                                        <span></span>
+                                    </label>
+                                </div>
+                            }
+                            @if (Model.HrSettingsList[i].SettingsCode == 2)   // your condition here
+                            {
+                                <div class="mt-2">
+                                    @Html.DropDownListFor(m => m.HrSettingsList[i].Financialyear.Code, (SelectList)ViewBag.FinancialYear, "--Select FinancialYear--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'type')", @onchange = "ontypechange(this)" })
+                                </div>
+                            }
+                            @if (Model.HrSettingsList[i].SettingsCode == 3)   // your condition here
+                            {
+                                <div class="mt-2">
+                                    @Html.DropDownListFor(m => m.HrSettingsList[i].Financialyear2.Code, (SelectList)ViewBag.FinancialYear, "--Select FinancialYear--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'type')", @onchange = "ontypechange(this)" })
+                                </div>
+                            }
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

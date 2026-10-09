@@ -1,0 +1,59 @@
+﻿@model Hrms.Lite.Shared.DataBank.InstantMessaging
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "msgList" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table insatnt_message_list  pt-5">
+
+        <table id="MessageTable"  class=" common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Title</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Applicable Employees</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Add Employee</th>
+                    <th scope="col">Send </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.MessagesList != null && Model.MessagesList.Count > 0)
+                {
+                    for (int i = 0; i < Model.MessagesList.Count; i++)
+                    {
+                <tr>
+                    <td>@Model.MessagesList[i].Title</td>
+                    <td>@Model.MessagesList[i].Message </td>
+                    <td>@Model.MessagesList[i].EmployeeCount </td>
+                    <td>
+                        <a data-bs-toggle="tooltip" title="Edit" id="editMessage"
+                           type="button"
+                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY','@Model.MessagesList[i].MessageCode')">
+                            <i class="icon-xl fas fa-pencil-alt"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("AddNewEmployee", "InstantMessaging", new { Area = "DataBank", MessageCode = Model.MessagesList[i].MessageCode })"
+                           data-bs-toggle="tooltip" title="Add" id="addEmp"
+                           type="button"
+                           class="btn btn-icon btn-edit icon-only">
+                            <i class="icon-xl fas fa-plus"></i>
+                        </a>
+                        
+                    </td>
+                    <td>
+                        <a title="Send" id="sendMessage" class="slider-btn" onclick="onSendClick('@Model.MessagesList[i].MessageCode')">
+                            Send
+                        </a>
+                    </td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+       
+    </div>
+
+    <!-- Table Setion End -->
+}

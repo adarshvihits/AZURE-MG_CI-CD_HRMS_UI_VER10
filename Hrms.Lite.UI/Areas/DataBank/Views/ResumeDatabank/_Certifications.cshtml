@@ -1,0 +1,177 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+    <style>
+        .step-outer .step-item {
+            left: 0px;
+        }
+    </style>>
+
+
+    <div class="step-outer ">
+
+        <a class="step-item active" onclick="onTabNameClick('Rd_Basic')">
+            Basic Details
+            <span class="step-circle"></span>
+        </a>
+        <a class="step-item active" onclick="onTabNameClick('Rd_Address')">
+            Address
+            <span class="step-circle"></span>
+        </a>
+        <a class="step-item active" onclick="onTabNameClick('Rd_Experience')">
+            Experience
+            <span class="step-circle"></span>
+        </a>
+        <a class="step-item active" onclick="onTabNameClick('Rd_Education')">
+            Education
+            <span class="step-circle"></span>
+        </a>
+        <div class="step-item active">
+            Certifications
+            <span class="step-circle"></span>
+        </div>
+        <div class="step-item">
+            Skills
+            <span class="step-circle"></span>
+        </div>
+        <div class="step-item">
+            Summary
+            <span class="step-circle"></span>
+        </div>
+    </div>
+
+    <div class="step-progress-outer">
+        <div class="step-demo col-md-5">
+            <img src="~/images/resume_template.png" style="max-width: 100%;" />
+
+        </div>
+
+
+
+        <div class="step-left col-md-7">
+
+            <div class="resumegrid_repeat my-3 cerfication_outer">
+                <h2>Certifications</h2>
+
+                @{
+
+                    if (Model.Certifications != null && Model.Certifications.Count > 0)
+                    {
+
+                        @for (int i = 0; i < Model.Certifications.Count; i++)
+                        {
+
+                            <div class="Rdcertifn" id="certification_div_@i">
+                                <div class="row my-2">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Certificate</label>
+                                            @*<span class="Mandatory">*</span>*@
+                                            @Html.TextBoxFor(m => m.Certifications[i].Certificate, new { @class = "form-control form-control-sm ifCertEmpty", @placeholder = "Certificate" })
+                                            <span class="rd_Cer_Span_Certi" id="Certificate_@i"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Certificate Type</label>
+                                            @*<span class="Mandatory">*</span>*@
+                                            @Html.DropDownListFor(m => m.Certifications[i].CertificateType.Code, (SelectList)ViewBag.CertificateType, "--Select--", new { @class = "form-control form-control-sm ifCertEmpty" })
+                                            <span class="rd_Cer_Span_Certitype" id="CertificateType_@i"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Issued By</label>
+                                            @*<span class="Mandatory">*</span>*@
+                                            @Html.TextBoxFor(m => m.Certifications[i].IssuedBy, new { @class = "form-control form-control-sm ifCertEmpty", @placeholder = "Certificate" })
+                                            <span class="rd_Cer_Span_issue" id="IssuedBy_@i"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row my-2">
+                                    <div class="col-md-4">
+                                        <label>Issued Date</label>
+                                        @*<span class="Mandatory">*</span>*@
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.Certifications[i].IssuedDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 ifCertEmpty", @readonly = "true", @placeholder = "IssuedDate" })
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="rd_Cer_Span_issueDate" id="IssuedDate_@i"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Mode</label>
+                                            @*<span class="Mandatory">*</span>*@
+                                            @Html.DropDownListFor(m => m.Certifications[i].CertificateMode.Code, (SelectList)ViewBag.CertificateMode, "--Select--", new { @class = "form-control form-control-sm ifCertEmpty" })
+
+                                        </div>
+                                        <span class="rd_Cer_Span_mode" id="CertificateMode_@i"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Validity</label>
+                                            @*<span class="Mandatory">*</span>*@
+                                            @Html.DropDownListFor(m => m.Certifications[i].CertificateValidity.Code, (SelectList)ViewBag.CertificateValidity, "--Select--", new { @class = "form-control form-control-sm ifCertEmpty", @onchange = "onCertificateValidityChange(" + @i + ")" })
+
+                                        </div>
+                                        <span class="rd_Cer_Span_Validity" id="CertificateValidity_@i"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row reneweldate" id="reneweldate_@i">
+                                    <div class="col-md-4">
+                                        <label>Renewal Date</label>
+                                        @*<span class="Mandatory">*</span>*@
+                                        <div class="input-group date">
+
+                                            @Html.TextBoxFor(m => m.Certifications[i].RenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 ifCertEmpty", @readonly = "true", @placeholder = "Renewal Date" })
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="rd_Cer_Span_renewel" id="renwDate_@i"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pt-5">
+                                    <div class="col-md-2">
+                                        <a data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon btn-delete big-btn float-left" onclick="DeleteRwCertfn(@i)"><i class="icon-xl far fa-trash-alt"></i></a>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <button type="button" onclick="AddCertification()"
+                                                class="btn btn-default float-right mobile-full-width">
+                                            Add More
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        }
+
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row card-footer-bottom-fixed">
+        <div class="col-md-12 align-right">
+            <button type="button" onclick="onNextClick('Rd_Certification')"
+                    class="btn btn-default float-right mobile-full-width">
+                Next
+            </button>
+        </div>
+
+    </div>

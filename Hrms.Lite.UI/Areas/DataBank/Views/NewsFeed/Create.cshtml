@@ -1,0 +1,449 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.NewsFeed
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/NewsFeed.js"></script>
+<style>
+
+
+    .Resume_FileData {
+        color: white !important;
+    }
+</style>
+@if (Model.Combinations1 != null && Model.Combinations2 != null)
+{
+    <script>
+
+    $(document).ready(function () {
+        debugger;
+        if ("@Model.Mode"== "Modify") {
+            if ('@Model.Multiple' == 1) {
+                debugger;
+            $('.cmb2').removeClass('hide');
+                $("#MultipleCombination1").find("option").eq(1).hide();
+                $("#MultipleCombination2").find("option").eq(1).hide();
+
+                $('#totcomb1Count').html(@Model.Combinations1.Count);
+                $('#totcomb2Count').html(@Model.Combinations2.Count);
+                $('#cmb2theadID').html($('#MultipleCombination2 option:selected').text());
+                $('#cmb1theadID').html($('#MultipleCombination1 option:selected').text());
+        }
+            else {
+                debugger;
+                    $("#MultipleCombination1").find("option").eq(1).show();
+                $('#totcomb1Count').html(@Model.Combinations1.Count);
+                $('#cmb1theadID').html($('#MultipleCombination1 option:selected').text());
+                $('#cmb1tID').html("ID");
+                $('.cmb2').addClass('hide');
+                }
+        }
+        else {
+            debugger;
+        }
+        debugger;
+        var b = document.getElementById('Attachment_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Attachment_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '...';
+                //fileLabel.innerHTML = b.value;
+                theSplit = b.value.slice(0, 15);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+    });
+
+        window.pressed = function () {
+            debugger
+            var a = document.getElementById('Attachment_FileData');
+            if (a.value == "") {
+                fileLabel.innerHTML = "No File Chosen";
+            }
+            else {
+                debugger
+                var theSplit = a.value.split('\\');
+                theSplit = theSplit[theSplit.length - 1];
+                let replacemnt = '...';
+                //fileLabel.innerHTML = a.value;
+                theSplit = theSplit.slice(0, 15);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+        };
+    </script>
+
+}
+else
+{
+    <script>
+    $(document).ready(function () {
+        debugger;
+        if ("@Model.Mode" == "Modify") {
+            $('#cmb1theadID').html($('#MultipleCombination1 option:selected').text());
+            $('#cmb1tID').html("ID");
+        }
+        debugger;
+        var b = document.getElementById('Attachment_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Attachment_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '...';
+                //fileLabel.innerHTML = b.value;
+                theSplit = b.value.slice(0, 15);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+    });
+    window.pressed = function () {
+        debugger
+        var a = document.getElementById('Attachment_FileData');
+        if (a.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '...';
+            //fileLabel.innerHTML = a.value;
+            theSplit = theSplit.slice(0, 15);
+            fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    };
+    </script>
+}
+<script src="~/scripts/DataBank/HRNewsFeed.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data", @id = "NewsFeedSave" }))
+{
+    @Html.HiddenFor(model => model.Mode)
+    @Html.HiddenFor(model => model.NewsFeedCode)
+    @Html.HiddenFor(model => model.NewsFeedGI)
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">NewsFeed</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "NewsFeed", new { Area = "DataBank" })" class="">NewsFeed</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Create
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body">
+                                <div class="page_white" style="margin-bottom:10px!important;">
+
+                                    <div class="row my-4">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>News Feed Name: </label>
+                                                @Html.TextBoxFor(m => m.NewsFeedname, new { @class = "form-control form-control-sm", @placeholder = "NewsFeed Name", @onblur = "validate(this,'NewsFeednameSpan')" })
+                                            </div>
+                                            <span id="NewsFeednameSpan"></span>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label>Visible From</label>
+                                            <div class="input-group date">
+
+                                                @Html.TextBoxFor(m => m.VisibleFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", placeholder = "Visible From", @onchange = "validate(this,'visiblefrom');" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="visiblefrom"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Visible To</label>
+                                            <div class="input-group date form-group">
+
+                                                @Html.TextBoxFor(m => m.VisibleTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", placeholder = "Visible To", @onchange = "validate(this,'visibleto');DateSelect(this,'visibleto');" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span id="visibleto"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="file-upload-form-group">
+                                                <label for="formFileMultiple" class="form-label">
+                                                    News Feed Document
+                                                </label>
+
+                                                <div class="file-upload-form mb-1">
+                                                    <div class="small-btn-group">
+                                                        <button type="button" data-bs-toggle="tooltip"
+                                                                data-placement="top"
+                                                                data-bs-original-title="View Image"
+                                                                class="btn btn-icon btn-default" onclick="Preview()">
+                                                            <i class="icon-xl far fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div data-bs-toggle="tooltip" data-bs-original-title=" Only Image files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                        @Html.HiddenFor(model => model.Attachment.FileName)
+                                                        @Html.HiddenFor(model => model.Attachment.FileExtension)
+                                                        @Html.HiddenFor(model => model.Attachment.AbsoluteUri)
+                                                        @Html.HiddenFor(model => model.Attachment.ActualFileName)
+                                                        @Html.TextBoxFor(model => model.Attachment.FileData, null, new { type = "file", @class = "form-control PreviewImage nofilechosen Resume_FileData", onchange = "pressed();CheckExtensionAndSize(this,0)", title = "",@accept=".jpg, .jpeg" })
+                                                        <label id="fileLabel" class="nofilelabel notchlabel"></label>
+                                                    </div>
+                                                </div>
+
+
+
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+
+                                       
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>URL:</label>
+                                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-control-sm", @placeholder = "Description" })
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                    @*<div class="row">
+
+                                        </div>*@
+                                </div>
+
+
+                                @*<div class="my-4">
+                                        <h4>Console Combination</h4>
+                                    </div>*@
+                                <div class="row">
+
+                                    <div class="col-md-6">
+
+
+                                        <!--begin: Search Form-->
+                                        <div class="row tab-style-button">
+                                            <div class="tab-button-wrap">
+                                                <div class="tab-items ">
+                                                    <div class="form-group filter-combobox pl-2 ">
+                                                        <div class="d-flex align-items-center h-100 pt-4">
+                                                            <label class="mr-2">Multiple Combinations :</label>
+                                                            <div class="radio-inline">
+
+                                                                <label class="radio radio-outline radio-success">
+                                                                    @Html.RadioButtonFor(m => m.Multiple, "0", new { @onchange = "radiobtnChange(this)" })
+                                                                    <span></span>No
+                                                                </label>
+                                                                <label class="radio radio-outline radio-success">
+                                                                    @*<input type="radio" name="radios15">*@
+                                                                    @Html.RadioButtonFor(m => m.Multiple, "1", new { @onchange = "radiobtnChange(this)" })
+                                                                    <span></span>Yes
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-items d-flex align-items-center pt-2">
+                                                    <div class="form-group filter-combobox pl-2 ">
+                                                        <div>
+                                                            <h4 class="total_count">Total Count:<span id="totcomb1Count"></span></h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-items select-option d-flex align-items-center">
+
+
+                                                    <div class="form-group filter-combobox"
+                                                         style="width: 140px; margin: auto;">
+                                                        <label>Based On</label>
+                                                        @Html.DropDownListFor(m => m.MultipleCombination1, (SelectList)ViewBag.MultipleCombination, "--Select--", new { @class = "form-control form-control-sm", @onchange = "getCombinationDetails(this,0)" })
+                                                        <span id="mcombination1"></span>
+                                                    </div>
+                                                    <div class="sraech-slider mt-0 ml-5">
+                                                        <div class="search-slider-inner">
+                                                            <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                                                        </div>
+                                                        <input id="searchList" type="text" class="form-control form-control-sm"
+                                                               placeholder="Search Here..." onkeyup="combination1searchRows()">
+                                                    </div>
+
+
+
+                                                </div>
+
+
+
+
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <!-- Table Section -->
+
+                                        <div id="CombinationList1">
+                                            @await Html.PartialAsync("_CombinationList1", Model)
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-md-6 cmb2 hide">
+
+
+                                        <!--begin: Search Form-->
+                                        <div class="row tab-style-button">
+                                            <div class="tab-button-wrap">
+
+                                                <div class="tab-items">
+                                                    <div class="form-group filter-combobox"
+                                                         style="width: 140px; margin: auto;">
+                                                        <label>Based On</label>
+                                                        @Html.DropDownListFor(m => m.MultipleCombination2, (SelectList)ViewBag.MultipleCombination, "--Select--", new { @class = "form-control form-control-sm", @onchange = "getCombinationDetails(this,1)" })
+                                                        <span id="mcombination2"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-items d-flex align-items-center pt-2">
+                                                    <div class="form-group filter-combobox pl-2 ">
+                                                        <div>
+                                                            <h4 class="total_count">Total Count:<span id="totcomb2Count"></span></h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-items select-options d-flex align-items-center">
+
+                                                    <div class="sraech-slider-circular mt-0">
+                                                        <div class="search-slider-new">
+                                                            <i class="fa fa-search" @*onclick="$('#searchList2').focus();"*@></i>
+                                                        </div>
+                                                        <input id="searchList2" type="text" class="form-controls form-control-sm"
+                                                               placeholder="Search Here..." onkeyup="combination2searchRows()">
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <!-- Table Section -->
+                                        <div id="CombinationList2">
+                                            @await Html.PartialAsync("_CombinationList2", Model)
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="row card-footer-bottom-fixed">
+                                    @if (Model.Mode != "Modify")
+                                    {
+                                        <div class="col-md-12 align-right">
+                                            <a type="button" class="btn btn-default  mobile-full-width" onclick="SaveNewsFeed('@Model.Mode')">
+                                                Save
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12 align-right">
+                                            <a type="button" class="btn btn-default  mobile-full-width" onclick="SaveNewsFeed('@Model.Mode')">
+                                                Modify
+                                            </a>
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

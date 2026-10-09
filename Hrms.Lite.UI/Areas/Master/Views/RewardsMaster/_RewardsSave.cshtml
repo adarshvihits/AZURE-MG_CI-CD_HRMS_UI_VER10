@@ -1,0 +1,243 @@
+﻿@model Hrms.Lite.Shared.Master.Rewards
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "RewardsMaster", FormMethod.Post, new { id = "rewardsSave" }))
+{
+    <div id="addNewRewardsMaster" class="slider-forms slider-forms-open rewardsSaveclose">
+        @{var abc = 0;}
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('rewardsSaveclose')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Rewards
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm Rname", @placeholder = "Name", @onchange = "OnlycapitalizeFirstLetter(this,'rewardsname')", maxlength = "120" })
+                        <span id="rewardsname" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Short Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm RshtName", @placeholder = "Short Name", @onchange = "validate(this,'rewardsshortname')", maxlength = "5" })
+                        <span id="rewardsshortname" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ihits-table table-border  reward-master-departmentadd-new mt-2 vertical-scroll-150">
+                        <table id="rewDep">
+                            <thead>
+                                <tr class="table-gray">
+                                    <th scope="col">
+                                        Department
+                                        <span class="Mandatory">*</span>
+                                    </th>
+                                    <th scope="col" class="d-flex">
+                                        <div class="checkbox-inline pl-4">
+                                            <label class="checkbox checkbox-outline checkbox-success mr-1">
+
+                                                <input type="checkbox"
+                                                       name="Checkboxes15" id="rewDepAll" onclick="onAllClick('rewDepAll','rewDep')">
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+
+                                    if (Model != null && Model.RewardsGridFill.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < Model.RewardsGridFill.Count; i++)
+                                        {
+
+                                            <tr>
+
+                                                <td>@Model.RewardsGridFill[i].Name</td>
+                                                <td>
+                                                    @Html.HiddenFor(item => item.RewardsGridFill[i].Code)
+                                                    @Html.HiddenFor(item => item.RewardsGridFill[i].Name)
+                                                    <div class="checkbox-inline justify-content-center">
+                                                        <label class="checkbox checkbox-outline checkbox-success mr-1">
+
+                                                            @Html.CheckBoxFor(item => item.RewardsGridFill[i].Applicable, new { @class = "form-control form-control-sm dept", @onclick = "onChkBoxClick(this,'rewDepAll','rewDep')" })
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+
+
+
+                                                </td>
+
+
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="ihits-table table-border mobile-responsive-table reward-master-listadd my-7">
+                <table class="table form-grid clear fixTable" id="PointCriteriaTable">
+                    <thead>
+                        <tr class="table-gray">
+                            <th scope="col">
+                                Point Criteria
+                                <span class="Mandatory">*</span>
+                            </th>
+                            <th scope="col">
+                                Point
+                            </th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.RewardVsPointCriteriaList.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+                                <td data-label="Point Criteria">
+
+                                    @Html.TextBoxFor(Model => Model.RewardVsPointCriteriaList[i].Name, new { @class = "form-control form-control-sm", @placeholder = "Level", maxlength = "120", @onblur = "validateResumeDB(this,'pointname_'," + @i + ")" })
+                                    <span class="test1 pointCriteriaclass" id="pointname_@i"></span>
+
+
+                                </td>
+
+                                <td data-label="Point">
+
+                                    @Html.TextBoxFor(Model => Model.RewardVsPointCriteriaList[i].Point, new { @class = "form-control form-control-sm", @placeholder = "Point", @onkeypress = "return onlyNumberKey(event)", maxlength = "4", @oninput = "process(this)", @onblur = "validateResumeDB(this,'point_'," + @i + ")" })
+                                    <span class="test2 pointclass" id="point_@i"></span>
+
+
+                                </td>
+
+                                <td data-label="Actions">
+                                    <button type="button" onclick="AddRowGrid('PointCriteriaTable')"
+                                            class="btn btn-icon btn-default icon-only  mobile-full-width">
+                                        <i class="icon-xl fas fa-plus"></i>
+                                    </button>
+                                    <button type="button" onclick="DeleteRw(@i)"
+                                            class="btn btn-icon btn-delete icon-only mobile-full-width">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </button>
+
+
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row my-3">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onchange="ActiveInactiveValidationRewards('REWARD','@Model.Code')">
+                            @Html.HiddenFor(m => Model.Code)
+                            @Html.CheckBoxFor(Model => Model.Active, new { @id = "Activeinactiverewards" })
+                            <span class="slider round"></span>
+
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+
+
+
+
+                    @if (Model.Mode == "Create")
+                    {
+                        <label>Description</label>
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-control-sm", @placeholder = "Description", maxlength = "250" })
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+
+                            @Html.DisplayFor(Model => Model.Description)
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "Create")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveRewards('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveRewards('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

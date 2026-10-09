@@ -1,0 +1,82 @@
+﻿@*@model Hrms.Lite.Shared.DataBank.Reports.ExitAnalysisReport
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/scripts/DataBank/Reports/ExitAnalysisReport.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.search-slider-inner').click(function () {
+
+                $('.pop-up').val('');
+                $('.pop-up').focus();
+                dataTable.search('').draw();
+            });
+        });
+    </script>
+
+    <div class="tab-items select-option col-md-1 ">
+
+        <div class="sraech-slider">
+            <div class="search-slider-inner">
+                <i class="fa fa-search" onclick="onSearchClick()"></i>
+            </div>
+            <input type="text" id="searchList" class="form-control form-control-sm pop-up dataTableSearchPopup"
+                   placeholder="Search by Item" onkeyup="searchRows()">
+        </div>
+
+
+        <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" style="    margin-top: 8px;
+                                margin-left: 5px;"
+           data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+            <i class="icon-xl far fa-file-excel"></i>
+        </a>
+    </div>
+
+
+
+    <div id="ExitList">
+        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/ExitAnalysisReport/_ExitAnalysisPopup.cshtml", Model)
+    </div>*@
+
+
+@*<a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" style="    margin-top: 8px;
+                                margin-left: 5px;"
+   data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+    <i class="icon-xl far fa-file-excel"></i>
+</a>*@
+@model Hrms.Lite.Shared.DataBank.Reports.ExitAnalysisReport
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Exit-CheckList-poup-list vertical-scroll-200">
+    @Html.HiddenFor(m => m.ExitAnalysisReportList.Count)
+    @Html.HiddenFor(m => m.EmployeeCode)
+    <table id="exitAnalysispopup">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">DOJ</th>
+                <th scope="col">LWD</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.ExitAnalysisReportList != null && Model.ExitAnalysisReportList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ExitAnalysisReportList.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="ID">@Model.ExitAnalysisReportList[i].EmployeeID</td>
+                            <td data-label="EmployeeName">@Model.ExitAnalysisReportList[i].EmployeeName</td>
+                            <td data-label="Designation">@Model.ExitAnalysisReportList[i].Designation</td>
+                            <td data-label="Department">@Model.ExitAnalysisReportList[i].Department</td>
+                            <td data-label="Location">@Model.ExitAnalysisReportList[i].Location</td>
+                            <td data-label="DOJ"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ExitAnalysisReportList[i].DOJ))</td>
+                            <td data-label="LWD"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ExitAnalysisReportList[i].LWD))</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div> 

@@ -1,0 +1,65 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.Reports.SalaryReports
+
+
+    <div style="padding:10px;"
+         class="ihits-table table-border hover-color odd-even mobile-responsive-table emp_profile-list-table vertical-scroll-250">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Group By</label>
+                    @Html.DropDownListFor(m => Model.GroupByFill.Code, (SelectList)ViewBag.groupBy, new { @class = "form-control form-control-sm", @onchange = "groupbyChange(this)" })
+
+
+                </div>
+            </div>
+
+            @{ var TotalEmpCount = 0;
+                decimal TotalGrossAllow = 0;
+            }
+            @if (Model.GroupSummary != null && Model.GroupSummary.Count > 0)
+            {
+
+                for (int i = 0; i < Model.GroupSummary.Count; i++)
+                {
+
+
+
+                    TotalEmpCount += Model.GroupSummary[i].Count;
+                    TotalGrossAllow += Model.GroupSummary[i].GrossAlw;
+
+                }
+            }
+            <div class="col-md-8 d-flex justify-content-end "
+                 style="height:fit-content ;">
+
+                <button data-bs-toggle="tooltip" title=""
+                        class="btn btn-excel"
+                        data-bs-original-title="Export to Excel" onclick="GroupSummaryExportToExcel(@TotalEmpCount,@TotalGrossAllow)">
+                    <i class="icon-xl far fa-file-excel"></i>
+                </button>
+            </div>
+
+
+            <div id="SummaryListID">
+                @await Html.PartialAsync("~/Areas/PayRoll/Reports/Views/SalarySummaryReport/_SummaryList.cshtml", Model)
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+

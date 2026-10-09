@@ -1,0 +1,100 @@
+﻿@model Hrms.Lite.Shared.Master.SpecialHolidayApplicability
+
+<script>
+                $(document).ready(function () {
+                    if ($('#SpecialHolidaytable').find('input[type="checkbox"]:checked').length == $('#SpecialHolidaytable').find('input[type="checkbox"]').length - 1) {
+                        $('#holidaystatus').prop('checked', true);
+                    }
+                    @{
+                        int rwCnt = 0;
+                    }
+                    @if (Model.SpecialHolidayEmpList != null && Model.SpecialHolidayEmpList.Count > 0)
+                    {
+                        rwCnt = Model.SpecialHolidayEmpList.Count;
+                    }
+                    $('#rwCnt').html(@rwCnt);
+                });
+</script>
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Special-Holiday-Applicability-List vertical-scroll-400">
+        
+        <table id="SpecialHolidaytable">
+          
+        @*@Html.HiddenFor(m => m.EmpCode)*@
+            <thead>
+                @Html.HiddenFor(m => m.SpecialHolidayEmpList.Count)
+                <tr class="table-dark">
+
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name  </th>
+                    <th scope="col">Fun.Designation </th>
+                    <th scope="col">Department</th>
+
+
+                    <th scope="col">Location  </th>
+
+                    <th scope="col">DOJ</th>
+                    <th scope="col">
+                        <div class="checkbox-inline ">
+                            <label class="checkbox checkbox-outline checkbox-success ">
+                                <input type="checkbox"
+                                       name="Checkboxes15" id="holidaystatus" onclick="onAllClick('holidaystatus','SpecialHolidaytable')">
+                                <span style=" margin-right: 0px; "></span>
+                            </label>
+                        </div>
+                    </th>
+
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.SpecialHolidayEmpList != null && Model.SpecialHolidayEmpList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.SpecialHolidayEmpList.Count; i++)
+
+                        {
+
+                            @Html.HiddenFor(model => Model.SpecialHolidayEmpList[i].EmpCode)
+                            <tr>
+
+
+
+                                <td data-label="Name">@Model.SpecialHolidayEmpList[i].EmpId</td>
+                                <td data-label="Name">@Model.SpecialHolidayEmpList[i].EmpName</td>
+                                <td data-label="Name">@Model.SpecialHolidayEmpList[i].Designation</td>
+                                <td data-label="Name">@Model.SpecialHolidayEmpList[i].Department</td>
+                                <td data-label="Name">@Model.SpecialHolidayEmpList[i].Location</td>
+                                <td data-label="Name">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.SpecialHolidayEmpList[i].Doj))</td>
+                                <td data-label="">
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            @Html.CheckBoxFor(
+                              m => m.SpecialHolidayEmpList[i].Applicability,
+                              new
+                              {
+                                  @onclick = "onChkBoxClick(this,'holidaystatus','SpecialHolidaytable')",
+                                  data_original = Model.SpecialHolidayEmpList[i].Applicability, // custom attribute
+                                  onblur = "validateClickedRow(this)"
+                              }
+                          )
+
+                                            <span id="Applicability"></span>
+
+                                        </label>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+                        }
+                    }
+                }
+
+
+            </tbody>
+        </table>
+
+    </div>

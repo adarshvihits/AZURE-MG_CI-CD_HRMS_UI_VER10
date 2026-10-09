@@ -1,0 +1,147 @@
+﻿@model Hrms.Lite.Shared.Master.Reader
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "readerApprove" }))
+{
+    <div id="readerapprove" class="slider-forms slider-forms-open approveSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('approveSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Reader</h4>
+            @Html.HiddenFor(m => m.GI)
+            @Html.HiddenFor(m => m.LogGI)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">User Code</label>
+                        <div class="view-details">
+                            @Model.UserCode
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Reader Name
+                        </label>
+                        <div class="view-details">
+                            @Model.ReaderName
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> IP Address</label>
+                        <div class="view-details">
+                            @Model.IPAddress
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Port
+                        </label>
+                        <div class="view-details">
+                            @Model.Port
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title"> Reader Type</label>
+                        <div class="view-details">
+                            @Model.ReaderType.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Location
+                        </label>
+                        <div class="view-details">
+                            @Model.Location.Name
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">  Biometric ID In Attendance DB</label>
+                        <div class="view-details">
+                            @Model.BiometricIDInAttendanceDB
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        @Model.Remarks
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Approve == true)
+                    {
+                        <a type="button"
+                           class="btn btn-danger  mobile-full-width" onclick="confirmReject()">
+                            Reject
+                        </a>
+                        <a type="button"
+                           class="btn btn-default  mobile-full-width" onclick="confirmApprove()">
+                            Approve
+                        </a>
+                    }
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+}

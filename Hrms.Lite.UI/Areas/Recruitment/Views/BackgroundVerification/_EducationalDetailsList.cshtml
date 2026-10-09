@@ -1,0 +1,137 @@
+﻿@model Hrms.Lite.Shared.Recruitment.BackgroundVerification
+<style>
+    .btn.btn-danger {
+        border-radius: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+</style>
+<div class="row my-2">
+    <div class="col-md-12">
+        <div class="">
+            <h4>Educational Details</h4>
+        </div>
+        <div class="ihits-table table-border mobile-responsive-table my-4 education_details_list">
+            @Html.HiddenFor(m => m.EducationalDetailsList.Count)
+            <table id="AllowanceTable">
+                <thead>
+                    <tr class="table-gray">
+                        <th scope="col">
+                            Qualification
+                        </th>
+                        <th scope="col">
+                            Specialization
+                        </th>
+                        <th scope="col">
+                            Years Of Completion
+                        </th>
+                        <th scope="col">
+                            College/University
+                        </th>
+                        <th scope="col">
+                            Aggregate
+                        </th>
+                        <th scope="col">
+                            File
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @if (Model.EducationalDetailsList != null && Model.EducationalDetailsList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.EducationalDetailsList.Count; i++)
+                        {
+                            <tr>
+
+                                <td data-label="">@Model.EducationalDetailsList[i].Qualification</td>
+                                <td data-label="">@Model.EducationalDetailsList[i].Specialization</td>
+                                <td data-label="">@Model.EducationalDetailsList[i].YearOfCompletion</td>
+                                <td data-label="">@Model.EducationalDetailsList[i].College</td>
+                                <td data-label="">@Model.EducationalDetailsList[i].Aggregate</td>
+                                <td data-label=""><a data-bs-toggle="tooltip" title="" data-bs-original-title="View" type="button" class="btn btn-icon btn-view btn-big" onclick="showDocument('@Model.EducationalDetailsList[i].Filename', '@Model.EducationalDetailsList[i].AbsoluteURI')"><i class="icon-xl far fa-eye"></i></a></td>
+
+                            </tr>
+
+                        }
+                    }
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row my-2">
+          
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="view-title">Educational Details Remarks</label>
+                    <div class="view-details">
+                        @{
+                            Model.Mode = "Education";
+                        }
+                        @Html.HiddenFor(m => m.Mode)
+                        @Html.HiddenFor(m => m.PreEnrollGI)
+                        @Html.HiddenFor(m => m.EducationDetailsStatus)
+                        @Html.TextAreaFor(m => m.EducationDetailsStatusReason, new { @class = "form-control form-control-sm" ,@onblur= "validate(this,'EducationDetails')" })
+                        <span id="EducationDetails"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+
+
+            <div class="col-md-6">
+                @if (Model.EducationDetailsStatus == 1)
+                {
+                    <span class="verified_btn">Verified</span>
+                }
+                else if (Model.EducationDetailsStatus == 2)
+                {
+                    <span class="reject_btn">Rejected</span>
+                }
+            </div>
+            <div class="col-md-6 align-right d-flex justify-content-end">
+                @if (Model.EducationalDetailsList != null && Model.EducationalDetailsList.Count > 0)
+                {
+
+                    <div class="d-flex align-items-center  vr_btn" onclick="onEducationDetailsSave('Reject')">
+                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" class="btn_reject mr-2"  cursorshover="true">
+                        </a>  Reject
+                    </div>
+                    <div class="d-flex align-items-center  vr_btn" onclick="onEducationDetailsSave('Verify')">
+                        <a data-bs-toggle="tooltip" data-bs-original-title="Verify" class="btn_approve mr-2"  cursorshover="true">
+
+                        </a>
+                        Verify
+                    </div>
+
+
+
+                    @*<button type="button" class="btn btn-danger mobile-full-width mr-2" onclick="onEducationDetailsSave('Reject')">
+                        Reject
+                    </button>
+                    <button type="button" class="btn btn-default mobile-full-width" onclick="onEducationDetailsSave('Verify')">
+                        Verify
+                    </button>*@
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>

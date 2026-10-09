@@ -1,0 +1,164 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.SalaryProcessing
+
+ 
+    <script src="~/js/settings.js"></script>
+    <script>
+
+        $(".search-slider-inner").click(function () {
+            $(".form-control").toggleClass('field-width-big')
+        });
+
+    </script>
+    <style>
+        .dataTables_scrollBody {
+            height: 30vh !important;
+        }
+    </style>
+    <div class="row tab-style-button">
+        <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+            <div class="tab-items">
+
+            </div>
+
+
+
+            <div class="tab-items select-option high">
+
+                @*<div class="sraech-slider">
+
+
+
+            <div class="search-slider-inner">
+                <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+            </div>
+            <input id="searchList" type="text" class="form-control form-control-sm"
+                   placeholder="ID/Name" onkeyup="EmployeeSearch('StatutoryTable')">
+        </div>*@
+
+                <div class="sraech-slider">
+                    <div class="search-slider-inner">
+                        <i class="fa fa-search"></i>
+                    </div>
+                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                           placeholder="ID/Name">
+                </div>
+
+                <a data-bs-toggle="tooltip" title=""
+                   class="btn btn-excel"
+                   data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                    <i class="icon-xl far fa-file-excel"></i>
+                </a>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+    <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  ">
+        @Html.HiddenFor(Model => Model.SalaryProcessing_popup.Count)
+        <table id="StatutoryTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+
+
+
+                    @if (@ViewBag.RowName == "Payment Mode Bank But Account Details Missing")
+                    {
+                        <th scope="col" tooltip="">Bank</th>
+                        <th scope="col" tooltip="">Account No.</th>
+                        <th scope="col" tooltip="">IFSC</th>
+
+
+                    }
+                    else if (@ViewBag.RowName == "Account Number Variation With Previous Month")
+                    {
+                        <th scope="col" tooltip="">Previous</th>
+                        <th scope="col" tooltip="">Current</th>
+
+                    }
+                    else if (@ViewBag.RowName == "Payroll Group Varience")
+                    {
+                        <th scope="col" tooltip="">Previous</th>
+                        <th scope="col" tooltip="">Current</th>
+
+                    }
+                    else if (@ViewBag.RowName == "Bank Account Number Duplication")
+                    {
+                        <th scope="col" tooltip="">Bank</th>
+                        <th scope="col" tooltip="">Account No.</th>
+                    }
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.SalaryProcessing_popup != null && Model.SalaryProcessing_popup.Count > 0)
+                {
+                    for (int i = 0; i < Model.SalaryProcessing_popup.Count; i++)
+                    {
+                <tr>
+                    <td data-label="ID">
+                        @Model.SalaryProcessing_popup[i].ID
+                    </td>
+                    <td data-label="Employee Name">
+                        @Model.SalaryProcessing_popup[i].Name
+
+                    </td>
+                    <td data-label="Designation">@Model.SalaryProcessing_popup[i].Designation</td>
+                    <td data-label="Department">
+                        @Model.SalaryProcessing_popup[i].Department
+                    </td>
+                    <td data-label="Location">@Model.SalaryProcessing_popup[i].Location</td>
+
+
+
+                    @if (@ViewBag.RowName == "Payment Mode Bank But Account Details Missing")
+                    {
+                        <td data-label="Bank">@Model.SalaryProcessing_popup[i].Bank</td>
+                        <td data-label="Account number">@Model.SalaryProcessing_popup[i].AccNo</td>
+                        <td data-label="ifsc code">@Model.SalaryProcessing_popup[i].IFSC</td>
+
+                    }
+                    else if (@ViewBag.RowName == "Account Number Variation With Previous Month")
+                    {
+                        <td data-label="Previous">@Model.SalaryProcessing_popup[i].PrevAccNo</td>
+                        <td data-label="Current">@Model.SalaryProcessing_popup[i].CurrAccNo</td>
+                    }
+                    else if (@ViewBag.RowName == "Payroll Group Varience")
+                    {
+                        <td data-label="Previous">@Model.SalaryProcessing_popup[i].PrevPayrollGroup</td>
+                        <td data-label="Current">@Model.SalaryProcessing_popup[i].CurrPayrollGroup</td>
+                    }
+                    else if (@ViewBag.RowName == "Bank Account Number Duplication")
+                    {
+                        <td data-label="Bank">@Model.SalaryProcessing_popup[i].Bank</td>
+                        <td data-label="Account number">@Model.SalaryProcessing_popup[i].AccNo</td>
+                           
+                        }
+
+                </tr>
+
+
+                            }
+                }
+            </tbody>
+
+        </table>
+    </div>

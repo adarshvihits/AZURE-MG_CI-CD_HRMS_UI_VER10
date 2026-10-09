@@ -1,0 +1,465 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeBGV
+@{ ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/employeeBGV.js"></script>
+<style>
+    .profile-header a, .profile-header i {
+        color: #fff !important;
+    }
+
+
+
+
+    .profile-header {
+        background-color: #01877c !important;
+        border-radius: 10px;
+    }
+
+
+
+    .card.card-custom > .card-body {
+        padding: 5px 30px 60px 20px !important;
+    }
+
+    .tab-content-scroller-tab {
+        height: 240px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .page_white-edit .inner-padding {
+        padding: 0px 15px;
+    }
+
+    .page_white-edit h5 {
+        background-color: #06867b00;
+        color: #02685f !important;
+        padding: 10px 15px 0px 15px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    .page_white-edit {
+        background-color: white;
+        padding: 0px 0px 10px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        border: 1px solid #dddddd9e;
+    }
+
+    .page_white h5 {
+        background-color: #06867b14;
+        color: #02685f !important;
+        padding: 10px 15px 10px 15px;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    .page_white {
+        background-color: white;
+        padding: 0px 0px 10px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        border: 1px solid #06867b9e;
+        margin-top: 20px;
+    }
+
+        .page_white .inner-padding {
+            padding: 0px 15px;
+        }
+
+    .four-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 45px;
+        padding: 0px 10px;
+    }
+
+
+
+    .photostyle-bg {
+        background-color: #eef7ff;
+        border-radius: 20px;
+    }
+
+
+    .photostyle {
+        background: linear-gradient(218deg, rgb(197 222 244) 0%, rgb(201 225 250) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+
+
+    .adarstyle-bg {
+        background-color: #f0faef;
+        border-radius: 20px;
+    }
+
+
+    .adarstyle {
+        background: linear-gradient(168deg, rgba(247, 190, 153, 1) 0%, rgba(255, 255, 255, 1) 47%, rgba(174, 230, 168, 1) 100%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .panstyle-bg {
+        background-color: #fff7fe;
+        border-radius: 20px;
+    }
+
+    .panstyle {
+        background: linear-gradient(218deg, rgba(47, 202, 240, 1) 0%, rgba(215, 169, 211, 1) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .resumestyle-bg {
+        background-color: #e7faf9;
+        border-radius: 20px;
+    }
+
+    .resumestyle {
+        background: linear-gradient(218deg, rgb(215 255 255) 0%, rgb(83 226 214) 75%);
+        border-radius: 20px 20px 0px 0px;
+        padding-left: 20px !important;
+    }
+
+
+    .page_white h4 {
+        font-size: 14px;
+        color: #06867b;
+    }
+
+    .ihits-table table tr:first-child th:last-child {
+        border-top-right-radius: 10px !important;
+    }
+
+    .ihits-table table tr:first-child th:first-child {
+        border-top-left-radius: 10px !important;
+    }
+</style>
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Background Verification</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "EmployeeBGV", new { Area = "DataBank" })" class="">Employee Background Verification</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Create
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "EmployeebgvSave" }))
+{
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="profile-header position-relative box-shadow-none mb-2">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Html.HiddenFor(m => m.Details.ApplicantCode)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+                        <div class="page_white mb-2">
+                            <h5 class="h5-style">Basic Info</h5>
+                            <div class="inner-padding">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="row-outer">
+                                            <label class="view-title">Applicant ID</label>
+                                            <div class="view-details">@Model.Details.ApplicantID</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-outer">
+                                            <label class="view-title">Aadhar No.</label>
+                                            <div class="view-details">@Model.Details.AadhaarNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-outer">
+                                            <label class="view-title">Name as per Aadhar</label>
+                                            <div class="view-details">@Model.Details.NameInAadhaar</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Pan</label>
+                                            <div class="view-details">@Model.Details.PanNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row-outer">
+                                            <label class="view-title">Whatsapp No</label>
+                                            <div class="view-details">@Model.Details.WhatsappNo</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="row-outer">
+                                            <label class="view-title">Fresher</label>
+                                            <div class="view-details">
+                                                @(Model.Details.Fresher ? "Yes" : "No")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--begin: Search Form-->
+                        <div class="page_white mb-2">
+                            <h5  class="h5-style ">Background Verification</h5>
+                            <div class="inner-padding">
+
+
+                                <div class="two-col ">
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Referee Name</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.RefereeName, new { @class = "form-control form-control-sm", @placeholder = "Referee Name", maxlength = "250", @onkeypress = "return onlyLetters_Space_DotKeys(event)", @onblur = "capitalizeAllLetter(this);validate(this,'referee_Name')", autocomplete = "off" })
+                                            <span id="referee_Name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Contact Information (email and/or phone number)</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.ContactInformation, new { @class = "form-control form-control-sm", @placeholder = "Contact Information", @onblur = "capitalizeAllLetter(this);validate(this,'contactinfo')", maxlength = "250", autocomplete = "off" })
+                                            <span id="contactinfo"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Title/Position and Company Name</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.TitleAndCompanyName, new { @class = "form-control form-control-sm", @placeholder = "Title/Position and Company Name", @onkeypress = "return onlyLettersKey(event)", @onblur = "capitalizeAllLetter(this);validate(this,'titleAndCompany')", maxlength = "250", autocomplete = "off" })
+                                            <span id="titleAndCompany"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="width: 100%; display: flex; flex-wrap: nowrap; gap: 10px;">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Relationship With Candidate</label><span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.Details.RelationshipWithCandidate.Code, new List<SelectListItem> { new SelectListItem { Value = "1", Text = "Former Supervisor" }, new SelectListItem { Value = "4", Text = "Others" } }, "-- Select Relationship --", new { @class = "form-control form-control-sm", @onchange = "onRelationshipChange()", @onblur = "validate(this,'relationwithCand')", autocomplete = "off" }) @*new SelectListItem { Value = "2", Text = "Direct Subordinate" }, new SelectListItem { Value = "3", Text = "Peer" },*@
+                                                <span id="relationwithCand"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6 hide" id="detailText">
+                                            <div class="form-group">
+                                                <label>Details</label><span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(Model => Model.Details.OtherDetails, new { @class = "form-control form-control-sm", @placeholder = "Details", @onkeypress = "return onlyLettersKey(event)", @onblur = "capitalizeAllLetter(this);validate(this,'otherDetail')", maxlength = "250", autocomplete = "off" })
+                                                <span id="otherDetail"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>How many years have you known the candidate?</label><span class="Mandatory">*</span>
+                                            @Html.DropDownListFor(m => m.Details.HowManyYears.Code, new List<SelectListItem> { new SelectListItem { Value = "1", Text = "Less than 1 year" }, new SelectListItem { Value = "2", Text = "Between 1 to 2 years" }, new SelectListItem { Value = "3", Text = "Between 2 to 5 years" }, new SelectListItem { Value = "4", Text = "More than 5 years" } }, "-- Select Years --", new { @class = "form-control form-control-sm", @onblur = "validate(this,'year')" })
+                                            <span id="year"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group pt-8 d-flex align-items-center">
+                                            <label >Type Of Reference</label><span class="Mandatory pr-3">*</span>
+                                            <div class="radio-inline">
+                                                <label class="radio radio-outline mt-4  radio-success">
+
+                                                    @Html.RadioButtonFor(m => m.Details.TypeOfReference, "1", new { @class = "form-check-input", id = "Professional" })
+                                                    <span></span><div>Professional</div>
+                                                </label>
+                                                <label class="radio radio-outline mt-4  radio-success">
+                                                    @*<input type="radio" name="radios15">*@
+                                                    @Html.RadioButtonFor(m => m.Details.TypeOfReference, "2", new { @class = "form-check-input", id = "Personal" })
+                                                    <span></span><div>Personal</div>
+                                                </label>
+
+                                            </div>
+                                            @*<div class="form-check form-check-inline">
+                                                @Html.RadioButtonFor(m => m.Details.TypeOfReference, "1", new { @class = "form-check-input", id = "Professional" })
+                                                <label class="form-check-label" for="years1">Professional</label>
+                                            </div>*@
+                                            @*<div class="form-check form-check-inline">
+                                                @Html.RadioButtonFor(m => m.Details.TypeOfReference, "2", new { @class = "form-check-input", id = "Personal" })
+                                                <label class="form-check-label" for="years2">Personal</label>
+                                            </div>*@
+                                            <span id="reftype"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Name of company</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.BGVCompanyName, new { @class = "form-control form-control-sm", @placeholder = "Name of company", @onblur = "capitalizeAllLetter(this);validate(this,'bgvCompany')", maxlength = "250", oninput = "RestrictAlphanumwithDots(this)", autocomplete = "off" })
+                                            <span id="bgvCompany"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="width: 100%; display: flex; flex-wrap: nowrap; gap: 10px;">
+
+                                        <div class="col-md-6">
+
+                                            <label class="form-group pt-6">
+                                                Duration/period where you have worked together
+                                            </label>
+                                        </div>
+
+
+                                        <div class="=col-md-3">
+                                            <label class="form-group">
+                                                in years
+                                            </label><span class="Mandatory">*</span>
+                                            <div class="view-details">
+
+                                                @{
+                                                    var durationList = Enumerable.Range(0, 9)
+                                                        .Select(i => new SelectListItem
+                                                        {
+                                                            Value = i.ToString(),
+                                                            Text = i.ToString()
+                                                        }).ToList();
+
+                                                    durationList.Add(new SelectListItem
+                                                    {
+                                                        Value = "10+",
+                                                        Text = "10+"
+                                                    });
+                                                }
+
+                                                @Html.DropDownListFor(
+                                                    m => m.Details.DurationYears.Name,
+                                                    durationList,
+                                                    "-- Select Duration --",
+                                                    new { @class = "form-control form-control-sm" }
+                                                )
+
+                                            </div>
+                                            <span id="yearsduration"></span>
+
+                                        </div>
+
+                                        <div class="=col-md-3">
+                                            <label class="form-group">
+                                                in months
+                                            </label><span class="Mandatory">*</span>
+                                            <div class="view-details">
+                                                @{
+                                                    var durationmonthList = Enumerable.Range(0, 12)
+                                                        .Select(i => new SelectListItem
+                                                        {
+                                                            Value = i.ToString(),
+                                                            Text = i.ToString()
+                                                        }).ToList();
+                                                }
+
+                                                @Html.DropDownListFor(
+                                                    m => m.Details.DurationMonths.Code,
+                                                    durationmonthList,
+                                                    "-- Select Duration --",
+                                                    new { @class = "form-control form-control-sm" }
+                                                )
+
+                                            </div>
+                                            <span id="monthsduration"></span>
+
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Candidate's position at that time during your working relationship</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.BGVCandidatePosition, new { @class = "form-control form-control-sm", @placeholder = "Position", @onkeypress = "return onlyLettersKey(event)", @onblur = "capitalizeAllLetter(this);validate(this,'candposition')", maxlength = "250", autocomplete = "off" })
+                                            <span id="candposition"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Would you rehire/work with/work for the candidate again?</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.BGVRehire, new { @class = "form-control form-control-sm", @placeholder = "", @onkeypress = "return onlyLettersKey(event)", @onblur = "capitalizeAllLetter(this);validate(this,'bgvRehiring')", maxlength = "250", autocomplete = "off" })
+                                            <span id="bgvRehiring"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <div class="form-group">
+                                            <label>Can you please state the reason for the candidate’s exit, while you worked together?</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(Model => Model.Details.BGVReasonForExit, new { @class = "form-control form-control-sm", @placeholder = "Reason For Exit", @onkeypress = "return onlyLettersKey(event)", @onblur = "capitalizeAllLetter(this);validate(this,'exitReason')", maxlength = "250", autocomplete = "off" })
+                                            <span id="exitReason"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    @*<div class="row-outer">
+                                        <label class="form-group">
+                                            Additional Comments, if any
+                                        </label>
+                                        <div class="view-details">
+                                            @Html.TextAreaFor(Model => Model.Details.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Comments", maxlength = "100", autocomplete = "off" })
+
+                                        </div>
+                                    </div>*@
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-12 align-right">
+                                <button type="button" class="btn btn-default mobile-full-width" onclick="SaveBGV()">Save</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <!--end::Content-->
+}

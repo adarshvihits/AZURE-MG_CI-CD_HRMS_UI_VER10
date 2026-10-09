@@ -1,0 +1,76 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.Suspension
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    function ApplyFilter(mode) {
+        if (mode == 'apply') {
+            if (filterApplicable >= 1) {
+                GetTransactionHistoryList();
+                CloseSlider('basicFilter');
+                $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+                //showSpinner();
+                GetTransactionHistoryList();
+                CloseSlider('basicFilter');
+                $('#filterForm').addClass('filter-apply');
+            }
+        }
+        else {
+            //showSpinner();
+            filterApplicable = 1;
+            $('.reset').val('');
+            $('#Optional_Filter_EmploymentStatus_Code').val(0);
+            $('#filterForm').removeClass('filter-apply');
+            GetTransactionHistoryList();
+        }
+    }
+</script>
+<div class="ihits-table table-border odd-even  mobile-responsive-table suspension_transaction_list">
+    @Html.HiddenFor(m => m.TransactionHistoryList.Count)
+    <table id="SuspensionTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Date Of Joining">DOJ</th>
+                <th scope="col">Incident</th>
+                <th scope="col">Occured Date</th>
+                <th scope="col">Reported By</th>
+                <th scope="col">Entry User</th>
+                <th scope="col">Entry Date</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.TransactionHistoryList != null && Model.TransactionHistoryList.Count > 0)
+            {
+                for (int i = 0; i < Model.TransactionHistoryList.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.TransactionHistoryList[i].EmployeeID</td>
+                       
+                        <td>@Model.TransactionHistoryList[i].EmployeeName</td>
+                        
+                        <td>@Model.TransactionHistoryList[i].Designation</td>
+                        <td>@Model.TransactionHistoryList[i].Department</td>
+                        <td>@Model.TransactionHistoryList[i].Location</td>
+                        <td>@Model.TransactionHistoryList[i].DOJ</td>
+                        <td>@Model.TransactionHistoryList[i].Incident</td>
+                        <td>@Model.TransactionHistoryList[i].OccuredDate</td>
+                        <td>@Model.TransactionHistoryList[i].ReportedBy</td>
+                        <td>@Model.TransactionHistoryList[i].EntryUser</td>
+                        <td>@Model.TransactionHistoryList[i].EntryDate</td>
+                       
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

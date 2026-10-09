@@ -1,0 +1,154 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+
+<div class="row">
+    <div class="accoding-new-color-change">Other Income - Actual Details</div>
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table  otherincome-tble-list mb-2">
+            <table id="otherIncome">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Sl.No.</th>
+                        <th scope="col">Nature of Income</th>
+                        <th scope="col">Amount(Rs)</th>
+                        <th scope="col">TDS/TCS</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OtherIncomeActualList.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.OtherIncomeActualList.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+                                <td data-label="SlNo">
+
+                                    @(i+1)
+                                </td>
+
+                                <td data-label="NatureofIncome">
+
+                                    @Html.DisplayFor(m => m.OtherIncomeActualList[i].NatureofIncome)
+                                </td>
+
+                                <td data-label="Amount">
+
+                                    @Html.DisplayFor(m => m.OtherIncomeActualList[i].Amount)
+                                </td>
+                                <td data-label="TdsorTcs">
+
+                                    @Html.DisplayFor(m => m.OtherIncomeActualList[i].TdsorTcs)
+                                </td>
+
+
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" align="center"><em>No table data</em></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "OtherIncme" }))
+{
+    <div class="row">
+        <div class="accoding-new-color-change">Other Income - Approval</div>
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table  otherincome-tble-list mb-2">
+                <table id="otherIncome">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Nature of Income</th>
+                            <th scope="col">Amount(RS)</th>
+                            <th scope="col">TDS/TCS</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="View">View</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Action">Action</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @if (Model.OtherIncomeList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.OtherIncomeList.Count; i++)
+                            {
+
+                        <tr id="row_OI_@i">
+                            <td data-label="SlNo">
+
+                                @(i + 1)
+                            </td>
+
+                            <td data-label="NatureofIncome">
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].flag)
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].TrnCode)
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].NatureofIncome)
+                                @Html.DisplayFor(m => m.OtherIncomeList[i].NatureofIncome)
+                            </td>
+
+                            <td data-label="Amount">
+
+                                @Html.TextBoxFor(m => m.OtherIncomeList[i].Amount, new { @class = "form-control", placeholder = "Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)" })
+
+                            </td>
+                            <td data-label="TdsorTcs">
+                                @Html.TextBoxFor(m => m.OtherIncomeList[i].TdsorTcs, new { @class = "form-control", placeholder = "Tds or Tcs", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)" })
+                            </td>
+
+                            <td data-label="AttachDocument">
+                                <i onclick="GetUploadDocumentPopUp('OtherIncome', '@Model.OtherIncomeList[i].TrnCode')" title="Click Here To View Document" class=" far fa-eye"></i>
+                                <span>@Model.OtherIncomeList[i].OIDocCount </span>
+                            </td>
+
+                            <td data-label="reject">
+
+                                <a data-bs-toggle="modal" data-bs-original-title="Reject" id="OtherIncmebtnId_@i" class="btn_reject" onclick="RejectionPopUp(@i,'OtherIncome')">  </a>
+
+                                <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="ApprovebtnId_@i" class="btn_approve" onclick="OtherIncomeApproval(@i,'Approved','OtherIncome')"></a>
+                            </td>
+                          
+
+                            <td data-label="Status" style="font-weight:600; color:@Model.OtherIncomeList[i].StatusColor"> @Html.DisplayFor(m => Model.OtherIncomeList[i].ApprovalStatus)</td>
+                        </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center"><em>No table data</em></td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+
+
+
+
+
+

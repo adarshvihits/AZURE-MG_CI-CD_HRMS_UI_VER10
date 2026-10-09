@@ -1,0 +1,191 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanClosureDetails
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm(null,null, FormMethod.Post, new { @id="loanClosureSave"}))
+{
+<div id="AppraisalView" class="slider-forms slider-forms-open closureEdit">
+    <div class="slider-inner-style">
+        <div class="slider-form-close">
+            <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('closureEdit')"></i>
+        </div>
+        <h4>Loan Closure</h4>
+        <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+            <div class="row">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+        <div class="row">
+            <!-- <div class="col-md-4">
+                <div class="row-outer">
+                    <label class="view-title">Evaluation Period</label>
+                    <div class="view-details">
+                        Demo</div>
+                </div>
+            </div> -->
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.LoanIssueGI)
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Principle Amount
+                    </label>
+                    <div class="view-details">
+                        @Model.PrincipleAmount
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">Monthly EMI</label>
+                    <div class="view-details">
+                        @Model.MonthlyEMI
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Total Tenure
+                    </label>
+                    <div class="view-details">
+                        @Model.TotalTenure
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Disbursement Date
+                    </label>
+                    <div class="view-details">
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Convert.ToDateTime(Model.DisbursementDate)))
+                        @Html.HiddenFor(m => m.DisbursementDate)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Payment Started
+                    </label>
+                    <div class="view-details">
+                        @Model.PaymentStarted
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+        <h4 class="pt-3">Repayment Details</h4>
+        <div class="row pt-2">
+            <div class="col-md-4">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Paid Amount
+                    </label>
+                    <div class="view-details">
+                        @Model.PaidAmount
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Balance Amount
+                    </label>
+                    <div class="view-details">
+                        @Model.BalanceAmount
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Balance Tenure
+                    </label>
+                    <div class="view-details">
+                        @Model.BalanceTenure
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+        <h4 class="pt-3">Closure Details</h4>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="">Closure Date</label>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.ClosureDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", @readonly = "true", @placeholder = "Closure Date", onchange= "validateById('#ClosureDate','CDate');onClosureDateChange()" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                        <span id="CDate"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Closure Amount</label>
+                    <div class="view-details">@Model.ClosureAmount @Html.HiddenFor(m => m.ClosureAmount)</div>
+
+                    
+                    @*@Html.TextBoxFor(m => m.ClosureAmount, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)", onblur="validateById('#ClosureAmount','CAmt')" })*@
+                </div>
+                <span id="CAmt"></span>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+
+
+
+
+            <div class="col-md-12">
+                <label>Remarks</label>
+                @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks",@maxlength=250 })
+            </div>
+
+        </div>
+        <div class="row card-footer-bottom-fixed border-none">
+
+            <div class="col-md-12 align-right">
+                <a type="button" class="btn btn-default  mobile-full-width" onclick="LoanClosureSave()">
+                    Save
+                </a>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+}

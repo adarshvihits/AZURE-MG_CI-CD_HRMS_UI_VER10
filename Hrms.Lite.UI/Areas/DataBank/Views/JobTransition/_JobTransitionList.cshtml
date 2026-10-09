@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+   
+    <script>
+      
+
+
+         $(document).ready(function () {
+         debugger;
+         $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+             $('.Tab2Count').html("@Model.Tab2Count");
+             $('.Tab3Count').html("@Model.Tab3Count");
+             $('.Tab4Count').html("@Model.Tab4Count");
+             $('.MoreCount').html("@Model.MoreCount");
+           
+
+
+          //$('#jobTransitionTable').DataTable({
+          //      "pageLength": 25
+          //  });
+
+
+          //  $('.ihits-table table').removeClass("dataTable no-footer");
+          //  $(".ihits-table table tr th").removeAttr('style')
+
+
+        });
+
+    </script>
+
+    <!-- Table Section -->
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Job_Transition table">
+        @Html.HiddenFor(m => m.JobTransitionList.Count)
+        <table id="jobTransitionTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Functional Designation">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Order Date</th>
+                    <th data-bs-toggle="tooltip" title="Effective Date" scope="col">Eff-Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.JobTransitionList != null && Model.JobTransitionList.Count > 0)
+                {
+                    for (int i = 0; i < Model.JobTransitionList.Count; i++)
+                    {
+                        <tr>
+
+                            <td>@Model.JobTransitionList[i].EmployeeID</td>
+                            <td>
+                                @Html.ActionLink(@Model.JobTransitionList[i].EmployeeName, "Approve", "JobTransition", new { EmployeeGI = @Model.JobTransitionList[i].EmployeeGI, HistoryGI = @Model.JobTransitionList[i].HistoryGI }, null)
+
+                            </td>
+                            <td>@Model.JobTransitionList[i].Designation</td>
+                            <td>@Model.JobTransitionList[i].Department</td>
+                            <td>@Model.JobTransitionList[i].Location</td>
+                            <td>@Model.JobTransitionList[i].TransitionType</td>
+                            <td>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobTransitionList[i].OrderDate))</td>
+                            <td>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobTransitionList[i].EffectiveDate))</td>
+
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- Table Setion End -->

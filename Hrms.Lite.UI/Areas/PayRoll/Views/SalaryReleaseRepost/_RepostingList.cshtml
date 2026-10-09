@@ -1,0 +1,74 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryReleaseRepost
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".Repost_Count").html(@Model.RepostingCount);
+        $(".Pending_Count").html(@Model.PendingCount);
+
+
+    });
+
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-3 vertical-scroll-400 SalaryReleaseRePosting-List">
+    <table id="RepostingTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Company</th>
+                <th scope="col">File Name</th>
+                <th scope="col">Employee Count</th>
+                <th scope="col">Posted User</th>
+                <th scope="col">Posted Date</th>
+                <th scope="col">Repost</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.SalaryReleaseRepostList != null && Model.SalaryReleaseRepostList.Count > 0)
+                {
+                    for (int i = 0; i < Model.SalaryReleaseRepostList.Count; i++)
+
+                    {
+
+                    
+                        <tr>
+
+                                        <td data-label="Company">
+                                            @Model.SalaryReleaseRepostList[i].GroupCompany.Name
+                                            @Html.HiddenFor(model => model.SalaryReleaseRepostList[i].HdCode)
+                                            @Html.HiddenFor(m => m.SalaryReleaseRepostList[i].FileName)
+                                            @Html.HiddenFor(m => m.SalaryReleaseRepostList[i].PostedUserCode)
+                                            @Html.HiddenFor(m => m.SalaryReleaseRepostList[i].GroupCompany.GI)
+                                        </td>
+                            <td data-label="FileName">
+
+                                @Model.SalaryReleaseRepostList[i].FileName
+                            </td>
+                            <td data-label="Count">
+
+                                @Model.SalaryReleaseRepostList[i].Employeecount
+                            </td>
+                            <td data-label="User">
+
+                                @Model.SalaryReleaseRepostList[i].PostedUser
+                            </td>
+                            <td data-label="Date">
+                                @Model.SalaryReleaseRepostList[i].PostedDate
+                            </td>
+                            <td data-label="Repost">
+                                <a onclick="onRepostClick(@i)">
+                                    <i class="icon-xl la la-arrow-circle-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+

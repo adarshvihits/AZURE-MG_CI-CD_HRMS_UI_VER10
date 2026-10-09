@@ -1,0 +1,264 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+
+    <script>
+        $(document).ready(function () {
+            maskAadhar(document.getElementById('PreEnrollment_BasicInfo_AdharNo'));
+        });
+    </script>
+
+    <div class="step-outer step_row">
+
+
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Contact')">
+            Personal Info
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item ">
+            Job Details
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" data-bs-toggle="tooltip" data-bs-original-title="Compensation & Benefits" class="step-item">
+            C & B
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Address
+            <span class="step-circle"></span>
+        </a>
+
+        <a href="#" class="step-item">
+            Attendance Settings
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Leave
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Statutory & Payment
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            Other Groupings
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item">
+            ID & Manager Generation
+            <span class="step-circle"></span>
+        </a>
+
+
+    </div>
+    <style>
+        /*Enrollment Position*/
+
+        .btn-Position {
+            --btn-container-bg: #f9edd2;
+            --btn-container-border: #edca78;
+        }
+
+        .active,
+        input[type="radio"]:checked + label {
+            --active-btn-bg: #fffdfa;
+            --active-btn-box-shadow: rgba(237, 202, 120, 0.6);
+            --active-btn-text: #b48218;
+        }
+
+        .inactive,
+        label {
+            --inactive-btn-text: #b48218;
+        }
+
+        /*Needed for both*/
+
+        .btn-Position {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            padding: 3px;
+            margin-right: 12px;
+            background-color: #ffffff;
+            border: #b3ab99 1px solid;
+            width: 15%;
+            height: 34px;
+            margin-top: 5px;
+            border-radius: 10px;
+        }
+
+
+            .btn-Position .active,
+            .inactive {
+                width: 45.5%;
+                height: 60%;
+                padding: 10px 20px;
+                border: 0px;
+                border-radius: 8px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-Position .active {
+                background-color: var(--active-btn-bg);
+                box-shadow: 0 0 10px 1px var(--active-btn-box-shadow);
+                font-weight: bold;
+                color: var(--active-btn-text);
+            }
+
+            .btn-Position .inactive {
+                background-color: transparent;
+                color: var(--inactive-btn-text);
+                text-decoration: none;
+            }
+
+        /*To be used as radio buttons*/
+
+        input[type="radio"] {
+            visibility: hidden;
+            height: 0;
+            width: 0;
+            margin: 0;
+        }
+
+        .btn-Position label {
+            width: 48.5%;
+            height: 60%;
+            font-size: 12px;
+            font-weight: 400;
+            padding: 11px 3px;
+            border: 0px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            color: #657389;
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: #37b678;
+            /* box-shadow: 0 0 10px 1px rgb(162 183 173); */
+            font-weight: bold;
+            color: #ffffff;
+        }
+    </style>
+
+    <div class="step-progress-outer">
+        <div class="step-left col-md-12">
+            <h3>Position</h3>
+            <div class="row my-3">
+                <div class="btn-Position">
+                    <input type="radio" id="r_New" name="PreEnrollment.BasicInfo.PositionNewReplacement" value="New Position" checked="checked" onchange="NewOrReplacement('N')">
+                    <label for="r_New">New Position</label><br />
+                    <input type="radio" id="r_Rep" name="PreEnrollment.BasicInfo.PositionNewReplacement" value="Replacement" onchange="NewOrReplacement('R')">
+                    <label for="r_Rep">Replacement</label><br />
+                    <span class="Mandatory">*</span>
+                </div>
+
+                <div class="col-md-6" id="positionInfo">
+                    @Html.DropDownListFor(m => m.PreEnrollment.BasicInfo.Position.Code, (SelectList)ViewBag.Position, new { @class = "form-control form-control-sm", @onchange = "validate(this,'position')" })
+                    <span id="position"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="step-progress-outer">
+        <div class="step-left col-md-12">
+            <h3>Personal Info</h3>
+            <div class="row my-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>DOB</label><span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @*<input type="text" class="form-control"
+                                    id="kt_datepicker_2" readonly="readonly"
+                                    placeholder="DOB" />*@
+                                @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.DOB, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "DOB", @onchange = "validateDOB(this,'dob')" })
+                                @Html.HiddenFor(m => m.DOB_Password)
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="dob"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Gender</label><span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                                        id="exampleSelects">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>*@
+                            @Html.DropDownListFor(m => m.PreEnrollment.BasicInfo.Gender.Code, (SelectList)ViewBag.Gen, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'gender')" })
+                            <span id="gender"></span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Relation</label><span class="Mandatory">*</span>
+
+                                @Html.DropDownListFor(m => m.PreEnrollment.BasicInfo.Relation.Code, (SelectList)ViewBag.Relation, new { @class = "form-control form-control-sm", @onchange = "onRelationChange(this,'relation')" })
+                                <span id="relation"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label id="labRel">Father's Name</label><span class="Mandatory">*</span>
+                            @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.FathersName, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Enter Name", @onblur = "firstLetterCaps(this,'father')", @onkeypress = "return onlyLettersKey(event)" })
+                            <span id="father"></span>
+                        </div>
+                    </div>*@
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Aadhar Number</label><span id="adharMandatory" class="Mandatory">*</span>
+                        @*<input type="text" class="form-control form-control-sm"
+                            placeholder="Aadhar Number" onchange="trim(this)">*@
+                        @*@Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.AdharNo, new {@class = "form-control form-control-sm", @maxlength = 12, @placeholder = "Aadhar Number", @onblur = "validateAadharEnroll('PreEnrollment_BasicInfo_AdharNo','aadhar','PreEnrollment_FiledValidations_2__Applicability')", @onkeypress = "return onlyNumberKey(event)" })*@
+                        @Html.HiddenFor(m => m.PreEnrollment.BasicInfo.AdharNo, new { id = "hdnAadhar" })
+                        @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.AdharNo, new { @class = "form-control form-control-sm", @maxlength = 12, @placeholder = "Aadhar Number", oninput = "validateAadharNew('PreEnrollment_BasicInfo_AdharNo','aadhar',this);", onkeypress = "return onlyNumberKey(event)", autocomplete = "off", onblur = "maskAadhar(this)" })
+                        <span id="aadhar"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>PAN</label><span id="panMandatory" class="Mandatory">*</span>
+                        @*<input type="text" class="form-control form-control-sm"
+                            placeholder="PAN" onchange="trim(this)">*@
+                        @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.PanNo, new { @*type = "password",*@@class = "form-control form-control-sm", @maxlength = 10, @placeholder = "PAN Number", @onblur = "validatePanEnroll('pan','PreEnrollment_FiledValidations_3__Applicability')" })
+                        <span id="pan"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row card-footer-bottom-fixed">
+        <div class="col-md-6">
+            <button type="button" onclick="PopUp_Preview()"
+                    class="btn btn-default float-left mobile-full-width">
+                Salary Details
+            </button>
+
+        </div>
+        <div class="col-md-6">
+            <button type="button" onclick="onNextClick('Enroll_personal','Job-Details')"
+                    class="btn btn-default float-right mobile-full-width">
+                Next
+            </button>
+        </div>
+    </div>

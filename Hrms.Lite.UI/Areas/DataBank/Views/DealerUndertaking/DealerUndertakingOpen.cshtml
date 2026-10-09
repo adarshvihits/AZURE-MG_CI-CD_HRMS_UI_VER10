@@ -1,0 +1,143 @@
+﻿@model Hrms.Lite.Shared.DataBank.DealerUndertaking
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/DataBank/DealerUndertaking.js"></script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Dealer Undertaking</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted child-mute">
+                        Dealer Undertaking
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="card card-custom height-100per">
+
+    <div class="card-body">
+        <div class="profile-header  position-relative box-shadow-none mb-2">
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+            <div class="profile-header-overflow"></div>
+        </div>
+        <!--begin: Search Form-->
+        <div class="row mb-3">
+
+
+
+        </div>
+
+        <div class="page_white">
+            <div id="viewClarificationDetails">
+                <div class="ihits-table table-border hover-color odd-even mobile-responsive-table loan-request-clarification_detailed-list">
+                    <h4>
+                        Dealer Undertaking
+                    </h4>
+                    @Html.HiddenFor(Model => Model.DealerUndertakingHistory.Count)
+                    <table class="common-table">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Effective Date</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Closing Date</th>
+                                <th scope="col">Close/ReOpen</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @if (Model.DealerUndertakingHistory != null && Model.DealerUndertakingHistory.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.DealerUndertakingHistory.Count; i++)
+                                {
+                            <tr>
+                                <td data-label="Employee Name">@Model.DealerUndertakingHistory[i].EffectiveDate</td>
+                                <td data-label="Designation">@Model.DealerUndertakingHistory[i].Remarks</td>
+                                <td data-label="Designation">@Model.DealerUndertakingHistory[i].Status</td>
+                                <td data-label="Department">@Model.DealerUndertakingHistory[i].ClosingDate</td>
+                                @*<td data-label="">
+            <a data-bs-toggle="tooltip" title="" class="view_btn m-0" onclick="GetDealerUndertaking('@Model.DealerUndertakingList[i].EmployeeGI','General');" data-bs-original-title="Approve"> </a>
+        </td>*@
+                                
+                                    @if (Model.DealerUndertakingHistory[i].Status == "Pending for Approval")
+                                    {
+                                        <td data-label="">
+                                            <a onclick="swal.fire('Employee Pending for Approval');">
+                                                Close/ReOpen
+                                            </a>
+                                        </td>
+                                    }
+
+                               
+                                else
+                                {
+                                    <td data-label="">
+                                        <a onclick="GetDealerUndertakingDetails('@Model.EmployeeGI','@Model.DealerUndertakingHistory[i].RequestCode','Open');">
+                                            Close/ReOpen
+                                        </a>
+                                    </td>
+                                }
+                            </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+</div>
+<div class="modal fade newApplication" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:785px ;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding: 10px; background-color: #ddf5f3;">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Dealer Undertaking
+                </h5>
+                <div>
+
+                    <button type="button" class="close mt-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+            </div>
+
+            @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data", @id = "DealerUndertaking_Entry" }))
+            {
+
+                <div class="modal-body" style="padding: 10px;">
+                    @Html.HiddenFor(model => Model.EmployeeGI)
+                    
+                    <div id="dynamic-certification-content"></div>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+</div>

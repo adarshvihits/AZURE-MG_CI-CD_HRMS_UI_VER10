@@ -1,0 +1,491 @@
+﻿@model Hrms.Lite.Shared.MIS.CompanyMIS
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+
+<script src="~/scripts/MIS/MIS.js"></script>
+
+<style>
+    .chart-title {
+        font-weight: bold !important;
+    }
+
+    .ihits-table.table-border table thead tr {
+        background-color: #264f94;
+        color: #ffffff;
+    }
+</style>
+
+
+@using Kendo.Mvc.UI
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">MIS</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                         MIS
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body " style="padding:25px 50px;">
+
+                    <div class="tab-button-wrap">
+                        <div class="tab-items">
+                            <div class="form-group filter-combobox">
+
+                                @Html.DropDownListFor(m => m.Bbb, (SelectList)ViewBag.Module, "Select Module", new { @class = "form-control form-control-sm grid-plan", @style = "width: 140px;", @onchange = "onModuleChange(this,'index')" })
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="tab-items ">
+                            <div class="form-group filter-combobox">
+                                @Html.DropDownListFor(m => m.MISDetailsList, (SelectList)ViewBag.SubModule, "Select Report", new { @id = "submodule", @class = "form-control form-control-sm", @onchange = "getList()" })
+                            </div>
+                        </div>
+                        <div class="tab-items ">
+                            <div class="form-group">
+
+                                @(Html.Kendo().DropDownList()
+                                    .Name("chartType")
+                                    .FillMode(FillMode.Flat)
+                                    
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .ValueTemplate("<span><img src='" + @Url.Content("~/images") + "/#: Text #.png' alt='#: Text #' />   #: Text #</span>")
+                                    .Template("<span><img src='" + @Url.Content("~/images") + "/#: Text #.png' alt='#: Text #' />   #: Text #</span>")
+                                    .Events(e => e.Change("onChartChange"))                                   
+                                    .BindTo(new List<SelectListItem>() {
+                                new SelectListItem() {
+                                Text = "Donut",
+                                Value = "1"
+                                },
+                                new SelectListItem() {
+                                Text = "Bar",
+                                Value = "2"
+                                },
+                                new SelectListItem() {
+                                Text = "Pie",
+                                Value = "3"
+                                }
+                                })
+                                    .Value("1")
+                                    .HtmlAttributes(new { style = "background-color: white; width: 200px;" })
+                                    )
+
+
+                              @*  <select id="chartType" onchange="onChartChange()" class="form-control form-control-sm ">
+
+                                    <option selected="selected" value="1">Donut Chart</option>
+                                    <option value="3">Pie Chart</option>
+                                    <option value="2">Bar Chart</option>
+
+
+                                </select>*@
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="tab-items select-option">
+                            <div class="form-group ">
+                                <div data-bs-toggle="tooltip" title="Export to PDF" style="cursor:pointer;" class="pdf">
+                                    <img id="export-pdf" src="~/images/pdf.png" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="page_white">
+                        <div class="row">
+                            <div id="Datalist" class="col-md-4">
+                                <div class="inner-pro">
+                                    <div class="ihits-table table-border  mobile-responsive-table employee-profile-report-list company-list  vertical-scroll-205">
+                                        <table id="tableData">
+                                            @*  <thead>
+                                                    <tr class="table-light">
+                                                        <th scope="col">Department</th>
+                                                        <th scope="col">Count</th>
+
+                                                </thead>*@
+
+                                            <tbody></tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISDetailsList>()
+                                    .Name("dataChart")
+                                    .Title("")
+
+                                    .Legend(legend => legend
+
+                                    .Position(ChartLegendPosition.Right)
+                                    .Orientation(ChartLegendOrientation.Vertical)
+
+
+
+                                    .Visible(true)
+                                    )
+                                    .ChartArea(chart => chart
+                                    .Background("transparent")
+
+
+                                    )
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read(read => read.Action("GetDepCount", "CompanyMIS"));
+
+
+                                    }
+                                    )
+                                    .Series(series => series
+
+                                    .Donut(model => model.count, model => model.name)
+
+                                    .Labels(labels => labels
+                                    .Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.valuePercentage)#%)").Visible(true)//Template("#= dataItem.name #:") //\n #= dataItem.count#
+                                    .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                    .Background("transparent")
+
+                                    .Visible(true)
+                                    )
+
+
+                                    )
+
+
+
+                                    .Tooltip(tooltip => tooltip.
+                                    Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.valuePercentage)#%)").Visible(true)
+
+                                    )
+
+                                    )
+                                @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISDetailsList>()
+                                    .Name("pieChart")
+                                    .Title("")
+
+
+
+
+                                    .Legend(legend => legend
+
+                                    .Position(ChartLegendPosition.Right)
+                                    .Orientation(ChartLegendOrientation.Vertical)
+
+
+                                    .Visible(true)
+                                    )
+                                    .ChartArea(chart => chart
+                                    .Background("transparent")
+
+
+                                    )
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read(read => read.Action("GetDepCount", "CompanyMIS"));
+
+
+                                    }
+                                    )
+                                    .Series(series => series
+
+                                    .Pie(model => model.count, model => model.name)
+
+                                    .Labels(labels => labels
+                                    .Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.valuePercentage)#%)").Visible(true)//Template("#= dataItem.name #:") //\n #= dataItem.count#
+                                    .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                    .Background("transparent")
+
+                                    .Visible(true)
+                                    )
+
+
+                                    )
+
+
+
+                                    .Tooltip(tooltip => tooltip.
+                                      Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.valuePercentage)#%)").Visible(true)
+
+                                    )
+
+                                    )
+                                @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISDetailsList>()
+                                .Name("barChart")
+                                .Title("")
+
+                                .HtmlAttributes(new { style = "width:600px;height:340px;" })
+                                .Legend(legend => legend
+                                .Position(ChartLegendPosition.Top)
+
+                                )
+                                .ChartArea(chartArea => chartArea
+                                .Margin(margin=>margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                    .DataSource(ds => ds.Read(read => read.Action("GetDepCount", "CompanyMIS")))
+                                .Series(series =>
+                                {
+                                        series.Column(model => model.count).Name("name").CategoryField("name").Color("#1d60b8")
+
+                                        .Tooltip(tooltip => tooltip.
+                                      Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.valuePercentage)#%)").Visible(true));
+
+
+                                        series.Column(model => model.sepCount).Name("Separation").CategoryField("name").Color("#ff0000").Visible(false)
+                                        .Tooltip(tooltip => tooltip.
+                                              Template("${ dataItem.name } - ${ dataItem.count } - (#= (dataItem.sepPercentage)#%)").Visible(true));
+
+
+
+
+                                })
+                                .CategoryAxis(axis => axis
+                                //.Labels(labels => labels.Rotation(0))
+                                .MajorGridLines(lines => lines.Visible(false))
+                                .Line(line => line.Visible(false))
+
+                                )
+                                .ValueAxis(axis => axis.Numeric()
+                                .Labels(labels => labels
+                                .Format("{0:N0}")
+                                //.Rotation(0)
+                                )
+                                //.MajorUnit(500)
+
+                                .Line(line => line.Visible(false))
+                                )
+                                .RenderAs(RenderingMode.Canvas)
+                                .Tooltip(tooltip => tooltip
+                                .Visible(true)
+                                .Format("{0:N0}")
+                                )
+                                )
+
+                                @(Html.Kendo().Chart(Model.PayrollGP)
+                                    .Name("payRollChart")
+                                    .HtmlAttributes(new { style = "width: 100%; height: 250px;" })
+                                    .Title(title => title
+                                    .Text("Last 6 months Manpower and Gross Pay Comparison")
+                                    //.Align(ChartTextAlignment.Right)
+                                    )
+                                    .Legend(legend => legend
+                                    .Position(ChartLegendPosition.Right).Padding(padding => padding.Left(70))
+                                    ).Events(events =>
+                                    {
+                                        events.LegendItemClick("function(e) { e.preventDefault(); }");
+                                    })
+                                    .Series(series =>
+                                    {
+                                        series
+                                        .Line(model => model.manpower)
+                                        .Color("#ff1c1c")
+                                        .Name("Manpower")
+                                        .Axis("manpower");
+                                        series
+                                        .Bar(model => model.grosspay)
+                                        .Color("#007eff")
+                                        .Name("Grosspay")
+                                        .Axis("gross").Gap(4).Spacing(0.1);
+                                    })
+                                    .CategoryAxis(axis => axis
+                                    .Categories(model => model.month)
+
+                                    .AxisCrossingValue(32, 0, 32)
+                                    .Justify(true)
+                                    )
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read(read => read.Action("getPatRollGP", "CompanyMIS"));
+
+
+                                    }
+                                    )
+                                    .ValueAxis(axis => axis
+                                    .Numeric("gross")
+                                    .Color("#007eff")
+                                    .Visible(true).Title("GrossPay").MajorUnit(CalculateMajorUnit(Model.PayrollGP))
+                                    )
+                                    .ValueAxis(axis => axis
+                                    .Numeric("manpower")
+                                    .Visible(true).Title("ManPower")
+                                    )
+                                    .Tooltip(tooltip => tooltip
+                                    .Visible(true)
+                                    .Format("{0}")
+                                    .Template("#= value #")
+                                    ).RenderAs(RenderingMode.Canvas)
+                                    )
+
+                            </div>
+                            @functions {
+                                public static double CalculateMajorUnit(IEnumerable<Hrms.Lite.Shared.MIS.PayrollGP> data)
+                                {
+                                    // Step 1: Determine the range of your data
+                                    var grosspayList = new int[data.Count()];
+                                    int i = 0;
+                                    foreach (var item in data)
+                                    {
+                                        grosspayList[i] = item.grosspay;
+                                        i++;
+                                    }
+                                    var minValue = grosspayList.Min();
+                                    var maxValue = grosspayList.Max();
+                                    double range = maxValue - minValue;
+                                    double majorUnit = 1;
+                                    if (range < 10000)
+                                    {
+                                        majorUnit = 400;
+                                    }
+                                    else if (range < 100000)
+                                    {
+                                        majorUnit = 4000;
+                                    }
+                                    else if (range < 1000000)
+                                    {
+                                        majorUnit = 40000;
+                                    }
+                                    else if (range < 10000000)
+                                    {
+                                        majorUnit = 400000;
+                                    }
+                                    else if (range < 100000000)
+                                    {
+                                        majorUnit = 4000000;
+                                    }
+                                    else if (range < 1000000000)
+                                    {
+                                        majorUnit = 40000000;
+                                    }
+                                    else if (range < 10000000000)
+                                    {
+                                        majorUnit = 400000000;
+                                    }
+                                    else if (range < 100000000000)
+                                    {
+                                        majorUnit = 4000000000;
+                                    }
+                                    else if (range < 1000000000000)
+                                    {
+                                        majorUnit = 40000000000;
+                                    }
+
+
+
+                                    return majorUnit;
+                                }
+                            }
+                            
+
+                            </div>
+                           
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    @*<div class="col-md-5">
+                        @(Html.Kendo().Chart<Hrms.Lite.Shared.DataBank.DTO.DesignationDetailsList>()
+                        .Name("chartDepartment")
+                        .Title("Department wise strength")
+
+                        .HtmlAttributes(new { style = "width:600px;height:340px;" })
+                        .Legend(legend => legend
+                        .Position(ChartLegendPosition.Top)
+
+                        )
+                        .ChartArea(chartArea => chartArea
+                        .Margin(margin=>margin.Top(10).Right(5).Left(10).Bottom(0)))
+                        .DataSource(ds => ds.Read(read => read.Action("GetDepCount", "DepartmentCount")))
+                        .Series(series =>
+                        {
+                        series.Column(model => model.count).Name("Department").CategoryField("name");
+
+                        //series.Column(model => model.gp).Name("gp").CategoryField("name");
+
+
+
+                        })
+                        .CategoryAxis(axis => axis
+                        .Labels(labels => labels.Rotation(0))
+                        .MajorGridLines(lines => lines.Visible(false))
+                        .Line(line => line.Visible(false))
+
+                        )
+                        .ValueAxis(axis => axis.Numeric()
+                        .Labels(labels => labels
+                        .Format("{0:N0}")
+                        .Rotation(-90))
+                        .MajorUnit(500)
+
+                        .Line(line => line.Visible(false))
+                        )
+                        .RenderAs(RenderingMode.Canvas)
+                        .Tooltip(tooltip => tooltip
+                        .Visible(true)
+                        .Format("{0:N0}")
+                        )
+                        )
+                        </div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

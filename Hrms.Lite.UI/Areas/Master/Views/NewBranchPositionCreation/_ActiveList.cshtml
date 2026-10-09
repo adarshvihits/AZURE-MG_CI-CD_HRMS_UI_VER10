@@ -1,0 +1,150 @@
+﻿@model Hrms.Lite.Shared.Master.NewBranchPositionCreationViewModel
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using System.Linq
+
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions =
+        JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(
+            Context.Session.GetString("UserRoleActions")
+        );
+
+    var NewBranchPositionCreationList =
+        Model.Positions ?? new List<Hrms.Lite.Shared.Master.NewBranchPositionCreation>();
+
+    var Summary = Model.Summary ?? new Hrms.Lite.Shared.Master.NewBranchPositionCreationSummary();
+}
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<link href="~/css/hrplan.css" rel="stylesheet" type="text/css" />
+
+<div class="stat-row">
+
+    <div class="stat-tile tone-">
+        <div class="stat-label">Approved Plan Lines</div>
+        <div class="stat-value">@Summary.ApprovedPlanLines</div>
+        <div class="stat-sub" id="approvedPlanPeriod">All periods</div>
+    </div>
+
+    <div class="stat-tile tone-">
+        <div class="stat-label">New Branches</div>
+        <div class="stat-value">@Summary.NewBranches</div>
+        <div class="stat-sub">Upcoming branches</div>
+    </div>
+
+    <div class="stat-tile tone-">
+        <div class="stat-label">Created</div>
+        <div class="stat-value">@Summary.Created</div>
+        <div class="stat-sub">
+            @(Summary.Created > 0 ? "Positions created" : "None yet")
+        </div>
+    </div>
+
+    <div class="stat-tile tone-accent">
+        <div class="stat-label">Awaiting JD</div>
+        <div class="stat-value">@Summary.AwaitingJD</div>
+        <div class="stat-sub">
+            @(Summary.AwaitingJD > 0 && Summary.AwaitingJD == NewBranchPositionCreationList.Count
+                ? "No job description yet"
+                : Summary.AwaitingJD > 0
+                    ? "Awaiting job description"
+                    : "All positions have JD")
+        </div>
+    </div>
+
+</div>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table hr-planning-master-listss pt-1">
+
+    <table id="activeTable" class="common-table dt-width-fix">
+
+        <thead>
+            <tr class="table-dark">
+                <th>Branch</th>
+                <th>Department</th>
+                <th>Section</th>
+                <th>Grade</th>
+                <th>Count</th>
+                <th>Avg Salary</th>
+                <th>Total Salary</th>
+                <th>Currency</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (NewBranchPositionCreationList.Count > 0)
+            {
+                for (int i = 0; i < NewBranchPositionCreationList.Count; i++)
+                {
+                    <tr>
+
+                        <td data-label="Branch">
+                            @NewBranchPositionCreationList[i].BranchName
+                        </td>
+
+                        <td data-label="Department">
+                            @NewBranchPositionCreationList[i].DepartmentName
+                        </td>
+
+                        <td data-label="Section">
+                            @NewBranchPositionCreationList[i].SectionName
+                        </td>
+
+                        <td data-label="Grade">
+                            @NewBranchPositionCreationList[i].GradeName
+                        </td>
+
+                        <td data-label="Plan Count">
+                            @NewBranchPositionCreationList[i].PlanCount
+                        </td>
+
+                        <td data-label="Avg Salary">
+                            &#8377; @NewBranchPositionCreationList[i].AvgSalary
+                        </td>
+
+                        <td data-label="Total Salary">
+                            &#8377; @NewBranchPositionCreationList[i].TotalSalary
+                        </td>
+
+                        <td data-label="Currency">
+                            @NewBranchPositionCreationList[i].CurrencyName
+                        </td>
+
+                       <td data-label="Actions">
+                <a data-bs-toggle="tooltip" title="Create Position"
+                   class="btn btn-icon btn-edit icon-only"
+                   style="width:40px;height:40px;"
+                   onclick="event.stopPropagation();openPositionPopup(
+             '@NewBranchPositionCreationList[i].PlanCode',
+             '@NewBranchPositionCreationList[i].PlanCount',
+             '@NewBranchPositionCreationList[i].AvgSalary',
+             '@NewBranchPositionCreationList[i].TotalSalary',
+             '@System.Web.HttpUtility.JavaScriptStringEncode(NewBranchPositionCreationList[i].BranchName)'
+         )">
+                    <i class="icon-xl fas fa-plus-circle" style="font-size:22px;"></i>
+                </a>
+            </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+              @*   <tr>
+                    <td colspan="9" class="text-center">
+                        No positions found.
+                    </td>
+                </tr> *@
+            }
+
+        </tbody>
+
+    </table>
+
+    <div id="CreateNewBranchPosition"></div>
+
+</div>

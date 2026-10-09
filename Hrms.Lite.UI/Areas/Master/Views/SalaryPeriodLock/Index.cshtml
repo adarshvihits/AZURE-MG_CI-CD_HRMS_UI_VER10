@@ -1,0 +1,181 @@
+﻿@model Hrms.Lite.Shared.Master.SalaryPeriodLock
+
+@{ ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Master/SalaryperiodLock.js"></script>
+<style>
+    .dataTables_scrollBody {
+        max-height: 30vh !important;
+        height: 30vh !important;
+    }
+</style>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Salary/Attendance Cancel</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Salary/Attendance Cancel
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <div class="topbar">
+
+
+        </div>
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed backremove">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+
+
+                            <div class="tab-items">
+
+                                <div class="form-group filter-combobox mt-0">
+
+                                    @Html.DropDownListFor(Model => Model.MonthCode, (SelectList)ViewBag.month, new { @class = "form-control form-control-sm", onchange = "GetList()" })
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div id="LockUnlockList">
+                        @await Html.PartialAsync("_SalaryPeriodLockUnlockList", Model)
+                    </div>
+                    <div style="padding-top:45px; color:red; text-align:justify; padding-bottom:30px;">
+                        NOTE : - Unlocking the attendance or salary will result in the removal of attendance and salary data, and it will prevent the extraction of reports. We strongly advise against unlocking attendance and salary if these details have been finalized and bank statements and payslips have been released.
+                    </div>
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-left">
+
+
+                            <div class="d-flex">
+                                <a data-bs-toggle="modal" data-target=".bd-example-modal-lg">
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="~/images/Icon awesome-history.png" />
+
+                                        </div>
+                                        <div class="application-icon" onclick=" GetLockUnlockPopUp('LockUnlock')"> <h3 class="pt-2 pl-3">  Salary Period Lock / Unlock Log</h3></div>
+                                    </div>
+                                </a>
+
+
+
+
+
+                                <a data-bs-toggle="modal" data-target=".rs_settings_applicable" class="pl-8">
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="~/images/Icon awesome-history.png" />
+
+                                        </div>
+                                        <div class="application-icon" onclick=" GetOpenMonthPopUp('OpenMonth')"> <h3 class="pt-2 pl-3">  Open Month</h3></div>
+                                    </div>
+                                </a>
+
+
+
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                         aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-lg" style="max-width:1065px;">
+                            <div id="myDiv" class="modal-content popup" style="height:500px ;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">  Salary Period Lock / Unlock Log</h5>
+                                    @*<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>*@
+                                    <button type="button" class="close mt-2" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade rs_settings_applicable" tabindex="-1" role="dialog"
+                         aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-lg" style="max-width:800px ;">
+                            <div id="myDiv" class="modal-content popup" style="height:500px ;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Salary Period Open Month</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body1div">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+        
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

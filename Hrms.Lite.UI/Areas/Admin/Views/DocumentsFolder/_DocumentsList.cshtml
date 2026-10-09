@@ -1,0 +1,73 @@
+﻿@model Hrms.Lite.Shared.Admin.DocumentsFolder
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<style>
+    .view_btn_appli {
+        width: 18px;
+        height: 18px;
+        background: url(/images/icons/viewappli.svg);
+        background-size: contain;
+        color: white;
+        display: inline-block;
+        background-repeat: no-repeat;
+        margin: 2px;
+    }
+</style>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Documentfolder-Table-01 pt-1">
+    @Html.HiddenFor(m => m.DocumentsFolderList.Count)
+    <table id="DocumentsFolderTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl No</th>
+                <th scope="col">Category</th>
+                <th scope="col">Document Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Renewal Date</th>
+                <th scope="col">Upload Date</th>
+                <th scope="col">View File</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model.DocumentsFolderList != null && Model.DocumentsFolderList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.DocumentsFolderList.Count; i++)
+                    {
+                        <tr>
+
+
+                            @Html.HiddenFor(model => Model.DocumentsFolderList[i].DocumentCode)
+                            <td data-label="Sl No">@Model.DocumentsFolderList[i].SlNo</td>
+                            <td data-label="Category">@Model.DocumentsFolderList[i].DocumentCategory</td>
+                            <td data-label="Document Name">@Model.DocumentsFolderList[i].DocumentName</td>
+                            <td data-label="Description">@Model.DocumentsFolderList[i].Description</td>
+                            <td data-label="Renewal Date">@Model.DocumentsFolderList[i].RenewalDate</td>
+                            <td data-label="Upload Date">@Model.DocumentsFolderList[i].EntryDate</td>
+                            <td data-label="View File">
+                                <a data-bs-toggle="tooltip" title="" class="view_btn_appli" onclick="showDocument('@Model.DocumentsFolderList[i].File.FileName','@Model.DocumentsFolderList[i].File.AbsoluteUri')" cursorshover="true"> </a>
+
+                            </td>
+                            <td data-label="Edit">
+                                <div>
+
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="categoryedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditOrDeleteClick('MODIFY','@Model.DocumentsFolderList[i].DocumentCategoryCode','@Model.DocumentsFolderList[i].DocumentGI')">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            }
+
+        </tbody>
+    </table>
+</div>

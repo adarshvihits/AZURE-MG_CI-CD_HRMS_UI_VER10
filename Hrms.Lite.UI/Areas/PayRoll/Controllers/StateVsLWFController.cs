@@ -1,0 +1,255 @@
+﻿using ClosedXML.Excel;
+using Hrms.Lite.Infrastructure.Helpers;
+using Hrms.Lite.Services.IServices.General;
+using Hrms.Lite.Services.IServices.PayRoll;
+using Hrms.Lite.Shared.Account;
+using Hrms.Lite.Shared.General;
+using Hrms.Lite.Shared.PayRoll;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using Spire.Xls;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Hrms.Lite.UI.Areas.PayRoll.Controllers
+{
+    [Area("PayRoll")]
+    [SessionAuthorize]
+    public class StateVsLWFController : Controller
+    {
+
+        private readonly IStateVsLWFService _IStateVsLWFService;
+        private readonly ICommonService _commonService;
+        private readonly IHelpers _helpers;
+        private readonly IDropdownService _dropdownService;
+
+        public static class Global
+        {
+            public static string state;
+
+        }
+        public StateVsLWFController(IStateVsLWFService IStateVsLWFService, ICommonService commonService, IHelpers Helpers, IDropdownService dropdownService)
+        {
+            _IStateVsLWFService = IStateVsLWFService;
+            _commonService = commonService;
+            _helpers = Helpers;
+            _dropdownService = dropdownService;
+        }
+
+
+        public async  Task<IActionResult> Index()
+        {
+                try
+                {
+                    LWFSettings model = new LWFSettings();
+                    ViewBag.deduction = new SelectList(await _dropdownService.GetLWFDeductionDropdown(), "Code", "Name");
+                    //model = await _IStateVsLWFService.GetList(0);
+                    model = await _IStateVsLWFService.GetList(0);
+                    return View(model);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+
+                    return RedirectToAction("Login", "Account", new { Area = "" });
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("Error", "Account", new { Area = "" });
+                }
+        }
+        public async Task<IActionResult> GetPopUp(int StateCode,string state,int DeductionCode)
+        {
+            LWFSettings model = new LWFSettings();
+          
+            model = await _IStateVsLWFService.GetPopUpDetails(StateCode, DeductionCode);
+            model.StateCode = StateCode;
+            model.State = state;
+            return PartialView("_PopUp",model);
+        }
+
+        public async Task<IActionResult> GetList(int DeductionCode)
+        {
+            LWFSettings model = new LWFSettings();
+            model = await _IStateVsLWFService.GetList(DeductionCode);
+      
+            return PartialView("_List", model);
+        }
+
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> PopUpSave(LWFSettings model)
+        {
+            try
+            {
+
+                var list = from li in model.LWFSettingsStateDetailsList
+                           where li.Applicability == true
+                           select li;
+                model.LWFSettingsStateDetailsList = list.ToList();
+                var response = await _IStateVsLWFService.Save(model);
+                return Json(response);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+
+                return RedirectToAction("Login", "Account", new { Area = "" });
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Error", "Account", new { Area = "" });
+            }
+        }
+
+
+
+
+
+
+        public async Task<IActionResult> ExportToExcel(string Deduction,int DeductionCode)
+        {
+            try
+            {
+                LWFSettings model = new LWFSettings();
+                model = await _IStateVsLWFService.GetList(DeductionCode);
+                int slno = 0;
+                string currDateTime = await _helpers.GetCurrentDate();
+                
+                var LoginUser = HttpContext.Session.GetString("LoginUser");
+                var CompanyName = HttpContext.Session.GetString("CompanyName");
+                var User = JsonConvert.DeserializeObject<Login>(HttpContext.Session.GetString("User"));
+                var GroupCompanyName = User.authUser.GroupCompanyName;
+                ExcelPassword EP = new ExcelPassword();
+                EP = await _commonService.GetExcelPassword("LWF Settings", "Excel");
+              
+
+               
+
+                    using (var workbook = new XLWorkbook())
+                    {
+                    var worksheet = workbook.Worksheets.Add("LWF Settings");
+                    int count = model.LWFSettingsList.Count+ 5;
+
+
+                    worksheet.Range("A1:E" + count).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range("A1:E" + count).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range("A1:E" + count).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range("A1:E" + count).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range("A1:E" + count).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    var wsReportNameHeaderRange = worksheet.Range(string.Format("A{0}:{1}{0}", 1, Char.ConvertFromUtf32(65 + 4)));
+                    wsReportNameHeaderRange.Style.Font.Bold = true;
+                    wsReportNameHeaderRange.Style.Font.FontSize = 15;
+                    wsReportNameHeaderRange.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    wsReportNameHeaderRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    wsReportNameHeaderRange.Merge();
+                    wsReportNameHeaderRange.Style.Fill.BackgroundColor = XLColor.FromArgb(191, 191, 191);
+                    worksheet.Range("A5:E5").Style.Fill.BackgroundColor = XLColor.FromArgb(217, 217, 217);
+                    wsReportNameHeaderRange.Value = "LWF Settings";
+
+                    worksheet.Cell(2, 1).Style.Font.Bold = true;
+                    worksheet.Cell(2, 1).Value = "Group Company Name";
+                    worksheet.Cell(2, 2).Value = GroupCompanyName.ToUpper();
+                    worksheet.Cell(2, 3).Style.Font.Bold = true;
+                    worksheet.Cell(2, 3).Value = "Deduction Name";
+                    worksheet.Cell(2, 4).Value = Deduction;
+                    worksheet.Cell(3, 1).Style.Font.Bold = true;
+                    worksheet.Cell(3, 1).Value = "Login User";
+                    worksheet.Cell(3, 2).Value = LoginUser;
+                    worksheet.Cell(3, 3).Style.Font.Bold = true;
+                    worksheet.Cell(3, 3).Value = "Date & Time";
+                    worksheet.Cell(3, 4).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    worksheet.Cell(3, 4).Style.DateFormat.Format = "dd-MMM-yyyy   h:mm AM/PM";
+                    worksheet.Cell(3, 4).Value = currDateTime.ToString();
+                    worksheet.Cell(4, 1).Style.Font.Bold = true;
+                    worksheet.Cell(4, 1).Value = "Total Count";
+                    worksheet.Cell(4, 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    worksheet.Cell(4, 2).Value = model.LWFSettingsList.Count;
+                    worksheet.Cell(4, 2).Style.Font.Bold = true;
+           
+                    var currentRow = 5;
+                    #region Header
+                  
+                 
+                   
+                        worksheet.Cell(currentRow, 1).Value = "Sl.No";
+                        worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 2).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 2).Value = "Name";
+                        worksheet.Cell(currentRow, 3).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 3).Value = "Employee Contribution";
+                        worksheet.Cell(currentRow, 4).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 4).Value = "Employer Contribution";
+                        worksheet.Cell(currentRow, 5).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 5).Value = "Month";
+
+                    #endregion
+
+                    #region Body
+                    foreach (var item in model.LWFSettingsList)
+                        {
+                            currentRow++;
+                            slno = slno + 1;
+                            worksheet.Cell(currentRow, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                            worksheet.Cell(currentRow, 1).Value = slno;
+                            worksheet.Cell(currentRow, 2).Value = item.State;
+                            worksheet.Cell(currentRow, 3).Value = item.ELWF;
+                        worksheet.Cell(currentRow, 4).Value = item.MLWF;
+                        worksheet.Cell(currentRow, 5).Value = item.Months;
+                        worksheet.Columns(1, 5).Style.Alignment.WrapText = true;
+
+                        }
+                        #endregion
+                        worksheet.Columns().AdjustToContents();
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            if (EP.NeedPassword)
+                            {
+                                Workbook book = new Workbook();
+                                book.LoadFromStream(stream);
+                                //Protect Workbook
+                                book.Protect(EP.Password,false,false);
+                                book.SaveToStream(stream);
+                            }
+                            var content = stream.ToArray();
+                            return File(
+                                content,
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                               "LWF Settings List.xlsx"
+                                );
+                        }
+                    }
+
+                
+            }
+            catch (UnauthorizedAccessException e)
+            {
+
+                return RedirectToAction("Login", "Account", new { Area = "" });
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Error", "Account", new { Area = "" });
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+}

@@ -1,0 +1,251 @@
+﻿@model Hrms.Lite.Shared.PayRoll.FullandFinalSettelment
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.uniform.min.css" rel="stylesheet" />
+
+
+<style>
+    body {
+        margin: 5px;
+        font-family: Verdana, Arial, sans-serif;
+    }
+
+    #fullAndFinal {
+        position: absolute;
+        left: 52px;
+        right: 52px;
+        top: 50px;
+        bottom: 5px;
+        overflow: hidden;
+        clear: both;
+    }
+
+    #theme-switcher {
+        float: right;
+        width: 12em;
+        height: 30px;
+    }
+
+    /* #reportViewer1 {
+            position: absolute;
+            left: 450px;
+            right: 5px;
+            top: 160px;
+            bottom: 5px;
+            overflow: hidden;
+            clear: both;
+            width:900px;
+        }*/
+</style>
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Full And Final Settlement </h3>
+
+
+
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+
+                        <a href="@Url.Action("Index", "FullAndFinalSettlementSlip", new { Area = "PayRoll" })">
+                            Full & Final Settlement Slip List
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Full And Final Settlement PDF
+                    </li>
+
+
+
+                </ul>
+
+
+
+
+
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <div class="topbar">
+
+            <!--begin::User-->
+            <!--end::User-->
+        </div>
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+
+
+
+                    <div>
+
+
+
+                        @*<div class="row-outer " style="width:200px;">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    @Html.DropDownListFor(m => m.Basic_Filter.Location.Code, (SelectList)ViewBag.Loc, "All", new { @class = "form-control form-control-sm reset" })
+                                </div>
+                            </div>*@
+
+
+
+
+
+
+
+                    </div>
+
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <div id="fullAndFinal">
+                loading...
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+
+
+    <!--end::Entry-->
+
+</div>
+
+
+
+
+
+
+@section scripts
+    {
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+
+    <script type="text/javascript">
+        function onReady(e, args) {
+            var kendoTouch = $(".trv-pages-area").data("kendoTouch");
+
+            if (kendoTouch) {
+                kendoTouch.unbind("doubletap");
+            }
+        }
+        $(document).ready(function () {
+
+          //  var code = $('#Basic_Filter_Location_Code').val();
+
+            // code=parseInt(code);
+
+            $("#fullAndFinal")
+                .telerik_ReportViewer({
+                    // The URL of the service which will serve reports.
+                    // The URL corresponds to the name of the controller class (ReportsController).
+                    // For more information on how to configure the service please check http://www.telerik.com/help/reporting/telerik-reporting-rest-conception.html.
+                    serviceUrl: "/api/reports/",
+
+                    pageReady: onReady,
+                    //ReportSource - report description
+                    reportSource: {
+
+                        // The report can be set to a report file name (.trdx or .trdp report definition)
+                        // or CLR type name (report class definition).
+
+                       // report: "FullAndFinalSettlement.trdp",
+
+                        report: '@Model.Url.Payslip',
+
+
+                        parameters: {
+
+                           
+
+                            @*Url: "http://localhost:5001/GetFullAndFinalJSON?EmpCode=" + '@Model.Details.EmployeeCode' + '&UserCode=' + '@Model.Details.UserCode' +'&ComCode='+'@Model.Details.CompanyCode',*@
+
+                            Url: '@Model.Url.Urllink' + "/GetFullAndFinalJSON?EmpCode=" + '@Model.Details.EmployeeCode' + '&UserCode=' + '@Model.Details.UserCode' + '&ComCode=' + '@Model.Details.CompanyCode',
+                            EmployeeName: '@Model.Url.EmployeeName',
+                            ID: '@Model.Url.ID'
+
+                            @*EmpCode: '@Model.Details.EmployeeCode',
+                            UserCode: '@Model.Details.UserCode',
+
+                            ComCode: '@Model.Details.CompanyCode'*@
+
+                        }
+
+                    },
+
+
+                    viewMode: telerikReportViewer.ViewModes.PRINT_PREVIEW,
+
+                    scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+
+                    scale: 1.0,
+
+
+                    enableAccessibility: false,
+
+
+                    sendEmail: { enabled: true }
+                });
+
+
+
+            @*$('#Basic_Filter_Location_Code').change(function () {
+
+                var code = $('#Basic_Filter_Location_Code').val();
+
+
+
+                var viewer = $("#fullAndFinal").data("telerik_ReportViewer");
+                viewer.reportSource({
+                    report: viewer.reportSource().report,
+                    parameters: {
+                          EmpCode: '@Model.Details.EmployeeCode',
+                            UserCode: '@Model.Details.UserCode',
+                            ComCode: '@Model.Details.CompanyCode'
+                });
+
+            });*@
+
+            //    //setting the HTML5 Viewer's reportSource, causes a refresh automatically
+            //    //if you need to force a refresh for other case, use:
+            //    //viewer.refreshReport();
+            //});
+
+        });
+    </script>
+}

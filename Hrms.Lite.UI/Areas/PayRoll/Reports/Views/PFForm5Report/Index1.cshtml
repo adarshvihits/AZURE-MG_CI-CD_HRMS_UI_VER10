@@ -1,0 +1,404 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.Reports.PFForm5Report
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.uniform.min.css" rel="stylesheet" />
+<script src="~/scripts/PayRoll/Reports/pfForm5Report.js"></script>
+
+
+
+<style>
+    #PFForm5 {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0px;
+        bottom: 65px;
+        overflow: hidden;
+        clear: both;
+    }
+
+    .my-wrapper {
+        display: block !important;
+    }
+
+    .my-inner3 {
+        padding-top: 15px;
+        float: left !important;
+    }
+
+    .my-inner2 {
+        float: left !important;
+    }
+
+    .tab-button-wrap .tab-items {
+        padding: 0px 2px 0px 5px;
+    }
+
+    .payslip_container {
+       /* padding: 10px 20px 20px;*/
+        height: 100%;
+        background-color: transparent;
+    }
+
+    .select-option .sraech-slider {
+        margin-right: -1px;
+    }
+</style>
+
+<style>
+    .multiselect-filter {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: white;
+    }
+
+        .multiselect-filter .input-group {
+            padding: 5px;
+            margin: 0px;
+            border-radius: 2px;
+        }
+
+    .multiselect-search {
+        border-radius: 5px !important;
+        height: 26px;
+    }
+
+    .radio-inline .radio {
+        margin-bottom: 0;
+    }
+</style>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    PF Form5
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        PF Form5
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body">
+
+
+
+                            <div class="row tab-style-button">
+                                <div class="col-md-4">
+                                    <div class="page_white">
+                                        <div class="row pb-5">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>From</label><span class="Mandatory">*</span>
+                                                    @Html.HiddenFor(m => Model.Url.Urllink)
+                                                    @Html.HiddenFor(m => Model.UserCode)
+                                                    @Html.HiddenFor(m => Model.GroupCompanyCode)
+                                                    @Html.HiddenFor(m => Model.CompanyCode)
+                                                    @Html.DropDownListFor(m => m.From, (SelectList)ViewBag.PayRollMonth, "--select--", new { @class = "form-control form-control-sm reset"})
+                                                    <span id="pay_month"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>To</label><span class="Mandatory">*</span>
+                                                    @Html.DropDownListFor(m => m.To, (SelectList)ViewBag.PayRollMonth, "--select--", new { @class = "form-control form-control-sm reset" })
+                                                    <span id="pay_month"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label>Designation</label>
+                                                        @Html.DropDownListFor(m => m.Designation, (SelectList)ViewBag.Des, "All", new { @class = "form-control form-control-sm reset" })
+
+                                                        @*@Html.ListBoxFor(m => m.Designations, (SelectList)ViewBag.Dsg, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label>Department</label>
+                                                        @*@Html.ListBoxFor(m => m.Departments, (SelectList)ViewBag.Dept, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+                                                        @Html.DropDownListFor(m => m.Department, (SelectList)ViewBag.Dept, "All", new { @class = "form-control form-control-sm reset" })
+
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+
+                                                    <div class="form-group">
+                                                        <label>Location</label>
+                                                        @*@Html.ListBoxFor(m => m.Locations, (SelectList)ViewBag.Loc, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+                                                        @Html.DropDownListFor(m => m.Location, (SelectList)ViewBag.Loc, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Category</label>
+                                                        @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.Cat, "All", new { @class = "form-control form-control-sm reset" })
+
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Grade</label>
+                                                        @*@Html.ListBoxFor(m => m.Grades, (SelectList)ViewBag.Grd, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+                                                        @Html.DropDownListFor(m => m.Grade, (SelectList)ViewBag.Grade, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Payroll Group</label>
+                                                        @Html.DropDownListFor(m => m.PayrollGP, (SelectList)ViewBag.PayrollGp, "All", new { @class = "form-control form-control-sm reset" })
+
+                                                    </div>
+                                                </div>
+
+
+
+
+
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Region</label>
+
+                                                        @Html.DropDownListFor(m => m.Region, (SelectList)ViewBag.Reg, "All", new { @class = "form-control form-control-sm reset" })
+
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>State</label>
+                                                        @Html.DropDownListFor(m => m.State, (SelectList)ViewBag.State, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Division</label>
+                                                        @*@Html.ListBoxFor(m => m.Divisions, (SelectList)ViewBag.division, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+                                                        @Html.DropDownListFor(m => m.Division, (SelectList)ViewBag.Div, "All", new { @class = "form-control form-control-sm reset" })
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Section</label>
+                                                        @*@Html.ListBoxFor(m => m.Sections, (SelectList)ViewBag.section, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+                                                        @Html.DropDownListFor(m => m.Section, (SelectList)ViewBag.Sec, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Employment Type</label>
+                                                        @Html.DropDownListFor(m => m.EmpType, (SelectList)ViewBag.EmpType, "All", new { @class = "form-control form-control-sm reset" })
+                                                        @*@Html.ListBoxFor(m => m.EmploymentTypes, (SelectList)ViewBag.EmploymentType, new { @class = "multiselectDropdownField", @multiple = "multiple" })*@
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Work Location</label>
+                                                        @Html.DropDownListFor(m => m.WorkLocation, (SelectList)ViewBag.WorkLoc, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Wage Grade</label>
+                                                        @Html.DropDownListFor(m => m.WageGrade, (SelectList)ViewBag.Wage, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+                                              
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>PF Group</label>
+                                                        @Html.DropDownListFor(m => m.PFGroup, (SelectList)ViewBag.PfGp, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>ESI Group</label>
+                                                        @Html.DropDownListFor(m => m.ESIGroup, (SelectList)ViewBag.ESIGp, "All", new { @class = "form-control form-control-sm reset" })
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
+
+
+                                            <!-- <end table></end> -->
+
+                                        </div>
+                                        <div class="row pt-16">
+                                            <div class="col-md-12">
+                                                <button type="button"
+                                                        class="btn btn-default float-right mobile-full-width " onclick="ExportToPdf()">
+                                                    Proceed
+                                                </button>
+                                                @*<button type="submit"
+                                                            class="btn btn-default float-right mobile-full-width ">
+                                                        Export To Excel
+                                                    </button>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <end col-6></end> -->
+
+                                </div>
+                                <div class="col-md-8">
+
+                                    <div class="payslip_container">
+                                        <div id="PFForm5" class="hide">
+                                            loading...
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+
+
+@section scripts
+    {
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+
+    <script type="text/javascript">
+        function onReady(e, args) {
+            var kendoTouch = $(".trv-pages-area").data("kendoTouch");
+
+            if (kendoTouch) {
+                kendoTouch.unbind("doubletap");
+            }
+        }
+
+        $(document).ready(function () {
+
+            var code = $('#Basic_Filter_Location_Code').val();
+
+            $("#PFForm5")
+                .telerik_ReportViewer({
+
+                    serviceUrl: "/api/reports/",
+                    pageReady: onReady,
+                    reportSource: {
+                        report: "PFFormVReportJoy.trdp",
+                        @*report: '@Model.Url.offerLetter',*@
+                        parameters: {
+                            url: "",
+                            @*url: 'http://localhost:5001/api/CompanyLettersDetails/GetConfirmationLetterReport?HistoryCode=' + parseInt('@Model.HistoryCode') + "&empCode=" + parseInt('@Model.EmpCode') + "&DocumentType=" + parseInt('@Model.TypeCode') + "&LetterFormatCode=" + parseInt('@Model.FormatCode') + "&GcCode=" + parseInt('@Model.GcCode'),*@
+                            @*url: '@Model.Url.Urllink' + "/api/CompanyLettersDetails/GetConfirmationLetterReport?HistoryCode=" + parseInt('@Model.HistoryCode') + "&empCode=" + parseInt('@Model.EmpCode') + "&DocumentType=" + parseInt('@Model.TypeCode') + "&LetterFormatCode=" + parseInt('@Model.FormatCode') + "&GcCode=" + parseInt('@Model.GcCode'),*@
+
+
+                        }
+                    },
+
+
+                    viewMode: telerikReportViewer.ViewModes.PRINT_PREVIEW,
+
+                    scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+
+                    scale: 1.0,
+
+                    enableAccessibility: false,
+
+
+                    sendEmail: { enabled: true }
+                });
+
+
+
+
+        });
+    </script>
+}
+
+

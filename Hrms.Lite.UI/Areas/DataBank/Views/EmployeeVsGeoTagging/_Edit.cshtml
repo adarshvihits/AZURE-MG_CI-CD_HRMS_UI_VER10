@@ -1,0 +1,95 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeVsGeoTagging
+<script src="~/js/tooltip.js"></script>
+<script>
+ 
+
+    $('.geotaggingMultiselectDropdown').multiselect({
+        includeSelectAllOption: true,
+        nonSelectedText: 'All',
+        selectAllText :'All',
+        //enableCaseInsensitiveFiltering: true,
+        //includeFilterClearBtn: true,
+    });
+
+</script>
+<style>
+    .btn-multi-selection {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "employeeVsGeoTaggingDetailsSave" }))
+{ 
+<div id="" class="slider-forms slider-forms-open employeeVsGeoTaggingDetails">
+    <div class="slider-inner-style">
+        <div class="slider-form-close" onclick="CloseSlider('employeeVsGeoTaggingDetails')"><i class="ki ki-close icon-xs text-muted"></i></div>
+        <h4 class="mb-4">Employee Vs Geotagging</h4>
+        <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+            <div class="row">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label class="view-title">Applicable Locations</label>
+                    <div class="form-control-sm form-control  JType   applLoc ">
+                        @Html.ListBoxFor(m => m.ApplicablePunchingLocations, (SelectList)ViewBag.ApplicableLocations, new { @class = "geotaggingMultiselectDropdown form-control-multiselect", @multiple = "multiple", data_placeholder = "Select Applicable Location" })
+                        @*@Html.DropDownListFor(m => m.ApplicablePunchingLocations, (SelectList)ViewBag.ApplicableLocations, new { @class = " form-control-multiselect"})*@
+                    </div>
+                    <span id="ApplPunchingLoc"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row-outer">
+                    <label class="view-title">Outside Punching</label>
+                    <div class="view-details">
+                        @Html.HiddenFor(m => m.EmployeeVsGeoTaggingDetails.EmployeeGuid)
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-success mt-2">
+                                @Html.CheckBoxFor(m => m.EmployeeVsGeoTaggingDetails.OutsidePunchingApplicable)
+                                <span></span>
+                            </label>
+                            <label class="checkbox checkbox-outline checkbox-success"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        
+
+
+
+
+
+        <div class="row card-footer-bottom-fixed ">
+
+            <div class="col-md-12 align-right">
+
+                <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                    Save
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+}
+
+
+
+
+

@@ -1,0 +1,151 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.SalaryPosting
+
+<script src="~/js/settings.js"></script>
+
+<script>
+
+    $(".search-slider-inner").click(function () {
+        $(".form-control").toggleClass('field-width-big')
+    });
+
+</script>
+<style>
+    .dataTables_scrollBody {
+        height: 35vh !important;
+    }
+</style>
+<div class="row tab-style-button">
+    <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+        <div class="tab-items">
+
+        </div>
+
+
+
+        <div class="tab-items select-option high">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+   
+
+
+            <a data-bs-toggle="tooltip" title=""
+               class="btn btn-excel"
+               data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  ">
+    @Html.HiddenFor(Model => Model.PostingValidation_Popup.Count)    
+    <table id="TablepostValidation" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+
+
+
+                @if (@ViewBag.RowCode == "2")
+                {
+                    <th scope="col" tooltip="Date Of Joining">DOJ</th>
+
+                }
+                @if (@ViewBag.RowCode == "3")
+                {
+                    <th scope="col" tooltip="">Resignation Date</th>
+                    <th scope="col" tooltip="Last Working Date">LWD</th>
+
+                }
+                @if ((@ViewBag.RowCode == "5") || (@ViewBag.RowName == "6"))
+                {
+                    <th scope="col" tooltip="">LOP Count</th>
+
+                }
+
+              
+                @if ((@ViewBag.RowCode == "10") ||( @ViewBag.RowName == "11"))
+                {
+                    <th scope="col" tooltip="Job Transition Type">Gross Salary</th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.PostingValidation_Popup != null && Model.PostingValidation_Popup.Count > 0)
+            {
+                for (int i = 0; i < Model.PostingValidation_Popup.Count; i++)
+                {
+            <tr>
+                <td data-label="ID">
+                    @Model.PostingValidation_Popup[i].ID
+                </td>
+                <td data-label="Employee Name">
+                    @Model.PostingValidation_Popup[i].Name
+
+                </td>
+                <td data-label="Designation">@Model.PostingValidation_Popup[i].Designation</td>
+                <td data-label="Department">
+                    @Model.PostingValidation_Popup[i].Department
+                </td>
+                <td data-label="Location">@Model.PostingValidation_Popup[i].Location</td>
+
+                @if (@ViewBag.RowCode == "2")
+                {
+                    <td data-label=">Date of joining">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PostingValidation_Popup[i].DOJ))</td>
+
+
+                }
+                @if (@ViewBag.RowCode == "3")
+                {
+                    <td data-label="Resignation date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PostingValidation_Popup[i].ResignationDate))</td>
+
+                    <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PostingValidation_Popup[i].LWD))</td>
+
+
+                }
+                @if ((@ViewBag.RowCode =="5") || (@ViewBag.RowName == "6"))
+                {
+                    <td data-label="lop count">@Model.PostingValidation_Popup[i].LOP</td>
+                }
+
+              
+             
+                @if ((@ViewBag.RowCode == "10" )|| (@ViewBag.RowName == "11"))
+                {
+                    <td data-label="Job Transition Type">@Model.PostingValidation_Popup[i].GrossSalary</td>
+                }
+            </tr>
+
+
+                }
+            }
+        </tbody>
+
+
+    </table>
+</div>
+

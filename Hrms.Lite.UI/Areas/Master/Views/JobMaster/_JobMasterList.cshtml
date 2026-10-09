@@ -1,0 +1,73 @@
+@model Hrms.Lite.Shared.Master.JobMaster
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table job_master_list pt-1">
+    <table id="JobMasterTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Job Code</th>
+                <th scope="col">Position Title</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Business Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Approval</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model?.JobMasterList != null && Model.JobMasterList.Count > 0)
+            {
+                for (int i = 0; i < Model.JobMasterList.Count; i++)
+                {
+                         bool isPending = Model.JobMasterList[i].EditActive;  
+                        @Html.HiddenFor(m => m.JobMasterList[i].EditActive) 
+                        @Html.HiddenFor(m => m.JobMasterList[i].MakerChecker)
+                    <tr>
+                        <td data-label="Job Code">@Model.JobMasterList[i].JobCode</td>
+                        <td data-label="Position Title">@Model.JobMasterList[i].Name</td>
+                        <td data-label="Department">@Model.JobMasterList[i].Department?.Name</td>
+                        <td data-label="Section">@Model.JobMasterList[i].Section?.Name</td>
+                        <td data-label="Grade">@Model.JobMasterList[i].GradeName</td>
+                        <td data-label="Business Type">@Model.JobMasterList[i].BusinessType?.Name</td>
+                        <td data-label="Status">
+                            @if (isPending)
+                            {
+                                <span class="jm-badge jm-badge-pending">Pending</span>
+                            }
+                            else if (Model.JobMasterList[i].Active)
+                            {
+                                <span class="jm-badge jm-badge-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="jm-badge jm-badge-inactive">Inactive</span>
+                            }
+                        </td>
+                        <td data-label="Approval">
+                            @if (isPending)
+                            {
+                                    <span class="jm-badge jm-badge-pending jm-clickable" title="Click to approve / reject"
+                                          onclick="onApproveClick('@Model.JobMasterList[i].GI', '@Model.JobMasterList[i].LogGI', @i)">Pending Approval</span>
+                            }
+                            else
+                            {
+                                <span class="jm-badge jm-badge-approved">Approved</span>
+                            }
+                        </td>
+                        <td data-label="Actions">
+                            
+                                <a data-bs-toggle="tooltip" title="Edit"
+                                   class="btn btn-icon btn-edit icon-only" onclick="onAddNewOrEditClick('MODIFY', '@Model.JobMasterList[i].GI', '@Model.JobMasterList[i].LogGI', @i)">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

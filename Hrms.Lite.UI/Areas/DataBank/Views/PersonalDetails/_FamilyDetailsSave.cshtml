@@ -1,0 +1,81 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "Family Details";
+}
+<script src="~/js/bootstrap-datepicker.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "pada" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+    @Html.HiddenFor(m => m.GetFamilyDetails.DateOfBirth)
+    <div id="addFamilyDetails" class="slider-forms slider-forms-open fam">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('fam')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Family Details</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.GetFamilyDetails.FamilyLogGI, new { @class = "form-control form-control-sm", @placeholder = "familyGI" })
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.TextBoxFor(m => m.GetFamilyDetails.Name, new { @class = "form-control", placeholder = "Name", @maxlength = 120, @onblur = "firstLetterCaps(this,'fmlyname')", @onkeypress = "return onlyLettersKey(event)" })
+                        <span id="fmlyname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Relation</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetFamilyDetails.Relation.Code, (SelectList)ViewBag.Fam, "--Select Relation--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'familyrelation')" })
+                        <span id="familyrelation"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Date of Birth</label>@*<span class="Mandatory">*</span>*@
+                        <div class="input-group date">
+                            @Html.TextBoxFor(m => m.GetFamilyDetails.DateOfBirth, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date Of Birth" })
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="fmlydob"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Occupation</label>
+                        @Html.TextBoxFor(m => m.GetFamilyDetails.Occupation, new { @class = "form-control", placeholder = "Occupation", @maxlength = 120, @onblur = "firstLetterCapsWithOutValidation(this)" })
+
+                    </div>
+                    <span id="occupation"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Status</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetFamilyDetails.Status.Code, (SelectList)ViewBag.Sta, "--Select Status--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'status  ')" })
+                        <span id="status"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button id="famid" type="button" class="btn btn-default" onclick="validateAllFamilySave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

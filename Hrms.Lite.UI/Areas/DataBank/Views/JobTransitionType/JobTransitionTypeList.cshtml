@@ -1,0 +1,67 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.JobTransitionType
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table departmentvshead_list  ">
+    @Html.HiddenFor(m => m.JobTransitionTypeList.Count)
+    <table id="GrievanceTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Sl. No</th>
+                <th scope="col">Job Transition Category</th>
+                <th scope="col">Job Transition Type</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.JobTransitionTypeList != null && Model.JobTransitionTypeList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.JobTransitionTypeList.Count; i++)
+                {
+                    <tr>
+                        @Html.HiddenFor(m => Model.JobTransitionTypeList[i].JobTransitionCode)
+
+                        <td data-label="Sl. No">@Model.JobTransitionTypeList[i].SlNo</td>
+                        <td data-label="Department Name">@Model.JobTransitionTypeList[i].JobTransitionCategory</td>
+                        @*<td data-label="Cost Center">@Model.JobTransitionTypeList[i].CostCenter</td>*@
+                        <td>
+                            <span id="hideCost__@i" class="">@Model.JobTransitionTypeList[i].JobTransitionTypeA</span>
+                            <span id="dropDownTxtbox_@i" class="hide">
+                                @Html.DropDownListFor(model => model.JobTransitionTypeList[i].JobTransitionTypeDropdown.Code, (SelectList)ViewBag.TransitionTypeDropdown, "--Select Transition--", new { @class = "form-control form-control-sm LocArea" })
+
+                            </span>
+                        </td>
+
+
+
+
+
+                        <td>
+                            <span id="edit_@i" class="">
+                                <a data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only" data-bs-original-title="Edit" onclick="onEditClk(@i)">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            </span>
+                            <span id="updatecancel_@i" class="hide">
+                                <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-update icon-only " onclick="onUpdateClick(@i,'@Model.JobTransitionTypeList[i].JobTransitionCode')" data-bs-original-title="Update"> <i class="icon-xl fas fa-sync-alt"></i> </a>
+                                <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-cancel icon-only " onclick="onCancelClick(@i)" data-bs-original-title="Cancel"> <i class="icon-xl fas fa-times"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

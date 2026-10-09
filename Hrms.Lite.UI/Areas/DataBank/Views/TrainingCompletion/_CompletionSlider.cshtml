@@ -1,0 +1,137 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.InductionTraining
+
+
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+
+    });
+
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "InductionCompletionSave" }))
+{
+    @Html.HiddenFor(Model => Model.EmployeeCode)
+    @Html.HiddenFor(Model => Model.HeadCode)
+    @Html.HiddenFor(Model => Model.Mode)
+    @Html.HiddenFor(Model => Model.ScheduledDate)
+    @Html.HiddenFor(Model => Model.InitiateDescription)
+    <div id="gradeMaseredit" class="slider-forms slider-forms-open CreateOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('CreateOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Training Completion</h4>
+            </div>
+
+
+
+            <div class="add-padding">
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Scheduled Date</label>
+                            <div class="view-details">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ScheduledDate))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Initate Description</label>
+                            <div class="view-details">
+                                @Model.InitiateDescription
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+
+
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Accepted Date</label>
+                            <div class="view-details">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AcceptedDate))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Accepted Description</label>
+                            <div class="view-details">
+                                @Model.AcceptedDescription
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="ihits-table table-border mobile-responsive-table induction-slider-list">
+                    <table class="my-3" id="inductonTypeTable">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Training Name</th>
+
+
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.InductionTrainingTypeList != null && Model.InductionTrainingTypeList.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.InductionTrainingTypeList.Count; i++)
+                                {
+                                    <tr>
+                                        @Html.HiddenFor(Model => Model.InductionTrainingTypeList[i].TrainingCode)
+                                        @Html.HiddenFor(Model => Model.InductionTrainingTypeList[i].TrainingName)
+                                        <td data-label="ID">@Model.InductionTrainingTypeList[i].TrainingName</td>
+
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Remarks
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control form-control-sm GShortName", @placeholder = "Remarks", @onblur = "validate(this,'remarks')" })
+                            <span id="remarks" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+
+                        <button type="button"
+                                class="btn btn-danger  mobile-full-width" onclick="return inductionCompletion('Reject')">
+                            Reject
+                        </button>
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="return inductionCompletion('Approve')">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

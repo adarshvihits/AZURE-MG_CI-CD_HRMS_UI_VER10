@@ -1,0 +1,71 @@
+﻿@model Hrms.Lite.Shared.Master.ResumeSources
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.tab3Count').html("@Model.PendingCount");
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table resume-source-master-list pt-1">
+    @Html.HiddenFor(m => m.SourceList.Count)
+    <table class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.SourceList != null && Model.SourceList.Count > 0)
+                {
+                    for (int i = 0; i < Model.SourceList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.SourceList[i].MakerChecker)
+                            @Html.HiddenFor(m => m.SourceList[i].GI)
+                            @Html.HiddenFor(model => Model.GI)
+                            <td data-label="Name">@Model.SourceList[i].Name</td>
+                            <td data-label="Short Name">@Model.SourceList[i].ShortName</td>
+
+                            <td data-label="Status">@Model.SourceList[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="resumesourceapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only" onclick="onApproveClick('@Model.SourceList[i].GI','@Model.SourceList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="resumesourceapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only " onclick="onApproveClick('@Model.SourceList[i].GI', '@Model.SourceList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+
+                                <!-- Approve Slider -->
+                                <!-- Approve Slider end-->
+                            </td>
+                            <!-- <second></second> -->
+                        </tr>
+
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

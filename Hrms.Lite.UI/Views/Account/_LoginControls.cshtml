@@ -1,0 +1,134 @@
+﻿@model Hrms.Lite.Shared.Account.Login
+
+
+
+<style>
+    .procced_btn {
+    }
+</style>
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "HrmsLogin", @onsubmit = "return validateGrpCmpy();" }))
+{
+    <div class="form-group">
+        <span class="user-svg">
+            <img src="~/images/codepen.svg" />
+        </span>
+        @Html.TextBoxFor(m => m.CompanyCode, new { @class = "form-control h-auto  placeholder-white  border-0 py-4 px-3 mb-5 usernameinput company-code", @maxlength = 120, @placeholder = "Company Code", @required = "true", tabindex = "1", @onblur = "validate(this,'CmpCode')", onchange= "CompanyCodeChange()",@onkeyup = "onLoginControlsChange(event)" })
+        <span id="CmpCode"></span>
+    </div>
+
+    <div class="form-group">
+        <span class="user-svg">
+            <img src="~/images/user.svg" />
+        </span>
+        @Html.TextBoxFor(m => m.UserCode, new { @class = "form-control h-auto placeholder-white border-0 py-4 px-3 mb-5  usernameinput company-code", @maxlength = 120, @placeholder = "User Code / Username", @required = "true", tabindex = "2", @onblur = "validate(this,'UsrCode')", @onkeyup = "onLoginControlsChange(event)" })
+        <span id="UsrCode"></span>
+    </div>
+    <div class="form-group">
+        <span class="user-svg">
+            <img src="~/images/lock.svg" />
+        </span>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control h-auto placeholder-white  border-0 py-4 px-3 mb-5 usernameinput company-code", @maxlength = 120, @placeholder = "Password", type = "password", @required = "true", tabindex = "3", @onblur = "validate(this,'Pwd')", @onkeyup = "onLoginControlsChange(event)" })
+        <a class="passwordeye" onclick="onPwdVisibility()"><i class="fa fa-eye-slash" id="togglePassword"></i></a>
+        <span id="Pwd"></span>
+    </div>
+
+    <div class="row align-items-center mr-n">
+        @*<div class="col-md-7">
+                <div class="form-group" style="background-color:transparent;">
+                    <dnt-captcha asp-captcha-generator-max="99"
+                    asp-captcha-generator-min="11"
+                    asp-captcha-generator-language="English"
+                    asp-captcha-generator-display-mode="SumOfTwoNumbers"
+                    asp-use-relative-urls="true"
+                    asp-placeholder="Enter Captcha"
+                    asp-validation-error-message="Please enter the security code."
+                    asp-font-name="Tahoma"
+                    asp-font-size="20"
+                    asp-fore-color="#1a84d9"
+                    asp-back-color="#fff"
+                    asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text '></span></span>{0}"
+                    asp-text-box-class="text-box form-control h-auto placeholder-white company-code   py-4 mb-5 captchaTxtBox"
+                    asp-validation-message-class="text-danger"
+                    asp-refresh-button-class="fas fa-redo btn-sm"
+                    asp-use-noise="false" />
+
+
+                </div>
+            </div>*@
+
+
+
+        <div class="col-md-4">
+            <div class="form-group" style="background-color:transparent;">
+
+                @*<input type="text" class="text-box form-control h-auto placeholder-white company-code   py-4 mb-5 captchaTxtBox" placeholder="Enter Captcha" />*@
+                @Html.TextBoxFor(m => m.Captcha, new { @class = "text-box form-control h-auto placeholder-white company-code   py-4 mb-5 captchaTxtBox", @placeholder = "Enter Captcha", tabindex = "4", @onblur = "validate(this,'cap')" })
+                <span id="cap"></span>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="d-flex align-items-center justify-content-around" id="CaptchaImg">
+
+
+                @await Html.PartialAsync("_Captcha")
+            </div>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <button type="button" style="width:100%;"
+                    class="font-weight-bold  py-2 proceed-login-btn procced_btn btn btn-default btn-sm  " onclick="loginProceed()">
+                Proceed
+            </button>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div id="grpCmpDiv">
+
+                @*@Html.DropDownListFor(m => m.GroupCompanyCode, (SelectList)ViewBag.GrpCompany, "--Select Group Company--", new {@class = "form-control form-control-sm hide"})*@
+            </div>
+            <span id="grpCmpSpan"></span>
+        </div>
+
+    </div>
+
+    @*<div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8">
+            <div class="checkbox-inline">
+                <label class="checkbox checkbox-outline  m-0">
+                    <input type="checkbox" name="remember" />
+                    <span></span>Remember me
+                </label>
+            </div>
+
+        </div>*@
+    <div class="form-group mt-9  text-center ">
+        <button id="LoginBtn" type="submit" style="width:100%;"
+                class="font-weight-bold px-15 py-3 login-btn btn btn-default btn-sm hide" disabled>
+            Login
+        </button>
+        <div class="mt-p">
+            <a href="javascript:;" id="kt_login_forgot" class=" font-weight-bold text-center" onclick="forgotPassword()" tabindex="7">
+                Forgot
+                Password ?
+            </a>
+            <div>
+                <div class="version">
+                    <label style="width: 50px; color: #b5b5c3; z-index: 1010;">V 3.1.14</label>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="form-group text-center mt-10">
+        <span id="validationMsgSpan" style="color:red;">@TempData["Message"]</span>
+    </div>
+    @*<p class="copy-right">
+            Copyright@2021 HRMS. All right reserved.
+        </p>*@
+}

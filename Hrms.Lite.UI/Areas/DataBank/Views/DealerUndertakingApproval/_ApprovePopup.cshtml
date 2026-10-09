@@ -1,0 +1,133 @@
+﻿@model Hrms.Lite.Shared.DataBank.DealerUndertakingApproval
+<script src="~/js/bootstrap-datepicker.js"></script>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @if (@Model.ApprovalStatus == "Pending for Approval")
+            {
+                <label>Effective Date</label>
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.EffectiveDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Effective Date" })
+
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            }
+            @if (@Model.ApprovalStatus == "Pending for Close Approval")
+            {
+                <label class="view-title">Effective Date</label>
+
+                <div class="view-details">
+                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EffectiveDate))
+                </div>
+
+            }
+        </div>
+    </div>
+
+</div>
+
+<div class="row my-2">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="view-title">Remarks</label>
+            <div class="view-details">
+                @Model.Remark
+            </div>
+            @*<span id="purpose"></span>*@
+        </div>
+    </div>
+</div>
+
+@if (@Model.ApprovalStatus == "Pending for Close Approval")
+{
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="form-group mb-0">
+                <label>Closing Date</label><span class="Mandatory">*</span>
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.ClosingDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Closing Date" })
+
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="closingDate"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="view-title">Closing Remarks</label>
+                <div class="view-details">
+                    @Model.ClosingRemark
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (@Model.ApprovalStatus == "Pending for Approval")
+{
+    <div class="col-md-6">
+        <div class="form-group">
+            <label> </label>
+            <label class="checkbox checkbox-outline checkbox-success    ">
+                @Html.CheckBoxFor(m => m.DullyDealerUndertaking)
+                <span class="spanlabel mr-3"></span>Have you as a Checker verified the duly filled Dealer Undertaking
+            </label>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="form-group">
+            <label> </label>
+            <label class="checkbox checkbox-outline checkbox-success    ">
+                @Html.CheckBoxFor(m => m.DateOfUndertaking)
+                <span class="spanlabel mr-3"></span>Have you verified the date of the Dealer undertaking
+            </label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label> </label>
+            <label class="checkbox checkbox-outline checkbox-success      ">
+                @Html.CheckBoxFor(m => m.DealingRights)
+                <span class="spanlabel mr-3"></span>Can he/she be given Dealing rights through HRMS
+            </label>
+        </div>
+    </div>
+}
+
+<div class="row my-4">
+
+    <div class="col-md-8">
+        <div class="form-group">
+            <label>Approver Comments</label>
+            @Html.TextAreaFor(Model => Model.ApprovalRemark, new { @class = "form-control form-control-sm", maxlength = "250" })
+
+            @*<span id="purpose"></span>*@
+        </div>
+    </div>
+    <div class="col-md-4 align-right d-flex align-items-center">
+
+        <a type="button" class="btn btn-danger  mobile-full-width" onclick="RejectDealerUndertaking('@Model.RequestCode', '@Model.ApprovalStatus')">
+            Reject
+        </a>
+        <a type="button" class="btn btn-default  mobile-full-width" onclick="ApproveDealerUndertaking('@Model.RequestCode', '@Model.ApprovalStatus')">
+            Approve
+        </a>
+
+        @*<button type="button" onclick="SaveDealerUndertaking()"
+                    class="btn btn-default mt-4 mobile-full-width ">
+                Save
+            </button>*@
+
+    </div>
+
+
+</div>

@@ -1,0 +1,157 @@
+﻿@model Hrms.Lite.Shared.PayRoll.MonthlyPaymentRemittance
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Save", "MonthlyPaymentRemittance", FormMethod.Post, new { id = "Pfsave" }))
+{
+    <div id="pfedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>PT Remittance</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <label>Month</label>
+                        <div class="form-group filter-combobox mr-2">
+                            @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Select Month--", new { @class = "form-control form-control-sm month" })
+                            <span id="month"></span>
+                        </div>
+                        <span id="Month"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer  ">
+                            <label>Date</label>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(Model => Model.Date, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Date" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="Date"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row ">
+                    <div class="col-md-6">
+                        <label>Voucher Number</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                @Html.TextBoxFor(model => Model.VoucherNum, new { @class = "form-control form-control-sm DeptDiscription", maxlength = "250" })
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.HiddenFor(model => Model.VoucherNum)
+
+                                @Html.DisplayFor(model => Model.VoucherNum)
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>PT Amount</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                @Html.TextBoxFor(model => Model.PTAmountPaid, new { @class = "form-control form-control-sm DeptDiscription",  maxlength = "250", type = "number" })
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.HiddenFor(model => Model.PTAmountPaid)
+
+                                @Html.DisplayFor(model => Model.PTAmountPaid)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @*<div class="col-md-6">
+                            <label>Total</label>
+                            <div class="view-details">
+                                @if (Model.Mode == "CREATE")
+                                {
+                                    @Html.TextBoxFor(model => Model.LWFEmployer, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Remarks", maxlength = "250" })
+                                }
+                                @if (Model.Mode == "MODIFY")
+                                {
+                                    @Html.HiddenFor(model => Model.LWFEmployer)
+
+                                    @Html.DisplayFor(model => Model.LWFEmployer)
+
+                                }
+
+                            </div>
+                        </div>*@
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.HiddenFor(model => Model.Remarks)
+
+                                @Html.DisplayFor(model => Model.Remarks)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="pfSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="pfSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}

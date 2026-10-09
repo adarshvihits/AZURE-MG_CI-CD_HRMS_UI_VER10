@@ -1,0 +1,95 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.BankStatement
+    @*<script src="~/js/settings.js"></script>*@
+
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "List_Emp" }))
+    {
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table account-statement vertical-scroll-450" id="content1">
+    @Html.HiddenFor(m => m.AccountStatement.Count)
+    <table id="AccountStatementTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Description</th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    data-bs-original-title="Number Of Employee">No. Of Employees</th>
+                <th scope="col">Amount</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.AccountStatement != null && Model.AccountStatement.Count > 0)
+            {
+                for (int i = 0; i < Model.AccountStatement.Count; i++)
+                {
+                    <tr>
+                       
+                        <td data-label="Description">
+
+                            @Html.HiddenFor(Model => Model.AccountStatement[i].TYPE)
+                            @Html.HiddenFor(Model => Model.AccountStatement[i].Code)
+                            @Html.HiddenFor(Model => Model.AccountStatement[i].Description)
+                            @Model.AccountStatement[i].Description
+                        </td>
+                        <td data-label="Number Of Employee">
+                            <!-- <a data-bs-toggle="modal" data-target=".bd-example-modal-lg" type="button" type="button" class="btn btn-default btn-sm float-left">
+                       12
+                    </a> -->
+                            <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                               type="button" class="btn btn-sm float-left" onclick="OnEmployeeCountClick('@Model.AccountStatement[i].Description', '@Model.AccountStatement[i].TYPE', '@Model.AccountStatement[i].Code')">
+                                @Model.AccountStatement[i].EmployeeCount
+                            </a>
+
+
+
+                        <td data-label="Amount">
+                            @Model.AccountStatement[i].Amount
+
+                        </td>
+
+
+
+                    </tr>
+
+
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+    }
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div id="myDiv" class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Employee Details
+                    </h5>
+                    <button type="button" class="close"
+                            data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true"
+                           class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>

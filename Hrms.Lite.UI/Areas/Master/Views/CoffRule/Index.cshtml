@@ -1,0 +1,226 @@
+﻿@model Hrms.Lite.Shared.Master.CoffLeaveRule
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Master/CoffRule.js"></script>
+
+
+
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title"> Compensatory Off Policy</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Compensatory Off Policy
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->
+          
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+                            <div class="card-body">
+                                <div class="row tab-style-button">
+                                    <div class="tab-button-wrap">
+                                      
+                                        <div class="tab-items">
+                                            <div class="d-flex align-items-center">
+                                                <label>Leave Group</label>
+                                                <div class="row-outer pl-3">
+                                                    <div class="form-group" style="width: 180px;">
+                                                        @Html.DropDownListFor(Model => Model.LeaveGroup.Code, (SelectList)ViewBag.Leavegroup, new { @class = "form-control form-control-sm", onchange = "onLeavegroupClick(); validate(this, 'LeaveGp')" })
+                                                        @Html.HiddenFor(Model => Model.LeaveGroup.Code)
+
+                                                        <span id="LeaveGp"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="tab-items select-option">
+                                            @*<div class="sraech-slider">
+                                                <div class="search-slider-inner">
+                                                    <i class="fa fa-search"></i>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                       placeholder="Search">
+                                            </div>
+                                            <div class="filter-button" data-bs-toggle="tooltip" title=""
+                                                 data-bs-original-title="Filter">
+                                                <i class="fas fa-filter"></i>
+                                            </div>*@
+                                            <button data-bs-toggle="tooltip" title="Export to Excel"
+                                                    class="btn btn-excel">
+                                                <i class="icon-xl far fa-file-excel"onclick="ExportToexcel()"></i>
+                                            </button>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <div id="coffRuleDetailsList">
+                                    @await Html.PartialAsync("_CoffRuleDetails", Model)
+                                </div>
+                                @*<div class="row card-footer-bottom-fixed">
+
+                <div class="col-md-12 align-right">
+
+                    <div id="adddeduction" class="slider-forms">
+                        <div class="slider-inner-style">
+                            <div class="slider-form-close">
+                                <i class="ki ki-close icon-xs text-muted"></i>
+                            </div>
+                            <h4>
+                                Deduction
+                            </h4>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Short Name</label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               placeholder="Short Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label>Deduction Type</label>
+                                        <select class="form-control form-control-sm " id="exampleSelects">
+                                            <option>..Select..</option>
+                                            <option>Demo</option>
+                                            <option>Demo</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label>Display Order </label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               placeholder="Display Order">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row my-3">
+
+                                <div class="col-md-12 d-flex align-items-center">
+                                    <label class="switch">
+                                        Active
+                                        <input type="checkbox" checked="">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="row my-3">
+
+                                <div class="col-md-12">
+                                    <label>Description</label>
+                                    <textarea class="form-control form-control-sm"
+                                              placeholder="Description"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row card-footer-bottom-fixed border-none">
+
+                                <div class="col-md-12 align-right">
+                                    <a type="button"
+                                       class="btn btn-default  mobile-full-width">
+                                        Save
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>*@
+                            </div>
+                            <div class="row card-footer-bottom-fixed">
+
+                                <div class="col-md-12 align-right">
+                                    <button type="button"
+                                            class="btn btn-default float-right mobile-full-width" onclick="CoffRuleSave()">
+                                        Save
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+
+
+</div>

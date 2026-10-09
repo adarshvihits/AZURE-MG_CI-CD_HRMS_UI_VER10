@@ -1,0 +1,251 @@
+﻿
+
+
+
+@model Hrms.Lite.Shared.Master.KendoReport
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.uniform.min.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<style>
+    #salaryCertificate1 {
+        position: absolute;
+        left: 40px;
+        right: 38px;
+        top: 5px;
+        bottom: 20px;
+        top: 20px;
+        bottom: 20px;
+        overflow: hidden;
+        clear: both;
+    }
+
+    .my-wrapper {
+        display: block !important;
+    }
+
+    .my-inner3 {
+        padding-top: 15px;
+        float: left !important;
+    }
+
+    .my-inner2 {
+        float: left !important;
+    }
+
+    .tab-button-wrap .tab-items {
+        padding: 0px 2px 0px 5px;
+    }
+
+    .payslip_container {
+        padding: 10px 20px 20px;
+        height: 100%;
+    }
+
+    .select-option .sraech-slider {
+        margin-right: -1px;
+    }
+</style>
+
+
+
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Salary Certificate</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+
+                        <a href="@Url.Action("Index", "EmployeeCompanyDocuments", new { Area = "DataBank" })">Employee Company Documents</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Salary Certificate
+                    </li>
+
+                    @*<li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "JobTransition", new { Area = "DataBank" })">Job Transition List</a>
+                        </li>*@
+
+
+
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+            @*<div class="card card-custom height-100per">
+
+                    <div class="card-body">
+
+                        <div>
+                            <div class="row-outer " style="width:200px;">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    @Html.DropDownListFor(m => m.Basic_Filter.Location.Code, (SelectList)ViewBag.Loc, "All", new { @class = "form-control form-control-sm reset" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>*@
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <div class="payslip_container">
+                        <div id="salaryCertificate1">
+                            loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+
+
+    <!--end::Entry-->
+
+</div>
+
+
+
+
+
+
+
+@section scripts
+    {
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+
+    <script type="text/javascript">
+        function onReady(e, args) {
+            var kendoTouch = $(".trv-pages-area").data("kendoTouch");
+
+            if (kendoTouch) {
+                kendoTouch.unbind("doubletap");
+            }
+        }
+        $(document).ready(function () {
+
+
+
+            // code=parseInt(code);
+
+            $("#salaryCertificate1")
+                .telerik_ReportViewer({
+                    // The URL of the service which will serve reports.
+                    // The URL corresponds to the name of the controller class (ReportsController).
+                    // For more information on how to configure the service please check http://www.telerik.com/help/reporting/telerik-reporting-rest-conception.html.
+                    serviceUrl: "/api/reports/",
+                    pageReady: onReady,
+                    ready: function () {
+                        $("[data-command*='telerik_ReportViewer_historyBack']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_historyForward']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_refresh']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_stopRendering']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_togglePrintPreview']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_toggleSendEmailDialog']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_toggleDocumentMap']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_toggleParametersArea']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_toggleZoomMode']").parent().hide();
+                        $("[data-command*='telerik_ReportViewer_toggleSearchDialog']").parent().hide();
+                        //$("[data-command*='telerik_ReportViewer_goToFirstPage']").parent().hide();
+                        //$("[data-command*='telerik_ReportViewer_goToPrevPage']").parent().hide();
+                    },
+                    reportSource: {
+
+                        // The report can be set to a report file name (.trdx or .trdp report definition)
+                        // or CLR type name (report class definition).
+
+                        report: '@Model.Url.offerLetter',
+
+                        parameters: {
+
+                            Url: '@Model.Url.Urllink' + "/api/CompanyLettersDetails/GetSalaryLetterReport?empCode=" + parseInt('@Model.EmpCode') + "&DocumentType=" + parseInt('@Model.TypeCode') + "&LetterFormatCode=" + parseInt('@Model.FormatCode') + "&GroupCompanyGI=" + '@Model.GroupCompanyGI' + "&Reason=" + '@Model.Reason',
+                            @*url:' http://localhost:5001/api/CompanyLettersDetails/GetSalaryLetterReport?empCode='+ parseInt('@Model.EmpCode') + "&DocumentType=" + parseInt('@Model.TypeCode') + "&LetterFormatCode=" + '@Model.FormatCode' + "&GroupCompanyGI=" + GroupCompanyGI + "&Reason=" + '@Model.Reason',*@
+
+
+                           
+                        }
+
+
+                    },
+
+                    //parameters: {
+                    //    editors: {
+                    //        singleSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX,
+                    //        multiSelect: telerikReportViewer.ParameterEditorTypes.COMBO_BOX,
+                    //    }
+                    //},
+
+                    // Specifies whether the viewer is in interactive or print preview mode.
+                    // PRINT_PREVIEW - Displays the paginated report as if it is printed on paper. Interactivity is not enabled.
+                    // INTERACTIVE - Displays the report in its original width and height without paging. Additionally interactivity is enabled.
+                    viewMode: telerikReportViewer.ViewModes.PRINT_PREVIEW,
+
+                    // Sets the scale mode of the viewer.
+                    // Three modes exist currently:
+                    // FIT_PAGE - The whole report will fit on the page (will zoom in or out), regardless of its width and height.
+                    // FIT_PAGE_WIDTH - The report will be zoomed in or out so that the width of the screen and the width of the report match.
+                    // SPECIFIC - Uses the scale to zoom in and out the report.
+                    scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+
+                    // Zoom in and out the report using the scale
+                    // 1.0 is equal to 100%, i.e. the original size of the report
+                    scale: 1.0,
+
+                    //Enables or disables the accessibility features of the report viewer and its contents.
+                    enableAccessibility: false,
+
+                    //If set to true shows the Send Mail Message toolbar button
+                    sendEmail: { enabled: true }
+                });
+
+
+
+
+
+        });
+    </script>
+}

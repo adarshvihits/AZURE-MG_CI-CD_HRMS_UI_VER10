@@ -1,0 +1,128 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyCancellation
+    <script src="~/js/settings.js"></script>
+    <script>
+        function onmappedResumeClick(VacancyGI) {
+            debugger;
+            $.ajax({
+                type: 'GET',
+                url: "/DataBank/MRFVsResume/GetMappedResumePopUp?VacancyGI=" + VacancyGI,
+                dataType: 'html',
+
+                success: function (Data) {
+                    if ($($.parseHTML(Data)).filter(".Login_Session").length > 0) {
+                        window.location.reload();
+                    }
+
+                    else {
+                        var m = $('.bd-example-modal-lg');
+                        m.find('.modal-body').html('');
+                        m.find('.modal-body').html(Data);
+                        /* $("#myDiv").css("display", "block");*/
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    swal.fire(xhr.responseText);
+
+                }
+            });
+        }
+        function viewResume(GI) {
+            debugger;
+            var url = "/DataBank/MRFVsResume/ResumeView";
+            /* window.location.href = url + '?ResumeGI=' + GI;*/
+            window.open(url + '?ResumeGI=' + GI, '_blank');
+        }
+    </script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table  vacancy-cancellation-list pt-3">
+        @Html.HiddenFor(m => m.VacancyStatusReport.Count)
+        <table class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">MRF Code</th>
+                    <th scope="col">Job Title</th>
+
+                    <th scope="col">Location</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Initiated By ">Initiated By</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Number of Requirements ">N/Req </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Mapped Resumes ">Map </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Screening / Shortlisted ">SL </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Interview / Evaluation ">I & E </th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="RA Approval ">RAA</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Salary  Split  Up ">Salary</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Credit  Checking ">CC</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Background Verification">BG</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Cancelled  Date ">Can.Date</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Cancelled  User ">Can.User</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title=" ">Reason</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null && Model.VacancyStatusReport != null && Model.VacancyStatusReport.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.VacancyStatusReport.Count; i++)
+                    {
+                <tr>
+                    <td data-label="MRF Code">@Model.VacancyStatusReport[i].JobCode</td>
+                    <td data-label="Job Title">
+                        @Model.VacancyStatusReport[i].JobTitle
+
+                    </td>
+
+                    <td data-label="Location">@Model.VacancyStatusReport[i].LocationName</td>
+                    <td data-label="Initiated By">@Model.VacancyStatusReport[i].RequestedBy</td>
+                    <td data-label="Number of Requirements">@Model.VacancyStatusReport[i].NoOfRequirements</td>
+                    <td data-label="Map">
+                        <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                           type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyStatusReport[i].VacancyManagementGI')">
+                            @Model.VacancyStatusReport[i].MAP
+                        </a>
+                    </td>
+                    <td data-label="SL">@Model.VacancyStatusReport[i].SL</td>
+                    <td data-label="I & E">@Model.VacancyStatusReport[i].IE</td>
+                    <td data-label="RAA">@Model.VacancyStatusReport[i].RAA</td>
+                    <td data-label="Salary">@Model.VacancyStatusReport[i].SALARY</td>
+                    <td data-label="CC">@Model.VacancyStatusReport[i].CC</td>
+                    <td data-label="EC">@Model.VacancyStatusReport[i].EC</td>
+                    <td data-label="Can.Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyStatusReport[i].CancelledDate))</td>
+                    <td data-label="Can.User">@Model.VacancyStatusReport[i].CancelledBy </td>
+                    <td data-label="Reason">@Model.VacancyStatusReport[i].Reason </td>
+
+
+                </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1"
+         role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div id="myDiv" class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Mapped Resumes
+                    </h5>
+                    <button type="button" class="close"
+                            data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true"
+                           class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>

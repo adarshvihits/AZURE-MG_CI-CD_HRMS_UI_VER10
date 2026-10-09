@@ -1,0 +1,157 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.Reports.BonusReport
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/Reports/bonusReport.js"></script>
+
+@*<script>
+    $(document).ready(function () {
+        GetList();
+    });
+</script>*@
+
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Bonus Report </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Bonus Report
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <div class="topbar">
+
+
+        </div>
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+
+                            <div class="tab-items border-none d-flex align-items-center">
+                                <div>
+                                    @*<label>Based On</label>*@
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-success">                                            
+                                            @Html.RadioButtonFor(m => m.AmountType, "1", new { @onchange = "GetList()" })
+                                            <span></span>Bonus Amount
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input type="radio" name="radios15">*@
+                                            @Html.RadioButtonFor(m => m.AmountType, "2", new { @onchange = "GetList()" })
+                                            <span></span>Bonus Applicable Salary
+                                        </label>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-items">
+                                <label>Process Month</label>
+                                <div class="form-group filter-combobox mt-0">
+
+                                    @Html.DropDownListFor(Model => Model.ProcessMonth, (SelectList)ViewBag.PMonth, "--Select--", new { @class = "form-control form-control-sm", onchange = "GetList()" })
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <label>Bonus Group</label>
+                                <div class="form-group filter-combobox mt-0"style="width:210px;">
+
+
+                                    @Html.DropDownListFor(Model => Model.BonusGroup, (SelectList)ViewBag.BGroup, new { @class = "form-control form-control-sm", onchange = "GetList()" })
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="tab-items select-option high">
+
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left"
+                                        data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div id="ListView">
+                        @await Html.PartialAsync("~/Areas/PayRoll/Reports/Views/BonusReport/_List.cshtml",Model.ds)
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+
+                    <!--end: Datatable-->
+
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

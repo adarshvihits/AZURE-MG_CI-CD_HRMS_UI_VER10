@@ -1,0 +1,118 @@
+﻿@model Hrms.Lite.Shared.Master.TimeSheetProject
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+    });
+
+
+</script>
+
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "PMSAppraisal", FormMethod.Post, new { id = "TimeSheetProjectSave" }))
+{
+    <div id="circleedit" class="slider-forms  slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseCircleSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Project</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'name')", maxlength = "120" })
+                            <span id="name"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'shortname')", maxlength = "5" })
+
+
+                        </div>
+                        <span id="shortname"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" onclick="ActiveInactiveValidationProject('PROJECT',@Model.Code)">
+
+                                @Html.CheckBoxFor(model => model.Active,new { @id="project"})
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm GDescription", @placeholder = "Description", maxlength = "250" })
+                                @Html.HiddenFor(model => Model.Description)
+                                @*<span id="des"></span>*@
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                @*<div class="view-details">*@
+
+                                @Html.DisplayFor(Model => Model.Description, new { })
+                                @Html.HiddenFor(model => Model.Description)
+
+
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="AppraisalRoleSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="AppraisalRoleSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

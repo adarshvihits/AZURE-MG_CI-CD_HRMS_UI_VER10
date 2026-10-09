@@ -1,0 +1,124 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "donation" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table eight-tab-four-tble mb-2">
+                <table id="investment">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Donation</th>
+                            <th class="text-right" scope="col">Actual Amt</th>
+                            <th scope="col" class="text-right">Approved Amt</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="View">View</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Action">Action</th>
+
+
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Status">Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @Html.HiddenFor(m => m.DonationList.Count)
+                        @if (Model.DonationList != null)
+                        {
+                            @for (int i = 0; i < Model.DonationList.Count; i++)
+                            {
+
+                                <tr id="row_OI_@i">
+
+                                    <td data-label="slno">
+                                        @(i + 1)
+                                    </td>
+                                    <td data-label="donation">
+                                        @Html.HiddenFor(m => Model.DonationList[i].flag)
+                                        @Html.HiddenFor(m => Model.DonationList[i].TrnCode)
+                                        @Html.HiddenFor(m => Model.DonationList[i].InvestmentCode)
+                                        @Html.DisplayFor(m => Model.DonationList[i].InvestmentName)
+                                    </td>
+                                    <td data-label="Amount">
+
+                                        @Html.TextBoxFor(m => Model.DonationList[i].Amount, new { @class = "form-control", placeholder = "Actual Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @readonly = "true", @style = "text-align:right" })
+                                    </td>
+                                    <td data-label="Amount">
+
+                                        @Html.TextBoxFor(m => Model.DonationList[i].ApprovedAmount, new { @class = "form-control", placeholder = "Approved Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "onDonationAmtChange()" })
+                                    </td>
+                                    <td data-label="AttachDocument">
+                                        <i onclick="GetUploadDocumentPopUp('80G_DON', '@Model.DonationList[i].InvestmentCode')" title="Click Here To View Document" class=" far fa-eye"></i>
+                                        <span>@Model.DonationList[i].DonDocCount </span>
+                                    </td>
+                                    <td data-label="reject">
+                                        @if (Model.DonationList[i].DonDocCount > 0 && Model.DonationList[i].Amount > 0)
+                                        {
+                                            <a data-bs-toggle="modal" data-bs-original-title="Reject" id="DonationbtnId_@i" class="btn_reject" onclick="RejectionPopUp(@i,'80GSection')">  </a>
+
+                                            <a data-bs-toggle="tooltip" data-bs-original-title="Approve" id="ApprovebtnId_@i" class="btn_approve" onclick="DonationApproval(@i,'Approved','80GSection')"></a>
+                                        }
+                                    </td>
+
+                                    <td data-label="Status" style="font-weight:600; color:@Model.DonationList[i].StatusColor"> @Html.DisplayFor(m => Model.DonationList[i].ApprovalStatus)</td>
+
+
+                                </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No table data</td>
+                            </tr>
+                        }
+                    </tbody>
+
+
+
+                    <tfoot style=" width:100%;">
+                        <tr class="table-light">
+                            <td data-label="slno"><strong></strong></td>
+                            <td data-label="donation">
+                                <strong></strong>
+                            </td>
+                            <td data-label="Actual" align="right">
+                                <strong> <span id="DonActAmt"></span></strong>
+                            </td>
+                            <td data-label="Approved" align="right">
+                                <strong> <span id="DonAppAmt"></span></strong>
+                            </td>
+                            <td data-label="View">
+                                <strong></strong>
+                            </td>
+                            <td data-label="Action">
+                                <strong></strong>
+                            </td>
+                            <td data-label="Status">
+                                <strong></strong>
+                            </td>
+                        </tr>
+
+                    </tfoot>
+
+
+
+
+
+
+
+
+
+
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    
+}

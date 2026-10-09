@@ -1,0 +1,190 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var b = document.getElementById('Confidential_AbsoluteUri');
+        if (b.value == null || b.value == '') {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Confidential_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 18);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+    });
+
+
+    window.pressed = function () {
+        debugger
+        var a = document.getElementById('Confidential_FileData');
+        if (a.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 18);
+            fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    };
+
+
+</script>
+<style>
+
+    .PreviewImage {
+        color: white !important;
+    }
+</style>
+<div class="step-outer step_row">
+
+    <a href="#" onclick="onProgressTabClick('growth-history')" class="step-item active">
+        Growth History
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('transition-type')" class="step-item active ">
+        Effective From
+        <span class="step-circle "></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('job-details')" class="step-item active">
+        Job Details
+        <span class="step-circle "></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('compensation-benefits')" class="step-item active">
+        Compensation & Benifits
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('add-authority')" class="step-item active">
+        Add Authority
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('subordinates')" class="step-item active">
+        Subordinates
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item active">
+        Document & Summary
+        <span class="step-circle focused"></span>
+    </div>
+
+</div>
+
+<div class="job-transition-outer">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="personal-details-left mt-0">
+
+                            <div class="row">
+            <div class="col-md-12">
+
+                <div class="ihits-table table-border hover-color odd-even mobile-responsive-table job_transition_summary vertical-scroll-150 comp-width">
+                    @Html.HiddenFor(m => m.Summary.Count)
+                    <table class="SummaryJobTransitionTables">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Type</th>
+                                <th scope="col">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Summary != null && Model.Summary.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.Summary.Count; i++)
+                                {
+                            <tr>
+                                <td data-label="Type">
+                                    @Html.HiddenFor(m => m.Summary[i].TypeCode)
+                                    @Html.HiddenFor(m => m.Summary[i].ReasonCode)
+                                    @Model.Summary[i].Type
+                                </td>
+                                <td data-label="Type">
+                                    @*<label class="checkbox checkbox-outline checkbox-success      ">
+
+        </label>*@
+
+                                    <div class="checkbox-inline d-flex justify-content-center"><label class="checkbox checkbox-outline checkbox-success mr-0">
+    @Html.CheckBoxFor(m => m.Summary[i].Active)
+
+    <span></span>
+</label><label class="checkbox checkbox-outline checkbox-success"></label></div>
+                                    
+                                </td>
+                            </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+             <end></end>
+
+        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- <end table></end> -->
+<div class="row card-footer-bottom-fixed" style="padding-bottom:35px;">
+    <div class="col-md-6 align-left ">
+
+        @Html.TextBoxFor(m => m.JobTransition_JobDetail.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = "250", @onchange = "validate(this, 'JTRemarks')" })
+        <span id="JTRemarks"> </span>
+    </div>
+    <div class="col-md-2 align-center ">
+        <label>Confidential Document :</label>
+
+        <div class="file-upload-form-group">
+            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are allowed , File size less than 1 MB.">
+                <div class="small-btn-group">
+                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="Preview()"><i class="icon-xl far fa-eye"></i></button>
+                </div>
+                @Html.TextBoxFor(m => m.Confidential.FileData, new
+                {
+                    @type = "file",
+                    @name = "profile_avatar",
+                    @class = "form-control PreviewImage nofilechosen ",
+               onchange = "pressed()",
+                    @accept = ".png, .jpg, .jpeg, .pdf",
+                    @title = ""
+                })
+                @Html.HiddenFor(m => m.Confidential.AbsoluteUri)
+                @Html.HiddenFor(m => m.Confidential.FileName)
+                @Html.HiddenFor(m => m.Confidential.ActualFileName)
+                <label id="fileLabel" class="nofilelabel notchlabel"></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 align-right">
+        <button type="button" onclick="onJobTranstionSubmit()" class="btn btn-default float-right mobile-full-width">
+            Save
+        </button>
+    </div>
+
+</div>

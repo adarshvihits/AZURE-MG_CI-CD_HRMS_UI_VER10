@@ -1,0 +1,130 @@
+﻿
+
+
+
+@model Hrms.Lite.Shared.Master.GrievanceCategory
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+@using (Html.BeginForm("Save", "GrievanceCategory", FormMethod.Post, new { id = "Cat-save" }))
+{
+
+    <div id="addcategory" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Grievance Category</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @*<input type="text"
+                                class="form-control form-control-sm"
+                                placeholder="Name">*@
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm cName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'CatName')", maxlength = "120" })
+                            <span id="CatName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm cShtName", @placeholder = "Short Name", @onblur = "validate(this,'CatShortName')", maxlength = "5" })
+                            <span id="CatShortName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidationGrievanceCat('GrievanceCategory',@Model.Code)">
+                                @Html.CheckBoxFor(model => model.Active,new { @id="grievance"})
+                                @*<input type="checkbox" checked>*@
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        @*<textarea class="form-control form-control-sm"
+                            placeholder="Description"></textarea>*@
+                        @if (Model.Mode == "Create")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm cDescription", @placeholder = "Description", maxlength = "250" })
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+
+                                @Html.DisplayFor(Model => Model.Description)
+                                @Html.HiddenFor(model => Model.Description)
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "Create")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="CategorySave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="CategorySave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

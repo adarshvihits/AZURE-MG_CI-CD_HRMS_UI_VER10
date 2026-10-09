@@ -1,0 +1,52 @@
+﻿
+@model Hrms.Lite.Shared.Master.YearlyOffdaySettings
+
+<div class="ihits-table table-border w-100 hover-color odd-even  vertical-scroll-250 table-head-small hover-color odd-even  offdaysetting-master-slider">
+    <table id="DateTable">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Date</th>
+
+                <th scope="col">Day</th>
+
+
+            </tr>
+        </thead>
+        @Html.HiddenFor(m => m.Dates.Count)
+        <tbody id="DateTable_tbody">
+
+            @if (Model != null && Model.Dates != null && Model.Dates.Count > 0)
+            {
+                int coun = -170;
+
+                foreach (var itemX in Model.Dates.GroupBy(m => new { m.Day }))
+                {
+                    string stcount = coun + "px";
+                    <p class="day-count" style=" bottom: @stcount;left:-235px;">@itemX.Key.Day @itemX.Count()</p>
+                    coun = coun - 25;
+                }
+
+                for (int i = 0; i < Model.Dates.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model.Dates[i].Date)
+                    @Html.HiddenFor(m => Model.Dates[i].Day)
+
+                    <tr>
+                        <td data-label="Particular">
+                            @Model.Dates[i].Date
+                        </td>
+
+                        <td data-label="Particular">
+                            @Model.Dates[i].Day
+                        </td>
+
+                    </tr>
+
+                }
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

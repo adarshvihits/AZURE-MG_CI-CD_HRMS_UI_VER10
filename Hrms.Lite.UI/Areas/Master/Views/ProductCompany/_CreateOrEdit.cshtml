@@ -1,0 +1,193 @@
+﻿@model Hrms.Lite.Shared.Master.ProductCompany
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<style>
+
+    .file_filedata {
+        color: white !important;
+    }
+
+    .step-progress-outer .btn.btn-icon i::before {
+        color: #fff;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var b = document.getElementById('ProductRequest_File_AbsoluteUri');
+        if (b.value == null) {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('ProductRequest_File_FileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 6);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+    });
+
+
+    window.pressed = function () {
+        debugger
+        var a = document.getElementById('ProductRequest_File_FileData');
+        if (a.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 6);
+            fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    };
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Product_Save" , enctype = "multipart/form-data" }))
+{
+<script src="~/js/tooltip.js"></script>
+    <div id="addcompany" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Company Product
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        @Html.HiddenFor(model => Model.Mode)
+                    
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm PDName", @placeholder = "Name", @onblur = "OnlyOnlyOnlyOnlycapitalizeFirstLetter(this,'ProdName')", maxlength = "120" })
+                        <span id="ProdName"></span>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Short Name</label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm PDShtName", @placeholder = "Short Name", @onblur = "validate(this,'ProdShortName')", maxlength = "5" })
+                        <span id="ProdShortName"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attach
+                            File
+                        </label>
+
+                        <div class="file-upload-form mb-1">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" 
+                                        onclick="previewDocument('@Model.ProductRequest.File.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                            <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                              
+
+
+                                @Html.HiddenFor(m => m.ProductRequest.File.AbsoluteUri)
+                                @Html.TextBoxFor(m => m.ProductRequest.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange = "CheckImageExtensionSize(this)", @title = "" })
+
+
+
+
+
+
+                                @*@Html.HiddenFor(model => Model.ProductRequest.File.AbsoluteUri)
+        @Html.HiddenFor(model => Model.ProductRequest.File.FileName)
+        @Html.TextBoxFor(m => Model.ProductRequest.File.FileData, new { @type = "file", @name = "profile_avatar", @class = "form-control PreviewImage nofilechosen file_filedata", onchange = "pressed();CheckImageExtensionSize(this)", title = " " })*@
+
+                                @*<label id="fileLabel" class="nofilelabel notchlabel"></label>*@
+                            </div>
+
+
+
+                        </div>
+                        </div>
+                    </div>
+                <div class="col-md-6 d-flex">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onchange="ActiveInactiveValidationProduct('ProductCompany',@Model.Code)">
+                            @Html.CheckBoxFor(model => model.Active,new { @id="product"})
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <label>Description</label>
+                        @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm DDescription", @placeholder = "Description", maxlength = "250" })
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+
+                            @Html.DisplayFor(Model => Model.Description)
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="ProductCompanySave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="ProductCompanySave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

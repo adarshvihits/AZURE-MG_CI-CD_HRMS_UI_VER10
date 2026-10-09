@@ -1,0 +1,80 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.EmployeeWiseOffdaySettings
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "EmployeeWiseEdit" }))
+{
+    @Html.HiddenFor(m=>m.PreviousCombination.Code)
+    @Html.HiddenFor(m=>m.EmployeeGI)
+    @Html.HiddenFor(m=>m.Year.Code)
+    <div id="AppraisalView" class="slider-forms slider-forms-open editSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('editSlider')"></i>
+            </div>
+            <h4>Yearly Employee Wise Offday Settings</h4>
+            <div class="profile-header position-relative pb-12 mb-5"
+                 style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Previous
+                            Combination
+                        </label>
+                        <div class="view-details">
+                            @Model.PreviousCombination.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>New Combination </label>
+                        @Html.DropDownListFor(m => m.NewCombination.Code, (SelectList)ViewBag.NewCombination, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'newcombination')" })
+                        <span id="newcombination"></span>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="row my-3">
+                
+                <div class="col-md-6">
+            <label>Effective From</label>
+            <div class="input-group date">
+                  @Html.TextBoxFor(m => m.EffectiveFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_8", @readonly = "true", @placeholder = "Return Date", @onchange = "validate(this,'effectivefrom')" })
+
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            <span id="effectivefrom"></span>
+        </div>
+
+
+
+            </div>
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <a type="button" onclick="employeeEditSave()"
+                       class="btn btn-default  mobile-full-width">
+                        Modify
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+}

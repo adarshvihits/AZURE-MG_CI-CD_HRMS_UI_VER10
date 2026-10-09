@@ -1,0 +1,151 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.EmployeeCertification
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/Reports/employeeCertification.js"></script>
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title"> Employee Certification Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Employee Certification Report
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ml-5 pr-0 border-none ">
+                                <div class="form-group filter-combobox mr-3" style="width:300px; ">
+
+
+
+
+                                    @Html.DropDownListFor(m => m.CertificateTypecode, (SelectList)ViewBag.CertificatePolicy, "ALL", new
+                               {
+                                   @class = "selectpicker sliderSearchInput form-control form-control-sm",
+
+                                   @onchange = "fillData();",
+                                   data_show_subtext = "true",
+                                   data_live_search = "true"
+                               })
+                                </div>
+
+                            </div>
+
+                            <div class="tab-items ml-5 pr-0 border-none ">
+                                <div>
+                                    @*<label>Based On</label>*@
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline mt-4  radio-success">
+
+                                            @Html.RadioButtonFor(m => m.TabIndex, "0", new { @onchange = "fillData()" })
+                                            <span></span><div>Active</div>
+                                        </label>
+                                        <label class="radio radio-outline mt-4  radio-success">
+                                            @*<input type="radio" name="radios15">*@
+                                            @Html.RadioButtonFor(m => m.TabIndex, "1", new { @onchange = "fillData()" })
+                                            <span></span><div>Expired</div>
+                                        </label>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="Export to Excel"
+                                   class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="EmployeeVsNpsList">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/EmployeeCertification/_EmployeeCertificationList.cshtml", Model)
+                    </div>
+
+
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                    <div id="AddNewOrEditSlider">
+
+
+                    </div>
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 align-right">
+                           
+                                <button id="addattendancerequest" type="button" onclick="ExportToExcelSummary()"
+                                        class="btn btn-default float-right mobile-full-width ">
+                                    Summary
+                                </button>
+                           
+                            
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+

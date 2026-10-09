@@ -1,0 +1,74 @@
+﻿@model Hrms.Lite.Shared.Master.EmployeeVsMobileRestriction
+
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "restrictedEmpList" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table vertical-scroll-400">
+
+        <table id="AllListTable">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Location </th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Date Of Join">DOJ</th>
+                    <th scope="col">
+                        <div class="checkbox-inline selectAllChkBx pl-1">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                <input data-val="true" value="true" id="SelectAll" name="SelectAll" type="checkbox" onchange="onSelectAllClick()">
+                                <span cursorshover="true"></span>
+                            </label>
+                            <label class="checkbox checkbox-outline checkbox-success"></label>
+                        </div>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.RestrictedEmpList != null && Model.RestrictedEmpList.Count > 0)
+                {
+                    for (int i = 0; i < Model.RestrictedEmpList.Count; i++)
+                    {
+                <tr>
+                    <td>
+                        @Model.RestrictedEmpList[i].EmployeeID
+                        @Html.HiddenFor(m => m.RestrictedEmpList[i].EmployeeCode)
+                    </td>
+                    <td>@Model.RestrictedEmpList[i].EmployeeName </td>
+                    <td>@Model.RestrictedEmpList[i].Location</td>
+                    <td>@Model.RestrictedEmpList[i].Department</td>
+                    <td>@Model.RestrictedEmpList[i].Designation</td>
+                    <td> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.RestrictedEmpList[i].DOJ))</td>
+
+                    <td data-label="">
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                @Html.CheckBoxFor(m => m.RestrictedEmpList[i].Applicable)
+                                <span></span>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row card-footer-bottom-fixed align-right">
+
+
+            <div class="col-md-12">
+                <button class="btn btn-default float-right mobile-full-width" id="saveButton" type="button" onclick="onSaveClick()">
+                    Save
+                </button>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Table Setion End -->
+}

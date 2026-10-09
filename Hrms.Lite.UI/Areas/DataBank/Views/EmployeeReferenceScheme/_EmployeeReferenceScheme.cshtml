@@ -1,0 +1,140 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeReferenceScheme
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table EmployeeReferenceScheme-list pt-1">
+    @Html.HiddenFor(m => m.EmployeeReferenceSchemeList.Count)
+    <table id="EmployeeReferenceSchemetable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ROLES</th>
+                <th scope="col">BONUS AMOUNT</th>
+                <th scope="col">First Payout % (7th Months)</th>
+                <th scope="col">Second Payout % (14th Months)</th>
+                <th scope="col">Additional Bonus %</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.EmployeeReferenceSchemeList != null && Model.EmployeeReferenceSchemeList.Count > 0)
+                {
+                    for (int i = 0; i < Model.EmployeeReferenceSchemeList.Count; i++)
+
+                    {
+
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.EmployeeReferenceSchemeList[i].EmployeeReferenceCode)
+
+                            <td data-label="BonusAmount">@Model.EmployeeReferenceSchemeList[i].Roles</td>
+
+                            <td data-label="BonusAmount">
+
+
+                                <div class="form-group">
+
+                                    <span id="amtLabel1_@i">@Model.EmployeeReferenceSchemeList[i].BonusAmount</span>
+                                    <span id="amtTxtbox1_@i" class="hide">
+                                        @Html.TextBoxFor(Model => Model.EmployeeReferenceSchemeList[i].BonusAmount, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Amount", @onblur = "validate(this,'MediClaim')", maxlength = "10", oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');" })
+
+                                        <span id="BonusAmount"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+                            <td data-label="FirstPayout">
+
+
+                                <div class="form-group">
+
+                                    <span id="amtLabel2_@i">@Model.EmployeeReferenceSchemeList[i].FirstPayout</span>
+                                    <span id="amtTxtbox2_@i" class="hide">
+                                        @Html.TextBoxFor(Model => Model.EmployeeReferenceSchemeList[i].FirstPayout, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Amount", @onblur = "validate(this,'PersonalAccident')", maxlength = "10", oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');" })
+
+                                        <span id="FirstPayout"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+                            <td data-label="SecondPayout">
+
+
+                                <div class="form-group">
+
+                                    <span id="amtLabel3_@i">@Model.EmployeeReferenceSchemeList[i].SecondPayout</span>
+                                    <span id="amtTxtbox3_@i" class="hide">
+                                        @Html.TextBoxFor(Model => Model.EmployeeReferenceSchemeList[i].SecondPayout, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Amount", @onblur = "validate(this,'EmployeeReferenceScheme')", maxlength = "10", oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');" })
+
+                                        <span id="SecondPayout"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+                            <td data-label="AdditionalBonus">
+
+
+                                <div class="form-group">
+
+                                    <span id="amtLabel4_@i">@Model.EmployeeReferenceSchemeList[i].AdditionalBonus</span>
+                                    <span id="amtTxtbox4_@i" class="hide">
+                                        @Html.TextBoxFor(Model => Model.EmployeeReferenceSchemeList[i].AdditionalBonus, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Amount", @onblur = "validate(this,'EmployeeReferenceScheme')", maxlength = "10", oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');" })
+
+                                        <span id="AdditionalBonus"></span>
+                                    </span>
+
+                                </div>
+
+
+
+                            </td>
+                            <td data-label="Edit">
+                                <span id="editbt2_@i">
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="ceedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onEditClick(@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                </span>
+
+
+                                <span id="updateCancel2_@i" class="hide">
+                                    <a data-bs-toggle="tooltip" title="Update"
+                                       id="cupdate"
+                                       class="btn btn-icon btn-edit icon-only" onclick="onUpdateClick(@i,@Model.EmployeeReferenceSchemeList[i].EmployeeReferenceCode)">
+                                        <i class="icon-xl fas fa-sync-alt"></i>
+                                    </a>
+                                    <a data-bs-toggle="tooltip" title="Cancel"
+                                       id="ccancel"
+                                       class="btn btn-icon btn-cancel icon-only" onclick="onCancelClick(@i)">
+                                        <i class="icon-xl fas fa-times"></i>
+                                    </a>
+                                </span>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

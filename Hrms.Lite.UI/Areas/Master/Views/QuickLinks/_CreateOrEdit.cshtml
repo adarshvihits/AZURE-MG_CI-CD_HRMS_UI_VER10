@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.Master.QuickLinks
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "Quicklinks", FormMethod.Post, new { id = "Quicklinkssave" }))
+{
+    <div id="Quicklinksedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Quicklinks</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Url Descriptions
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.UrlDescriptions, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'QuicklinksName')", maxlength = "120" })
+                            <span id="QuicklinksName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Url
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.Url, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'DeptShortName')", maxlength = "500" })
+
+
+                        </div>
+                        <span id="DeptShortName"></span>
+                    </div>
+                </div>
+
+                @*<div class="row">
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidation('DPT','@Model.Code')">
+                                @Html.HiddenFor(m=>Model.Code)
+                                @Html.CheckBoxFor(model => model.Active ,new {@id="Activeinactivedpt" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>*@
+               
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="QuicklinksSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="QuicklinksSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

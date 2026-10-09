@@ -1,0 +1,65 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Generic.LeaveApplication
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllCount').html("@Model.TotalCount");
+        $('.RejectedCount').html("@Model.RejectedCount");
+        $('.ApprovedCount').html("@Model.ApproveCount");
+        $('.PendingCount').html("@Model.PendingCount");
+
+
+        
+
+    });
+</script>
+
+<div class="ihits-table table-border odd-even mobile-responsive-table Applicant-History-leave">
+    @Html.HiddenFor(m => m.LeaveApplicationList.Count)
+    <table id="LeaveHistoryTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">No.of Days</th>
+                <th scope="col">Type</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Date of Application</th>
+                <th scope="col">Status</th>
+                <th scope="col">Tracker</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LeaveApplicationList != null && Model.LeaveApplicationList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.LeaveApplicationList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Code">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveApplicationList[i].From))</td>
+                        <td data-label="To">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveApplicationList[i].To))</td>
+                        <td data-label="No.of Days">@Model.LeaveApplicationList[i].NoOfDays</td>
+                        <td data-label="Type">@Model.LeaveApplicationList[i].LeaveType.Name</td>
+                        <td data-label="Reason">@Model.LeaveApplicationList[i].LeaveReason.Name</td>
+                        <td data-label="Date of Application">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LeaveApplicationList[i].DateOfApplication))</td>
+                        <td data-label="Status">@Model.LeaveApplicationList[i].Status</td>
+                        <td data-label="Tracker">
+
+                            <a id="trainingEmployeeDetails " onclick="ApplnTracker('@Model.LeaveApplicationList[i].LeaveApplicationGI')">
+                                <i class="icon-xl la la-arrow-circle-right"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+    <div id="applntracker"></div>
+
+</div>
+

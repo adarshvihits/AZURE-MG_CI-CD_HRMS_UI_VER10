@@ -1,0 +1,75 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "EmployeeVsNominee";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "empVsNomineeSubmit" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+
+    <div id="EmpVsNomineeSliderOpen" class="slider-forms slider-forms-open EmpVsNomineeSliderclose">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('EmpVsNomineeSliderclose')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Nominee Details</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Nomination Category</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.HiddenFor(m => m.GetEmployeeVsNominee.EmpVsNomLogGI)
+                        @Html.DropDownListFor(m => m.GetEmployeeVsNominee.NominationCategory.Code, (SelectList)ViewBag.NomCat, "--Select--", new { @class = "form-control form-control-sm" })
+                        <span id="NominationCat"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Relation</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m =>m.GetEmployeeVsNominee.Relation.Code, (SelectList)ViewBag.Fam, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'skill')" })
+                        <span id="relationDD"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m =>m.GetEmployeeVsNominee.Name,  new { @class = "form-control form-control-sm", placeholder="Name", maxlength = 100 ,@onkeypress = "return onlyLetters_Space_DotKeys(event)" })
+                        <span id="NomName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Percentage</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.GetEmployeeVsNominee.Percentage, new { @class = "form-control form-control-sm", placeholder = "Percentage", maxlength = 5,
+                       @onkeypress = "return onlyAmount(event)",
+                       oninput = "decimalValidation(event)"
+                   })
+                        <span id="Percent"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comments</label><span class="Mandatory">*</span>
+                        @Html.TextAreaFor(m => m.GetEmployeeVsNominee.Comments, new { @class = "form-control form-control-sm", placeholder = "Comments",maxlength=500 })
+                        <span id="CommentsText"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button type="button" class="btn btn-default" onclick="validateAllEmpVsNomineeSave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

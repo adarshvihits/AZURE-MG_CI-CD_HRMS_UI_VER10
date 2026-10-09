@@ -1,0 +1,45 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeDueClearance
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table hr_clearance_dues_list    pt-1">
+    @Html.HiddenFor(m => m.List.Count)
+    <table id="DuesClearanceTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Date Of Resignation">DOR</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Last Working Date">LWD</th>
+                <th scope="col">Pending Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.List != null && Model.List.Count > 0)
+                {
+                    for (int i = 0; i < Model.List.Count; i++)
+
+                    {
+                        <tr>                          
+                            <td data-label="Employee ID">@Model.List[i].EmployeeID</td>
+                            <td data-label="Employee Name"><a data-bs-toggle="modal" data-target=".duesclearance" onclick="OnEmployeeClick('@Model.List[i].ResignationGI','@Model.List[i].EmployeeID','@Model.List[i].EmployeeName')">@Model.List[i].EmployeeName</a></td>
+                            <td data-label="Designation">@Model.List[i].Designation.Name</td>
+                            <td data-label="Department">@Model.List[i].Department.Name</td>
+                            <td data-label="Location">@Model.List[i].Location.Name</td>
+                            <td data-label="DOR">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.List[i].ResignationDate))</td>
+                            <td data-label="LWD">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.List[i].RequestedLastWorkingDate))</td>
+                            <td data-label="PendingCount">@Model.List[i].PendingCount</td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

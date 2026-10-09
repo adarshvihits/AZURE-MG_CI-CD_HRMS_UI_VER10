@@ -1,0 +1,62 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DisciplinaryIncidents
+    <script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+        $('.Tab2Count').html("@Model.Tab2Count");
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.MoreTabCount').html("@Model.MoreTabCount");
+        $('.PendingTabCount').html("@Model.PendingTabCount");
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table disciplinary-incidents ">
+    @Html.HiddenFor(m => m.DisciplinaryIncidentsList.Count)
+    <table id="DsplnryIncTbl" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Incident</th>
+                <th scope="col">Category</th>
+                <th scope="col">Occured Date</th>
+                <th scope="col">Action Taken</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.DisciplinaryIncidentsList != null && Model.DisciplinaryIncidentsList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.DisciplinaryIncidentsList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="ID">@Model.DisciplinaryIncidentsList[i].EmpId</td>
+                        <td data-label="Name">
+                            <div class="name-with-img">
+                                @Html.HiddenFor(m => m.DisciplinaryIncidentsList[i].DisciplinaryIncidentGI)
+                                @Html.HiddenFor(m => m.DisciplinaryIncidentsList[i].EmployeeGI)
+                                @Html.HiddenFor(m => m.DisciplinaryIncidentsList[i].Narration)
+                                <a id="EditDisciplinaryIncident"  onclick="onEmployeeClick('@Model.DisciplinaryIncidentsList[i].DisciplinaryIncidentGI','@Model.DisciplinaryIncidentsList[i].EmployeeGI','All')">@Model.DisciplinaryIncidentsList[i].EmployeeName</a>
+
+
+                            </div>
+                        </td>
+                        <td data-label="Designation">@Model.DisciplinaryIncidentsList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.DisciplinaryIncidentsList[i].Department.Name</td>
+                        <td data-label="Location">@Model.DisciplinaryIncidentsList[i].Location.Name</td>
+                        <td data-label="Incident">@Model.DisciplinaryIncidentsList[i].Incident</td>
+                        <td data-label="Incident Type">@Model.DisciplinaryIncidentsList[i].IncidentType</td>
+                        <td data-label="Incident Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DisciplinaryIncidentsList[i].Incidentdate))</td>
+                        <td data-label="Action Taken">@Model.DisciplinaryIncidentsList[i].ActionTaken</td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

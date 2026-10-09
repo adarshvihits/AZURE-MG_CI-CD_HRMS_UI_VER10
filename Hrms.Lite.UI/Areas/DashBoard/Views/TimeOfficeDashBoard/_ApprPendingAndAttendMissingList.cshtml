@@ -1,0 +1,56 @@
+﻿@model Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoard
+    
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table vertical-scroll-200 Approval-pendingpopup">
+    <table class="">
+        <thead>
+            <tr class="table-dark">
+                @if (Model.Popup_Type == "APPROVAL PENDING")
+                {
+                    <th scope="col">Requests</th>
+                }
+                else
+                {
+                    <th scope="col">Attendance Settings</th>
+                }
+                <th scope="col">Count</th>           
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.TimeOfficeDashBoardList != null && Model.TimeOfficeDashBoardList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.TimeOfficeDashBoardList.Count; i++)
+                {
+            <tr>
+                @if (Model.Popup_Type == "APPROVAL PENDING")
+                {
+                    if (Model.TimeOfficeDashBoardList[i].Type == "Permission Hours Request" || Model.TimeOfficeDashBoardList[i].Type == "Less Hour Regularization")
+                    {
+                        <td data-label="Requests">
+                            <a onclick="onRowWiseClick('APPROVAL PENDING','@Model.TimeOfficeDashBoardList[i].Type','timeDash_lessEmpPopup')" data-bs-toggle="modal" data-target=".timeDash_lessEmp">@Model.TimeOfficeDashBoardList[i].Type</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td data-label="Requests">
+                            <a onclick="onRowWiseClick('APPROVAL PENDING','@Model.TimeOfficeDashBoardList[i].Type','timeDashApprPendingEmpDetailsPopup')" data-bs-toggle="modal" data-target=".timeDashApprPendingEmpDetails">@Model.TimeOfficeDashBoardList[i].Type</a>
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td data-label="Attendance Settings">
+                        <a onclick="onRowWiseClick('MISSING','@Model.TimeOfficeDashBoardList[i].Type','timeDash_MissingEmployeeDTPopup')" data-bs-toggle="modal" data-target=".timeDash_MissingEmployeeDT">@Model.TimeOfficeDashBoardList[i].Type</a>
+                    </td>
+                }
+                <td data-label="Count">
+                    @Model.TimeOfficeDashBoardList[i].count
+                </td>
+            </tr>
+                }
+            }          
+         
+
+        </tbody>
+    </table>
+</div>

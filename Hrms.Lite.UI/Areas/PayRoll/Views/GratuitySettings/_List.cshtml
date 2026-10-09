@@ -1,0 +1,59 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.GratuitySettings
+@*<script src="~/js/settings.js"></script>*@
+@Html.HiddenFor(m=>m.GratuitySettingsList.Count)
+<script>
+    $(document).ready(function () {
+        debugger;
+        var count = $('#GratuitySettingsList_Count').val();
+        for (let i = 0; i < count; i++) {
+            if ($('#GratuitySettingsList_' + i + '__Applicable').is(':checked') == false)
+            $('#GratuitySettingsList_' + i + '__Percentage').attr("disabled", true);
+        }
+        alert(ab);
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table gratuity-settings-list vertical-scroll-500">
+    <table id="GratuityTable">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Applicable Allowance</th>
+                <th scope="col">Y/N</th>
+                <th scope="col">Applicable %</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.GratuitySettingsList != null && Model.GratuitySettingsList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.GratuitySettingsList.Count; i++)
+                {
+                    <tr>
+
+                        <td data-label="Applicable Allowance">
+                            @Model.GratuitySettingsList[i].Name
+                            @Html.HiddenFor(m => m.GratuitySettingsList[i].Code)
+
+                        </td>
+                        <td data-label="Y/N">
+                            <div class="checkbox-inline pl-3 justify-content-center">
+                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                    @Html.CheckBoxFor(m => m.GratuitySettingsList[i].Applicable, new { @onclick = "checkBoxcChange(" + i + ")" })
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td data-label="Applicable %">
+                            @Html.TextBoxFor(Model => Model.GratuitySettingsList[i].Percentage, new { @class = "form-control form-control-sm", maxlength = "250", @placeholder = "Applicable %" })
+                            <span id="applicableperc"></span>
+                        </td>
+
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>

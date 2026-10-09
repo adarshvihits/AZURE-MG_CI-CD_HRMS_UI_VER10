@@ -1,0 +1,187 @@
+@model Hrms.Lite.Shared.Master.HRPlanningMaster
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/Master/hrPlanningMaster.js?v=5"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    Manpower Plan Grid
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    
+                    <li class="breadcrumb-item text-muted">
+                        Manpower Plan Grid
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+            <div class="row height-100per">
+
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body ">
+
+                       
+
+                            <div class="row tab-style-button">
+                                <div class="tab-button-wrap">
+                                    <div class="tab-items">
+
+                                        <div class="form-group filter-combobox m-0" style="width: 150px;">
+                                            <label>Planning Period</label>
+                                            @Html.DropDownListFor(m => m.PlanningPeriod.Code, (SelectList)ViewBag.PlanningPeriod, new { @class = "form-control form-control-sm", @onchange = "OnPlanningPeriodChange(this)" })
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-items">
+
+                                        <div class="form-group filter-combobox m-0" style="width: 150px;">
+                                            <label>Branch</label>
+                                            @Html.DropDownListFor(m => m.Branch.Code, (SelectList)ViewBag.Branch, "--Select--", new { @class = "form-control form-control-sm", @onchange = "GetList()" })
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-items">
+
+                                        <div class="form-group filter-combobox m-0">
+                                            <label>&nbsp;</label>
+                                            <label class="radio radio-outline radio-outline-2x radio-primary mt-1">
+                                                <input type="radio" id="AllBranch" name="AllBranch" onclick="OnAllBranchClick(this)">
+                                                <span></span> All Branch
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-items select-option">
+
+                                        <div class="sraech-slider">
+                                            <div class="search-slider-inner">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                                   placeholder="Department, Section, Grade">
+                                        </div>
+                                        <a data-bs-toggle="tooltip" title="Export to Excel"
+                                           class="btn btn-excel" onclick="onExportToExcelClick()">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items select-option ml-auto" style="margin-top: 0px;
+    margin-bottom: 10px;">
+                                    <a class="btn btn-outline-secondary mobile-full-width mr-2" onclick="onCarryForwardClick()">
+                                        <i class="fas fa-share icon-nm"></i> Carry Forward
+                                    </a>
+                                    @if (CurrentUserRoleActions.Create == true)
+                                    {
+                                        <a id="hrPlanningGradeMasterAdd"
+                                           class="btn btn-default mobile-full-width" onclick="onAddNewClick()">
+                                            + New Plan
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="hrPlanningGradeMasterAdd"
+                                           class="btn btn-default mobile-full-width" onclick="swal.fire(MasterPersmissionMsg);">
+                                            + New Plan
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+
+
+
+                            <div id="activeList">
+                                @await Html.PartialAsync("_ActiveList", Model)
+                            </div>
+                            <div id="hrPlanningEditSlider">
+
+                            </div>
+                            <!-- <end table></end> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade bd-example-modal-lg" id="CarryForwardPlanningPopup" tabindex="-1" aria-labelledby="carryForwardPlanningLabel" aria-hidden="true" style="position:fixed;">
+                <div class="modal-dialog modal-dialog-centered" style="max-width:520px;">
+                    <div class="modal-content popup">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="carryForwardPlanningLabel">Carry Forward Planning</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <i aria-hidden="true" class="ki ki-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body pt-0">
+
+                        </div>
+
+                        <div class="modal-footer border-0 p-0">
+                            <div class="row">
+                                <div class="col-md-12 align-right">
+                                    <a class="btn btn-outline-secondary mr-2" data-bs-dismiss="modal">Cancel</a>
+                                    <a class="btn btn-default" onclick="confirmCarryForward()">Carry Forward</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->

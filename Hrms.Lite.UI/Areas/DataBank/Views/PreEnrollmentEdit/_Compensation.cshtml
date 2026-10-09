@@ -1,0 +1,512 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+
+<div class="step-outer step_row">
+
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+        Personal Info
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Job-Details')">
+        Job Details
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active">
+        Compensation
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item">
+        Address
+        <span class="step-circle"></span>
+    </a>
+
+</div>
+
+<div class="step-progress-outer">
+
+    <div class=" col-md-12">
+        <h3>
+            Compensation & Benefits
+        </h3>
+        <div class=" my-3" >
+            <div class="row justify-content-md-left pb-3">
+                <div class="col-md-3">
+                    <div class="">
+                        <label>Salary Band</label><span class="Mandatory">*</span>
+                        <div class="form-group ">
+                            @Html.DropDownListFor(m => m.Compensation.SalaryStructure.Code, (SelectList)ViewBag.SlryStruct, "--Select Salary Band--", new { @class = "form-control form-control-sm", @onchange = "onSalaryStructureChange()" })
+                            <span id="salaryStruct"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pt-1">
+                    <div class="">
+                        <label>Approved Gross</label>
+                        <span class="Mandatory">*</span>
+
+
+                        @Html.TextBoxFor(m => m.Compensation.ApprovedGross, new
+                   {
+                       @class = "form-control form-control-sm",
+                       @maxlength = 8,
+                       @placeholder = "Approved Gross",
+                       @onblur = "validate(this,'approvedGross');onSalaryStructureChange()",
+                       @onkeypress = "return onlyAmount(event)",
+                       //@oninput = "process(this)",
+
+                   })
+                        <span id="ApprovedGross"></span>
+
+                    </div>
+                </div>
+                <div class="col-md-3 pt-1">
+                    <div class="">
+                        <label>Approved CTC</label>
+                        <span class="Mandatory">*</span>
+                        <span id="salary"></span>
+                        @Html.DisplayFor(model => Model.Compensation.OfferedSalary)
+                        @Html.HiddenFor(model => Model.Compensation.OfferedSalary)
+                    </div>
+                </div>
+
+                <div class="col-md-3 pt-1">
+                    <div class="">
+                        <label>Min.CTC</label>
+                        <span class="Mandatory">*</span>
+
+
+
+                    </div>
+                    @Html.DisplayFor(model => Model.Compensation.MinCTC)
+                    <span id="salary"></span>
+                </div>
+            </div>
+            <div class="row Compensation">
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="personal-details-left mt-0">
+                                <ul class="nav nav-tabs exittab" role="tablist">
+                                    <li class="nav-item exititem mr-0">
+                                        <a class="nav-link exit-link active" data-bs-toggle="tab"
+                                           href="#tabs-1" role="tab">Allowance</a>
+                                    </li>
+                                    <li class="nav-item exititem mr-0">
+                                        <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-2"
+                                           role="tab">Deductions</a>
+                                    </li>
+                                    <li class="nav-item exititem">
+                                        <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-3"
+                                           role="tab">Provision And Perks</a>
+                                    </li>
+
+                                </ul><!-- Tab panes -->
+                                <div class="tab-content  "
+                                     style="display: block ; position: relative; top: 5px;">
+                                    <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-200 comp-width">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Fixed Allowance</th>                                                               
+                                                                <th scope="col" id="FAllwAmtOrPer">Amount</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.FixedAllowance != null && Model.Compensation.FixedAllowance.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.FixedAllowance.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Fixed Allowance">
+                                                                            @Model.Compensation.FixedAllowance[i].Name
+                                                                            @Html.HiddenFor(m => m.Compensation.FixedAllowance[i].Code)
+                                                                        </td>
+                                                                       
+                                                                        <td data-label="Amount">
+                                                                            @*<input type="text"
+                                                                class="form-control form-control-sm"
+                                                                placeholder="Amount">*@
+                                                                            @Html.TextBoxFor(m => m.Compensation.FixedAllowance[i].Amount, new { @class = "form-control form-control-sm AllowanceAmount input_height", @placeholder = "Amount",@onblur= "CTCCalculation()" })
+                                                                        </td>
+
+
+                                                                    </tr>
+                                                                }
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- <end></end> -->
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance comp-width vertical-scroll-200">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Other Applicable Allowance</th>
+                                                                <th scope="col">Applicability</th>
+                                                                
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.VariableAllowance != null && Model.Compensation.VariableAllowance.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.VariableAllowance.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Variable Allowance">@Html.HiddenFor(m => m.Compensation.VariableAllowance[i].Code)@Model.Compensation.VariableAllowance[i].Name</td>
+                                                                           <td data-label="Check Item">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">                                                                                       
+                                                                                        @Html.CheckBoxFor(m => m.Compensation.VariableAllowance[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                        </td>
+
+
+
+                                                                    </tr>
+                                                                }
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- <new? -->
+
+
+                                    </div>
+                                    <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab comp-width vertical-scroll-200">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Fixed Deduction</th>                                                             
+                                                                <th scope="col" id="FDedAmtOrPer">Amount</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.FixedDeduction != null && Model.Compensation.FixedDeduction.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.FixedDeduction.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Fixed Deduction">@Html.HiddenFor(m => m.Compensation.FixedDeduction[i].Code)@Model.Compensation.FixedDeduction[i].Name</td>                                                                       
+                                                                        <td data-label="Amount">
+                                                                            @*<input type="text"
+                                                                class="form-control form-control-sm"
+                                                                placeholder="Amount">*@
+                                                                            @Html.TextBoxFor(m => m.Compensation.FixedDeduction[i].Amount, new { @class = "form-control form-control-sm input_height DeductionsAmount", @placeholder = "Amount", @onblur = "CTCCalculation()" })
+                                                                        </td>
+
+
+                                                                    </tr>
+                                                                }
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- <end></end> -->
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance comp-width vertical-scroll-200">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">Other Applicable Deduction</th>
+                                                                <th scope="col">Applicability</th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.VariableDeduction != null && Model.Compensation.VariableDeduction.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.VariableDeduction.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="Variable Deduction"> @Html.HiddenFor(m => m.Compensation.VariableDeduction[i].Code)@Model.Compensation.VariableDeduction[i].Name</td>
+                                                                       
+                                                                          <td data-label="Check Item">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">                                                                                       
+                                                                                        @Html.CheckBoxFor(m => m.Compensation.VariableDeduction[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                        </td>
+
+
+
+                                                                    </tr>
+                                                                }
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab comp-width vertical-scroll-150">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">
+                                                                    Fixed Provision & Perks
+                                                                </th>                                                                
+                                                                <th scope="col" id="FProvAmtOrPer">Amount</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.FixedProvisions != null && Model.Compensation.FixedProvisions.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.FixedProvisions.Count; i++)
+                                                                {
+                                                            <tr>
+                                                                <td data-label="Fixed Provision & Perks">@Html.HiddenFor(m => m.Compensation.FixedProvisions[i].Code)@Model.Compensation.FixedProvisions[i].Name</td>
+                                                                @Html.HiddenFor(m => m.Compensation.FixedProvisions[i].CtcApplicable)
+                                                                <td data-label="Amount">
+                                                                    @*<input type="text"
+            class="form-control form-control-sm"
+            placeholder="Amount">*@
+                                                                    @Html.TextBoxFor(m => m.Compensation.FixedProvisions[i].Amount, new { @class = "form-control form-control-sm ProvisionsAmount input_height", @placeholder = "Amount", @onblur = "CTCCalculation()" })
+                                                                </td>
+
+
+                                                            </tr>
+                                                                }
+                                                            }
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- <end></end> -->
+                                            <div class="col-md-6">
+
+                                                <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance comp-width vertical-scroll-150">
+                                                    <table class="compensationPreenrollTables">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">
+                                                                    Variable Provision
+                                                                    & Perks
+                                                                </th>
+                                                                <th scope="col">Applicability</th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model.Compensation.VariableProvisions != null && Model.Compensation.VariableProvisions.Count > 0)
+                                                            {
+
+                                                                for (int i = 0; i < Model.Compensation.VariableProvisions.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        <td data-label="SI">@Html.HiddenFor(m => m.Compensation.VariableProvisions[i].Code)@Model.Compensation.VariableProvisions[i].Name</td>
+                                                                       
+                                                                         <td data-label="Check Item">
+                                                                                <div class="checkbox-inline ">
+                                                                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">                                                                                        
+                                                                                        @Html.CheckBoxFor(m => m.Compensation.VariableProvisions[i].Applicable)
+                                                                                        <span></span>
+                                                                                    </label>
+                                                                                </div>
+
+                                                                        </td>
+
+
+                                                                    </tr>
+                                                                }
+                                                            }
+
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row ">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.Compensation.GrossSalary)
+                                <label class="mr-2"><b>Gross Salary</b></label><b><span id="GrossSal">@Model.Compensation.GrossSalary</span></b>
+                                @*@Html.TextBoxFor(m => m.Compensation.GrossSalary, new { @class = "form-control form-control-sm", @readonly = "true" })*@
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.Compensation.CTC)
+                                <label class="mr-2"><b>CTC</b></label><b><span id="ctc">@Model.Compensation.CTC</span></b>
+                                @*@Html.TextBoxFor(m => m.Compensation.CTC, new { @class = "form-control form-control-sm", @readonly = "true" })*@
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="mr-2"><b>Total Deductions</b></label>
+                                <b><span id="totDeductions"></span></b>
+                                @*@Html.TextBoxFor(m => m.PreEnrollment.Compensation.CTC, new { @class = "form-control form-control-sm", @readonly = "true" })*@
+                            </div>
+                        </div>
+                       
+                        @*<div class="col-md-3 d-flex align-items-center" >
+            <div class="form-group mb-0 mt-4">
+                <div class="checkbox-inline">
+                    <label class="mr-2">Statutory Deductions</label>
+                    <label class="checkbox">
+                        @Html.CheckBoxFor(m => m.Compensation.PF)
+
+                        <span></span>PF
+                    </label>
+                    <label class="checkbox">
+                        @Html.CheckBoxFor(m => m.Compensation.ESI)
+                        <span></span>ESI
+                    </label>
+
+                </div>
+
+            </div>
+        </div>*@
+
+
+
+                    </div>
+                </div>
+           
+              
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6">
+        <button type="button" onclick="PopUp_PreviewEdit()"
+                class="btn btn-default float-left mobile-full-width">
+            Salary Details
+        </button>
+
+    </div>
+    <div class="col-md-6">
+        <button id="preEnrollID" type="button" onclick="onNextClick('preEnroll_Compensation','Address')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+</div>

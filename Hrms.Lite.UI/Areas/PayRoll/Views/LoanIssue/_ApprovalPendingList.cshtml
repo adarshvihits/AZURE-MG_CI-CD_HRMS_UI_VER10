@@ -1,0 +1,118 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanIssue
+<script src="~/js/settings.js"></script>
+<script>
+$(document).ready(function () {
+    $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+         $('.Tab2Count').html("@Model.Tab2Count");
+          $('.Tab3Count').html("@Model.Tab3Count");
+    $('.MoreCount').html("@Model.MoreCount");
+    $('.PendingTabCount').html("@Model.PendingTabCount");
+
+
+    //$('#ApprovalPendingTable').DataTable({
+    //        "pageLength": 25
+    //    });
+
+    //$(".dataTables_filter").addClass("dataTables_filter_trn");
+    //$('.ihits-table table').removeClass("dataTable no-footer");
+    //$(".ihits-table table tr th").removeAttr('style')
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+
+    });</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table Loan-Processing-list">
+    @Html.HiddenFor(m => m.LoanIssuesList.Count)
+    <table id="AllTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Loan Type</th>
+                <th scope="col">Loan Amount</th>
+                <th scope="col">Total Tenure</th>
+                <th scope="col">Employee Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LoanIssuesList != null && Model.LoanIssuesList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.LoanIssuesList.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.LoanIssuesList[i].EmployeeGI)
+                    @Html.HiddenFor(m => m.LoanIssuesList[i].LoanIssueGI)
+                    @Html.HiddenFor(m => m.LoanIssuesList[i].EmployeeHeader)
+                    <tr>
+                        <td data-label="ID">@Model.LoanIssuesList[i].EmployeeID</td>
+                        <td data-label="Candidate Name">
+                            @*<a onclick="onEmployeeClick('@Model.LoanIssuesList[i].LoanIssueGI', '@Model.LoanIssuesList[i].EmployeeGI','pending')">
+            @Model.LoanIssuesList[i].EmployeeName
+        </a>*@
+                            @*<a href="@Url.Action("Create", "EmployeeRequestLoanIssue", new { Area = "PayRoll",RequestGI=@Model.LoanIssuesList[i].LoanIssueGI,EmployeeGI=@Model.LoanIssuesList[i].EmployeeGI })">@Model.LoanIssuesList[i].EmployeeName</a>*@
+                            <a href="@Url.Action("ApproveDetails", "LoanIssue", new {EmployeeGI =Model.LoanIssuesList[i].EmployeeGI,RequestGI = Model.LoanIssuesList[i].LoanIssueGI,  Area = "PayRoll" })">@Model.LoanIssuesList[i].EmployeeName</a>
+
+                        </td>
+                        <td data-label="Designation">@Model.LoanIssuesList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.LoanIssuesList[i].Department.Name </td>
+                        <td data-label="Location">@Model.LoanIssuesList[i].Location.Name</td>
+                        <td data-label="Loan Type">@Model.LoanIssuesList[i].LoanType</td>
+                        <td data-label="Loan Amount">@Model.LoanIssuesList[i].LoanAmount</td>
+                        <td data-label="Total Tenure">@Model.LoanIssuesList[i].TotalTenure</td>
+                        <td data-label="Employee Status">@Model.LoanIssuesList[i].EmployeeStatus</td>
+
+
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+        <tr class="table-light" style=" position: sticky; bottom: 0;">
+
+
+            <td data-label="No of days">
+                <strong>
+                  
+                    <span></span>
+                </strong>
+            </td>
+
+
+            <td data-label="No of days">
+                <strong></strong>
+            </td>
+
+            <td data-label="No of days">
+                <strong></strong>
+            </td>
+
+
+            <td data-label="No of days">
+            </td>
+            <td data-label="No of days">
+            </td>
+            <td data-label="No of days">
+            </td>
+            <td data-label="No of days">
+                <strong>
+                    <span>Total:</span>
+                    <span>@Model.totalLoanAmount</span>
+                </strong>
+            </td>
+            <td data-label="No of days">
+                <strong>
+                    <span></span>
+                </strong>
+            </td>
+            <td data-label="No of days">
+            </td>
+
+
+        </tr>
+    </table>
+
+</div>

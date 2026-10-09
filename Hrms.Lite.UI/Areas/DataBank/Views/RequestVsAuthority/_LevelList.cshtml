@@ -1,0 +1,82 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RequestVsAuthority
+    <script>
+        $(document).ready(function () {
+            //$(".pending").hide();
+            debugger;
+            var count = $('#RequesDetails_Count').val();
+            var idd = parseInt($('#BatchUpdate_RequestType_Code').val());
+            var maxLevel = (idd === 12) ? 6 : 5;
+            if (count >= maxLevel) {
+                $('#addNewLevel').addClass('hide');
+            } else {
+                $('#addNewLevel').removeClass('hide');
+            }
+
+        });
+    </script>
+<div class="ihits-table table-border  mobile-responsive-table request-authority-one">
+    @Html.HiddenFor(m=>m.RequesDetails.Count)
+    <table id="leveltable">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Level</th>
+            
+                <th scope="col">Authority ID</th>
+                <th scope="col">Authority Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RequesDetails != null && Model.RequesDetails.Count > 0)
+            {
+
+                for (int i = 0; i < Model.RequesDetails.Count; i++)
+                {
+
+            <tr>
+                @Html.HiddenFor(Model => Model.RequesDetails[i].RequestVsAuthorityGI)
+                <td data-label="Level">@Model.RequesDetails[i].Level</td>
+              
+                <td data-label="ID">@Model.RequesDetails[i].EmployeeID</td>
+                <td data-label="Authority">@Model.RequesDetails[i].Authority</td>
+                <td data-label="Designation">@Model.RequesDetails[i].Designation</td>
+                <td data-label="Department">@Model.RequesDetails[i].Department</td>
+                <td>
+                    <a id="editLevel" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only " data-bs-original-title="Edit" onclick="getLevelDetails('@Model.RequesDetails[i].RequestVsAuthorityGI','MODIFY')">
+                        <i class="icon-xl fas fa-pencil-alt"></i>
+                    </a>
+                    @if (i == Model.RequesDetails.Count - 1)
+                    {
+                        <a data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  icon-only mobile-full-width btn-delete" data-bs-original-title="Delete" onclick="getLevelDetails('@Model.RequesDetails[i].RequestVsAuthorityGI','DELETE')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </a>
+                    }
+                </td>
+
+            </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-12 mt-2 mb-5">
+        @*@if (Model.RequesDetails == null || Model.RequesDetails.Count != 5)
+        {*@
+        <button id="addNewLevel" type="button"
+                class="btn btn-default float-right mobile-full-width " onclick="addLevelClick()">
+            Add Level
+        </button>
+        
+        <div id="AddLevelSlider" class="hide">
+
+          
+
+        </div>
+
+
+    </div>
+</div>

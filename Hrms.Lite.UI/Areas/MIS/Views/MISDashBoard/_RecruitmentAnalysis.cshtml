@@ -1,0 +1,380 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<style>
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+        background-color: transparent !important;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .k-card:nth-child(1) {
+        background-color: #18a3b8 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+    .k-tilelayout-item:first-child .k-card-header {
+        background-color: #18a3b8 !important;
+        border-radius: 10px 10px 0px 0px;
+        color: #fff !important;
+    }
+
+
+
+    #totVacancy, #totInterviewed, #totOffered, #totJoined {
+        color: #fff !important;
+        font-weight: 800 !important;
+    }
+
+    .k-card:nth-child(2) {
+        background-color: #27a746 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+    .k-card:nth-child(3) {
+        background-color: #fec106 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+    .k-card:nth-child(4) {
+        background-color: #dc3445 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+
+
+
+
+
+
+
+
+</style>
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+    function sortData(e) {
+
+        var chart = $("#vacancyTrend").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+
+
+        if (axis.categories != undefined) {
+
+          
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+
+       
+    }
+   </script>
+
+<script id="vacancy" type="text/x-kendo-template">
+    <div id="totVacancy" onclick="VacancyClick()"  style="color: \\#37B400; height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.vacancy </div>
+</script>
+
+<script id="interviewed" type="text/x-kendo-template">
+    <div id="totInterviewed"  onclick="InterviewClick()" style="color: \\#37B400;height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.interviewed </div>
+
+</script>
+
+<script id="offered" type="text/x-kendo-template">
+    <div id="totOffered"  onclick="OfferedClick()" style="color: \\#37B400; height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.offered </div>
+</script>
+
+<script id="joined" type="text/x-kendo-template">
+    <div id="totJoined" style="color: \\#37B400;height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.joined </div>
+
+</script>
+<script>
+    function VacancyDetailClick(e) {
+        debugger;
+        var GrpCompanyCode = $("#GroupCompanyCode").val();
+
+        var FinancialYear = $("#finYear").val();
+
+        var MONTH = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 120, FinancialYear: FinancialYear, GrpCompanyCode: GrpCompanyCode, MONTH: MONTH },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=120&FinancialYear=' + FinancialYear + '&GrpCompanyCode=' + GrpCompanyCode + '&MONTH=' + MONTH;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function VacancyClick(e) {
+        debugger;
+        var GrpCompanyCode = $("#GroupCompanyCode").val();
+        var FinancialYear = $("#finYear").val();
+
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: {
+                id: 124,
+                FinancialYear: FinancialYear,
+                GrpCompanyCode: GrpCompanyCode,
+                TYPE: 'VACANCY'
+            },
+            success: function (result) {
+
+                var url = '/MIS/MISDashBoard?id=124&FinancialYear=' + encodeURIComponent(FinancialYear) + '&GrpCompanyCode=' + encodeURIComponent(GrpCompanyCode) + '&TYPE=VACANCY';
+                window.location.href = url;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger;
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function InterviewClick(e) {
+        debugger;
+        var GrpCompanyCode = $("#GroupCompanyCode").val();
+        var FinancialYear = $("#finYear").val();
+
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: {
+                id: 122,
+                FinancialYear: FinancialYear,
+                GrpCompanyCode: GrpCompanyCode,
+                TYPE: 'INTERVIEW'
+            },
+            success: function (result) {
+
+                var url = '/MIS/MISDashBoard?id=122&FinancialYear=' + encodeURIComponent(FinancialYear) + '&GrpCompanyCode=' + encodeURIComponent(GrpCompanyCode) + '&TYPE=INTERVIEW';
+                window.location.href = url;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger;
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+    function OfferedClick(e) {
+        debugger;
+        var GrpCompanyCode = $("#GroupCompanyCode").val();
+        var FinancialYear = $("#finYear").val();
+
+        $.ajax({
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: {
+                id: 121,
+                FinancialYear: FinancialYear,
+                GrpCompanyCode: GrpCompanyCode,
+                TYPE: 'OFFERED'
+            },
+            success: function (result) {
+
+                var url = '/MIS/MISDashBoard?id=125&FinancialYear=' + encodeURIComponent(FinancialYear) + '&GrpCompanyCode=' + encodeURIComponent(GrpCompanyCode) + '&TYPE=OFFERED';
+                window.location.href = url;
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger;
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+
+    function VacancyDesignationDetailClick(e) {
+        debugger;
+        var GrpCompanyCode = $("#GroupCompanyCode").val();
+
+        var FinancialYear = $("#finYear").val();
+
+        var TYPE = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 123, FinancialYear: FinancialYear, GrpCompanyCode: GrpCompanyCode, TYPE: TYPE },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=123&FinancialYear=' + FinancialYear + '&GrpCompanyCode=' + GrpCompanyCode + '&TYPE=' + TYPE;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+</script>
+
+<script id="vacTrend" type="text/x-kendo-template">
+    @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.VacancyTrend>()
+
+                                                               .Name("vacancyTrend")
+
+                                                               .Title("")
+                                                                   .Events(e => e.DataBound("sortData").PlotAreaClick("VacancyDetailClick"))
+
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                               )
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetRecruitmentVacancyTrend", "MISDashBoard").Data("getFY")))
+                                                               .Series(series =>
+                                                               {
+                                                                   series.Column(model => model.total).Name("Vacancy").CategoryField("month").Color("\\#d72e2f"); ;
+
+                                                               })
+                                                           .CategoryAxis(axis => axis
+                                                           //.Labels(labels => labels.Rotation(0))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(0)
+                                                           )
+                                                           .MajorUnit(50)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+
+<script id="vacDsg" type="text/x-kendo-template">
+    @(
+                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.TopVacancyDesignation>()
+
+                                                               .Name("vacancyDsg")
+
+                                                               .Title("")
+       .Events(e => e.DataBound("sortData").PlotAreaClick("VacancyDesignationDetailClick"))
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                               )
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetTopVacancyDesignation", "MISDashBoard").Data("getFY")))
+                                                               .Series(series =>
+                                                               {
+                                                                   series.Column(model => model.total).Name("Designation").CategoryField("name").Color("\\#3a81c4"); ;
+
+                                                               })
+                                                           .CategoryAxis(axis => axis
+                                                           //.Labels(labels => labels.Rotation(0))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(0)
+                                                           )
+                                                           .MajorUnit(100)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(8)
+         .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Vacancy")).BodyTemplateId("vacancy").ColSpan(2).RowSpan(1);
+            c.Add().Header(h => h.Text("Interviews")).BodyTemplateId("interviewed").ColSpan(2).RowSpan(1);
+            c.Add().Header(h => h.Text("Offered")).BodyTemplateId("offered").ColSpan(2).RowSpan(1);
+            c.Add().Header(h => h.Text("Joined")).BodyTemplateId("joined").ColSpan(2).RowSpan(1);
+            c.Add().Header(h => h.Text("Vacancy Created")).BodyTemplateId("vacTrend").ColSpan(4).RowSpan(3);
+            c.Add().Header(h => h.Text("Vacancies Designation wise")).BodyTemplateId("vacDsg").ColSpan(4).RowSpan(3);
+
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

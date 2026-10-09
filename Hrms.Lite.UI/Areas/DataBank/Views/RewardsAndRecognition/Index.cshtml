@@ -1,0 +1,200 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.RewardsAndRecognition
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+<script src="~/scripts/DataBank/rewardsAndRecognition.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('.search-profile-details').hide(300);
+        
+
+    });
+
+</script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <!--begin::Header Menu-->
+                <h3 class="main-title">Rewards & Recognition</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Rewards & Recognition List
+                    </li>
+
+                </ul>
+                <!--end::Header Menu-->
+            </div>
+        </div>
+        <!--end::Header Menu Wrapper-->
+      
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+
+                                    @Html.DropDownListFor(m => m.TabCode, (SelectList)ViewBag.Tabs, new { @class = "form-control form-control-sm", @onchange = "TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())" })
+                                </div>
+                            </div>
+                            <div class="col-6" id="assetFilter">
+                                <div class="form-group">
+                                    <label>Select Allowance Type</label>
+                                    @Html.DropDownListFor(m => m.RewardsAndRecognitionFilterCombo.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm", @onchange = "onFilterDropdownChange(this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <!-- TILE STYLE -->
+                    <!-- TILE STYLE -->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+
+                                <span class="btn-title AllTabRewards active" onclick="Tab(0, 'AllTabRewards','@Model.RewardandRecognitionTabs[0].Name' )">
+
+                                    @Model.RewardandRecognitionTabs[0].Name
+
+                                    <span class="btn-notification AllTabCount">@Model.AllTabCount</span>
+                                </span>
+
+                            </div>
+                          
+                        <div class="tab-items other-items low">
+                            @for (int i = 0; i < Model.RewardandRecognitionTabs.Count; i++)
+                            {
+                                if (Model.RewardandRecognitionTabs[i].Code == -3)
+                                {
+                                    <span class="btn-title PointsSummaryTab" onclick="Tab(1,'PointsSummaryTab','@Model.RewardandRecognitionTabs[i].Name')">
+
+                                        @Model.RewardandRecognitionTabs[i].Name
+                                        <span class="btn-notification PointSummaryCount">@Model.PointSummaryCount</span>
+                                    </span>
+                                }
+                            }
+                                </div>
+                          
+                            <div class="form-group filter-combobox Rewardsfilter mr-15">
+
+                                @Html.DropDownListFor(m => m.RewardsCode, (SelectList)ViewBag.Rewards,"All", new { @class = "form-control form-control-sm", @onchange = "Tab(0,'AllTabRewards',$('#RewardsCode option:selected').text())" })
+
+                            </div>
+
+                            <div class="tab-items select-option">
+                                <div class="form-group filter-combobox Rewardsfilter mr-15">
+
+                                    @Html.DropDownListFor(m => m.RewardsAndRecognitionFilterCombo.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm filterDropDown", @onchange = "onFilterDropdownChange(this)" })
+
+                                </div>
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+                                <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+                                @*<div class="filter-button">
+                <i class="fas fa-filter"></i>
+            </div>*@
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="rewardsListPartial">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/RewardsAndRecognition/_RewardsList.cshtml", Model)
+                    </div>
+                    <div id="newRequestRewardsSlider" class="hide">
+                        @await Html.PartialAsync("_NewRequestRewards", Model)
+
+                    </div>
+                    <div class="row row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                            <a id="rewardsReconition"
+                               class="btn btn-default float-right mobile-full-width " onclick="onNewRequestClickRewards()">
+                                Add New Rewards
+                            </a>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <!--end: Datatable-->
+
+                    <div id="filterSlider">
+
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+                    @*<div id="ApproveSlider">
+
+        </div>*@
+
+                    <div id="RewardDtSlider">
+
+                    </div>
+                    @*<div id="pointSummaryDTSlider">
+
+        </div>*@
+                </div>
+            </div>
+           
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

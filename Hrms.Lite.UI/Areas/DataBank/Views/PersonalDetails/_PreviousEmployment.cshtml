@@ -1,0 +1,116 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+<div class="row">
+    <div class="col-md-12">
+        <div class="ihits-table table-border mobile-responsive-table personal-details-previous-employment mb-2">
+            <table id="previousEmployment">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Company Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Experience</th>
+                        <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Contact Person Name">Cont.Per.Name</th>
+                        <th scope="col"  data-bs-toggle="tooltip" data-bs-original-title="Contact Person Mobile">Cont.Per.Mob</th>
+                        <th scope="col"  data-bs-toggle="tooltip" data-bs-original-title="Contact Person Designation">Cont.Desgn</th>                      
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.PreviousEmployment.Count; i++)
+                    {
+                        @if (Model.PreviousEmployment[i].PrevEmploymentLogGI != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                        {
+                    <tr id="row_OI_@i">
+                        <td data-label="Company Name & Address">
+
+                            @Html.HiddenFor(m => m.PreviousEmployment[i].PrevEmploymentLogGI)
+                            @Html.DisplayFor(m => m.PreviousEmployment[i].CompanyName)
+
+                        </td>
+                        <td data-label="Location">
+
+                            @Html.DisplayFor(m => m.PreviousEmployment[i].Location)
+                        </td>
+                        <td data-label="Designation">
+
+                            @Html.DisplayFor(m => m.PreviousEmployment[i].Designation)
+                        </td>
+                        <td data-label="From">
+                            <div class="input-group date">
+
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Fromdate))
+                            </div>
+                        </td>
+                        <td data-label="To">
+                            <div class="input-group date">
+
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.PreviousEmployment[i].Todate))
+                            </div>
+                        </td>
+                        <td data-label="Experience">
+
+                            @Html.DisplayFor(m => m.PreviousEmployment[i].Experience)
+                        </td>
+                        <td data-label="ContanctPersonName"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonName)</td>
+                        <td data-label="ContanctPersonNumber"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonNumber)</td>
+                        <td data-label="ContanctPersonDesigantion"> @Html.DisplayFor(m => m.PreviousEmployment[i].ContanctPersonDesigantion)</td>
+                        <td data-label="Actions">
+                            <div class="small-btn-group">
+                                <a id="addPreviousEmployment" type="button"
+                                   class="btn btn-icon btn-default slider-btn icon-only" data-bs-toggle="tooltip" data-placement="top" title="Edit" onclick="onPrevEmploymentSave('@Model.PreviousEmployment[i].PrevEmploymentLogGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+                                <a type="button"
+                                   class="btn btn-icon btn-delete icon-only" data-bs-toggle="tooltip" data-placement="top" title="Delete" onclick="onPrevEmploymentDelete('@Model.PreviousEmployment[i].PrevEmploymentLogGI')">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                                <button data-bs-toggle="tooltip" title="View File" data-placement="top" type="button" class=" btn btn-icon btn-eye icon-only pr-2" onclick="ViewDocument('@Model.PreviousEmployment[i].PrevEmploymentLogCode','PreviousEmplr')" data-bs-original-title="">
+                                    <i class="icon-xl far fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No table data</td>
+                            </tr>
+                        }
+                    }
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.PreviousEmploymentApprovalPending == false)
+        {
+            <label  class="new_approval_pend_btn">
+                Approval Pending
+            </label>
+        }
+
+
+    </div>
+    <div class="col-md-6 ">
+        <button id="addPreviousEmployment" type="button" class="btn btn-default float-right " onclick="onPrevEmploymentSave()">
+            <i class="icon-nm fas fa-plus"></i>Add
+            New
+        </button>
+        <div id="previousSav">
+
+
+        </div>
+    </div>
+</div>

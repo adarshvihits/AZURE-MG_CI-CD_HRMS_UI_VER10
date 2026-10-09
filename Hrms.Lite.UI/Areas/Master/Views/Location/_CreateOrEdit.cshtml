@@ -1,0 +1,800 @@
+﻿@model Hrms.Lite.Shared.Master.Location
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script>
+    $(document).ready(function () {
+        moveCursorToEnd('Name');
+
+        $('.kt_datepicker_2').datepicker({
+            format: 'dd-M-yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true
+        });
+    });
+</script>
+<style>
+
+    .location-slidernew {
+           width: 1030px !important;
+    }
+
+    /* ---------------- Section Card ---------------- */
+
+.section-card {
+    background: #fff;
+    border: 1px solid #E6ECF3;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #344054;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #EEF2F7;
+}
+
+.section-title i {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #F3F6FB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+/* ---------------- Input Box ---------------- */
+
+.field-box {
+    border: 1px solid #E8EDF5;
+    border-radius: 10px;
+    padding: 10px;
+    background: #FCFDFE;
+    transition: .2s;
+    min-height: 90px;
+}
+
+.field-box:hover {
+    border-color: #5B8DEF;
+}
+
+.field-box label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #667085;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.field-box label i {
+    margin-right: 6px;
+    color: #5B8DEF;
+}
+
+/* ---------------- Form Control ---------------- */
+
+.field-box .form-control,
+.field-box select {
+    border: 1px solid #D9E2EC;
+    border-radius: 8px;
+    background: #fff;
+    height: 36px;
+}
+
+.field-box .form-control:focus,
+.field-box select:focus {
+    border-color: #4F7EF7;
+    box-shadow: 0 0 0 0.15rem rgba(79,126,247,.15);
+}
+
+/* ---------------- Checkbox ---------------- */
+
+.checkbox-box {
+    min-height: 110px;
+}
+
+.checkbox-box .custom-control {
+    padding-top: 6px;
+}
+
+/* ---------------- Active Switch ---------------- */
+
+.active-box {
+    min-height: 90px;
+}
+
+/* ---------------- Description ---------------- */
+
+.description-box {
+    border-radius: 10px;
+    border: 1px solid #D9E2EC;
+    min-height: 100px;
+}
+
+/* ---------------- Validation ---------------- */
+
+.text-danger,
+.Mandatory {
+    color: #E11D48 !important;
+}
+
+/* ---------------- Spacing ---------------- */
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.row > div {
+    margin-bottom: 15px;
+}
+</style>
+
+@using (Html.BeginForm("Save", "Location", FormMethod.Post, new { id = "locationSave" }))
+{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="addLocation" class="slider-forms  location-slidernew  slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit');$('.AddNewOrEdit').removeClass('location-slidernew')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="location-slider">
+                <h4>
+                    Location
+                </h4>
+            </div>
+
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <span class="Mandatory">*</span>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm LName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'LocationName')", maxlength = "120" })
+                            <span id="LocationName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label>Short Name</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm LShtName", @placeholder = "Short Name", @onblur = "validate(this,'locShortName')", maxlength = "5" })
+                            <span id="locShortName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label>ERP Code</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.ERPCode, new { @class = "form-control form-control-sm LShtName", @placeholder = "ERP Code", @onblur = "validate(this,'ERP')", maxlength = "20" })
+                            <span id="ERP"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mt-2 mb-2 pt-5">
+                        <div class="d-flex align-items-center">
+
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('LOC', '@Model.Code')"*@>
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "activeInactiveLoc" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+<div class="row">
+    <div class="col-md-3">
+    <div class="form-group">
+        <label>Company Opening</label>
+        <span class="Mandatory">*</span>
+
+        <div class="input-group date">
+           @Html.TextBoxFor(Model => Model.OpeningDate, "{0:dd-MMM-yyyy}", new
+{
+    @class = "form-control form-control-sm kt_datepicker_2",
+    @readonly = "readonly",
+    @placeholder = "Company Opening",
+    @onchange = "validate(this,'LocCompanyOpening')"
+})
+
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="la la-calendar"></i>
+                </span>
+            </div>
+        </div>
+
+        <span id="LocCompanyOpening"></span>
+    </div>
+</div>
+
+    <!-- Company Type Radio Buttons -->
+
+
+
+
+
+    <div class="col-md-3">
+    <div class="form-group">
+        <label>Metro/Non-Metro</label>
+        <span class="Mandatory">*</span>
+
+        @Html.DropDownListFor(Model => Model.Metro.Code,
+            (SelectList)ViewBag.Metrodropdown,
+            "--Select Metro/Non-Metro--",
+            new
+            {
+                @class = "form-control form-control-sm LocMetro",
+                @onblur = "validate(this,'LocMetro')"
+            })
+
+        <span id="LocMetro" class="text-danger"></span>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <!-- Company Type Checkboxes -->
+<div class="col-md-6">
+    <div class="form-group pt-8">
+        <div class="d-flex align-items-center flex-wrap">
+
+            <div class="form-check mr-4">
+                @Html.CheckBoxFor(Model => Model.UpcomingStatus, new { @id = "IsUpcomingCompany", @class = "form-check-input" })
+                <label class="form-check-label ml-2" for="IsUpcomingCompany">
+                    Is Upcoming Company
+                </label>
+            </div>
+
+            <div class="form-check">
+                @Html.CheckBoxFor(Model => Model.PayrollStatus, new { @id = "IsPayrollProcessingCompany", @class = "form-check-input" })
+                <label class="form-check-label ml-2" for="IsPayrollProcessingCompany">
+                    Is Payroll Processing Company
+                </label>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+<h6>
+    Classification
+</h6>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Category</label>
+            <span class="Mandatory">*</span>
+            @Html.DropDownListFor(Model => Model.Category.Code, (SelectList)ViewBag.CategoryDropDown, "--Select Category--", new { @class = "form-control form-control-sm LocCategory", @onblur = "validate(this,'LocCategory')" })
+            <span id="LocCategory" class="text-danger"></span>
+        </div>
+    </div>
+
+   
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Business Type</label>
+            <span class="Mandatory">*</span>
+            @Html.DropDownListFor(Model => Model.BusinessType.Code, (SelectList)ViewBag.BusinessTypeDropDown, "--Select Business Type--", new { @class = "form-control form-control-sm LocBusinessType", @onblur = "validate(this,'LocBusinessType')" })
+            <span id="LocBusinessType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Zone</label>
+            <span class="Mandatory">*</span>
+            @Html.DropDownListFor(Model => Model.Zone.Code, (SelectList)ViewBag.ZoneDropDown, "--Select Zone--", new { @class = "form-control form-control-sm LocZone", @onblur = "validate(this,'LocZone')" })
+            <span id="LocZone" class="text-danger"></span>
+        </div>
+    </div>
+
+
+        <div class="col-md-3">
+        <div class="form-group">
+            <label>Cluster</label>
+            <span class="Mandatory">*</span>
+            @Html.DropDownListFor(Model => Model.Cluster.Code, (SelectList)ViewBag.ClusterDropDown, "--Select Cluster--", new { @class = "form-control form-control-sm LocCluster", @onblur = "validate(this,'LocCluster')" })
+            <span id="LocCluster" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+
+</div>
+<div class="row">
+
+
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Over Time(Hr.)</label>
+            @Html.TextBoxFor(Model => Model.OverTimeHr, new { @class = "form-control form-control-sm LocOverTimeHr", @placeholder = "Over Time(Hr.)", maxlength = "5" })
+            <span id="LocOverTimeHr" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    
+ <div class="col-md-3">
+    <div class="form-group ">
+        <div class="form-check pt-8">
+            <input type="checkbox" id="IsEmirates" class="form-check-input"
+                   @(Model.Emirates == 1 ? "checked=\"checked\"" : "")
+                   onchange="document.getElementById('Emirates').value = this.checked ? 1 : 0;" />
+            <label class="form-check-label ml-2" for="IsEmirates">
+                Emirates
+            </label>
+            <input type="hidden" id="Emirates" name="Emirates" value="@(Model.Emirates)" />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</div>
+             
+                <h6>
+                    Address
+                </h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Door No.& Building</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.DoorNumAndBuilding, new { @class = "form-control form-control-sm LDoorNum", @placeholder = "Door No.& Building", maxlength = "120", @onblur = "validate(this,'LocDoorNumBuilding')" })
+                            <span id="LocDoorNumBuilding"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Street</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.Street, new { @class = "form-control form-control-sm LStreet", @placeholder = "Street", @onblur = "validate(this,'LocSreet')", maxlength = "120" })
+                            <span id="LocSreet"></span>
+                        </div>
+                    </div>
+
+
+                   @*  <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Area</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(model => model.AreaDropdown.Code, (SelectList)ViewBag.Area, "--Select Area--", new{@class = "form-control form-control-sm LocArea",@onblur = "validate(this,'LocArea')" })
+
+                            <span id="LocArea"></span>
+                        </div>
+                    </div> *@
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Location Type</label>
+                            <span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                        id="exampleSelects">
+                    <option>Location Type</option>
+                    <option>Location Type</option>
+                </select>*@
+                            @Html.DropDownListFor(Model => Model.LocationType.Code, (SelectList)ViewBag.LocationTypeDropDown, "--Select Location Type--", new { @class = "form-control form-control-sm LocType", @onblur = "validate(this,'LocationType')" })
+                            <span id="LocationType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+                     <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Region</label>
+                            <span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                        id="exampleSelects">
+                    <option>Region</option>
+                    <option>Region</option>
+                </select>*@
+                            @Html.DropDownListFor(Model => Model.Region.Code, (SelectList)ViewBag.RegionDropdown, "--Select Region--", new { @class = "form-control form-control-sm LRegion", @onblur = "validate(this,'LocRegion')" })
+                            <span id="LocRegion" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="row">
+
+
+
+                   
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                        id="exampleSelects">
+                    <option>India</option>
+                    <option>Country</option>
+                </select>*@
+                            @Html.DropDownListFor(Model => Model.Country.Code, (SelectList)ViewBag.CountryDropdown, "--Select Country--", new { @class = "form-control form-control-sm LCountry", @onchange = "onCountryChange(this,'LocCountry')", @onblur = "validate(this, 'LocCountry')" })
+                            <span id="LocCountry" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>State</label>
+                            <span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                        id="exampleSelects">
+                    <option>State</option>
+                    <option>State</option>
+                </select>*@
+                            @Html.DropDownListFor(Model => Model.State.Code, (SelectList)ViewBag.StateDropDown, "--Select State--", new { @class = "form-control form-control-sm LState", @onchange = "onStateChange(this,'LocState')", @onblur = "validate(this, 'LocState')" })
+                            <span id="LocState" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Functional State</label>
+                            <span class="Mandatory">*</span>
+                            @*<select class="form-control form-control-sm "
+                        id="exampleSelects">
+                    <option>State</option>
+                    <option>State</option>
+                </select>*@
+                            @Html.DropDownListFor(Model => Model.FunctionalState.Code, (SelectList)ViewBag.FunctionalState, "--Select State--", new { @class = "form-control form-control-sm LState", @*@onchange = "onStateChange(this,'LocStatefun')",*@ @onblur = "validate(this, 'LocStatefun')" })
+                            <span id="LocStatefun" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>District</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(Model => Model.District.Code, (SelectList)ViewBag.DistrictDropDown, "--Select District--", new { @class = "form-control form-control-sm LDistrict", @onchange = "onDistrictChange(this,'LocDistrict')", @onblur = "validate(this, 'LocDistrict')" })
+                            <span id="LocDistrict" class="text-danger"></span>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+         
+          
+
+                <h6>Communication</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>LandLine No</label>
+
+
+                            @Html.TextBoxFor(Model => Model.LandLineNum, new { @class = "form-control form-control-sm LanNumber", @placeholder = "LandLine No", maxlength = "13", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)" })
+                            <span id="LocLanNum"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Email ID</label>
+
+                            @Html.TextBoxFor(Model => Model.EmailId, new { @class = "form-control form-control-sm LanNumber", @placeholder = "Email ID", maxlength = "120", onchange = "validateEmail(this,'MailId')" })
+                            <span id="MailId"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Web Address</label>
+
+                            @Html.TextBoxFor(Model => Model.WebAdderss, new { @class = "form-control form-control-sm Webaddress", @placeholder = "Web Address", maxlength = "120"@*, @onblur = "isValidURL(this,'LocWebAddress')"*@ })
+                            <span id="LocWebAddress"></span>
+                        </div>
+                    </div>
+
+                </div>
+    
+
+                <h6>Geo Tagging Details</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Latitude</label>
+
+                            @Html.TextBoxFor(Model => Model.Latitude, new { @class = "form-control form-control-sm Lattitude", @placeholder = "Latitude", maxlength = "120" })
+                            <span id="LocLattitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Longitude</label>
+
+                            @Html.TextBoxFor(Model => Model.Longitude, new { @class = "form-control form-control-sm Longitude", @placeholder = "Longitude", maxlength = "120" })
+                            <span id="LocLongitude" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Geo Address</label>
+
+                            @Html.TextBoxFor(Model => Model.GeoAdderss, new { @class = "form-control form-control-sm GeoAddress", @placeholder = "Geo Address", maxlength = "120" })
+                            <span id="LocGeoAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+   
+          <h6>Statutory Parameters</h6>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Select PT Group</label>
+            <span class="Mandatory">*</span>
+            @Html.DropDownListFor(Model => Model.PTgroup.Code, (SelectList)ViewBag.PTGroupDropDown, "--Select PT Group--", new { @class = "form-control form-control-sm LPTGroup", @onblur = "validate(this,'PTGroup')" })
+            <span id="PTGroup"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Welfare Acc. No.</label>
+            <span class="Mandatory">*</span>
+            @Html.TextBoxFor(Model => Model.WelfareAccNo, new { @class = "form-control form-control-sm LocWelfareAccNo", @placeholder = "Welfare Acc. No.", maxlength = "150", @onblur = "validate(this,'LocWelfareAccNo')" })
+            <span id="LocWelfareAccNo" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Employer LWF Amount</label>
+            <span class="Mandatory">*</span>
+            @Html.TextBoxFor(Model => Model.LWFAmountEmployer, new { @class = "form-control form-control-sm LocLWFAmountEmployer", @placeholder = "Employer LWF Amount", maxlength = "20", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)", @onblur = "validate(this,'LocLWFAmountEmployer')" })
+            <span id="LocLWFAmountEmployer" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Employee LWF Amount</label>
+            <span class="Mandatory">*</span>
+            @Html.TextBoxFor(Model => Model.LWFAmount, new { @class = "form-control form-control-sm LocLWFAmount", @placeholder = "Employee LWF Amount", maxlength = "20", @onkeypress = "return onlyNumberKey(event)", @oninput = "CopypasteValidation(this)", @onblur = "validate(this,'LocLWFAmount')" })
+            <span id="LocLWFAmount" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Establish.Reg.No</label>
+            <span class="Mandatory">*</span>
+            @Html.TextBoxFor(Model => Model.EstRegNo, new { @class = "form-control form-control-sm LocEstRegNo", @placeholder = "Establish.Reg.No", maxlength = "100", @onblur = "validate(this,'LocEstRegNo')" })
+            <span id="LocEstRegNo" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>M365 Cost Center</label>
+            <span class="Mandatory">*</span>
+            @Html.TextBoxFor(Model => Model.M365CostCenter, new { @class = "form-control form-control-sm LocM365CostCenter", @placeholder = "M365 Cost Center", maxlength = "20", @onblur = "validate(this,'LocM365CostCenter')" })
+            <span id="LocM365CostCenter" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+                @* <h6>Employer Related Number</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Statutory Registration/License Number</label>
+
+                            @Html.TextBoxFor(Model => Model.StatutoryRegistration, new { @class = "form-control form-control-sm Lattitude", @placeholder = "License Number", maxlength = "120" })
+                            <span id="LocLattitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Profession Tax Employer Registration</label>
+
+                            @Html.TextBoxFor(Model => Model.TaxEmployer, new { @class = "form-control form-control-sm Longitude", @placeholder = "Tax Employer Registration", maxlength = "120" })
+                            <span id="LocLongitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Profession Tax Employee Registration</label>
+
+                            @Html.TextBoxFor(Model => Model.TaxEmployee, new { @class = "form-control form-control-sm Lattitude", @placeholder = "Tax Employee Registration", maxlength = "120" })
+                            <span id="LocLattitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Labour Welfare Fund</label>
+
+                            @Html.TextBoxFor(Model => Model.WelfareFund, new { @class = "form-control form-control-sm Longitude", @placeholder = "Welfare Fund", maxlength = "120" })
+                            <span id="LocLongitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+ *@
+               @*  <div class="row">
+                
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Trade License Number</label>
+
+                            @Html.TextBoxFor(Model => Model.LicenseNumber, new { @class = "form-control form-control-sm Lattitude", @placeholder = "License Number", maxlength = "120" })
+                            <span id="LocLattitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>LIN Number</label>
+
+                            @Html.TextBoxFor(Model => Model.LINNumber, new { @class = "form-control form-control-sm Longitude", @placeholder = "LIN Number", maxlength = "120" })
+                            <span id="LocLongitude" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SLN</label>
+
+                            @Html.TextBoxFor(Model => Model.SLN, new { @class = "form-control form-control-sm Lattitude", @placeholder = "SLN", maxlength = "120" })
+                            <span id="LocLattitude" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+ *@
+    
+
+
+
+
+
+
+
+
+
+
+                <div class="row my-3">
+                    <div class="col-md-12">
+
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm LDescription", @placeholder = "Description", maxlength = "250" })
+                                <span id="LocDescription" class="text-danger"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                <div class="view-details">
+
+                                    @Html.DisplayFor(Model => Model.Description)
+                                    @Html.HiddenFor(model => Model.Description)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @*<button type="submit" class="btn btn-default  mobile-full-width">
+                    Create
+                </button>*@
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveLocation('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveLocation('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

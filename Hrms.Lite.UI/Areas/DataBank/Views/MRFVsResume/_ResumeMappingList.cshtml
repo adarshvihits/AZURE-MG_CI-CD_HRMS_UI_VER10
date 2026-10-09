@@ -1,0 +1,152 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.MRFVsResume
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table    mrf-resume-list new-tble-pad-tp ">
+    @Html.HiddenFor(m => m.VacancyManagement_List.Count)
+    <table id="vacList" class="common-table ">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">
+                    MRF No
+                </th>
+                <th scope="col">
+                    Job Title
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" title="">
+                   Initiated on
+                </th>
+
+
+                <th scope="col">
+                    Deadline
+                </th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="Number Of Requirements">
+                    No.Req
+
+                </th>
+                <th scope="col">
+                    Location
+                </th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="Days Left">
+                    D. L.
+                </th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="Mapped Resumes">
+                    Resumes
+                </th>
+
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="Screening/Shortlisted">
+                    Shtlst
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="Interview&Evaluation">
+                    I & E
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip"
+                    title="RA Approval">
+                    RAA
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.VacancyManagement_List != null && Model.VacancyManagement_List.Count > 0)
+            {
+
+                for (int i = 0; i < Model.VacancyManagement_List.Count; i++)
+                {
+                    <tr>
+
+                        <td data-label="MRF No">@Model.VacancyManagement_List[i].JobCode</td>
+                        <td data-label="Job Title">
+                            <a onclick="GetList('@Model.VacancyManagement_List[i].VacancyManagementGI')">@Html.HiddenFor(m => m.VacancyManagement_List[i].VacancyManagementGI)  @Model.VacancyManagement_List[i].JobTitle</a>
+
+                        </td>
+                        <td data-label="Req date">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].RequestedDate))
+
+                        </td>
+                        <td data-label="Need By Date">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].NeedByDate))
+
+                        </td>
+                        <td data-label="Number Of Requirements">
+                            @Model.VacancyManagement_List[i].NoOfRequirements
+
+                        </td>
+                        <td data-label="Applied Location">
+                            @Model.VacancyManagement_List[i].Location
+
+                        </td>
+                        @*<td data-label="Days Left">
+                                @Model.VacancyManagement_List[i].DaysLeft
+
+                            </td>*@
+                        @if (@Model.VacancyManagement_List[i].DaysLeft < 0)
+                        {
+                            <td data-label="Days Left"><span class="text-color-low">@Model.VacancyManagement_List[i].DaysLeft</span></td>
+                        }
+                        else
+                        {
+                            <td data-label="Days Left"><span class="text-color-high">@Model.VacancyManagement_List[i].DaysLeft</span></td>
+                        }
+                        <td data-label="Total Mapped Resume">
+                            <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                               type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyManagement_List[i].VacancyManagementGI')">
+                                @Model.VacancyManagement_List[i].MappedResumes
+                            </a>
+
+                        </td>
+                        <td data-label="Total Mapped Resume">
+                            @Model.VacancyManagement_List[i].Shortlisted
+
+                        </td>
+                        <td data-label="Total Mapped Resume">
+                            @Model.VacancyManagement_List[i].InterviewEvaluation
+
+                        </td>
+                        <td data-label="Total Mapped Resume">
+                            @Model.VacancyManagement_List[i].FinalApprove
+
+                        </td>
+
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mapped Resumes
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

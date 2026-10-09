@@ -1,0 +1,57 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@{
+    Model.TabIndex = "Skills";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "skillSubmit" }))
+{
+    @Html.HiddenFor(m => m.TabIndex)
+    @Html.HiddenFor(m => m.EmployeeGI)
+
+    <div id="skillSliderOpen" class="slider-forms slider-forms-open skillSliderclose">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('skillSliderclose')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h3>Skills</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Skill Type</label><span class="Mandatory">*</span>
+                        @Html.HiddenFor(m => m.GetSkills.SkillLogGI)
+                        @Html.HiddenFor(m => m.SliderName)
+                        @Html.DropDownListFor(m => m.GetSkills.SkillType.Code, (SelectList)ViewBag.Sty, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onSkillChange(this, 'skilltype')" })
+                        <span id="skilltype"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Skill</label><span class="Mandatory">*</span>
+
+                        @Html.DropDownListFor(m =>m.GetSkills.Skill.Code, (SelectList)ViewBag.Ski, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'skill')" })
+                        <span id="skill"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Skill Proficiency</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.GetSkills.SkillProficiency.Code, (SelectList)ViewBag.Skp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'skillproficiency')" })
+
+                        <span id="skillproficiency"></span>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <button type="button" class="btn btn-default" onclick="validateAllSkillSave('@Model.SliderName')">@Model.SliderName</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

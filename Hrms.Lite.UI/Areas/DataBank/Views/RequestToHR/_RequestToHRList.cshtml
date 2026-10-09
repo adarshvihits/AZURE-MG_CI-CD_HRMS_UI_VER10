@@ -1,0 +1,80 @@
+﻿@model Hrms.Lite.Shared.DataBank.RequestToHR
+
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        //$('#ResignationDeleteTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table request_to_hrlist ">
+    @Html.HiddenFor(m => m.RequestToHRList.Count)
+    <table id="ResignationDeleteTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Request</th>
+                @*<th scope="col">Remarks</th>*@
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RequestToHRList != null && Model.RequestToHRList.Count > 0)
+            {
+                for (int i = 0; i < Model.RequestToHRList.Count; i++)
+                {
+                    @Html.HiddenFor(m=>m.RequestToHRList[i].RequestCode)
+                    @Html.HiddenFor(m=>m.RequestToHRList[i].EmployeeGI)
+                    <tr>
+                        <td data-label="ID">@Model.RequestToHRList[i].EmployeeID</td>
+                        <td data-label="Employee Name">
+                            @Model.RequestToHRList[i].EmployeeName
+                        </td>
+                        <td data-label="Designation">@Model.RequestToHRList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.RequestToHRList[i].Department.Name </td>
+                        <td data-label="Location">@Model.RequestToHRList[i].Location.Name</td>       
+                        <td data-label="Stage">@Model.RequestToHRList[i].Request</td>
+                        @*<td data-label="Stage">@Model.RequestToHRList[i].Remarks</td>*@
+
+
+                        <td data-label="Action">
+                            <a data-bs-toggle="tooltip" title="Edit"
+                               id="categoryedit"
+                               class="btn btn-icon btn-edit icon-only" onclick="onEditClick('@Model.RequestToHRList[i].EmployeeGI', '@Model.RequestToHRList[i].RequestCode')">
+                                <i class="icon-xl fas fa-pencil-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @*<tr><td colspan="11"> No data found</td></tr>*@
+            }
+
+
+
+
+        </tbody>
+    </table>
+</div>

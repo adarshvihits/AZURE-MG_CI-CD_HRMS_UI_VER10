@@ -1,0 +1,178 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+<script>
+    $(document).ready(function () {
+        debugger
+        $.getJSON("/DataBank/JobTransition/GetTransitionReasonDrpDwn", { TypeCode: $('#JobTransition_JobDetail_JobTransitionsType_Code').val() }, function (data) {
+            $('#JobTransition_JobDetail_JobTransitionReason_Code option').remove();
+            $('#JobTransition_JobDetail_JobTransitionReason_Code').append('<option value="">Select Reason</option');
+            debugger;
+            for (var i = 0; i < data.length; i++) {
+                $('#JobTransition_JobDetail_JobTransitionReason_Code').append('<option value="' + data[i].code + '">' + data[i].name + '</option');
+            }
+            $('#JobTransition_JobDetail_JobTransitionReason_Code').val(@Model.JobTransition_JobDetail.JobTransitionReason.Code);
+
+        });
+    });
+   /* jobTransitionReason();*/
+</script>
+
+<div class="step-outer step_row">
+
+    <a href="#" onclick="onProgressTabClick('growth-history')" class="step-item active">
+        Growth History
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item active ">
+        Effective From
+        <span class="step-circle focused"></span>
+    </div>
+    <div class="step-item">
+        Job Details
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Compensation & Benifits
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Add Authority
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Subordinates
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Document/Summary
+        <span class="step-circle"></span>
+    </div>
+</div>
+
+
+<div class="job-transition-outer">
+
+    <div class="row my-2">
+        <!--<div class="col-md-3">
+            <div class="form-group">
+                <label>Transition Type</label>
+                <span class="Mandatory">*</span>-->
+        @*@Html.DropDownListFor(m => Model.JobTransition_JobDetail.JobTransitionsType.Code, (SelectList)ViewBag.TransitionType, "Select Transition Type", new { @class = "form-control form-control-sm", @onchange = "onJObTrnTypechange(this)" })*@
+        <!--<span id="JTJobTransitionsType"></span>
+
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Reason</label>
+                <span class="Mandatory">*</span>-->
+        @*@Html.DropDownListFor(m => Model.JobTransition_JobDetail.JobTransitionReason.Code, (SelectList)ViewBag.TransitionReason, "Select Reason", new
+             {
+                 @class = "form-control form-control-sm"
+            ,
+                 @onchange = "validate(this,'JTJobTransitionReason')"
+             })*@
+        <!--<span id="JTJobTransitionReason"></span>
+            </div>
+        </div>-->
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>Effective Date</label>
+                <span class="Mandatory">*</span>
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.JobTransition_JobDetail.EffectiveDate, "{0:dd-MMM-yyyy}",
+                   new { @class = "form-control kt_datepicker_2", @placeholder = "Effective Date", @onchange = "validate(this,'JTEffectiveDate');onPRChange();" })
+
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="JTEffectiveDate"></span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>Order Date</label>
+                <span class="Mandatory">*</span>
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.JobTransition_JobDetail.OrderDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Order Date", @onchange = "validate(this,'JTOrderDate');" })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="JTOrderDate"></span>
+            </div>
+        </div>
+        @*<div class="col-md-2">
+                <div class="form-group">
+                    <label>PR Applicable</label>
+                    <span class="Mandatory">*</span>
+
+
+
+                    @Html.DropDownListFor(model => model.JobTransition_JobDetail.PRApplicability.Code,
+            new List<SelectListItem> {
+                 new SelectListItem {  Value= "1" , Text = "YES" },
+                 new SelectListItem { Value = "0" , Text = "NO" },
+
+              }, "--Select--",
+            new { @class = "form-control form-control-sm", @onchange = "validate(this,'prAppl');onPRChange();" })
+                </div>
+                <span id="prAppl"></span>
+            </div>*@
+    </div>
+
+    @*<div class="row my-2">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Next Appraisal Date</label>
+
+                    <div class="input-group date">
+                        @Html.TextBoxFor(m => m.JobTransition_JobDetail.NextAppraisalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Appraisal Date"})
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>*@
+   
+
+</div>
+
+    <div class="row card-footer-bottom-fixed">
+        <div class="col-md-6 align-left">
+
+
+        </div>
+        <div class="col-md-6 align-right">
+            <button type="button" onclick="onNextClick('transition-type')"
+                    class="btn btn-default float-right mobile-full-width">
+                Next
+            </button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

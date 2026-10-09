@@ -1,0 +1,76 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.LoanIssue
+    <script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            //$('#loantopuptable').DataTable({
+            //    "pageLength": 25,
+            //    "language":
+            //    {
+            //        searchPlaceholder: "Search",
+            //    }
+            //});
+
+            //$(".dataTables_filter").addClass("dataTables_filter_trn");
+            //$('.ihits-table table').removeClass("dataTable no-footer");
+            //$(".ihits-table table tr th").removeAttr('style')
+
+        });
+    </script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table loan-topup-list">
+        @Html.HiddenFor(m => m.LoanIssuesList.Count)
+        <table id="loantopuptable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+
+                    <th scope="col">Loan Type</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Loan Balance">Loan Bal.</th>
+                    <th scope="col">Monthly EMI</th>
+
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.LoanIssuesList != null && Model.LoanIssuesList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.LoanIssuesList.Count; i++)
+                    {
+
+                        <tr>
+
+                            <td data-label="SL:NO">@Model.LoanIssuesList[i].EmployeeID</td>
+                            <td data-label="Candidate Name">@Model.LoanIssuesList[i].EmployeeName</td>
+                            <td data-label="Designation">@Model.LoanIssuesList[i].Designation.Name</td>
+                            <td data-label="Department">@Model.LoanIssuesList[i].Department.Name</td>
+                            <td data-label="Location">@Model.LoanIssuesList[i].Location.Name</td>
+                            <td data-label="Loan Type">@Model.LoanIssuesList[i].LoanType</td>
+                            <td data-label="Loan Balance">@Model.LoanIssuesList[i].LoanBalance</td>
+                            <td data-label="Monthly EMI">@Model.LoanIssuesList[i].MonthlyEMI</td>
+                            <td data-label="Action">
+                                <a data-bs-toggle="tooltip" title="Edit"
+                                   id="AppraisalView "
+                                   class="btn btn-icon btn-edit icon-only " onclick="OnEditLoanTopUpClick('@Model.LoanIssuesList[i].LoanIssueGI', '@Model.LoanIssuesList[i].EmployeeGI', '@Model.LoanIssuesList[i].LoanBalance')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+                            </td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+
+
+
+    </div>

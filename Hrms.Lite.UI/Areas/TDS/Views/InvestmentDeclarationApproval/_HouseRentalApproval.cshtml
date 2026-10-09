@@ -1,0 +1,202 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "HouseRentalApprove" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table House-Rental-list-Approval-list mb-2 vertical-scroll-300 ">
+          
+                    <table id="rental" style="">
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">Month</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Other City Name</th>
+                                <th scope="col">Metro/NonMetro</th>
+                                <th scope="col" class="text-right">Actual Amt</th>
+                                <th scope="col" class="text-right">Approved Amt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @Html.HiddenFor(m => m.EmployeeGuid)
+                            @Html.HiddenFor(m => m.AssessmentYear.Code)
+                            @Html.HiddenFor(m => m.HouseRentalData.Count)
+                            @if (Model != null && Model.HouseRentalData.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.HouseRentalData.Count; i++)
+                                {
+                                    <tr class="even">
+
+                                        <td data-label="Month">
+                                            @Html.HiddenFor(m => @Model.HouseRentalData[i].TrnCode)
+                                            @Html.HiddenFor(m => @Model.HouseRentalData[i].SalaryPeriodCode)
+                                            @Model.HouseRentalData[i].Month
+
+                                        </td>
+                                        <td data-label="City">
+                                            <div style="position:relative;">
+                                                @Html.DropDownListFor(m => m.HouseRentalData[i].MetroCity.Code, (SelectList)ViewBag.MetroCity, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onCityChange(this," + i + ")" })
+                                                <span id="city_@i"></span>
+                                            </div>
+                                        </td>
+                                        <td data-label="other City Name">
+
+                                            @Html.TextBoxFor(m => Model.HouseRentalData[i].OtherCityName, new { @class = "form-control", placeholder = "Other City Name", @maxlength = 120, @onchange = "onOtherCityChange(this," + i + ")" })
+
+                                        </td>
+                                        <td data-label="Metro/NonMetro">@Html.TextBoxFor(m => Model.HouseRentalData[i].MetroNonMetro, new { @class = "form-control", placeholder = "Metro/NonMetro", @maxlength = 120 })</td>
+                                        <td data-label="Declared Amount">
+
+                                            @Html.TextBoxFor(m => Model.HouseRentalData[i].Amount, new { @class = "form-control", placeholder = "Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onblur = "validateCity(" + i + ")", @style = "text-align:right", @readonly = "true" })
+
+                                        </td>
+                                        <td data-label="Approved Amount">
+
+                                            @Html.TextBoxFor(m => Model.HouseRentalData[i].ApprvdAmount, new { @class = "form-control", placeholder = "Approved Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @onblur = "validateCity(" + i + ")", @style = "text-align:right", @onchange = "onRentAmountChange(this," + i + ")" })
+
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                        <tfoot style="display:inline-table; width:100%;">
+                            <tr class="table-light">
+                                <td data-label="Month"><strong></strong></td>
+                                <td data-label="City">
+                                    <strong></strong>
+                                </td>
+                                <td data-label="CityName">
+                                    <strong></strong>
+                                </td>
+                                <td data-label="Other">
+                                    <strong></strong>
+                                </td>
+                                <td data-label="Actual" align="right">
+                                    <strong>
+                                        <span id="actualamt"></span>
+                                    </strong>
+                                </td>
+                                <td data-label="Approval" align="right">
+                                    <strong>
+                                        <span id="approvalamt"></span>
+                                    </strong>
+                                </td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <div class="accoding-new-color-change">House Rent Landlord Details</div>
+    <div id="landlord" class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table Investment-Under-Section-Landlord-tble-two mb-2">
+                <table id="tbllandlord">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Landlord</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Pan</th>
+                            <th scope="col">View</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.LandlordList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.LandlordList.Count; i++)
+                            {
+
+                                <tr id="row_OI_@i">
+                                    <td data-label="SlNo">
+                                        @Html.HiddenFor(m => m.LandlordList[i].TrnCode)
+                                        @(i+1)
+                                    </td>
+                                    <td data-label="Name">
+                                        @Html.TextBoxFor(m => m.LandlordList[i].Name, new { @class = "form-control" })
+
+                                    </td>
+
+                                    <td data-label="Address">
+                                        @Html.TextBoxFor(m => m.LandlordList[i].Address, new { @class = "form-control" })
+
+                                    </td>
+                                    <td data-label="From">
+                                        @Html.HiddenFor(m => m.LandlordList[i].From.Code)
+                                        @Html.TextBoxFor(m => m.LandlordList[i].From.Name, new { @class = "form-control" })
+
+                                    </td>
+                                    <td data-label="To">
+                                        @Html.HiddenFor(m => m.LandlordList[i].To.Code)
+                                        @Html.TextBoxFor(m => m.LandlordList[i].To.Name, new { @class = "form-control" })
+                                    </td>
+                                    <td data-label="pan">
+                                        @Html.TextBoxFor(m => m.LandlordList[i].Pan, new { @class = "form-control" })
+
+                                    </td>
+                                    <td data-label="AttachDocument">
+
+                                        <i onclick="GetUploadDocumentPopUp('RENTAL', '@Model.LandlordList[i].TrnCode')" title="Click Here To View Document" class="flaticon far fa-eye"></i>
+                                        <span>@Model.LandlordList[i].RentalDocCount</span>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" align="center"><em>No table data</em></td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+}
+<div class="row mr-10">
+    <div class="col-md-12 " style="text-align:end;">
+
+        @if (Model.LandlordList.Count > 0)
+        {
+
+            <span class="float-right mt-2" style="font-weight:600; color:@Model.LandlordList[0].StatusColor"> @Model.LandlordList[0].ApprovalStatus</span>
+        }
+            <button type="button" onclick="HouseRentalSave('Approved')"
+                    class="btn btn-default float-right" style="background-color:green!important;border-color:green!important;">
+                Approve
+            </button>
+
+            <button data-bs-toggle="modal" type="button" onclick="RejectionPopUp(0,'HouseRental')"
+                    class="btn btn-default float-right mr-5" style="background-color:red!important;border-color:red!important;" id="HouseRentalbtnId">
+                Reject
+
+            </button>
+
+
+
+
+
+        </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

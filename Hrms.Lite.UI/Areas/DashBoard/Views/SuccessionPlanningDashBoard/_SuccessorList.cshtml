@@ -1,0 +1,188 @@
+﻿
+@model Hrms.Lite.Shared.DashBoard.SuccessionDashboard
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/js/settings.js"></script>
+    <style>
+        .dataTables_scrollBody {
+            height: 28vh !important;
+        }
+
+        .modal-open .modal {
+            overflow-x: hidden;
+            overflow-y: hidden !important;
+        }
+        .popup {
+            margin: 10% auto !important;
+            /* padding: 10px; */
+        }
+       
+    </style>
+    <div class="pt-2 ihits-table table-border mobile-responsive-table succession-planning ">
+        <table class="common-table">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">ID</th>
+                    <th scope="col"> Employee Name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Y/S</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Qual</th>
+                    <th scope="col">Skill</th>
+                    <th scope="col">Lang</th>
+                    <th scope="col">Matching</th>
+                    <th scope="col">View Profile</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    if (Model.SuccessorsList != null && Model.SuccessorsList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.SuccessorsList.Count; i++)
+
+                        {
+                            <tr>
+
+                                <td data-label="ID">
+                                    @Model.SuccessorsList[i].EmployeeID
+                                </td>
+
+                                <td data-label="Current Employee">@Model.SuccessorsList[i].EmployeeName</td>
+                                <td data-label="Gender">
+                                    @if (Model.SuccessorsList[i].Gender == true)
+                                    {
+
+                                        <button type="button" class="btn btn-icon btn-tick float-none">
+                                            <i class="icon-xl fas fa-check"></i>
+                                        </button>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-icon btn-close float-none">
+                                            <i class="icon-xl fas fa-times"></i>
+
+                                        </button>
+                                    }
+
+                                </td>
+                                <td data-label="Y/S">
+                                    @if (Model.SuccessorsList[i].YOS == true)
+                                    {
+
+                                        <button type="button" class="btn btn-icon btn-tick float-none">
+                                            <i class="icon-xl fas fa-check"></i>
+                                        </button>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-icon btn-close float-none">
+                                            <i class="icon-xl fas fa-times"></i>
+
+                                        </button>
+                                    }
+                                </td>
+                                <td data-label="Age">
+                                    <button type="button"
+                                            class="btn btn-icon btn-tick float-none">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+                                </td>
+
+                                <td data-label="Qual">
+                                    @if (Model.SuccessorsList[i].Qualification == true)
+                                    {
+
+                                        <button type="button" class="btn btn-icon btn-tick float-none">
+                                            <i class="icon-xl fas fa-check"></i>
+                                        </button>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-icon btn-close float-none">
+                                            <i class="icon-xl fas fa-times"></i>
+
+                                        </button>
+                                    }
+                                </td>
+                                <td data-label="Skill">
+                                    @if (Model.SuccessorsList[i].Skill == true)
+                                    {
+
+                                        <button type="button" class="btn btn-icon btn-tick float-none">
+                                            <i class="icon-xl fas fa-check"></i>
+                                        </button>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-icon btn-close float-none">
+                                            <i class="icon-xl fas fa-times"></i>
+
+                                        </button>
+                                    }
+                                </td>
+                                <td data-label="Lang">
+                                    @if (Model.SuccessorsList[i].Language == true)
+                                    {
+
+                                        <button type="button" class="btn btn-icon btn-tick float-none">
+                                            <i class="icon-xl fas fa-check"></i>
+                                        </button>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-icon btn-close float-none">
+                                            <i class="icon-xl fas fa-times"></i>
+
+                                        </button>
+                                    }
+                                </td>
+                                <td data-label="Matching">
+                                    <div class="profile-matching-line">
+                                        <div class="progress-bar">
+                                            @if (Model.SuccessorsList[i].Matching > 75)
+                                            {
+                                                <div class="high" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorsList[i].Matching">@*<span class="progress-value">@Model.SuccessorsList[i].Matching</span>*@</div>
+                                            }
+                                            else if (Model.SuccessorsList[i].Matching >= 50)
+                                            {
+                                                <div class="medium" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorsList[i].Matching">@*<span class="progress-value">@Model.SuccessorsList[i].Matching</span>*@</div>
+                                            }
+                                            else if (Model.SuccessorsList[i].Matching < 50)
+                                            {
+                                                <div class="low" data-bs-toggle="tooltip" title="" data-bs-original-title="@Model.SuccessorsList[i].Matching">@*<span class="progress-value">@Model.SuccessorsList[i].Matching</span>*@</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Actions">
+                                    <div class="small-btn-group">
+                                        <button data-bs-toggle="tooltip" title="View Profile"
+                                                type="button" class="btn btn-icon btn-eye icon-only" onclick="ViewEmployee('@Model.SuccessorsList[i].EmployeeGI')">
+                                            <i class="icon-xl far flaticon-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+
+
+
+
+
+
+
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>

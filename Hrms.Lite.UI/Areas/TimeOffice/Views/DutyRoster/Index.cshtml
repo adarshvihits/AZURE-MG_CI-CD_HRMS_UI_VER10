@@ -1,0 +1,405 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/TimeOffice/dutyRoster.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+@*<script src="~/js/bootstrap-datepicker.js"></script>*@
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+</style>
+<script>
+    function POPUP() {
+
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: '/TimeOffice/DutyRoster/GetShiftDetailsPOPUP',
+            dataType: 'html',
+            success: function (Data) {
+                var m = $('#dutyRostershiftPopUP');
+                m.find('.modal-body').html('');
+                m.find('.modal-body').html(Data);
+                m.modal('show');
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                swal.fire(xhr.responseText);
+
+            }
+        });
+    }
+
+
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Duty Roster</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Duty Roster
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed ">
+
+                <div class="card-body">
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "DutyRosterUpload", enctype = "multipart/form-data" }))
+                    {                 
+
+
+                        <!--begin: Search Form-->
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+
+                                <div class="tab-items pr-0 border-none  ">
+
+                                    <div class="form-group filter-combobox" style="width: 220px;">
+                                        @Html.DropDownListFor(m => Model.PayrollGroup.Code, (SelectList)ViewBag.PayRollGroup,"ALL" @*"--Select Payroll Group--"*@, new
+                                   {
+                                       @class = "form-control form-control-sm RPayroll",
+                                       @onchange =
+                                       "fillMonth(this);"/*validate(this, 'dutypayRollGrp');*/
+                                   })
+                                        <span id="dutypayRollGrp"></span>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-items pr-0 border-none">
+                                    <div class="form-group filter-combobox mr-2 width-150px">
+                                        @Html.DropDownListFor(m => Model.Month.Code, (SelectList)ViewBag.Month, "--Select Month--", new
+                                        {
+                                            @class = "form-control form-control-sm RMonth",
+                                       @onchange = "validate(this,'dutymonth');fillData();"
+                                   })
+                                        <span id="dutymonth"></span>
+                                    </div>
+                                </div>
+
+                                <div class="tab-items pr-0 border-none">
+                                    <div class="form-group filter-combobox width-100px">
+                                        @Html.DropDownListFor(m => Model.Circle.Code, (SelectList)ViewBag.Circle, "--Select Circle--",
+                                       new { @class = "form-control form-control-sm RCircle", @onchange = "validate(this,'dutycircle');fillData()" })
+                                        <span id="dutycircle"></span>
+                                    </div>
+
+                                </div>
+                                <div class="tab-items pr-0 border-none">
+                                    <div class="form-group filter-combobox width-100px">
+                                        @Html.DropDownListFor(m => Model.ShiftType.Code, (SelectList)ViewBag.ShiftType, new { @class = "form-control form-control-sm", @onchange = "validateshift(this,'dutytype');fillData();" })
+                                        <span id="dutytype"></span>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="tab-items select-option">
+                                    <div class="button-group float-left mr-10">
+                                        <button type="button" class="btn btn-default btn-sm" onclick="onEntryBatchUpdateClick()">
+                                            Batch Update
+                                        </button>
+                                    </div>
+
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm" placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button" data-bs-toggle="tooltip" title="Filter" onclick="onFilterClick('outerList')">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel"
+                                       class="btn btn-excel" onclick="onDutyRosterListExportClick()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                    <button type="button" data-bs-toggle="tooltip" title="Import From Excel" onclick="validateShift()"
+                                            class="btn btn-excel ml-0 import">
+                                        <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" data-bs-toggle="tooltip" title="From-To Date Updation" onclick="FromToDateUpdation()"
+                                            class="btn btn-excel ml-0 import">
+                                        <img src="~/images/menuicon/changes.svg" style="width:20px;" />
+
+
+
+
+                                    </button>
+                                </div>
+                                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="Impexcel">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content popup">
+                                            <div class="modal-header" style="padding:10px">
+                                                <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatchedlist').html('');$('#Excel_FileData').val()">
+                                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body pt-3">
+                                                <div class="colums_list pb-1">
+                                                    Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                    Employee ID,
+                                                    Employee Name,
+                                                    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31<br />
+                                                    @*Columns Needed :- Employee ID, Employee Name, days*@
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="file-upload-form-group">
+                                                            <label for="formFileMultiple" class="form-label">
+                                                                Attach
+                                                                File
+                                                                <span class="Mandatory">*</span>
+                                                            </label>
+
+                                                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only .xlsx files are
+                                            allowed , File size less than 1 MB.">
+                                                                <div class="small-btn-group">
+
+                                                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                                </div>
+                                                                <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+
+                                                                @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100", @onchange = "onImportExcelClick()" })
+                                                            </div>
+
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div id="Unmatchedlist">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="Imp_FromToDateUpdation_excel">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content popup">
+                                            <div class="modal-header" style="padding:10px">
+                                                <h5 class="modal-title" id="exampleModalLabel">Upload Format</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#Unmatchedlist').html('');$('#Excel_FileData').val()">
+                                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body pt-3">
+                                                <div class="colums_list pb-1">
+                                                    Please ensure your Excel file contains the following columns with the exact headings. Spelling and case must match precisely for a successful import -
+
+                                                    Employee ID,
+                                                    Employee Name,
+                                                    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31<br />
+                                                    @*Columns Needed :- Employee ID, Employee Name, days*@
+                                                </div>
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row-outer">
+                                                                <label class="view-title">
+                                                                    From
+                                                                </label>
+                                                                <div class="input-group date">
+                                                                    @Html.TextBoxFor(m => m.ImportFrom, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "From Date", @onchange = "validate(this,'importFrom');" })
+
+
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            <i class="la la-calendar"></i>
+                                                                        </span>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <span id="importFrom"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="row-outer">
+                                                                <label class="view-title">
+                                                                    To
+                                                                </label>
+                                                                <div class="input-group date">
+                                                                    @Html.TextBoxFor(m => m.ImportTo, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "From Date", @onchange = "validate(this,'importTo');" })
+
+
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">
+                                                                            <i class="la la-calendar"></i>
+                                                                        </span>
+
+                                                                    </div>
+
+                                                                </div> <span id="importTo"></span>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="file-upload-form-group">
+                                                            <label for="formFileMultiple" class="form-label">
+                                                                Attach
+                                                                File
+                                                                <span class="Mandatory">*</span>
+                                                            </label>
+
+                                                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only .xlsx files are
+                                            allowed , File size less than 1 MB.">
+                                                                <div class="small-btn-group">
+
+                                                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                                                </div>
+                                                                <input id="File_AbsoluteUri" name="File.AbsoluteUri" type="hidden" value="">
+
+                                                                @Html.HiddenFor(model => model.Excel.FileData, new { type = "file", @class = "input-file PreviewImage form-control h-100 importExcelFile"@*, @onchange = "ImportFromExcel_FromToDateUpdation()"*@ })
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div> <span id="importFile"></span>
+                                                </div>
+
+
+                                                <div class="row">
+
+                                                    <div class="col-md-12 align-right">
+                                                        <a type="button"
+                                                           class="btn btn-default  mobile-full-width" onclick="ImportFromExcel_FromToDateUpdation()">
+                                                            Upload
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                                <div id="Unmatchedlist">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div id="dutyRosterList">
+                        @*@if (Model.Month.Code != 0 && Model.From != null && Model.To != null && Model.Circle.Code != null && Model.PayrollGroup.Code !=null)*@
+                        @await Html.PartialAsync("_DutyRosterEntryList", Model)
+                    </div>
+
+                    <div id="dutyFilter">
+
+                    </div>
+
+
+                    <div id="dutyEntryBatch">
+
+                    </div>
+                    <!--end: Datatable-->
+
+                </div>
+                <div class="row card-footer-bottom-fixed align-right">
+
+                    <div class="">
+
+                        <a data-bs-toggle="modal" data-target="#dutyRostershiftPopUP" onclick="POPUP()">
+                            <div class="application-btn d-flex align-items-center">
+                                <div class="history-btn">
+                                    <img src="/images/arrow_3_trianglepath.png">
+
+                                </div>
+                                <div class="application-icon"> <h3 class="pt-2 pl-3">Shift Details</h3></div>
+                            </div>
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->
+<div class="modal fade bd-example-modal-lg" id="dutyRostershiftPopUP" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:1000px;">
+            <div class="modal-content popup">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Shift Details</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+

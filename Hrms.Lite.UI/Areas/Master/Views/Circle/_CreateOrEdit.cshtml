@@ -1,0 +1,301 @@
+﻿@model Hrms.Lite.Shared.Master.Circle
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        moveCursorToEnd('Name');
+        var count = $('#CircleTable tr').length - 1;
+        if (count == 1) 
+            $('#objDelete_0').addClass('hide');
+        else
+            $('#objDelete_0').removeClass('hide');
+        $(".loadselectpicker").find("option").eq(0).hide();
+        $('.loadselectpicker').selectpicker();
+    });
+
+
+</script>
+<style>
+    .slider-forms {
+        width: 715px;
+    }
+
+    .bootstrap-select .dropdown-menu {
+        width: max-content !important;
+    }
+
+    .form-control .btn.dropdown-toggle {
+        border: none !important;
+    }
+
+   
+    .slider-forms.slider-opens {
+        right: 0px;
+        transition: 0.4s;
+    }
+
+</style>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "Circle", FormMethod.Post, new { id = "Circlesave" }))
+{
+    <div id="circleedit" class="slider-forms  slider-forms-open slider-opens AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseCircleSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Employee Circle</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'CircleName')", maxlength = "120" })
+                            <span id="CircleName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'CircleShortName')", maxlength = "5" })
+
+
+                        </div>
+                        <span id="CircleShortName"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidationCircle('CIRCLE',@Model.Code)">
+
+                                @Html.CheckBoxFor(model => model.Active,new{@id="circle" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.HiddenFor(model => Model.Description)
+
+                                @Html.DisplayFor(model => Model.Description)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ihits-table table-border  Employee-Circle-sliderr-list  vertical-scroll-300">
+                            <table id="CircleTable">
+                                <thead>
+                                    <tr class="table-gray">
+                                       
+                                        <th scope="col">
+                                            Authority
+                                        </th>
+
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+
+
+                                        @*if (Model.CircleAuthorities != null && Model.CircleAuthorities.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.CircleAuthorities.Count; i++)
+                        {
+
+                            <tr id="row_OI_@i">
+
+
+                                <td>
+
+                <div class="position">
+                <div>
+
+
+                    @Html.DropDownListFor(model => model.CircleAuthorities[i].Authority.Code, (SelectList)ViewBag.Aut, "--Select--", new
+                    {
+                        @class = "form-control form-control-sm selectpicker sliderSearchInput loadselectpicker circleval",
+                        @onchange = "validateCircleAuthorityDD(this, 'circleval','authorityname_" + @i + "')",
+                        data_show_subtext = "true",
+                   data_live_search = "true",
+               })
+
+                </div>
+                <span class="authority" id="authorityname_@i"></span>
+            </div>
+                                </td>
+
+                                <td data-label="Actions">
+                                    @if (Model.CircleAuthorities.Count == (i + 1) || Model.CircleAuthorities.Count == 1)
+                                    {
+                                        <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                           class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('CircleTable')">
+                                            <i class="fa fa-plus"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                           class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('CircleTable')">
+                                            <i class="fa fa-plus"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                    }
+                                <a id="objDelete_@i" data-bs-toggle="tooltip"
+                                   title="Delete"
+                                   class="btn btn-icon icon-only mobile-full-width btn-delete objDelete" onclick="DeleteResultRow(@i)">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+                                </td>
+                            </tr>
+                        }
+                    }*@
+
+
+                                        @if (Model.CircleAuthorities != null && Model.CircleAuthorities.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.CircleAuthorities.Count; i++)
+                                            {
+                                                <tr id="row_OI_@i">
+                                                    <td>
+                                                        <div class="position">
+                                                            <div>
+                                                                @Html.DropDownListFor(model => model.CircleAuthorities[i].Authority.Code, (SelectList)ViewBag.Aut, "--Select--", new
+                                                                {
+                                                                    @class = "form-control form-control-sm selectpicker sliderSearchInput loadselectpicker circleval",
+                                                                    @onchange = "validateCircleAuthorityDD(this, 'circleval','authorityname_" + @i + "')",
+                                                                    data_show_subtext = "true",
+                                                                    data_live_search = "true"
+                                                                })
+                                                            </div>
+                                                            <span class="authority" id="authorityname_@i"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Actions">
+                                                        @if (Model.CircleAuthorities.Count == (i + 1) || Model.CircleAuthorities.Count == 1)
+                                                        {
+                                                            <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                                               class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('CircleTable')">
+                                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a id="objAdd_@i" data-bs-toggle="tooltip" title="Add"
+                                                               class="btn btn-icon btn-edit icon-only slider-btn addObj hide" onclick="AddNewResultRow('CircleTable')">
+                                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                            </a>
+                                                        }
+                                                        <a id="objDelete_@i" data-bs-toggle="tooltip"
+                                                           title="Delete"
+                                                           class="btn btn-icon icon-only mobile-full-width btn-delete objDelete" onclick="DeleteResultRow(@i)">
+                                                            <i class="icon-xl far fa-trash-alt"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Fallback row when no CircleAuthorities are present
+                                            <tr id="row_OI_0">
+                                                <td>
+                                                    <div class="position">
+                                                        <div>
+                                                            @Html.DropDownList("CircleAuthorities[0].Authority.Code", (SelectList)ViewBag.Aut, "--Select--", new
+                                                            {
+                                                                @class = "form-control form-control-sm selectpicker sliderSearchInput loadselectpicker circleval",
+                                                                data_show_subtext = "true",
+                                                                data_live_search = "true"
+                                                            })
+                                                        </div>
+                                                        <span class="authority" id="authorityname_0"></span>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Actions">
+                                                    <a id="objAdd_0" data-bs-toggle="tooltip" title="Add"
+                                                       class="btn btn-icon btn-edit icon-only slider-btn addObj" onclick="AddNewResultRow('CircleTable')">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a id="objDelete_0" data-bs-toggle="tooltip"
+                                                       title="Delete"
+                                                       class="btn btn-icon icon-only mobile-full-width btn-delete objDelete" onclick="DeleteResultRow(0)">
+                                                        <i class="icon-xl far fa-trash-alt"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+
+
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="CircleSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="CircleSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

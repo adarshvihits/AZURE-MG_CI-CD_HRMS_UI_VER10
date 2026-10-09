@@ -1,0 +1,84 @@
+﻿@model Hrms.Lite.Shared.DataBank.Generic.Master.ERPAccountHead
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+
+    });
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ERPAccountHead-pending pt-1">
+    @Html.HiddenFor(m => m.ERPAccountHeadList.Count)
+    <table id="PendingERPAccountHeadTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">ERP Account Head User Code</th>
+
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+                if (Model.ERPAccountHeadList != null && Model.ERPAccountHeadList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ERPAccountHeadList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.ERPAccountHeadList[i].MakerChecker)
+                            <td data-label="Name">@Model.ERPAccountHeadList[i].Name</td>
+                            <td data-label="Short Name">@Model.ERPAccountHeadList[i].ShortName</td>
+                            <td data-label="Entry Type">@Model.ERPAccountHeadList[i].ACCUserCode</td>
+                            <td data-label="Entry Type">@Model.ERPAccountHeadList[i].Mode</td>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Mode)
+
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="ERPAccountHeadapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.ERPAccountHeadList[i].GI', '@Model.ERPAccountHeadList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="ERPAccountHeadapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.ERPAccountHeadList[i].GI', '@Model.ERPAccountHeadList[i].LogGI', 'APPROVAL',@i);
+                                   swal.fire(MasterPersmissionMsg)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

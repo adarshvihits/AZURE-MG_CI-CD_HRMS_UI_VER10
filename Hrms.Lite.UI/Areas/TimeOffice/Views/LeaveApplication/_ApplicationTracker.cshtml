@@ -1,0 +1,209 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Generic.LeaveApplication
+<script src="~/js/tooltip.js"></script>
+<div class="slider-forms slider-forms-open applntrackerlistslider">
+    <div class="slider-inner-style  new-inner-style">
+        <div class="slider-form-close" onclick="CloseSlider('applntrackerlistslider')">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </div>
+        <div class="location-slider">
+            <h4 class="mb-4">Application Tracker</h4>
+        </div>
+        <!----- stepper start here --->
+        <div class="add-padding">
+            <div>
+
+                @if (Model.Tracker != null && Model.Tracker.Count > 0)
+                {
+                    for (int i = Model.Tracker.Count - 1; i >= 0; i--)
+                    {
+                        if (@Model.Tracker[i].ApprovalStatus == "Pending")
+
+                        {
+
+                            <!-- completed -->
+                            <div class="step">
+                                <div class="v-stepper">
+                                    <div class="circle"><i class="fa fa-check"></i></div>
+                                    <div class="line"></div>
+                                </div>
+
+                                <div class="stepper-content">
+                                    <div class="row-outer">
+                                        <label class="view-title">@Model.Tracker[i].Stage</label>
+                                        <div class="view-details">
+                                            @Model.Tracker[i].ApprovalStatus, @Model.Tracker[i].Approver
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        }
+                        else if (@Model.Tracker[i].ApprovalStatus == "Rejected")
+                        {
+                            <div class="step active rejected">
+                                <div class="v-stepper">
+                                    <div class="circle"><i class="icon-xl fas fa-times"></i></div>
+                                    <div class="line"></div>
+                                </div>
+
+                                <div class="stepper-content">
+                                    <div class="row-outer">
+                                        <label class="view-title">@Model.Tracker[i].Stage</label>
+
+                                        <div class="view-details">
+                                            @Model.Tracker[i].ApprovalStatus, @Model.Tracker[i].Approver, @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].Date))
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="step active completed">
+                                <div class="v-stepper">
+                                    <div class="circle"><i class="fa fa-check"></i></div>
+                                    <div class="line"></div>
+                                </div>
+
+                                <div class="stepper-content">
+                                    <div class="row-outer">
+                                        <label class="view-title">@Model.Tracker[i].Stage</label>
+                                        @if (Model.Tracker[i].ApprovalStatus == "Applied")
+                                        {
+                                            <div class="view-details">
+                                                @Model.Tracker[i].ApprovalStatus, @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].Date))
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="view-details">
+                                                @Model.Tracker[i].ApprovalStatus, @Model.Tracker[i].Approver, @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.Tracker[i].Date))
+                                            </div>
+                                        }
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        }
+
+
+                    }
+                }
+            </div>
+
+            <!----- stepper end here --->
+            <!--table start here-->
+            <div class="ihits-table table-border mobile-responsive-table tracker-list mb-5">
+                <table>
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Type</th>
+
+                            <th scope="col">No of days</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td data-label="ID">@Model.LeaveType.Name</td>
+
+                            <td data-label="No of days">
+                                @Model.TotalDays
+                            </td>
+
+                            <td data-label="From">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.From))
+                            </td>
+
+                            <td data-label="To">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.To))
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!--table start end-->
+
+
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Reason</label>
+                        <div class="view-details">
+                            @Model.LeaveReason.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Additional Remarks</label>
+                        <div class="view-details">
+                            @Model.AdditionalRemarks
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Work Handover:</label>
+                        <div class="view-details">
+                            @Model.HandOverDetails
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Contact Details & Address</label>
+                        <div class="view-details">
+                            @Model.ContactDetails
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed">
+
+                <div class="view-details align-right col-md-12">
+                    @*<a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" onclick="showDocument('@Model.Attachment.FileName', '@Model.Attachment.AbsoluteUri')" class="btn btn-small btn-secondary mobile-full-width">
+            @Html.HiddenFor(model => Model.Attachment.AbsoluteUri)*@
+
+                    <a data-bs-toggle="tooltip" data-bs-original-title="View File" type="button" onclick="showDecompressedDocument('@Model.LeaveApplicationGI','LEAVE')" class="btn btn-small btn-secondary mobile-full-width">
+                        @Html.HiddenFor(model => Model.Attachment.AbsoluteUri)
+                        <i class="icon-xl far fa-eye"></i>View File
+                    </a>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>

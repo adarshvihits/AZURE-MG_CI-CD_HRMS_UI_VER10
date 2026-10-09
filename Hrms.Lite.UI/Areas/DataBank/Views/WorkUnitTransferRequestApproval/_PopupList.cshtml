@@ -1,0 +1,53 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.WorkUnitTransferRequest
+    <script>
+    $(document).ready(function () {
+        $('.authoritydropdn').selectpicker();
+    });
+    </script>
+<div class="ihits-table table-border  mobile-responsive-table work_unit_tranfer_list_popuplist">
+
+    <table id="addleveltable">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Request Type</th>
+                <th scope="col">Level</th>
+                <th scope="col">Authority</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.WorkUnitAuthorityList != null && Model.WorkUnitAuthorityList.Count > 0)
+            {
+                for (int i = 0; i < Model.WorkUnitAuthorityList.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.WorkUnitAuthorityList[i].RequestTypeName</td>
+                        <td data-label="Level">
+                            @Html.HiddenFor(m => m.WorkUnitAuthorityList[i].LevelCode)
+                            @Html.HiddenFor(m => m.WorkUnitAuthorityList[i].LevelName)
+                            @Html.HiddenFor(m => m.WorkUnitAuthorityList[i].RequestTypeCode, new { @class = "reqCode" })
+                            @Html.HiddenFor(m => m.WorkUnitAuthorityList[i].RequestTypeName, new { @class = "reqName" })
+                            <span>@Model.WorkUnitAuthorityList[i].LevelName</span>
+                        </td>
+                        <td data-label="ID" style="position:relative;">
+                            <div class="form-group ">
+
+
+                                                     
+                                @Html.DropDownListFor(m => m.WorkUnitAuthorityList[i].AuthorityCode, (SelectList)ViewBag.Aut, "--Select--", new
+                                    {
+                                        @class = "selectpicker form-control form-control-sm form-control authoritydropdn general-validation authCodeDropdn_" + i,
+                                        data_show_subtext = "true",
+                                        data_live_search = "true",
+                                        onchange = "OnAuthorityDropdownChange(" + i + ",this)"
+                                    })
+                            </div>
+                            <span id="authCode"></span>
+                        </td>
+
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

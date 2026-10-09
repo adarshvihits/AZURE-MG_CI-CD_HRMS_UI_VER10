@@ -1,0 +1,303 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.TalentPool
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/multiselect.js"></script>
+<script src="~/js/custom.js"></script>
+<style>
+    .ihits-table.table-border table thead tr th, .ihits-table.table-border table tbody tr td {
+        font-size: 12px !important;
+    }
+</style>
+
+
+
+<div class="row">
+  
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Classifications" }))
+    {
+
+
+    <div class="page_white talent-brder-clr" style="height:570px;">
+        <div class="row mb-1  remove-pd-md">
+            <div class="col-md-6">
+                <div class="row">
+
+
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                            <label>Years Of Service</label>
+
+                            @Html.HiddenFor(m => m.YSAboveOrBelow.Name)
+                            @Html.DropDownListFor(m => m.YSAboveOrBelow.Code, (SelectList)ViewBag.Operators, "All", new { @class = "form-control form-control-sm ", @onchange = "onYOSChange(this)" })
+                        </div>
+                    </div>
+                    <div class="col-md-3 " id="yosDiv">
+                        <div class="form-group mt-6 mt-m-2px">
+                            @Html.TextBoxFor(m => m.YOSFrom, new { @class = "form-control form-control-sm yearsor", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="col-md-3  " id="yosDiv">
+                        <div class="form-group mt-6 mt-m-2px">
+                            @Html.TextBoxFor(m => m.YOSTo, new { @class = "form-control form-control-sm hide yearsor", @placeholder = "" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Age</label>
+
+                            @Html.HiddenFor(m => m.AgeAboveOrBelow.Name)
+                            @Html.DropDownListFor(m => m.AgeAboveOrBelow.Code, (SelectList)ViewBag.Operators, "All", new { @class = "form-control form-control-sm", @onchange = "onAgeChange(this)" })
+                        </div>
+                    </div>
+                    <div class="col-md-2" id="ageDiv">
+                        <div class="form-group mt-6 mt-m-2px">
+                            @Html.TextBoxFor(m => m.AgeFrom, new { @class = "form-control form-control-sm yearsor", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="col-md-2  hide" id="ageToDiv">
+                        <div class="form-group mt-6 mt-m-2px">
+                            @Html.TextBoxFor(m => m.AgeTo, new { @class = "form-control form-control-sm yearsor", @placeholder = "" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label>Gender</label>
+                            @Html.HiddenFor(m => m.Gender.Name)
+                            @Html.ListBoxFor(m => m.GenderCodes, (SelectList)ViewBag.Gen, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm JType", @multiple = "multiple", data_placeholder = "All", @onchange = "onGenderChange()" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        @*Graph skill*@
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="ihits-table table-border  talent-pool-entry-two vertical-scroll-150">
+                    <table id="skillTable">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Skill</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted ">
+                                        @Html.CheckBoxFor(m => m.AllSkills, new { @onclick = "onAllClick('AllSkills','skillTable')" })
+                                        <span></span>
+                                    </label>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Skills != null && Model.Skills.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.Skills.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="ID">
+                                            @Html.HiddenFor(m => m.Skills[i].NAME)
+                                            @Html.HiddenFor(m => m.Skills[i].CODE)
+                                            @Model.Skills[i].NAME
+                                        </td>
+                                        <td data-label="Count"> <a onclick="POPUP('SKILL','@Model.Skills[i].CODE')">@Model.Skills[i].COUNTS</a></td>
+                                        <td data-label="Employee Name">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                    @Html.CheckBoxFor(m => m.Skills[i].APPLICABILITY, new { @onchange = "checkBoxClick(this,'skillTable','AllSkills')" })
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="ihits-table table-border  talent-pool-entry-two vertical-scroll-150">
+                    <table id="skillProficiencyTable">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Skill Proficiency</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted ">
+                                        @Html.CheckBoxFor(m => m.AllSkillProficiency, new { @onclick = "onAllClick('AllSkillProficiency','skillProficiencyTable')" })
+                                        <span></span>
+                                    </label>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.SkillProficiency != null && Model.SkillProficiency.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.SkillProficiency.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="ID">
+                                            @Html.HiddenFor(m => m.SkillProficiency[i].NAME)
+                                            @Html.HiddenFor(m => m.SkillProficiency[i].CODE)
+                                            @Model.SkillProficiency[i].NAME
+                                        </td>
+                                        <td data-label="Count"><a onclick="POPUP('SkillProficiency','@Model.SkillProficiency[i].CODE')"> @Model.SkillProficiency[i].COUNTS</a></td>
+                                        <td data-label="Employee Name">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted ">
+
+                                                    @Html.CheckBoxFor(m => m.SkillProficiency[i].APPLICABILITY, new { @onchange = "checkBoxClick(this,'skillProficiencyTable','AllSkillProficiency')" })
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-4">
+            <div class="col-md-6">
+                <div class="ihits-table table-border  talent-pool-entry-two vertical-scroll-150">
+                    <table id="QualificationTable">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Qualification</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @Html.CheckBoxFor(m => m.AllEducation, new { @onclick = "onAllClick('AllEducation','QualificationTable')" })
+                                        <span></span>
+                                    </label>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Education != null && Model.Education.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.Education.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="ID">
+                                            @Html.HiddenFor(m => m.Education[i].NAME)
+                                            @Html.HiddenFor(m => m.Education[i].CODE)
+                                            @Model.Education[i].NAME
+                                        </td>
+                                        <td data-label="Count"> <a onclick="POPUP('Qualification','@Model.Education[i].CODE')">@Model.Education[i].COUNTS</a></td>
+                                        <td data-label="Employee Name">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+
+                                                    @Html.CheckBoxFor(m => m.Education[i].APPLICABILITY, new { @onchange = "checkBoxClick(this,'QualificationTable','AllEducation')" })
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="ihits-table table-border  talent-pool-entry-four vertical-scroll-150">
+                    <table>
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">Languages</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">Read</th>
+                                <th scope="col">Write</th>
+                                <th scope="col">Speak</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Languages != null && Model.Languages.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.Languages.Count; i++)
+                                {
+                                    <tr>
+                                        <td data-label="ID">
+                                            @Html.HiddenFor(m => m.Languages[i].NAME)
+                                            @Html.HiddenFor(m => m.Languages[i].CODE)
+                                            @Model.Languages[i].NAME
+                                        </td>
+                                        <td data-label="Count"><a onclick="POPUP('Languages','@Model.Languages[i].CODE')"> @Model.Languages[i].COUNTS</a></td>
+                                        <td data-label="Employee Name">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                    @Html.CheckBoxFor(m => m.Languages[i].Read)
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td data-label="ID">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                    @Html.CheckBoxFor(m => m.Languages[i].Write)
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td data-label="ID">
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                    @Html.CheckBoxFor(m => m.Languages[i].Speak)
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+        <!--begin: Search Form-->
+        <div class="row pt-6">
+
+
+            <div class="col-md-2">
+
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group  float-right">
+                    <button type="button" class="btn btn-default" onclick="fillData()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                }
+            </div>

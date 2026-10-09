@@ -1,0 +1,74 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Appraisal
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+        $('.Tab2Count').html("@Model.Tab2Count");
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.MoreTabCount').html("@Model.Tab4Count");
+        $('.PendingTabCount').html("@Model.MoreTabCount");
+
+
+        //$('#AppraisalTable').DataTable({
+        //    "pageLength": 25,
+        //    "language":
+        //    {
+        //        searchPlaceholder: "Search",
+        //    }
+
+        //});
+
+        //$(".dataTables_filter").addClass("dataTables_filter_trn");
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table appraisal-list">
+    @Html.HiddenFor(m => m.AppraisalList.Count)
+    <table id="AppraisalTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Evaluation Period</th>
+                <th scope="col">Appraisal Type</th>
+                <th scope="col" data-bs-toggle="tooltip" title="" data-bs-original-title="Reviewer Score ">Rev.Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.AppraisalList != null && Model.AppraisalList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.AppraisalList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="ID">@Model.AppraisalList[i].EmpId</td>
+                        <td data-label="Name">
+                            <div class="name-with-img">
+                                @Html.HiddenFor(m => m.AppraisalList[i].AppraisalTrnGI)
+                                @Html.HiddenFor(m => m.AppraisalList[i].EmployeeGuid)
+                                <a id="EditDisciplinaryIncident" onclick="onEmployeeClick('@Model.AppraisalList[i].AppraisalTrnGI','@Model.AppraisalList[i].EmployeeGuid','All')">@Model.AppraisalList[i].EmployeeName</a>
+
+
+                            </div>
+                        </td>
+                        <td data-label="Designation">@Model.AppraisalList[i].Designation.Name</td>
+                        <td data-label="Department">@Model.AppraisalList[i].Department.Name</td>
+                        <td data-label="Location">@Model.AppraisalList[i].Location.Name</td>
+                        <td data-label="Incident">@Model.AppraisalList[i].AppraisalRequest.EvaluationPeriod.Name</td>
+                        <td data-label="Action Taken">@Model.AppraisalList[i].AppraisalRequest.AppraisalType.Name</td>
+                        <td data-label="Incident Type">@Model.AppraisalList[i].AppraisalRequest.ReviewerScore</td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>

@@ -1,0 +1,142 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+<script>
+    $(document).ready(function () {
+         $(document).ready(function () {
+                debugger;
+             $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+             $(".OverDueCount").html(@Model.OverDueCount);
+             $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+
+            });
+
+    });
+</script>
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<div class="ihits-table table-border odd-even mobile-responsive-table active-vacancy-list-onboarding">
+    @Html.HiddenFor(m => m.ActiveVacancyList.Count)
+ 
+    <table id="ActivevacancyTbl" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No.</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Work Location</th>
+                <th scope="col">Need by Date</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Days Left">D.L.</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Number of Requirements">No of Req.</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ActiveVacancyList != null && Model.ActiveVacancyList.Count > 0)
+            {
+
+
+                for (int i = 0; i < Model.ActiveVacancyList.Count; i++)
+
+                {
+            <tr>
+                <td data-label="MRF No.">  @Model.ActiveVacancyList[i].JobCode</td>
+                <td data-label="Job Title">  @Model.ActiveVacancyList[i].JobTitle</td>
+                <td data-label="Fun.Designation">  @Model.ActiveVacancyList[i].Designation.Name</td>
+                <td data-label="Department">  @Model.ActiveVacancyList[i].Department.Name</td>
+                <td data-label="Location">  @Model.ActiveVacancyList[i].Location.Name</td>
+                <td data-label="Work Location">  @Model.ActiveVacancyList[i].WorkLocation.Name</td>
+                <td data-label="Need by Date">  @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ActiveVacancyList[i].NeedByDate))</td>
+                <td data-label="Days Left">  @Model.ActiveVacancyList[i].Aging</td>
+                <td data-label="No of Requirements">  @Model.ActiveVacancyList[i].NoOfRequirements</td>
+                @if (Model.UserVsMenuTab[7].Applicable == true)
+                {
+            <td data-label="" data-bs-toggle="tooltip" title="Offer Against Vacancy ">
+              <a  onclick="getActiveVacancyValidn(@Model.ActiveVacancyList[i].Department.Code,@Model.ActiveVacancyList[i].Designation.Code, @Model.ActiveVacancyList[i].Location.Code,  @Model.ActiveVacancyList[i].VacancyManagementCode)">
+                <div class="all_icon" >
+                    <div class="add_pro" >
+                        <img src="~/images/enter.svg" />                      
+                    </div>
+                </div>
+                  </a>
+            </td>
+                }
+                else
+                {
+            <td data-label="" data-bs-toggle="tooltip" title="Offer Against Vacancy ">                
+                <a onclick="swal.fire(MasterPersmissionMsg)">
+
+                    <div class="all_icon">
+                        <div class="add_pro">
+                            <img src="~/images/enter.svg" />
+                        </div>
+                    </div>
+                </a>
+            </td>
+                }
+            </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:970px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Resignation Details
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade resumemodal" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width:970px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mapped Resumes
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-bodyyy">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

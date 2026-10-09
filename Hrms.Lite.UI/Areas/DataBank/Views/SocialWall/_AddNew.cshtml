@@ -1,0 +1,123 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.SocialWall
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        $('#GroupCompany').multiselect({
+            includeSelectAllOption: true,
+        });
+        moveCursorToEnd('Description');
+     
+    });
+
+
+</script>
+<style>
+    .multiselect-native-select .multiselect {
+        border: none !important;
+    }
+</style>
+@using (Html.BeginForm(null,null, FormMethod.Post, new { id = "SocialWallSave",enctype = "multipart/form-data" }))
+{
+    <div id="addbankname" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Social Wall  </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>
+                                Description
+                                @*<span class="Mandatory">*</span>*@
+                            </label>
+
+                            @*@Html.TextBoxFor(Model => Model.Description, new { @class = "form-control form-control-sm BName", @placeholder = "Name", maxlength = "120" })*@
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control h-auto", rows = "6", placeholder = "Description" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!--<div class="form-group">
+            <label>
+                Upload Photo
+                <span class="Mandatory">*</span>
+            </label>-->
+                        @*@Html.TextBoxFor(model => model.file.FileData, null, new { type = "file", @class = "input-file", @onchange = "validateProfilePhoto()", style = "display:none", accept = ".jpg, .jpeg" })*@
+                        <!--@Html.TextBoxFor(model => model.file.FileData, null, new { type = "file", @class = "input-file",  accept = ".jpg, .jpeg" })
+                <span id="BankShortName"></span>
+            </div>-->
+                        <div class="file-upload-form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                Upload Photo
+                                @*<span class="Mandatory">*</span>*@
+                            </label>
+
+                            <div class="file-upload-form mb-1" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files are
+                                            allowed , File size less than 1 MB.">
+                                <div class="small-btn-group">
+
+                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+
+                                </div>
+                                @Html.TextBoxFor(model => model.file.FileData, null, new { type = "file", @class = "input-file", @onchange = "CheckProfileExtensionSize(this)", accept = ".jpg, .jpeg, .png, .bmp" })
+                                @* <input class="form-control PreviewImage nofilechosen Resume_FileData" id="myFileInput" name="Details.Resume.FileData" onchange="pressed();CheckResumeExtensionSize(this)" title=" " type="file">*@
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                Group Company
+                                @*<span class="Mandatory">*</span>*@
+                            </label><span class="Mandatory">*</span>
+                            <div class="form-control-sm form-control  GC ">
+                                @Html.ListBoxFor(Model => Model.GroupCompany, (SelectList)ViewBag.GrpCompany, new
+                                                          {
+                                                              @class = "multiselectDropdownFields",
+                                                              @multiple = "multiple",
+                                                              data_db_filter = "true",
+
+                                                          })
+                            </div>
+                            <span id="grpC"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+              
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+                            Upload
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,789 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+    div.k-tooltip.k-chart-tooltip {
+        margin-left: -50px;
+        margin-top: -50px;
+    }
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+       
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+        
+    }
+
+    .k-card-body {
+        overflow: hidden;
+       
+    }
+
+    .arrow_up{
+        font-size: 20px;
+        color: #62c437;
+        padding-right: 5px;
+       
+    }
+
+    .down_arrow{
+        font-size: 20px;
+        color: red;
+        padding-right: 5px;
+        padding-top: 4px;
+    }
+
+    .common_new{
+       /* background-color: #ffbb4d59;
+        padding: 10px;
+       
+        border-radius: 10px;*/
+      
+    }
+
+    .value_cls {
+        color: #FF781B;
+        font-size: 2rem;
+        padding-right: 4px;
+        font-weight: 700;
+    }
+
+    .new_emp{
+        border-left: 2px solid red;
+        margin: 12px;
+       
+        height: 35px;
+        margin: 20px 5px;
+        display: flex;
+      
+        align-items: center;
+        
+    }
+
+    .downarrow{
+        WIDTH: 20PX;
+       
+        transform: rotate(37deg);
+    }
+
+    .uparrow{
+        WIDTH: 20PX;
+        transform: rotate(37deg);
+    }
+
+    .uparrow {
+        WIDTH: 20PX;
+        transform: rotate(215deg);
+    }
+
+
+    #tilelayout1 .k-card:nth-child(1) {
+        /*  background-color: #282828 !important;*/
+      /*  background: linear-gradient(to top, #9ac160 0%, #396000 100%);*/
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 245px;
+    }
+
+    #tilelayout1 .k-card:nth-child(2) {
+     /*   background: linear-gradient(to top, #d5a61d 0%, var(--orange) 100%);*/
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 245px;
+    }
+
+
+    .first_circle {
+        color: #000000;
+        font-size: 14px;
+        padding: 10px 20px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+    .box-color2 {
+        background-color: #133E87 !important;
+    }
+    .box-color3 {
+        background-color: #31511E !important;
+    }
+    .box-color4 {
+        background-color: #EC8305 !important;
+    }
+    .box-color5 {
+        background-color: #F3C623 !important;
+    }
+    .box-color6 {
+        background-color: #006BFF !important;
+    }
+    .box-color7 {
+        background-color: #257180 !important;
+    }
+    .box-color8 {
+        background-color: #A594F9 !important;
+    }
+    .box-color1 {
+        /* border-left: 3px solid rgb(54 153 255);*/
+        margin: 4px 0px;
+        display: flex;
+        /* height: 45px; */
+        padding: 20px 10px;
+        border-radius: 13px;
+        display: flex;
+        background-color: #3B1C32;
+        align-items: center;
+    }
+    .box-dflex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .k-card-title{
+        color:#000 !important;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+    function onEmpClick() {
+        var currntLp = $("#CurrentSalaryPeriodCode").val();
+        var gc = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 80, month: currntLp, groupCom: gc },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=80&month=' + currntLp ;
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+
+    function onAlwClick(e) {
+        var currntLp = $("#CurrentSalaryPeriodCode").val();
+        var gc = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 81, month: currntLp, groupCom: gc },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=81&month=' + currntLp+"&type=Allowance";
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+
+    function onAlwHover(e) {
+        $("#salAlw").css("cursor", "pointer");
+    }
+
+    function onDedClick(e) {
+        var currntLp = $("#CurrentSalaryPeriodCode").val();
+        var gc = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 81, month: currntLp, groupCom: gc },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=81&month=' + currntLp + "&type=Deduction";
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+
+    function onDedHover(e) {
+        $("#salDed").css("cursor", "pointer");
+    }
+
+</script>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="hidden" id="hdnDay" value="1" />
+
+
+        <script id="totEmp" type="text/x-kendo-template">
+
+
+
+
+
+
+                     <div onclick="onEmpClick()" class="common_new" style="cursor:pointer;" >
+                           <div class="row " >
+                         <div class="col-md-6">
+                               <div class="box-color1">
+                        <div class="box-dflex">
+               <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">New Employees</div>
+            <div id="newHr"  class="value_cls first_circle">@Model.newHires</div>
+
+                       </div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+
+
+                                  <div class="box-color1 box-color2">
+                        <div class="box-dflex">
+                              <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">Seperations</div>
+
+            <div id="newResg" class="value_cls first_circle">@Model.resignations</div>
+                                   </div>
+                                   </div>
+                                   </div>
+
+                                   </div>
+
+
+
+
+
+                                                         <div class="row" >
+                                  <div class="col-md-6">
+                                           <div class="box-color1 box-color3">
+                        <div class="box-dflex">
+              <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">Total Employees</div>
+            <div id="newHr"  class="value_cls first_circle">@Model.totalEmp</div>
+                                    <div class="d-flex align-items-center">
+
+
+                                              <div id="employeeMaleCount" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:22px;padding-left: 10px;">
+                <i class="fa fa-male" aria-hidden="true" style="padding-right: 5px;font-size: 22px;padding-top: 5px;color: \\#97d5f2;"></i>@Model.totalEmpMale </div>
+            <div id="employeeFeMaleCount" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:22px;"><i class="fa fa-female" aria-hidden="true" style="padding-right: 5px;padding-top: 3px;padding-left: 35px; font-size: 22px;color:\\#f6b2d9;"></i>@Model.totalEmpFemale</div>
+            </div>
+                                         </div>
+                                 </div>
+                                 </div>
+                                 <div class="col-md-6">
+
+              <div class="box-color1 box-color8">
+                        <div class="box-dflex">
+                                                    @*  <div> <div id="newResg" style="color: \\#37B400;font-size:21px;padding-right:4px; padding-left: 5px;" class="value_cls">@Model.difference</div>*@
+                                                  <div id="prvData" style="display:flex; align-items:center;     justify-content: space-between;
+    width: 100%;">
+            @if (@Model.difference < 0)
+            {  <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">-vs Previous Month</div>
+                <div style="display:flex; "class="first_circle">
+                                                        <img src="~/images/decrease2-.svg" class="downarrow" />
+                                                <div id="totalPrvEmp" >@Model.difference</div>
+            </div>
+
+            }
+            else
+            {
+
+                                                               <img src="~/images/decrease-.svg" class="uparrow" />
+                                                      <div id="totalPrvEmp" style="color: \\#fff;font-size:21px;padding-right:4px;" class="value_cls">@Model.difference</div>
+
+
+            }
+
+                              </div>
+
+                              </div>
+                                            </div>
+                                            </div>
+                                            </div>
+
+                                            </div>
+
+
+
+
+
+                     <div class="row" style="padding-top:15px;">
+
+                <div class="col-md-12 ">
+
+            </div>
+            </div>
+               </div>
+
+
+                          </div>
+                           </div>
+        </script>
+
+        <script id="totPf" type="text/x-kendo-template">
+
+
+            <div onclick="onEmpClick()" style="cursor:pointer;" class="row">
+
+
+
+
+
+                   <div class="col-md-6">
+
+
+                             <div class="box-color1 box-color4">
+                        <div class="box-dflex">
+                <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">PF Managment Contribution</div>
+
+            <div id="pfEmployer"  class="value_cls first_circle">@Model.pfEmployer</div>
+
+                       </div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+
+
+
+
+
+                                 <div class="box-color1 box-color5">
+                        <div class="box-dflex">
+               <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">PF Employee Contribution</div>
+            <div id="pfEmployee"  class="value_cls first_circle">@Model.pfEmployee</div>
+
+                                   </div>
+                                   </div>
+                                   </div>
+                                     </div>
+                                               <div class="row pt-0">
+                                                   <div class="col-md-6">
+
+                   <div class="box-color1 box-color6">
+                        <div class="box-dflex">
+              <div    <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">ESI Managment Contribution</div>
+                        <div id="esiEmployer"  class="value_cls first_circle">@Model.esiEmployer</div>
+
+                    </div>
+                </div>
+                </div>
+                   <div class="col-md-6">
+                  <div class="box-color1 box-color7">
+                        <div class="box-dflex">
+             <div    <div style="font-size:17px;padding-left: 8px;font-weight: 700; color: \\#fff;">ESI Employee Contribution</div>
+                        <div id="esiEmployee"  class="value_cls first_circle">@Model.esiEmployee</div>
+
+                    </div>
+                </div>
+                </div>
+
+            </div>
+
+
+                                    </div>
+                                      </div>
+        </script>
+
+        <script id="salaryAlw" type="text/x-kendo-template">
+            @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AllowanceOverView>()
+                                                                                          .Name("salAlw")
+                                                                                          .Title("")
+                                                                                          .Events(e=>e.SeriesClick("onAlwClick").SeriesHover("onAlwHover"))
+                                                                                          
+
+                                                                  .Legend(legend => legend
+
+                                                                      .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                          )
+                                                                          .DataSource(ds =>
+                                                                          {
+                                                                              ds.Read(read => read.Action("GetPRAllowance", "MISDashBoard").Data("getSalPeriod"));
+
+
+                                                                          }
+                                                                          )
+                                                                          .Series(series => series
+
+                                                                          .Pie(model => model.total, model => model.allowance)
+
+                                                                          .Labels(labels => labels.
+                                                                                  Template("\\#= dataItem.shrtName \\# - \\#= dataItem.total \\#")
+                                                                          .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                                          .Background("transparent")
+
+                                                                          .Visible(true)
+                                                                          )
+
+
+                                                                  )//.SeriesColors("\\#166f99", "\\#2185b4", "\\#8d4194", "\\#75744d", "\\#f76d31")
+                                                                 .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                                                 .Tooltip(tooltip => tooltip.Template("\\#= dataItem.allowance \\# - \\#= dataItem.total \\#").Visible(true))
+
+
+
+
+
+                                                                              .ToClientTemplate()
+
+                                                                          )
+
+
+
+        </script>
+
+        <script id="salaryDed" type="text/x-kendo-template">
+            @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.DeductionOverView>()
+                                                                                              .Name("salDed")
+                                                                                              .Title("")
+                                                                                                   .Events(e => e.SeriesClick("onDedClick").SeriesHover("onDedHover"))
+
+                                                                      .Legend(legend => legend
+
+                                                                              .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+                                                                              .Visible(true)
+                                                                              )
+                                                                              .ChartArea(chart => chart
+                                                                              .Background("transparent")
+
+
+                                                                              )
+                                                                              .DataSource(ds =>
+                                                                              {
+                                                                                      ds.Read(read => read.Action("GetPRDeduction", "MISDashBoard").Data("getSalPeriod"));
+
+
+                                                                              }
+                                                                              )
+                                                                              .Series(series => series
+
+                                                                              .Pie(model => model.total, model => model.deduction)
+
+                                                                              .Labels(labels => labels.
+                                                                                          Template("\\#= dataItem.shrtName \\# - \\#= dataItem.total \\#")
+                                                                              .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                                              .Background("transparent")
+
+                                                                              .Visible(true)
+                                                                              )
+
+
+                                                                      )//.SeriesColors("\\#166f99", "\\#2185b4", "\\#8d4194", "\\#75744d", "\\#f76d31")
+                                                                     .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                                                         .Tooltip(tooltip => tooltip.Template("\\#= dataItem.deduction \\# - \\#= dataItem.total \\#").Visible(true))
+
+                                                                                  .ToClientTemplate()
+
+                                                                              )
+
+
+
+        </script>
+
+        <script id="salaryCTC" type="text/x-kendo-template">
+            @(
+                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.CTCOverView>()
+                    .Name("salCTC")
+                     .Title("")
+
+                 .Legend(legend => legend
+                  .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                          )
+                                                                                          .ChartArea(chart => chart
+                                                                                          .Background("transparent")
+
+
+                                                                                          )
+                                                                                          .DataSource(ds =>
+                                                                                          {
+                                                                                                  ds.Read(read => read.Action("GetPRCTC", "MISDashBoard").Data("getSalPeriod"));
+
+
+                                                                                          }
+                                                                                          )
+
+                                                                                          .Series(series => series
+
+                                                                                          .Pie(model => model.total, model => model.type)
+                                                                                          .ColorField("color")
+
+                                                                                  .Labels(labels => labels.
+                                                                                              Template("\\#= dataItem.type \\# - \\#= dataItem.total \\#")
+                                                                                  .Position(ChartSeriesLabelsPosition.OutsideEnd)
+                                                                                  
+                                                                                  .Background("transparent")
+
+                                                                                  .Visible(true)
+                                                                                  )
+
+
+                                                                          )
+                                                                         .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                                                             .Tooltip(tooltip => tooltip.Template("\\#= dataItem.type \\# - \\#= dataItem.total \\#").Visible(true))
+
+                                                                                      .ToClientTemplate()
+
+                                                                                  )
+
+
+
+        </script>
+
+        <script id="salaryPG" type="text/x-kendo-template">
+            @(
+                    Html.Kendo().Chart<Hrms.Lite.Shared.MIS.PGOverView>()
+                        .Name("salPG")
+                         .Title("")
+
+                     .Legend(legend => legend
+                      .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                                              )
+                                                                                              .ChartArea(chart => chart
+                                                                                              .Background("transparent")
+
+
+                                                                                              )
+                                                                                              .DataSource(ds =>
+                                                                                              {
+                                                                                                  ds.Read(read => read.Action("GetPG", "MISDashBoard").Data("getSalPeriod"));
+
+
+                                                                                              }
+                                                                                              )
+
+                                                                                              .Series(series => series
+
+                                                                                              .Pie(model => model.total, model => model.type)
+                                                                                              .ColorField("color")
+
+                                                                                      .Labels(labels => labels.
+                                                                                                  Template("\\#= dataItem.type \\# - \\#= dataItem.total \\#")
+                                                                                      .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                                                      .Background("transparent")
+
+                                                                                      .Visible(true)
+                                                                                      )
+
+
+                                                                              )
+                                                                             .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                                                                 .Tooltip(tooltip => tooltip.Template("\\#= dataItem.type \\# - \\#= dataItem.total \\#").Visible(true))
+
+                                                                                          .ToClientTemplate()
+
+                                                                                      )
+
+
+
+        </script>
+
+        <script id="allowanceComparison" type="text/x-kendo-template">
+            @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AllowanceMonthComparisonList>()
+                                                    .Name("alwComp")
+                                                .Title("")
+
+                                                .Legend(legend => legend
+                                                    .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                )
+                                                                        .DataSource(ds => ds.Read(read => read.Action("GetAllowanceMonthComparison", "MISDashBoard").Data("getSalPeriod")))
+                                                .Series(series =>
+                                                {
+                                                        series.Line(model => model.currMonth).Name("Month").CategoryField("shrtName").Color("\\#ee6055").Width(5);
+                                                        series.Line(model => model.prvMonth).Name("Previous Month").CategoryField("shrtName").Color("\\#662e9b").Width(5);
+
+                                                })
+
+                                                   
+
+                                                .ChartArea(ch => ch.Width(850).Height(250))
+                                                .CategoryAxis(axis => axis
+                                                    .Labels(labels => labels.Rotation(30))
+                                                    .Crosshair(c => c.Visible(true))
+                                                )
+                                                .ValueAxis(axis => axis.Numeric()
+                                                    .Labels(labels => labels.Format("{0:N0}"))
+                                                  //  .MajorUnit(20000)
+                                                )
+                                                .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                    .Shared(true)
+                                                    .Format("{0:N0}")
+                                                )
+
+                                                .ToClientTemplate()
+                        )
+        </script>
+
+        <script id="deductionComparison" type="text/x-kendo-template">
+            @(
+                                        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.DeductionMonthComparisonList>()
+                                                        .Name("dedComp")
+                                                    .Title("")
+
+                                                    .Legend(legend => legend
+                                                        .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                    )
+                                                                                .DataSource(ds => ds.Read(read => read.Action("GetDeductionMonthComparison", "MISDashBoard").Data("getSalPeriod")))
+                                                    .Series(series =>
+                                                    {
+                                                            series.Line(model => model.currMonth).Name("Month").CategoryField("shrtName").Color("\\#00b2ca").Width(5);
+                                                            series.Line(model => model.prvMonth).Name("Previous Month").CategoryField("shrtName").Color("\\#1985a1").Width(5);
+
+                                                    })
+                                                    .ChartArea(ch => ch.Width(850).Height(250))
+                                                    .CategoryAxis(axis => axis
+                                                        .Labels(labels => labels.Rotation(30))
+                                                        .Crosshair(c => c.Visible(true))
+                                                    )
+                                                    .ValueAxis(axis => axis.Numeric()
+                                                        .Labels(labels => labels.Format("{0:N0}"))
+                                                        //.MajorUnit(20000)
+                                                    )
+                                                    .Tooltip(tooltip => tooltip
+                                                        .Visible(true)
+                                                        .Shared(true)
+                                                        .Format("{0:N0}")
+                                                    )
+
+                                                    .ToClientTemplate()
+                            )
+        </script>
+
+    </div>
+</div>
+<div id="monthsDiv" class="s_slip_container">
+
+
+    @await Html.PartialAsync("~/Areas/MIS/Views/MISDashBoard/_Months.cshtml", Model)
+
+</div>
+
+
+
+
+
+
+
+<div class="row">
+
+
+    <div class="col-xl-4 col-md-4">
+
+        <!------------- search emplyee here ------------------>
+        <!------------- search emplyee here ------------------>
+
+    </div>
+    <div class="col-xl-8 col-md-8">
+    </div>
+</div>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout1")
+        .Columns(12)
+        .RowsHeight("110px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Employee Details")).BodyTemplateId("totEmp").ColSpan(6).RowSpan(2);
+            c.Add().Header(h => h.Text("Statutory Details")).BodyTemplateId("totPf").ColSpan(6).RowSpan(2);
+          
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+           
+            c.Add().Header(h => h.Text("Allowance")).BodyTemplateId("salaryAlw").ColSpan(3).RowSpan(3);
+            c.Add().Header(h => h.Text("Deduction")).BodyTemplateId("salaryDed").ColSpan(3).RowSpan(3);
+
+            c.Add().Header(h => h.Text("Payout Details")).BodyTemplateId("salaryCTC").ColSpan(3).RowSpan(3);
+            c.Add().Header(h => h.Text("PayRoll Group")).BodyTemplateId("salaryPG").ColSpan(3).RowSpan(3);
+
+            c.Add().Header(h => h.Text("Allowance Comparison")).BodyTemplateId("allowanceComparison").ColSpan(6).RowSpan(2);
+            c.Add().Header(h => h.Text("Deduction Comparison")).BodyTemplateId("deductionComparison").ColSpan(6).RowSpan(2);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )
+
+
+
+
+                                  

@@ -1,0 +1,210 @@
+﻿@model Hrms.Lite.Shared.Master.UserRole
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/scripts/Master/userRole.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    var GI, LogGI, Editmode;
+    $(document).ready(function () {
+        //$(".pending").hide();
+        GI = '@Model.GI';
+        LogGI = '@Model.LogGI';
+        Editmode = '@Model.Editmode';
+        $("#View").attr('checked', 'checked');
+        $("#View").attr('disabled', 'true');
+
+        if('@CurrentUserRoleActions.Modify' == 'False')
+        {
+            DisableAllElements('#kt_content');
+        }
+    });
+
+    const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        moveCursorToEnd('userrole');
+    }
+
+</script>
+@using (Html.BeginForm("Create", "UserRole", FormMethod.Post, new { @class = "display-flex", @id = "createUserRole" }))
+{
+    <!--begin::Header-->
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">
+                        User Role
+                    </h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        @*<li class="breadcrumb-item text-muted">
+                                <a href="pre-enrollment.html" class="">Onboarding List</a>
+                            </li>*@
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "UserRole", new { Area = "Master" })" class="">
+                                User Role List
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            User Role
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--end::Header Menu Wrapper-->
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body ">
+
+                                <div class="row">
+                                    <div class="col-md-2 col-lg-2">
+                                        <div class="form-group">
+                                            <label>User Role</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(m => m.userrole, new { @class = "form-control form-control-sm", @placeholder = "User Role", maxlength = "120", @onblur = "validate(this, 'userroleval')" })
+                                            @Html.HiddenFor(Model => Model.GI)
+                                            @Html.HiddenFor(Model => Model.LogGI)
+                                            @Html.HiddenFor(Model => Model.Editmode)
+                                            <span id="userroleval"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-lg-2">
+                                        <div class="form-group">
+                                            <label>Short Name</label><span class="Mandatory">*</span>
+                                            @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", maxlength = "5", @onblur = "validate(this, 'shortnameval')" })
+                                            <span id="shortnameval"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-lg-2">
+                                        <div class="form-group">
+                                            <label>Salary Visibility</label><span class="Mandatory">*</span>
+                                            @Html.DropDownListFor(m => m.SalaryVisibility.Code, (SelectList)ViewBag.Svi, "--Select Salary Visibility--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'salaryvisiblty')" })
+                                            <span id="salaryvisiblty"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8 col-xl-4 col-lg-6 responsive-checks">
+                                        <h6>Actions Allowed in Masters</h6>
+                                        <div class="checkbox-inline   " style="justify-content:space-evenly;">
+                                            <label data-bs-toggle="tooltip" data-bs-original-title="View Cannot be Untick" class="checkbox checkbox-outline checkbox-success          ">
+                                                @Html.CheckBoxFor(m => m.View)
+                                                <span></span>View
+                                            </label>
+                                            <label class="checkbox checkbox-outline checkbox-success      ">
+                                                @Html.CheckBoxFor(m => m.Create)
+                                                <span></span>Create
+                                            </label>
+                                            <label class="checkbox checkbox-outline checkbox-success       ">
+                                                @Html.CheckBoxFor(m => m.Modify)
+                                                <span></span>Modify
+                                            </label>
+                                            <label class="checkbox checkbox-outline checkbox-success       ">
+                                                @Html.CheckBoxFor(m => m.Approve)
+                                                <span></span>Approve
+                                            </label>
+                                            <label class="checkbox checkbox-outline checkbox-success              ">
+                                                @Html.CheckBoxFor(m => m.Delete)
+                                                <span></span>Delete
+                                            </label>
+
+                                            <div> Active</div>
+                                            <label class="switch" onclick="ActiveInactiveValidationUser('User Role',@Model.Code)">
+                                                @Html.CheckBoxFor(m => m.Active, new { @id = "user" })
+                                                <span class="slider round"></span>
+                                            </label>
+
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--<div class="row">
+        <div class="col-md-2 mt-6">
+            <div class="d-flex align-items-center">
+                <div> Active</div>
+                <label class="switch" onclick="ActiveInactiveValidationUser('User Role',@Model.Code)">
+                    @Html.CheckBoxFor(m => m.Active,new { @id="user"})
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>-->
+                                @*<div class="col-md-6">
+            <div class="form-group">
+                <label>Remarks</label><span class="Mandatory">*</span>
+                @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", maxlength = "250", @onblur = "validate(this, 'remarkss')" })
+                <span id="remarkss"></span>
+
+            </div>
+        </div>*@
+                                <!--</div>-->
+
+                              
+
+
+                                        <div class=" mt-3" id="Module">
+                                            @await Html.PartialAsync("_Module", Model)
+                                        </div>
+                                        <div class="hide  mt-3" id="SubModule">
+                                            @await Html.PartialAsync("_SubModule", Model)
+                                        </div>
+                                        <div class="hide  mt-3" id="Menu">
+                                            @await Html.PartialAsync("_Menu", Model)
+                                        </div>
+                                        <!-- <end table></end> -->
+                                    </div>
+                          
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+    <!--end::Content-->
+}

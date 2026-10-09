@@ -1,0 +1,194 @@
+﻿@model Hrms.Lite.Shared.PayRoll.JVPosting
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/PayRoll/JVPosting.js"></script>
+<script>
+    $(document).on("change", "input[name='radioSelection']", function () {
+        $('#PayrollGroup_Code').val('');
+        $('#Payrollgroup').html('');
+        GetMonth();
+
+    });
+</script>
+<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">JV Posting</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            JV Posting
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+
+
+
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+
+                                <div class="tab-items pt-8 d-flex">
+                                    <div class="d-flex justify-content-center" style="border: 1px solid #c4c4c4; background-color: white;border-radius:6px;height:37px;padding:7px; ">
+
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-success" style="font-weight:700;">
+                                                @Html.RadioButtonFor(m => m.radioSelection, "0")
+                                                <span></span>General
+                                            </label>
+                                            <label class="radio radio-outline radio-success" style="font-weight:700;">
+                                                @Html.RadioButtonFor(m => m.radioSelection, "1")
+                                                <span></span>Blocked Salary
+                                            </label>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-items pt-3 ml-3">
+                                    <div class="row-outer  " style="width:215px">
+                                        <div class="form-group filter-combobox mt-0">
+                                            <label>PayRoll Group</label>
+
+                                            @Html.DropDownListFor(m => m.PayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "--Select PayRoll Group--", new { @class = "form-control form-control-sm", @onchange = "GetMonth();validate(this,'Payrollgroup')" })
+                                            <span id="Payrollgroup"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-items pt-3">
+
+                                    <div class="row-outer  ">
+
+                                        <div class="form-group filter-combobox mt-0">
+                                            <label>Month</label>
+                                            @Html.DropDownListFor(m => Model.PayrollMonth.Code, (SelectList)ViewBag.month, "--Select Month--", new { @class = "form-control form-control-sm", @onchange = "OnMonthChange();validate(this,'Month')", @style = "width:150px;" })
+                                            <span id="Month"></span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+
+
+                                <div class="tab-items d-flex ">
+                                    <div class="align-items-center d-flex justify-content-center">
+                                        <a href="#" type="button"
+                                           class="btn btn-default float-right mobile-full-width mt-5" onclick="getList()">
+                                            Proceed
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="tab-items select-option d-flex align-items-center">
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="Location">
+                                    </div>
+                                    @*<div class="sraech-slider">
+                                            <div class="search-slider-inner">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                                   placeholder="Location">
+                                        </div>*@
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="jvlistList">
+                            @await Html.PartialAsync("_JVPostingList")
+                        </div>
+
+                        <!--end: Datatable-->
+                        <div class="row card-footer-bottom-fixed">
+
+                            <div class="col-md-12 align-right">
+                                <button type="button"
+                                        class="btn btn-default float-right mobile-full-width" onclick="JVPostingSave()">
+                                    Post to DB
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+
+    <!--end::Content-->
+
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Link Missing!!</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#CheckList').html('')">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body pt-3">
+                <div id="CheckList">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

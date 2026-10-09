@@ -1,0 +1,87 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DocumentUpload
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;        
+        moveCursorToEnd('SliderDocumentName');       
+    });
+</script>
+@using (Html.BeginForm("OtherDocumentSave", "DocumentUpload", FormMethod.Post, new { @class = "display-flex", enctype = "multipart/form-data" , @id= "editOtherDocumentsSave" }))
+{
+    <div id="editNewDocument" class="slider-forms slider-forms-open editOtherDoc">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('editOtherDoc')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Other Documents</h4>
+            @Html.HiddenFor(m => m.Mode)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.SliderDocumentGI)
+            @Html.HiddenFor(m => m.SliderDocumentLogGI)
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Name</label>
+                        @Html.TextBoxFor(m => m.SliderDocumentName, new { @class = "form-control form-control-sm", @placeholder = "Document Name", @onblur = "validate(this,'DocName')", @maxlength = 120 })
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Type</label>
+                        @Html.DropDownListFor(m => m.SliderDocument.Code, (SelectList)ViewBag.Document, "--Select Document Type--", new { @class = "form-control form-control-sm", @onchange = "onDocumentChange(this)" })
+
+                        <h4><span id="docTypes">@Model.docname </span></h4>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        @Html.TextAreaFor(m => m.SliderDescription, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = 250 })
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="file-upload-wrap">
+                        <div class="image-input image-input-outline float-right" id="kt_image_4">
+                            <div class="image-input-wrapper">
+                            </div>
+
+                            <div class="file-upload-outer" data-action="change" data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, jpg, jpeg, png and bmp formats are allowed, File size less than 1 MB."
+                                 >
+
+                                @Html.HiddenFor(m => m.File.fdata)
+                                @Html.TextBoxFor(m => m.File.FileData, new { @type = "file", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf", @onchange= "CheckImageExtensionSize(this)" })
+                                <input type="hidden" name="profile_avatar_remove" />
+                                <i class="icon-xl fas fa-cloud-upload-al1t"></i>
+                            </div>
+
+                            <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow file-remove-btn"
+                                  data-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 float-right-btn">
+                    <a data-bs-toggle="tooltip" title="" data-bs-original-title="View"  class="btn btn-icon btn-view btn-big" onclick="displayDoc('OTHER','oTHER', '@Model.SliderDocumentGI')"><i class="icon-xl far fa-eye"></i></a>
+                    <a data-bs-toggle="tooltip" data-bs-original-title="Delete"  class="btn btn-icon btn-delete btn-big" onclick="DeleteOtherDocuments()"><i class="icon-xl far fa-trash-alt"></i></a>
+                    <button type="button" class="btn btn-default " onclick="validateAll('Modify')">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

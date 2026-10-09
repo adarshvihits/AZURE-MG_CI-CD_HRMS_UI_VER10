@@ -1,0 +1,335 @@
+﻿@model Tuple<Hrms.Lite.Shared.PayRoll.Reports.SalaryReports, System.Data.DataTable>
+
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+
+<script>
+
+
+    $(document).ready(function () {
+
+
+
+        $("#dataTableSearch").on("keyup search paste cut", function () {
+
+            $('#Report').data('kendoGrid').dataSource.read().then(function () {
+               
+                
+                $('#Report').data('kendoGrid').dataSource.page(1);
+            });
+            $('#Report').data('kendoGrid').refresh();
+
+        });
+
+        $('.search-slider-inner').click(function () {
+            $('#Report').data('kendoGrid').dataSource.read({ page: 1 });
+            $('#Report').data('kendoGrid').pager.page(1);
+            $('#Report').data('kendoGrid').refresh();
+            $('#dataTableSearch').val('');
+            $('#dataTableSearch').focus();
+        });
+
+    });
+
+    function GetList() {
+        //SCRIPT FOR LOADING GRID
+        //var formArray = $("#BasicFilter").serializeArray();
+        //var temp = {};
+        //for (var i = 0; i < formArray.length; i++) {
+        //    temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        //}
+
+
+        var alw = $('#alwCodes').val();
+        var ded = $('#dedCodes').val();
+
+        var salCode = $('#Item1_PayrollMonth_Code').val();
+        var url = '@Url.Action("ReloadDiv", "SalaryDetailedReport", new { area = "PayRoll" })';
+
+        url += '?SalaryPeriod=' + salCode + '&allowance=' + alw + '&deduction=' + ded; // Append the type value as a query parameter
+
+    
+        $("#grid").empty();
+        $("#grid").load(url);
+
+
+    }
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+      
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+        var alw = $('#alwCodes').val();
+        var ded = $('#dedCodes').val();
+
+        var salCode = $('#Item1_PayrollMonth_Code').val();
+    
+        temp["searchValue"] = searchValue;
+       
+
+        return { filter1: temp, SalaryPeriod: salCode, allowance: alw, deduction: ded };
+    }
+</script>
+
+
+
+
+<div id="grid" style="width:100%;">
+
+
+    @(
+        Html.Kendo().Grid<dynamic>()
+        .Name("Report")
+        .Columns(columns =>
+        {
+
+            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+            {
+                if (column.ColumnName != "Ppempcode" && column.ColumnName != "Ppeempcode")
+                {
+                    var c = columns.Bound(column.ColumnName);
+                    if (column.ColumnName == "Id" || column.ColumnName == "Employee")
+                    {
+                        c.Locked(true);
+                        c.Width(150);
+                    }
+                    else
+                    {
+                        c.Width(110);
+                    }
+
+
+
+                }
+            //
+
+            }
+
+
+        })
+        //.ToolBar(tools => tools.Excel())
+
+        .Scrollable(scrollable => scrollable.Height(380))
+
+        .NoRecords(template => template
+        
+        .Template("<div style='width:100%; text-align: center; display: flex; align-items: center; justify-content: center; height: 45vh;'><img src='/images/nodata.png' /></div >"))
+
+        .Pageable(pager => pager.Numeric(true).PreviousNext(true).Info(true).PageSizes(new[] { 10, 25 }).ButtonCount(5))
+
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .ServerOperation(true)
+        .Model(model =>
+        {
+            foreach (System.Data.DataColumn column in Model.Item2.Columns)
+            {
+                var field = model.Field(column.ColumnName, column.DataType);
+
+            }
+
+        })
+        .Read(read => read.Action("GetSalaryDetailedReport", "SalaryDetailedReport").Data("employeeParam"))
+        )
+        )
+
+
+
+
+
+    <style>
+
+        .k-header,
+        .column-header,
+        .group-header,
+        .column-cell {
+            text-align: center !important;
+            vertical-align: middle;
+            border-right: 1px solid #c4c4c4; /* Add vertical line */
+            padding: 5px; /* Adjust padding as needed */
+            position: relative; /* Enable relative positioning for pseudo-elements */
+        }
+
+        .k-grid a {
+            border-bottom: 1px solid #656875;
+        }
+
+        .k-header::after,
+        .group-header:before,
+        .column-header:after,
+        .column-cell:after {
+            text-align: center !important;
+            vertical-align: middle;
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 1px;
+            background-color: #e6eef7; /* Color of the vertical line */
+        }
+
+        .k-grid-header-wrap tr {
+            border-bottom: 1px solid #c4c4c4;
+        }
+
+        .k-grid th {
+            white-space: normal;
+        }
+
+
+
+        .k-grid td {
+            padding: 10px 3px !important;
+        }
+
+        .k-grid-header-locked table thead tr {
+            height: 72px !important;
+        }
+
+        .k-grid-header-wrap table thead tr {
+            height: 30px !important;
+        }
+
+        .k-grid th {
+            /*border-color: rgba(55, 60, 65, 0.5) !important;*/
+            border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+        }
+
+        .k-grid {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+
+            .k-grid a {
+                color: #3699FF;
+            }
+
+
+            .k-grid .k-grid-content-locked, .k-grid .k-grid-content-locked td, .k-grid .k-grid-header-locked, .k-grid .k-grid-header-locked .k-header {
+                border-color: rgba(55, 60, 65, 0.5);
+            }
+
+            .k-grid .k-grid-content, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked, .k-grid td {
+                /*  border-color: rgba(55, 60, 65, 0.5) !important;*/
+                border-right: 1px solid rgba(55, 60, 65, 0.5) !important;
+            }
+
+                .k-grid .k-grid-header-locked .k-header {
+                    border-color: rgba(55, 60, 65, 0.5) !important;
+                }
+
+        .k-grid-content table tbody tr {
+            border-bottom: 1px solid #F6F7F9;
+            border-collapse: collapse;
+        }
+
+        .k-grid table {
+            border-collapse: collapse !important;
+        }
+
+        .branch {
+            font-weight: 600 !important;
+        }
+
+        .k-grid td, .k-grid th {
+            font-weight: revert;
+        }
+
+    </style>
+
+
+
+</div>
+
+
+
+
+@*    <script src="~/js/settings.js"></script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table salarystructure-table">
+       @Html.HiddenFor(m=>m.Data.Count)
+                <table style="table-layout:auto;" class="common-table">
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col" class="sticky-col  groupsummary-cols">ID</th>
+                            <th scope="col" class="sticky-col totals-col">Employee Name</th>
+                            @for (int i = 2; i < Model.MainList.Header.Count; i++)
+                            {
+                                <th scope="col" class="basic-col">@Model.MainList.Header[i].HeaderName</th>
+                                }                         
+
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Data != null && Model.Data.Count > 0)
+                        {
+
+                            @for (int i = 0; i < Model.Data.Count; i++)
+                            {
+
+                        <tr>
+                            <td data-label="ID" class="sticky-col groupsummary-cols">@Model.Data[i]["Employee"].employeeID</td>
+                            <td data-label="Employee Name" class="sticky-col totals-col">
+                                @Model.Data[i]["Employee"].employeeName
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].designation 
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].department
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].location
+                            </td>
+
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].pfNumber
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].paymentMode
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].presentDays
+                            </td>
+                            <td data-label="Employee Name" class="">
+                                @Model.Data[i]["Employee"].lop
+                            </td>
+                            @for (int j = 9; j < Model.MainList.Header.Count; j++)
+                            {
+
+                                <td data-label="ID" class="basic-col">
+                                    @Model.Data[i][Model.MainList.Header[j].FieldName]
+
+                                </td>
+                            }
+                        </tr>
+                            }
+                        }
+
+
+
+
+
+
+
+                    </tbody>
+                </table>
+            </div>*@
+        
+
+

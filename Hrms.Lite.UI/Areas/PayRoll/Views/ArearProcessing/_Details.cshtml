@@ -1,0 +1,361 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ArearProcessing
+<script>
+        $(document).ready(function () {
+            debugger;
+            $(".popup-title").html('@Model.EmployeeName');
+        });
+</script>
+<style>
+
+
+ .PF-Split-Up-list thead, tfoot {
+        background: #f9f9f9;
+        display: table;
+        width: 100%;
+    }
+    .esi_split_up  thead, tfoot {
+        background: #f9f9f9;
+        display: table;
+        width: 100%;
+    }
+</style>
+
+
+<h6 class="hed-namee-new">Arrear Split UP</h6>
+<div id="Smrylist">
+    <div style="padding: 0px 10px; display:block; height:200px; overflow-y:scroll;" class="ihits-table table-border hover-color odd-even mobile-responsive-table Arear-Processing-list ">
+
+
+
+        <table id="summarylist">
+            <thead>
+                <tr class="table-light" style="position:sticky; top:0;">
+                    <th scope="col">Month</th>
+                    <th scope="col">Allowance</th>
+                    <th scope="col">Old Amt</th>
+                    <th scope="col">New Amt</th>
+                    <th scope="col">Diff Amount</th>
+                    <th scope="col">Amt/Day</th>
+                    <th scope="col">T.Days</th>
+                    <th scope="col">LOP</th>
+                    <th scope="col">PayDays</th>
+                    <th scope="col">Arrear</th>
+                    <th scope="col">Total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int Next_Month = 0;
+
+                    int j = 0;
+                    if (Model.ArearProcessingDetails != null)
+                    {
+                        foreach (var itemX in Model.ArearProcessingDetails.GroupBy(m => new { m.SalaryPeriodCode }))
+                        {
+                            int rowspanCount = itemX.Count();
+                            foreach (var item in itemX)
+                            {
+                                var MonthCode = @item.SalaryPeriodCode;
+                                <tr>
+                                    @if (MonthCode != Next_Month)
+                                    {
+                                        Next_Month = MonthCode;
+
+                                        <td rowspan="@rowspanCount" data-label="Month">@item.SalaryPeriod</td>
+
+                                    }
+
+                                    <td data-label="Allowance">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.Allowance
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td data-label="New Amt">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.OldAmt
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td data-label="Old Arrear">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.NewAmt
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Amt/Day">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.prevArrear
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="T.Days">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.AmtPerDay
+                                            </div>
+                                        </div>
+                                    <td data-label="LOP">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.tDays
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="PayDays">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.LOP
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Arrear">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.PayDays
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Total">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+                                                @item.Arrear
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Total">
+                                        <div class="answers-spce-gap">
+                                            <div class="">
+
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                j++;
+                            }
+                        }
+                    }
+
+                }
+
+                <tr style=" position: sticky; bottom: 0;" class="table-light">
+
+                    <td data-label="Month"><strong></strong></td>
+                    <td data-label="Allowance">
+                    </td>
+
+                    <td data-label="New Amt">
+                        <strong><span class="arrear_NewAmntSum"></span></strong>
+                    </td>
+
+                    <td data-label="Old Amt">
+                        <strong><span class="arrear_OldAmntSum"></span></strong>
+                    </td>
+
+                    <td data-label="Old Arrear">
+                        <strong><span class="arrear_OldArrear"></span></strong>
+                    </td>
+
+                    <td data-label="No of days"></td>
+
+                    <td data-label="No of days"> </td>
+
+                    <td data-label="No of days"></td>
+
+                    <td data-label="No of days"></td>
+
+                    <td data-label="No of days">
+                        <strong><span class="arrear_SumArrear"></span></strong>
+                    </td>
+                    <td data-label="No of days">
+                    </td>
+
+
+
+                </tr>
+
+
+
+
+            </tbody>
+
+
+        </table>
+    </div>
+</div>
+
+
+
+
+<div class="row mt-5">
+    <div class="col-md-6">
+
+        <h6 class="hed-namee-new">PF Split Up</h6>
+
+        <div style="padding:0px 10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table PF-Split-Up-list vertical-scroll-150">
+
+            <div id="Smrylist">
+
+                <table id="summarylist">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Month</th>
+                            @*<th scope="col">Allowance</th>*@
+                            <th scope="col">New Amt</th>
+                            <th scope="col">Old Amt</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ArearProcessingPFDetails != null && Model.ArearProcessingPFDetails.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.ArearProcessingPFDetails.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Department">@Model.ArearProcessingPFDetails[i].Month</td>
+                                    <td data-label="Department">@Model.ArearProcessingPFDetails[i].newSubSal</td>
+                                    <td data-label="Department">@Model.ArearProcessingPFDetails[i].prevArrear</td>
+                                    @*<td data-label="Department">@Model.ArearProcessingPFDetails[i].empPf</td>*@
+                                </tr>
+
+                            }
+                        }
+
+
+
+
+
+
+
+
+                    </tbody>
+
+                    <tfoot>
+
+                        <tr style=" position: sticky; bottom: 0;" class="table-light">
+
+                            <td data-label="ID"><strong></strong></td>
+                            @*<td data-label="No of days"> </td>*@
+                            <td data-label="No of days">
+                                <strong><span class="arrear_SumArrear"></span></strong>
+                            </td>
+
+                            <td data-label="No of days">
+                                <strong><span class="arrear_SumArrear"></span></strong>
+                            </td>
+
+                        </tr>
+
+
+                    </tfoot>
+                    
+
+
+
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <h6 class="hed-namee-new">ESI Split Up</h6>
+
+        <div style="padding: 0px 10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  esi_split_up vertical-scroll-150">
+
+
+
+
+            <div id="Smrylist">
+
+                <table id="summarylist">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Month</th>
+                            @*<th scope="col">Allowance</th>*@
+                            <th scope="col">New Amt</th>
+                            <th scope="col">Old Amt</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (Model.ArearProcessingESIDetails != null && Model.ArearProcessingESIDetails.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.ArearProcessingESIDetails.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Department">@Model.ArearProcessingESIDetails[i].Month</td>
+                                    <td data-label="Department">@Model.ArearProcessingESIDetails[i].newSubSal</td>
+                                    <td data-label="Department">@Model.ArearProcessingESIDetails[i].prevArrear</td>
+                                    @*<td data-label="Department">@Model.ArearProcessingESIDetails[i].EmpESI</td>*@
+                                </tr>
+
+                            }
+                        }
+
+
+
+
+
+
+
+
+                    </tbody>
+
+                    <tfoot>
+
+                        <tr style=" position: sticky; bottom:0; " class="table-light">
+                            <td data-label="ID"><strong></strong></td>
+
+                            <td data-label="No of days">
+                                <strong><span class="arrear_SumArrear"></span></strong>
+                            </td>
+
+                            <td data-label="No of days">
+                                <strong><span class="arrear_SumArrear"></span></strong>
+                            </td>
+                        </tr>
+
+                    </tfoot>
+
+                
+
+
+
+
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+</div>

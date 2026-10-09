@@ -1,0 +1,194 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeProfile
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+
+<script src="~/scripts/DataBank/KendoEmployeeProfile.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('.search-profile-details').hide(300);
+
+
+    });
+    function POPUP() {
+        var groupby = $("#GroupByFill_Code").val();
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: '/DataBank/EmployeeProfile/Summary',
+            dataType: 'html',
+
+            success: function (Data) {
+                var m = $('.bd-example-modal-lg');
+                m.find('.modal-body').html('');
+                m.find('.modal-body').html(Data);
+                m.modal('show');
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                swal.fire(xhr.responseText);
+
+            }
+        });
+    }
+</script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Profile</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Employee Profile
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+                                    <select class="form-control form-control-sm "
+                                            id="TabCode"
+                                            onchange="TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())">
+                                        <option value="0">Active</option>
+                                        <option value="1">Resigned</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <div class="button-group float-left ">
+                                    <button data-bs-toggle="modal" data-target=".bd-example-modal-lg" type="button" onclick="POPUP()" class="btn btn-default btn-sm float-left">
+                                        Summary
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+                                <span class="btn-title active ActiveTab" onclick="tabClick('ActiveTab', 0, 'Active')">
+                                    Active
+                                    <span class="btn-notification ActiveCount">@Model.ActiveCount</span>
+                                </span>
+                            </div>
+
+                          
+                            <div class="tab-items highs">
+                                <div class="button-group float-left ">
+                                    <button data-bs-toggle="modal" data-target=".bd-example-modal-lg" type="button" onclick="POPUP()" class="btn btn-default btn-sm float-left">
+                                        Summary
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="tab-items select-option lows">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content popup">
+                                        <div class="modal-header" style="padding:10px">
+                                            <h5 class="modal-title" id="exampleModalLabel">Summary - Active Employees</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+                    <div id="activeListPartial">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/KendoEmployeeProfile/_kendoList.cshtml", Model)
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_AdvancedFilter.cshtml", Model.Filter)
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

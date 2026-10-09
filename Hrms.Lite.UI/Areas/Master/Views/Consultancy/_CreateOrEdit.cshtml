@@ -1,0 +1,153 @@
+﻿@model Hrms.Lite.Shared.Master.Consultancy
+
+<!-- Include jQuery and Bootstrap Datepicker (adjust paths as per your project setup) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Move cursor to end
+        moveCursorToEnd('Name');
+
+        // Initialize datepicker
+        $('.kt_datepicker_2').datepicker({
+            format: 'dd-M-yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+    });
+</script>
+
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Save", "Consultancy", FormMethod.Post, new { id = "Consultancysave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Consultancy</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name <span class="Mandatory">*</span></label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'DepartmentName')", maxlength = "120" })
+                            <span id="ConsultancyName"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Short Name <span class="Mandatory">*</span></label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'DeptShortName')", maxlength = "5" })
+                            <span id="ConsultancyShortName"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Valid From <span class="Mandatory">*</span></label>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(Model => Model.ValidFrom, "{0:dd-MMM-yyyy}", new
+                           {
+                               @class = "form-control kt_datepicker_2",
+                               @placeholder = "From",
+                               onchange = "ValidateDate();fillData();validate(this,'fromdate')"
+                           })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="la la-calendar"></i></span>
+                                </div>
+                            </div>
+                            <span id="ValidFromDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Valid To <span class="Mandatory">*</span></label>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(Model => Model.ValidTo, "{0:dd-MMM-yyyy}", new
+                           {
+                               @class = "form-control kt_datepicker_2",
+                               @placeholder = "To",
+                               onchange = "ValidateDate();fillData();validate(this,'todate')"
+                           })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="la la-calendar"></i></span>
+                                </div>
+                            </div>
+                            <span id="ValidToDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Mobile No. <span class="Mandatory">*</span></label>
+                            @Html.TextBoxFor(Model => Model.MobileNo, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Mobile No", @onblur = "validate(this,'MobileNo')", maxlength = "10" })
+                            <span id="MobileNumber"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Landline No. <span class="NonMandatory"></span></label>
+                            @Html.TextBoxFor(Model => Model.LandNO, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Landline No", @onblur = "validate(this,'LandNO')", maxlength = "11" })
+                            <span id="LandNumber"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Contact Person <span class="Mandatory">*</span></label>
+                            @Html.TextBoxFor(Model => Model.ContactPerson, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Contact Person", @onblur = "validate(this,'DeptShortName')", maxlength = "50" })
+                            <span id="Person"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch">
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "Activeinactivedpt" })
+                                <span id="Activeinactivedpt" class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            <button type="button" class="btn btn-default mobile-full-width" onclick="ConsultancySave('Save')">Save</button>
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+
+                            <button type="button" class="btn btn-default mobile-full-width" onclick="ConsultancySave('Modify')">Modify</button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,125 @@
+﻿@model Hrms.Lite.Shared.DashBoard.LandingPage
+    <style>
+        .attendance_table {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        .ihits-table.table-border table tbody tr td {
+            padding: 10px 6px !important;
+            border: 1px dotted rgba(106, 113, 133, 0.3);
+            border-right: none;
+            border-left: 0;
+        }
+        .new-dash-table table tbody tr td:nth-child(1) {
+            border-left: 1px dotted rgba(106, 113, 133, 0.3) !important;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .new-dash-table table tbody tr td:nth-child(4) {
+            border-right: 1px dotted rgba(106, 113, 133, 0.3) !important;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .ihits-table.table-border table tbody tr td:nth-child(1) {
+            padding: 16px 11px !important;
+        }
+        .new-dash-table table thead tr th:nth-child(4) {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .new-dash-table table thead tr th:nth-child(1) {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+         
+        }
+    </style>
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive new-dash-table   ">
+        <table class="tble-new-color-chng attendance_table ">
+            <thead>
+                <tr class="table-color-new ">
+
+                    <th class="table-radius-new-payroll" scope="col">Type</th>
+                    <th scope="col">Yes</th>
+                    <th scope="col">NO</th>
+                    <th class="table-radius-new-payroll-end" scope="col">Change</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null && Model.PayrollApplicableList != null && Model.PayrollApplicableList.Count > 0)
+                {
+                    for (int i = 0; i < Model.PayrollApplicableList.Count; i++)
+                    {
+
+                        <tr>
+                            <td data-label="Name">@Model.PayrollApplicableList[i].TYPE</td>
+                            <td data-label="Name"><div onclick="GetApplicableCountDetails('@Model.PayrollApplicableList[i].TYPE','YES')" class="notification_attendance_list">@Model.PayrollApplicableList[i].YES</div></td>
+                            <td data-label="Name"><div onclick="GetApplicableCountDetails('@Model.PayrollApplicableList[i].TYPE','NO')" class="notification_attendance">@Model.PayrollApplicableList[i].NO</div></td>
+                            <td data-label="Name"><div onclick="GetApplicableCountDetails('@Model.PayrollApplicableList[i].TYPE','VARIANCE')" class="notification_attendance_count">@Model.PayrollApplicableList[i].CHANGE</div></td>
+
+
+                        </tr>
+                        @*<tr>
+                                <td data-label="Name">ESI</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('ESI','YES')" class="notification_attendance_list">2719</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('ESI','NO')" class="notification_attendance">3088</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('ESI','VARIANCE')" class="notification_attendance_count">2</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">PT</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('PT','YES')" class="notification_attendance_list">86</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('PT','NO')" class="notification_attendance">5721</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('PT','VARIANCE')" class="notification_attendance_count">1</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">LWF</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','YES')" class="notification_attendance_list">54</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','NO')" class="notification_attendance">5753</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','VARIANCE')" class="notification_attendance_count">0</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">Holiday Wage</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Holiday Wage','YES')" class="notification_attendance_list">0</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Holiday Wage','NO')" class="notification_attendance"> 5807</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Holiday Wage','VARIANCE')" class="notification_attendance_count">0</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">LWF</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','YES')" class="notification_attendance_list">54</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','NO')" class="notification_attendance">5753</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('LWF','VARIANCE')" class="notification_attendance_count">0</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">Offday Wage</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','YES')" class="notification_attendance_list">19</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','NO')" class="notification_attendance">5788</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','VARIANCE')" class="notification_attendance_count">0</div></td>
+
+
+                            </tr>
+                            <tr>
+                                <td data-label="Name">Offday Wage</td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','YES')" class="notification_attendance_list">19</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','NO')" class="notification_attendance">5788</div></td>
+                                <td data-label="Name"><div onclick="GetApplicableCountDetails('Offday Wage','VARIANCE')" class="notification_attendance_count">0</div></td>
+
+
+                            </tr>*@
+                    }
+                }
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,198 @@
+﻿@model Hrms.Lite.Shared.DataBank.MedicalCheckup
+<script src="~/scripts/DataBank/MedicalCheckup.js"></script>
+@{
+    ViewData["Title"] = "Save";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Medical_CheckUpSave" }))
+{
+
+
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <!--begin::Header-->
+        <div id="kt_header" class="header header-fixed">
+            <!--begin::Container-->
+            <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                <!--begin::Header Menu Wrapper-->
+
+
+                <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                    <!--begin::Header Menu-->
+                    <div class="d-flex align-items-baseline flex-wrap mr-5">
+                        <h3 class="main-title">Medical Checkup</h3>
+                        <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                            <li class="breadcrumb-item ">
+                                <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                            </li>
+
+                            <li class="breadcrumb-item text-muted">
+                                <a href="@Url.Action("Index", "MedicalCheckup", new { Area = "DataBank" })" >Medical Checkup List</a>
+                            </li>
+                            <li class="breadcrumb-item text-muted">
+                                Medical Checkup
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--begin::Topbar-->
+                <!--end::Topbar-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+
+
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+                        <div class="col-md-12">
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body ">
+                                    <div class="profile-header position-relative box-shadow-none" id="MedEmpHead">
+
+                                        <div id="employeeHeaderMedical">
+                                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml",Model.EmployeeHeader)
+
+                                        </div>
+
+
+
+                                        <div class="profile-header-overflow"></div>
+                                    </div>
+                                    <div class="row my-4">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="view-title">Checkup Type</label>
+                                                <div class="view-details">
+                                                    @Html.HiddenFor(Model => Model.EmployeeGI)
+                                                    @Html.HiddenFor(Model => Model.MedicalCheckupGI)
+                                                    @Html.HiddenFor(Model => Model.CheckupType.Code)
+
+                                                    @Model.CheckupType.Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Date Of Checkup</label>
+                                            <div class="input-group date">
+
+                                                @Html.TextBoxFor(Model => Model.CheckupDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "CheckUp Date" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Hospital/ Clinic Details</label>
+                                                @Html.TextBoxFor(Model => Model.HospitalDetails, new { @class = "form-control form-control-sm EShtName", @placeholder = "Hospital Details" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label>Checkup Validity</label>
+                                            <div class="input-group date">
+                                                @Html.TextBoxFor(Model => Model.CheckupValidity, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "CheckUp Validity" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Health Card Number</label>
+                                                @Html.TextBoxFor(Model => Model.HealthCardNumber, new { @class = "form-control form-control-sm EShtName", @placeholder = "Health Card Number" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Checkup Details</label>
+                                                @Html.TextBoxFor(Model => Model.CheckupDetails, new { @class = "form-control form-control-sm EShtName", @placeholder = "CheckUp Details" })
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="file-upload-form-group">
+                                                <label for="formFileMultiple" class="form-label">Attach File</label>
+
+                                                <div class="file-upload-form mb-1">
+                                                    <div class="small-btn-group">
+                                                        <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default"><i class="icon-xl far fa-eye"></i></button>
+                                                    </div>
+
+                                                    @Html.TextBoxFor(m => m.Attachment.FileData, new { @type = "file", @title = "", @class = "previewImage", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "CheckImageExtensionSize(this)" })
+
+                                                    @*<input class="form-control" type="file" id="formFileMultiple" multiple>*@
+                                                </div>
+                                                <label class="font-size-xs">Only pdf, doc, docx files are allowed , File size should be less than 1 MB.</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+
+                                    <div class="row card-footer-bottom-fixed">
+
+                                        <div class="col-md-12 align-right">
+                                            <button type="button" class="btn btn-default  mobile-full-width" onclick="MedicalCheckUpSave()">
+                                                Save
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--end::Row-->
+                    <!--begin::Row-->
+                    <!--end::Row-->
+                    <!--end::Dashboard-->
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+        </div>
+        <!--end::Content-->
+
+
+    </div>
+
+
+}

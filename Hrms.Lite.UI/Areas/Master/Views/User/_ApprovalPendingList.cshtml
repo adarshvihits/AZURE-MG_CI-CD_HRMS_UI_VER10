@@ -1,0 +1,82 @@
+﻿@model Hrms.Lite.Shared.Master.User
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+@*<script>
+    $(document).ready(function () {
+
+
+        $('#approvePendingTable').DataTable({
+            "pageLength": 25,
+            "language": {
+                searchPlaceholder: "Search"
+            }
+        });
+
+
+        $('.ihits-table table').removeClass("dataTable no-footer");
+        $(".ihits-table table tr th").removeAttr('style')
+
+    });</script>*@
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table user-entry-list-tab-five pt-1">
+    @Html.HiddenFor(m => m.UserList.Count)
+    <table id="approvePendingTable" class="common-table ">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">User ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">User Role</th>
+                <th data-bs-toggle="tooltip" title="User vs Employee Count" scope="col">Count</th>
+                <th scope="col">Is Admin</th>
+                <th scope="col">Valid To</th>
+                <th scope="col">Password Expiry</th>
+                <th scope="col">Type</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.UserList != null && Model.UserList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.UserList.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.UserList[i].LogGI)
+                    @Html.HiddenFor(m => m.UserList[i].UserMasterGI)
+                    @Html.HiddenFor(m => m.UserList[i].EntryType)
+                    <tr>
+
+                        <td data-label="User Name">@Model.UserList[i].UserName</td>
+                        <td data-label="Employee Name">@Model.UserList[i].EmployeeName</td>
+                        <td data-label="User Role">@Model.UserList[i].UserRole</td>
+                        <td data-label="User vs Emp Count">@Model.UserList[i].Count</td>
+                        <td data-label="Full Permission">@Model.UserList[i].FullPermission</td>
+                        <td data-label="Valid To">   @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].ValidTo))</td>
+                        <td data-label="Password Expiry">   @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].PasswordExpiry))</td>
+                        <td data-label="Type">@Model.UserList[i].Type</td>
+                        <td data-label="Entry Type">@Model.UserList[i].EntryType</td>
+                        <td data-label="Approve">
+
+
+
+                            <!-- delete Slider  start-->
+
+                            <a id="userMasterESSPDelete" data-bs-toggle="tooltip" title="Approve"
+                               type="button"
+                               class="btn btn-icon btn-tick icon-only mobile-full-width slider-btn" onclick="onApproveClick('@Model.UserList[i].UserMasterGI', '@Model.UserList[i].LogGI', '@Model.UserList[i].Type', '@Model.UserList[i].EntryType', '@Model.UserList[i].FullPermission')">
+                                <i class="icon-xl far fa-check-circle"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<div id="Approve">
+
+</div>

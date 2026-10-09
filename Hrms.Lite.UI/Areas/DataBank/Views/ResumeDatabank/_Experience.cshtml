@@ -1,0 +1,201 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+
+<script>
+    $(document).ready(function () {
+
+        if (@Model.FresherOrExperienced== 0)
+
+            $(".RdExp").addClass('hide');
+        else
+            $(".RdExp").removeClass('hide');
+
+    });
+</script>
+<style>
+    .step-outer .step-item {
+        left: 0px;
+    }
+</style>
+
+
+<div class="step-outer ">
+    <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Basic')">
+        Basic Details
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Address')">
+        Address
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item active">
+        Experience
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Education
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Certifications
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Skills
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Summary
+        <span class="step-circle"></span>
+    </div>
+</div>
+
+<div class="step-progress-outer">
+
+    <div class="step-demo col-md-5">
+        <img src="~/images/resume_template.png" style="max-width: 100%;" />
+    </div>
+
+    <div class="step-left col-md-7">
+        <div class="resumegrid_repeat my-3 experience_Outer">
+            <h2>Experience</h2>
+
+
+            <div class="row my-2">
+                <div class="col-md-6">
+                    <div class="radio-inline">
+                        <label class="radio radio-outline radio-success">
+
+                            @Html.RadioButtonFor(m => m.FresherOrExperienced, "1", new { @onchange = "showExpDiv(this)", @checked = "checked" })
+                            <span></span>Experienced
+                        </label>
+                        <label class="radio radio-outline radio-success">
+
+                            @Html.RadioButtonFor(m => m.FresherOrExperienced, "0", new { @onchange = "showExpDiv(this)" })
+                            <span></span>Fresher
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            @{
+                if (Model.Experience != null && Model.Experience.Count > 0)
+                {
+
+                    @for (int i = 0; i < Model.Experience.Count; i++)
+                    {
+                        <div class="RdExp" id="experience_div_@i">
+                            <div class="row my-2">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Company Name</label><span class="Mandatory">*</span>
+
+                                        @Html.TextBoxFor(m => m.Experience[i].CompanyName, new { @class = "form-control form-control-sm ifExpEmpty", @placeholder = "Company Name", @onchange = "validateResumeDB(this,'rd_CompanyName_'," + @i + ")" })
+                                        <span class="rd_Exp_Span_cmpany" id="rd_CompanyName_@i"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Location</label><span class="Mandatory">*</span>
+                                        @Html.TextBoxFor(m => m.Experience[i].Location, new { @class = "form-control form-control-sm ifExpEmptyy", @placeholder = "Location", @onchange = "validateResumeDB(this,'rd_Location_'," + @i + ")" })
+                                        <span class="rd_Exp_Span_Loc" id="rd_Location_@i"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Designation</label><span class="Mandatory">*</span>
+                                        @Html.TextBoxFor(m => m.Experience[i].Designation, new { @class = "form-control form-control-sm ifExpEmpty", @placeholder = "Designation", @onchange = "validateResumeDB(this,'rd_Designation_'," + @i + ")" })
+                                        <span class="rd_Exp_Span_Des" id="rd_Designation_@i"></span>
+                                    </div>
+                                </div> 
+                               
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Area</label>
+                                        @Html.TextBoxFor(m => m.Experience[i].Area, new { @class = "form-control form-control-sm ifExpEmpty", @placeholder = "Area" })
+                                 
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>From</label><span class="Mandatory">*</span>
+                                        <div class="input-group date">
+
+
+                                            @Html.TextBoxFor(m => m.Experience[i].From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 ifExpEmpty", @readonly = "true", @placeholder = "From", @onchange = "CalcExperience(this,'from','rd_From_' ," + @i + ")" })
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="rd_Exp_Span_fr" id="rd_From_@i"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>To</label><span class="Mandatory">*</span>
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.Experience[i].To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 ifExpEmpty", @readonly = "true", @placeholder = "To", @onchange = "CalcExperience(this,'to','rd_To_'," + @i + ")" })
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="rd_Exp_Span_to" id="rd_To_@i"></span>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Experience</label><span class="Mandatory">*</span>
+                                        @Html.TextBoxFor(m => m.Experience[i].Experience, new { @class = "form-control", @readonly = "true", @placeholder = "Experience" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <a data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon btn-delete big-btn float-left" onclick="DeleteRwExp(@i)"><i class="icon-xl far fa-trash-alt"></i></a>
+
+                                </div>
+                                <div class="col-md-10">
+                                    <button type="button" onclick="AddExp()"
+                                            class="btn btn-default float-right mobile-full-width">
+                                        Add More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    }
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- <end table></end> -->
+<div class="row card-footer-bottom-fixed">
+
+    <div class="col-md-12 align-right">
+        <button type="button" onclick="onNextClick('Rd_Experience')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+
+</div>

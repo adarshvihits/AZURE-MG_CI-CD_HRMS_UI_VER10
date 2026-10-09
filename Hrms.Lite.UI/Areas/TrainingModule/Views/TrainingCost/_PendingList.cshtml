@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingCost
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+      
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table TrainingCost-master-pendinglist pt-1">
+    @Html.HiddenFor(m => m.GetTrainingCostList.Count)
+    <table id="Pendingtable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                @*<th scope="col">Short Name</th>*@
+                <th scope="col">Type</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+
+                if (Model.GetTrainingCostList != null && Model.GetTrainingCostList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.GetTrainingCostList.Count; i++)
+                    {
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Code)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.GetTrainingCostList[i].MakerChecker)
+                            <td data-label="Name">@Model.GetTrainingCostList[i].Name</td>
+                            @*<td data-label="ShortName">@Model.GetTrainingCostList[i].ShortName</td>*@
+                            <td data-label="Type">@Model.GetTrainingCostList[i].TrainingCostHeadTypeName</td>
+                            <td data-label="Entry Type">@Model.GetTrainingCostList[i].Mode</td>
+                            <td data-label="Approve">
+
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="divisionapprove"
+                                   class="btn btn-icon btn-tick icon-only " onclick="onApproveClick('@Model.GetTrainingCostList[i].GI', '@Model.GetTrainingCostList[i].LogGI', 'APPROVAL',@i);
+                                     ">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+

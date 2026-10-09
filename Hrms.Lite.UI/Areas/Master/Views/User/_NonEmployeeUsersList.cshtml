@@ -1,0 +1,58 @@
+﻿@model Hrms.Lite.Shared.Master.User
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/js/settings.js"></script>  
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table user-entry-list-tab-three pt-1">
+    @Html.HiddenFor(m => m.UserList.Count)
+    <table id="nonEmployeeTable" class="common-table ">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">User ID</th>
+                <th scope="col">User Role</th>
+                <th data-bs-toggle="tooltip" title="User vs Employee Count" scope="col">Count</th>
+                <th scope="col">Is Admin</th>
+                <th scope="col">Valid To</th>
+                <th scope="col">Password Expiry</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Reset</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.UserList != null && Model.UserList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.UserList.Count; i++)
+                {
+            <tr>
+                @Html.HiddenFor(m => m.UserList[i].UserMasterGI)
+                <td data-label="User Name">@Model.UserList[i].UserName</td>
+                <td data-label="User Role">@Model.UserList[i].UserRole</td>
+                <td data-label="User vs Emp Count">@Model.UserList[i].Count</td>
+                <td data-label="Full Permission">@Model.UserList[i].FullPermission</td>
+                <td data-label="Valid To">   @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].ValidTo))</td>
+                <td data-label="Password Expiry">   @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].PasswordExpiry))</td>
+                <td data-label="Actions">
+                    <div>
+                        <span data-bs-toggle="tooltip" title="Edit"
+                              type="button"
+                              class="btn btn-icon btn-edit icon-only" onclick="onEditNonEmployeeUserClick('@Model.UserList[i].UserMasterGI')">
+                            <i class="icon-xl fas fa-pencil-alt"></i>
+                        </span>
+
+
+
+                    </div>
+                </td>
+                <td data-label="Reset">
+                    <div>
+                        <a data-bs-toggle="tooltip" title="Reset" class="btn btn-icon slider-btn  icon-only mobile-full-width  btn-edit"
+                           onclick="onPasswordResetClick(@Model.UserList[i].EmployeeCode, '@Model.UserList[i].Mobile', '@Model.UserList[i].DOB.ToString("dd-MMM-yyyy")', '@Model.UserList[i].PasswordParameter',@Model.UserList[i].UserCode)"><i class="icon-xl far fas fa-cog"></i> </a>
+                    </div>
+                </td>
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

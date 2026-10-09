@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Recruitmentdrive
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-1">
+    <input type="hidden" id="List_Count" value="@(Model.List?.Count ?? 0)" />
+    <table id="PendingRecruitmentdriveTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Venue</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Total Cost</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.List != null && Model.List.Count > 0)
+            {
+                for (int i = 0; i < Model.List.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Name">
+                            @Html.HiddenFor(m => m.List[i].MakerChecker)
+                            @Model.List[i].Name
+                        </td>
+                        <td data-label="Location">@Model.List[i].LocationName</td>
+                        <td data-label="Venue">@Model.List[i].Venue?.Name</td>
+                        <td data-label="From">@(Model.List[i].DateFrom?.ToString("dd-MMM-yyyy"))</td>
+                        <td data-label="To">@(Model.List[i].DateTo?.ToString("dd-MMM-yyyy"))</td>
+                        <td data-label="Total Cost">@(Model.List[i].Cost?.ToString("N2"))</td>
+                        <td data-label="Entry Type">@Model.List[i].ApprovalStatus</td>
+                        <td data-label="Approve">
+                            @if (CurrentUserRoleActions.Approve == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   class="btn btn-icon btn-tick icon-only slider-btn"
+                                   onclick="onApproveClick('@Model.List[i].GI', '@Model.List[i].LogGI', @i)">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   class="btn btn-icon btn-tick icon-only slider-btn"
+                                   onclick="swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

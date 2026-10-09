@@ -1,0 +1,663 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/onBoarding.js"></script>
+<script>
+    $(document).ready(function () {      
+        //const myTimeout = setTimeout(CTCCalculation, 5000);
+        CTCCalculation();
+       
+        //var pan = $("#PreEnrollment_BasicInfo_PanNo").val();
+        //var Adhar = $("#PreEnrollment_BasicInfo_AdharNo").val();        
+        //$(".pa_AdharNo").html(mask(Adhar));
+        //$(".pa_Pan").html(mask(pan));
+    });
+
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Preenrollment Approval </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "OnBoarding", new { Area = "DataBank" })" class="">Preenrollment Approval List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Preenrollment Approval
+                    </li>
+                </ul>
+            </div>
+            <!--end::Header Menu-->
+        </div>
+
+
+
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+      
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="profile-header">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/OnBoarding/_OnBoardingHeader.cshtml", Model.PreEnrollment.EmployeeHeader)
+                        @Html.HiddenFor(m => m.PreEnrollment.BasicInfo.PanNo)
+                        @Html.HiddenFor(m => m.PreEnrollment.BasicInfo.AdharNo)
+                        <div class="profile-header-overflow"></div>
+                    </div>
+                    <div class="onboarding-view">
+                        <h5>       <i class="fa fa-user icon-clr-new" aria-hidden="true" style="padding:4px; "></i>Personal Info</h5>
+                        <div class="five-col">
+                            <div class="row-outer">
+                                <label class="view-title">DOJ</label>
+                                <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PreEnrollment.BasicInfo.AcceptedDOJ))</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">DOB</label>
+                                <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PreEnrollment.BasicInfo.DOB))</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Gender</label>
+                                <div class="view-details">@Model.PreEnrollment.BasicInfo.Gender.Name</div>
+                            </div>
+                            @*<div class="row-outer">
+                                <label class="view-title">Relation</label>
+                                <div class="view-details">@Model.PreEnrollment.BasicInfo.FathersName (@Model.PreEnrollment.BasicInfo.Relation.Name)</div>
+                            </div>*@
+
+                        <div class="row-outer">
+                            <label class="view-title">Aadhar Number</label>
+                            @*<div class="view-details pa_AdharNo">@Model.PreEnrollment.BasicInfo.AdharNo</div>*@
+                            <div class="view-details pa_AdharNo">
+                                @{ var aadhar = Model.PreEnrollment.BasicInfo.AdharNo;
+                                    if (!string.IsNullOrEmpty(aadhar) && aadhar.Length == 12)
+                                    { @("********" + aadhar.Substring(8)) }
+                                }
+                            </div>
+                        </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">PAN</label>
+                                <div class="view-details pa_Pan">@Model.PreEnrollment.BasicInfo.PanNo</div>
+                            </div>
+
+                        </div>
+                        <h5> <i class="fas fa-briefcase icon-md mr-2 icon-clr-new"></i>Job Details</h5>
+                        <div class="five-col">
+                            <div class="row-outer">
+                                <label class="view-title">Mobile No.</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.MobileNo</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Email</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.MailID</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Company</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Company.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Category</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Category.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Designation</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Grade.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Fun.Designation</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Designation.Name</div>
+                            </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">Department</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Department.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Sub.Department</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.SubDepartment.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Location</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Location.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Division</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Division.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Section</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Section.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Wage Grade</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.WageGrade.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Payroll Group</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.PayrollGroup.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Employment Type</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.EmploymentType.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Function</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.Function.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Work Location</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.WorkLocation.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">VDA Group</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.VDAGroup.Name</div>
+                            </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">Renewal Date</label>
+                                <div class="view-details"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PreEnrollment.BasicInfo.RenewalDate))</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Notice Period (In Days)</label>
+                                <div class="view-details">@Model.PreEnrollment.JobDetails.NoticePeriod</div>
+                            </div>
+
+                        </div>
+                        <h5><i class="fa fa-university icon-clr-new" aria-hidden="true"></i> Compensation & Benefits</h5>
+                        <div class="three-col border-none mb-0">
+                            <div class="row-outer">
+                                <label class="view-title">Salary Band</label>
+                                <div class="view-details">@Model.PreEnrollment.Compensation.SalaryStructure.Name</div>
+                            </div>
+                            <div class="row-outer ">
+
+                                <label class="view-title">Offered Salary</label>
+                                <div class="view-details">@Model.PreEnrollment.Compensation.OfferedSalary</div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="personal-details-left mt-0">
+                                    <ul class="nav nav-tabs exittab" role="tablist">
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link active" data-bs-toggle="tab"
+                                               href="#tabs-1" role="tab">Allowance</a>
+                                        </li>
+                                        <li class="nav-item exititem mr-0">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-2"
+                                               role="tab">Deductions</a>
+                                        </li>
+                                        <li class="nav-item exititem">
+                                            <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-3"
+                                               role="tab">Provision And Perks</a>
+                                        </li>
+
+                                    </ul><!-- Tab panes -->
+                                    <div class="tab-content  "
+                                         style="display: block ; position: relative; top: 5px;">
+                                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Fixed Allowance</th>
+                                                                    <th scope="col">Amount</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                @if (Model.PreEnrollment.Compensation.FixedAllowance != null && Model.PreEnrollment.Compensation.FixedAllowance.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.FixedAllowance.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Allowance">
+                                                                                @Model.PreEnrollment.Compensation.FixedAllowance[i].Name
+                                                                            </td>
+
+                                                                            <td data-label="Amount">
+                                                                                @Html.HiddenFor(m => m.PreEnrollment.Compensation.FixedAllowance[i].Amount, new { @class = "AllowanceAmount" })
+                                                                                @Model.PreEnrollment.Compensation.FixedAllowance[i].Amount
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Other Applicable Allowance</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.PreEnrollment.Compensation.VariableAllowance != null && Model.PreEnrollment.Compensation.VariableAllowance.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.VariableAllowance.Count; i++)
+                                                                    {
+                                                                        if (Model.PreEnrollment.Compensation.VariableAllowance[i].Applicable == true)
+                                                                        {
+
+                                                                            <tr>
+                                                                                <td data-label="Variable Allowance">
+                                                                                    @Model.PreEnrollment.Compensation.VariableAllowance[i].Name
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <!-- <new? -->
+
+
+                                        </div>
+                                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Fixed Deduction</th>
+
+                                                                    <th scope="col">Amount</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.PreEnrollment.Compensation.FixedDeduction != null && Model.PreEnrollment.Compensation.FixedDeduction.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.FixedDeduction.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Deduction">
+                                                                                @Model.PreEnrollment.Compensation.FixedDeduction[i].Name
+                                                                            </td>
+
+                                                                            <td data-label="Amount">
+                                                                                @Html.HiddenFor(m => m.PreEnrollment.Compensation.FixedDeduction[i].Amount, new { @class = "DeductionsAmount" })
+                                                                                @Model.PreEnrollment.Compensation.FixedDeduction[i].Amount
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">Other Applicable Deduction</th>
+
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.PreEnrollment.Compensation.VariableDeduction != null && Model.PreEnrollment.Compensation.VariableDeduction.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.VariableDeduction.Count; i++)
+                                                                    {
+                                                                        if (Model.PreEnrollment.Compensation.VariableDeduction[i].Applicable == true)
+                                                                        {
+                                                                            <tr>
+                                                                                <td data-label="Variable Deduction">
+                                                                                    @Model.PreEnrollment.Compensation.VariableDeduction[i].Name
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">
+                                                                        Fixed Provision & Perks
+                                                                    </th>
+
+                                                                    <th scope="col">Amount</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.PreEnrollment.Compensation.FixedProvisions != null && Model.PreEnrollment.Compensation.FixedProvisions.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.FixedProvisions.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td data-label="Fixed Provision & Perks">
+                                                                                @Model.PreEnrollment.Compensation.FixedProvisions[i].Name
+                                                                                @Html.HiddenFor(m => m.PreEnrollment.Compensation.FixedProvisions[i].CtcApplicable)
+                                                                            </td>
+
+                                                                            <td data-label="Amount">
+                                                                                @Html.HiddenFor(m => m.PreEnrollment.Compensation.FixedProvisions[i].Amount, new { @class = "ProvisionsAmount" })
+                                                                                @Model.PreEnrollment.Compensation.FixedProvisions[i].Amount
+                                                                            </td>
+
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <end></end> -->
+                                                <div class="col-md-6">
+
+                                                    <!-- <div class="newgroup">
+                                    <h5><i
+                                            class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                        Your Company
+                                    </h5>
+                                </div> -->
+                                                    <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                        <table>
+                                                            <thead>
+                                                                <tr class="table-light">
+                                                                    <th scope="col">
+                                                                        Variable Provision
+                                                                        & Perks
+                                                                    </th>
+
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.PreEnrollment.Compensation.VariableProvisions != null && Model.PreEnrollment.Compensation.VariableProvisions.Count > 0)
+                                                                {
+
+                                                                    for (int i = 0; i < Model.PreEnrollment.Compensation.VariableProvisions.Count; i++)
+                                                                    {
+                                                                        if (Model.PreEnrollment.Compensation.VariableProvisions[i].Applicable == true)
+                                                                        {
+                                                                            <tr>
+                                                                                <td data-label="SI">@Model.PreEnrollment.Compensation.VariableProvisions[i].Name</td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="four-col  mt-4">
+                            <div class="row-outer">
+                                <label class="view-title">Gross Salary</label>
+                                <div class="view-details"><span id="GrossSalary"></span></div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">CTC</label>
+                                <div class="view-details"><span id="CTC"></span></div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Total Deductions</label>
+                                <div class="view-details"><span id="totDeductions"></span></div>
+                            </div>
+
+                            @*<div class="row-outer">
+                <label class="view-title">PF</label>
+                <div class="view-details">
+                    @if (Model.PreEnrollment.Compensation.PF == true)
+                    {
+                        <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                    }
+                </div>
+            </div>*@
+
+                            @*<div class="row-outer">
+                <label class="view-title">ESI</label>
+                <div class="view-details">
+                    @if (Model.PreEnrollment.Compensation.ESI == true)
+                    {
+                        <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                    }
+                </div>
+            </div>*@
+                        </div>
+
+                        <h5> <i class="fa fa-address-card icon-clr-new" aria-hidden="true" style="padding:4px;"></i>Address for Communication</h5>
+                        <div class="five-col border-none">
+                            <div class="row-outer">
+                                <label class="view-title">House</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.House</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">Street</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.Street</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">City</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.City</div>
+                            </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">PIN code</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.PinCode</div>
+                            </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">Country</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.Country.Name</div>
+                            </div>
+                            <div class="row-outer">
+                                <label class="view-title">State</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.State.Name</div>
+                            </div>
+
+                            <div class="row-outer">
+                                <label class="view-title">District</label>
+                                <div class="view-details">@Model.PreEnrollment.PermanentAddress.District.Name</div>
+                            </div>
+
+
+                        </div>
+                        <div class="row mt-5 border-b pt-1 pb-2">
+                            <div class="col-md-2">
+                                <div class="row-outer">
+                                    <label class="view-title" cursorshover="true">Entry User</label>
+                                    <div class="view-details">
+                                       @Model.EntryUser
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row-outer">
+                                    <label class="view-title" cursorshover="true">Entry Date and Time</label>
+                                    <div class="view-details">
+                                        @Model.EntryDate
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row card-footer-bottom-fixed">
+                        @Html.HiddenFor(m => m.PreEnrollment.PreEnrollGI)
+                        <div class="col-md-12 align-right">
+                            <button type="button" class="btn btn-danger mobile-full-width" onclick="RejectPreEnrollment('@Model.PreEnrollment.PreEnrollGI')">
+                                Reject
+                            </button>
+                            <button type="button" class="btn btn-default mobile-full-width" onclick="ApprovePreEnrollment('@Model.PreEnrollment.PreEnrollGI')">
+                                Approve
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->

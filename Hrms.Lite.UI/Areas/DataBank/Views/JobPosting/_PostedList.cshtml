@@ -1,0 +1,73 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobPosting
+    <script src="~/js/tooltip.js"></script>
+<script>
+        $(document).ready(function () {
+        debugger;
+        $('#tb1').html("@Model.Tab1Count");
+        $('#tb2').html("@Model.Tab2Count");
+    });
+</script>
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border odd-even mobile-responsive-table job-posting-list-neww new-tble-pad-tp">
+    @Html.HiddenFor(m => m.JobPostingList.Count)
+    <table id="JPPostedTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No.</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Applied Designation</th>
+                <th scope="col">Applied Location</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Initiated On">Initiated On</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Deadline">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" title="No of Requirements">N / Req</th>
+                <th data-bs-toggle="tooltip" title="Days Left">D.L.</th>
+                <th scope="col">Job Posted In</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.JobPostingList != null && Model.JobPostingList.Count > 0)
+            {
+
+
+                for (int i = 0; i < Model.JobPostingList.Count; i++)
+
+                {
+            <tr>
+
+                @Html.HiddenFor(model => Model.JobPostingList[i].MRFGI)
+                @Html.HiddenFor(model => Model.JobPostingList[i].VacancyManagementCode)
+                <td data-label="Code">@Model.JobPostingList[i].JobCode</td>
+                <td data-label="Job Title">
+                    <a id="" onclick="getJobPostingDetails('@Model.JobPostingList[i].MRFGI','Posted','@Model.JobPostingList[i].IsJobDescriptionNotPresent')">
+                        @Model.JobPostingList[i].JobTitle
+                    </a>
+                </td>
+                <td data-label="Applied Designation"> @Model.JobPostingList[i].Designation</td>
+                <td data-label="Applied Designation"> @Model.JobPostingList[i].Location</td>
+                <td data-label="Requested Date"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobPostingList[i].RequestedDate))</td>
+                <td data-label="Need by Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobPostingList[i].NeedByDate))</td>
+                <td data-label="No of Requirements"> @Model.JobPostingList[i].NoOfRequirements</td>
+                @if (@Model.JobPostingList[i].Aging < 0)
+                {
+                    <td data-label="Days Left"><span class="text-color-low">@Model.JobPostingList[i].Aging</span></td>
+                }
+                else
+                {
+                    <td data-label="Days Left"><span class="text-color-high">@Model.JobPostingList[i].Aging</span></td>
+                }
+                <td data-label="Job Posted In"> @Model.JobPostingList[i].JobpostedIn</td>
+                <td data-label="Delete">
+                    <a data-bs-toggle="tooltip" title="" id="deleteloan" class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="Delete('@Model.JobPostingList[i].MRFGI')" data-bs-original-title="Delete" cursorshover="true">
+                        <i class="icon-xl far fa-trash-alt" cursorshover="true"></i>
+                    </a>
+                </td>
+            </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

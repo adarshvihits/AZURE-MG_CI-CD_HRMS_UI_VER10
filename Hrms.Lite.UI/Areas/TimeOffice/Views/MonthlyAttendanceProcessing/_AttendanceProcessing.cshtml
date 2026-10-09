@@ -1,0 +1,189 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.MonthlyAttendanceProcessing
+    <script src="~/js/tooltip.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+       
+        fillData();
+    });
+    $(".search-slider-inner").click(function () {
+        $(".form-control").toggleClass('field-width-big')
+    });
+</script>
+
+
+
+
+<div class="content  content-background-remove  d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+            <div class=" height-100per footer-row-fixed h-100">
+
+                <div class="">
+                    <div class="step-outer pb-10  mt-0 step_row">
+                        <a class="step-item active" onclick="onTabNameClick('map_Selection',0)">
+                            Selection
+                            <span class="step-circle"></span>
+                        </a>
+                        <a class="step-item active" onclick="onTabNameClick('map_Settings',1)">
+                            Attendance Settings
+                            <span class="step-circle"></span>
+                        </a>
+                        <a class="step-item active" onclick="onTabNameClick('map_Status',2)">
+                            Attendance Status
+                            <span class="step-circle"></span>
+                        </a>
+                        <a class="step-item active" onclick="onTabNameClick('map_Leave',3)">
+                            Leave
+                            <span class="step-circle"></span>
+                        </a>
+                        <a class="step-item active" onclick="onTabNameClick('map_Wages',4)">
+                            Attendance Wages
+                            <span class="step-circle"></span>
+                        </a>
+                        <a class="step-item active">
+                            Attendance Processing
+                            <span class="step-circle"></span>
+                        </a>
+
+                    </div>
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+                                <div class="form-group filter-combobox ml-2" style="width: 200px;">
+                                    <label class="view-title">Payroll Group</label>
+                                    <div class="view-details">
+                                        @if (Model.PayrollGroup != null)
+                                            @Model.PayrollGroup.Name
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <div class="form-group filter-combobox ml-2" style="width: 200px;">
+                                    <label class="view-title">Month</label>
+                                    <div class="view-details">
+                                        @if (Model.Month != null)
+                                            @Model.Month.Name
+                                        @Html.HiddenFor(m => m.Month.Name)
+                                        @Html.HiddenFor(m => m.PayrollGroup.Name)
+                                        @Html.HiddenFor(m => m.Period)
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <div class="form-group filter-combobox ml-2" style="width: 250px;">
+                                    <label class="view-title">Period</label>
+                                    <div class="view-details">
+                                        @Model.Period
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="tab-items select-option">
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button" data-bs-toggle="tooltip" title="Filter" onclick="onFilterClick()">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+                                <a data-bs-toggle="tooltip" title="Export to Excel" onclick="onExportToExcelClick()"
+                                   class="btn btn-excel">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <!-- Table Section -->
+
+                    <div class="ihits-table table-border  mobile-responsive-table monthly-attendance-process-list ">
+                        @Html.HiddenFor(m => Model.MonthlyAttendanceProcessing_Data.Count)
+                        <table id="MapTable" class="common-table">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Employee Name</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Present">PR</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Regularization approval">RA</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Absent">AB</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="loss of pay">Lop</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="ESI Leave">ESI.Lev</th>
+                                    <th scope="col">Leave</th>
+                                    <th scope="col">C.Off</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="On Duty">OD</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Double Duty">DD</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Work From Home">WFH</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Holiday">HD</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Holiday Present">Hd.Pr</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Weekly Off">WO</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="On Duty Present ">ODPR</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Late Joining Period">LJP</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Late Resignation Period">LRP</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Previous LOP">Prv.Lop</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Previous Month Arrear">Prv.Arr</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Suspension">SUS</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Maternity Days">M.Days</th>
+                                    <th scope="col">Lay.Off</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title="Total LOP">Tot.Lop</th>
+                                    <th scope="col" data-bs-toggle="tooltip" title=""
+                                        data-bs-original-title="Paid days">P.D.</th>
+
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-12">
+
+        <span class="pl-10">Total Days: &nbsp;<span class="map_TotalDays"></span></span>
+        
+        <a onclick="OnApplyAndLockClick()"
+           class="btn btn-default float-right mobile-full-width">
+            Apply & Lock
+        </a>
+    </div>
+
+</div>

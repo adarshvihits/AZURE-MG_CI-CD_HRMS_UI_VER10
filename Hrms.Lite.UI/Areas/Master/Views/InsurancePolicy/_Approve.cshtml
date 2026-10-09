@@ -1,0 +1,111 @@
+﻿@model Hrms.Lite.Shared.Master.InsurancePolicy
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "approve" }))
+{
+    <div id="deductionapprove" class="slider-forms slider-forms-open approvePolicy">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('approvePolicy')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>Insurance policy</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Policy Name</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => Model.LogGI)
+                            @Html.HiddenFor(m => Model.GI)
+                            @Model.Name
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Short Name
+                        </label>
+                        <div class="view-details">
+                            @Model.ShortName
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Insurance Company</label>
+                        <div class="view-details">
+                           @Model.InsuranceCompany.Name
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <div class="row-outer">
+                        <label class="view-title">Active</label>
+                        <div class="view-details">
+                            @if (Model.Active == true)
+                            {
+
+                                <button type="button" class="btn btn-icon btn-tick">
+                                    <i class="icon-xl fas fa-check"></i>
+                                </button>
+
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-icon btn-close">
+                                    <i class="icon-xl fas fa-times"></i>
+
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label class="view-title">Description</label>
+                    <div class="view-details">
+                        @Model.Description
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (CurrentUserRoleActions.Approve == true)
+                    {
+                        <button type="button" class="btn btn-danger mobile-full-width" onclick="return ConfirmReject('@Model.GI','@Model.LogGI')">
+                            Reject
+                        </button>
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="return ConfirmApprove('@Model.GI','@Model.LogGI')">
+                            Approve
+                        </button>
+                    }
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}

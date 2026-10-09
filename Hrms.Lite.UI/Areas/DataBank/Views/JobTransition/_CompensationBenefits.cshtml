@@ -1,0 +1,743 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+
+<script>
+    $(document).ready(function () {
+       
+        jobTransitionReason();
+    });
+</script>
+
+<style>
+    .ihits-table.vertical-scroll-150 tbody {
+        height: 140px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var b = document.getElementById('Confidential_AbsoluteUri');
+        if (b.value == null || b.value == '') {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Confidential_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 18);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+    });
+
+
+    window.pressed = function () {
+        debugger
+        var a = document.getElementById('Confidential_FileData');
+        if (a.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 18);
+            fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    };
+
+
+</script>
+<style>
+
+    .PreviewImage {
+        color: white !important;
+    }
+ </style>
+<div class="step-outer step_row">
+
+    <a href="#" onclick="onProgressTabClick('growth-history')" class="step-item active">
+        Growth History
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('transition-type')" class="step-item active ">
+        Effective From
+        <span class="step-circle "></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('job-details')" class="step-item active">
+        Job Details
+        <span class="step-circle "></span>
+    </a>
+    <a href="#" onclick="onProgressTabClick('add-authority')" class="step-item active">
+        Compensation & Benifits
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item">
+        Add Authority
+        <span class="step-circle"></span>
+    </div>
+        <div class="step-item">
+            Subordinates
+            <span class="step-circle"></span>
+        </div>
+        <div class="step-item">
+            Document/Summary
+            <span class="step-circle"></span>
+        </div>
+    </div>
+
+<div class="job-transition-outer" style=" padding-bottom: 0;">
+    <div class=" col-md-12">
+        <h4 style=" padding-top: 0px; font-size: 14px;">
+            Compensation & Benefits
+        </h4>
+
+
+        <div class=" ">
+            <div class="row justify-content-md-left tab-form ">           
+
+                <div class="col-sm-5">
+                    <div class="row">
+
+                        <div class="col-md-12 d-flex pb-1 align-items-center">
+                            <div class="col-md-2">
+                                <label>CTC</label>
+                            </div>
+                            <div class="col-md-2">
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.oldCTCValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "CTC", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>
+                            @*<div class="col-md-2">
+                                <label>Gross</label>
+                            </div>
+                            <div class="col-md-2">
+
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.GrossOldAmt, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Gross", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>*@
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(m => m.JobTransition_JobDetail.GrossCalculator.Code, new SelectList(new List<object>{
+                new { Code = "0", Name = "Hike %" },
+                new { Code = "1", Name = "Hike Amount"},
+                 new { Code = "2", Name = "Lower %" },
+                  new { Code = "3", Name = "Lower Amount" }
+                           }, "Code", "Name", "1"), "--Select--",
+                                new { @class = "form-control form-control-sm", @onchange = "onNewAmountChange()" })
+
+                            </div>
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.GrossChangeValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Gross", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", @onchange = "onNewAmountChange()" })
+
+                            </div>
+                            <div class="col-md-3">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.NewCTCValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "CTC", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+
+                            </div>
+                            @*<div class="col-md-3">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.GrossNewValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Gross", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+
+                            </div>*@
+                        </div>
+                        @*<div class=" col-md-12 d-flex align-items-center">
+                            <div class="col-md-2">
+                                <label>Basic</label>
+                            </div>
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.BasicOldAmt, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Basic", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(m => m.JobTransition_JobDetail.BasicCalculator.Code, new SelectList(new List<object>{
+                new { Code = "0", Name = "Hike %" },
+                new { Code = "1", Name = "Hike Amount" }
+                           }, "Code", "Name", "1"), new { @class = "form-control form-control-sm", @onchange = "onNewAmountChange();jobTransitionReason();" })
+
+                            </div>
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.BasicChangeValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Basic", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", @onchange = "onNewAmountChange();jobTransitionReason();" })
+
+                            </div>
+                            <div class="col-md-3">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.BasicNewValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "Basic", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)" })
+
+                            </div>
+                        </div>*@
+
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+
+                    <div class="row">
+
+
+                        @*<div class="col-md-12 d-flex align-items-center">
+
+                            <div class="col-md-2">
+                                <label>AB</label>
+                            </div>
+                            <div class="col-md-3">
+
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.ABOldAmt, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "AB", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(m => m.JobTransition_JobDetail.ABCalculator.Code, new SelectList(new List<object>{
+                new { Code = "0", Name = "%" },
+                new { Code = "1", Name = "Amount" }
+                           }, "Code", "Name", "1"), new { @class = "form-control form-control-sm", @onchange = "onNewAmountChange();jobTransitionReason();" })
+
+                            </div>
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.ABChangeValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "AB", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", @onchange = "onNewAmountChange();jobTransitionReason();" })
+
+                            </div>
+                            <div class="col-md-2">
+
+                                @Html.TextBoxFor(m => m.JobTransition_JobDetail.ABNewValue, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "AB", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+
+                            </div>
+
+                        </div>*@
+                        <div class="col-md-12 d-flex align-items-center">
+                            <div class="col-md-2">
+                                <label>Allowance</label>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label></label>
+                                    @Html.DropDownListFor(m => m.JobTransition_JobDetail.Allowance.Code, (SelectList)ViewBag.Alw, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onAllowanceChange();jobTransitionReason();" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                    <label>Old</label>
+                                    @Html.TextBoxFor(m => m.JobTransition_JobDetail.AlwAmtOld, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "AB", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>
+                            <div class="col-md-2">
+                                    <label>New</label>
+                                    @Html.TextBoxFor(m => m.JobTransition_JobDetail.AlwAmtNew, new { @class = "form-control form-control-sm", @maxlength = 8, @placeholder = "AB", @onblur = "validate(this,'salary');", @onkeypress = "return onlyAmount(event)", })
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+                <div class="col-sm-2 " style=" display: flex; align-items: center; justify-content: center;">
+
+                   
+                    <div class="d-flex justify-content-start">
+                        <button type="button" onclick="onSalaryStructureChange()"
+                                class="btn btn-default btn-dd float-right mobile-full-width">
+                            Calculate
+                        </button>
+                        <button type="button" onclick="PopUp_Preview()"
+                                class="btn btn-default btn-dd float-left mobile-full-width">
+                            Salary Details
+                        </button>
+                    </div>
+
+                      
+                   
+                </div>
+                </div>
+
+            </div>
+        
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="job-transition-outer">
+
+    <div class=" col-md-12">
+
+        <div class="row Compensation">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="personal-details-left mt-0">
+                            <ul class="nav nav-tabs exittab" role="tablist">
+                                <li class="nav-item exititem mr-0">
+                                    <a class="nav-link exit-link active" data-bs-toggle="tab"
+                                       href="#tabs-1" role="tab">Allowance</a>
+                                </li>
+                                <li class="nav-item exititem mr-0">
+                                    <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-2"
+                                       role="tab">Deductions</a>
+                                </li>
+                                <li class="nav-item exititem">
+                                    <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-3"
+                                       role="tab">Provision And Perks</a>
+                                </li>
+
+                            </ul><!-- Tab panes -->
+                            <div class="tab-content  "
+                                 style="display: block ; position: relative; top: 5px;">
+                                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+
+                                            <div class="ihits-table table-border table-dot  mobile-responsive-table salary-structure-tab vertical-scroll-150 comp-width">
+                                                @Html.HiddenFor(m => m.JobTransition_VariableDeduction.Count)
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">Fixed Allowance</th>
+                                                            <th scope="col" id="">Current</th>
+                                                            <th scope="col" id="FAllwAmtOrPer">New</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_FixedAllowance != null && Model.JobTransition_FixedAllowance.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_FixedAllowance.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Fixed Allowance">
+                                                                        @Model.JobTransition_FixedAllowance[i].Name
+                                                                        @Html.HiddenFor(m => m.JobTransition_FixedAllowance[i].Code)
+                                                                    </td>
+
+                                                                    <td data-label="Amount">
+                                                                        @Html.DisplayFor(m => m.JobTransition_FixedAllowance[i].CurrentAmount)
+                                                                        @Html.HiddenFor(m => m.JobTransition_FixedAllowance[i].CurrentAmount)
+                                                                    </td>
+                                                                    <td data-label="Amount">
+
+                                                                        @Html.TextBoxFor(m => m.JobTransition_FixedAllowance[i].NewAmount, new { @class = "form-control form-control-sm AllowanceAmount input_height", @placeholder = "Amount", @maxlength = 11, @onblur = "CTCCalculation()" })
+                                                                    </td>
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                        <!-- <end></end> -->
+                                        <div class="col-md-6">
+
+                                            <div class="ihits-table table-border table-dot  mobile-responsive-table comp-width vertical-scroll-150">
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">Variable Allowance</th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col">New</th>
+
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_VaiableAllowance != null && Model.JobTransition_VaiableAllowance.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_VaiableAllowance.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Variable Allowance">@Html.HiddenFor(m => m.JobTransition_VaiableAllowance[i].Code)@Model.JobTransition_VaiableAllowance[i].Name</td>
+                                                                    <td data-label="Check Item">
+
+                                                                        @if (Model.JobTransition_VaiableAllowance[i].OldApplicable == true)
+                                                                        {
+
+                                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                                <i class="icon-xl fas fa-check"></i>
+                                                                            </button>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                                            </button>
+                                                                        }
+
+
+
+                                                                    </td>
+                                                                    <td data-label="Check Item">
+                                                                        <div class="checkbox-inline ">
+                                                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                @Html.CheckBoxFor(m => m.JobTransition_VaiableAllowance[i].Applicable, new { @class = "getapplicable" })
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <!-- <new? -->
+
+
+                                </div>
+                                <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab comp-width vertical-scroll-150">
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">Fixed Deduction</th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col" id="FDedAmtOrPer">New</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_FixedDeduction != null && Model.JobTransition_FixedDeduction.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_FixedDeduction.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Fixed Deduction">@Html.HiddenFor(m => m.JobTransition_FixedDeduction[i].Code)@Model.JobTransition_FixedDeduction[i].Name</td>
+                                                                    <td data-label="Amount">
+                                                                        @Html.DisplayFor(m => m.JobTransition_FixedDeduction[i].CurrentAmount)
+                                                                        @Html.HiddenFor(m => m.JobTransition_FixedDeduction[i].CurrentAmount)
+                                                                    </td>
+                                                                    <td data-label="Amount">
+
+                                                                        @Html.TextBoxFor(m => m.JobTransition_FixedDeduction[i].NewAmount, new { @class = "form-control form-control-sm input_height DeductionsAmount", @placeholder = "Amount", @maxlength = 11, @onblur = "CTCCalculation()" })
+                                                                    </td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <end></end> -->
+                                        <div class="col-md-6">
+
+                                            <div class="ihits-table table-border  mobile-responsive-table comp-width vertical-scroll-150">
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">Variable Deduction</th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col">New</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_VariableDeduction != null && Model.JobTransition_VariableDeduction.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_VariableDeduction.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Variable Deduction"> @Html.HiddenFor(m => m.JobTransition_VariableDeduction[i].Code)@Model.JobTransition_VariableDeduction[i].Name</td>
+                                                                    @Html.HiddenFor(m => m.JobTransition_VariableDeduction[i].DeductionType.Code)
+                                                                    <td data-label="Check Item">
+
+                                                                        @if (Model.JobTransition_VariableDeduction[i].OldApplicable == true)
+                                                                        {
+
+                                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                                <i class="icon-xl fas fa-check"></i>
+                                                                            </button>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                                            </button>
+                                                                        }
+
+
+
+                                                                    </td>
+                                                                    <td data-label="Check Item">
+                                                                        <div class="checkbox-inline ">
+                                                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                @Html.CheckBoxFor(m => m.JobTransition_VariableDeduction[i].Applicable, new { @class = "getapplicable", @onchange = "onDeductionChekboxClick(" + i + ")" })
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+
+                                                                    </td>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab comp-width vertical-scroll-150">
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">
+                                                                Fixed Provision & Perks
+                                                            </th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col" id="FProvAmtOrPer">New</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_FixedProvision != null && Model.JobTransition_FixedProvision.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_FixedProvision.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="Fixed Provision & Perks">@Html.HiddenFor(m => m.JobTransition_FixedProvision[i].Code)@Model.JobTransition_FixedProvision[i].Name</td>
+
+                                                                    <td data-label="Amount">
+                                                                        @Html.DisplayFor(m => m.JobTransition_FixedProvision[i].CurrentAmount)
+                                                                        @Html.HiddenFor(m => m.JobTransition_FixedProvision[i].CurrentAmount)
+                                                                        @Html.HiddenFor(m => m.JobTransition_FixedProvision[i].AllowanceApplicableFor)
+                                                                    </td>
+                                                                    <td data-label="Amount">
+
+                                                                        @Html.TextBoxFor(m => m.JobTransition_FixedProvision[i].NewAmount, new { @class = "form-control form-control-sm ProvisionsAmount input_height", @placeholder = "Amount", @maxlength = 11, @onblur = "CTCCalculation()" })
+                                                                    </td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <end></end> -->
+                                        <div class="col-md-6">
+
+
+                                            <div class="ihits-table table-border  mobile-responsive-table comp-width vertical-scroll-150">
+                                                <table class="compensationJobTransitionTables">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">
+                                                                Variable Provision
+                                                                & Perks
+                                                            </th>
+                                                            <th scope="col">Current</th>
+                                                            <th scope="col">New</th>
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.JobTransition_VariableProvision != null && Model.JobTransition_VariableProvision.Count > 0)
+                                                        {
+
+                                                            for (int i = 0; i < Model.JobTransition_VariableProvision.Count; i++)
+                                                            {
+                                                                <tr>
+                                                                    <td data-label="SI">@Html.HiddenFor(m => m.JobTransition_VariableProvision[i].Code)@Model.JobTransition_VariableProvision[i].Name</td>
+                                                                    <td data-label="Check Item">
+
+                                                                        @if (Model.JobTransition_VariableProvision[i].OldApplicable == true)
+                                                                        {
+
+                                                                            <button type="button" class="btn btn-icon btn-tick">
+                                                                                <i class="icon-xl fas fa-check"></i>
+                                                                            </button>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <button type="button" class="btn btn-icon btn-close">
+                                                                                <i class="icon-xl fas fa-times"></i>
+
+                                                                            </button>
+                                                                        }
+
+
+
+                                                                    </td>
+                                                                    <td data-label="Check Item">
+                                                                        <div class="checkbox-inline ">
+                                                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                                                @Html.CheckBoxFor(m => m.JobTransition_VariableProvision[i].Applicable, new { @class = "getapplicable" })
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+
+                                                                    </td>
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="row pb-8 pt-3">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentGrossSalary)
+                            <label class="mr-2"><b>Current Gross Salary</b></label><b><span id="CurrGrossSal">
+                                   @Model.JobTransition_JobDetail.CurrentGrossSalary</span></b>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.JobTransition_JobDetail.NewGrossSalary)
+                            <label class="mr-2"><b>New Gross Salary</b></label>
+                            <b><span id="NewGrossSal">  @Model.JobTransition_JobDetail.NewGrossSalary</span></b>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.JobTransition_JobDetail.CurrentCTC)
+                            <label class="mr-2"><b>Current CTC</b></label><b>
+                                                                              <span id="CurrCTC">
+                                                                                  @Model.JobTransition_JobDetail.CurrentCTC
+                                                                              </span>
+                            </b>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.JobTransition_JobDetail.NewCTC)
+                            <label class="mr-2"><b>New CTC</b></label>
+                            <b>
+                                <span id="NewCTC">
+                                    @Model.JobTransition_JobDetail.NewCTC
+                                </span>
+                            </b>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+<!-- <end table></end> -->
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6 align-left">
+
+
+    </div>
+    <div class="col-md-6 align-right">
+        <button type="button" onclick="onNextClick('compensation-benefits')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+
+</div>

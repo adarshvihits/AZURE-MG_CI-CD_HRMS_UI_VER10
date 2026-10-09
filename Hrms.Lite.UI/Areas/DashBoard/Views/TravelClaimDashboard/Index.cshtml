@@ -1,0 +1,189 @@
+﻿@model Hrms.Lite.Shared.DashBoard.TravelClaimDashboard
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<!--begin::Header-->
+<link href="~/css/travelclaim.css" rel="stylesheet" />
+<script src="~/scripts/DashBoard/TravelclaimDashboard.js"></script>
+<script>
+        $(document).ready(function () {
+            debugger
+            setTimeout(OnRequesttypechange, 500);
+            setTimeout(OnBudjetTrackingchange, 500);
+        });
+    //$(document).ready(function () {
+    //    debugger
+    //    setTimeout(OnBudjetTrackingchange, 500);
+    //});
+    </script>
+
+
+@*<script>
+        debugger
+        $(document).ready(function () {
+            $("#RquestTypeList").load("/TravelClaimDashBoard/GetRequestList?Type=1");
+        });
+    </script>*@
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Travel Claim Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Travel Claim Dashboard
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="travel_boxone">
+                                <div class="d-flex align-items-center h-100 justify-content-between">
+                                    <div class="">
+                                        <h4 class="sub-total">Total Request</h4>
+                                        <h4 class="sub-value">@Model.TotalRqst</h4>
+                                    </div>
+                                    <div class="travel_claim_round">
+                                        <img style="width:30px; height:30px; " src="~/images/icons/budgeting.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="travel_pendingreq">
+                                <div class="d-flex align-items-center h-100 justify-content-between">
+                                    <div class="">
+                                        <h4 class="sub-total">Approval Pending</h4>
+                                        <h4 class="sub-value">@Model.ApprovalPendingRqst</h4>
+                                    </div>
+                                    <div class="travel_claim_round round_request">
+                                        <img style="width:30px; height:30px; " src="~/images/icons/request.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="travel_reject">
+                                <div class="d-flex align-items-center h-100 justify-content-between">
+                                    <div class="">
+                                        <h4 class="sub-total">Approved</h4>
+                                        <h4 class="sub-value">@Model.ApprovedRqst</h4>
+                                    </div>
+                                    <div class="travel_claim_round round_reject">
+                                        <img style="width:30px; height:30px; " src="~/images/icons/requere.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="travel_approve">
+                                <div class="d-flex align-items-center h-100 justify-content-between">
+                                    <div class="">
+                                        <h4 class="sub-total">Rejected</h4>
+                                        <h4 class="sub-value">@Model.RejectedRqst</h4>
+                                    </div>
+                                    <div class="travel_claim_round round_approve">
+                                        <img style="width:30px; height:30px; " src="~/images/icons/approved.svg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="travel_claim_graph">
+                                <div style="padding:10px;">
+                                    <select class="form-control form-control-sm mb-2" id="Requesttyp" onchange="OnRequesttypechange();OnBudjetTrackingchange()" style="width: 200px;">
+                                        <option value="1">Request By Department</option>
+                                        <option value="2">Request By Location</option>
+
+                                    </select>
+                                    @*@Html.DropDownListFor(Model => Model.Type.Code, (SelectList)ViewBag.RequestType, new { @class = "form-control form-control-sm AsCat", @Onchange = "fillDonutAppraisal();fillBellAppraisal()" })*@
+
+
+                                </div>
+                                <div id="RquestTypeList">
+                                    @* @await Html.PartialAsync("~/Areas/DashBoard/Views/TravelClaimDashboard/_RequestList.cshtml", Model.requestLists)*@
+                                </div>
+                               
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="travel_claim_graph ">
+                                <div class="d-flex  mb-4">
+                                <img style="width:28px; height:28px; padding-right:5px;" src="~/images/icons/track.svg" /> <h4>Budget Tracking</h4>
+
+                                </div>
+                                <div id="BudgetTrackingList">
+                                   @* @await Html.PartialAsync("~/Areas/DashBoard/Views/TravelClaimDashboard/_BudjetTracking.cshtml", Model.BudjetTrackings)*@
+                                </div>
+                            </div>
+                         
+                            <!--<div id="BudgetTrackingList">-->
+                             
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

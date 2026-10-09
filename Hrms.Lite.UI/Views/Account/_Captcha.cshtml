@@ -1,0 +1,27 @@
+﻿<script>
+    function refreshCaptcha() {
+
+        $.ajax({
+
+            type: 'POST',
+            url: '/Account/RefreshCaptcha',
+            dataType: 'html',
+            async: false,
+            success: function (result) {
+                debugger;
+                $('#CaptchaImg').html('');
+                $('#CaptchaImg').html(result);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $('body').html(xhr.responseText);
+            }
+        });
+    }
+    $(document).ready(function () {
+        localStorage.setItem("data", '@ViewBag.CaptchaAnswer');
+    });
+</script>
+<img src="@ViewBag.CaptchaImage" style="width:75px; border-radius:5px;" />
+<div class="captcha" onclick="refreshCaptcha()">
+    <img class="" src="~/images/icons/refresh-arrow.svg" />
+</div>

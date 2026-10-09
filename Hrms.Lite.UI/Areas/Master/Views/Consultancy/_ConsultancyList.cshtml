@@ -1,0 +1,90 @@
+﻿@model Hrms.Lite.Shared.Master.Consultancy
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+        //if (!$.fn.DataTable.isDataTable('#Departmenttable')) {
+           //$('#example').dataTable();
+       // }
+        //$('#Departmenttable').DataTable({
+        //    "pageLength": 10,
+        //    pagingType: 'full_numbers',
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table department-list pt-1">
+    @Html.HiddenFor(m => m.ConsultancyList.Count)
+    <table id="Departmenttable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.ConsultancyList != null && Model.ConsultancyList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ConsultancyList.Count; i++)
+
+                    {
+
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(m => m.ConsultancyList[i].EditActive)
+                            @Html.HiddenFor(model => Model.GI)
+                            <td data-label="Name">@Model.ConsultancyList[i].Name</td>
+                            <td data-label="Name">@Model.ConsultancyList[i].ShortName</td>
+                            <td data-label="Actions">
+                                <div>
+
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="departmentedit"
+                                       class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.ConsultancyList[i].GI', '@Model.ConsultancyList[i].LogGI',@i)">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+
+
+
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deletedepartment"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.ConsultancyList[i].GI', '@Model.ConsultancyList[i].LogGI','DELETE',@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

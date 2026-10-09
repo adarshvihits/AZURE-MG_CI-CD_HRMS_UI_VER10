@@ -1,0 +1,45 @@
+﻿@model Hrms.Lite.Shared.DashBoard.AdminDashBoard
+@using Kendo.Mvc.UI
+
+<div id="todochart" >
+
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DashBoard.AdminDashBoard>()
+
+    .Name("chart1")
+
+     .Legend(legend => legend
+    .Visible(true)
+    .Position(ChartLegendPosition.Bottom)
+    .Labels(labels => labels
+    .Font("11px Arial,Helvetica,sans-serif")
+   .Padding(p => p.Top(10).Right(50))
+    )
+    )
+
+
+    .ChartArea(chart => chart
+        .Background("transparent")
+        .Height(300) // Adjusted height
+        .Width(300)  // Adjusted width
+
+    )
+    .Series(series =>
+    {
+        series.Donut(new dynamic[] {
+            new {category = "Completed",value = Model.ToDo.Green},
+            new {category = "Pending",value = Model.ToDo.Red},
+            new {category = "In Progress",value = Model.ToDo.Yellow},
+
+        });
+    })
+    .SeriesColors(new string[] { "#3bb353", "#c82d19", "#f4ca16" })
+    .Tooltip(tooltip => tooltip
+    .Visible(true)
+    .Template("#= category #: #= value #")
+)
+
+)
+
+
+</div>

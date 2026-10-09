@@ -1,0 +1,96 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.AssetAllocation
+    <script src="~/js/settings.js"></script>
+    <script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.AllTabCount");
+        $('.Tab1Count').html("@Model.Tab1Count");
+        $('.Tab2Count').html("@Model.Tab2Count");
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.MoreTabCount').html("@Model.MoreTabCount");
+        $('.PendingTabCount').html("@Model.PendingTabCount");
+
+        //$('#historyTable').DataTable({
+        //    columnDefs: [{
+        //        "targets": 6,
+        //        "type": 'date',
+        //    }, {
+        //            "targets": 7,
+        //            "type": 'date',
+        //        }, {
+        //            "targets": 8,
+        //            "type": 'date',
+        //        }],
+        //    "pageLength": 25
+        //});
+
+        //$(".dataTables_filter").addClass("dataTables_filter_trn");
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+    });
+    </script>
+    <div class="selectFieldValuShow">
+        <div id="one"
+             class="ihits-table table-border hover-color odd-even mobile-responsive-table asset-issue-history-list">
+            @Html.HiddenFor(m => m.AssetAllocationList.Count)
+            <table id="historyTable" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">ID</th>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">Fun.Designation</th>
+                        <th scope="col">Department</th>
+
+                        <th scope="col">Category</th>
+                        <th scope="col">Asset Name</th>
+                        <th scope="col">Issued Date</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Return Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.AssetAllocationList != null && Model.AssetAllocationList.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.AssetAllocationList.Count; i++)
+                        {
+
+                            <tr>
+                                @Html.HiddenFor(m => m.AssetAllocationList[i].AssetAllocationGI)
+                                @Html.HiddenFor(m => m.AssetAllocationList[i].EmployeeGI)
+                                <td data-label="ID">@Model.AssetAllocationList[i].EmpId</td>
+                                <td data-label="Name">
+                                    <div class="name-with-img">
+                                        <a id="EditAssetAllocation"
+                                           class="slider-btn" onclick="onEmployeeClick('@Model.AssetAllocationList[i].AssetAllocationGI','@Model.AssetAllocationList[i].EmployeeGI','History')">@Model.AssetAllocationList[i].EmployeeName</a>
+
+
+                                    </div>
+                                </td>
+                                <td data-label="Designation">@Model.AssetAllocationList[i].Designation.Name</td>
+                                <td data-label="Department">@Model.AssetAllocationList[i].Department.Name </td>
+
+                                <td data-label="Category">@Model.AssetAllocationList[i].Category.Name</td>
+                                <td data-label="Asset Name">@Model.AssetAllocationList[i].AssetName</td>
+                                <td data-label="Issued Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetAllocationList[i].IssuedDate))</td>
+                                <td data-label="Due Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetAllocationList[i].DueDate))</td>
+                                <td data-label="Return Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.AssetAllocationList[i].ReturnDate == DateTime.Parse("01/Jan/0001 12:00:00 AM") ? null : Model.AssetAllocationList[i].ReturnDate))</td>
+                                <td data-label="Status">@Model.AssetAllocationList[i].Status</td>
+                            </tr>
+
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <!-- Table Setion End -->
+
+    </div>
+
+
+        <!--end: Datatable-->
+    </div>

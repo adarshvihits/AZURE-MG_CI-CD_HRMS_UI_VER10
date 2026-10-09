@@ -1,0 +1,67 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "donation" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table Investmen-Under-Section-list mb-2">
+                <table id="family">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Donation</th>
+                            <th class="text-right" scope="col">Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @if (Model.DonationList != null)
+                        {
+                            @for (int i = 0; i < Model.DonationList.Count; i++)
+                            {
+
+                                <tr id="row_OI_@i">
+
+                                    <td data-label="slno">
+
+                                        @(i + 1)
+                                    </td>
+                                    <td data-label="donation">
+                                        @Html.HiddenFor(m => Model.DonationList[i].InvestmentCode)
+                                        @Html.DisplayFor(m => Model.DonationList[i].InvestmentName)
+                                    </td>
+                                    <td data-label="Amount">
+
+                                        @Html.TextBoxFor(m => Model.DonationList[i].Amount, new { @class = "form-control", placeholder = "Amount", @maxlength = 120, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })
+                                    </td>
+
+
+
+                                </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No table data</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" onclick="EightyGDonationSave()"
+                    class="btn btn-default float-right">
+                Save
+            </button>
+        </div>
+    </div>
+}

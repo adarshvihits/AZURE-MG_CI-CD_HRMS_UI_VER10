@@ -1,0 +1,161 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.SocialWallReport
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+<script src="~/scripts/DataBank/Reports/SocialWallReport.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Social Wall Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Social Wall Report
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="tab-items">
+
+
+                                <div class="tab-items ">
+                                    <div class="tab-items mt-2">
+                                        <div class="form-group filter-combobox mt-0">
+                                            @Html.DropDownListFor(m => m.MonthCode, (SelectList)ViewBag.Month, "--Select Month--", new { @class = "form-control form-control-sm", @onchange = "GetList()" })
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="tab-items select-option  align-items-center">
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="searchList" class="form-control form-control-sm"
+                                           placeholder="ID/Name" onkeyup="search()">
+                                </div>
+
+
+
+                                <button data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel" onclick="ExportToExcel()" style="margin-top: 8px;">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </button>
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- Table Section -->
+
+                    <div id="SocialWallList">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/SocialWallReport/_SocialWallReport.cshtml")
+                    </div>
+                    <div id="filterSlider">
+                        @*@await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.filter)*@
+                    </div>
+
+                    <!-- Table Setion End -->
+                    <div class="row card-footer-bottom-fixed">
+
+
+                    </div>
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->
+<div class="modal fade LikesEmployeedetails" tabindex="-1" role="dialog"
+     aria-labelledby="LikesEmployeeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header pb-4">
+                <h5 class="modal-title" id="LikesEmployeeLabel">Likes Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0  pl-3">
+                <!-- Your content here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade CommentEmployeedetails" tabindex="-1" role="dialog"
+     aria-labelledby="CommentEmployeeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg " style="max-width: 1000px;">
+        <div class="modal-content popup">
+            <div class="modal-header pb-4">
+                <h5 class="modal-title" id="CommentEmployeeLabel">Comments Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  p-0 pl-3">
+                <!-- Your content here -->
+            </div>
+        </div>
+    </div>
+</div>
+

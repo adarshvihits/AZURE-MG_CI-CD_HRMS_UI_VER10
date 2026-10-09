@@ -1,0 +1,75 @@
+@model Hrms.Lite.Shared.Master.HRPlanningMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.pendingTabCount').html("@Model.PendingCount");
+    });</script>
+<div class="mb-2">
+    <a href="javascript:void(0)" onclick="ShowActiveList()"><i class="fas fa-arrow-left"></i> Back to Plan Grid</a>
+</div>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table hr-planning-master-pending-list pt-1">
+    @Html.HiddenFor(m => m.HRPlanningMasterList.Count)
+    <table id="approvePendingTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Plan Count</th>
+                <th scope="col">Avg Salary</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.HRPlanningMasterList != null && Model.HRPlanningMasterList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.HRPlanningMasterList.Count; i++)
+                {
+
+                    <tr>
+                        @Html.HiddenFor(m => m.HRPlanningMasterList[i].MakerChecker)
+                        @Html.HiddenFor(m => m.HRPlanningMasterList[i].GI)
+                        @Html.HiddenFor(m => m.HRPlanningMasterList[i].LogGI)
+                        <td data-label="Department">@Model.HRPlanningMasterList[i].Department?.Name</td>
+                        <td data-label="Section">@Model.HRPlanningMasterList[i].Section?.Name</td>
+                        <td data-label="Grade">@Model.HRPlanningMasterList[i].Grade?.Name</td>
+                        <td data-label="Plan Count">@Model.HRPlanningMasterList[i].PlanCount</td>
+                        <td data-label="Avg Salary">&#8377; @Model.HRPlanningMasterList[i].AvgSalary</td>
+                        <td data-label="Entry Type">@Model.HRPlanningMasterList[i].EntryType</td>
+                        <td data-label="Approve">
+                            @if (CurrentUserRoleActions.Approve == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="gradeapprove"
+                                   class="btn btn-icon btn-tick icon-only " onclick="OnApproveClick('@Model.HRPlanningMasterList[i].GI','@Model.HRPlanningMasterList[i].LogGI','@Model.HRPlanningMasterList[i].EntryType',@i)">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="gradeapprove"
+                                   class="btn btn-icon btn-tick icon-only " onclick="OnApproveClick('@Model.HRPlanningMasterList[i].GI', '@Model.HRPlanningMasterList[i].LogGI', '@Model.HRPlanningMasterList[i].EntryType',@i);
+                                   swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                            }
+                                <!-- Approve Slider -->
+                                <!-- Approve Slider end-->
+                            </td>
+                        <!-- <second></second> -->
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div id="approve"></div>
+</div>

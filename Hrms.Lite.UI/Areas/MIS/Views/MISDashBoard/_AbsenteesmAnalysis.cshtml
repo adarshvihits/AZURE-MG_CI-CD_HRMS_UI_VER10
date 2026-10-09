@@ -1,0 +1,984 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+
+
+
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+    $(document).ready(function () {
+
+        kendo.ui.progress($(".chart-loading"), true);
+    });
+    function onRender(e) {
+        // Clear up the loading indicator for this chart
+        var loading = $(".chart-loading");
+
+        kendo.ui.progress(loading, false);
+    }
+
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+            "Sunday"];
+
+
+
+        if (axis.categories != undefined) {
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+    }
+
+</script>
+<style>
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+        background-color: transparent !important;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .k-card:nth-child(1) {
+        background-color: #1C5CF9 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 100px;
+    }
+
+    .k-tilelayout-item:first-child .k-card-header {
+        background-color: #1C5CF9 !important;
+        border-radius: 10px 10px 0px 0px;
+        color: #fff !important;
+    }
+
+    #absRate {
+        background-color: #FF7A00 !important;
+
+    }
+    #absCount {
+        background-color: #FF7A00 !important;
+    }
+
+    #absenRate, #absenCount {
+        color: #fff !important;
+        font-weight: 800 !important;
+    }
+
+    .k-card:nth-child(2) {
+        background-color: #FF7A00 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 100px;
+    }
+
+
+</style>
+<div class="chart-loading"></div>
+<script id="absRate" type="text/x-kendo-template">
+    <div id="absenRate" style="height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.absRate </div>
+</script>
+<script id="absCount" type="text/x-kendo-template">
+    <div id="absenCount" style="height:100%;display:flex; align-items:center;justify-content:center;font-size:2rem;">@Model.absenteesmCount </div>
+</script>
+
+
+<script>
+
+
+
+
+    function MonthWiseDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var month = e.category.toLowerCase();
+        var monthcode;
+
+        switch (month) {
+            case "january":
+                monthcode = 1;
+                break;
+            case "february":
+                monthcode = 2;
+                break;
+            case "march":
+                monthcode = 3;
+                break;
+            case "april":
+                monthcode = 4;
+                break;
+            case "may":
+                monthcode = 5;
+                break;
+            case "june":
+                monthcode = 6;
+                break;
+            case "july":
+                monthcode = 7;
+                break;
+            case "august":
+                monthcode = 8;
+                break;
+            case "september":
+                monthcode = 9;
+                break;
+            case "october":
+                monthcode = 10;
+                break;
+            case "november":
+                monthcode = 11;
+                break;
+            case "december":
+                monthcode = 12;
+                break;
+            default:
+
+                break;
+        }
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 110, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, MONTHCODE: monthcode },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=110&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&MONTHCODE=' + monthcode;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+
+    function AgeBandDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var ageslab = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 111, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, AGESLAB: ageslab },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=111&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&AGESLAB=' + ageslab;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+    function ServiceBandDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var yearslab = e.category
+        var id = e.slabid
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 112, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, YEARSLAB: id },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=112&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&YEARSLAB=' + yearslab;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function DepartmentDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var department = e.category
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 113, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, DEPARTMENT: department },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=113&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&DEPARTMENT=' + department;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function LocationDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var location = e.category
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 114, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, LOCATION: location },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=114&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&LOCATION=' + location;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    function WeeklyDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var day = e.category
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 115, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, DAY: day },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=115&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&DAY=' + day;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+
+    function DivisionDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var division = e.category
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 116, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, DIVISION: division },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=116&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&DIVISION=' + division;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function CategoryDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var categorys = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 117, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, CATEGORY: categorys },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=117&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&CATEGORY=' + categorys;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function RegionDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var region = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 118, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, REGION: region },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=118&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&REGION=' + region;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+    function GradeDetailClick(e) {
+        debugger;
+        var gc = $("#GroupCompanyCode").val();
+
+        var fromdate = $("#From").val();
+        var todate = $("#To").val();
+        var grade = e.category
+
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 119, FROMDATE: fromdate, TODATE: todate, GROUPCOMPANYCODE: gc, GRADE: grade },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=119&FROMDATE=' + fromdate + '&TODATE=' + todate + '&GROUPCOMPANYCODE=' + gc + '&GRADE=' + grade;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+</script>
+
+
+
+<script id="absMonths" type="text/x-kendo-template">
+
+    @(
+                                Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsMonthWise>()
+                                            .Name("monthAbs")
+                                            .Title("")
+                                                .Events(events => events.Render("onRender").PlotAreaClick("MonthWiseDetailClick"))
+                                            .Legend(legend => legend
+                                                .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                            )
+                                                                    .DataSource(ds => ds.Read(read => read.Action("GetAbsMonth", "MISDashBoard").Data("getParam")))
+                                            .Series(series =>
+                                            {
+                                                series.Line(model => model.total).Name("Absent Rate").CategoryField("monthName").Color("\\#FF69B4").Width(5);
+
+
+                                            })
+                                            .ChartArea(ch => ch.Width(800).Height(350))
+                                            .CategoryAxis(axis => axis
+                                                .Labels(labels => labels.Rotation(0))
+                                                .Crosshair(c => c.Visible(true))
+                                            )
+                                            .ValueAxis(axis => axis.Numeric()
+                                                .Labels(labels => labels.Format("{0:N0}"))
+                                                .MajorUnit(50)
+                                            )
+                                            .Tooltip(tooltip => tooltip
+                                                .Visible(true)
+                                                .Shared(true)
+                                                .Format("{0:N0}")
+                                                    .Template("(\\#= (dataItem.total)\\# %)")
+                                            )
+
+                                            .ToClientTemplate()
+                    )
+</script>
+<script id="absbyAge" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AgeBandAbsList>()
+
+                                                       .Name("absAge")
+                                                             .Events(events => events.Render("onRender").PlotAreaClick("AgeBandDetailClick"))
+                                                       .Title("")
+
+                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                       .Legend(legend => legend
+                                                       .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                       )
+                                                       .ChartArea(chartArea => chartArea
+                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                           .DataSource(ds => ds.Read(read => read.Action("GetAbsAge", "MISDashBoard").Data("getParam")))
+                                                       .Series(series =>
+                                                       {
+                                                           series.Column(model => model.total).Name("Year").CategoryField("years").Color("\\#029666");
+
+                                                       })
+                                                       .CategoryAxis(axis => axis
+                                                       //.Labels(labels => labels.Rotation(0))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       //.Rotation(0)
+                                                       )
+                                                       .MajorUnit(10)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+
+<script id="absbyTenure" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.TenureAbsList>()
+
+                                                           .Name("absTenure").Events(events => events.Render("onRender").PlotAreaClick("ServiceBandDetailClick"))
+
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetAbsTenure", "MISDashBoard").Data("getParam")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.total).Name("Year").CategoryField("years").Color("\\#f93a5a");
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           //.Labels(labels => labels.Rotation(0))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(0)
+                                                           )
+                                                           .MajorUnit(10)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+
+<script id="absbyDepartment" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsDepartmentList>()
+
+                                                               .Name("absDepartment").Events(events => events.Render("onRender").PlotAreaClick("DepartmentDetailClick"))
+
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetAbsDepartment", "MISDashBoard").Data("getParam")))
+                                                           .Series(series =>
+                                                           {
+                                                               series.Column(model => model.total).Name("Department").CategoryField("shrtName").Color("\\#0162e8")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                                            Template("(\\#= (dataItem.department)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           // .Labels(labels => labels.Rotation(45))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(90)
+                                                           )
+                                                           //.MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+<script id="absbyLocation" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsLocationList>()
+
+                                                                   .Name("absLocation").Events(events => events.Render("onRender").PlotAreaClick("LocationDetailClick"))
+
+
+                                                               .Title("")
+
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                               )
+
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                       .DataSource(ds => ds.Read(read => read.Action("GetAbsLocation", "MISDashBoard").Data("getParam")))
+                                                               .Series(series =>
+                                                               {
+                                                                   series.Column(model => model.total).Name("Location").CategoryField("shrtName").Color("\\#f76a2d")
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                                Template("(\\#= (dataItem.location)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                               })
+                                                               .CategoryAxis(axis => axis
+                                                               // .Labels(labels => labels.Rotation(45))
+                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                               .Line(line => line.Visible(false))
+
+                                                               )
+                                                               .ValueAxis(axis => axis.Numeric()
+                                                               .Labels(labels => labels
+                                                               .Format("{0:N0}")
+                                                               //.Rotation(90)
+                                                               )
+                                                               //.MajorUnit(500)
+
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .RenderAs(RenderingMode.Canvas)
+                                                               .Tooltip(tooltip => tooltip
+                                                               .Visible(true)
+                                                               .Format("{0:N0}")
+                                                               )
+                                                               .ToClientTemplate()
+                                                               )
+
+</script>
+<script id="absbyDivision" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsDivisionList>()
+
+                                                                       .Name("absDivision").Events(events => events.Render("onRender").PlotAreaClick("DivisionDetailClick"))
+
+
+                                                                   .Title("")
+
+                                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                   .Legend(legend => legend
+                                                                   .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                   )
+                                                                   .ChartArea(chartArea => chartArea
+                                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetAbsDivision", "MISDashBoard").Data("getParam")))
+                                                                   .Series(series =>
+                                                                   {
+                                                                       series.Column(model => model.total).Name("Division").CategoryField("shrtName").Color("\\#FDD017")
+                                                                                 .Tooltip(tooltip => tooltip.
+                                                                                                    Template("(\\#= (dataItem.division)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                                   })
+                                                                   .CategoryAxis(axis => axis
+                                                                   // .Labels(labels => labels.Rotation(45))
+                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                   .Line(line => line.Visible(false))
+
+                                                                   )
+                                                                   .ValueAxis(axis => axis.Numeric()
+                                                                   .Labels(labels => labels
+                                                                   .Format("{0:N0}")
+                                                                   //.Rotation(90)
+                                                                   )
+                                                                   //.MajorUnit(500)
+
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .RenderAs(RenderingMode.Canvas)
+                                                                   .Tooltip(tooltip => tooltip
+                                                                   .Visible(true)
+                                                                   .Format("{0:N0}")
+                                                                   )
+                                                                   .ToClientTemplate()
+                                                                   )
+
+</script>
+<script id="absbyCategory" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsCategoryList>()
+
+                                                                               .Name("absCategory").Events(events => events.Render("onRender").PlotAreaClick("CategoryDetailClick"))
+
+
+                                                                       .Title("")
+
+                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                       .Legend(legend => legend
+                                                                       .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                       )
+                                                                       .ChartArea(chartArea => chartArea
+                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetAbsCategory", "MISDashBoard").Data("getParam")))
+                                                                       .Series(series =>
+                                                                       {
+                                                                               series.Column(model => model.total).Name("Category").CategoryField("shrtName").Color("\\#E3F9A6")
+                                                                                     .Tooltip(tooltip => tooltip.
+                                                                                                        Template("(\\#= (dataItem.category)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                                       })
+                                                                       .CategoryAxis(axis => axis
+                                                                       // .Labels(labels => labels.Rotation(45))
+                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                       .Line(line => line.Visible(false))
+
+                                                                       )
+                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                       .Labels(labels => labels
+                                                                       .Format("{0:N0}")
+                                                                       //.Rotation(90)
+                                                                       )
+                                                                       //.MajorUnit(500)
+
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                       .Tooltip(tooltip => tooltip
+                                                                       .Visible(true)
+                                                                       .Format("{0:N0}")
+                                                                       )
+                                                                       .ToClientTemplate()
+                                                                       )
+
+</script>
+<script id="absbyGrade" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsGradeList>()
+
+                                                                                   .Name("absGrade").Events(events => events.Render("onRender").PlotAreaClick("GradeDetailClick"))
+
+
+                                                                           .Title("")
+
+                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                           .Legend(legend => legend
+                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                           )
+                                                                           .ChartArea(chartArea => chartArea
+                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                       .DataSource(ds => ds.Read(read => read.Action("GetAbsGrade", "MISDashBoard").Data("getParam")))
+                                                                           .Series(series =>
+                                                                           {
+                                                                               series.Column(model => model.total).Name("Grade").CategoryField("shrtName").Color("\\#12E193")
+                                                                                     .Tooltip(tooltip => tooltip.
+                                                                                                        Template("(\\#= (dataItem.grade)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                                           })
+                                                                           .CategoryAxis(axis => axis
+                                                                           // .Labels(labels => labels.Rotation(45))
+                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                           .Line(line => line.Visible(false))
+
+                                                                           )
+                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                           .Labels(labels => labels
+                                                                           .Format("{0:N0}")
+                                                                           //.Rotation(90)
+                                                                           )
+                                                                           //.MajorUnit(500)
+
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                           .Tooltip(tooltip => tooltip
+                                                                           .Visible(true)
+                                                                           .Format("{0:N0}")
+                                                                           )
+                                                                           .ToClientTemplate()
+                                                                           )
+
+</script>
+<script id="absbyRegion" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.AbsRegionList>()
+
+                                                                                       .Name("absRegion").Events(events => events.Render("onRender").PlotAreaClick("RegionDetailClick"))
+
+
+                                                                               .Title("")
+
+                                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                               .Legend(legend => legend
+                                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                                               )
+                                                                               .ChartArea(chartArea => chartArea
+                                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetAbsRegion", "MISDashBoard").Data("getParam")))
+                                                                               .Series(series =>
+                                                                               {
+                                                                                   series.Column(model => model.total).Name("Region").CategoryField("shrtName").Color("\\#4B5320")
+                                                                                         .Tooltip(tooltip => tooltip.
+                                                                                                            Template("(\\#= (dataItem.region)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                                               })
+                                                                               .CategoryAxis(axis => axis
+                                                                               // .Labels(labels => labels.Rotation(45))
+                                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                                               .Line(line => line.Visible(false))
+
+                                                                               )
+                                                                               .ValueAxis(axis => axis.Numeric()
+                                                                               .Labels(labels => labels
+                                                                               .Format("{0:N0}")
+                                                                               //.Rotation(90)
+                                                                               )
+                                                                               //.MajorUnit(500)
+
+                                                                               .Line(line => line.Visible(false))
+                                                                               )
+                                                                               .RenderAs(RenderingMode.Canvas)
+                                                                               .Tooltip(tooltip => tooltip
+                                                                               .Visible(true)
+                                                                               .Format("{0:N0}")
+                                                                               )
+                                                                               .ToClientTemplate()
+                                                                               )
+
+</script>
+<script id="absbyWeek" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.GetAbsDaysList>()
+
+                                                                   .Name("absWeek").Events(events => events.Render("onRender").PlotAreaClick("WeeklyDetailClick"))
+
+
+                                                               .Title("")
+                                                                     .Events(e => e.DataBound("sortData"))
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                               )
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetAbsDays", "MISDashBoard").Data("getParam")))
+                                                               .Series(series =>
+                                                               {
+                                                                       series.Column(model => model.total).Name("Day").CategoryField("weekDay").Color("\\#007C80");
+
+                                                               })
+                                                               .CategoryAxis(axis => axis
+                                                               //.Labels(labels => labels.Rotation(0))
+                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .ValueAxis(axis => axis.Numeric()
+                                                               .Labels(labels => labels
+                                                               .Format("{0:N0}")
+                                                               //.Rotation(0)
+                                                               )
+                                                               .MajorUnit(10)
+
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .RenderAs(RenderingMode.Canvas)
+                                                               .Tooltip(tooltip => tooltip
+                                                               .Visible(true)
+                                                               .Format("{0:N0}")
+                                                               )
+                                                               .ToClientTemplate()
+                                                               )
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("100px")
+        .ColumnsWidth("200px")
+
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Absenteeism Rate")).BodyTemplateId("absRate").ColSpan(3).RowSpan(1);
+            c.Add().Header(h => h.Text("Absenteeism Count")).BodyTemplateId("absCount").ColSpan(3).RowSpan(1);
+            c.Add().Header(h => h.Text("Absenteeism Month wise")).BodyTemplateId("absMonths").ColSpan(6).RowSpan(4);
+            c.Add().Header(h => h.Text("Absenteeism Age Band")).BodyTemplateId("absbyAge").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Service Band")).BodyTemplateId("absbyTenure").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Department Wise")).BodyTemplateId("absbyDepartment").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Location Wise")).BodyTemplateId("absbyLocation").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Division Wise")).BodyTemplateId("absbyDivision").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Category Wise")).BodyTemplateId("absbyCategory").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Region Wise")).BodyTemplateId("absbyRegion").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Grade Wise")).BodyTemplateId("absbyGrade").ColSpan(6).RowSpan(3);
+            c.Add().Header(h => h.Text("Absenteeism Days")).BodyTemplateId("absbyWeek").ColSpan(6).RowSpan(3);
+
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

@@ -1,0 +1,109 @@
+﻿@model Hrms.Lite.Shared.Master.ApproverRole
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        if ($('#ApplicabilityCode').val() != 4 ) {
+            $('#Div_Applicability').show();
+        }
+
+    });
+</script>
+@using (Html.BeginForm("Delete", "ApproverRole", FormMethod.Post, new { @id = "deleteApproverRole" }))
+{
+
+    <div id="ApproverRoledelete" class="slider-forms slider-forms-open delete">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('delete')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Role Matrix Settings</h4>
+            </div>
+            <div class="add-padding">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+                                @Html.HiddenFor(model => Model.Code)
+                                @Html.HiddenFor(model => Model.ApplicabilityCode)
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>*@
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Country</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.CountryName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"  style="display: none;" id="Div_Applicability">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                @Model.ApplicabilityName
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Applicability.Name)
+                            </div>
+                        </div>
+                    </div>
+
+                </div><div class="row">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Authority</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Employee.Name)
+                            </div>
+                        </div>
+                    </div>
+                     
+
+                </div>
+                 
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (CurrentUserRoleActions.Delete == true)
+                        {
+
+                            <a type="button"
+                               data-bs-toggle="tooltip" title="Delete"
+                               data-bs-original-title="Delete"
+                               class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.Code')">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,88 @@
+﻿@model Hrms.Lite.Shared.Master.HolidayGroup
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.PendingTabCount').html("@Model.PendingCount");
+
+        //$('#HolidayPendingList').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table holidaygroup-master-pending pt-1">
+    @Html.HiddenFor(m => m.HolidayGroupList.Count)
+    <table id="HolidayPendingList" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+                if (Model.HolidayGroupList != null && Model.HolidayGroupList.Count > 0)
+                {
+                    for (int i = 0; i < Model.HolidayGroupList.Count; i++)
+
+                    {
+
+                        <tr>
+                            @Html.HiddenFor(m => m.HolidayGroupList[i].MakerChecker)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Mode)
+                            <td data-label="Name">@Model.HolidayGroupList[i].Name</td>
+                            <td data-label="ShortName">@Model.HolidayGroupList[i].ShortName</td>
+                            <td data-label="Entry Type">@Model.HolidayGroupList[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="apprveholidayoffday"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.HolidayGroupList[i].GI', '@Model.HolidayGroupList[i].LogGI','APPROVAL',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="apprveholidayoffday"
+                                       class="btn btn-icon btn-tick icon-only slider-btn" onclick="onApproveClick('@Model.HolidayGroupList[i].GI', '@Model.HolidayGroupList[i].LogGI', 'APPROVAL',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                </td>
+
+                        </tr>
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

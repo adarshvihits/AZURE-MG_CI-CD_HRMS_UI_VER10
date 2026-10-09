@@ -1,0 +1,368 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.HRAttendanceApproval
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+@*<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>*@
+<script src="~/js/datatables.min.js"></script>
+@*<script src="~/js/datatables.min.js"></script>*@
+
+<script src="~/scripts/TimeOffice/hrAttendanceApproval.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        if ('@Model.FirstTab' == "LeaveGroupMissing") {
+            tabClick('HR_Leave', 'Leave');
+        }
+        else if ('@Model.FirstTab' == "OnDutyMissing") {
+            tabClick('HR_onduty', 'ONDUTY');
+        }
+        else if ('@Model.FirstTab' == "WFHApproval") {
+            tabClick('HR_WFH', 'WFH');
+        }
+        else if ('@Model.FirstTab' == "AttendaceRegularisation") {
+            tabClick('HR_AtteReg', 'AttendanceRegularization');
+        }
+        else if ('@Model.FirstTab' == "PermissionHoursApproval") {
+            tabClick('Permission_Hours', 'PermissionHours');
+        }
+
+        $("#AuthorityCode").find("option").eq(0).hide();
+
+    });
+</script>
+
+<style>
+    .tab-button-wrap .tab-items {
+        padding: 0px;
+        margin: 0px;
+        position: relative;
+        padding: 0px 6px 0px 5px !important;
+        /* border-right: 1px solid #ededf4; */
+    }
+</style>
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">
+                    HR Attendance Approval
+
+                </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        HR Attendance Approval
+
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="tab-items ">
+                                <a class="btn-title active HR_All" onclick="tabClick('HR_All','ALL')">
+                                    All
+                                    <span class="btn-notification AllCount">@Model.AllCount</span>
+                                </a>
+                            </div>
+                            <div class="tab-items high">
+                                <a class="btn-title HR_Leave" onclick="tabClick('HR_Leave','Leave')">
+                                    Leave
+                                    <span class="btn-notification LeaveCount">@Model.LeaveCount</span>
+                                </a>
+                            </div>
+                            <div class="tab-items high">
+                                <a class="btn-title HR_onduty" onclick="tabClick('HR_onduty','ONDUTY')">
+                                    On Duty
+                                    <span class="btn-notification OnDutyCount">@Model.OnDutyCount</span>
+                                </a>
+                            </div>
+                            <div class="tab-items medium">
+                                <a class="btn-title HR_coff" onclick="tabClick('HR_coff','COFF')">
+                                    Coff
+                                    <span class="btn-notification COFFCount">@Model.COFFCount</span>
+                                </a>
+                            </div>
+
+                            @*<div class="tab-items">
+                                    <a class="btn-title HR_WFH" onclick="tabClick('HR_WFH','WFH')">
+                                        WFH
+                                        <span class="btn-notification WFHCount">@Model.WFHCount</span>
+                                    </a>
+                                </div>*@
+
+
+                            @*<div class="tab-items" data-bs-toggle="tooltip" data-bs-original-title="Permission Hours" title="">
+                                    <a class="btn-title Permission_Hours" onclick="tabClick('Permission_Hours','PermissionHours')" >
+                                        Per. Hrs
+                                        <span class="btn-notification PermissionHoursCount">@Model.PermissionHoursCount</span>
+                                    </a>
+                                </div>*@
+
+
+
+                            <div class="tab-items high">
+                                <a class="btn-title HR_AtteReg" onclick="tabClick('HR_AtteReg','AttendanceRegularization')">
+                                    Att. Reg
+                                    <span class="btn-notification AttendanceRegularizationCount">@Model.AttendanceRegularizationCount</span>
+                                </a>
+                            </div>
+                            @*<div class="tab-items high">
+                                    <a class="btn-title Auth_Change" onclick="tabClick('Auth_Change','AuthorityChange')" data-bs-toggle="tooltip" title=" Authority Change">
+                                        Auth. Chg
+                                        <span class="btn-notification AuthorityChangeCount">@Model.AuthorityChangeCount</span>
+                                    </a>
+                                </div>*@
+
+                            <div class="tab-items">
+                                    <a class="btn-title HR_ML" onclick="tabClick('HR_ML','MaternityLeave')">
+                                        More
+                                        <span class="btn-notification MLCount">@Model.MaternityLeaveCount</span>
+                                    </a>
+                                </div>
+
+                            @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "HR_Atten_Approval_Form" }))
+                            {
+                                <div class="d-flex">
+                                    <div class="tab-items">
+                                        <div class="form-group filter-combobox mr-3">
+                                            @Html.DropDownListFor(m => m.AuthorityLevelCode, (SelectList)ViewBag.AuthorityLevel, "ALL", new { @class = "form-control form-control-sm", @style = "width:80px;", @onchange = "onLevelChange();fillData()" })
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-items">
+                                        <div class="form-group filter-combobox mr-3" style="width:250px; ">
+
+
+
+                                            @*@Html.DropDownListFor(m => m.AuthorityCode, (SelectList)ViewBag.Authority, new { @class = "form-control form-control-sm", @style = "width: 170px;", @onchange = "$('#HRAttendanceApprovalTableTwo tbody tr').remove();fillData();" })*@
+                                            @Html.DropDownListFor(m => m.AuthorityCode, (SelectList)ViewBag.Authority, "Search by Employee name/ID", new
+                                            {
+                                                @class = "selectpicker sliderSearchInput form-control form-control-sm",
+
+                                                @onchange = "$('#HRAttendanceApprovalTableTwo tbody tr').remove();fillData();",
+                                                data_show_subtext = "true",
+                                                data_live_search = "true"
+                                            })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="tab-items pr-0 border-none">
+
+                                        <div class="form-group" style="width:132px;">
+
+
+                                            @Html.DropDownListFor(m => m.PayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "-Payroll Group-", new { @class = "form-control form-control-sm", @onchange = "fillMonth(this)" })
+
+                                            <span id="payrollgp"></span>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+                                    <div class="tab-items pr-0 border-none">
+                                        <div class="form-group filter-combobox mr-2" style="width:80px;">
+                                            @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "-Month-", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+
+                                            <span id="dutymonth"></span>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                                <div id="testOT" class="hide">
+                                    <table id="HRAttendanceApprovalTableTwo">
+                                        <thead>
+                                            <tr class="table-dark">
+
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Employee Name</th>
+
+                                                <th scope="col">Department</th>
+                                                <th scope="col">Location </th>
+
+                                                <th scope="col">Type</th>
+                                                <th scope="col">From</th>
+                                                <th scope="col">To </th>
+
+                                                <th scope="col">Days</th>
+                                                <th scope="col">Ageing</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Authority</th>
+                                                <th scope="col">
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            }
+                        <div class="tab-items select-option">
+                            
+                            <div class="sraech-slider">
+                                <div class="search-slider-inner">
+                                    <i class="fa fa-search"></i>
+
+                                </div>
+                                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                       placeholder="ID/Name">
+                            </div>
+                            <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                <i class="fas fa-filter"></i>
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                <i class="icon-xl far fa-file-excel"></i>
+                            </a>
+
+
+                        </div>
+                        </div>
+
+                    </div>
+                    <div id="HRAtt_List">
+                        @await Html.PartialAsync("_HRAttendanceApprovalList", Model)
+                    </div>
+
+                    <div class="row card-footer-bottom-fixed ProceedClick">
+                        <div class="col-md-6 align-left">
+
+
+
+                            <div class="responsive-center">
+                                <a href="@Url.Action("PREVIOUSHISTORY", "HRAttendanceApproval", new { Area = "TimeOffice" })">
+                                    <div class="application-btn d-flex align-items-center  pr-3 ">
+                                        <div>
+                                            <img class="leave_appli_img">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3"> Previous History </h3></div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 align-right">
+                            <a data-bs-toggle="modal" data-target="" class="btn btn-default float-right mobile-full-width" id="HRProceedButton" onclick="onProceedClick()">
+                                Proceed
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div id="filterSlider">
+
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog ">
+                            <div class="modal-content popup">
+                                <div class="modal-header" style="padding:10px">
+                                    <h5 class="modal-title" id="exampleModalLabel">HR Attendance Approvals</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label>Remarks</label>
+
+                                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @maxlength = "250" })
+                                </div>
+
+                                <div class="card border-none" style="margin-top: 10px;">
+
+                                    <div class="col-md-12 align-right pb-4">
+                                        <a type="button" class="btn btn-danger  mobile-full-width" onclick="onSubmit('REJECT')">
+                                            Reject
+                                        </a>
+                                        <a type="button" class="btn btn-default  mobile-full-width" onclick="onSubmit('APPROVE')">
+                                            Approve
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

@@ -1,0 +1,176 @@
+﻿@model Hrms.Lite.Shared.Master.UserRole
+<script src="~/scripts/Master/userRole.js"></script>
+<script>
+    $(document).ready(function () {
+        if ($('#MenuAllCheckBox').find('input[type="checkbox"]:checked').length == $('#MenuAllCheckBox').find('input[type="checkbox"]').length - 1) {
+            $('#MenuAll').prop('checked', true);
+        }
+
+    });
+
+    function onSearchClick() {
+        if (searchClick == 0) {
+            searchClick = 1;
+            $('#searchList').addClass('field-width-big');
+            $('#searchList').focus();
+        }
+        else {
+            searchClick = 0;
+            $('#searchList').removeClass('field-width-big');
+        }
+    }
+
+   
+</script>
+<div class="row">
+    <div class="col-md-10">
+        <div class="step-outer mt-4">
+
+
+            <div class="step-item step-item-1  active   new-resposive-tab   ">
+                <label class="label-1">
+                    Module
+                </label>
+
+                <span class="step-circle focused       "></span>
+            </div>
+            <div class="step-item  step-item-2 step_new_2 active  new-resposive-tab     ">
+                <label class="label-2">
+                    Sub Module
+                </label>
+
+                <span class="step-circle   step-circle-2      "></span>
+            </div>
+            <div class="step-item step-item-3 active new-resposive-tab        ">
+                <label class="label-3">
+                    Menu
+                </label>
+
+                <span class="step-circle   step-circle-3        "></span>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="row ">
+    <div class="col-md-9">
+        <div class="row tab-style-button">
+            <div class="tab-button-wrap">
+                <div class="tab-items">
+
+                </div>
+                <div class="tab-items medium">
+
+                </div>
+                <div class="tab-items low">
+
+                </div>
+
+
+
+                <div class="tab-items select-option mb-3">
+                 
+
+                    <div class="sraech-slider">
+                        <div class="search-slider-inner">
+                            <i class="fa fa-search" onclick="onSearchClick()"></i>
+                        </div>
+                        <input id="searchList" type="text" class="form-control form-control-sm"
+                               placeholder="Search Here" onkeyup="searchRows()">
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="ihits-table table-border user-role-menu-list mb-0 vertical-scroll-250">
+            <table id="MenuAllCheckBox">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Module</th>
+                        <th scope="col">Sub Module</th>
+                        <th scope="col">Menu</th>
+                        <th scope="col">
+                            <div class="checkbox-inline" style=" padding-left: 9px;">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    <input type="checkbox"
+                                           name="Checkboxes15" id="MenuAll" onclick="onAllClick('MenuAll','MenuAllCheckBox')">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.UserVsMenu != null && Model.UserVsMenu.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.UserVsMenu.Count; i++)
+                        {
+                            @Html.HiddenFor(m => m.UserVsMenu[i].Code)
+                            @Html.HiddenFor(m => m.UserVsMenu[i].Name)
+                            <tr>
+                                <td data-label="Module">@Model.UserVsMenu[i].ModuleName</td>
+                                <td data-label="SubModule">@Model.UserVsMenu[i].SubModuleName</td>
+                                <td data-label="SubModule">@Model.UserVsMenu[i].Name</td>
+                                <td data-label="Y/S">
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            @Html.CheckBoxFor(m => m.UserVsMenu[i].Applicable, new { @class = "atleastonecheck", @onclick = "onChkBoxClick(this,'MenuAll','MenuAllCheckBox')" })
+                                            @*, new { @onclick = "moduleChange(" + i + ")" }*@
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="arrow-outer" style="margin-top: 140px;">
+
+            <button type="button" class="arrow-previous" onclick="onBackArrowClck('Menu')">
+                <i class="icon-xl fas fa-angle-double-left"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row card-footer-bottom-fixed">
+
+    <div class="col-md-12 align-right">
+
+        @if (Model.Editmode == "SAVE")
+        {
+            <button type="button"
+                    class="btn btn-default mobile-full-width" onclick="userRoleSave('@Model.Editmode')">
+                Save
+            </button>
+        }
+        else
+        {
+            <button type="button"
+                    class="btn btn-default mobile-full-width" onclick="userRoleSave('@Model.Editmode')">
+                Modify
+            </button>
+        }
+
+    </div>
+
+</div>

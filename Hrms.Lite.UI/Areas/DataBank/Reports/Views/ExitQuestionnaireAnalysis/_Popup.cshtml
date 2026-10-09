@@ -1,0 +1,80 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.ExitQuestionnaireAnalysis
+
+
+<script src="~/js/tooltip.js"></script>
+<style>
+    .dataTables_scrollBody {
+        max-height: 30vh !important;
+        height: 30vh !important;
+    }
+</style>
+<div class="row" style="padding:5px 16px;">
+    <div class="col-md-6">
+        <div class="form-group">
+
+            <label class="view-title" id="qstnNo"></label>
+            <div class="view-details"> @Model.Question @Html.HiddenFor(m => m.QuestionCode)</div>
+
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="form-group">
+
+            <label class="view-title">Answer</label>
+            <div class="view-details">@Model.Answer @Html.HiddenFor(m => m.AnswerCode)</div>
+
+
+        </div>
+    </div>
+
+    <div class="col-md-1">
+        <div class="form-group">
+
+            <label class="view-title">Total</label>
+            <div class="view-details">@Model.Count</div>
+
+
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-3 d-flex justify-content-end">
+
+        <div class="tab-items select-option">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search" onclick="onSearchClick()"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+
+            <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter" onclick="$('.basicFilter').addClass('slider-forms-open');$('#filterSlider').removeClass('hide')">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-check"></i>
+            </div>
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" style="    margin-top: 5px;
+                            margin-left: 5px;"
+                    data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp('@Model.Question.TrimEnd()', '@Model.Answer')">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+<div id="empList">
+    @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/ExitQuestionnaireAnalysis/_EmployeeList.cshtml", Model)
+</div>
+<div id="filterSlider" class="hide">
+    @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.SliderFilter)
+</div>

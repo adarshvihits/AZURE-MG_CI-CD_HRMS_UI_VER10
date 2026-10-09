@@ -1,0 +1,58 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+    <script src="~/js/settings.js"></script>
+    <script>
+             $(document).ready(function () {
+            $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentPendCount").html(@Model.PreenrollmentPendingCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+                 $(".OverDueCount").html(@Model.OverDueCount);
+                 $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+                  $(".documentsCount").html(@Model.JoiningConfCount);
+
+        });
+    </script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table onboarding">
+    <table id="PendingList" class="common-table">
+        @Html.HiddenFor(m => m.OnBoardingList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Location</th>
+                <th scope="col">Need By Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+            {
+                for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Designation"> @Model.OnBoardingList[i].JobCode</td>
+                        <td data-label="Department"> @Model.OnBoardingList[i].JobTitle</td>
+                        <td data-label="Location">
+                            <a href="@Url.Action("Create", "PreEnrollmentTest" ,new { Area="DataBank"})" class="slider-btn">
+                                @Model.OnBoardingList[i].CandidateName
+                            </a>
+                        </td>
+                        <td data-label="Fun.Designation"> @Model.OnBoardingList[i].Designation.Name</td>
+                        <td data-label="Location"> @Model.OnBoardingList[i].Location.Name</td>
+                        <td data-label="Due Days">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.OnBoardingList[i].NeedByDate))</td>
+                        @*<td data-label="E:DOJ"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OnBoardingList[i].ExpectedDOJ))</td>
+                        <td data-label="Checklist">@Html.ActionLink(@Model.OnBoardingList[i].CheckList, "GetCheckList", "OnBoarding", new { PreEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)</td>*@
+
+
+
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

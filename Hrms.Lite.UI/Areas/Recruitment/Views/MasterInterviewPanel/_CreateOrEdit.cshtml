@@ -1,0 +1,173 @@
+@model Hrms.Lite.Shared.Recruitment.MasterInterviewPanel
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+    var members = Model.MemberList ?? new List<Hrms.Lite.Shared.Recruitment.MasterInterviewPanelMember>();
+    var roles = new[] { "Chairperson", "Department Head", "Technical Panelist", "HR Panelist", "External Expert" };
+    var title = Model.Mode == "MODIFY" ? "Edit Master Panel" + (string.IsNullOrEmpty(Model.Name) ? "" : " — " + Model.Name) : "Create Master Panel";
+}
+<form id="masterInterviewPanelForm" onsubmit="return false;">
+    <input type="hidden" id="PanelGI" value="@Model.PanelGI" />
+    <input type="hidden" id="PanelMode" value="@Model.Mode" />
+
+    <div id="MasterInterviewPanelSlider" class="slider-forms MasterInterviewPanel mp-drawer">
+        <div class="slider-inner-style">
+            <div class="mp-drawer-head">
+                <div>
+                    <h4>@title</h4>
+                    <div class="mp-drawer-sub">Configure organizational scope and assign panel members</div>
+                </div>
+                <button type="button" class="mp-drawer-close" onclick="closeMasterInterviewPanelSlider()" title="Close">
+                    <i class="ki ki-close icon-xs"></i>
+                </button>
+            </div>
+
+            <div class="mp-drawer-body">
+
+                <!-- Organizational attributes -->
+                <div class="mp-section">
+                    <div class="mp-section-title">Organizational Attributes</div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label>Panel Name</label>
+                                <input type="text" id="PanelName" class="form-control" maxlength="200"
+                                       placeholder="e.g. Retail Sales – Senior Executive Panel" value="@Model.Name"
+                                       onchange="validateById('#PanelName', 'mpName')" />
+                                <span id="mpName"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div class="radio-inline mp-radio-field">
+                                    <label class="radio radio-outline radio-primary">
+                                        <input type="radio" name="PanelStatus" value="true" @(Model.Active ? "checked" : "") />
+                                        <span></span>Active
+                                    </label>
+                                    <label class="radio radio-outline radio-primary">
+                                        <input type="radio" name="PanelStatus" value="false" @(!Model.Active ? "checked" : "") />
+                                        <span></span>Inactive
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select id="PanelLocation" class="form-control" onchange="validateMasterInterviewPanelSelect('#PanelLocation', 'mpLocation', 'branch')">
+                                    <option value="0">Select branch</option>
+                                    @foreach (var item in Model.LocationList ?? new List<Hrms.Lite.Shared.General.Dropdown>())
+                                    {
+                                        <option value="@item.Code" selected="@(item.Code == Model.LocationCode)">@item.Name</option>
+                                    }
+                                </select>
+                                <span id="mpLocation"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select id="PanelDepartment" class="form-control" onchange="validateMasterInterviewPanelSelect('#PanelDepartment', 'mpDepartment', 'department')">
+                                    <option value="0">Select department</option>
+                                    @foreach (var item in Model.DepartmentList ?? new List<Hrms.Lite.Shared.General.Dropdown>())
+                                    {
+                                        <option value="@item.Code" selected="@(item.Code == Model.DepartmentCode)">@item.Name</option>
+                                    }
+                                </select>
+                                <span id="mpDepartment"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Section</label>
+                                <select id="PanelSection" class="form-control" onchange="validateMasterInterviewPanelSelect('#PanelSection', 'mpSection', 'section')">
+                                    <option value="0">Select section</option>
+                                    @foreach (var item in Model.SectionList ?? new List<Hrms.Lite.Shared.General.Dropdown>())
+                                    {
+                                        <option value="@item.Code" selected="@(item.Code == Model.SectionCode)">@item.Name</option>
+                                    }
+                                </select>
+                                <span id="mpSection"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Grade</label>
+                                <select id="PanelGrade" class="form-control" onchange="validateMasterInterviewPanelSelect('#PanelGrade', 'mpGrade', 'grade')">
+                                    <option value="0">Select grade</option>
+                                    @foreach (var item in Model.GradeList ?? new List<Hrms.Lite.Shared.General.Dropdown>())
+                                    {
+                                        <option value="@item.Code" selected="@(item.Code == Model.GradeCode)">@item.Name</option>
+                                    }
+                                </select>
+                                <span id="mpGrade"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group mb-0">
+                                <label>Description / Purpose (optional)</label>
+                                <textarea id="PanelDescription" class="form-control" rows="2" maxlength="500"
+                                          placeholder="Notes on when this panel should be used">@Model.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel members -->
+                <div class="mp-section">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="mp-section-title mb-0">Panel Members</div>
+                        <span class="btn-notification mp-member-count">@members.Count</span>
+                    </div>
+                    <div class="mp-section-note">Assign interviewers and their role on this panel. This is the default line-up — it can still be adjusted per interview at scheduling time.</div>
+
+                    <div class="mp-member-head">
+                        <label>Interviewer Name</label>
+                        <label>Role</label>
+                        <label>Designation</label>
+                        <label>Email</label>
+                        <span></span>
+                    </div>
+                    <div id="PanelMemberRows">
+                        @foreach (var member in members)
+                        {
+                            <div class="mp-member-row">
+                                <input type="text" class="form-control form-control-sm mp-member-name" maxlength="200" placeholder="Full name" value="@member.InterviewerName" />
+                                <select class="form-control form-control-sm mp-member-role">
+                                    @foreach (var role in roles)
+                                    {
+                                        <option value="@role" selected="@(member.Role == role)">@role</option>
+                                    }
+                                </select>
+                                <input type="text" class="form-control form-control-sm mp-member-designation" maxlength="200" placeholder="Designation" value="@member.Designation" />
+                                <input type="text" class="form-control form-control-sm mp-member-email" maxlength="200" placeholder="name@malabargroup.com" value="@member.Email" />
+                                <a class="mp-remove-row" title="Remove member" onclick="removePanelMember(this)">
+                                    <i class="ki ki-close icon-xs"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <span id="mpMembers"></span>
+
+                    <a class="btn btn-sm mp-add-member mt-3" onclick="addPanelMember()">
+                        <i class="fas fa-plus"></i> Add Interviewer
+                    </a>
+                </div>
+            </div>
+
+            <div class="mp-drawer-foot">
+                <a class="btn mp-btn-cancel mr-2" onclick="closeMasterInterviewPanelSlider()">Cancel</a>
+                @if (Model.Mode == "CREATE" && CurrentUserRoleActions.Create == true)
+                {
+                    <a class="btn btn-default" onclick="masterInterviewPanelSave('Save')">Save Panel</a>
+                }
+                @if (Model.Mode == "MODIFY" && CurrentUserRoleActions.Modify == true)
+                {
+                    <a class="btn btn-default" onclick="masterInterviewPanelSave('Modify')">Update Panel</a>
+                }
+            </div>
+        </div>
+    </div>
+</form>

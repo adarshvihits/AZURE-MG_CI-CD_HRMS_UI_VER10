@@ -1,0 +1,128 @@
+﻿@model Hrms.Lite.Shared.Master.WorkLocation
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+
+
+@using (Html.BeginForm("Save", "WorkLocation", FormMethod.Post, new { id = "worklocationId" }))
+{
+
+
+    <div id="addphysicallocation" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEdit')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Work Location  </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm WLName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'WLName')", maxlength = "120" })
+                            <span id="WLName"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm WLShtName", @placeholder = "Short Name", @onblur = "validate(this,'WLShortName')", maxlength = "5" })
+                            <span id="WLShortName"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row my-3">
+
+
+                    <div class="col-md-12 d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+
+
+                            <div>Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidationWorkLocation('WORKLOCATION', '@Model.Code')"*@>
+                                @Html.HiddenFor(m=>Model.Code)
+                                @Html.CheckBoxFor(model => model.Active,new { @id="worklocation_id"})
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm WLDescription", @placeholder = "Description", maxlength = "250" })
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+
+                                @Html.DisplayFor(Model => Model.Description)
+                                @Html.HiddenFor(model => Model.Description)
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="WorkLocationSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="WorkLocationSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

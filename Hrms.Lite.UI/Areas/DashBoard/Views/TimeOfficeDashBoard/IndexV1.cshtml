@@ -1,0 +1,795 @@
+﻿@model Hrms.Lite.Shared.DashBoard.TimeOfficeDashBoard
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@*<script src="~/js/jquery.min.js"></script>*@
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+<link href="~/css/DashBoard.css" rel="stylesheet" />
+<script src="~/scripts/DashBoard/timeOfficedashboard.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Time Office
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!-- Dashboard start here -->
+
+                    <div class="row">
+
+
+
+
+                        <!--begin::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b" style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('APPROVAL PENDING','timeDash_ApprovalPendingPopup')">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                        <div class="d-flex">
+
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="~/images/icons/onboarding-pending.svg" />
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count">@Model.ApprovalPending</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+                                            <a class="text-dark-75 text-hover-primary  cuser-pointer-hand font-weight-bolder font-size-h3">Approval Pending</a>
+
+                                            <div class="">
+                                                @*<a href="#">  <img src="~/images/icons/card_arrow.svg" /></a>*@
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--end::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <!--begin::Tiles Widget 3-->
+                            <div class="card gutter-b" style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('LowAttendanceRate','lowattendanceratePopup')">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+                                        <div class="d-flex">
+
+
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="~/images/icons/notebook.svg" />
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <div class="approval_count">@Model.LowAttendanceRate</div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand font-weight-bolder font-size-h3">
+                                                Low Attendance Rate
+                                            </a>
+
+
+                                            <div class="">
+                                                @*<a href="#">  <img src="~/images/icons/card_arrow.svg" /></a>*@
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Tiles Widget 3-->
+                        </div>
+
+
+
+                        <!--begin::Tiles Widget 4-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b" style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('MISSING','timeDash_missingPopup')">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                        <div class="d-flex">
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="~/images/icons/calendar3.svg" />
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count">@Model.AttendanceSettingsMissing</div>
+
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand  font-weight-bolder font-size-h3">Attendance Settings Missing</a>
+                                            <div class="">
+                                                @*<a href="#">  <img src="~/images/icons/card_arrow.svg" /></a>*@
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--begin::Tiles Widget 4-->
+
+                        <div class="col-xl-3">
+                            <div class="card gutter-b" style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('Upcoming Leaves','timeDash_upcomingleavesPopup')">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6 ">
+                                        <div class="d-flex">
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="~/images/icons/Approval_tracker.svg" />
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count">@Model.UpcomingLeaves</div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand   font-weight-bolder font-size-h3">Upcoming Leaves</a>
+
+                                            <div class="">
+                                                @*<a href="#"> <img src="~/images/icons/card_arrow.svg" /></a>*@
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+                                    </div>
+                                    <!--end::Stats-->
+
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+
+                    <!--middile section -->
+
+                    <div class="row middile_section">
+                        <div class="col-xl-4">
+                            <!--begin::Stats Widget 1-->
+                            <div class="card gutter-b">
+                                <!--begin::Body-->
+                                <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8">
+
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3 bottom_border" data-bs-toggle="modal" data-target="" onclick="onLabelClick('PreviousMonthAdjustments','timeDash_previousmonthadjstPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/Layer 2.svg" />
+
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand font-weight-bolder font-size-h3">Previous Month Adjustments</a>
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.PreviousMonthAdjustments</span>
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3" data-bs-toggle="modal" data-target="" onclick="onLabelClick('LESSHOURS','timeDash_lesshourPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/onboarding-pending.svg" />
+
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand font-weight-bolder font-size-h3">Less Hours</a>
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.LessHours</span>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Stats Widget 1-->
+                        </div>
+
+                        <div class="col-xl-4">
+                            <!--begin::Stats Widget 1-->
+                            <div class="card gutter-b">
+                                <!--begin::Body-->
+                                <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8">
+
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3 bottom_border " data-bs-toggle="modal" data-target="" onclick="onLabelClick('ContinousAbsenteesim','timeDash_absenteesimPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/Layer -2.svg" />
+
+                                            <a class="text-dark-75 cuser-pointer-hand text-hover-primary font-weight-bolder">
+                                                Continuous Absenteeism
+                                            </a>
+
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.ContinousAbsenteesim</span>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center justify-content-between flex-grow-1" data-bs-toggle="modal" data-target="" onclick="onLabelClick('Duty Roster Variance','timeDash_dutyrosterPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/onboarding-pending.svg" />
+
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand font-weight-bolder font-size-h3">Duty Roster Variance</a>
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.DutyRosterVariance</span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Stats Widget 1-->
+                        </div>
+
+                        <div class="col-xl-4">
+                            <!--begin::Stats Widget 1-->
+                            <div class="card gutter-b">
+                                <!--begin::Body-->
+                                <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8">
+
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3 bottom_border" data-bs-toggle="modal" data-target="" onclick="onLabelClick('AUTHORISED LOP','authorisedlopPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/Layer 2.svg" />
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand  font-weight-bolder font-size-h3">Authorised LOP</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3"><span class="">@Model.AuthorisedLOP</span></span>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3" data-bs-toggle="modal" data-target="" onclick="onLabelClick('UN AUTHORISED LOP','unauthorisedlopPopup')">
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+
+                                            <img src="~/images/icons/calendar3.svg" />
+                                            <a class="text-dark-75 text-hover-primary cuser-pointer-hand  font-weight-bolder font-size-h3">Unauthorized LOPs</a>
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.UnauthorizedLOPs</span>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Stats Widget 1-->
+                        </div>
+                    </div>
+
+
+
+                    <!--middile section end -->
+                    <!--footer section start -->
+
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!--begin::Card-->
+                            <div class="card gutter-b  card-spacer-x pt-3" style="height:315px">
+                                <!--begin::Header-->
+                                <!--end::Header-->
+                                <div class="card-body">
+                                    <!--begin::Chart-->
+
+                                    <div class="row ">
+                                        <h6> Absenteeism by Day </h6>
+                                    </div>
+
+                                    @*<div class="Time_AbscenteeismChart">
+
+                                        </div>*@
+
+                                    @await Html.PartialAsync("~/Areas/DashBoard/Views/TimeOfficeDashBoard/_AbsenteeismChart.cshtml", Model.Absenteeism_by_Day)
+
+                                </div>
+                            </div>
+                            <!--end::Card-->
+                        </div>
+                        <div class="col-lg-6">
+                            <!--begin::Card-->
+                            <div class="card gutter-b  card-spacer-x pt-3" style="height:315px;">
+
+
+
+
+                                <div class="card-body">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Today Check In Time Status </h6>
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            @Html.DropDownListFor(m => m.ShiftDetails.Code, (SelectList)ViewBag.Shift, new { @class = "form-control form-control-sm", @onchange = "onShiftChange(this)" })
+                                        </div>
+
+                                    </div>
+
+                                    @*<div id="chart_12" class="d-flex justify-content-center" style="min-height: 243.7px;">
+                                            <div id="apexchartsppx0lj1b" class="apexcharts-canvas apexchartsppx0lj1b apexcharts-theme-light" style="width: 380px; height: 243.7px;">
+                                                <svg id="SvgjsSvg3023" width="380" height="243.70000000000002" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;">
+                                                    <foreignObject x="0" y="0" width="380" height="243.70000000000002">
+                                                        <div class="apexcharts-legend apexcharts-align-center position-right" xmlns="http://www.w3.org/1999/xhtml" style="position: absolute; left: auto; top: 24px; right: 5px;"><div class="apexcharts-legend-series" rel="1" seriesname="TeamxA" data:collapsed="false" style="margin: 2px 5px;"><span class="apexcharts-legend-marker" rel="1" data:collapsed="false" style="background: rgb(105, 147, 255) !important; color: rgb(105, 147, 255); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 12px;"></span><span class="apexcharts-legend-text" rel="1" i="0" data:default-text="Team%20A" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-weight: 400; font-family: Helvetica, Arial, sans-serif;">Team A</span></div><div class="apexcharts-legend-series" rel="2" seriesname="TeamxB" data:collapsed="false" style="margin: 2px 5px;"><span class="apexcharts-legend-marker" rel="2" data:collapsed="false" style="background: rgb(27, 197, 189) !important; color: rgb(27, 197, 189); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 12px;"></span><span class="apexcharts-legend-text" rel="2" i="1" data:default-text="Team%20B" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-weight: 400; font-family: Helvetica, Arial, sans-serif;">Team B</span></div><div class="apexcharts-legend-series" rel="3" seriesname="TeamxC" data:collapsed="false" style="margin: 2px 5px;"><span class="apexcharts-legend-marker" rel="3" data:collapsed="false" style="background: rgb(255, 168, 0) !important; color: rgb(255, 168, 0); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 12px;"></span><span class="apexcharts-legend-text" rel="3" i="2" data:default-text="Team%20C" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-weight: 400; font-family: Helvetica, Arial, sans-serif;">Team C</span></div><div class="apexcharts-legend-series" rel="4" seriesname="TeamxD" data:collapsed="false" style="margin: 2px 5px;"><span class="apexcharts-legend-marker" rel="4" data:collapsed="false" style="background: rgb(246, 78, 96) !important; color: rgb(246, 78, 96); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 12px;"></span><span class="apexcharts-legend-text" rel="4" i="3" data:default-text="Team%20D" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-weight: 400; font-family: Helvetica, Arial, sans-serif;">Team D</span></div><div class="apexcharts-legend-series" rel="5" seriesname="TeamxE" data:collapsed="false" style="margin: 2px 5px;"><span class="apexcharts-legend-marker" rel="5" data:collapsed="false" style="background: rgb(137, 80, 252) !important; color: rgb(137, 80, 252); height: 12px; width: 12px; left: 0px; top: 0px; border-width: 0px; border-color: rgb(255, 255, 255); border-radius: 12px;"></span><span class="apexcharts-legend-text" rel="5" i="4" data:default-text="Team%20E" data:collapsed="false" style="color: rgb(55, 61, 63); font-size: 12px; font-weight: 400; font-family: Helvetica, Arial, sans-serif;">Team E</span></div></div><style type="text/css">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           opacity: 0.45;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           }
+                                                        </style>
+                                                    </foreignObject>
+                                                    <g id="SvgjsG3025" class="apexcharts-inner apexcharts-graphical" transform="translate(22, 0)"><defs id="SvgjsDefs3024"><clipPath id="gridRectMaskppx0lj1b"><rect id="SvgjsRect3027" width="247" height="265" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMaskppx0lj1b"><rect id="SvgjsRect3028" width="245" height="267" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><filter id="SvgjsFilter3036" filterUnits="userSpaceOnUse" width="200%" height="200%" x="-50%" y="-50%"><feFlood id="SvgjsFeFlood3037" flood-color="#000000" flood-opacity="0.45" result="SvgjsFeFlood3037Out" in="SourceGraphic"></feFlood><feComposite id="SvgjsFeComposite3038" in="SvgjsFeFlood3037Out" in2="SourceAlpha" operator="in" result="SvgjsFeComposite3038Out"></feComposite><feOffset id="SvgjsFeOffset3039" dx="1" dy="1" result="SvgjsFeOffset3039Out" in="SvgjsFeComposite3038Out"></feOffset><feGaussianBlur id="SvgjsFeGaussianBlur3040" stdDeviation="1 " result="SvgjsFeGaussianBlur3040Out" in="SvgjsFeOffset3039Out"></feGaussianBlur><feMerge id="SvgjsFeMerge3041" result="SvgjsFeMerge3041Out" in="SourceGraphic"><feMergeNode id="SvgjsFeMergeNode3042" in="SvgjsFeGaussianBlur3040Out"></feMergeNode><feMergeNode id="SvgjsFeMergeNode3043" in="[object Arguments]"></feMergeNode></feMerge><feBlend id="SvgjsFeBlend3044" in="SourceGraphic" in2="SvgjsFeMerge3041Out" mode="normal" result="SvgjsFeBlend3044Out"></feBlend></filter><filter id="SvgjsFilter3049" filterUnits="userSpaceOnUse" width="200%" height="200%" x="-50%" y="-50%"><feFlood id="SvgjsFeFlood3050" flood-color="#000000" flood-opacity="0.45" result="SvgjsFeFlood3050Out" in="SourceGraphic"></feFlood><feComposite id="SvgjsFeComposite3051" in="SvgjsFeFlood3050Out" in2="SourceAlpha" operator="in" result="SvgjsFeComposite3051Out"></feComposite><feOffset id="SvgjsFeOffset3052" dx="1" dy="1" result="SvgjsFeOffset3052Out" in="SvgjsFeComposite3051Out"></feOffset><feGaussianBlur id="SvgjsFeGaussianBlur3053" stdDeviation="1 " result="SvgjsFeGaussianBlur3053Out" in="SvgjsFeOffset3052Out"></feGaussianBlur><feMerge id="SvgjsFeMerge3054" result="SvgjsFeMerge3054Out" in="SourceGraphic"><feMergeNode id="SvgjsFeMergeNode3055" in="SvgjsFeGaussianBlur3053Out"></feMergeNode><feMergeNode id="SvgjsFeMergeNode3056" in="[object Arguments]"></feMergeNode></feMerge><feBlend id="SvgjsFeBlend3057" in="SourceGraphic" in2="SvgjsFeMerge3054Out" mode="normal" result="SvgjsFeBlend3057Out"></feBlend></filter><filter id="SvgjsFilter3062" filterUnits="userSpaceOnUse" width="200%" height="200%" x="-50%" y="-50%"><feFlood id="SvgjsFeFlood3063" flood-color="#000000" flood-opacity="0.45" result="SvgjsFeFlood3063Out" in="SourceGraphic"></feFlood><feComposite id="SvgjsFeComposite3064" in="SvgjsFeFlood3063Out" in2="SourceAlpha" operator="in" result="SvgjsFeComposite3064Out"></feComposite><feOffset id="SvgjsFeOffset3065" dx="1" dy="1" result="SvgjsFeOffset3065Out" in="SvgjsFeComposite3064Out"></feOffset><feGaussianBlur id="SvgjsFeGaussianBlur3066" stdDeviation="1 " result="SvgjsFeGaussianBlur3066Out" in="SvgjsFeOffset3065Out"></feGaussianBlur><feMerge id="SvgjsFeMerge3067" result="SvgjsFeMerge3067Out" in="SourceGraphic"><feMergeNode id="SvgjsFeMergeNode3068" in="SvgjsFeGaussianBlur3066Out"></feMergeNode><feMergeNode id="SvgjsFeMergeNode3069" in="[object Arguments]"></feMergeNode></feMerge><feBlend id="SvgjsFeBlend3070" in="SourceGraphic" in2="SvgjsFeMerge3067Out" mode="normal" result="SvgjsFeBlend3070Out"></feBlend></filter><filter id="SvgjsFilter3075" filterUnits="userSpaceOnUse" width="200%" height="200%" x="-50%" y="-50%"><feFlood id="SvgjsFeFlood3076" flood-color="#000000" flood-opacity="0.45" result="SvgjsFeFlood3076Out" in="SourceGraphic"></feFlood><feComposite id="SvgjsFeComposite3077" in="SvgjsFeFlood3076Out" in2="SourceAlpha" operator="in" result="SvgjsFeComposite3077Out"></feComposite><feOffset id="SvgjsFeOffset3078" dx="1" dy="1" result="SvgjsFeOffset3078Out" in="SvgjsFeComposite3077Out"></feOffset><feGaussianBlur id="SvgjsFeGaussianBlur3079" stdDeviation="1 " result="SvgjsFeGaussianBlur3079Out" in="SvgjsFeOffset3078Out"></feGaussianBlur><feMerge id="SvgjsFeMerge3080" result="SvgjsFeMerge3080Out" in="SourceGraphic"><feMergeNode id="SvgjsFeMergeNode3081" in="SvgjsFeGaussianBlur3079Out"></feMergeNode><feMergeNode id="SvgjsFeMergeNode3082" in="[object Arguments]"></feMergeNode></feMerge><feBlend id="SvgjsFeBlend3083" in="SourceGraphic" in2="SvgjsFeMerge3080Out" mode="normal" result="SvgjsFeBlend3083Out"></feBlend></filter><filter id="SvgjsFilter3088" filterUnits="userSpaceOnUse" width="200%" height="200%" x="-50%" y="-50%"><feFlood id="SvgjsFeFlood3089" flood-color="#000000" flood-opacity="0.45" result="SvgjsFeFlood3089Out" in="SourceGraphic"></feFlood><feComposite id="SvgjsFeComposite3090" in="SvgjsFeFlood3089Out" in2="SourceAlpha" operator="in" result="SvgjsFeComposite3090Out"></feComposite><feOffset id="SvgjsFeOffset3091" dx="1" dy="1" result="SvgjsFeOffset3091Out" in="SvgjsFeComposite3090Out"></feOffset><feGaussianBlur id="SvgjsFeGaussianBlur3092" stdDeviation="1 " result="SvgjsFeGaussianBlur3092Out" in="SvgjsFeOffset3091Out"></feGaussianBlur><feMerge id="SvgjsFeMerge3093" result="SvgjsFeMerge3093Out" in="SourceGraphic"><feMergeNode id="SvgjsFeMergeNode3094" in="SvgjsFeGaussianBlur3092Out"></feMergeNode><feMergeNode id="SvgjsFeMergeNode3095" in="[object Arguments]"></feMergeNode></feMerge><feBlend id="SvgjsFeBlend3096" in="SourceGraphic" in2="SvgjsFeMerge3093Out" mode="normal" result="SvgjsFeBlend3096Out"></feBlend></filter></defs><g id="SvgjsG3029" class="apexcharts-pie"><g id="SvgjsG3030" transform="translate(0, 0) scale(1)"><g id="SvgjsG3031" class="apexcharts-slices"><g id="SvgjsG3032" class="apexcharts-series apexcharts-pie-series" seriesName="TeamxA" rel="1" data:realIndex="0"><path id="SvgjsPath3033" d="M 120.5 8.939024390243887 A 111.56097560975611 111.56097560975611 0 0 1 232.05658249367576 119.50995892392531 L 120.5 120.5 L 120.5 8.939024390243887" fill="rgba(105,147,255,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-pie-slice-0" index="0" j="0" data:angle="89.49152542372882" data:startAngle="0" data:strokeWidth="2" data:value="44" data:pathOrig="M 120.5 8.939024390243887 A 111.56097560975611 111.56097560975611 0 0 1 232.05658249367576 119.50995892392531 L 120.5 120.5 L 120.5 8.939024390243887" stroke="#ffffff"></path></g><g id="SvgjsG3045" class="apexcharts-series apexcharts-pie-series" seriesName="TeamxB" rel="2" data:realIndex="1"><path id="SvgjsPath3046" d="M 232.05658249367576 119.50995892392531 A 111.56097560975611 111.56097560975611 0 0 1 79.87389094618513 224.4007725772438 L 120.5 120.5 L 232.05658249367576 119.50995892392531" fill="rgba(27,197,189,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-pie-slice-1" index="0" j="1" data:angle="111.86440677966102" data:startAngle="89.49152542372882" data:strokeWidth="2" data:value="55" data:pathOrig="M 232.05658249367576 119.50995892392531 A 111.56097560975611 111.56097560975611 0 0 1 79.87389094618513 224.4007725772438 L 120.5 120.5 L 232.05658249367576 119.50995892392531" stroke="#ffffff"></path></g><g id="SvgjsG3058" class="apexcharts-series apexcharts-pie-series" seriesName="TeamxC" rel="3" data:realIndex="2"><path id="SvgjsPath3059" d="M 79.87389094618513 224.4007725772438 A 111.56097560975611 111.56097560975611 0 0 1 37.85955024472911 195.44269372825573 L 120.5 120.5 L 79.87389094618513 224.4007725772438" fill="rgba(255,168,0,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-pie-slice-2" index="0" j="2" data:angle="26.440677966101703" data:startAngle="201.35593220338984" data:strokeWidth="2" data:value="13" data:pathOrig="M 79.87389094618513 224.4007725772438 A 111.56097560975611 111.56097560975611 0 0 1 37.85955024472911 195.44269372825573 L 120.5 120.5 L 79.87389094618513 224.4007725772438" stroke="#ffffff"></path></g><g id="SvgjsG3071" class="apexcharts-series apexcharts-pie-series" seriesName="TeamxD" rel="4" data:realIndex="3"><path id="SvgjsPath3072" d="M 37.85955024472911 195.44269372825573 A 111.56097560975611 111.56097560975611 0 0 1 41.96529006019071 41.26521840964905 L 120.5 120.5 L 37.85955024472911 195.44269372825573" fill="rgba(246,78,96,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-pie-slice-3" index="0" j="3" data:angle="87.4576271186441" data:startAngle="227.79661016949154" data:strokeWidth="2" data:value="43" data:pathOrig="M 37.85955024472911 195.44269372825573 A 111.56097560975611 111.56097560975611 0 0 1 41.96529006019071 41.26521840964905 L 120.5 120.5 L 37.85955024472911 195.44269372825573" stroke="#ffffff"></path></g><g id="SvgjsG3084" class="apexcharts-series apexcharts-pie-series" seriesName="TeamxE" rel="5" data:realIndex="4"><path id="SvgjsPath3085" d="M 41.96529006019071 41.26521840964905 A 111.56097560975611 111.56097560975611 0 0 1 120.48052893668756 8.93902608941471 L 120.5 120.5 L 41.96529006019071 41.26521840964905" fill="rgba(137,80,252,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-pie-slice-4" index="0" j="4" data:angle="44.745762711864415" data:startAngle="315.25423728813564" data:strokeWidth="2" data:value="22" data:pathOrig="M 41.96529006019071 41.26521840964905 A 111.56097560975611 111.56097560975611 0 0 1 120.48052893668756 8.93902608941471 L 120.5 120.5 L 41.96529006019071 41.26521840964905" stroke="#ffffff"></path></g><g id="SvgjsG3034" class="apexcharts-datalabels"><text id="SvgjsText3035" font-family="Helvetica, Arial, sans-serif" x="183.32776795184748" y="57.11217472771927" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="600" fill="#ffffff" class="apexcharts-text apexcharts-pie-label" filter="url(#SvgjsFilter3036)" style="font-family: Helvetica, Arial, sans-serif;">24.9%</text></g><g id="SvgjsG3047" class="apexcharts-datalabels"><text id="SvgjsText3048" font-family="Helvetica, Arial, sans-serif" x="171.14893262647576" y="193.98489941722113" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="600" fill="#ffffff" class="apexcharts-text apexcharts-pie-label" filter="url(#SvgjsFilter3049)" style="font-family: Helvetica, Arial, sans-serif;">31.1%</text></g><g id="SvgjsG3060" class="apexcharts-datalabels"><text id="SvgjsText3061" font-family="Helvetica, Arial, sans-serif" x="69.85106737352422" y="193.98489941722107" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="600" fill="#ffffff" class="apexcharts-text apexcharts-pie-label" filter="url(#SvgjsFilter3062)" style="font-family: Helvetica, Arial, sans-serif;">7.3%</text></g><g id="SvgjsG3073" class="apexcharts-datalabels"><text id="SvgjsText3074" font-family="Helvetica, Arial, sans-serif" x="31.282848287245415" y="118.12415092572905" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="600" fill="#ffffff" class="apexcharts-text apexcharts-pie-label" filter="url(#SvgjsFilter3075)" style="font-family: Helvetica, Arial, sans-serif;">24.3%</text></g><g id="SvgjsG3086" class="apexcharts-datalabels"><text id="SvgjsText3087" font-family="Helvetica, Arial, sans-serif" x="86.52899239619722" y="37.96930594655855" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="600" fill="#ffffff" class="apexcharts-text apexcharts-pie-label" filter="url(#SvgjsFilter3088)" style="font-family: Helvetica, Arial, sans-serif;">12.4%</text></g></g></g></g><line id="SvgjsLine3097" x1="0" y1="0" x2="241" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine3098" x1="0" y1="0" x2="241" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line></g>
+                                                    <g id="SvgjsG3026" class="apexcharts-annotations"></g>
+                                                </svg><div class="apexcharts-tooltip apexcharts-theme-dark" style="left: 185.891px; top: 75px;"><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex; background-color: rgb(27, 197, 189);"><span class="apexcharts-tooltip-marker" style="background-color: rgb(27, 197, 189); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Team B: </span><span class="apexcharts-tooltip-text-value">55</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 2; display: none; background-color: rgb(27, 197, 189);"><span class="apexcharts-tooltip-marker" style="background-color: rgb(27, 197, 189); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Team B: </span><span class="apexcharts-tooltip-text-value">55</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 3; display: none; background-color: rgb(27, 197, 189);"><span class="apexcharts-tooltip-marker" style="background-color: rgb(27, 197, 189); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Team B: </span><span class="apexcharts-tooltip-text-value">55</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 4; display: none; background-color: rgb(27, 197, 189);"><span class="apexcharts-tooltip-marker" style="background-color: rgb(27, 197, 189); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Team B: </span><span class="apexcharts-tooltip-text-value">55</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 5; display: none; background-color: rgb(27, 197, 189);"><span class="apexcharts-tooltip-marker" style="background-color: rgb(27, 197, 189); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Team B: </span><span class="apexcharts-tooltip-text-value">55</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div>
+                                            </div>
+                                        </div>*@
+
+                                    @*<div id="checkIn">
+
+                                        @await Html.PartialAsync("~/Areas/DashBoard/Views/TimeOfficeDashBoard/_CheckInChart.cshtml", Model)
+                                    </div>*@
+
+
+                                </div>
+                            </div>
+                            <!--end::Card-->
+                        </div>
+                    </div>
+
+                    <!--footer section end -->
+                    <!-- Dashboard End here -->
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+
+<div class="modal fade timeDashApprPendingEmpDetails" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:450px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span id="ApprPendingTitle"></span>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.timeDash_ApprovalPending');m.modal('show');">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDashApprPendingEmpDetailsPopup">
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade timeDash_lessEmp" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:450px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Approval Pending
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_lessEmpPopup">
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- <end lowattendancerate start></end> -->
+
+<div class="modal fade lowattendancerate" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Low Attendance Rate (Below 80 %)
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body lowattendanceratePopup">
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade timeDash_MissingEmployeeDT" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:450px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span id="AttndSettingsMissingTitle"></span>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="var m = $('.timeDash_missing'); m.modal('show')">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  timeDash_MissingEmployeeDTPopup">
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade unauthorisedlop" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Unauthorized LOPs from the Month of June 2022
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body unauthorisedlopPopup">
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade timeDash_ApprovalPending" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content popup " style="height:450px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Approval Pending
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_ApprovalPendingPopup">
+
+            </div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade timeDash_missing" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content popup " style="height:370px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Attendance Settings Missing
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_missingPopup"></div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade timeDash_upcomingleaves" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:430px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Employees leave on next 15 days including today
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_upcomingleavesPopup">
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade authorisedlop" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Authorized LOPs from the Month of June 2022
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body authorisedlopPopup">
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade timeDash_dutyroster" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup" style="height:430px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Duty Roster Variance
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_dutyrosterPopup">
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade timeDash_absenteesim" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Employees Absent more than 3 days
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_absenteesimPopup">
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade timeDash_previousmonthadjst" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Previous Month Adjustments
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_previousmonthadjstPopup">
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade timeDash_lesshour" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " style="height:400px ;">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Less Hours
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body timeDash_lesshourPopup">
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+

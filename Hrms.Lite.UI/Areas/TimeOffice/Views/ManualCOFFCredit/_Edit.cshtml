@@ -1,0 +1,139 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.ManualCOFFCredit
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<!--<script>
+    $(document).ready(function () {
+        $('#EntitledDate').focus();
+        $('#EntitledDate').datepicker('hide');
+        $('.kt_datepicker_11').datepicker('remove');
+        setDateHidePicker();
+    });
+</script>
+<script>-->
+        @*$(document).ready(function () {
+            debugger;
+                moveCursorToEnd('LeaveCreditDebitEditDetils_Value');
+        });
+
+    $(window).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (preventENterFlag == 0)
+                    EmployeeWiseLeaveCreditDebitSave('@Model.EmployeeGI');
+                return false;
+            }
+        });
+    });*@
+<!--</script>-->
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "manualCOFFCreditSave" }))
+{
+    @Html.HiddenFor(m => m.EmployeeGI);
+    @*@Html.HiddenFor(m => m.EntitledDate);
+    @Html.HiddenFor(m => m.AttendanceDayStatus);
+    @Html.HiddenFor(m => m.Remarks);*@
+
+
+    <div id="manualCOFFCreditEdit" class="slider-forms slider-forms-open manualCOFFCreditEdit_">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('manualCOFFCreditEdit_');preventENterFlag = 1">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+
+                <h4>
+                    Manual COFF Credit
+                </h4>
+
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Entitled Date</label>
+                            @Html.TextBoxFor(m => m.EntitledDate, "{0:dd-MMM-yyyy}", new
+                       {
+                           @class = "form-control kt_datepicker_8",
+                           @placeholder = "EntitledDate",
+                           @autocomplete = "off",
+                           @readonly = "true",
+                           @onchange = "validate(this,'entitledDate')"
+                          ,
+                           @onclick = "$('#EntitledDate').datepicker('show');"
+                       })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Half /Full Day</label>
+                            @Html.DropDownListFor(m => m.AttendanceDayStatus.Code, (SelectList)ViewBag.DayStatus, "--Select Day Status--", new { @class = "form-control form-control-sm" })
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label>Remarks</label>
+                            @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = "250" })
+                            <span id="remarks"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                @*<h4 class="">Log</h4>
+                <div class="ihits-table table-border vertical-scroll-150  hover-color odd-even leave-credit-debit-list-slider">
+                    <table>
+                        <thead>
+                            <tr class="table-light">
+                                <th scope="col">SlNo</th>
+                                <th scope="col">Entitled Date</th>
+                                <th scope="col">AppStatus</th>
+                                <th scope="col">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.ManualCOFFCreditLogDetailsList != null && Model.ManualCOFFCreditLogDetailsList.Count > 0)
+                            {
+
+                                for (int i = 0; i < Model.ManualCOFFCreditLogDetailsList.Count; i++)
+                                {
+                                    <tr>
+
+                                        <td data-label="SlNo">@Model.ManualCOFFCreditLogDetailsList[i].SlNo</td>
+                                        <td data-label="Entitled Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.ManualCOFFCreditLogDetailsList[i].LogDATE))  </td>
+                                        <td data-label="AppStatus">@Model.ManualCOFFCreditLogDetailsList[i].AppStatus</td>
+                                        <td data-label="Balance">@Model.ManualCOFFCreditLogDetailsList[i].Opening </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                </div>*@
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        <button type="button" onclick="EmployeeWiseCreditSave('@Model.EmployeeGI')"
+                                class="btn btn-default  mobile-full-width">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

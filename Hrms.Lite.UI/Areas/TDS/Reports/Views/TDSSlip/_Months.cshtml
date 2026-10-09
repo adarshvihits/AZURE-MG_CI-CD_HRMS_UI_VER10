@@ -1,0 +1,40 @@
+﻿@model Hrms.Lite.Shared.TDS.TDSSlip
+
+@Html.HiddenFor(m => m.CurrentSalaryPeriodCode)
+@if (Model.Months != null && Model.Months.Count > 0)
+{
+
+    @for (int i = 0; i < Model.Months.Count; i++)
+    {
+        if (Model.CurrentSalaryPeriodCode == Model.Months[i].SalaryPeriodCode)
+        {
+           
+                <div id="monthTab" class="box_months active" onclick="onMonthTabClick('monthTab',@i)">
+                    <p>
+                        @Model.Months[i].Month @Html.HiddenFor(m => m.Months[i].SalaryPeriodCode)
+
+                    </p>
+
+                </div>
+            
+               
+           
+        }
+        else
+        {
+      
+                <div id="monthTab_@i" class="box_months" onclick="onMonthTabClick('monthTab_@i',@i)">
+                    <p>
+                        @Model.Months[i].Month @Html.HiddenFor(m => m.Months[i].SalaryPeriodCode)
+
+                    </p>
+                </div>
+            
+              
+          
+        }
+    }
+    }
+<div class="monthselection">
+    @Html.DropDownListFor(m => m.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, "--Select Assessment Year--", new { @class = "form-control form-control-sm", @onchange = "OnAssessmentYrChange()" })
+</div>

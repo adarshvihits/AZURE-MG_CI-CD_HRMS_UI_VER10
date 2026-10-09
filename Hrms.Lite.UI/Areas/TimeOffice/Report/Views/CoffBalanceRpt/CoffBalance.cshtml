@@ -1,0 +1,165 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.Report.CoffBalance
+@{
+    ViewData["Title"] = "CoffBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .image-button::after {
+        content: '';
+        display: block;
+        /*   width: 0;*/
+        height: 3px;
+        /*   transition: width .3s;*/
+        background-color: #6e6e6e;
+    }
+
+
+
+
+    .image-button.active::after {
+        width: 100%;
+        background-color: #135fd4;
+    }
+
+</style>
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/TimeOffice/Report/CoffBalanceRpt.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Coff Report</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "CoffBalanceRpt", new { Area = "TimeOffice"})">Coff Report</a>
+
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Coff Balance
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="profile-header position-relative box-shadow-none mb-2">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                        <div class="profile-header-overflow"></div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+                            @*<div class="tab-items pr-0 border-none hide">
+
+
+                    <div class="form-group filter-combobox mr-2" style="width: 150px; margin-right: 10px;">
+                        @Html.DropDownListFor(m => m.CoffBalance.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod,
+                       new { @class = "form-control form-control-sm", @onchange = "onCoffLPChange()" })
+
+                    </div>
+
+
+                </div>*@
+
+
+
+
+
+                            <div class="tab-items select-option">
+
+
+
+                                <div class="pt-3">
+                                    Validity:<strong> @Model.CoffLapseDays</strong>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="dash-board-top-buttons c-off-dashboard justify-content-center">
+                        <div class="image-button active cursor-pointer" id="tabcolor_bal" onclick="onCoffBalTypeChange('Balance','tabcolor_bal','@Model.EmployeeHeader.EmployeeGuid')">
+
+                            <h3>@Model.Balance</h3>
+                            <h2 class="mt-0">Total Balance</h2>
+                        </div>
+                        <div class="image-button cursor-pointer" id="tabcolor_exp" onclick="onCoffBalTypeChange('Expired','tabcolor_exp','@Model.EmployeeHeader.EmployeeGuid')">
+
+                            <h3>@Model.Expired</h3>
+                            <h2 class="mt-0">Expired</h2>
+                        </div>
+                        <div class="image-button cursor-pointer" id="tabcolor_ava" onclick="onCoffBalTypeChange('Availed', 'tabcolor_ava','@Model.EmployeeHeader.EmployeeGuid')">
+
+                            <h3>@Model.Availed</h3>
+                            <h2 class="mt-0">Availed</h2>
+                        </div>
+                        @*<div class="pt-3" data-bs-toggle="tooltip" title="Validity: 90 Days">
+                Validity:<strong> @Model.CoffBalance.CoffLapseDays</strong>
+            </div>*@
+                    </div>
+
+
+
+                    <div class="coff_list_Dashboard">
+                        @await Html.PartialAsync("~/Areas/TimeOffice/Report/Views/CoffBalanceRpt/_BalanceList.cshtml")
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>

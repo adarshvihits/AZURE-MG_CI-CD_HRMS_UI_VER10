@@ -1,0 +1,150 @@
+﻿@model Hrms.Lite.Shared.PayRoll.MonthlyPaymentRemittance
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('#Empcode').selectpicker();
+        $("#Empcode").find("option").eq(0).hide();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Save", "MonthlyPaymentRemittance", FormMethod.Post, new { id = "Pfsave" }))
+{
+    <div id="pfedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Employee Remittance</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Select Employee</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Empcode, (SelectList)ViewBag.Employee, "Search by Employee name/ID", new
+                        {
+                            @class = "selectpicker sliderSearchInput form-control form-control-sm",
+
+                              data_show_subtext = "true",
+                             data_live_search = "true",
+                          })
+
+
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Payment Type </label>
+                        <span class="Mandatory">*</span>
+                        <div class="input-group date">
+
+
+                            @Html.DropDownListFor(m => m.Code, (SelectList)ViewBag.RemittanceType,  new { @class = "form-control form-control-sm" })
+
+
+                        </div>
+                        <span id="fromDate"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Payment Date</label>
+                        <span class="Mandatory">*</span>
+                        <div class="input-group date">
+
+                            @Html.TextBoxFor(m => m.Date, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "readonly", @placeholder = "Date", @onchange = "$('#To').val($('#From').val());validate(this,'fromDate');CalculateDays();" @*"setToDate()"*@})
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="fromDate"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Amount Paid</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                @Html.TextBoxFor(model => Model.TotalAmount, new { @class = "form-control form-control-sm DeptDiscription", maxlength = "250", type = "number" })
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.HiddenFor(model => Model.TotalAmount)
+
+                                @Html.DisplayFor(model => Model.TotalAmount)
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+             
+
+
+
+                    @*@await Html.PartialAsync("~/Areas/DataBank/Views/JobTransition/_EmployeeCard.cshtml", Model.EmployeeHeader)*@
+
+               
+
+               
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                @Html.HiddenFor(model => Model.Remarks)
+
+                                @Html.DisplayFor(model => Model.Remarks)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="pfSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="pfSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

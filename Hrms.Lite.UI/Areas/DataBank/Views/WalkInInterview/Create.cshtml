@@ -1,0 +1,577 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.WalkInInterView
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/walkInInterview.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $("#CandidateDetails_InterviewSelection_Code").find("option").eq(1).hide();
+        $("#CandidateDetails_InterviewSelection_Code").find("option").eq(3).hide();
+        $('#CandidateDetails_Experience').val('');
+    });
+
+    $(document).ready(function () {
+        debugger
+          $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+
+                    $('.walk_img').css('background-image', "url('" + '@Model.CandidateDetails.CandidatePhoto.AbsoluteUri' + "')");
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.CandidateDetails.CandidatePhoto.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.CandidateDetails.CandidatePhoto.FileName');
+                        debugger
+                        $('.walk_img').css('background-image', "url('" + mimeType + data + "')");
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+    });
+
+
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "walkInInterviewSave", enctype = "multipart/form-data" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Walk In Interview</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index","Home")"><i class="icon-nm fas fa-home"></i></a>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index","WalkInInterview", new { Area ="DataBank"})"> Walk In Interview List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Walk In Interview
+                        </li>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <div class="page_white">
+                            <!--begin: Search Form-->
+                            <div class="pb-1">
+                                <h4><i class="fas fa-briefcase icon-nm mr-2 walk_icon"></i>MRF Details</h4>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col-md-2">
+
+                                    <div class="form-group  ">
+                                        <label class="view-title">MRF No </label>
+                                        <div class="view-details">
+                                            @Model.VacancyDetails.JobCode
+                                            @Html.HiddenFor(m => m.VacancyManagementCode)
+                                            @Html.HiddenFor(m => m.VacancyManagementGI)
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group  ">
+                                        <label class="view-title">Job Title </label>
+                                        <div class="view-details">@Model.VacancyDetails.JobTitle</div>
+
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group  ">
+                                        <label class="view-title">Location </label>
+                                        <div class="view-details">@Model.VacancyDetails.Location.Name</div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="pb-3 pt-3">
+                                <h4><i class="fas fa-briefcase icon-nm mr-2 walk_icon"></i>Candidate Info</h4>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-md-2">
+                                    <div class="image-input image-input-outline image-input-circle emp_HeaderPic"
+                                         id="kt_image_4" style="background-image: url(images/blank.png)">
+
+                                        @if (Model.CandidateDetails.CandidatePhoto == null)
+                                        {
+                                            <div class="image-input-wrapper walk_img" data-bs-toggle="tooltip" title="" data-bs-original-title="Click to upload photo"
+                                                 style="background-image:url(/images/blank.png)">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="image-input-wrapper walk_img">
+                                                
+                                            </div>
+                                            @Html.HiddenFor(m => m.CandidateDetails.CandidatePhoto.AbsoluteUri)
+                                            @Html.HiddenFor(m => m.CandidateDetails.CandidatePhoto.FileName)
+                                        }
+                                        <label class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                               data-action="change" data-bs-toggle="tooltip" title=""
+                                               data-bs-original-title="Change avatar" onclick="$('#CandidateDetails_CandidatePhoto_FileData').trigger('click')">
+                                            <i class="fa fa-pen icon-sm text-muted"></i>
+                                            @*<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">*@
+
+                                            <input type="hidden" name="profile_avatar_remove">
+                                        </label>
+
+                                        <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                              data-action="cancel" data-bs-toggle="tooltip" title=""
+                                              data-bs-original-title="Cancel avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+
+                                        <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                              data-action="remove" data-bs-toggle="tooltip" title=""
+                                              data-bs-original-title="Remove avatar">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
+                                    </div>
+                                    @Html.HiddenFor(m => m.CandidateDetails.CandidatePhoto.FileData, new { @type = "file", accept = ".jpg, .jpeg",@style="display:none", onchange = "validateProfilePhoto()" })
+                                </div>
+
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Reference No</label>
+                                                @Html.HiddenFor(m => m.CandidateDetails.RefNo)
+                                                @Html.TextBoxFor(m => m.CandidateDetails.RefNo, new { @class = "form-control form-control-sm", disabled = true })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Salutation</label>
+                                                @*<select class="form-control form-control-sm "
+                                                            id="exampleSelects">
+                                                        <option>Mr.</option>
+                                                        <option>Mrs</option>
+
+                                                    </select>*@
+
+                                                @Html.DropDownListFor(m => m.CandidateDetails.Salutation.Code, (SelectList)ViewBag.Salutation, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'salutation')" })
+                                                <span id="salutation"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Name as per aadhar</label>
+                                                @*<input type="text" class="form-control form-control-sm"
+                                                    placeholder="Candidate Name">*@
+                                                @Html.TextBoxFor(m => m.CandidateDetails.FullName, new { @class = "form-control form-control-sm", @placeholder = "Candidate Name", @onblur = "capitalizeFirstLetter(this,'fullname')" })
+                                                <span id="fullname"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+                            <div class="row my-2">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Mobile number linked to aadhar</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Mobile Number">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.Mobile, new { @class = "form-control form-control-sm", @placeholder = "Mobile Number", @maxlength = 10, @onblur = "validateMobileNumber('CandidateDetails_Mobile','mob')" })
+                                        <span id="mob"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Email Id</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Email Id">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.Email, new { @class = "form-control form-control-sm", @placeholder = "Email Id", @onblur = "validateEmailID(this,'email')" })
+                                        <span id="email"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row-outer pb-2">
+                                        <label>Date Of Birth</label>
+                                        <div class="input-group date">
+                                            @*<input type="text" class="form-control" id="kt_datepicker_2"
+                                                readonly="readonly" placeholder="From">*@
+                                            @Html.TextBoxFor(m => m.CandidateDetails.DOB, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "DOB", @onchange = "validateDateOfBirth(this,'dob')" })
+
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="dob"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                                <option>--SELECT--</option>
+                                                <option>Male</option>
+                                                <option>Female</option>
+
+                                            </select>*@
+                                        @Html.DropDownListFor(m => m.CandidateDetails.Gender.Code, (SelectList)ViewBag.Gen, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'gender')" })
+                                        <span id="gender"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Aadhar Number</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Aadhar Number">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.Adhar, new { @class = "form-control form-control-sm", @placeholder = "Aadhar Number", @maxlength = 12, @onblur = "validateAadhar('CandidateDetails_Adhar','aadhar')" })
+                                        <span id="aadhar"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>PAN Number</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="PAN Number">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.PAN, new { @class = "form-control form-control-sm", @placeholder = "PAN Number", @maxlength = 10, onblur = "validatePan('CandidateDetails_PAN','pan')" })
+                                    </div>
+                                    <span id="pan"></span>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Driving License</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Driving License">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.DrivingLicenseNo, new { @class = "form-control form-control-sm", @placeholder = "Driving License", @maxlength = 25, @onblur = "validate(this,'drivingLicense')" })
+                                    </div>
+                                    <span id="drivingLicense"></span>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Qualification</label>
+                                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                                <option>--SELECT--</option>
+                                                <option>MTech</option>
+                                                <option>BTech</option>
+
+                                            </select>*@
+                                        @Html.DropDownListFor(m => m.CandidateDetails.Qualification.Code, (SelectList)ViewBag.Qual, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'qualification')" })
+                                    </div>
+                                    <span id="qualification"></span>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <div class="radio-inline pt-3">
+
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input id="BasedOn" name="BasedOn"
+                                                onchange="showMonthCalender(this)" type="radio" value="1">*@
+                                            @Html.RadioButtonFor(m => m.CandidateDetails.FresherOrExperienced, "0", new { @onclick = "onExperiencedOrFresherChange(this)" })
+                                            <span></span>Experienced
+                                        </label>
+                                        <label class="radio radio-outline radio-success">
+                                            @*<input id="BasedOn" name="BasedOn"
+                                                onchange="showMonthCalender(this)" type="radio" value="1">*@
+                                            @Html.RadioButtonFor(m => m.CandidateDetails.FresherOrExperienced, "1", new { @onclick = "onExperiencedOrFresherChange(this)" })
+                                            <span></span>Fresher
+                                        </label>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group CurrentEmployerDiv">
+                                        <label>Current Employer </label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Current Employer">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.CurrentEmployer, new { @class = "form-control form-control-sm", @placeholder = "Current Employer", @onblur = "validate(this,'currEmployer')" })
+                                        <span id="currEmployer"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 ExperienceDiv">
+                                    <div class="form-group">
+                                        <label>Total Exp</label>
+                                        @*<input type="text" class="form-control form-control-sm"
+                                            placeholder="Total Experience">*@
+                                        @Html.TextBoxFor(m => m.CandidateDetails.Experience, new { @class = "form-control form-control-sm", @placeholder = "Total Experience", @onblur = "validate(this,'exp')" })
+                                    </div>
+                                    <span id="exp"></span>
+                                </div>
+                            </div>
+
+                            <div class="row my-2 pb-2">
+
+                                <div class="col-md-6">
+                                    <label>Comments</label>
+                                    @*<textarea class="form-control form-control-sm" placeholder="Comments"></textarea>*@
+                                    @Html.TextAreaFor(m => m.CandidateDetails.CurrentEmployementComments, new { @class = "form-control form-control-sm", @placeholder = "Comments", @onblur = "validate(this,'currEmploymentComments')" })
+                                    <span id="currEmploymentComments"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="file-upload-form-group">
+                                        <label for="formFileMultiple" class="form-label">
+                                            Resume Upload
+                                        </label>
+
+                                        <div class="file-upload-form mb-1">
+                                            <div class="small-btn-group">
+                                                <button type="button" data-bs-toggle="tooltip" data-placement="top"
+                                                        data-bs-original-title="View Image"
+                                                        class="btn btn-icon btn-default" onclick="Preview('resume')">
+                                                    <i class="icon-xl far fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            @*<input class="form-control" type="file" id="formFileMultiple"
+                                                multiple="">*@
+                                            <div data-bs-toggle="tooltip"
+                                                 data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                @Html.TextBoxFor(m => m.CandidateDetails.Resume.FileData, new { @class = "form-control resume", @type = "file", title = "" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="file-upload-form-group">
+                                        <label for="formFileMultiple" class="form-label">
+                                            KYC Doc Upload
+                                        </label>
+
+                                        <div class="file-upload-form mb-1">
+                                            <div class="small-btn-group">
+                                                <button type="button" data-bs-toggle="tooltip" data-placement="top"
+                                                        data-bs-original-title="View Image"
+                                                        class="btn btn-icon btn-default" onclick="Preview('kycDoc')">
+                                                    <i class="icon-xl far fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            @*<input class="form-control" type="file" id="formFileMultiple"
+                                                multiple="">*@
+                                            <div data-bs-toggle="tooltip"
+                                                 data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                @Html.TextBoxFor(m => m.CandidateDetails.KYCDoc.FileData, new { @class = "form-control kycDoc", @type = "file", title = "" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+                            <!--end: Datatable-->
+
+                            <hr>
+                            <div class="pb-3 pt-4">
+                                <h4><i class="fas fa-briefcase icon-nm mr-2 walk_icon"></i>Interview & Evaluation</h4>
+                            </div>
+                            <div class="row my-2">
+
+                                <div class="col-md-2">
+                                    <div class="row-outer pb-2">
+                                        <label>Date Of Interview</label>
+                                        <div class="input-group date">
+                                            @*<input type="text" class="form-control" id="kt_datepicker_2"
+                                                readonly="readonly" placeholder="Date Of Interview">*@
+                                            @Html.TextBoxFor(m => m.CandidateDetails.InterviewDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Date Of Interview", @onchange = "validate(this,'interviewDte')" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="interviewDte"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Interviewer</label>
+                                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                                <option>--SELECT--</option>
+                                                <option>Sandra</option>
+                                                <option>Syama</option>
+
+                                            </select>*@
+                                        @Html.DropDownListFor(m => m.CandidateDetails.Interviewer.EmployeeCode, (SelectList)ViewBag.Interviewer, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'EmpCode')" })
+                                    </div>
+                                    <span id="EmpCode"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Feedback</label>
+                                    @*<textarea class="form-control form-control-sm" placeholder="Feedback"></textarea>*@
+                                    @Html.TextAreaFor(m => m.CandidateDetails.InterViewFeedBack, new { @class = "form-control form-control-sm", @placeholder = "Feedback", @onblur = "validate(this,'feedback')" })
+                                    <span id="feedback"></span>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="file-upload-form-group">
+                                        <label for="formFileMultiple" class="form-label">
+                                            File Upload
+                                        </label>
+
+                                        <div class="file-upload-form mb-1">
+                                            <div class="small-btn-group">
+                                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="Preview('fil')"><i class="icon-xl far fa-eye"></i></button>
+                                            </div>
+                                            @*<input class="form-control" type="file" id="formFileMultiple" multiple="">*@
+                                            <div data-bs-toggle="tooltip"
+                                                 data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                                                @Html.TextBoxFor(m => m.CandidateDetails.File.FileData, new { @class = "form-control fil", @type = "file", title = "" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--<div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Status</label>-->
+                                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                                <option>--SELECT--</option>
+                                                <option>Demo</option>
+
+
+                                            </select>*@
+                                        <!--@Html.DropDownListFor(m => m.CandidateDetails.InterviewSelection.Code, (SelectList)ViewBag.Status, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'interviewSel')" })
+                                        <span id="interviewSel"></span>
+                                    </div>
+                                </div>-->
+
+                            </div>
+                        </div>
+
+                        <div class="row card-footer-bottom-fixed">
+
+                            <div class="col-md-12 align-right">
+                                <a id="" type="button" class="btn btn-default float-right mobile-full-width " onclick="WalkInInterviewSave()">
+                                    Save
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <div class="slider-over-flow"></div>
+    <!--end::Content-->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Profile Photo</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,88 @@
+﻿@model Hrms.Lite.Shared.Master.Reader
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.ActiveTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+        //$('#ReaderPendingTable').DataTable({
+        //    "pageLength": 25,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style');
+
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table reader-master-pending pt-1">
+    @Html.HiddenFor(m => m.ReaderList.Count)
+    <table id="ReaderPendingTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Reader Name</th>
+                <th scope="col">User Code</th>
+                <th scope="col">Reader Type</th>
+                <th scope="col">Location</th>
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.ReaderList != null && Model.ReaderList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ReaderList.Count; i++)
+                {
+                    <tr>
+                        <td data-label="Reader Name">
+                            @Html.HiddenFor(m => m.ReaderList[i].GI)
+                            @Html.HiddenFor(m => m.ReaderList[i].LogGI)
+                            @Html.HiddenFor(m => m.ReaderList[i].MakerChecker)
+                            @Model.ReaderList[i].ReaderName
+                        </td>
+                        <td data-label="User Code">@Model.ReaderList[i].UserCode</td>
+                        <td data-label="Reader Type">@Model.ReaderList[i].ReaderType.Name</td>
+                        <td data-label="Location">@Model.ReaderList[i].Location.Name</td>
+
+
+                        <td data-label="Status">@Model.ReaderList[i].Mode</td>
+                        <td data-label="Approve">
+                            @if (CurrentUserRoleActions.Approve == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="readerapprove" type="button"
+                                   class="btn btn-icon btn-tick icon-only " onclick="onApproveClick('@Model.ReaderList[i].GI','@Model.ReaderList[i].LogGI','@Model.ReaderList[i].Mode',@i)">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a> 
+                            }
+                            else
+                            { 
+                                <a data-bs-toggle="tooltip" title="Approve"
+                                   id="readerapprove" type="button"
+                                   class="btn btn-icon btn-tick icon-only " onclick="onApproveClick('@Model.ReaderList[i].GI', '@Model.ReaderList[i].LogGI', '@Model.ReaderList[i].Mode',@i);
+                                    swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl far fa-check-circle"></i>
+                                </a>
+                            }
+                                <!-- Approve Slider -->
+                                <!-- Approve Slider end-->
+                            </td>
+                        <!-- <second></second> -->
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,80 @@
+﻿
+@model Hrms.Lite.Shared.Master.RoleMatrix
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.slider-btn').click(function () {
+            $('body').append('<div class="form-overlay"></div>');
+            $("div").removeClass('slider-forms-open');
+            // get class name this way
+            var elementClassName = $(this).attr('Id');
+            // alert(elementClassName)
+            //find the divs with this class name
+            $('div#' + elementClassName).toggleClass('slider-forms-open');
+        });
+    });
+</script>
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table RoleMatrix-list pt-1 ">
+    @Html.HiddenFor(m => m.RoleMatrixList.Count)
+    <table class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col"> @Model.ColumnCaption</th>
+                <th scope="col">Authority</th>
+                <th scope="col">Position</th>
+                <th scope="col">Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.RoleMatrixList != null && Model.RoleMatrixList.Count > 0)
+                {
+                    for (int i = 0; i < Model.RoleMatrixList.Count; i++)
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(model => model.Role.Code)
+
+                            <td data-label="@Model.ColumnCaption">@Model.RoleMatrixList[i].ParameterName</td>
+                            <td data-label="Authority">@Model.RoleMatrixList[i].Authority</td>
+                            <td data-label="Position">@Model.RoleMatrixList[i].Position</td>
+
+
+
+                            <td data-label="Actions">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Add" id="rolemat" type="button"
+                                           class="btn btn-icon btn-edit icon-only slider-btn" onclick="AddNewOrEditClick('@Model.RoleMatrixList[i].ParameterCode','@Model.RoleMatrixList[i].ParameterName')">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+
+
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

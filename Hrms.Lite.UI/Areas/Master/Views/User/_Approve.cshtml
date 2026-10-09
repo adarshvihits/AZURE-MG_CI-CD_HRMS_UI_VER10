@@ -1,0 +1,149 @@
+﻿@model Hrms.Lite.Shared.Master.User
+
+
+@*  NOTE  : APPROVE FOR ESSP AND IS ADMIN TRUE EMPLOYEES*@
+
+
+@using (Html.BeginForm("ApproveRequest", "User", FormMethod.Post, new { @id = "ApproveOrRejectNonEmp" }))
+{
+    <div id="userMasterESSPDelete" class="slider-forms slider-forms-open approveSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('approveSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>User</h4>
+            @Html.HiddenFor(m => m.LogGI)
+            @Html.HiddenFor(m => m.UserType)
+            @Html.HiddenFor(m => m.Mode)
+            @Html.HiddenFor(m => m.UserMasterGI)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">User ID</label>
+                        <div class="view-details">@Model.Name</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Employee Name</label>
+                        <div class="view-details">@Model.EmployeeName</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Mobile</label>
+                        <div class="view-details">@Model.Mobile </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Email</label>
+                        <div class="view-details">
+                            @Model.Email
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Active From</label>
+                        <div class="view-details">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ActiveFrom))
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Active To</label>
+                        <div class="view-details">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ActiveTo))
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Active</label>
+                        @if (@Model.Active)
+                        {
+
+                            <div class="view-details">
+                                <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="view-details">
+                                <button type="button" class="btn btn-icon btn-close"><i class="icon-xl fas fa-times"></i></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">Type</label>
+                        <div class="view-details">
+                            @Model.UserType
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            @if (Model.UserType != "Essp")
+            {
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+                        <label class="view-title">User Role</label>
+                        <div class="view-details">
+                            @Model.UserRole.Name
+                        </div>
+                    </div>
+                 
+                    <div class="col-md-6">
+                        <label class="view-title">Is Admin</label>
+                        <div class="view-details">
+                            <button type="button" class="btn btn-icon btn-tick"><i class="icon-xl fas fa-check"></i></button>
+                        </div>
+                    </div>
+                   
+                </div>
+            }
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+                        <label class="view-title">Remarks</label>
+                        <div class="view-details">
+                            @Model.Remarks
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+
+                        <button type="button" class="btn btn-danger  mobile-full-width" onclick="confirmReject()">
+                            Reject
+                        </button>
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="confirmApprove()">
+                            Approve
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+    </div>
+}

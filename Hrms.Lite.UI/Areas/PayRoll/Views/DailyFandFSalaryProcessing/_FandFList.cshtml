@@ -1,0 +1,88 @@
+﻿@model Hrms.Lite.Shared.PayRoll.DailyFandFSalaryProcessing
+
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "DailyFandFSPSave" }))
+{
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table esi-settings-list">
+        @Html.HiddenFor(m => m.DailyFandFSalaryProcessingList.Count)
+        <table id="FandFListTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">DOJ</th>
+                    <th scope="col">Res.Date</th>
+                    <th scope="col">LWD</th>
+                    <th scope="col">
+                        <div class="checkbox-inline selectAllChkBx" style=" text-align:center;justify-content:center;padding-left:23px; }">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                <input data-val="true" value="true" id="SelectAll" name="SelectAll" type="checkbox" onchange="onSelectAllClick()">
+                                <span cursorshover="true"></span>
+                            </label>
+                            <label class="checkbox checkbox-outline checkbox-success"></label>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.DailyFandFSalaryProcessingList != null && Model.DailyFandFSalaryProcessingList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.DailyFandFSalaryProcessingList.Count; i++)
+
+                        {
+                            <tr>
+
+                                <td>
+
+                                    @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.EmployeeId
+                                    @Html.HiddenFor(model => model.DailyFandFSalaryProcessingList[i].EmployeeHeader.EmployeeCode)
+
+                                </td>
+                                <td>
+                                    @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.EmployeeName
+                                </td>
+                                <td>
+                                    @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.Designation.Name
+                                </td>
+                                <td>
+                                    @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.Department.Name
+                                </td>
+                                <td>
+                                    @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.Location.Name
+                                </td>
+                                <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.DailyFandFSalaryProcessingList[i].EmployeeHeader.DOJ))</td>
+                                <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.DailyFandFSalaryProcessingList[i].ResignationDate))</td>
+                                <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.DailyFandFSalaryProcessingList[i].LWD))</td>
+                                <td data-label="Appicability">
+                                    <div class="checkbox-inline d-flex justify-content-center">
+                                        <label class="checkbox checkbox-outline checkbox-success">
+                                            @Html.CheckBoxFor(model => model.DailyFandFSalaryProcessingList[i].Applicability)
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+
+
+
+
+
+    </div>
+}
+
+
+
+

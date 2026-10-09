@@ -1,0 +1,193 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PersonalDetails
+@*<script>
+        //function fillAddress() {
+        //    debugger;
+        //    //if ($(this).attr('checked')) {
+        //    if ($("#Address_SameAsAddressCheck").prop('checked') == true) {
+        //        debugger;
+        //        $("#Address_PresentAddress_House").val($("#Address_PermanentAddress_House").val());
+        //        $("#PreFirstPO").val($("#ParFirstPO").val());
+        //        $("#PreFirstPS").val($("#ParFirstPS").val());
+        //    }
+        //    else {
+        //        $("#PreFirstAddr").val('');
+        //        $("#PreFirstPO").val('');
+        //        $("#PreFirstPS").val('');
+        //    }
+        //}
+    </script>*@
+
+    <script>
+        const myTimeout = setTimeout(changeFocus, 500);
+
+        function changeFocus() {
+            moveCursorToEnd('Address_PermanentAddress_House');            
+        }
+    </script>
+
+@using (Html.BeginForm(null,null, FormMethod.Post,new { @id="Address"}))
+{
+    <div class="row">
+        <div class="col-md-6 pr-7">
+            <h5>Permanent Address</h5>
+            @{
+                Model.TabIndex = "Address";
+            }
+            @Html.HiddenFor(m => m.TabIndex)
+            @Html.HiddenFor(m => m.EmployeeGI)
+            <div class="form-group">
+                <label>House Number, Building</label><span class="Mandatory">*</span>
+                @Html.TextBoxFor(m => m.Address.PermanentAddress.House, new { @class = "form-control form-control-sm", @placeholder = "House Number, Building", @maxlength = 120, @onblur = "validate(this,'house')" })
+                <span id="house"></span>
+            </div>
+            <div class="form-group">
+                <label>Street, Area</label><span class="Mandatory">*</span>
+                @Html.TextBoxFor(m => m.Address.PermanentAddress.Street, new { @class = "form-control form-control-sm", @placeholder = "Street, Area", @maxlength = 120, @onblur = "validate(this,'street')" })
+                <span id="street"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Locality, City</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.Address.PermanentAddress.City, new { @class = "form-control form-control-sm", @placeholder = "Locality, City", @maxlength = 120, @onblur = "validate(this,'city')" })
+                        <span id="city"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Pin Code</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.Address.PermanentAddress.PinCode, new { @class = "form-control form-control-sm", @placeholder = "Pin Code", @maxlength = 6, @onblur = "validatePin(this,'pin')", @onkeypress = "return onlyNumberKey(event)" })
+                        <span id="pin"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Country</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Address.PermanentAddress.Country.Code, (SelectList)ViewBag.Cou, "--Select Country--", new { @class = "form-control form-control-sm", @onchange = "onCountryChangepd(this,'country')" })
+                        <span id="country"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>State</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Address.PermanentAddress.State.Code, (SelectList)ViewBag.St, "--Select State--", new { @class = "form-control form-control-sm", @onchange = "onStateChangepd(this,'state')" })
+                        <span id="state"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>District</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Address.PermanentAddress.District.Code, (SelectList)ViewBag.Dist, "--Select District--", new { @class = "form-control form-control-sm", @onchange = "onDistrictChangepd(this,'district')" })
+                        <span id="district" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="col-md-6 pl-7">
+            <div class="checkbox-inline">
+                <h5>Present Address</h5>
+                <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted ml-20">
+                    @Html.CheckBoxFor(m => m.Address.SameAsAddressCheck, new { @onclick = "fillAddress()" })
+                    <span></span>Same as Permanent Address
+                </label>
+
+
+            </div>
+
+            <div class="form-group">
+                <label>House Number, Building</label><span class="Mandatory">*</span>
+                @Html.TextBoxFor(m => m.Address.PresentAddress.House, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "House Number, Building", @onblur = "validate(this,'prhouse')" })
+                <span id="prhouse"></span>
+            </div>
+            <div class="form-group">
+                <label>Street, Area</label><span class="Mandatory">*</span>
+                @Html.TextBoxFor(m => m.Address.PresentAddress.Street, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Street, Area", @onblur = "validate(this,'prstreet')" })
+                <span id="prstreet" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Locality, City</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.Address.PresentAddress.City, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "Locality, City", @onblur = "validate(this,'prcity')" })
+                        <span id="prcity"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Pin Code</label><span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.Address.PresentAddress.PinCode, new { @class = "form-control form-control-sm", @maxlength = 6, @placeholder = "Pin Code", @onblur = "validatePincode(this,'prpin')", @onkeypress = "return onlyNumberKey(event)" })
+                        <span id="prpin" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Country</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Address.PresentAddress.Country.Code, (SelectList)ViewBag.Cou, "--Select Country--", new { @class = "form-control form-control-sm", @onchange = "onCountryChangepresentpd(this,'prcountry')" })
+                        <span id="prcountry" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>State</label>
+                        @Html.DropDownListFor(m => m.Address.PresentAddress.State.Code, (SelectList)ViewBag.PrSt, "--Select State--", new { @class = "form-control form-control-sm", @onchange = "onStateChangepresentpd(this,'prstate')" })
+                        <span id="prstate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>District</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.Address.PresentAddress.District.Code, (SelectList)ViewBag.PrDist, "--Select District--", new { @class = "form-control form-control-sm", @onchange = "onDistrictChangepresentpd(this,'prdistrict')" })
+                        <span id="prdistrict" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+    <div class="row">
+
+        <div id="addrFooter" class="col-md-6">
+            @if (Model.AddressApprovalPending == false)
+            {
+               
+                <label class="new_approval_pend_btn">
+                    Approval Pending
+                </label>
+            }
+
+
+        </div>
+
+        <div class="col-md-6">
+            <button type="button" onclick="validateAllAddress()"
+                    class="btn btn-default float-right">
+                Save
+            </button>
+
+
+        </div>
+
+
+    </div>
+}

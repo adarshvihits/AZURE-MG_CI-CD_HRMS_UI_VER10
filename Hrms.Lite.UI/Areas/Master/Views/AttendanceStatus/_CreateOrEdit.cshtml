@@ -1,0 +1,288 @@
+﻿
+@model Hrms.Lite.Shared.Master.AttendanceStatus
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+
+<script src="~/js/tooltip.js"></script>
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/custom.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('Name');
+
+
+
+        if (@Model.Mode= "MODIFY")
+        {
+            var fontHEX = '@Model.ForeColor';
+            var fontcolor = colours[fontHEX];
+            $("#FontColorI").addClass('color-code ' + fontcolor);
+            $("#FontColorSpan").html(fontcolor);
+
+        }
+
+
+    // SELECT COLOR CODE START
+        $('.slider-color-list-two').click(function () {
+            debugger
+            var bg = $(this).attr('data-ticket');
+
+            $("#ForeColor").val(bg);
+        });
+
+        });
+
+</script>
+
+@using (Html.BeginForm("Save", "AttendanceStatus", FormMethod.Post, new { id = "AttendanceStatus-Save" }))
+{
+
+
+
+    <div id="addattendancestatus" class="slider-forms slider-forms-open AddNewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Attendance Status
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm AtName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'districtName')", maxlength = "120" })
+                            <span id="AttName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Short Name</label>
+                            <span class="Mandatory">*</span>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm AtShortName", @placeholder = "ShortName", @onblur = "validate(this,'AttShtName')", maxlength = "5" })
+                            <span id="AttShtName"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row my-2">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <span class="Mandatory">*</span>
+
+                            @Html.DropDownListFor(Model => Model.AttendanceStatusType.Code, (SelectList)ViewBag.AttendanceStatusType, " Select Type ", new { @class = "form-control form-control-sm AType", @onblur = "validate(this,'AttType')" })
+                            <span id="AttType"></span>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="news">Font Color</label>
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <div class="slider-color-selecter-two">
+                                    <div class="slider-color-pick-two"><i id="FontColorI"></i><span id="FontColorSpan">Select Color</span> </div>
+
+
+                                    <div class="slider-color-box-two">
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Red" data-ticket="#ff0000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Green" data-ticket="#3d8701"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Blue" data-ticket="#0000ff"></div>
+                                        </div>
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Black" data-ticket="#000000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Orange" data-ticket="#FFA500"></div>
+                                        </div>
+                                        @*<div class="color-selecter-outer">
+                        <div class="slider-color-list-two Gray" data-ticket="#808080"></div>
+                    </div>*@
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Purple" data-ticket="#800080"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Magenta" data-ticket="#FF00FF"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Maroom" data-ticket="#800000"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Cyan" data-ticket="#00FFFF"></div>
+                                        </div>
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Coffee" data-ticket="#6F4E37"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Bronze" data-ticket="#CD7F32"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Raspberry" data-ticket="#E30B5D"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Deep-Purple" data-ticket="#36013F"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Medium-Teal" data-ticket="#045F5F"></div>
+                                        </div>
+
+
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Eggplant" data-ticket="#614051"></div>
+                                        </div>
+                                        <div class="color-selecter-outer">
+                                            <div class="slider-color-list-two Black-Bean" data-ticket="#3D0C02"></div>
+                                        </div>
+                                        @*<div class="color-selecter-outer">
+                        <div class="slider-color-list-two Midnight" data-ticket="#2B1B17"></div>
+                    </div>*@
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="slider-color-selecter-two" >
+                                    <div class="slider-color-pick-two" style="background-color: #F3F6F9 !important"><i id="FontColorI"></i><span id="FontColorSpan">Select Color</span> </div>
+
+
+                                   
+                                </div>
+
+                            }
+
+                            @Html.HiddenFor(m => m.ForeColor, new { @class = "ShiftFontColorName", @onblur = "validate(this,'AttType')" })
+
+                        </div>
+                        <span id="Color"></span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-2 mt-5 ">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" onchange="ActiveInactiveValidationAttendance('ATTENDANCE STATUS', '@Model.Code')">
+                                @Html.HiddenFor(m=>Model.Code)
+                                @Html.CheckBoxFor(model => model.Active,new { @id="activeinactiveAtt"})
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        <div class="view-details">
+
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm ADescription", @placeholder = "Description" })
+                                <span id="AttDescription"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(model => Model.Description)
+                                    @Html.DisplayFor(Model => Model.Description)
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                @*<div class="row my-3">
+
+                        <div class="col-md-12">
+                            <label>Description</label>
+
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm SDescription", @placeholder = "Description" , maxlength = "250"})
+                                <span id="AttDescription"></span>
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                <div class="view-details">
+                                    @Html.HiddenFor(model => Model.Description)
+                                    @Html.DisplayFor(Model => Model.Description)
+
+                                </div>
+                            }
+                        </div>
+                    </div>*@
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveAttendanceStatus('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveAttendanceStatus('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,779 @@
+﻿
+@model IEnumerable<Hrms.Lite.Shared.MIS.GetHistoricalJoiningCountMonthList>
+@using Kendo.Mvc.UI
+
+<script>
+    function sortData(e) {
+
+        var chart = $("#histJoinersMonth").data("kendoChart");
+
+        var axis = e.sender.options.categoryAxis;
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+
+
+        if (axis.categories != undefined) {
+
+            //sort Categories by months array
+            axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+        }
+
+        //var axis = e.sender.options.categoryAxis;
+        //console.log(axis);
+        //  axis.categories = axis.categories.sort();
+    }
+</script>
+    <div class="demo-section wide">
+        @(Html.Kendo().Chart(Model)
+            .Name("chart1new")
+            .Legend(legend => legend
+                .Position(ChartLegendPosition.Bottom)
+
+            )
+            .Events(e => e.DataBound("sortData"))
+            //.SeriesDefaults(seriesDefaults => seriesDefaults
+            //    .Line()
+            //    .Stack(true)
+            //    .MissingValues(ChartSeriesMissingValues.Gap)
+            //)
+            .Series(series =>
+            {
+
+                series.Line(model => model.empCount).Name("").CategoryField("month").Width(5);
+
+            })
+
+            .DataSource(ds => ds.Read(read => read.Action("GetHistoricalJoiningCountMonth", "MISDashBoard").Data("getGroupCompany"))
+                .Group(g => g.Add(a => a.year)))
+                 .CategoryAxis(axis => axis
+
+                    .MajorGridLines(lines => lines.Visible(false))
+                    .Line(line => line.Visible(false))
+
+                    )
+                    .Panes(panes => panes.Add().Clip(false))
+                    .ValueAxis(axis => axis
+                        .Numeric().MajorUnit(100)
+                        .Line(line => line.Visible(false))
+                    )
+            //.HtmlAttributes(new { style = "height:100%;width:100%;" })
+            .ChartArea(area => area.Height(300).Width(750))
+            .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Template("#= series.name #: #= value #")
+            )
+
+        )
+    </div>
+
+@*@model IEnumerable<Hrms.Lite.Shared.MIS.GetHistoricalJoiningCountMonthList>
+@using Kendo.Mvc.UI*@
+
+
+@*<div class="demo-section wide">
+            @(
+                                        Html.Kendo().Chart(Model)
+
+                                               .Name("histJoinersMonth")
+                                               //.Events(e => e.PlotAreaHover("onSeriesJoinsAllHover")
+                                               //        .PlotAreaClick("onSeriesJoinsAllClick"))
+                                               .Title("")
+                                               .Legend(legend => legend
+                                                   .Position(ChartLegendPosition.Bottom)
+
+                                               )
+
+                                               //.Events(e => e.DataBound("sortData"))
+                                               .Series(series =>
+                                               {
+
+                                                   series.Line(model => model.empCount).Name("AAAA").CategoryField("month").Width(5);
+                                               })
+                                                                               .SeriesColors("\\#00215E", "\\#FC4100", "\\#FFC436", "\\#41B06E")
+                                                   //         .DataSource(ds => ds.Read(read => read.Action("GetHistoricalJoiningCountMonth", "MISDashBoard").Data("getGroupCompany"))
+                                                   //.Group(g => g.Add(a => a.year)
+                                                   //)
+                                                   //)
+
+                                                   .CategoryAxis(axis => axis
+                                                   .Categories(model =>model.year)
+
+                                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                                   .Line(line => line.Visible(false))
+
+                                                                                   )
+                                               .Panes(panes => panes.Add().Clip(false))
+                                               .ValueAxis(axis => axis
+                                                   .Numeric()
+                                                   .Line(line => line.Visible(false))
+                                               )
+                                                     .HtmlAttributes(new { style = "height:100%;width:100%;" })
+                                               .Tooltip(tooltip => tooltip
+                                                   .Visible(true)
+                                                           .Template("\\#= series.name \\#: \\#= value \\#")
+                                               ).ToClientTemplate()
+                    )
+
+        </div>*@
+    @*@model IEnumerable<Hrms.Lite.Shared.MIS.GetHistoricalJoiningCountMonthList>
+    @using Kendo.Mvc.UI
+
+
+
+    <style>
+        .k-tilelayout-item-header .k-card-title {
+            font-size: 1rem;
+        }
+
+        .k-card-header {
+            flex: 0 0 auto;
+        }
+
+        .k-card-body {
+            overflow: hidden;
+        }
+
+        #surface {
+            width: 500px;
+            height: 500px;
+        }
+    </style>*@
+
+
+    @*<script>
+                   // Create a new drawing group
+            var group = new kendo.drawing.Group();
+
+            // Create the head as a circle
+            var head = new kendo.drawing.Circle(new kendo.geometry.Circle([50, 50], 30), {
+                fill: { color: "#009bd7" }
+            });
+            group.append(head);
+
+            // Create the body as a rectangle
+            var body = new kendo.drawing.Rect(new kendo.geometry.Rect([40, 80], [20, 40]), {
+                fill: { color: "#009bd7" }
+            });
+            group.append(body);
+
+
+
+            // Create the arms as rectangles
+            var leftArm = new kendo.drawing.Rect(new kendo.geometry.Rect([30, 90], [10, 20]));
+            //group.append(leftArm);
+
+            var rightArm = new kendo.drawing.Rect(new kendo.geometry.Rect([60, 90], [10, 20]));
+            //group.append(rightArm);
+
+            // Create the legs as rectangles
+            //var leftLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([40, 120], [10, 30]));
+            var leftLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([40, 120], [10, 30]), {
+                fill: { color: "#009bd7" }
+            });
+            group.append(leftLeg);
+
+            //var rightLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([50, 120], [10, 30]));
+            //group.append(rightLeg);
+
+            var rightLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([50, 120], [10, 30]), {
+                fill: { color: "#009bd7" }
+            });
+            group.append(rightLeg);
+
+
+            // Draw the group on the surface
+            var surface = kendo.drawing.Surface.create($("#surface"));
+            surface.draw(group);
+
+        </script>*@
+
+
+
+
+
+    @*<script>
+
+
+            function sortData(e) {
+
+                var chart = $("#histJoinersMonth").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function sortTermData(e) {
+
+                var chart = $("#histTerminationsMonth").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function sortLOPData(e) {
+
+                var chart = $("#histLOPMonth").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function sortWFHData(e) {
+
+                var chart = $("#histWFHMonth").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function sortSalData(e) {
+
+                var chart = $("#hisSal").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function sortIncData(e) {
+
+                var chart = $("#hisSalInc").data("kendoChart");
+
+                var axis = e.sender.options.categoryAxis;
+
+                var months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+                if (axis.categories != undefined) {
+
+                    //sort Categories by months array
+                    axiscategories = axis.categories.sort((a, b) => months.indexOf(a) - months.indexOf(b));
+                }
+
+                //var axis = e.sender.options.categoryAxis;
+                //console.log(axis);
+                //  axis.categories = axis.categories.sort();
+            }
+
+            function columnVisual(e) {
+                var color='';
+                if(e.options.name=='Female')
+                {
+                    color = '#f5a6d3';
+                }
+                else
+                {
+                    color = '#89CFF0';
+                }
+                return createColumn(e.rect, color);
+            }
+
+            function toggleHandler(e) {
+                e.preventDefault();
+                var visual = e.visual;
+                var opacity = e.show ? 0.8 : 1;
+
+                visual.opacity(opacity);
+            }
+
+            function createLegendItem(e) {
+                var drawing = kendo.drawing;
+                var geometry = kendo.geometry;
+                var labelColor = '';
+                var color = '';
+                if (e.series.name=='Female')
+                {
+                    color = '#f5a6d3';
+                }
+                else if (e.series.name == 'Male')
+                {
+                    color = '#89CFF0';
+                }
+                else
+                {
+                     color = e.options.markers.background;
+                }
+                labelColor = e.options.labels.color;
+               // console.log(e.options.labels.color, e.options.markers.background);
+              //  var color = e.options.markers.background;
+
+                var rect = new geometry.Rect([0, 0], [120, 50]);
+                var layout = new drawing.Layout(rect, {
+                    spacing: 5,
+                    alignItems: "center"
+                });
+
+                var overlay = drawing.Path.fromRect(rect, {
+                    fill: {
+                        color: "#fff",
+                        opacity: 0
+                    },
+                    stroke: {
+                        color: "none"
+                    },
+                    cursor: "pointer"
+                });
+
+                var column = createColumn(new geometry.Rect([0, 0], [15, 10]), color);
+                var label = new drawing.Text(e.series.name, [0, 0], {
+                    fill: {
+                        color: labelColor
+                    }
+                })
+
+                layout.append(column, label);
+                layout.reflow();
+
+                var group = new drawing.Group().append(layout, overlay);
+
+                return group;
+            }
+
+            function createColumn(rect, color) {
+
+                var drawing = kendo.drawing;
+                var geometry = kendo.geometry;
+
+                var origin = rect.origin;
+                var center = rect.center();
+                var bottomRight = rect.bottomRight();
+                var radiusX = rect.width() / 2;
+                var radiusY = radiusX / 3;
+                var gradient = new drawing.LinearGradient({
+                    stops: [{
+                        offset: 0,
+                        color: color
+                    }, {
+                        offset: 0.5,
+                        color: color,
+                        opacity: 0.9
+                    }, {
+                        offset: 0.5,
+                        color: color,
+                        opacity: 0.9
+                    }, {
+                        offset: 1,
+                        color: color
+                    }]
+                });
+
+                var path = new drawing.Path({
+                    fill: gradient,
+                    stroke: {
+                        color: "none"
+                    }
+                }).moveTo(origin.x, origin.y)
+                    .lineTo(origin.x, bottomRight.y)
+                    .arc(180, 0, radiusX, radiusY, true)
+                    .lineTo(bottomRight.x, origin.y)
+                    .arc(0, 180, radiusX, radiusY);
+
+                var topArcGeometry = new geometry.Arc([center.x, origin.y], {
+                    startAngle: 0,
+                    endAngle: 360,
+                    radiusX: radiusX,
+                    radiusY: radiusY
+                });
+
+                var topArc = new drawing.Arc(topArcGeometry, {
+                    fill: {
+                        color: color
+                    },
+                    stroke: {
+                        color: "#ebebeb"
+                    }
+                });
+                var group = new drawing.Group();
+                group.append(path, topArc);
+
+                return group;
+            }
+
+            function onSeriesJoinsHover(e) {
+                $("#histJoins").css("cursor", "pointer");
+            }
+            function onSeriesJoinsClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'NEWHIRES', age: e.dataItem.year },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=NEWHIRES&name=NewHires-' + e.dataItem.year + ' &age=' + e.dataItem.year;
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesSepHover(e) {
+                $("#histTerminations").css("cursor", "pointer");
+            }
+            function onSeriesSepClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'Seperations', age: e.dataItem.year },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=Seperations&name=Seperations-' + e.dataItem.year + '&age=' + e.dataItem.year;
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesSepHover(e) {
+                $("#histTerminations").css("cursor", "pointer");
+            }
+            function onSeriesSepClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'Seperations', age: e.dataItem.year },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=Seperations&name=Seperations-' + e.dataItem.year + '&age=' + e.dataItem.year;
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesBHHover(e) {
+                $("#histBadHires").css("cursor", "pointer");
+            }
+            function onSeriesBHClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'Bad Hires', age: e.dataItem.year },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=Bad Hires&name=BadHires-' + e.dataItem.year + '&age=' + e.dataItem.year;
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesJoinsAllHover(e) {
+                $("#histJoinersMonth").css("cursor", "pointer");
+            }
+            function onSeriesJoinsAllClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'New Hires All', age:0 },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=New Hires All&name=NewHires&age=0';
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesSepAllHover(e) {
+                $("#histTerminationsMonth").css("cursor", "pointer");
+            }
+            function onSeriesSepAllClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'Seperations All', age: 0 },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=Seperations All&name=Seperations&age=0';
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesWFHAllHover(e) {
+                $("#histWFHMonth").css("cursor", "pointer");
+            }
+            function onSeriesWFHAllClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'WFH', age: 0 },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=WFH&name=WFH&age=0';
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+            function onSeriesLOPAllHover(e) {
+                $("#histLOPMonth").css("cursor", "pointer");
+            }
+            function onSeriesLOPAllClick(e) {
+                var groupCom = $("#GroupCompanyCode").val();
+                $.ajax({
+
+                    type: 'GET',
+                    url: '/MIS/MISDashBoard/ReloadDiv',
+                    dataType: 'html',
+                    data: { id: 59, type: 'LOP', age: 0 },
+
+                    success: function (result) {
+
+                        console.log(e);
+                        window.location.href = '/MIS/MISDashBoard?id=59&groupCom=' + groupCom + '&type=LOP&name=LOP&age=0';
+
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        debugger
+                        document.body.id = "kt_body";
+                        $('body').html(xhr.responseText);
+
+
+                    }
+                });
+
+            }
+
+        </script>*@
+
+
+    @*<div class="demo-section wide">
+            @(
+                                        Html.Kendo().Chart(Model)
+
+                                               .Name("histJoinersMonth")
+                                               //.Events(e => e.PlotAreaHover("onSeriesJoinsAllHover")
+                                               //        .PlotAreaClick("onSeriesJoinsAllClick"))
+                                               .Title("")
+                                               .Legend(legend => legend
+                                                   .Position(ChartLegendPosition.Bottom)
+
+                                               )
+
+                                               //.Events(e => e.DataBound("sortData"))
+                                               .Series(series =>
+                                               {
+
+                                                   series.Line(model => model.empCount).Name("AAAA").CategoryField("month").Width(5);
+                                               })
+                                                                               .SeriesColors("\\#00215E", "\\#FC4100", "\\#FFC436", "\\#41B06E")
+                                                   //         .DataSource(ds => ds.Read(read => read.Action("GetHistoricalJoiningCountMonth", "MISDashBoard").Data("getGroupCompany"))
+                                                   //.Group(g => g.Add(a => a.year)
+                                                   //)
+                                                   //)
+
+                                                   .CategoryAxis(axis => axis
+                                                   .Categories(model =>model.year)
+
+                                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                                   .Line(line => line.Visible(false))
+
+                                                                                   )
+                                               .Panes(panes => panes.Add().Clip(false))
+                                               .ValueAxis(axis => axis
+                                                   .Numeric()
+                                                   .Line(line => line.Visible(false))
+                                               )
+                                                     .HtmlAttributes(new { style = "height:100%;width:100%;" })
+                                               .Tooltip(tooltip => tooltip
+                                                   .Visible(true)
+                                                           .Template("\\#= series.name \\#: \\#= value \\#")
+                                               ).ToClientTemplate()
+                    )
+
+        </div>*@
+    @*<div class="demo-section wide">
+            @(Html.Kendo().Chart(Model)
+                .Name("chart")
+                .Title("Olympic Medals won by USA")
+                .Legend(legend => legend
+                    .Visible(false)
+                )
+                .SeriesDefaults(seriesDefaults => seriesDefaults
+                    .Line()
+                    .Stack(true)
+                    .MissingValues(ChartSeriesMissingValues.Gap)
+                )
+                .Series(series =>
+                {
+                    series.Line(model => model.empCount).Name("AAAA").CategoryField("month").Width(5);
+                    //series.Line(new double?[] { 19, 25, 21, 26, 28, 31, 35, null, 60, 31, 34, 32, 24, 40, 38, 29 }).Name("Silver Medals").Color("#b8b8b8");
+                    //series.Line(new double?[] { 17, 17, 16, 28, 34, 30, 25, null, 30, 27, 37, 25, 33, 26, 36, 29 }).Name("Bronze Medals").Color("#bb6e36");
+                })
+                .CategoryAxis(axis => axis
+                    .Categories("1952", "1956", "1960", "1964", "1968", "1972", "1976", "1980", "1984", "1988", "1992", "1996", "2000", "2004", "2008", "2012")
+                    .MajorGridLines(lines => lines.Visible(false))
+                )
+                .ValueAxis(axis => axis
+                    .Numeric()
+                    .Max(180)
+                    .Line(line => line.Visible(false))
+                    .MinorGridLines(lines => lines.Visible(true))
+                )
+                .Tooltip(tooltip => tooltip
+                    .Visible(true)
+                    .Template("#= series.name #: #= value #")
+                )
+            )
+        </div>*@

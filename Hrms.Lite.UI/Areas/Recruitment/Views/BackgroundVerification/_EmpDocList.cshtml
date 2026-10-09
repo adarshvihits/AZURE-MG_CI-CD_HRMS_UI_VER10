@@ -1,0 +1,105 @@
+﻿@model Hrms.Lite.Shared.Recruitment.BackgroundVerification
+<style>
+    .btn.btn-danger {
+        border-radius: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+</style>
+<div class="row my-2">
+    <div class="col-md-12">
+        <div class="">
+            <h4>Document Details</h4>
+        </div>
+        <div class="ihits-table table-border mobile-responsive-table my-4 documents_details_list">
+            @Html.HiddenFor(m => m.EmployeeDocumentList.Count)
+            <table id="AllowanceTable">
+                <thead>
+                    <tr class="table-gray">
+                        <th scope="col">
+                            Document Name
+                        </th>
+                        <th scope="col">
+                            View
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.EmployeeDocumentList != null && Model.EmployeeDocumentList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.EmployeeDocumentList.Count; i++)
+                        {
+                            <tr>
+
+                                <td data-label="Document">@Model.EmployeeDocumentList[i].DocumentName</td>
+                                <td data-label=""><a data-bs-toggle="tooltip" title="" data-bs-original-title="View" type="button" class="btn btn-icon btn-view btn-big" onclick="showDocument('@Model.EmployeeDocumentList[i].FileName', '@Model.EmployeeDocumentList[i].AbsoluteUri')"><i class="icon-xl far fa-eye"></i></a></td>
+
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="row my-2">
+         
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="view-title">Document Details Remarks</label>
+                    <div class="view-details">
+                        @{
+                            Model.Mode = "Document";
+                        }
+                        @Html.HiddenFor(m => m.Mode)
+                        @Html.HiddenFor(m => m.PreEnrollGI)
+                        @Html.HiddenFor(m => m.DocumentDetailsStatus)
+                        @Html.TextAreaFor(m => m.DocumentDetailsStatusReason, new { @class = "form-control form-control-sm", @onblur= "validate(this,'DocumentDetails')" })
+                        <span id="DocumentDetails"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.DocumentDetailsStatus == 1)
+                {
+                    <span class="verified_btn">Verified</span>
+                }
+                else if (Model.DocumentDetailsStatus == 2)
+                {
+                    <span class="reject_btn">Rejected</span>
+                }
+            </div>
+
+            <div class="col-md-6 align-right d-flex justify-content-end">
+                @if (Model.EmployeeDocumentList != null && Model.EmployeeDocumentList.Count > 0)
+                {
+                    <div class="d-flex align-items-center  vr_btn" onclick="onDocumentDetailsSave('Reject')">
+                        <a data-bs-toggle="tooltip" data-bs-original-title="Reject" class="btn_reject mr-2"  cursorshover="true">
+                        </a>  Reject
+                    </div>
+                    <div class="d-flex align-items-center  vr_btn" onclick="onDocumentDetailsSave('Verify')">
+                        <a data-bs-toggle="tooltip" data-bs-original-title="Verify" class="btn_approve mr-2"  cursorshover="true">
+                        </a>
+                        Verify
+                    </div>
+                    @*<button type="button" class="btn btn-danger mobile-full-width mr-2" onclick="onDocumentDetailsSave('Reject')">
+                        Reject
+                    </button>
+                    <button type="button" class="btn btn-default mobile-full-width" onclick="onDocumentDetailsSave('Verify')">
+                        Verify
+                    </button>*@
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>

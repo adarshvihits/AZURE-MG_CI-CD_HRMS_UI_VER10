@@ -1,0 +1,97 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentPendCount").html(@Model.PreenrollmentPendingCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+            $(".OverDueCount").html(@Model.OverDueCount);
+            $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+             $(".documentsCount").html(@Model.JoiningConfCount);
+
+        });
+
+    </script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table onboarding_all">
+    <table id="OnboardingList" class="common-table">
+        @Html.HiddenFor(m => m.OnBoardingList.Count)
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl:No</th>
+                <th scope="col">Applicant ID</th>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Due days</th>
+                <th scope="col" data-bs-toggle="tooltip" data-placement="right" title="Expected DOJ">E:DOJ</th>
+                <th scope="col">Checklist</th>
+                <th scope="col">Pending Status</th>
+                @*<th scope="col" align="center"></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+            {
+                for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                {
+            <tr>
+
+                <td data-label="SL:NO">@(i + 1)</td>
+                <td data-label="Applicant ID">@Model.OnBoardingList[i].ApplicantID</td>
+                <td data-label="Candidate Name">@Model.OnBoardingList[i].CandidateName</td>
+                <td data-label="Fun.Designation"> @Model.OnBoardingList[i].Designation.Name</td>
+                <td data-label="Department"> @Model.OnBoardingList[i].Department.Name</td>
+                <td data-label="Location"> @Model.OnBoardingList[i].Location.Name</td>
+                <td data-label="Due Days"> @Model.OnBoardingList[i].DueDays</td>
+                <td data-label="E:DOJ"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OnBoardingList[i].ExpectedDOJ))</td>
+                @*<td data-label="Checklist">@Html.ActionLink(@Model.OnBoardingList[i].CheckList, "GetCheckList", "OnBoarding", new { PreEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)</td>*@
+                <td data-label="Checklist">@Model.OnBoardingList[i].CheckList</td>
+                <td data-label="Pending Status">
+                    @Model.OnBoardingList[i].PendingStatus
+
+                </td>
+                @*@if (@Model.OnBoardingList[i].PendingStatus == "Joining Confirmation")
+        {
+            <td data-label="Pending Status">
+                <span class="status-pending-label">
+                    @Html.ActionLink(@Model.OnBoardingList[i].PendingStatus, "Create", "JoiningConfirmation", new { EnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)
+                </span>
+            </td>
+        }
+        else if (@Model.OnBoardingList[i].PendingStatus == "Enroll")
+        {
+            <td data-label="Pending Status">
+                <span class="status-pending-label">
+                    @Html.ActionLink(@Model.OnBoardingList[i].PendingStatus, "Create", "EnrollmentTest", new { EnrollGI = @Model.OnBoardingList[i].PreEnrollGI, Breadcrumb = "OnBoarding", BreadcrumbName = "OnBoarding List" }, null)
+                </span>
+            </td>
+        }
+        else if (@Model.OnBoardingList[i].PendingStatus == "Preenrollment Approval")
+        {
+            <td data-label="Pending Status">
+                <span class="status-pending-label">
+                    @Html.ActionLink(@Model.OnBoardingList[i].PendingStatus, "GetPreEnrollmentApproval", "OnBoarding", new { preEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)
+                </span>
+            </td>
+        }
+        else
+        {
+            <td data-label="Pending Status">
+                @Html.ActionLink(@Model.OnBoardingList[i].PendingStatus, "Index", "OnBoarding", null)
+
+            </td>
+        }*@
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

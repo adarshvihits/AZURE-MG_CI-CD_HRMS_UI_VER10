@@ -1,0 +1,663 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "ChapterVIA" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="accoding-new-color-change"> 4.80CCC</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="chapterVIA">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col"></th>
+                            <th scope="col">Current Amount</th>
+                            @*<th scope="col">Limit</th>
+        <th scope="col">Eligible Amount</th>*@
+                            <th scope="col"></th>
+        <th scope="col"></th>
+
+                        </tr>
+                    </thead>
+                    <tr class="even">
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @Html.HiddenFor(m => m.ChapterVIADetails.TrnCode)
+
+
+                        <td data-label="PPS">4.1. Payment to pension schemes</td>
+                        <td data-label="PPSAmount">@Html.TextBoxFor(m => m.ChapterVIADetails.PPSAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "PPSChange()" })</td>
+                        @*<td data-label="PPSLimit">@Html.TextBoxFor(m => m.ChapterVIADetails.PPSAmtLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>
+        <td data-label="PPSEAmount">@Html.TextBoxFor(m => m.ChapterVIADetails.PPSEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>*@
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+                    <tbody>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="accoding-new-color-change">5. 80CCD - 1B</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="NPS">5.1. National Pension Scheme(NPS) [Tier 1]</td>
+                        <td data-label="NPSAmt">@Html.TextBoxFor(m => m.ChapterVIADetails.NPSAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "NPSChange()" })</td>
+                        @*<td data-label="NPSAmtLmt">@Html.TextBoxFor(m => m.ChapterVIADetails.NPSAmtLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>
+        <td data-label="NPSEAmt">@Html.TextBoxFor(m => m.ChapterVIADetails.NPSEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>*@
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+                    <tbody>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+            <div class="accoding-new-color-change">6. 80D (Cash Payment only for Preventive Health Checkup)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="label3">6.1. Medical Insurance Premium paid other than by Cash (Self & Dependent)</td>
+                        <td data-label="DMediInsurSelf">@Html.TextBoxFor(m => m.ChapterVIADetails.MedInsurAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                    <tbody>
+                    </tbody>
+                    <tr class="even">
+
+                        <td data-label="label4">6.2. Medical Insurance Premium paid other than by Cash for Parents.</td>
+                        <td data-label="DMediInsurParents">@Html.TextBoxFor(m => m.ChapterVIADetails.MedInsurParentAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr class="even">
+
+                        <td data-label="SrCtizn">6.3. Whether Father or Mother is senior citizen(Age>=60)-(YES/NO)</td>
+                        <td data-label="IsParentsSrCitizen">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.IsParentsSrCitizen.Code, (SelectList)ViewBag.YesorNo, "--Select--", new { @class = "form-control form-control-sm", @onchange = "" })
+                        </td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr class="even">
+
+                        <td data-label="MedExpen">6.4. Medical Expenditure incurred for senior citizen(Prescription from appropriate medical authority is required)(Should Not be Insured)</td>
+                        <td data-label="DExpenditureSnr">@Html.TextBoxFor(m => m.ChapterVIADetails.MedExpSrCtznAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "MedExpChange()" })</td>
+                        @*<td>@Html.TextBoxFor(m => m.ChapterVIADetails.MedExpSrCtznLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled",  @style = "text-align:right" })</td>
+            <td data-label="DExpenditureSnrEA">@Html.TextBoxFor(m => m.ChapterVIADetails.MedExpSrCtznEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>*@
+
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="PrevHChkUp">6.5. Preventive Health Checkup(Self & Dependent)</td>
+                        <td data-label="DPrevHCSelf">@Html.TextBoxFor(m => m.ChapterVIADetails.PrevHChkUp, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr class="even">
+
+                        <td data-label="PrevHChkUp">6.6. Preventive Health Checkup for Parents</td>
+                        <td data-label="DPrevHCSelf">@Html.TextBoxFor(m => m.ChapterVIADetails.PrevHChkUpParents, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                </table>
+            </div>
+
+
+
+            <div class="accoding-new-color-change">7. 80DD (Certificate in form 10IA from prescribed government medical authority is required)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="DepHandicaped">7.1. Handicaped dependent</td>
+                        <td data-label="other City Name">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.IsDepndHandicaped.Code, (SelectList)ViewBag.YesorNo, "--Select--", new { @class = "form-control form-control-sm", @onchange = "IsHandicaped()" })
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="DisabilitySevere">7.2. Nature of disability-severe</td>
+                        <td data-label="other City Name">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.DisabilitySevere.Code, (SelectList)ViewBag.Percentage, "--Select--", new { @class = "form-control form-control-sm", @disabled = "disabled", @onchange = "validate(this,'DisabilitySevere')" })
+                            <span id="DisabilitySevere" class="text-danger"></span>
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+                    <tr class="even">
+
+                        <td data-label="DependRelation">7.3. Dependent Relationship</td>
+                        <td data-label="Relation">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.DependentRelation.Code, (SelectList)ViewBag.DepRelation, "--Select--", new { @class = "form-control form-control-sm", @disabled = "disabled", @onchange = "validate(this,'DependentRelation')" })
+                            <span id="DependentRelation" class="text-danger"></span>
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+
+
+                </table>
+            </div>
+
+
+            <div class="accoding-new-color-change">8.80DDB</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="Ailments">8.1. Type of Critical Ailments</td>
+                        <td data-label="CriticalAilments">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.CriticalAilments.Code, (SelectList)ViewBag.CriticalAliments, "--Select--", new { @class = "form-control form-control-sm",  @onchange = "CriticalAilments()" })
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="Relation">8.2. Relationship</td>
+                        <td data-label="RelationShip">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.RelationShip.Code, (SelectList)ViewBag.MCRelation, "--Select--", new { @class = "form-control form-control-sm", @disabled = "disabled", @onchange = "validate(this,'RelationShip')" })
+                            <span id="RelationShip" class="text-danger"></span>
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+                    <tr class="even">
+
+                        <td data-label="Age">8.3. Patient age</td>
+
+
+                        <td data-label="DDBAge">@Html.TextBoxFor(m => m.ChapterVIADetails.PatientAge, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @onchange = "validate(this,'patientage')" })
+                        <span id="patientage" class="text-danger"></span>
+                        </td>
+                        <td data-label="Limit"></td>
+        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="Month">8.4. Expenditure incurred on medical treatment or maintenance of dependant relative</td>
+
+                        <td data-label="DDBExpenditure">@Html.TextBoxFor(m => m.ChapterVIADetails.DepndExpenditure, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right", @onchange = "validate(this,'expenditure')" })
+                        <span id="expenditure" class="text-danger"></span>
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+                </table>
+            </div>
+
+            <div class="accoding-new-color-change">9. 80E</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="Month">9.1. Payment of education loan interest(self/children) to bank(s)</td>
+
+
+                        <td data-label="EeduLoanInterest">@Html.TextBoxFor(m => m.ChapterVIADetails.EduLoanInterest, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)",@onchange= "EducationLoan()", @style = "text-align:right" })</td>
+                        @*<td data-label="Limit"></td>
+                        <td data-label="EeduLoanInterestEA">@Html.TextBoxFor(m => m.ChapterVIADetails.EduLoanInterestEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @disabled = "disabled", @style = "text-align:right" })</td>*@
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="Month">9.2. Date on which payment of education loan interest commenced</td>
+
+                        <td data-label="EduLoanDate">  @Html.TextBoxFor(m => m.ChapterVIADetails.EduLoanInterestDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr" })</td>
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+
+                    </tr>
+
+
+
+
+                </table>
+            </div>
+
+
+
+
+            <div class="accoding-new-color-change">10. Interest on new housing loan sanctioned between 1/Apr/2016 – 31/Mar/2017 (80EE)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EE">10.1 Date of availing Loan [dd-mmm-yyyy]</td>
+
+
+                        <td data-label="EEAvailLoanDate">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.HouseLoanDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", @onchange = "validate(this,'HouseLoanDate')" })
+                                                <span id="HouseLoanDate" class="text-danger"></span>
+                                            </td>
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="80EE">10.2. Loan amount</td>
+
+                        <td data-label="HouseLoanAmt">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.HouseLoanAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" , @onchange = "validate(this,'HouseLoanAmt')" })
+                                                <span id="HouseLoanAmt" class="text-danger"></span>
+                                            </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+                    <tr class="even">
+
+                        <td data-label="80EE">10.3. The value of the house</td>
+
+                        <td data-label="other City Name">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.ValueofHouse, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" , @onchange = "validate(this,'ValueofHouse')" })
+                                                <span id="ValueofHouse" class="text-danger"></span>
+                                            </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                        <td>
+
+
+
+                    </tr>
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EE">10.4.Do you have any other existing residential house in your name.</td>
+
+                        <td data-label="otherHouse">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.IsOtherHouse.Code, (SelectList)ViewBag.YesorNo, "--Select--", new { @class = "form-control form-control-sm" , @onchange = "validate(this,'IsOtherHouse')" })
+                            <span id="IsOtherHouse" class="text-danger"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="Interest">10.5. Interest paid/payable during the current FY</td>
+                        <td data-label="EEInterestPaid">@Html.TextBoxFor(m => m.ChapterVIADetails.InterestPaid, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "HouseLoan()" })</td>
+                        @*<td>@Html.TextBoxFor(m => m.ChapterVIADetails.InterestLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>
+                        <td data-label="EEInterestPaidEA">@Html.TextBoxFor(m => m.ChapterVIADetails.InterestEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>*@
+
+                    </tr>
+
+
+
+                </table>
+            </div>
+
+
+
+
+            <div class="accoding-new-color-change">11. Interest on new housing loan sanctioned between 1/Apr/2019 – 31/Mar/2022 (80EEA)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEA">11.1 Date of availing Loan [dd-mmm-yyyy]</td>
+
+
+                        <td data-label="EEAAvailLoanDate">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.EEAHouseLoanDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", @onchange = "validate(this,'EEAHouseLoanDate')" })
+                                                <span id="EEAHouseLoanDate" class="text-danger"></span>
+                                            </td>
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="80EEA">11.2. Loan amount</td>
+
+                        <td data-label="EEAHouseLoanAmt">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.EEAHouseLoanAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "validate(this,'EEAHouseLoanAmt')" })
+                                                <span id="EEAHouseLoanAmt" class="text-danger"></span>
+                                            </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+
+
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEA">11.3. The value of the house</td>
+
+                        <td data-label="other City Name">@Html.TextBoxFor(m => m.ChapterVIADetails.EEAValueofHouse, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" , @onchange = "validate(this,'EEAValueofHouse')" })
+                            <span id="EEAValueofHouse" class="text-danger"></span>
+                        </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                        <td>
+
+
+
+                    </tr>
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEA">11.4.Do you have any other existing residential house in your name.</td>
+                        <td data-label="other City Name">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.IsEEAOtherHouse.Code, (SelectList)ViewBag.YesorNo, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'IsEEAOtherHouse')" })
+                            <span id="IsEEAOtherHouse" class="text-danger"></span>
+                        </td>
+
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="80EEA">11.5. Interest paid/payable during the Year 1/april/2019-31/mar/2022</td>
+                        <td data-label="EEInterestPaid">@Html.TextBoxFor(m => m.ChapterVIADetails.EEAInterestPaid, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "EEAHouseLoan()" })</td>
+                        @*<td>@Html.TextBoxFor(m => m.ChapterVIADetails.EEAInterestLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>
+                        <td data-label="EEInterestPaidEA">@Html.TextBoxFor(m => m.ChapterVIADetails.EEAInterestEAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>*@
+
+                    </tr>
+
+
+
+                </table>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="accoding-new-color-change">12.Tax Exemption on Purchase of Electric Vehicles (80EEB)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEB">12.1 Date of purchase of eletric car [dd-mmm-yyyy]</td>
+
+
+                        <td data-label="EEBPurchaseDate">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.ECPurchaseDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", @onchange = "validate(this,'ECPurchaseDate')" })
+                            <span id="ECPurchaseDate" class="text-danger"></span>
+                        </td>
+                        
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="80EEB">12.2. Loan amount</td>
+
+                        <td data-label="other City Name">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.ECLoanAmount, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" ,@onchange = "validate(this,'ECLoanAmount')" })
+                                                <span id="ECLoanAmount" class="text-danger"></span>
+                                            </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEB">12.3.Name of finanical/non-banking financial institution which santioned the loan</td>
+
+                        <td data-label="EEBFinInstitution">
+                            @Html.TextBoxFor(m => m.ChapterVIADetails.ECBank, new { @class = "form-control form-control-sm", @maxlength = 10,@onchange = "validate(this,'ECBank')" })
+                                                <span id="ECBank" class="text-danger"></span>
+                                            </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80EEB">12.4.Interest paid/payable on purchase of electric vehicle during the current FY</td>
+
+                        <td data-label="EEBInterestPaid">@Html.TextBoxFor(m => m.ChapterVIADetails.ECInterest, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "ElectricCarLoan()" })</td>
+
+                        @*<td data-label="Limit">@Html.TextBoxFor(m => m.ChapterVIADetails.ECInterestLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td data-label="EAmount">@Html.TextBoxFor(m => m.ChapterVIADetails.ECInterestEA, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>*@
+
+                    </tr>
+
+
+
+
+
+                </table>
+            </div>
+
+
+
+            <div class="accoding-new-color-change">13. 80TTA</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+                    <tr class="even">
+
+                        <td data-label="Month">13.1. SB Account interest</td>
+                        <td data-label="other City Name">@Html.TextBoxFor(m => m.ChapterVIADetails.SBAccInterest, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right", @onchange = "SBAccountInterest()" })</td>
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                        @*<td>@Html.TextBoxFor(m => m.ChapterVIADetails.SBAccInterestLmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @disabled = "disabled", @style = "text-align:right" })</td>
+        <td data-label="EAmount">@Html.TextBoxFor(m => m.ChapterVIADetails.SBAccInterestEA, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>*@
+                    </tr>
+                    <tbody>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+
+
+
+            <div class="accoding-new-color-change">14.80U Deduction in the case of employee with disability (Certificate in form 10IA from prescribed government medical authority is required)</div>
+            <div class="ihits-table table-border mobile-responsive-table four-a-list mb-2">
+                <table id="family">
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80U">14.1. Nature of disability</td>
+
+                        <td data-label="NatureofDisability">
+
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.NatureofDisability.Code, (SelectList)ViewBag.NatureofDisability, "--Select--", new { @class = "form-control form-control-sm", @onchange = "DisabilityNature()" })
+                        </td>
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+                    <tr class="even">
+
+                        <td data-label="80U">14.2. Percentage of disability</td>
+
+                        <td data-label="PercentageofDisability">
+                            @Html.DropDownListFor(m => m.ChapterVIADetails.PercentageofDisability.Code, (SelectList)ViewBag.Percentage, "--Select--", new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                        </td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80U">15. Leave Travel (LT)</td>
+
+                        <td data-label="ULeaveTravel">@Html.TextBoxFor(m => m.ChapterVIADetails.LeaveTravelAmt, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+
+
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80U">16. Number of children for education allowance</td>
+
+                        <td data-label="UChildrenfrEduAlw">@Html.TextBoxFor(m => m.ChapterVIADetails.NoOfChildren, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)" })</td>
+
+
+
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+                    <tr class="even">
+
+                        <td data-label="80U">17.Uniform Expense</td>
+
+                        <td data-label="UUniformExpense">@Html.TextBoxFor(m => m.ChapterVIADetails.UniformExpense, new { @class = "form-control form-control-sm", @maxlength = 10, @onkeypress = "return onlyNumberKey(event)", @style = "text-align:right" })</td>
+                        <td data-label="Limit"></td>
+                        <td data-label="EAmount"></td>
+                    </tr>
+
+
+
+
+
+                </table>
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <button type="button" onclick="ChapterVIASave()"
+                                class="btn btn-default float-right">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
+
+

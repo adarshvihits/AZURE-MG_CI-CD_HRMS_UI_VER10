@@ -1,0 +1,82 @@
+@model Hrms.Lite.Shared.Recruitment.MasterInterviewPanel
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+
+    // initials for the member avatars (first letter of the first two words)
+    Func<string, string> initials = name =>
+    {
+        var parts = (name ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return string.Concat(parts.Take(2).Select(p => char.ToUpper(p[0])));
+    };
+}
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border odd-even mobile-responsive-table mp-list pt-3">
+    <table id="MasterInterviewPanelTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col" class="mp-col-code">Panel Code</th>
+                <th scope="col" class="mp-col-name">Panel Name</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Department</th>
+                <th scope="col">Section</th>
+                <th scope="col">Grade</th>
+                <th scope="col" class="mp-col-members">Members</th>
+                <th scope="col" class="mp-col-status">Status</th>
+                <th scope="col" class="mp-col-action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.PanelList != null && Model.PanelList.Count > 0)
+            {
+                foreach (var item in Model.PanelList)
+                {
+                    <tr class="mp-row" onclick="onAddOrEditMasterInterviewPanel('MODIFY', '@item.PanelGI')">
+                        <td data-label="Panel Code"><div class="cell-primary">@item.PanelID</div></td>
+                        <td data-label="Panel Name"><div class="cell-primary">@item.Name</div></td>
+                        <td data-label="Branch">@item.LocationName</td>
+                        <td data-label="Department">@item.DepartmentName</td>
+                        <td data-label="Section">@item.SectionName</td>
+                        <td data-label="Grade">@item.GradeName</td>
+                        <td data-label="Members">
+                            <div class="mp-avatar-stack">
+                                @foreach (var member in (item.MemberList ?? new List<Hrms.Lite.Shared.Recruitment.MasterInterviewPanelMember>()).Take(4))
+                                {
+                                    <div class="mp-avatar" title="@member.InterviewerName">@initials(member.InterviewerName)</div>
+                                }
+                            </div>
+                            <div class="cell-sub">@item.MemberCount member(s)</div>
+                        </td>
+                        <td data-label="Status">
+                            @if (item.Active)
+                            {
+                                <span class="pill pill-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="pill pill-neutral">Inactive</span>
+                            }
+                        </td>
+                        <td data-label="Action">
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <a data-bs-toggle="tooltip" title="Edit Panel" class="btn btn-icon btn-edit icon-only"
+                                   onclick="event.stopPropagation(); onAddOrEditMasterInterviewPanel('MODIFY', '@item.PanelGI')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a data-bs-toggle="tooltip" title="Edit Panel" class="btn btn-icon btn-edit icon-only"
+                                   onclick="event.stopPropagation(); swal.fire(MasterPersmissionMsg);">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

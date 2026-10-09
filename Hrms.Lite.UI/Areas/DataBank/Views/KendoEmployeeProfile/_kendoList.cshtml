@@ -1,0 +1,362 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeProfile
+
+<script>
+    $(document).ready(function () {
+      
+        $('.ActiveCount').html("@Model.ActiveCount");
+        $('.ResignedCount').html("@Model.ResignedCount");
+
+        $("#dataTableSearch").on("keyup search paste cut", function () {
+
+          
+
+        $('#ActiveListtable').data('kendoGrid').dataSource.read();
+
+        
+        $('#ActiveListtable').data('kendoGrid').refresh();
+
+
+            // dataTable.search(this.value).draw();
+
+        });
+
+        $('.search-slider-inner').click(function () {
+            // dataTable.search('').draw();
+            $('#ActiveListtable').data('kendoGrid').dataSource.read({ page: 1 });
+            $('#ActiveListtable').data('kendoGrid').pager.page(1);
+            $('#ActiveListtable').data('kendoGrid').refresh();
+            $('#dataTableSearch').val('');
+            $('#dataTableSearch').focus();
+        });
+       
+
+
+        });
+
+    function ApplyFilter(mode) {
+
+        if (mode == 'apply') {
+
+            if (filterApplicable >= 1) {
+
+        $('#ActiveListtable').data('kendoGrid').dataSource.read();
+
+        //refresh will re-render items in grid from the current datasource
+        $('#ActiveListtable').data('kendoGrid').refresh();
+
+        CloseSlider('basicFilter');
+            $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+              $('#ActiveListtable').data('kendoGrid').dataSource.read();
+
+        
+        $('#ActiveListtable').data('kendoGrid').refresh();
+            CloseSlider('basicFilter');
+            $('#filterForm').addClass('filter-apply');
+        }
+
+
+        }
+
+        else {
+        filterApplicable = 1;
+        $('.reset').val('');
+        $('#Optional_Filter_EmploymentStatus_Code').val(0);
+        $('#filterForm').removeClass('filter-apply');
+
+            $('#ActiveListtable').data('kendoGrid').dataSource.read();
+
+          
+            $('#ActiveListtable').data('kendoGrid').refresh();
+
+    }
+
+
+    }
+</script>
+
+
+<script>
+    $(document).on("kendoReady", function () {
+        $(".download").click(function () {
+            var grid = $("#Grid").data("kendoGrid");
+            var options = {
+                format: $(this).data("format"),
+                title: "DemoSheet"
+            }
+            $("#export-data").val(encodeURIComponent(JSON.stringify(options)));
+            $("#export-model").val(encodeURIComponent(JSON.stringify(grid.columns)));
+        });
+    });
+</script>
+
+<style>
+    .designation {
+      
+        display: block;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .description {
+        
+        display: block;
+       
+        padding-top: 12px;
+    }
+
+    .employeeID, .country {
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 50px;
+        font-weight: bold;
+        color: #898989;
+        text-align:right;
+    }
+
+
+    .names{
+        font-weight:bold !important;
+        font-size: 1em !important;
+    }
+
+    td.photo, .employeeID {
+        text-align: center;
+    }
+
+  
+
+       .k-grid-pager {
+      
+        background-color: #dbeaee;
+    }
+
+    .k-grid td {
+   /*    background: -moz-linear-gradient(top, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.05)), color-stop(100%,rgba(0,0,0,0.15)));
+        background: -webkit-linear-gradient(top, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.15) 100%);
+            background: -o-linear-gradient(top, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.15) 100%);
+                background: -ms-linear-gradient(top, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.15) 100%);*/
+            background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.15) 100%);
+        padding: 20px;
+    }
+
+    .k-grid .k-alt td {
+        background: -moz-linear-gradient(top, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.2)), color-stop(100%,rgba(0,0,0,0.1)));
+        background: -webkit-linear-gradient(top, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%);
+        background: -o-linear-gradient(top, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%);
+        background: -ms-linear-gradient(top, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%);
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.1) 100%);
+    }
+
+
+    .photo img{
+        width:110px;
+        height:110px;
+        display:flex;
+        margin:auto;
+        border-radius:50%;
+    }
+
+    .namehead{
+        padding-bottom:10px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .k-pager-numbers .k-link {
+        background: none !important;
+        border: 1px solid #EBEBFD !important;
+        border-radius: 6px !important;
+        color: #0d6efd !important;
+        margin-left: 2px;
+    }
+    .k-grid-pager {
+        background-color: #ffffff;
+    }
+    .k-pager-nav.k-link, .k-pager-refresh {
+        border-radius: 6px !important;
+    }
+</style>
+<link href="~/css/kendo/css/test.css" rel="stylesheet" />
+@*<link href="~/css/kendo/css/grid.css" rel="stylesheet" />*@
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.all.min.js"></script>
+<link href="~/css/custom.css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.aspnetmvc.min.js"></script>
+
+@*<form action="@Url.Action("ExportServer", "EmployeeProfile")" method="POST">
+    <input type="hidden" id="export-data" name="data" />
+    <input type="hidden" id="export-model" name="model" />
+    <input type="submit" class="k-button k-button-solid-primary k-button-solid k-button-md k-rounded-md download" data-format="xlsx" data-title="Title1" value="Export to XLSX" />
+    <input type="submit" class="k-button k-button-solid-primary k-button-solid k-button-md k-rounded-md download" data-format="csv" data-title="Title2" value="Export to CSV" />
+</form>*@
+
+
+@*<script>
+    $(document).ready(function () {
+        fillData();
+    });
+</script>*@
+
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+        $('.ActiveCount').html("@Model.ActiveCount");
+        $('.ResignedCount').html("@Model.ResignedCount");
+    });
+</script>*@
+<!-- Table Section -->
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table employee-profile-list">
+  
+    @Html.HiddenFor(m=>m.EmployeeProfileList.Count)
+
+
+    @using Kendo.Mvc.UI
+    @using Hrms.Lite.Shared.DataBank.Reports;
+
+    @(
+        Html.Kendo().Grid<Hrms.Lite.Shared.DataBank.DTO.EmployeeProfile_List>()
+            .Name("ActiveListtable")
+           
+            
+            .Columns(columns =>
+            {
+                columns.Template(" ").Width(240).Title("");
+                columns.Bound(EmployeeProfile => EmployeeProfile.EmployeeName).Width("340").Title("Name");
+                //.ClientTemplate("<div class='dd-flex align-items-center' ><div class='img-report'><img src=#:data.AbsoluteUrl#.></div><div class='name-post' ><div><a href='/DataBank/EmployeeProfile/GetEmployeeProfileDetails?EmployeeGI=#:data.EmployeeGI#.&Breadcrumb=EmployeeProfile&BreadcrumbName=Employee Profile List'>#:data.EmployeeName#.</a></div>#:data.Employeeid#.</div></div>");
+                columns.Bound(EmployeeProfile => EmployeeProfile.Designation).Width(400).Title("Position Profile");
+                // columns.Bound(p => p.Date);
+                @*  columns.Bound(EmployeeProfile => EmployeeProfile.Department);
+            columns.Bound(EmployeeProfile => EmployeeProfile.Location);
+            columns.Bound(EmployeeProfile => EmployeeProfile.Category);*@
+            columns.Bound(EmployeeProfile => EmployeeProfile.DOB);
+            columns.Bound(EmployeeProfile => EmployeeProfile.DOJ);
+            columns.Bound(EmployeeProfile => EmployeeProfile.YOS);
+            columns.Bound(EmployeeProfile => EmployeeProfile.GrossPay).HtmlAttributes(new { style = "text-align:right;" });;
+
+        })
+      @*  .ToolBar(tools => tools.Excel())
+        .Excel(excel => excel
+        .FileName("Kendo UI Grid ExportFGH.xlsx")
+        .Filterable(true)
+        .ProxyURL(Url.Action("Excel_Export_Save", "EmployeeProfile"))
+        )*@
+        .Height(500)
+        
+
+
+        .ClientRowTemplate(
+        "<tr data-uid='#: uid #'>" +
+        "<td class='photo'>" +
+        "<img src='" + Url.Content("#:data.AbsoluteUrl#") + "' />" +
+        "</td>" +
+       @*  "<td class='k-widget'>#: data.EmployeeName #" +
+        "</td>" +*@
+
+        "<td class='names'><div class='namehead'><a href='/DataBank/EmployeeProfile/GetEmployeeProfileDetails?EmployeeGI=#:data.EmployeeGI#&Breadcrumb=EmployeeProfile&BreadcrumbName=Employee Profile List'>#:data.EmployeeName#</a></div>#:data.Employeeid#</div></td>"
++
+        "<td class='details'>" +
+        "<span class='designation'>#: data.Designation #</span>" +
+        "<span class='description'>Department : #: data.Department#</span>" +
+        "<span class='description'>Location : #: data.Location# </span>" +
+        "<span class='description'>Category : #: data.Category# </span>" +
+        "</td>" +
+        "<td class='country'>" + "#:  kendo.toString(kendo.parseDate(data.DOB), 'dd-MMM-yyyy') #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: kendo.toString(kendo.parseDate(data.DOJ), 'dd-MMM-yyyy') #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: data.YOS #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: data.GrossPay #" +
+        "</td>" +
+        "</tr>"
+        )
+       @* .ClientAltRowTemplate(
+        "<tr class='k-alt' data-uid='#: uid #'>" +
+        "<td class='photo'>" +
+        "<img src='" + Url.Content("#:data.AbsoluteUrl#") + "'  />" +
+        "</td>" +
+        "<td class='names'><div><a href='/DataBank/EmployeeProfile/GetEmployeeProfileDetails?EmployeeGI=#:data.EmployeeGI#&Breadcrumb=EmployeeProfile&BreadcrumbName=Employee Profile List'>#:data.EmployeeName#</a></div>#:data.Employeeid#</div></td>"
++
+        "<td class='details'>" +
+        "<span class='designation'>#: data.Designation #</span>" +
+        "<span class='description'>Department : #: data.Department#</span>" +
+        "<span class='description'>Location : #: data.Location# </span>" +
+        "<span class='description'>Category : #: data.Category# </span>" +       
+        "</td>" +
+        "<td class='country'>" +
+        "#:  kendo.toString(kendo.parseDate(data.DOB), 'dd-MMM-yyyy') #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: kendo.toString(kendo.parseDate(data.DOJ), 'dd-MMM-yyyy') #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: data.YOS #" +
+        "</td>" +
+        "<td class='country'>" +
+        "#: data.GrossPay #" +
+        "</td>" +
+        "</tr>"
+        )*@
+
+
+   @* .ClientRowTemplate(@<text>
+            <div class="customer-details">
+                <img src='@Url.Content("~/Content/web/Customers/" + item.r + ".jpg")'
+                    alt='@item.' />
+                <h3 class="k-widget">@item.ContactName</h3>
+                <dl>
+                   <dt>Name:</dt><dd>@item.ContactName</dd>
+                   <dt>Company:</dt><dd>@item.CompanyName</dd>
+                   <dt>Country:</dt><dd>@item.Country</dd>
+                </dl>
+                <dl >
+                   <dt>Address:</dt><dd>@item.Address</dd>
+                   <dt>Phone:</dt><dd>@item.Phone</dd>
+                </dl>               
+            </div>
+        </text>
+    )*@
+
+    
+        
+        .Scrollable().HtmlAttributes(new { style = "height:330px;" })
+        .Pageable(pager => pager.Numeric(true).PreviousNext(true).Info(true).PageSizes(new[] { 10, 25 }).ButtonCount(5))
+        .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(true).
+        Read(read => read.Action("GetEmployeeList", "KendoEmployeeProfile").Data("employeeParam")
+        
+        )
+        )
+        )
+
+
+
+  @*  <table id="ActiveListtable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID / Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">Category</th>
+                <th scope="col" data-bs-toggle="tooltip" title="    Date Of Birth">DOB</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Date Of Join">DOJ</th>
+
+                <th data-bs-toggle="tooltip" data-bs-original-title="Years of Experience" scope="col">Y/S</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Gross Pay">GP</th>
+
+            </tr>
+
+           
+        </thead>
+
+    </table>*@
+</div>
+<!-- Table Setion End -->

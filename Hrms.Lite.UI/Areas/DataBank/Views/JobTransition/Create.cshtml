@@ -1,0 +1,205 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobTransition
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/jobTransition.js" asp-append-version="true"></script>
+<style>
+
+
+    .card.card-custom > .card-body {
+        padding: 5px 30px 75px 20px !important;
+    }
+    .datepicker.datepicker-orient-top {
+        z-index: 20 !important;
+    }
+
+    .ihits-table.table-dot table tbody tr td {
+        padding: 2px 6px !important
+    }
+
+    .ihits-table.table-dot .form-control {
+        height: 20px;
+        font-size: 12px;
+      
+    }
+
+    .tab-form .form-control {
+        height: 24px;
+    }
+    .step-circle {
+        width: 18px;
+        height: 18px;
+    }
+
+    .step-outer .step-item::after,
+    .step-outer .step-item.active::after {
+       
+        top: 25px;
+       
+    }
+    .step-circle:after {
+        top: 0px;
+    }
+
+    .step-outer {
+        padding: 10px 10px;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .job-transition-outer {
+        margin-top: 5px;
+        padding: 5px;
+    }
+    .card.card-custom > .card-body {
+        padding: 5px 30px 110px 20px !important;
+    }
+    .ihits-table.table-dot table thead tr th {
+        padding: 4px 5px;
+        font-weight: 500;
+    }
+
+    .btn.btn-dd {
+        color: #ffffff;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0px 10px 0px 0px;
+        font-size: 11px;
+        cursor: pointer;
+    }
+    .nav .nav-link {
+        padding: 5px 15px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var MName = $("#JobTransition_JobDetail_NewCategory_Code option:selected").text();
+        if (MName == "Permanent") {
+           
+            $(".newreneweltext").addClass('hide');
+        }
+        else {
+         
+            $(".newreneweltext").removeClass('hide');
+        }
+       
+    });
+    jobTransitionReason();
+</script>
+@using (Html.BeginForm(null,null, FormMethod.Post, new { @class = "display-flex", @id="job-tran-Save-form", enctype = "multipart/form-data" }))
+{
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title"> Job Transition</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "JobTransition", new { Area = "DataBank" })">Job Transition list</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Job Transition
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+         
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+ 
+
+
+    <!--begin::Content-->
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            
+                            <div class="card-body">
+                                <!--begin: Search Form-->
+                                <div class="profile-header position-relative box-shadow-none mb-2">
+                                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                    @Html.HiddenFor(m => m.EmployeeGI)
+                                    @Html.HiddenFor(m => m.EmployeeHeader.EmployeeCode)
+                                    <div class="profile-header-overflow"></div>
+                                </div>
+                                <div id="growth-history" class="job-transition-tabs">
+                                    @await Html.PartialAsync("_GrowthHistory", Model)
+
+                                </div>
+                                <div id="transition-type" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_TransitionType", Model)
+                                </div>
+                                <div id="job-details" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_JobDetails", Model)
+                                </div>
+                                <div id="compensation-benefits" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_CompensationBenefits", Model)
+
+                                </div>
+                                <div id="add-authority" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_AddAuthority", Model)
+                                </div>
+                                <div id="subordinates" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_Subordinates", Model)
+
+                                </div>
+                                <div id="summary" class="hide job-transition-tabs">
+                                    @await Html.PartialAsync("_Summary", Model)
+
+                                </div>
+                                <div id="reason" class="hide">
+                                    @*   @await Html.PartialAsync("_JobTransitionReasons", Model)*@
+
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="modal fade salary_summary" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog " style="min-width: 1000px !important;">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Salary Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+            </div>
+
+        </div>
+    </div>
+</div>
+

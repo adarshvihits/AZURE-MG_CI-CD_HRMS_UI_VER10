@@ -1,0 +1,80 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.Reports.EmployeeGroupSummaryReport
+ 
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Emp-popup" }))
+{
+
+
+
+
+
+            <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table emp-group-list-table vertical-scroll-250">
+
+
+
+                <br>
+                <table id="PopUptable">
+                    <thead>
+
+
+                        <tr class="table-light">
+
+
+
+                            <th scope="col">Name</th>
+                            <th scope="col">
+                                <div class="checkbox-inline justify-content-center">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        <input type="checkbox" name="Checkboxes16" id="Emp_Checkbox" onchange="OnCheckBoxAllClick('Emp_Checkbox','PopUptable')">
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </th>
+
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @if (Model.EmployeeGroupSummarySelectList != null && Model.EmployeeGroupSummarySelectList.Count > 0)
+                        {
+
+                            for (int i = 0; i < Model.EmployeeGroupSummarySelectList.Count; i++)
+                            {
+                                @Html.HiddenFor(model => Model.EmployeeGroupSummarySelectList[i].Code)
+                                <tr>
+
+
+
+                                    <td data-label="Department">@Model.EmployeeGroupSummarySelectList[i].Name</td>
+                                    <td data-label="Count">
+                                        <div class="checkbox-inline justify-content-center">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                                @*<input type="checkbox" name="Checkboxes16">*@
+                                                @Html.CheckBoxFor(m => m.EmployeeGroupSummarySelectList[i].Applicability, new { @onclick = "onChkBoxClick(this,'Emp_Checkbox','PopUptable')" })
+                                                <span></span>
+                                            </label>
+                                        </div>
+
+                                    </td>
+
+
+
+
+                                </tr>
+
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+                <div class="mt-3 mb-2">
+                    <button type="button" style="float:right" class="btn btn-default  mobile-full-width" onclick="OnApplyClick()">
+                        Apply
+                    </button>
+                </div>
+
+            </div>
+}

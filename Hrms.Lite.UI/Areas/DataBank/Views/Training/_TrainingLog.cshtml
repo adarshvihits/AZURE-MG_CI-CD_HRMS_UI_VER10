@@ -1,0 +1,61 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Training
+<script>
+    $(document).ready(function () {
+      
+        $("#TrainingRequest_FilterLog_Code").find("option").eq(0).hide();
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table training-log pt-1" >
+    <div class="row ">
+        <h4 class="col-md-10 mt-4 mb-2">Log</h4>
+        <div class="col-md-2">
+            <div class="form-group pb-2">
+                <label>Year</label>
+                @*<select class="form-control form-control-sm " id="exampleSelects">
+                        <option>This Year</option>
+                        <option>All</option>
+                    </select>*@
+                @Html.DropDownListFor(m => m.TrainingRequest.FilterLog.Code, (SelectList)ViewBag.LogFilter, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onLogFilterDropdownChange(this)" })
+            </div>
+        </div>
+    </div>
+    <table>
+
+        <thead>
+
+            <tr class="table-dark">
+                <th scope="col">SlNo</th>
+                <th scope="col">Training Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Date</th>
+                <th scope="col">Trainer</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Mode</th>
+                <th scope="col">Score</th>
+                <th scope="col">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.TrainingRequest.TrainingLog != null && Model.TrainingRequest.TrainingLog.Count > 0)
+            {
+
+                for (int i = 0; i < Model.TrainingRequest.TrainingLog.Count; i++)
+                {
+
+<tr>
+    <td data-label="SlNo">@(i+1)</td>
+    <td data-label="Training Name">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.TrainingName.Name</td>
+    <td data-label="Type">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.Type</td>
+    <td data-label="Attended Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.TrainingRequest.TrainingLog[i].TrainingRequest.AttendedDate))</td>
+    <td data-label="Trainer">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.Trainer</td>
+    <td data-label="Duration">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.Duration</td>
+    <td data-label="Training Mode">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.Mode.Name</td>
+    <td data-label="Score">@Model.TrainingRequest.TrainingLog[i].PostAssessmentScore</td>
+    <td data-label="Remarks">@Model.TrainingRequest.TrainingLog[i].TrainingRequest.Remarks</td>
+</tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

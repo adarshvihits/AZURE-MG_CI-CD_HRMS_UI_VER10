@@ -1,0 +1,115 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ApprovalMatrix
+<link href="~/css/custom.css" rel="stylesheet" />
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/Multiselectdropdown.js"></script>
+<script>
+    $(document).ready(function () {
+        // Prevent form submission on Enter for NoOfLevels
+        $('#NoOfLevels').on('keydown', function (e) {
+            if (e.key === "Enter" || e.keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        //$('#Locations').multiselect({
+        //    includeSelectAllOption: true,
+        //    enableFiltering: true,
+        //    maxHeight: 300,
+        //    buttonWidth: '100%',
+        //    nonSelectedText: 'Select Location'
+        //});
+
+    });
+
+    $(document).on('change', '.role-select', function () {debugger
+        const index = $(this).data('index');
+        const shortNameInput = $(`input[name='ApprovalRoleList[${index}].Role.ShortName']`);
+
+        const selectedOption = this.options[this.selectedIndex];
+        const shortName = selectedOption ? $(selectedOption).data('shortname') : '';
+
+        shortNameInput.val(shortName);
+        console.log('Dropdown value changed, ShortName updated to:', shortName);
+    });
+
+
+</script>
+
+<style>
+    .multiselect-native-select .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "ApprovalMatrix", FormMethod.Post, new { id = "ApprovalMatrixSave" }))
+{
+    @Html.HiddenFor(model => Model.ApprovalMatrixGI)
+    <div id="approvalMatrix" class="slider-forms slider-forms-open closeEdit">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseeSlider('closeEdit')"></i>
+            </div>
+            <div class="location-slider">
+
+                <h4>
+                    Approval Matrix
+                </h4>
+
+            </div>
+            <div class="add-padding">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Workflow</label>
+                            @Html.DropDownListFor(m => m.WorkFlow.Code, (SelectList)ViewBag.WorkFlow, "Select", new { @class = "form-control form-control-sm" })
+                            <span id="workFlow"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>No Of Levels</label>
+                            @Html.TextBoxFor(Model => Model.NoOfLevels, new { @class = "form-control form-control-sm ", @placeholder = "NoOfLevels", @onkeypress = "return onlyNumberKey(event)", @onblur = "validate(this, 'noOfLevels')"@*, @onChange = "return GetRoleDetails()"*@ })
+                            <span id="noOfLevels"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group d-flex align-items-center">
+                        <div class=" pt-4 align-right">
+
+                            <div class="button-group">
+
+                                <button type="button" class="btn btn-default btn-sm " onclick="GetRoleListDetails()">
+                                    Proceed
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div id="RoleList" style="display: none;">
+                            @await Html.PartialAsync("_RoleList", Model)
+                        </div>
+                    </div>
+                    <div class="row card-footer-bottom-fixed border-none">
+                        <div class="col-md-12 align-right">
+                            <button type="button" onclick="Save()" disabled id="AMSubmit"
+                                    class="btn btn-default mobile-full-width">
+                                Save
+                            </button>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- Edit Slider  end-->

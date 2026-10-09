@@ -1,0 +1,109 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.Training_EmployeVsReport
+@*<script src="~/js/settings.js"></script>*@
+<script src="~/scripts/TrainingModule/Training_EmployeVsReport.js"></script>
+@*<script>
+        var searchClick = 0;
+        function onSearchClick1() {
+            debugger;
+            if (searchClick == 0) {
+                searchClick = 1;
+                $('.dataTableSearchPopup1').addClass('field-width-big');
+                CursorFocusOnSearch();
+            }
+            else {
+                searchClick = 0;
+                $('.dataTableSearchPopup1').removeClass('field-width-big');
+            }
+        }
+    </script>
+    <style>
+        .select-option .sraech-slider i, .select-option .filter-button i {
+            z-index: 10;
+            position: relative;
+
+        }
+        .select-option .sraech-slider input.form-control {
+
+            top: -9px;
+        }
+
+
+    </style>*@
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap">
+
+
+
+
+        <div class="tab-items select-option">
+
+
+
+            <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-right" data-bs-original-title="Export to Excel" onclick="TrainingExportToExcel()" style=" margin-top: 0px;">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+@Html.HiddenFor(m => m.EmployeeCode)
+@Html.HiddenFor(m => m.EmployeeID)
+@Html.HiddenFor(m => m.popupDTList.Count)
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table partcipantcompleted_details  vertical-scroll-200">
+    @Html.HiddenFor(m => m.popupDTList.Count)
+
+    <table id="ParticipantsCompleted">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Training</th>
+                <th scope="col">Category</th>
+                <th scope="col">Startdate</th>
+                <th scope="col">EndDate</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Cost</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.popupDTList != null && Model.popupDTList.Count > 0)
+            {
+                for (int i = 0; i < Model.popupDTList.Count; i++)
+
+                {
+                    <tr>
+
+
+                        <td data-label="ID">@Model.popupDTList[i].Trainingname</td>
+                        <td data-label="Employee Name">@Model.popupDTList[i].Category</td>
+                        <td data-label="Designation">@Model.popupDTList[i].StartDate</td>
+                        <td data-label="Department">@Model.popupDTList[i].EndDate</td>
+                        <td data-label="Department">@Model.popupDTList[i].Duration</td>
+                        <td data-label="Department">@Model.popupDTList[i].Cost</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+
+    </table>
+</div>
+

@@ -1,0 +1,102 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.SkillRequisition
+<style>
+    .k-grid-content table thead tr th:nth-child(1),
+    .k-grid-content table tbody tr td:nth-child(1) {
+    }
+</style>
+
+<script>
+
+
+    function getList() {
+        $('#skillRequisitionGrid').data('kendoGrid').dataSource.read();
+
+
+        $('#skillRequisitionGrid').data('kendoGrid').refresh();
+    }
+
+    function employeeParam() {
+        //SCRIPT FOR INPUT PARAMETERS
+        var formArray = $("#BasicFilter").serializeArray();
+
+        var tabIndex = 0;
+        var searchValue = $('#dataTableSearch').val();
+
+        var temp = {};
+        for (var i = 0; i < formArray.length; i++) {
+            temp[formArray[i]['name']] = formArray[i]['value']; // Map the current key-value pairs into the filter variable object.
+        }
+
+        var skilltypeCode = $('#SkillTypeCode').val();
+
+        temp["searchValue"] = searchValue;
+
+        return { filter1: temp, SkillTypeCode: skilltypeCode };
+    }
+</script>
+@*<link href="~/css/kendo/css/grid.css" rel="stylesheet" />*@
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.all.min.js"></script>
+<link href="~/css/custom.css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.aspnetmvc.min.js"></script>
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+<div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid<Hrms.Lite.Shared.DataBank.DTO.SkillRequisition>()
+            .Name("skillRequisitionGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.GI).Visible(false);
+                columns.Bound(p => p.SkillCode).Visible(false);
+                columns.Bound(p => p.SkillName);
+                columns.Bound(p => p.SkillTypeName);
+                columns.Bound(e => e.RequirmentCount).Title("Requirments").Width(105);
+            })
+            .Pageable()
+            .Sortable()
+            .Scrollable()
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .Filterable()
+            .HtmlAttributes(new { style = "height:550px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(20)
+                .Read(read => read.Action("GetList", "SkillRequisition").Data("employeeParam"))
+            )
+        )
+    </div>
+</div>
+
+@(Html.Kendo().Button()
+    .Name("postButton")
+    .HtmlAttributes( new {type = "button"} )
+    .Content("Save")
+    .Events(e => e.Click("onClick"))
+)
+
+<script>
+    function onClick() {
+        debugger;
+        var grid = $("#skillRequisitionGrid").data("kendoGrid");
+        // Get the dataSource of the Grid
+        var dataSource = grid.dataSource;
+
+        // Parse the data of the dataSource to JSON format
+        var rows = JSON.stringify(dataSource.data());
+
+
+     
+
+
+        // Building and execution the Ajax request
+        $.ajax({
+            contentType: 'application/json',
+            url: "/DataBank/SkillRequisition/Create",
+            data: { model: rows},
+            dataType: "json",
+            type: "POST",
+        });
+    }
+</script>

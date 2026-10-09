@@ -1,0 +1,71 @@
+﻿@model Hrms.Lite.Shared.General.ReportBuilder
+    <script src="~/js/settings.js"></script>
+<style>
+    .dataTables_scrollBody {
+        height: 25vh !important;
+    }
+   
+</style>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table svaedreport-list ">
+        @Html.HiddenFor(m => m.Saved_Report.Code)
+        @Html.HiddenFor(m => m.Saved_Report.Name)
+        <table class="common-table">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Report Name</th>
+
+                    <th scope="col">Created By</th>
+                    <th scope="col">
+                        Modify/Create Date
+                    </th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.SavedDetails != null && Model.SavedDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.SavedDetails.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Sl. No">@(i+1)</td>
+                            <td data-label="Report Name">
+                                @Model.SavedDetails[i].ReportName
+                            </td>
+                            <td data-label="Created By">
+                                @Model.SavedDetails[i].CreatedBy
+                            </td>
+                            <td data-label="Modify/Create Date ">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.SavedDetails[i].CreatedOn))
+                            </td>
+
+                            <td data-label="Actions">
+                              
+                                <a data-bs-toggle="tooltip"
+                                   title="Edit"
+                                   class="btn btn-icon btn-edit icon-only" href="@Url.Action("Edit","PayRollReportBuilder", new {  ReportCode=Model.SavedDetails[i].Code, Area="General"})">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+
+
+                                <!-- delete Slider  start-->
+                                <a data-bs-toggle="tooltip"
+                                   title="Delete"
+                                   class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick(@Model.SavedDetails[i].Code);">
+                                    <i class="icon-xl far fa-trash-alt"></i>
+                                </a>
+
+
+                                <!-- <end delete section></end> -->
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+
+            </tbody>
+        </table>
+    </div>

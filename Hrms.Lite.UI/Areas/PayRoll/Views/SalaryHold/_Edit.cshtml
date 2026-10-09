@@ -1,0 +1,219 @@
+﻿@model Hrms.Lite.Shared.PayRoll.SalaryHold
+<script>
+   $(document).ready(function () {
+       debugger
+         $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+
+                    $('.emp_HeaderPic').css('background-image', "url('" + '@Model.EmployeeHeader.EmployeeAbsoluteUri' + "')");
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.EmployeeHeader.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.EmployeeHeader.FileName');
+                        debugger
+                        $('.emp_HeaderPic').css('background-image', "url('" + mimeType + data + "')");
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+   })
+
+</script>
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "Save_Salary_Hold" }))
+{
+    <div id="empattendancesettings" class="slider-forms slider-forms-open salaryHld">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('salaryHld')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Salary Hold
+            </h4>
+            <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="image-input image-input-outline image-input-circle float-right emp_HeaderPic"
+                             id="kt_image_4">
+                            <div class="image-input-wrapper">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 pl-7">
+                        <div class="row">
+
+                            <div class="flex-grow-1">
+                                <!--begin::Title-->
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <div class=" mr-3 header-profile-name">
+                                        <a class="">@Model.EmployeeHeader.EmployeeName</a>
+                                        <a>
+                                            @*( @Model.EmployeeHeader.EmployeeId
+                                            )*@
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <!--end::Title-->
+                                <!--begin::Content-->
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="d-flex flex-column flex-grow-1 pr-8">
+                                        <div class="d-flex flex-wrap mb-1">
+                                            <span data-bs-toggle="tooltip" data-bs-original-title="Designation" class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                <i class="fas fa-briefcase icon-nm mr-2"></i>@Model.EmployeeHeader.Designation.Name
+                                            </span>
+                                            <span data-bs-toggle="tooltip" data-bs-original-title="Department" class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                <i class="fas fa-network-wired icon-nm mr-2"></i>@Model.EmployeeHeader.Department.Name
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Location</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+                            @Html.HiddenFor(m => m.EmployeeHeader.EmployeeCode)
+                            @Html.HiddenFor(m => m.Location)
+                            @Html.HiddenFor(m => m.GrossDeduction)
+                            @Html.HiddenFor(m => m.GrossSalry)
+                            @Html.HiddenFor(m => m.NetPay)
+                            @Html.DisplayFor(m => m.Location)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Gross Salary</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(m => m.GrossSalry)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Gross Deduction</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(m => m.GrossDeduction)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Net Pay</label>
+                        <div class="view-details">
+
+                          @Html.DisplayFor(m =>m.NetPay)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Hold Amount</label>
+                        <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(m => m.HoldAmount, new
+                   {
+                       @class = "form-control form-control-sm",
+                       @placeholder="Hold Amount",
+                       style = "width: 100%",
+                       @onkeypress = "return onlyAmount(event)",
+                       @onchange= "CheckHoldAmount(this)",
+                      
+                       @onblur = "validatezero('#HoldAmount','holdamnt')"
+
+
+
+
+                   })
+                        <span id="holdamnt"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label>Remarks</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextAreaFor(m => m.Remarks, new
+               {
+                   @class = "form-control form-control-sm",
+                   @placeholder = "Remarks",
+                   style = "width: 100%",@onblur= "validate(this,'remarks')"
+
+
+
+               })
+                    <span id="remarks"></span>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="Save()">
+                        Save
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

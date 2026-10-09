@@ -1,0 +1,168 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+<script>
+    $(document).ready(function () {
+        if ($('#Breadcrumb').val() == "Employee Rejoin")
+            onEditClick();
+        debugger
+
+        $('.emp_HeaderPic').css('background-image', "url('@Html.Raw(@ViewBag.dataUri)')");
+
+
+    });
+
+</script>
+
+<div class="profile-header pb-12">
+    <div class="row">
+        <div class="col-md-1">
+            <div class="image-input image-input-outline image-input-circle" id="kt_image_4"
+                 style="background-image: url(/images/blank.png)">
+
+                @if (Model.FormName == "OfferProcessing")
+
+                {
+                <div class="image-input-wrapper emp_HeaderPic" data-bs-toggle="tooltip" data-bs-original-title="Click to upload photo">
+                    
+                </div>
+
+                    @Html.HiddenFor(m => m.BasicInfo.File.fdata)
+                    @Html.HiddenFor(m => m.BasicInfo.File.FileName)
+                }
+                else
+                {
+                    if (Model.BasicInfo != null)
+                    {
+            <div class="image-input-wrapper emp_HeaderPic">
+                
+            </div>
+                        @Html.HiddenFor(m => m.BasicInfo.File.fdata)
+                        @Html.HiddenFor(m => m.BasicInfo.File.FileName)
+                    }
+                    else
+                    {
+                        <div class="image-input-wrapper">
+                        </div>
+                    }
+                }
+
+
+
+                @*<label class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-bs-toggle="tooltip" data-bs-original-title="Click to upload photo" onclick="$('#BasicInfo_File_FileData').trigger('click')">
+                    <i class="fa fa-pen icon-sm text-muted"></i>
+                </label>*@
+
+
+
+
+
+
+                <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
+                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                </span>
+
+                <span class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove photo">
+                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                </span>
+            </div>
+            @Html.TextBoxFor(model => model.BasicInfo.File.FileData, null, new { type = "file", @class = "input-file", @onchange = "validateProfilePhoto()", style = "display:none", accept = ".jpg, .jpeg" })
+        </div>
+        <div class="col-md-11 pl-10 mt-2">
+            <div class="row">
+                <div class="col-md-6 pr-0">
+                    <div class="form-group">
+
+                        <div class="input-group">
+
+                            <div class="input-group-merge" style="position:relative;">
+                                @Html.DropDownListFor(m => m.BasicInfo.Salutation.Code, (SelectList)ViewBag.Sal, "--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Saln')" })
+                                <span id="Saln"></span>
+                            </div>
+
+                            @Html.TextBoxFor(m => m.BasicInfo.FullName, new { @class = "form-control form-control-sm ml-3", @maxlength = 120, @placeholder = "Fullname", @onblur = "capitalizeAllLetter(this)"@*"firstLetterCaps(this,'fullname')"*@, @onkeypress = "return onlyLetters_Space_DotKeys(event)" })
+
+                        </div>
+                        <span id="fullname"></span>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group mb-0">
+                        <div class="input-group date">
+                          
+                            @Html.TextBoxFor(m => m.BasicInfo.AcceptedDOJ, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dojpicker", @readonly = "true", @placeholder = "DOJ", @onchange = "validateDOJ(this,'doj')", onclick = "$('.dojpicker').datepicker('show')" })
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span id="doj"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-0">
+                        @Html.TextBoxFor(m => m.PermanentAddress.MobileNo, new { @class = "form-control form-control-sm", @maxlength = 10, @placeholder = "Mobile", @onblur = "validateMobile('PermanentAddress_MobileNo','mobile')", @onkeypress = "return onlyNumberKey(event)" })
+                        <span id="mobile"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group mb-0">
+                        @Html.TextBoxFor(m => m.PermanentAddress.MailID, new { @class = "form-control form-control-sm", @maxlength = 120, @placeholder = "E-Mail", @onblur = "validateEmail(this,'email','FiledValidations_0__Applicability')" })
+                        <span id="email"></span>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <div class="profile-header-overflow"></div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Update Profile Photo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="clearPopUp()">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            @*<div class="profile-header" style="text-align:center;">
+
+
+                    <div class="image-input image-input-outline image-input-circle mr-5" id="kt_image_4">
+                        <div class="image-input-wrapper"
+                             style="background-image: url(@Model.enrollment.PreEnrollment.BasicInfo.File.AbsoluteUri)">
+                        </div>
+                        <label class="btn btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-bs-toggle="tooltip" data-bs-original-title="Click to upload photo">
+                            <i class="fa fa-pen icon-sm text-muted"></i>
+                            @Html.TextBoxFor(model => model.enrollment.PreEnrollment.BasicInfo.File.FileData, new { type = "file", @name = "profile_avatar", @onchange = "CheckProfileExtensionSize(this);validateProfilePhoto()" })
+                        </label>
+                    </div>
+                </div>*@
+
+            <div class="modal-body">
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Resignation
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/scripts/DataBank/resignation.js"></script>
+<script src="~/js/jquery.min.js"></script>
+     <script src="~/js/datatables.min.js"></script>
+     <script>
+    $(document).ready(function () {
+
+        $('.search-profile-details').hide(300);
+        if ('@Model.FirstTab' == "ResignationPending") {
+            tabClick('tab2', @Model.ResignationListTabs[1].Code, '@Model.ResignationListTabs[1].Name');
+        }
+        if ('@Model.FirstTab' == "ApprovalPending") {
+            tabClick('tab6', @Model.ResignationListTabs[5].Code, '@Model.ResignationListTabs[5].Name');
+        }
+    });
+     </script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Resignation</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Resignation
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+
+                                    @Html.DropDownListFor(m => m.TabCode, (SelectList)ViewBag.Tabs, new { @class = "form-control form-control-sm", @onchange = "TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            <div class="tab-items low">
+                                <span class="btn-title active tab1" onclick="tabClick('tab1', @Model.ResignationListTabs[0].Code, '@Model.ResignationListTabs[0].Name')">
+                                    @Model.ResignationListTabs[0].Name
+                                    <span class="btn-notification tab1Count">@Model.Count_InNoticePeriod</span>
+                                </span>
+                            </div>
+                            <div class="tab-items medium">
+                                <span class="btn-title tab2" onclick="tabClick('tab2', @Model.ResignationListTabs[1].Code, '@Model.ResignationListTabs[1].Name')">
+                                    @Model.ResignationListTabs[1].Name
+                                    <span class="btn-notification tab2Count">@Model.Count_ResignationAccept</span>
+                                </span>
+                            </div>
+                            <div class="tab-items high">
+                                <span class="btn-title tab3" onclick="tabClick('tab3', @Model.ResignationListTabs[2].Code, '@Model.ResignationListTabs[2].Name')">
+                                    @Model.ResignationListTabs[2].Name
+                                    <span class="btn-notification tab3Count">@Model.Count_ExitChecklistPending</span>
+                                </span>
+                            </div>
+
+                            <div class="tab-items low">
+                                <span class="btn-title tab4" onclick="tabClick('tab4', @Model.ResignationListTabs[3].Code, '@Model.ResignationListTabs[3].Name')">
+                                    @Model.ResignationListTabs[3].Name
+                                    <span class="btn-notification tab4Count">@Model.Count_RelivingPending</span>
+                                </span>
+                            </div>
+
+                            <div class="tab-items medium">
+                                <span class="btn-title tab5" onclick="tabClick('tab5', @Model.ResignationListTabs[4].Code, '@Model.ResignationListTabs[4].Name')">
+                                    @Model.ResignationListTabs[4].Name
+                                    <span class="btn-notification tab5Count">@Model.Count_RetirementDueList</span>
+                                </span>
+                            </div>
+                            <div class="tab-items medium">
+                                <span class="btn-title tab6" onclick="tabClick('tab6', @Model.ResignationListTabs[5].Code, '@Model.ResignationListTabs[5].Name')">
+                                    @Model.ResignationListTabs[5].Name
+                                    <span class="btn-notification tab6Count">@Model.Count_ResignationApproval</span>
+                                </span>
+                            </div>
+                            <div class="tab-items medium">
+                                <span class="btn-title tab7" onclick="tabClick('tab7', @Model.ResignationListTabs[6].Code, '@Model.ResignationListTabs[6].Name')">
+                                    @Model.ResignationListTabs[6].Name
+                                    <span class="btn-notification tab7Count">@Model.Count_ResignationAmendment</span>
+                                </span>
+                            </div>
+
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel" onclick="onExportToExcelClick()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <!-- Table Section -->
+
+                    <div id="resignationList">
+                        @await Html.PartialAsync("_InNoticePeriodList")
+                    </div>
+                    <div id="ResignationTrackerSlider">
+
+                    </div>
+
+                    <div id="ResignationAmendmentSlider">
+
+                    </div>
+
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.SliderFilter)
+                    </div>
+                    <div id="addNewResignation" class="hide">
+                        @await Html.PartialAsync("_AddNew", Model)
+                    </div>
+                    <div class="row row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                            @if (Model.UserVsMenuTab[0].Applicable == true)
+                            {
+                                <a id="addNewAssets" type="button"
+                                   class="btn btn-default float-right mobile-full-width slider-btn" onclick="onAddNewClick()">
+                                    New Resignation
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="addNewAssets" type="button"
+                                   class="btn btn-default float-right mobile-full-width" onclick="swal.fire(MasterPersmissionMsg)">
+                                    New Resignation
+                                </a>
+                            }
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

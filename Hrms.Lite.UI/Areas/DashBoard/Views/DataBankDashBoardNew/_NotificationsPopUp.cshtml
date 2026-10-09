@@ -1,0 +1,106 @@
+﻿@model Hrms.Lite.Shared.DashBoard.DataBankDashBoardNew
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $(".search-slider-inner").click(function () {
+            $(".form-control").toggleClass('field-width-big')
+        });
+
+    });
+
+</script>
+
+<style>
+    .dataTables_scrollBody {
+        height: 20vh !important;
+    }
+
+    .dataTables_scrollHeadInner table {
+        width: 100% !important;
+    }
+</style>
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap">
+
+        <div class="tab-items select-option col-md-1">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+            <a data-bs-toggle="tooltip" title="Export to Excel"
+               class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ">
+    @Html.HiddenFor(m => m.Notification_PopUp.Count)
+
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID </th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">
+                    Designation
+                </th>
+                <th scope="col">
+                    Department
+
+                </th>
+                <th scope="col">
+                    Location
+
+                </th>
+                @*<th scope="col">
+                    DOJ
+                    </th>*@
+                <th scope="col">
+                    Certificate
+
+                </th>
+                <th scope="col">
+                    Renewal Date
+
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Notification_PopUp != null && Model.Notification_PopUp.Count > 0)
+            {
+                @for (int i = 0; i < Model.Notification_PopUp.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.Notification_PopUp[i].ID</td>
+                        <td>@Model.Notification_PopUp[i].Name</td>
+                        <td>@Model.Notification_PopUp[i].Designation</td>
+                        <td>@Model.Notification_PopUp[i].Department</td>
+                        <td>@Model.Notification_PopUp[i].Location</td>
+                        @*<td>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Notification_PopUp[i].DOJ))</td>*@
+                        <td>@Model.Notification_PopUp[i].Certificate </td>
+                        <td>@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Notification_PopUp[i].RenewalDate))</td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

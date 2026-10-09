@@ -1,0 +1,187 @@
+﻿@model Hrms.Lite.Shared.Master.LoanSettings
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@*<link href="~/css/custom.css" rel="stylesheet" />
+    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/custom.js"></script>*@
+<script>
+    $(document).ready(function () {
+        debugger;
+        hideorshowmaxten();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "LoanSettings", FormMethod.Post, new { id = "loanSave" }))
+{
+    <div id="loanedit" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close " onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Loan
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Name
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm LName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'LoanName')", maxlength = "120" })
+                        <span id="LoanName"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Short Name
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm LShtName", @placeholder = "Short Name", @onblur = "validate(this,'LoanShortName')", maxlength = "5" })
+                        <span id="LoanShortName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Company Principle
+                            Amount
+                        </label> <span class="Mandatory">*</span>
+                        @Html.TextBoxFor(Model => Model.CompanyLoanAmount, "{0:#.#}", new { @class = "form-control form-control-sm LPAmt", @placeholder = "Company Principle Amount", @onblur = "validate(this,'LoanPAmt');onPrincipleOrLimitChange()", @maxlength = "8", onpaste = "return false", onkeypress = "return onlyNumberKey(event)", @oninput = "process(this)" })
+                        <span id="LoanPAmt"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Maximum Limit Per Employee
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.MaximumLimitPerEmployee, "{0:#.#}", new { @class = "form-control form-control-sm LMaxLimit", @placeholder = "Maximum Limit Per Employee", @onblur = "validate(this,'Limit');onPrincipleOrLimitChange()", maxlength = "8", onpaste = "return false", onkeypress = "return onlyNumberKey(event)", @oninput = "process(this)" })
+                        <span id="Limit"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2" id="kt_image_4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Repayment Method </label> <span class="Mandatory">*</span>
+
+                        @*@Html.ListBoxFor(Model => Model.RepaymentMethods, (SelectList)ViewBag.RepaymentMethod1, new { @class = "multiselectDropdownField form-control-multiselect form-control-sm loan12", @multiple = "multiple" })*@
+                        @Html.DropDownListFor(Model => Model.RepaymentMethod.Code, (SelectList)ViewBag.RepaymentMethod1, "--Select--", new
+                        {
+                            @class = "form-control form-control-sm loan12",
+                            @onchange = "hideorshowmaxten()",
+                       @onblur = "validate(this,'RPMethod')"
+                   })
+
+
+
+
+                    </div>
+                    <span id="RPMethod"></span>
+                </div>
+                 <div class="col-md-6 showmaxten">
+                            <div class="form-group">
+                                <label>Maximum Tenure <span class="Mandatory">*</span></label>
+                                @Html.TextBoxFor(Model => Model.MaximumTenure, "{0:#.#}", new { @class = "form-control form-control-sm LMaxTen", @placeholder = "Maximum Tenure", @onblur = "validate(this,'MaxTen')", maxlength = "3", onpaste = "return false", onkeypress = "return onlyNumberKey(event)", @oninput = "process(this)" })
+                                <span id="MaxTen"></span>
+                            </div>
+
+                        </div>
+                    
+
+              
+
+            </div>
+            <div class="row my-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Type <span class="Mandatory">*</span></label>
+                        @Html.DropDownListFor(model => model.AdvType,
+          new List<SelectListItem> {              
+               new SelectListItem {  Value= "ADV" , Text = "Salary Advance" },
+               new SelectListItem { Value = "LOAN" , Text = "Loan" },
+
+            }, "--Select--",
+          new { @class = "form-control form-control-sm", @onchange = "validate(this,'type')" })
+
+                        <span id="type"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onchange="ActiveInactiveValidationLoan('LOAN', '@Model.Code')">
+                            @Html.HiddenFor(m => Model.Code)
+                            @Html.CheckBoxFor(Model => Model.Active, new { @id = "ActiveLoan" })
+
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+                    <div class="view-details">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            <label>Description</label>
+                            @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm LRemarks", @placeholder = "Description", @maxlength = "250" })
+
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            <label class="view-title">Description</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(model => Model.Description)
+                                @Html.DisplayFor(Model => Model.Description)
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveLoanMaster('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveLoanMaster('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+            </div>
+        </div>
+    </div>
+}

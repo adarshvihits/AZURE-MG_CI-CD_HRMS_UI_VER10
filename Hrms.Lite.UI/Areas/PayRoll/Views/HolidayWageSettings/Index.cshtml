@@ -1,0 +1,210 @@
+﻿@model Hrms.Lite.Shared.PayRoll.AllowanceSettings.ApplicableAllowance
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/PayRoll/HolidayWageAllowanceSettings.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Holiday Wage Settings</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Holiday Wage Settings
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ml-5 pr-0 border-none select-option">
+                                <div class="row-outer">
+                                    <div class="form-group filter-combobox mr-2" style="width: 269px;">
+                                        @Html.DropDownListFor(model => model.Allowance.Code, (SelectList)ViewBag.Allowance, "--Select Holiday Wage Allowance--", new { @class = "form-control form-control-sm"@*, @onblur= "validate(this,'Allowance_span')"*@, @onchange = "fillData();validate(this,'Allowance_span')" })
+
+                                        <span id="Allowance_span" style="bottom: -15px;"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            @*<div class="tab-items pr-0 border-none">
+                                    <div class="button-group float-left border-none">
+
+
+                                        <button type="button" class="btn btn-default btn-sm mr-10" onclick="getList()">
+                                            Proceed
+                                        </button>
+                                    </div>
+                                </div>*@
+
+                            <div class="button-group float-right  batchleave mr-4">
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+                            <div class="tab-items select-option">
+
+                                <button id="BatchUpdatebutton" type="button"
+                                        class="btn btn-default btn-sm float-left mt-2 mr-5" onclick="sliderChange()">
+                                    Batch Update
+                                </button>
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+
+                                <a data-bs-toggle="tooltip" title="Export to Excel"
+                                   class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                                <button data-bs-toggle="tooltip" title="Import From Excel"
+                                        class="btn btn-excel ml-0 import">
+                                    <i class="fa fa-upload icon-xls" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div id="SettingsEmployeeList">
+                        @await Html.PartialAsync("_SettingsEmployeeList", Model.ApplicableAllowanceList)
+                    </div>
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+
+
+
+
+
+
+
+
+
+                    <div class="row card-footer-bottom-fixed d-flex ">
+
+
+                        <div class="d-flex">
+                            <a class="">
+                                <div class="application-btn d-flex align-items-center">
+                                    <div class="history-btn">
+                                        <img src="~/images/settings-line-icon.png" />
+
+                                    </div>
+                                    <div class="application-icon" onclick="defaultSettingsClick()"> <h3 class="pt-2 pl-3"> Default Settings</h3></div>
+                                </div>
+                            </a>
+
+                            <a class="pl-10 ">
+                                <div class="application-btn d-flex align-items-center">
+                                    <div class="history-btn">
+                                        <img src="~/images/add-category-icon (1).png" />
+
+                                    </div>
+                                    <div class="application-icon" onclick="applicableAllowanceClick()"> <h3 class="pt-2 pl-3">  Applicable Allowance</h3></div>
+                                </div>
+                            </a>
+                        </div>
+
+
+
+
+
+                        @*<div class="btn-group float-left">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-group btn-default btn-sm slider-btn " onclick="defaultSettingsClick()">Default Settings</button>
+                                </div>
+
+                            </div>
+                            <div class="btn-group float-left">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-group btn-default btn-sm slider-btn" onclick="applicableAllowanceClick()">Applicable Allowance</button>
+                                </div>
+
+                            </div>*@
+                    </div>
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                </div>
+            </div>
+            <div id="FilterPartial">
+
+            </div>
+            <div id="batchUpdate"></div>
+        </div>
+        <div id="applicableallowance">
+            @*@await Html.PartialAsync("_ApplicableAllowance")*@
+        </div>
+
+    </div>
+    <div id="defaultsettings"></div>
+</div>
+
+<!--end::Row-->
+<!--begin::Row-->
+<!--end::Row-->
+<!--end::Dashboard-->
+    </div>
+<!--end::Container-->
+    </div>
+<!--end::Entry-->
+<!--end::Entry-->

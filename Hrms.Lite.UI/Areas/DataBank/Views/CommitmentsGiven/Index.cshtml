@@ -1,0 +1,143 @@
+﻿@model Hrms.Lite.Shared.DataBank.CommitmentsGiven
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/DataBank/commitmentsGiven.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        fillData();
+
+    });
+
+</script>
+
+<div id="kt_header" class="header header-fixed">
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Commitments Given</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Commitments Given
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <div class="d-flex flex-column-fluid">
+
+        <div class="container full-width">
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+
+                   
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+
+                            <div class="tab-items">
+                                <span class="btn-title ActiveTab active" onclick="OnTabClick('ActiveTab',0)">
+                                    Pending
+                                    @*<span class="btn-notification AllTabCount">@Model.ActiveCount</span>*@
+                                </span>
+
+                            </div>
+                            <div class="tab-items medium">
+                                <span class="btn-title InActiveTab" onclick="OnTabClick('InActiveTab',1)">
+                                    Commitments Given
+                                    @*<span class="btn-notification InActiveTabCount">@Model.InactiveCount</span>*@
+                                </span>
+                            </div>
+
+
+                            <div class="tab-items select-option">
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn pt-1 btn-excel float-left" data-bs-original-title="Export to Excel">
+                                    <i class="icon-xl far fa-file-excel" onclick="ExportToExcel()"></i>
+                                </a>
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div id="Pending">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/CommitmentsGiven/_PendingList.cshtml")
+                    </div>
+
+                    <div id="CommitmentsGiven" class="hide">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/CommitmentsGiven/_CommitmentsGivenList.cshtml")
+                    </div>
+
+
+
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.filter)
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="modal fade CommitmentsGiven" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Commitments Given</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body"></div>
+
+
+
+        </div>
+    </div>
+</div>

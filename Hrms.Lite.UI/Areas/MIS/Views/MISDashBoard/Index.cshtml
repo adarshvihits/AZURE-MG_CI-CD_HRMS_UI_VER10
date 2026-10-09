@@ -1,0 +1,496 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMIS.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<script src="~/scripts/MIS/MISDashBoard.js"></script>
+<script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+<script>
+    $(document).ready(function () {
+        showSpinner();
+        var queryString = window.location.search;
+
+        // Parse the query string to extract parameters
+        var params = new URLSearchParams(queryString);
+
+        // Get the value of the "id" parameter
+        var id = params.get("id");
+
+        $(".export-pdf").click(function () {
+            // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+            kendo.drawing.drawDOM($(".content-wrapper"))
+                .then(function (group) {
+                    // Render the result as a PDF file
+                    return kendo.drawing.exportPDF(group, {
+                        paperSize: "auto",
+                        margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+                    });
+                })
+                .done(function (data) {
+                    // Save the PDF file
+                    var dashName="HR-Dashboard.pdf"
+                    if(id==1)
+                    {
+                        dashName = "New-Hires.pdf"
+                    }
+                    else if(id==2)
+                    {
+                        dashName = "Resignations.pdf"
+                    } 
+                    else if (id == 3) 
+                    {
+                        dashName = "Employee-Profile.pdf"
+                    }
+                    else if(id=="4")
+                    {
+                        dashName="Leave-Analysis.pdf"
+                    }
+                    else if (id == "5") 
+                    {
+                        dashName = "Salary-Analysis.pdf"
+                    }
+                    else if (id == "6") 
+                    {
+                        dashName = "Absenteeism.pdf"
+                    }
+                    else if (id == "7") 
+                    {
+                        dashName = "Historical-Trends.pdf"
+                    }
+                    else if (id == "8") 
+                    {
+                        dashName = "Recruitment-Analysis.pdf"
+                    }
+                      else if (id == "9") 
+                    {
+                        dashName = dashName;
+                    }
+                    else if (id == "10") {
+                        dashName = "Work-Force-Time-Trends.pdf";
+                    }
+                     else if (id == "12") {
+                        dashName = "Attendance-Over-View.pdf";
+                    }
+                     else if (id == "13") {
+                        dashName = "Payroll-Over-View.pdf";
+                    }
+                     else if (id == "14") {
+                        dashName = "Leave-Over-View.pdf";
+                    }
+                     else if (id == "15") {
+                        dashName = "Punching-Over-View.pdf";
+                    }
+                    else if (id == "16") {
+                        dashName = "Employee-Over-View.pdf";
+                    }
+                    kendo.saveAs({
+                        dataURI: data,
+                        fileName: dashName,
+                        proxyURL: "@Url.Action("Pdf_Export_Save")"
+                    });
+                });
+        });
+    });
+</script>
+<style>
+
+    #employee-list .dropdown-header {
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    #employee-list .photo {
+        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        margin: 0 10px 0 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        display: inline-block;
+    }
+
+    #employee-list h3 {
+        margin: 0 0 1px 0;
+        padding: 0;
+        font-size: 1.2em;
+        font-weight: normal;
+    }
+
+    #employee-list p {
+        margin: 0;
+        padding: 0;
+        font-size: .8em;
+    }
+
+    .k-w-300 {
+        width: 250px;
+    }
+
+    .merge_btn {
+        display: flex;
+        align-items: end;
+        padding-left: 20px;
+    }
+
+        .merge_btn input {
+            height: 30px;
+        }
+
+    .home-btn {
+        padding: 10px 81px;
+        font-size: 25px !important;
+    }
+</style>
+
+
+<script>
+    function valueMapper(options) {
+        $.ajax({
+            url: "@Url.Action("Orders_ValueMapper", "MISDashBoard")",
+            data: convertValues(options.value),
+            success: function (data) {
+                options.success(data);
+            }
+        });
+    }
+    function valueMapperOv(options) {
+        $.ajax({
+            url: "@Url.Action("Orders_ValueMapperOv", "MISDashBoard")",
+            data: convertValues(options.value),
+            success: function (data) {
+                options.success(data);
+            }
+        });
+    }
+    function convertValues(value) {
+        var data = {};
+
+        value = $.isArray(value) ? value : [value];
+       
+        for (var idx = 0; idx < value.length; idx++) {
+            data["values[" + idx + "]"] = value[idx];
+
+          
+        }
+
+        return data;
+    }
+</script>
+@(Html.Kendo().Tooltip()
+        .For("#exportPDF")
+        .Position(TooltipPosition.Top)
+        .Content("Download")
+        
+        .Width(120)
+        
+    )
+
+<div id="kt_header" class="header header-fixed pl-0">
+
+    <!--begin::Container-->
+    <div class="row w-100">
+        <div class="col-md-2">
+
+            <div class="home-btns">
+              @*  <button class='export-pdf'>Export as PDF</button>*@
+                <a href="/MIS/MISDashBoard/GetNewDashboardPage"><i class="icon-nm fas fa-home  home-btn"></i></a>
+            </div>
+
+
+
+        </div>
+        <div class="col-md-8 text-center">
+            <div id="dashName" class="Bi-dashboard-hed " style="text-align: center;width: 100%;">
+                
+            </div>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
+            <div style=" text-align: center;width: 50px;height: 50px;object-fit: cover;margin-left: 20px;">
+                <img id="exportPDF" src="~/images/download.svg" class='export-pdf' style="padding: 7px;width: 100%;
+  height: 100%;cursor:pointer;"  />
+            </div>
+        </div>
+
+        <!--begin::Header Menu Wrapper-->
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+   
+    <!--end::Container-->
+</div>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+<div class="card card-custom height-100per">
+
+    <div class="card-body">
+        <div class="tab-button-wrap">
+            <div id="fromDate" class="tab-items hide">
+                <div class="row-outer pb-2" style="display: flex;
+  align-items: center;
+  width: 227px;">
+                    <label style="width:45px;">From</label>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(Model => Model.From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "From" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="fromdate"></span>
+                </div>
+            </div>
+            <div id="toDate" class="tab-items pl-3 hide">
+                <div class="row-outer pb-2" style="display: flex;
+  align-items: center;
+  width: 230px;">
+                    <label style="width:26px;">To</label>
+                    <div class="input-group date">
+                        @Html.TextBoxFor(Model => Model.To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "To" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="todate"></span>
+                </div>
+            </div>
+            <div id="lp" class="tab-items pl-0 hide">
+                <div class="row-outer pb-2" style="
+  ">
+                    <div>
+                        <div class="form-group filter-combobox pt-0 mt-0 pl-2" style="width: 245px;display: flex;
+  align-items:center;">
+
+                            <label style="width:120px;">Leave Period</label>
+                            @Html.DropDownListFor(m => m.LeavePeriod.Code, (SelectList)ViewBag.LeavePeriod, "--LeavePeriod--", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+                            <span id="LR_LeavePeriod"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="fy" class="tab-items pl-0 hide">
+                <div class="row-outer pb-2">
+                    <div class=" filter-combobox pl-2" style="width: 300px; display:flex;align-items:center;">
+                        <label style="width:195px;">Financial Year</label>
+                        @Html.DropDownListFor(m => m.finYear, (SelectList)ViewBag.financialYear, "--Financial Year--", new { @class = "form-control form-control-sm" })
+                        <span id="LR_LeavePeriod"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div id="employees" class="tab-items pl-0 hide">
+                <div class="row-outer pb-2">
+
+                    <div class="form-group filter-combobox pt-2 pl-2" style="width: 240px; margin-top:-20px;">
+                        @*@using Kendo.Mvc.UI*@
+
+                        @(Html.Kendo().MultiColumnComboBox()
+                            .Name("employee")
+                            .DataTextField("fullName")
+                            .DataValueField("employeeCode")
+                            //.AutoBind(false)
+                            .Label(label =>
+                            {
+                                label.Content("Select an Employee...");
+                                label.Floating(true);
+                            })
+                            .Columns(columns =>
+                            {
+                                columns.Add()
+                                .Field("fullName")
+                                .Title("Name")
+                                .Template("<span class=\"k-state-default photo\" style=\"background-image: url(" + Url.Content("#:data.absoluteUrl #") + ");\" ></span>")
+                                .HeaderTemplate("<span class=\"dropdown-header\"></span>")
+                                .Width("100px");
+
+
+                                columns.Add()
+                                .Field("fullName")
+                                .Title("Name")
+                                .Template("<span class=\"k-state-default\"><h3>#: data.fullName #</h3><p>#: data.employeeID #</p></span>")
+                                .HeaderTemplate("<span class=\"dropdown-header\">Name</span>").Width("400px");
+
+                            })
+                            .FooterTemplate("Total Employees <strong>#: instance.dataSource.total() #</strong>")
+                            .HtmlAttributes(new { style = "width: 100%;" })
+                            .Filter(FilterType.Contains)
+                            .Height(400)
+
+                            .DataSource(source =>
+                            {
+                                source
+                                .Ajax()
+                                .PageSize(80)
+                                            .Read(read => read.Action("GetEmployeesList", "MISDashBoard").Data("getGroupCompany"));
+                                //.Read("GetEmployeesList", "MISDashBoard");
+                            })
+                            .Virtual(v => v.ItemHeight(56).ValueMapper("valueMapper"))
+
+                            .Events(e =>
+                            {
+                                e.Change("onEmpChange");
+                            })
+
+
+
+                            )
+                    </div>
+                </div>
+            </div>
+
+            <div id="employeesOv" class="tab-items pl-0 hide">
+                <div class="row-outer pb-2">
+
+                    <div class="form-group filter-combobox pt-2 pl-2" style="width: 240px; margin-top:-20px;">
+                        @using Kendo.Mvc.UI
+
+                        @(Html.Kendo().MultiColumnComboBox()
+                                        .Name("employeeOv")
+                                        .DataTextField("fullName")
+                                        .DataValueField("employeeCode")
+                                        //.AutoBind(false)
+                                        .Label(label =>
+                                        {
+                                            label.Content("Select an Employee...");
+                                            label.Floating(true);
+                                        })
+                                        .Columns(columns =>
+                                        {
+                                            columns.Add()
+                                            .Field("fullName")
+                                            .Title("Name")
+                                            .Template("<span class=\"k-state-default photo\" style=\"background-image: url(" + Url.Content("#:data.absoluteUrl #") + ");\" ></span>")
+                                            .HeaderTemplate("<span class=\"dropdown-header\"></span>")
+                                            .Width("100px");
+
+
+                                            columns.Add()
+                                            .Field("fullName")
+                                            .Title("Name")
+                                            .Template("<span class=\"k-state-default\"><h3>#: data.fullName #</h3><p>#: data.employeeID #</p></span>")
+                                            .HeaderTemplate("<span class=\"dropdown-header\">Name</span>").Width("400px");
+
+                                        })
+                                        .FooterTemplate("Total Employees <strong>#: instance.dataSource.total() #</strong>")
+                                        .HtmlAttributes(new { style = "width: 100%;" })
+                                        .Filter(FilterType.Contains)
+                                        .Height(400)
+
+                                        .DataSource(source =>
+                                        {
+                                            source
+                                            .Ajax()
+                                            .PageSize(80)
+                                            .Read(read => read.Action("GetEmployeesListOv", "MISDashBoard").Data("getSalPeriod"));
+
+                                        })
+                                        .Virtual(v => v.ItemHeight(56).ValueMapper("valueMapperOv"))
+
+                                        .Events(e =>
+                                        {
+                                            e.Change("onEmpChangeOv");
+                                        })
+
+
+
+                                        )
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="groupCompany" class="tab-items pl-0" style="">
+                <div class="row-outer pb-2">
+
+                    <div class=" filter-combobox  pl-2" style="width: 300px; display:flex; align-items:center;">
+                        <label style="width:195px;">Group Company</label>
+                        @Html.DropDownListFor(m => m.GroupCompanyCode, (SelectList)ViewBag.GrpCompany, "All", new { @class = "form-control form-control-sm " })
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transitionjobType" class="tab-items pl-0 hide" style="">
+                <div class="row-outer pb-2">
+
+                    <div class=" filter-combobox  pl-2" style="width: 300px; display:flex; align-items:center;">
+                        <label style="width:195px;">Transition Type</label>
+                        @Html.DropDownListFor(m => m.TransitionTypeCode, (SelectList)ViewBag.TransitionType, "--Select--", new { @class = "form-control form-control-sm " })
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="reportType" class="tab-items pl-7 hide">
+                <div class="row-outer pb-2">
+
+                    <div class=" filter-combobox  pl-2" style="width: 220px; display:flex; align-items:center;">
+                        <label class="pr-2">Type</label>
+                        @(Html.Kendo().RadioGroup()
+                            .Name("radiogroup")
+                            .Layout("horizontal")
+                            .Items(i =>
+                            {
+                                i.Add().Label("Head Count").Value("1");
+                                i.Add().Label("Salary").Value("2");
+
+                            })
+                            .Value("1")
+                                        .Events(e => e.Change("onTypeChange"))
+                            )
+                    </div>
+                </div>
+            </div>
+
+            @*        <div id="range" class="tab-items pl-8 hide">
+            <div class="row-outer pb-2">
+
+                <div class=" filter-combobox  pl-2" style="width: 140px;">
+                    <select  id="dateRange">
+                        <option value="0">--Select--</option>
+                        <option value="1">Last 45 Days</option>
+                        <option value="2">Last 90 Days</option>
+                        <option value="3">Last 180 Days</option>
+
+                    </select>
+                </div>
+            </div>
+        </div>*@
+        </div>
+                    <input type="hidden" id="hdnList" value="1" />
+                    <input type="hidden" id="hdnMonth" value="1" />
+                    <div class="demo-section export-app wide hidden-on-narrow content-wrapper" id="MisDashBoard">
+                        <input type="hidden" id="dashBoardId" name="dashBoard" value="0" />
+
+                        @* @await Html.PartialAsync("~/Areas/MIS/Views/MISDashBoard/_ResignationProfile.cshtml", Model)
+                        @await Html.PartialAsync("~/Areas/MIS/Views/MISDashBoard/_ResignationProfile.cshtml", Model)*@
+</div>
+
+              
+                </div>
+
+                </div>
+                </div>
+                </div>

@@ -1,0 +1,386 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/TimeOffice/dutyRoster.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/css/fonts/flaticon_mycollection.css">
+
+<style>
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        visibility: hidden !important;
+    }
+</style>
+<script>
+    function POPUP() {
+
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: '/TimeOffice/DutyRoster/GetShiftDetailsPOPUP',
+            dataType: 'html',
+
+            success: function (Data) {
+                var m = $('#dutyRostershiftPopUP');
+                m.find('.modal-body').html('');
+                m.find('.modal-body').html(Data);
+                m.modal('show');
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                swal.fire(xhr.responseText);
+
+            }
+        });
+    }
+    $(document).ready(function () {
+        debugger
+        global_Month = $("#Month_Code").val();
+        global_CIRCLE = $("#Circle_Code").val();
+        global_PayrollGroup = $("#PayrollGroup_Code").val();
+        global_FROM = $("#From").val();
+        global_TO = $("#To").val();
+    });
+
+</script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Duty Roster</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home" , new {Area="" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("DutyRoster", "DutyRoster", new { Area = "TimeOffice",Month=Model.Month.Code,PayrollGroup=Model.PayrollGroup.Code,CIRCLE=Model.Circle.Code})">Duty Roster List</a>
+
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Duty Roster
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+            <div class="row height-100per">
+                <div class="col-md-12">
+                    <div class="card card-custom height-100per">
+
+                        <div class="card-body ">
+
+
+                            <div class="profile-header position-relative box-shadow-none">
+
+                                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                                @Html.HiddenFor(m => m.Month.Code)
+                                @Html.HiddenFor(m => m.Circle.Code)
+                                @Html.HiddenFor(m => m.PayrollGroup.Code)
+                                @Html.HiddenFor(m => m.From)
+                                @Html.HiddenFor(m => m.To)
+
+                                @Html.HiddenFor(m => m.Month.Name)
+                                @Html.HiddenFor(m => m.PayrollGroup.Name)
+                                @Html.HiddenFor(m => m.Circle.Name)
+
+                                <div class="profile-header-overflow"></div>
+                            </div>
+                            <!--begin: Search Form-->
+                            <div class="mobile-tab-section">
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <div class="row-outer">
+                                                <label class="view-title">Month</label>
+                                                <div class="view-details">
+
+                                                    @Model.Month.Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" id="assetFilter">
+                                        <div class="form-group">
+                                            <label class="view-title">From</label>
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.From))
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" id="assetFilter">
+                                        <div class="form-group">
+                                            <label class="view-title">To</label>
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.To))
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" id="assetFilter">
+                                        <div class="form-group">
+                                            <label class="view-title">Circle</label>
+                                            <div class="view-details">
+                                                @Model.Circle.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" id="assetFilter">
+                                        <div class="form-group">
+                                            <label class="view-title">Payroll Group</label>
+                                            <div class="view-details">
+                                                @Model.PayrollGroup.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-center">
+                                        <div class="tab-items px-5">
+                                            <div class="button-group float-left ">
+                                                <button type="button" class="btn btn-default btn-sm" onclick="onEmpWiseBatchUpdateClick('@Model.EmployeeGI')">
+                                                    Batch Update
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row tab-style-button">
+                                <div class="tab-button-wrap">
+
+                                    <div class="tab-items px-5">
+                                        <div class="row-outer">
+                                            <label class="view-title">Month</label>
+                                            <div class="view-details">
+
+                                                @Model.Month.Name
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-items px-5">
+                                        <div class="row-outer">
+                                            <label class="view-title">From</label>
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.From))
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-items px-5">
+                                        <div class="row-outer">
+                                            <label class="view-title">To</label>
+                                            <div class="view-details">
+                                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.To))
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-items px-5">
+                                        <div class="row-outer">
+                                            <label class="view-title">Circle</label>
+                                            <div class="view-details">
+                                                @Model.Circle.Name
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-items border-none">
+                                        <div class="row-outer">
+                                            <label class="view-title">Payroll Group</label>
+                                            <div class="view-details">
+                                                @Model.PayrollGroup.Name
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="tab-items select-option">
+
+
+
+                                        <div class="button-group float-left mr-5">
+
+                                            <button type="button" class="btn btn-default btn-sm" onclick="onEmpWiseBatchUpdateClick('@Model.EmployeeGI')">
+                                                Batch Update
+                                            </button>
+                                            <div id="employeeWiseDutyBatch">
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel" onclick="onEmployeeWiseExportClick('@Model.EmployeeGI')">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+                                        <!-- <button data-bs-toggle="tooltip" title="Download Excel" type="button" class="btn btn-sm btn-excel ml-2">
+                                            <i class="icon-xl fas fa-download"></i>
+                                        </button> -->
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+                            <!-- Table Section -->
+
+                            <div class="ihits-table table-border mobile-responsive-table duty-roster-details-list vertical-scroll-300">
+                                @Html.HiddenFor(m => m.Employee_DutyRosterEditDetails.Count)
+                                <table id="dutyRosterDetailsListTable">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Day</th>
+                                            <th scope="col">Shift Code </th>
+                                            <th scope="col">Shift Name </th>
+                                            <th scope="col">Shift Start</th>
+                                            <th scope="col">Shift End</th>
+                                            <th scope="col">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.Employee_DutyRosterEditDetails.Count > 0 && Model.Employee_DutyRosterEditDetails != null)
+                                        {
+                                            for (int i = 0; i < Model.Employee_DutyRosterEditDetails.Count; i++)
+                                            {
+                                                <tr>
+                                                   
+                                                    <td data-label="Date">
+
+                                                        @Html.HiddenFor(m => m.Employee_DutyRosterEditDetails[i].Date)
+
+                                                        @Model.Employee_DutyRosterEditDetails[i].Date.ToString("dd-MMM-yyyy")
+                                                    </td>
+                                                    <td data-label="Day">@Model.Employee_DutyRosterEditDetails[i].Day</td>
+                                                    <td data-label="Shift Code">
+                                                        <span id="dutyDREmpShift"></span>
+                                                        <span class="shift_Label_@i">
+                                                            @Model.Employee_DutyRosterEditDetails[i].ShiftDetails.ShiftCode
+
+                                                        </span>
+
+                                                        <span class="shift_ID_@i hide">
+                                                            @Html.DropDownListFor(m => m.Employee_DutyRosterEditDetails[i].ShiftDetails.Code, new SelectList(ViewBag.EmployeeWiseShift, "Value", "Text", Model.Employee_DutyRosterEditDetails[i].ShiftDetails.Code), "Select Shift", new { @class = "form-control form-control-sm", @onchange = "onShiftChange(this," + i + ")" })
+
+                                                        </span>
+
+                                                    </td>
+                                                    <td data-label="Shift Name" class="dutyShiftName_Row_@i"> @Model.Employee_DutyRosterEditDetails[i].ShiftDetails.Name</td>
+                                                    <td data-label="Shift Start" class="dutyShiftStart_Row_@i">@Model.Employee_DutyRosterEditDetails[i].ShiftDetails.ShiftStartTime</td>
+                                                    <td data-label="Shift End" class="dutyShiftEnd_Row_@i">@Model.Employee_DutyRosterEditDetails[i].ShiftDetails.ShiftEndTime</td>
+                                                    <td data-label="Action">
+                                                        <div class="small-btn-group edit_Button_@i">
+                                                            <a type="button" data-bs-toggle="tooltip" title="Edit" class="btn btn-icon btn-edit icon-only" onclick="onDutyEditClick(@i)"><i class="icon-xl fas fa-pencil-alt"></i></a>
+
+                                                        </div>
+                                                        <div class="small-btn-group save_Cancel_@i hide">
+                                                            <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-update btn-cancel icon-only " data-bs-original-title="Update" aria-describedby="tooltip858902" onclick="OnDutySaveClick('@Model.EmployeeGI', @i)"><i class="fa fa-check update-icon"></i>@*<img class="" src="~/images/icons/upadtenewwwiconn.svg" />*@</a>
+                                                            <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-cancel icon-only " data-bs-original-title="Cancel"><i class="icon-xl fas fa-times  cancel-btn" onclick="onDutyCancelClick(@i)"></i></a>
+                                                        </div>
+
+                                                </tr>
+                                            }
+                                        }
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Table Setion End -->
+                            <!--end: Datatable-->
+                        </div>
+
+
+
+
+                        @*-----------POPUP--------------------------------------*@
+
+
+                        <div class="row card-footer-bottom-fixed align-right">
+
+                            <div class="col-md-12">
+
+                                <a  data-bs-toggle="modal" data-target="#dutyRostershiftPopUP" onclick="POPUP()">
+                                    <div class="application-btn d-flex align-items-center">
+                                        <div class="history-btn">
+                                            <img src="/images/arrow_3_trianglepath.png">
+
+                                        </div>
+                                        <div class="application-icon"> <h3 class="pt-2 pl-3">Shift Details</h3></div>
+                                    </div>
+                                </a>
+
+                                <!-- Large modal -->
+                                @*<button type="button" class="btn btn-group btn-default btn-sm" data-bs-toggle="modal" data-target="#dutyRostershiftPopUP" onclick="POPUP()"> Shift Details</button>*@
+
+                                @*<div class="modal fade bd-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">*@
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        @*--------------------------------------------------------------------------------*@
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="modal fade bd-example-modal-lg" id="dutyRostershiftPopUP" tabindex="-1" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+        <div class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Shift Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

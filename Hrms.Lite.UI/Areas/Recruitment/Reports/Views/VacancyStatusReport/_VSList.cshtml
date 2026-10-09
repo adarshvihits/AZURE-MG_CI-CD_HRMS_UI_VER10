@@ -1,0 +1,373 @@
+﻿@model Hrms.Lite.Shared.Recruitment.Reports.RecruitmentReports
+@*<script src="~/js/settings.js"></script>*@
+
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+      
+
+    });
+</script>*@
+
+
+
+<script>
+    $(document).ready(function () {
+
+        debugger;
+        var filter1 = $('#BasicFilter').serialize();
+
+        var temp = filter1;
+
+
+
+        var dataTable = $("#ReportvacancyStatusTable").DataTable({
+
+            "pagingType": 'full_numbers',
+            "destroy": 'true',
+            "ajax": {
+                "url": "/Recruitment/VacancyStatusReport/GetList",
+                "type": "POST",
+
+
+                "datatype": "json",
+
+
+                'data':
+
+                    function (d) {
+                        temp = '';
+
+
+
+
+                        var start = d.start;
+
+                        var searchValue = $('#dataTableSearch').val();
+
+
+
+
+
+
+
+                        temp = filter1 + '&draw=' + d.draw + '&start=' + d.start + '&length=' + d.length + '&searchValue=' + searchValue + '&dummy=dummy';
+                        d.filter = temp;
+
+
+                        return JSON.stringify(d);
+                    },
+
+
+
+
+                "dataSrc": function (d) {
+
+
+
+
+
+
+                    $('#VacancyStatusReport_Count').val(d.recordsTotal);
+
+                    for (var i = 0, ien = d.data.length; i < ien; i++) {
+                        d.data[i].needByDate = _GetFormattedDate(d.data[i].needByDate);
+
+
+
+                        if (d.data[i].daysLeft > 0) {
+                            d.data[i].daysLeft = '<td data-label="Days Left">' + d.data[i].daysLeft + '</td>'
+                        }
+                        else {
+                            d.data[i].daysLeft = '<td data-label="Days Left" class="daysred">' + d.data[i].daysLeft + '</td>'
+                        }
+
+
+
+                        if (d.data[i].map == 0) {
+                            d.data[i].map = '<td data-label="Map" class="daysred"><a data-bs-toggle="modal" data-target=".bd-example-modal-lg"type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick(' + "'" + d.data[i].vacancyManagementGI + "'" + ')">' + d.data[i].map + '</a></td>'
+                        }
+                        else {
+
+                            d.data[i].map = ' <td data-label="Map"><a data-bs-toggle="modal" data-target=".bd-example-modal-lg" type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick(' + "'" + d.data[i].vacancyManagementGI + "'" + ')">' + d.data[i].map + '</a></td>'
+
+                        }
+
+
+                    }
+
+                    return d.data;
+                }
+
+            },
+
+            "columns": [
+
+                { "data": "jobCode", "width": "8%" },
+                { "data": "jobTitle", "width": "13%" },
+                { "data": "locationName", "width": "9%" },
+                { "data": "needByDate", "width": "7%" },
+                { "data": "daysLeft", "width": "4%" },
+                { "data": "noOfRequirements", "width": "5%" },
+                { "data": "map", "width": "5%" },
+                { "data": "sl", "width": "4%" },
+                { "data": "ie", "width": "5%" },
+                { "data": "raa", "width": "5%" },
+                { "data": "salary", "width": "5%" },
+                { "data": "cc", "width": "4%" },
+                { "data": "ec", "width": "4%" },
+                { "data": "offer", "width": "5%" },
+               /* { "data": "edc", "width": "8%" },*/
+
+
+            ],
+
+
+
+
+
+
+            "dom": 'rt<"bottom"><"my-wrapper"<"my-inner2"l><"my-inner1"i><"my-inner3"p>>',
+
+            "serverSide": "true",
+            "scrollY": '52vh',
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+
+            "order": [0, "asc"],
+            "processing": "true",
+            "language": {
+                processing: '<img width="100%" src="/images/Loader_img1 (7).gif">',
+
+                emptyTable: '<div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                zeroRecords: '<div id="noDataFound" style="text-align: center;display: flex;align-items: center;justify-content: center;height: 45vh;"><img src="/images/nodata.png" /></div >',
+
+                sLengthMenu: "_MENU_",
+                paginate: {
+
+
+                    next: '<img width="100%" src="/images/icons/Icon awesome-arrow-right-1.png" >',
+                    previous: '<img src="/images/icons/Icon awesome-arrow-right.png">',
+                    first: '<img src="/images/icons/Icon metro-next-1.png">',
+                    last: '<img src="/images/icons/Icon metro-next.png">'
+
+
+
+
+                }
+            }
+
+
+
+        });
+
+
+
+        $('.ihits-table table').removeClass("dataTable no-footer");
+
+
+        $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.next').attr("title", "Next");
+        $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.previous').attr("title", "Previous");
+        $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.first').attr("title", "First");
+        $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+        $('.paginate_button.last').attr("title", "Last");
+
+
+        $("#dataTableSearch").on("keyup search input paste cut", function () {
+            dataTable.search(this.value).draw();
+            $('#noDataFound').css("display", 'none');
+        });
+
+        $('.search-slider-inner').click(function () {
+            dataTable.search('').draw();
+            $('#dataTableSearch').val('');
+            $('#dataTableSearch').focus();
+        });
+
+        dataTable.on('draw', function () {
+            $('.paginate_button.next').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.next').attr("title", "Next");
+            $('.paginate_button.previous').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.previous').attr("title", "Previous");
+            $('.paginate_button.first').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.first').attr("title", "First");
+            $('.paginate_button.last').attr("data-bs-toggle", "tooltip");
+            $('.paginate_button.last').attr("title", "Last");
+
+        });
+
+        $.fn.DataTable.ext.pager.numbers_length = 5;
+
+    });
+</script>
+
+
+
+
+<script>
+
+
+    function onmappedResumeClick(VacancyGI) {
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: "/DataBank/MRFVsResume/GetMappedResumePopUp?VacancyGI=" + VacancyGI,
+            dataType: 'html',
+
+            success: function (Data) {
+                if ($($.parseHTML(Data)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+
+                else {
+                    var m = $('.bd-example-modal-lg');
+                    m.find('.modal-body').html('');
+                    m.find('.modal-body').html(Data);
+                /* $("#myDiv").css("display", "block");*/
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                swal.fire(xhr.responseText);
+
+            }
+        });
+    }
+    function viewResume(GI) {
+        debugger;
+        var url = "/DataBank/MRFVsResume/ResumeView";
+        /* window.location.href = url + '?ResumeGI=' + GI;*/
+        window.open(url + '?ResumeGI=' + GI, '_blank');
+    }
+
+    function ExportToExcel() {
+        debugger;
+       
+        var tableLength = $('#VacancyStatusReport_Count').val();
+        if (tableLength > 0) {
+            url = "/Recruitment/VacancyStatusReport/ExportToExcel?totRecords=" + tableLength;
+            window.location.href = url;
+        }
+        else {
+            swal.fire("No data found to export");
+        }
+    }
+</script>
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table  vacancy-status-report pt-1">
+    @Html.HiddenFor(m => m.VacancyStatusReport.Count)
+    <table id="ReportvacancyStatusTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF Code</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Location</th>
+                <th scope="col">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Days Left ">D.L.</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Number of Requirements ">N/Req </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Mapped Resumes">Map </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Screening / Shortlisted">SL </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Interview and Evaluation">I & E </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="RA Approval">RAA</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Salary Split Up">Salary</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Credit Checking">CC</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Employment Checking">EC</th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Offer Initiation">Offer</th>
+                @*<th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Expected Date Of Completion">EDC</th>*@
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @*@if (Model != null && Model.VacancyStatusReport != null && Model.VacancyStatusReport.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.VacancyStatusReport.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="MRF Code">@Model.VacancyStatusReport[i].JobCode</td>
+                            <td data-label="Job Title">@Model.VacancyStatusReport[i].JobTitle</td>
+                            <td data-label="Location">@Model.VacancyStatusReport[i].LocationName</td>
+                            <td data-label="Need By Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyStatusReport[i].NeedByDate))</td>
+                            @if (Model.VacancyStatusReport[i].DaysLeft < 0)
+                            {
+
+                                <td data-label="Days Left" class="daysred">@Model.VacancyStatusReport[i].DaysLeft</td>
+                            }
+                            else
+                            {
+
+                                <td data-label="Days Left">@Model.VacancyStatusReport[i].DaysLeft</td>
+                            }
+
+                            <td data-label="Number of Requirements">@Model.VacancyStatusReport[i].NoOfRequirements</td>
+
+
+                            @if (Model.VacancyStatusReport[i].MAP == 0)
+                            {
+                                <td data-label="Map" class="daysred">
+                                    <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                       type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyStatusReport[i].VacancyManagementGI')">
+                                        @Model.VacancyStatusReport[i].MAP
+                                    </a>
+
+                                </td>
+                            }
+                            else
+                            {
+                                <td data-label="Map">
+                                    <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                       type="button" class="btn btn-sm float-left" onclick="onmappedResumeClick('@Model.VacancyStatusReport[i].VacancyManagementGI')">
+                                        @Model.VacancyStatusReport[i].MAP
+                                    </a>
+                                </td>
+                            }
+
+                            <td data-label="SL">@Model.VacancyStatusReport[i].SL</td>
+                            <td data-label="I & E">@Model.VacancyStatusReport[i].IE</td>
+                            <td data-label="RAA">@Model.VacancyStatusReport[i].RAA</td>
+                            <td data-label="Salary">@Model.VacancyStatusReport[i].SALARY</td>
+                            <td data-label="CC">@Model.VacancyStatusReport[i].CC</td>
+                            <td data-label="EC">@Model.VacancyStatusReport[i].EC</td>
+                            <td data-label="Offer">@Model.VacancyStatusReport[i].OFFER</td>
+                            <td data-label="EDC">@Model.VacancyStatusReport[i].EDC</td>
+
+
+                        </tr>
+                    }
+                }*@
+
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mapped Resumes
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,180 @@
+﻿@model Hrms.Lite.Shared.Master.Department
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<style>
+    #deptSecBT thead th {
+        color: #3f4254 !important;     
+        font-weight: 600;
+        background-color: #e9ebf0;
+        position: sticky;              
+        top: 0;
+        z-index: 1;
+    }
+    #deptSecBT thead .checkbox > span {
+        border-color: #7e8299;          
+    }
+</style>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "Department", FormMethod.Post, new { id = "Departmentsave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Department</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'DepartmentName')", maxlength = "120" })
+                            <span id="DepartmentName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'DeptShortName')", maxlength = "5" })
+
+
+                        </div>
+                        <span id="DeptShortName"></span>
+                    </div>
+                </div>
+                <div class="row">
+    <div class="col-md-12 mt-3">
+        <div class="ihits-table table-border vertical-scroll-150">
+            <table id="deptSecBT">
+                <thead>
+                    <tr class="table-gray">
+                        <th scope="col">
+                            Section
+                            <span class="Mandatory">*</span>
+                        </th>
+                        <th scope="col">Business Type</th>
+                        <th scope="col" class="d-flex "style="justify-content: center;">
+                            <div class="checkbox-inline mr-2">
+                                <label class="checkbox checkbox-outline checkbox-success mr-1">
+                                    <input type="checkbox" id="deptSecBTAll"
+                                           onclick="onAllClick('deptSecBTAll','deptSecBT')">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.DepartmentVsSectionBT != null)
+                    {
+                        for (int i = 0; i < Model.DepartmentVsSectionBT.Count; i++)
+                        {
+                            <tr>
+                                <td>@Model.DepartmentVsSectionBT[i].SectionName</td>
+                                <td>@Model.DepartmentVsSectionBT[i].BusinessTypeName</td>
+                                <td>
+                                    @Html.HiddenFor(x => x.DepartmentVsSectionBT[i].SectionCode)
+                                    @Html.HiddenFor(x => x.DepartmentVsSectionBT[i].BusinessTypeCode)
+                                    <div class="checkbox-inline justify-content-center">
+                                        <label class="checkbox checkbox-outline checkbox-success mr-1">
+                                            @Html.CheckBoxFor(x => x.DepartmentVsSectionBT[i].Applicable,
+                                                new { @class = "form-control form-control-sm dept",
+                                                      @onclick = "onChkBoxClick(this,'deptSecBTAll','deptSecBT')" })
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+                <div class="row">
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('DPT','@Model.Code')"*@>
+                                @Html.HiddenFor(m=>Model.Code)
+                                @Html.CheckBoxFor(model => model.Active ,new {@id="Activeinactivedpt" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.HiddenFor(model => Model.Description)
+
+                                @Html.DisplayFor(model => Model.Description)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DepartmentSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="DepartmentSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

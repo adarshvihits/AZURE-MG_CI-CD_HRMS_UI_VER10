@@ -1,0 +1,112 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+    <script src="~/js/settings.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            
+         if (@ViewBag.IsFilterApplied == 0) {
+            $('#filterForm').removeClass('filter-apply');
+        }
+        else {
+            $('#filterForm').addClass('filter-apply');
+        }
+    });
+    </script>
+   
+    <div class="ihits-table table-border mobile-responsive-table duty-roster-date-details-list ">
+        @Html.HiddenFor(m => m.DateWise_DutyRosterEditDetails.Count)
+        <table id="dutyDateWiseEntrytable" class="common-table">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">ID</th>
+                    <th scope="col">Emploee Name</th>
+                    <th scope="col">Shift Code</th>
+                    <th scope="col">Shift Name</th>
+                    <th scope="col">Shift Start</th>
+                    <th scope="col">Shift End</th>
+                    <th scope="col">Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.DateWise_DutyRosterEditDetails != null && Model.DateWise_DutyRosterEditDetails.Count > 0)
+                {
+                    for (int i = 0; i < Model.DateWise_DutyRosterEditDetails.Count; i++)
+                    {
+                        <tr>
+
+                            <td data-label="ID">@Model.DateWise_DutyRosterEditDetails[i].EmployeeID</td>
+                            <td data-label="Emploee Name">@Model.DateWise_DutyRosterEditDetails[i].FullName</td>
+                            <td data-label="Shift Code">
+                                <span id="dutyRrDateShift_@i"></span>
+                                <span class="shift_Label_DateWise_@i">
+                                    @Html.DisplayFor(m => m.DateWise_DutyRosterEditDetails[i].ShiftDetails.ShiftCode)
+                                </span>
+                                <span class="shift_ID_DateWise_@i hide">
+                                    @Html.DropDownListFor(model => model.DateWise_DutyRosterEditDetails[i].ShiftDetails.Code,
+                                               new List<SelectListItem> {
+                                                new SelectListItem { Value = "" , Text = "Shift Code" }},
+                                                new { @class = "form-control form-control-sm", @onchange = "onDateWiseShiftChange(this," + i + ")" })
+
+                                </span>
+                            </td>
+                            <td data-label="Shift Name" class="dutyShiftName_DateWise_Row_@i">  @Model.DateWise_DutyRosterEditDetails[i].ShiftDetails.Name</td>
+                            <td data-label="Shift Start" class="dutyShiftStart_DateWise_Row_@i">@Model.DateWise_DutyRosterEditDetails[i].ShiftDetails.ShiftStartTime</td>
+                            <td data-label="Shift End" class="dutyShiftEnd_DateWise_Row_@i">@Model.DateWise_DutyRosterEditDetails[i].ShiftDetails.ShiftEndTime</td>
+                            <td data-label="Action">
+                                <div class="small-btn-group edit_Button_DateWise_@i">
+                                    <a type="button" data-bs-toggle="tooltip" title="Edit" class="btn btn-icon btn-edit icon-only" onclick="onDutyDateWiseEditClick(@i, '@Model.DateWise_DutyRosterEditDetails[i].EmployeeGI')"><i class="icon-xl fas fa-pencil-alt"></i></a>
+
+                                </div>
+                                <div class="small-btn-group save_Cancel_DateWise_@i hide">
+                                    <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-update btn-cancel icon-only " data-bs-original-title="Update" aria-describedby="tooltip858902" onclick="OnDutyDateWiseSaveClick('@Model.DateWise_DutyRosterEditDetails[i].EmployeeGI',@i,'@Model.From')"><i class="icon-xl fas fa-sync-alt  update-icon"></i></a>
+                                    <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-icon btn-cancel icon-only " data-bs-original-title="Cancel"><i class="icon-xl fas fa-times  cancel-btn" onclick="onDutyDateWiseCancelClick(@i)"></i></a>
+                                </div>
+
+                        </tr>
+                    }
+                }
+                @*<tr>
+                    <td data-label="ID">@Model.EmpId</td>
+                    <td data-label="Emploee Name">@Model.emp</td>
+                    <td data-label="Shift Code">
+                        <select class="form-control form-control-sm ">
+                            <option>Shift Code</option>
+                            <option>Demo</option>
+                            <option>Demo</option>
+                        </select>
+                    </td>
+                    <td data-label="Shift Name">Demo</td>
+                    <td data-label="Shift Start">09:30</td>
+                    <td data-label="Shift End">18:00</td>
+                    <td data-label="Action">
+                        <div class="small-btn-group">
+                            <a type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update icon-only "><i class="icon-xl fas fa-sync-alt"></i></a>
+                            <a type="button" data-bs-toggle="tooltip" title="Cancel" class="btn btn-icon btn-cancel icon-only "><i class="icon-xl fas fa-times"></i></a>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td data-label="ID">IHS001</td>
+                    <td data-label="Emploee Name">Krishnakumar</td>
+                    <td data-label="Shift Code">IT</td>
+                    <td data-label="Shift Name">Demo</td>
+                    <td data-label="Shift Start">09:30</td>
+                    <td data-label="Shift End">18:00</td>
+                    <td data-label="Action">
+                        <div class="small-btn-group">
+                            <a type="button" data-bs-toggle="tooltip" title="Edit" class="btn btn-icon btn-edit icon-only "><i class="icon-xl fas fa-pencil-alt"></i></a>
+
+                        </div>
+                    </td>
+
+                </tr>*@
+
+
+
+
+            </tbody>
+        </table>
+    </div>

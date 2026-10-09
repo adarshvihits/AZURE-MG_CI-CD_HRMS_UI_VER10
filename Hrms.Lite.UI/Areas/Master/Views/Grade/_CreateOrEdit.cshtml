@@ -1,0 +1,139 @@
+﻿@model Hrms.Lite.Shared.Master.Grade
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+@using (Html.BeginForm("Save", "Grade", FormMethod.Post, new { id = "gradeSave" }))
+{
+    <div id="gradeMaseredit" class="slider-forms slider-forms-open CreateOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('CreateOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>GRADE</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.Code)
+
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm GName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'GradeName')", maxlength = "120" })
+                            <span id="GradeName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm GShortName", @placeholder = "Short Name", @onblur = "validate(this,'GradeShrtName')", maxlength = "5" })
+                            <span id="GradeShrtName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>
+                Notice Period
+                <span class="Mandatory">*</span>
+            </label>
+
+           @Html.TextBoxFor(Model => Model.NoticePeriod, new {
+    @class = "form-control form-control-sm NoticePeriod",
+    @placeholder = "Notice Period",
+    maxlength = "5",
+    @onkeypress = "return onlyNumberKey(event)",
+    @oninput = "CopypasteValidation(this)",
+    @onblur = "validate(this,'GradeNoticePeriod')" })
+<span id="GradeNoticePeriod" class="text-danger"></span>
+           
+        </div>
+    </div>
+     <div class="col-md-6 mt-2 mb-2">
+                        <div class="d-flex align-items-center mt-5">
+
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('GRD','@Model.Code')"*@>
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(Model => Model.Active, new { @id = "Activeinactivedgrd" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+</div>
+               
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+                                <label>Description</label>
+                                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm GDescription", @placeholder = "Description", maxlength = "250" })
+                                @Html.HiddenFor(model => Model.Description)
+                                @*<span id="des"></span>*@
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+                                <label class="view-title">Description</label>
+                                @*<div class="view-details">*@
+
+                                @Html.DisplayFor(Model => Model.Description, new { })
+                                @Html.HiddenFor(model => Model.Description)
+
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                            @if (CurrentUserRoleActions.Create == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="GradeSave('Save')">
+                                    Save
+                                </button>
+                            }
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                            @if (CurrentUserRoleActions.Modify == true)
+                            {
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="GradeSave('Modify')">
+                                    Modify
+                                </button>
+                            }
+                        }
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

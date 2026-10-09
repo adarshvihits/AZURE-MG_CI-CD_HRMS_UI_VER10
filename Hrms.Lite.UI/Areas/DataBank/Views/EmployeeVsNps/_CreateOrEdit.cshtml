@@ -1,0 +1,122 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeVsNps
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "EmployeeVsNps", FormMethod.Post, new { id = "EmployeeVsNpssave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Employee Vs Nps</h4>
+            </div>
+            <div class="add-padding">
+                <div class="profile-header position-relative box-shadow-none mb-2">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                   
+
+
+                    <div class="profile-header-overflow"></div>
+                </div>
+              
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-0">
+                            <label>NPS Date</label><span class="Mandatory">*</span>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.code)
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.NpsDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 dojpicker", @readonly = "true", @placeholder = "", @onchange = " ", onclick = "$('.dojpicker').datepicker('show')" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="date_re"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Pran Number
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.PranNumber, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "PranNumber", @onblur = "validate(this,'DeptShortName')", maxlength = "12" })
+
+
+                        </div>
+                        <span id="PranNumberid"></span>
+                    </div>
+                </div>
+
+
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.HiddenFor(model => Model.Remarks)
+
+                                @Html.DisplayFor(model => Model.Remarks)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="EmployeeVsNpsSave('Save')">
+                                Save
+                            </button>
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="EmployeeVsNpsSave('Modify')">
+                                Modify
+                            </button>
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="confirmDelete('Model.code')">
+                                Delete
+                            </button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

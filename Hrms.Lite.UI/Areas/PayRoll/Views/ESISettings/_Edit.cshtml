@@ -1,0 +1,182 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ESISettings
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "esiSettingsEditSlider" }))
+{
+    <div id="ESI_Settings_slider" class="slider-forms slider-forms-open esiSlider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('esiSlider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>ESI Settings</h4>
+            <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+
+            <div class="row">
+                <!-- <div class="col-md-4">
+                    <div class="row-outer">
+                        <label class="view-title">Evaluation Period</label>
+                        <div class="view-details">
+                            Demo</div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">
+                            Location
+                        </label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.ESISettingsDetails.EmployeeGI)
+                            @Html.HiddenFor(m => m.ESIDeduction.Code)
+                            @Model.ESISettingsDetails.Location
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row-outer">
+                        <label class="view-title">DOJ</label>
+                        <div class="view-details">
+                            @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ESISettingsDetails.DOJ))
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="row">
+
+
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ESI Group </label><span class="Mandatory">*</span>
+                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                <option>ESI Group</option>
+                                <option>1</option>
+                                <option>1</option>
+                            </select>*@
+                        @Html.DropDownListFor(m => m.ESISettingsDetails.ESIGroup.Code, (SelectList)ViewBag.EsiGrp, "--Select--", new { @class = "form-control form-control-sm",@onblur= "validate(this, 'esiGrp')" })
+                        <span id="esiGrp"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ESI No</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="51425685">*@
+                        @Html.TextBoxFor(m => m.ESISettingsDetails.ESINo, new { @class = "form-control form-control-sm", @placeholder = "ESI No", @onblur = "validate(this, 'esiNo')" })
+                        <span id="esiNo"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="row">
+
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>EESI</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="0.75">*@
+                        @Html.TextBoxFor(m => m.ESISettingsDetails.EESI, new { @class = "form-control form-control-sm", @placeholder = "EESI", @onblur = "validate(this, 'esiEESI')", @onkeypress = "return onlyAmount(event)" })
+                        @Html.HiddenFor(m=> m.ESISettingsDetails.Gen_EESI)
+                        <span id="esiEESI"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>MESI</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="3.25">*@
+                        @Html.TextBoxFor(m => m.ESISettingsDetails.MESI, new { @class = "form-control form-control-sm", @placeholder = "MESI", @onblur = "validate(this, 'esiMESI')", @onkeypress = "return onlyAmount(event)" })
+                        @Html.HiddenFor(m=> m.ESISettingsDetails.Gen_MESI)
+                        <span id="esiMESI"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="row">
+
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Min Limit</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="0.0">*@
+                        @Html.TextBoxFor(m => m.ESISettingsDetails.MinLimit, new { @class = "form-control form-control-sm", @placeholder = "Min Limit", @onblur = "validate(this, 'esiMinLimit')", @onkeypress = "return onlyNumberKey(event)" })
+                        @Html.HiddenFor(m=> m.ESISettingsDetails.Gen_MinLimit)
+                        <span id="esiMinLimit"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Max Limit</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="21000.0">*@
+                        @Html.TextBoxFor(m => m.ESISettingsDetails.EmpMaxLimit, new { @class = "form-control form-control-sm", @placeholder = "Max Limit", @onblur = "validate(this, 'esiMaxLimit')", @onkeypress = "return onlyNumberKey(event)" })
+                        @Html.HiddenFor(m=> m.ESISettingsDetails.Gen_EmpMaxLimit)
+                        <span id="esiMaxLimit"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="row">
+
+
+
+
+                <div class="col-md-12">
+                    <label>Remarks</label>
+                    @*<textarea class="form-control form-control-sm"
+                        placeholder="Remarks"></textarea>*@
+                    @Html.TextAreaFor(m => m.ESISettingsDetails.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks" })
+                </div>
+
+            </div>
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <a type="button" class="btn btn-default  mobile-full-width" onclick="EmpWiseSave()">
+                        Save
+                    </a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+}

@@ -1,0 +1,9 @@
+﻿var MasterPersmissionMsg = "You don't have permission to perform this Action";
+var SavedSuccessfullyMsg = "Saved Successfully";
+var ModifiedSuccessfullyMsg = "Modified Successfully";
+var ApprovedSuccessfullyMsg = "Approved Successfully";
+var DeletedSuccessfulyMsg = "Deleted Successfully";
+var RejectedSuccessfullyMsg = "Rejected Successfully";
+var MakerCheckerMsg = "MAKER AND CHECKER SHOULD BE DIFFERENT";
+var NoDataFoundMsg = "No data found to export";
+var ApprovalPendingMsg = "APPROVAL PENDING";

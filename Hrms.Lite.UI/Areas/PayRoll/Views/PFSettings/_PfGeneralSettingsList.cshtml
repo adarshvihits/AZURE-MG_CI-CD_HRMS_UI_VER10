@@ -1,0 +1,80 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PFSettings
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "GeneralSettingsSave" }))
+{
+    <div class="ihits-table table-border mobile-responsive-table mb-5 vertical-scroll-250 pf-settings-popup" style="padding:10px;">
+        <table>
+            <thead>
+                <tr class="table-light">
+                    <th scope="col"></th>
+
+                    <th scope="col">Settings Parameter</th>
+                    <th scope="col">Value</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.PFGeneralSettings != null && Model.PFGeneralSettings.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.PFGeneralSettings.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="">
+                                @Html.HiddenFor(m => m.PFGeneralSettings[i].ParameterCode)
+                                @Html.HiddenFor(m => m.PFGeneralSettings[i].ParameterName)
+                                @Html.HiddenFor(m => m.PFDeduction.Code)
+                                @Model.PFGeneralSettings[i].ParameterCode
+                            </td>
+
+                            <td data-label="Settings Parameter">
+                                @Model.PFGeneralSettings[i].ParameterName
+                            </td>
+
+                            <td data-label="Value">
+
+                                <div class="form-group">
+                                    @if (Model.PFGeneralSettings[i].ParameterCode != 4 && Model.PFGeneralSettings[i].ParameterCode != 5)
+                                    { 
+                                        @if (i < 11)
+                                        {
+                                            @Html.TextBoxFor(m => m.PFGeneralSettings[i].Value, new { @class = "form-control form-control-sm", @placeholder = "Value", @onkeypress = "return onlyAmount(event)" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(m => m.PFGeneralSettings[i].Applicability)
+                                        }
+                                    }
+                                </div>
+                            </td>
+
+
+
+                        </tr>
+                    }
+                }
+
+
+
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 10px;">
+
+        <div class="col-md-12 align-right mb-3">
+
+            <a type="button" class="btn btn-default  mobile-full-width" onclick="GeneralSettingsSave()">
+                Save
+            </a>
+        </div>
+
+
+    </div>
+}

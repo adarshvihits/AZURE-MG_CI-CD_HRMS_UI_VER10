@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.Master.AttendanceRequestReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+        });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table attendance-Requestmaster-list pt-1">
+    @Html.HiddenFor(model => Model.RequestReason.Count)
+    <table id="AttendanceRequestReasonTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Reason</th>
+                <th scope="col">Applicable Request</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+
+                if (Model.RequestReason != null && Model.RequestReason.Count > 0)
+                {
+                    for (int i = 0; i < Model.RequestReason.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.ReasonCode)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.ApproveMode)
+                            @Html.HiddenFor(m => m.RequestReason[i].MakerChecker)
+                            <td data-label="Reason">@Model.RequestReason[i].Name</td>
+                            <td data-label="Applicable Request">@Model.RequestReason[i].ApplicableRequest</td>
+                            <td data-label="Actions">
+                                @if (CurrentUserRoleActions.Modify == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editattendancerequest" type="button" onclick="AddNewOrEditClick('MODIFY', '@Model.RequestReason[i].ReasonGI', '@Model.RequestReason[i].LogGI',@i)"
+                                       class="btn btn-icon btn-edit icon-only ">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="editattendancerequest" type="button" onclick="AddNewOrEditClick('MODIFY', '@Model.RequestReason[i].ReasonGI', '@Model.RequestReason[i].LogGI',@i);
+                                    swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});"
+                                       class="btn btn-icon btn-edit icon-only ">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+                                }
+                                @if (CurrentUserRoleActions.Delete == true)
+                                {
+
+                                    <!-- delete Slider  start-->
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteattendancerequest" type="button" onclick="onDeleteClick('@Model.RequestReason[i].ReasonGI', '@Model.RequestReason[i].LogGI',@i)"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a> 
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleteattendancerequest" type="button" onclick="onDeleteClick('@Model.RequestReason[i].ReasonGI', '@Model.RequestReason[i].LogGI',@i);
+                                        swal.fire(MasterPersmissionMsg);"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                }
+
+
+                                    <!-- <end delete section></end> -->
+                                </td>
+                        </tr>
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

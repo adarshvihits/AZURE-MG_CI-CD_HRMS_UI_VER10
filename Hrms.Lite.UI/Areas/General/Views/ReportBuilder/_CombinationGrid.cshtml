@@ -1,0 +1,111 @@
+﻿
+@model Hrms.Lite.Shared.General.ReportBuilder
+
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+   
+        $("#databankRight").sortable({         
+            items: 'tr:not(thead tr)',
+            cursor: 'pointer',
+            axis: 'y',
+          dropOnEmpty: false,
+            start: function (e, ui) {
+                ui.item.addClass("selected");
+            },
+            stop: function (e, ui) {
+                ui.item.removeClass("selected");
+
+                $(this).find("tr").each(function (index) {
+                    if (index > 0) {
+                        $(this).find("td").eq(2).html(index);
+                        debugger
+                        var tdd = $(this).find("td").eq(2);
+                        tdd.prevObject[0].getElementsByTagName('input')[0].value = index;
+
+
+                    }
+                });
+                
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+@*<script>
+        var row;
+
+        function start() {
+            row = event.target;
+
+        }
+        function dragover() {
+            var e = event;
+            e.preventDefault();
+            debugger;
+            var children = Array.from(e.target.parentNode.parentNode.children);
+
+            if (children.indexOf(e.target.parentNode) > children.indexOf(row)) {
+
+                e.target.parentNode.after(row);
+            }
+            else {
+                e.target.parentNode.before(row);
+
+            }
+
+
+        }
+    </script>*@
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table report-builder-tablelist vertical-scroll-450">
+
+    <table id="databankRight">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Selected Fields</th>
+                <th scope="col">Field</th>
+                <th scope="col">Preference</th>
+            </tr>
+        </thead>
+        <tbody id="databankRight_tbody">
+            @if (Model.Combinations != null && Model.Combinations.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Combinations.Count; i++)
+                {
+
+                    @*<tr draggable="true" ondragstart="start()" ondragover="dragover()">*@
+                    <tr>
+                        <td data-label="Field Group">
+                            @Html.HiddenFor(model => Model.Combinations[i].Order)
+                            @Model.Combinations[i].FieldGroup
+                        </td>
+                        <td data-label="Field">
+                            @Model.Combinations[i].Field
+                            @Html.HiddenFor(model => Model.Combinations[i].Code)
+                            @Html.HiddenFor(model => Model.Combinations[i].Field)
+                            @Html.HiddenFor(model => Model.Combinations[i].FieldGroup)
+
+                        </td>
+                        <td data-label="Preference">@Model.Combinations[i].Order</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="pt-4">
+    <span class="note"><span class="dot">"</span> Employee ID and Employee Name will be first two columns by default<span class="dot">"</span> </span>
+
+
+</div>
+

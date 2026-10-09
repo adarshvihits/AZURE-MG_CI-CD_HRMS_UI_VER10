@@ -1,0 +1,390 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingSchedule
+@*@model System.Data.DataTable*@
+@using System.Data
+
+
+<style>
+
+
+    .Cancelled {
+        background-color: #fff !important;
+        border-left: 7px solid #ed7e62;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+
+    .Scheduled {
+        background-color: #fff !important;
+        border-left: 7px solid #3f8cad;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+
+    .Completed {
+        background-color: #fff !important;
+        border-left: 7px solid #7eebdc;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+
+    .Header {
+        text-transform: capitalize;
+    }
+
+
+    .mrf-request-list table thead tr th:nth-child(1),
+    .mrf-request-list table tbody tr td:nth-child(1) {
+        width: 100px;
+        min-width: 100px;
+        text-align: center;
+        display: none;
+    }
+
+    .mrf-request-list table thead tr th:nth-child(2),
+    .mrf-request-list table tbody tr td:nth-child(2) {
+        font-weight: 600;
+    }
+
+    .mrf-request-list table thead tr th {
+        display: none;
+    }
+
+    .mrf-request-list table thead tr th,
+    .mrf-request-list table tbody tr td {
+        min-width: 190px;
+        max-width: 190px;
+        text-align: center;
+    }
+
+    .mrf-request-list table {
+        max-width: 1803px;
+        display: block;
+        overflow: scroll;
+        height: 445px;
+    }
+
+        .mrf-request-list table thead tr {
+            position: sticky;
+            top: 0;
+        }
+
+    .table_element {
+        font-weight: 500;
+        padding: 5px 10px;
+        height: 65px;
+        font-size: 10px;
+        display: block;
+        border-radius: 10px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .ihits-table table tbody tr {
+        border-bottom: none !important;
+        /* border-bottom: 1px solid #c6cbd8; */
+    }
+
+    #blue-theme .ihits-table.table-border table thead tr.table-dark th, .ihits-table.table-border table tbody tr.table-dark td {
+        background-color: #fff !important;
+        color: black;
+        font-weight: 600;
+    }
+
+    .table_heads {
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        background-color: #a7c9fd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+
+    .new-with {
+        flex: none;
+        max-width: 100% !important;
+    }
+
+    .scroll_tab {
+        max-width: 1803px;
+        display: block;
+        height: 487px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+    .tile-value-count {
+        color: white;
+        padding-left: 11px;
+    }
+    .new-tile-box-3 {
+        /* height: 80px; */
+        height: calc(100% - -1rem);
+        padding: 10px;
+    }
+    .new-tile-box {
+        /* height: 80px; */
+        height: calc(100% - -1rem);
+    }
+    .new-tile-box-2 {
+        /* height: 80px; */
+        height: calc(100% - -1rem);
+    }
+</style>
+
+@*<script src="~/js/settings.js"></script>*@
+<script>
+    $(document).ready(function () {
+
+        SetColour();
+
+    });
+
+
+    function SetColour() {
+        var TDs = document.querySelectorAll('.ColourClass');
+
+        for (var i = 0; i < TDs.length; i++) {
+            debugger;
+            var temp = TDs[i];
+
+            if (temp.firstChild.nodeValue.indexOf('Cancelled') > -1) {
+                temp.className = "Cancelled table_element";
+            }
+            if (temp.firstChild.nodeValue.indexOf('Scheduled') > -1) {
+                temp.className = "Scheduled table_element";
+            }
+            if (temp.firstChild.nodeValue.indexOf('Completed') > -1) {
+                temp.className = "Completed table_element";
+            }
+
+        }
+
+    }
+
+</script>
+
+<div>
+    <div class="row">
+        <div class="col-md-2  ">
+
+            <div class="new-tile-box ">
+                <div style="display:flex; align-items:center; padding-bottom:10px;">
+                    <div class="new-tile-iconz">
+                        <div class="icon-with-set">
+                            <img class="icon-withz" src="/images/icons/handshake.svg">
+                        </div>
+
+                    </div>
+                    <div>
+                        <h1 class="new-tile-headz">
+                            Scheduled
+
+                        </h1>
+                        <div class="tile-value-count pt-2">
+                            @Model.SheduledCount
+                            <h1 class="tile-value-count"></h1>
+                        </div>
+                    </div>
+                   
+                </div>
+
+               
+
+                <div class="wave-box">
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-2 ">
+
+            <div class="new-tile-box-2">
+                <div style="display:flex; align-items:center; padding-bottom:10px;">
+                    <div class="new-tile-iconz">
+                        <div class="icon-with-set">
+                            <img class="icon-withz" src="/images/icons/vacancy.svg">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="new-tile-headz">Completed</h1>
+                        <div class="tile-value-count pt-2">
+                            @Model.CompletedCount
+                            <h1 class="tile-value-count"> </h1>
+                        </div>
+                    </div>
+                   
+                </div>
+              
+
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-2  ">
+
+            <div class="new-tile-box-2   tile-color-5  light-blue-wave     ">
+                <div style="display:flex; align-items:center; padding-bottom:10px;">
+                    <div class="new-tile-iconz">
+                        <div class="icon-with-set">
+                            <img class="icon-withz" src="/images/icons/noticepriod.svg">
+                        </div>
+                    </div>
+                    <div>
+
+                        <h1 class="new-tile-headz">Not-Completed</h1>
+                        <div class="tile-value-count pt-2">
+                            @Model.NotCompletedCount
+                            <h1 class="tile-value-count"> </h1>
+                        </div>
+                    </div>
+                </div>
+               
+
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="col-md-2   ">
+
+
+
+            <div class="new-tile-box-3">
+
+                <div class="row">
+
+
+
+                    <div class="col-md-12">
+
+                        <div style="display:flex; align-items:center; padding-bottom:10px;">
+                            <div class="new-tile-iconz">
+                                <div class="icon-with-set">
+                                    <img class="icon-withz" src="/images/icons/active-emplee.svg">
+                                </div>
+                            </div>
+
+                            <div class="total-male  d-flex">
+                                <div>
+                                    <h1 class="new-tile-headz">Alloted-Amount</h1>
+                                    <div class="tile-value-count pt-2">
+                                        @Model.AllotedAmount
+                                        <h1 class="tile-value-count"> </h1>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-2  ">
+
+            <div class="new-tile-box-3   yellow-wave tile-color-6      ">
+                <div style="display:flex; align-items:center; padding-bottom:10px;">
+                    <div class="new-tile-iconz">
+                        <div class="icon-with-set">
+                            <img class="icon-withz" src="/images/icons/less hour.svg">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="new-tile-headz">Cost</h1>
+                        <div class="tile-value-count pt-2">
+                            @Model.CostAmount
+                            <h1 class="tile-value-count"> </h1>
+                        </div>
+                    </div>
+                   
+
+                </div>
+              
+
+            </div>
+
+        </div>
+        <div class="col-md-2  ">
+
+            <div class="new-tile-box-3      tile-color-10    ">
+                <div style="display:flex; align-items:center; padding-bottom:10px;">
+                    <div class="new-tile-iconz">
+                        <div class="icon-with-set">
+                            <img class="icon-withz" src="/images/icons/whf icon.svg">
+                        </div>
+                    </div>
+                    <div>
+
+
+                        <h1 class="new-tile-headz">Variance</h1>
+                        <div class="tile-value-count pt-2">
+                            @Model.VarienceAmount
+                            <h1 class="tile-value-count"> </h1>
+                        </div>
+                    </div>
+                </div>
+               
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="scroll_tab pt-5">
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table mrf-request-list ">
+        <table class="common-table ">
+            @if (Model != null)
+            {
+                <thead>
+                    <tr class="table-dark">
+
+                        @foreach (DataColumn column in Model.DataTable.Columns)
+                        {
+                            <th>
+                                <div class="Header table_heads">
+                                    @column.ColumnName
+                                </div>
+
+                            </th>
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.DataTable.Rows)
+                    {
+                        <tr>
+                            @foreach (DataColumn column in Model.DataTable.Columns)
+                            {
+                                <td class="">
+                                    <div class="ColourClass">
+                                        @row[column.ColumnName]
+                                    </div>
+
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+    </div>
+</div>

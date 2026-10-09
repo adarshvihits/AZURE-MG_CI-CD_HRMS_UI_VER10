@@ -1,0 +1,109 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LOPSandwichUpdation
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+
+<script src="~/scripts/TimeOffice/LOPSandwichUpdation.js"></script>
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">LOP Sandwich Updation</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        LOP Sandwich Updation
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+            <div class="card card-custom height-100per footer-row-fixed">
+                <div class="card-body">
+                    <!--begin: Search Form-->
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "LOP_SAND_UPDATE" }))
+                    {
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items ml-1 pr-0 border-none select-option">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.Payroll, (SelectList)ViewBag.Payroll, "--Select Payroll--", new { @class = "form-control form-control-sm month", @onchange = "GetList()" })
+                                        <span id="payrollgrp"></span>
+                                    </div>
+                                </div>
+                                <div class="tab-items ml-1 pr-0 border-none select-option">
+                                    <div class="form-group filter-combobox mr-2" style="width: 150px;">
+                                        @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Select Month--", new { @class = "form-control form-control-sm month", @onchange = "GetList()" })
+                                        <span id="month"></span>
+                                    </div>
+                                </div>
+                                <div class="tab-items select-option">
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm" placeholder="ID/Name">
+                                    </div>
+                                    <div class="filter-button slider-btn" id="filterForm" data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Table Section -->
+
+                        <div id="lopsandupdate">
+                            @await Html.PartialAsync("_List")
+                        </div>
+
+                        <!-- Table Section End -->
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6 align-right">
+                                <a type="button"
+                                   class="btn btn-default mobile-full-width" onclick="lopsandsave()">
+                                    Save
+                                </a>
+                            </div>
+                        
+                            <div>
+                            <a id="wageGradeMasterAdd" type="button" class="btn btn-default  mobile-full-width" onclick="TransactionHistory()">
+                                Transaction History
+                            </a>
+                            </div>
+                 
+                        </div>
+                    }
+                    </div>
+        </div>
+    </div>
+</div>
+                   
+<div id="filterSlider">
+    @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+</div>

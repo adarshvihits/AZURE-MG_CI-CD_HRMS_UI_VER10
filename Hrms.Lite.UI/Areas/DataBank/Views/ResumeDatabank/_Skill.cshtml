@@ -1,0 +1,128 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+    <style>
+        .step-outer .step-item {
+            left: 0px;
+        }
+    </style>
+
+
+    <div class="step-outer ">
+
+
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Basic')">
+            Basic Details
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Address')">
+            Address
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Experience')">
+            Experience
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Education')">
+            Education
+            <span class="step-circle"></span>
+        </a>
+        <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Certification')">
+            Certifications
+            <span class="step-circle"></span>
+        </a>
+        <div class="step-item active">
+            Skills
+            <span class="step-circle"></span>
+        </div>
+        <div class="step-item ">
+            Summary
+            <span class="step-circle"></span>
+        </div>
+    </div>
+
+    @{
+        if (Model.Skill != null && Model.Skill.Count > 0)
+        {
+
+            @for (int i = 0; i < Model.Skill.Count; i++)
+            {
+                <div class="step-progress-outer">
+
+                    <div class="step-demo col-md-5">
+
+                        <img src="~/images/resume_template.png" style="max-width: 100%;" />
+                    </div>
+
+
+                    <div class="step-left col-md-7">
+
+                        <div class="resumegrid_repeat my-3 skill_Outer">
+
+                            <h2>Skill</h2>
+                            <div class="Rdskill" id="skill_div_@i">
+                                <div class="row pt-4">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Skill Type</label><span class="Mandatory">*</span>
+                                            @Html.DropDownListFor(m => m.Skill[i].SkillType.Code, (SelectList)ViewBag.skillType, "--Select--", new { @class = "form-control form-control-sm ifSkilEmpty", @onchange = "onSkillTypeChange(this," + @i + ")" })
+
+                                        </div>
+                                        <span class="rd_Skill_Span_skType" id="skilType_@i"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Skill</label><span class="Mandatory">*</span>
+                                            @Html.DropDownListFor(m => m.Skill[i].Skill.Code, new SelectList(Model.Skill[i].SkillDropdown, "Code", "Name"), "--Select--", new { @class = "form-control form-control-sm ifSkilEmpty", @onchange = "validateResumeDB(this,'skill_'," + @i + ")" })
+                                            <span class="rd_Skill_Span_sk" id="skill_@i"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Skill Proficiency</label><span class="Mandatory">*</span>
+                                            @Html.DropDownListFor(m => m.Skill[i].SkillProficiency.Code, (SelectList)ViewBag.SkillProficiency, "--Select--", new { @class = "form-control form-control-sm ifSkilEmpty", @onchange = "validateResumeDB(this,'skilProf_'," + @i + ")" })
+
+                                        </div>
+                                        <span class="rd_Skill_Span_skprof" id="skilProf_@i"></span>
+                                    </div>
+                                </div>
+                                <div class="row pt-5">
+
+                                    <div class="col-md-2">
+                                        <a data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon btn-delete big-btn float-left" onclick="DeleteRwSkill(@i)"><i class="icon-xl far fa-trash-alt"></i></a>
+
+
+                                    </div>
+                                    <div class="col-md-10">
+
+                                        <button type="button" onclick="AddSkill()"
+                                                class="btn btn-default float-right mobile-full-width">
+                                            Add More
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+    }
+
+
+    <!-- <end table></end> -->
+    <div class="row card-footer-bottom-fixed">
+
+        <div class="col-md-12 align-right">
+            <button onclick="onNextClick('Rd_Skill')" type="button"
+                    class="btn btn-default float-right mobile-full-width">
+                Next
+            </button>
+        </div>
+
+    </div>

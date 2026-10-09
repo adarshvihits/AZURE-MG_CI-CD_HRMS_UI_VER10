@@ -1,0 +1,179 @@
+﻿   @model Hrms.Lite.Shared.TimeOffice.DutyRoster
+
+
+<style>
+    /* .dataTables_scrollFoot tfoot {
+        display: none !important;
+    }*/
+    #daily-attendance-entry-list-table tfoot {
+        display: none !important;
+    }
+
+    .dataTables_sizing {
+        height: 20px !important;
+    }
+
+    .attendance-table-footer {
+        background-color: #d0d5d9;
+        color: #000;
+        position: sticky;
+        bottom: 0;
+    }
+
+    .ihits-table.table-border table thead tr th {
+        padding: 10px 7px;
+        padding: 12px 12px;
+        font-weight: 500;
+    }
+
+    .sevenday th, td {
+        padding: 10px 2px !important;
+        font-size: 12px;
+    }
+
+    .ihits-table.table-border table thead tr th {
+        padding: 10px 4px !important;
+    }
+
+
+    table, td {
+        border: 1px solid #F6F7F9 !important;
+    }
+
+
+    .dataTables_scrollFoot tfoot {
+        display: none !important;
+    }
+
+    .dataTables_sizing {
+        height: 20px !important;
+    }
+
+    .ihits-table.table-border table tbody tr td {
+        padding: 10px 4px !important ;
+    }
+    .ihits-table.table-border table thead tr.table-dark th, .ihits-table.table-border table tbody tr.table-dark td {
+        FONT-SIZE: 10PX;
+    }
+
+    .ihits-table.table-border table tbody tr td {
+        padding: 9px 6px !important;
+        /* font-size: 11px; */
+        font-size: 10px !important;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        fillData();
+    });
+</script>
+ <!-- Table Section -->
+<div class="ihits-table table-border  mobile-responsive-table duty-roster-table-list-new table-scroll-footer">
+    @Html.HiddenFor(m => m.DutyRosterList.Count)
+    <table id="dutyroster-entry-list-table">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                @*<th scope="col" class="newdaily">
+            <a href="@Url.Action("DailyAttendanceEditList", "DailyAttendanceEntry", new { HeaderDate = @Model.DailyAttendanceList[0].Day1_Date })">1</a>
+
+        <a onclick="DutyRosterDateWise('@Model.MainList.Header[i].Date',@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">
+                    @Model.MainList.Header[i].HeaderName
+                </a>
+
+        </th>*@
+                <th scope="col" id="headerDate_0" onclick="DutyRosterDateWise(1,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day1_Date) 1</th>
+                <th scope="col" id="headerDate_1" onclick="DutyRosterDateWise(2,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day2_Date) 2</th>
+                <th scope="col" id="headerDate_2" onclick="DutyRosterDateWise(3,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day3_Date) 3</th>
+                <th scope="col" id="headerDate_3" onclick="DutyRosterDateWise(4,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day4_Date) 4</th>
+                <th scope="col" id="headerDate_4" onclick="DutyRosterDateWise(5,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day5_Date) 5</th>
+                <th scope="col" id="headerDate_5" onclick="DutyRosterDateWise(6,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day6_Date) 6</th>
+                <th scope="col" id="headerDate_6" onclick="DutyRosterDateWise(7,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day7_Date) 7</th>
+                <th scope="col" id="headerDate_7" onclick="DutyRosterDateWise(8,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day8_Date) 8</th>
+                <th scope="col" id="headerDate_8" onclick="DutyRosterDateWise(9,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day9_Date) 9</th>
+                <th scope="col" id="headerDate_9" onclick="DutyRosterDateWise(10,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day10_Date) 10</th>
+                <th scope="col" id="headerDate_10" onclick="DutyRosterDateWise(11,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day11_Date) 11</th>
+                <th scope="col" id="headerDate_11" onclick="DutyRosterDateWise(12,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day12_Date) 12</th>
+                <th scope="col" id="headerDate_12" onclick="DutyRosterDateWise(13,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day13_Date) 13</th>
+                <th scope="col" id="headerDate_13" onclick="DutyRosterDateWise(14,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day14_Date) 14</th>
+                <th scope="col" id="headerDate_14" onclick="DutyRosterDateWise(15,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day15_Date) 15</th>
+                <th scope="col" id="headerDate_15" onclick="DutyRosterDateWise(16,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day16_Date) 16</th>
+                <th scope="col" id="headerDate_16" onclick="DutyRosterDateWise(17,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day17_Date) 17</th>
+                <th scope="col" id="headerDate_17" onclick="DutyRosterDateWise(18,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day18_Date) 18</th>
+                <th scope="col" id="headerDate_18" onclick="DutyRosterDateWise(19,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day19_Date) 19</th>
+                <th scope="col" id="headerDate_19" onclick="DutyRosterDateWise(20,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day20_Date) 20</th>
+                <th scope="col" id="headerDate_20" onclick="DutyRosterDateWise(21,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day21_Date) 21</th>
+                <th scope="col" id="headerDate_21" onclick="DutyRosterDateWise(22,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day22_Date) 22</th>
+                <th scope="col" id="headerDate_22" onclick="DutyRosterDateWise(23,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day23_Date) 23</th>
+                <th scope="col" id="headerDate_23" onclick="DutyRosterDateWise(24,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day24_Date) 24</th>
+                <th scope="col" id="headerDate_24" onclick="DutyRosterDateWise(25,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day25_Date) 25</th>
+                <th scope="col" id="headerDate_25" onclick="DutyRosterDateWise(26,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day26_Date) 26</th>
+                <th scope="col" id="headerDate_26" onclick="DutyRosterDateWise(27,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day27_Date) 27</th>
+                <th scope="col" id="headerDate_27" onclick="DutyRosterDateWise(28,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day28_Date) 28</th>
+                <th scope="col" id="headerDate_28" onclick="DutyRosterDateWise(29,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day29_Date) 29</th>
+                <th scope="col" id="headerDate_29" onclick="DutyRosterDateWise(30,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day30_Date) 30</th>
+                <th scope="col" id="headerDate_30" onclick="DutyRosterDateWise(31,@Model.Month.Code,@Model.PayrollGroup.Code,@Model.Circle.Code)">@Html.HiddenFor(m => m.DutyRosterList[0].Day31_Date) 31</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Work Hours">WH</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Average Hours">AH</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Night Shift">NS</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Day Shift">DS</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Total Shift">TS</th>
+                <th scope="col" class=" " data-bs-toggle="tooltip" data-bs-original-title="Off days">OD</th>
+</thead>
+
+
+
+        <tfoot class="daily-footer">
+            
+            <tr class="attendance-table-footer" id="attendance-test">
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="d1" id="news"></td>
+                <td scope="col" class="d2" id="news"></td>
+                <td scope="col" class="d3" id="news"></td>
+                <td scope="col" class="d4" id="news"></td>
+                <td scope="col" class="d5"></td>
+                <td scope="col" class="d6"></td>
+                <td scope="col" class="d7"></td>
+                <td scope="col" class="d8"></td>
+                <td scope="col" class="d9"></td>
+                <td scope="col" class="d10"></td>
+                <td scope="col" class="d11"></td>
+                <td scope="col" class="d12"></td>
+                <td scope="col" class="d13"></td>
+                <td scope="col" class="d14"></td>
+                <td scope="col" class="d15"></td>
+                <td scope="col" class="d16"></td>
+                <td scope="col" class="d17"></td>
+                <td scope="col" class="d18"></td>
+                <td scope="col" class="d19"></td>
+                <td scope="col" class="d20"></td>
+                <td scope="col" class="d21"></td>
+                <td scope="col" class="d22"></td>
+                <td scope="col" class="d23"></td>
+                <td scope="col" class="d24"></td>
+                <td scope="col" class="d25"></td>
+                <td scope="col" class="d26"></td>
+                <td scope="col" class="d27"></td>
+                <td scope="col" class="d28"></td>
+                <td scope="col" class="d29"></td>
+                <td scope="col" class="d30"></td>
+                <td scope="col" class="d31"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+                <td scope="col" class="" id="news"></td>
+
+
+
+            </tr>
+        </tfoot>
+
+    </table>
+</div>
+<!-- Table Setion End -->

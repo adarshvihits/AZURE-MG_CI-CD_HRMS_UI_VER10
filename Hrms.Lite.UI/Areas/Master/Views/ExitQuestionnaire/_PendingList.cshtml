@@ -1,0 +1,76 @@
+﻿@model Hrms.Lite.Shared.Master.ExitInterviewQuestionnaire
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table exit-questionnaire-pending pt-1">
+    @Html.HiddenFor(m => m.ExitInterviewQuestionnaireList.Count)
+    <table id="QuestionnairePendingtable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Question</th>
+
+                <th scope="col">Type</th>
+                <th scope="col">Group Name</th>
+
+                <th scope="col">Entry Type</th>
+                <th scope="col">Approve</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.ExitInterviewQuestionnaireList != null && Model.ExitInterviewQuestionnaireList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ExitInterviewQuestionnaireList.Count; i++)
+
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.HiddenFor(model => Model.LogGI)
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.Active)
+                            @Html.HiddenFor(m => m.ExitInterviewQuestionnaireList[i].MakerChecker)
+                            <td data-label="Question">@Model.ExitInterviewQuestionnaireList[i].Name</td>
+
+                            <td data-label="Type">@Model.ExitInterviewQuestionnaireList[i].TypeName</td>
+                            <td data-label="Group Name">@Model.ExitInterviewQuestionnaireList[i].GroupName</td>
+
+                            <td data-label="Status">@Model.ExitInterviewQuestionnaireList[i].Mode</td>
+                            <td data-label="Approve">
+                                @if (CurrentUserRoleActions.Approve == true)
+                                {
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="interviewapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only" onclick="OnApproveClick('APPROVAL', '@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i)">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                else
+                                { 
+                                    <a data-bs-toggle="tooltip" title="Approve"
+                                       id="interviewapprove" type="button"
+                                       class="btn btn-icon btn-tick icon-only" onclick="OnApproveClick('APPROVAL', '@Model.ExitInterviewQuestionnaireList[i].GI', '@Model.ExitInterviewQuestionnaireList[i].LogGI',@i);
+                                       swal.fire(MasterPersmissionMsg);">
+                                        <i class="icon-xl far fa-check-circle"></i>
+                                    </a>
+                                }
+                                </td>
+
+                        </tr>
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,253 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EditEmployeeInfo
+@{
+    ViewData["Title"] = "Approve";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/DataBank/editEmployeeInfo.js"></script>
+<script src="~/js/jquery.min.js"></script>
+@using (Html.BeginForm("Approve", "EditEmployeeInfo", FormMethod.Post, new { @class = "display-flex",@id="Approve" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <!--end::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Edit Employee Approve</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Index", "EditEmployeeInfo", new { Area = "DataBank" })">Edit Employee info</a>
+                        </li>
+
+                        <li class="breadcrumb-item">
+                            Edit Employee Approve
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+           
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+  
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="profile-header box-shadow-none mb-5">
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            @Html.HiddenFor(m => m.LogGI)
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+
+
+
+                            <div class="profile-header-overflow"></div>
+                        </div>
+                        <!-- Table Section -->
+                        <div class="row mt-5">
+                            <div class="col-md-6">
+                                <div class="ihits-table table-border  mobile-responsive-table ">
+                                    <table>
+                                        <thead>
+                                            <tr class="table-light">
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Old</th>
+                                                <th scope="col">New</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.EditInfoDetailsList != null && Model.EditInfoDetailsList.Count > 0)
+                                            {
+
+                                                for (int i = 0; i < Model.EditInfoDetailsList.Count / 2; i++)
+                                                {
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].Name)
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].Old)
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].New)
+                                                    <tr>
+                                                        <td data-label="Name">
+                                                            @Model.EditInfoDetailsList[i].Name
+                                                        </td>
+                                                        <td data-label="Old">
+                                                            @if ((Model.EditInfoDetailsList[i].Name == "DOB" || Model.EditInfoDetailsList[i].Name == "DOJ" || Model.EditInfoDetailsList[i].Name == "Date of Confirmation" ||
+
+                                                        Model.EditInfoDetailsList[i].Name == "PF Enroll Date" || Model.EditInfoDetailsList[i].Name == "ESI Enroll Date") && Model.EditInfoDetailsList[i].Old != "")
+                                                            {
+                                                                <span class="gray-bg">
+                                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", DateTime.Parse(Model.EditInfoDetailsList[i].Old)))
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="gray-bg">@Model.EditInfoDetailsList[i].Old</span>
+                                                            }
+                                                        </td>
+                                                        <td data-label="New">
+                                                            @if ((Model.EditInfoDetailsList[i].Name == "DOB" || Model.EditInfoDetailsList[i].Name == "DOJ" || Model.EditInfoDetailsList[i].Name == "Date of Confirmation" ||
+
+                                                       Model.EditInfoDetailsList[i].Name == "PF Enroll Date" || Model.EditInfoDetailsList[i].Name == "ESI Enroll Date") && Model.EditInfoDetailsList[i].New != "")
+                                                            {
+                                                                <span class="gray-bg">
+                                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", DateTime.Parse(Model.EditInfoDetailsList[i].New)))
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="gray-bg">
+                                                                    @Model.EditInfoDetailsList[i].New
+                                                                </span>
+                                                            }
+
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="ihits-table table-border  mobile-responsive-table ">
+                                    <table>
+                                        <thead>
+                                            <tr class="table-light">
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Old</th>
+                                                <th scope="col">New</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.EditInfoDetailsList != null && Model.EditInfoDetailsList.Count > 0)
+                                            {
+
+                                                for (int i = Model.EditInfoDetailsList.Count / 2; i < Model.EditInfoDetailsList.Count; i++)
+                                                {
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].Name)
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].Old)
+                                                    @Html.HiddenFor(m => m.EditInfoDetailsList[i].New)
+                                                    <tr>
+                                                        <td data-label="Name">
+                                                            @Model.EditInfoDetailsList[i].Name
+                                                        </td>
+                                                        <td data-label="Old">
+                                                            @if ((Model.EditInfoDetailsList[i].Name == "DOB" || Model.EditInfoDetailsList[i].Name == "DOJ" || Model.EditInfoDetailsList[i].Name == "Date of Confirmation" ||
+
+                                                      Model.EditInfoDetailsList[i].Name == "PF Enroll Date" || Model.EditInfoDetailsList[i].Name == "ESI Enroll Date") && Model.EditInfoDetailsList[i].Old != "")
+                                                            {
+                                                                <span class="gray-bg">
+                                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", DateTime.Parse(Model.EditInfoDetailsList[i].Old)))
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="gray-bg">@Model.EditInfoDetailsList[i].Old</span>
+                                                            }
+                                                        </td>
+                                                        <td data-label="New">
+                                                            @if ((Model.EditInfoDetailsList[i].Name == "DOB" || Model.EditInfoDetailsList[i].Name == "DOJ" || Model.EditInfoDetailsList[i].Name == "Date of Confirmation" ||
+
+                                                          Model.EditInfoDetailsList[i].Name == "PF Enroll Date" || Model.EditInfoDetailsList[i].Name == "ESI Enroll Date") && Model.EditInfoDetailsList[i].New != "")
+                                                            {
+                                                                <span class="gray-bg">
+                                                                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", DateTime.Parse(Model.EditInfoDetailsList[i].New)))
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="gray-bg">@Model.EditInfoDetailsList[i].New</span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-12 mb-2 mt-2">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="row-ithems">
+                                            <label class="view-title">Entry User</label>
+                                            <div class="view-details">@Model.EntryUser</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-ithems">
+                                            <label class="view-title">Entry Date and Time</label>
+                                            <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy hh:mm:ss}", Model.EntryDateAndTime))</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row-ithems">
+                                            <label class="view-title">Remarks</label>
+                                            <div class="view-details">@Model.Remarks</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-default float-right mobile-full-width" onclick="confirmApprove()">Approve</button>
+                                        <button type="button" class="btn btn-danger float-right mobile-full-width mr-2" onclick="confirmReject()">Reject</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!--begin: Datatable-->
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <!--end::Content-->
+}

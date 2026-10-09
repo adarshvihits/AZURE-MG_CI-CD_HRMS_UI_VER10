@@ -1,0 +1,166 @@
+﻿@model Hrms.Lite.Shared.Master.TrainingMaster
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+</script>
+@using (Html.BeginForm("Save", "TrainingMaster", FormMethod.Post, new { id = "training-master-save" }))
+{
+    <div id="addtrainingmaster" class="slider-forms slider-forms-open training-create-slider">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('training-create-slider')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Training
+            </h4>
+            @Html.HiddenFor(m => m.Mode)
+            @Html.HiddenFor(m => m.GI)
+            @Html.HiddenFor(m => m.LogGI)
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Name</label><span class="Mandatory">*</span>
+                        @*<input type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Name">*@
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'TName')", @maxlength = 120 })
+                    </div>
+                    <span id="TName"></span>
+                </div>
+                @*<div class="col-md-6">
+                    <div class="form-group">
+                        <label>Short Name</label>
+                  
+                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control form-control-sm", @placeholder = "Short Name", @onblur = "validate(this,'TShortName')", @maxlength = 5 })
+                    </div>
+                    <span id="TShortName"></span>
+                </div>*@
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Type</label><span class="Mandatory">*</span>
+                        @*<select class="form-control form-control-sm "
+                            id="exampleSelects">
+                        <option>Demo</option>
+                        <option>Demo1</option>
+                    </select>*@
+                        @Html.DropDownListFor(m => m.TrainingType.Code, (SelectList)ViewBag.Type, "--Select Type--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'TType')" })
+                    </div>
+                    <span id="TType"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Assessment Mode</label><span class="Mandatory">*</span>
+                        @*<select class="form-control form-control-sm "
+                            id="exampleSelects">
+                        <option>Rating</option>
+                        <option>Score</option>
+                    </select>*@
+                        @Html.DropDownListFor(m => m.AssesmentMode.Code, (SelectList)ViewBag.AssessmentMode, "--Select Assessment Mode--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'TMode')" })
+                    </div>
+                    <span id="TMode"></span>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Training Category</label><span class="Mandatory">*</span>
+                        @*<select class="form-control form-control-sm "
+                            id="exampleSelects">
+                        <option>Demo</option>
+                        <option>Demo1</option>
+                    </select>*@
+                        @Html.DropDownListFor(m => m.TrainingCategory.Code, (SelectList)ViewBag.Category, "--Select Category--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'TType')" })
+                    </div>
+                    <span id="TCategory"></span>
+                </div>
+
+
+            </div>
+
+            <div class="row my-3">
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onclick="ActiveInactiveValidationTraining('TRAINING',@Model.Code)">
+                            @*<input type="checkbox" checked="">*@
+                            @Html.CheckBoxFor(m => m.Active, new { @id = "training" })
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-3">
+                @if (Model.Mode != "MODIFY")
+                {
+
+                    <div class="col-md-12">
+                        <label>Description</label>
+
+
+                        @*<textarea class="form-control form-control-sm"
+                    placeholder="Description"></textarea>*@
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = 250 })
+                        @Html.HiddenFor(model => Model.Description)
+                    </div>
+                }
+                else
+                {
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Model.Description
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode != "MODIFY")
+                    {
+
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button"
+                                    class="btn btn-default  mobile-full-width" onclick="trainingSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button"
+                                    class="btn btn-default  mobile-full-width" onclick="trainingSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

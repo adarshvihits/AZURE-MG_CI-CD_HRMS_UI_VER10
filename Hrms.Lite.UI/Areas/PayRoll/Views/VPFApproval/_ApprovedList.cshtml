@@ -1,0 +1,50 @@
+﻿@model Hrms.Lite.Shared.PayRoll.VPFApproval
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.pending_Count').html(@Model.pendingCount);
+        $('.approved_Count').html(@Model.approvedCount);
+    });
+</script>
+
+
+<div class="ihits-table table-border mobile-responsive-table VPFApprovalPendingList">
+    @Html.HiddenFor(m => m.VPFApprovalList.Count)
+    <table id="approveListTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Function </th>
+                <th scope="col">Location</th>
+                <th scope="col">Modified Date</th>
+                <th scope="col">VPF Amount Old</th>
+                <th scope="col">VPF Amount New</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.VPFApprovalList != null && Model.VPFApprovalList.Count > 0)
+            {
+                for (int i = 0; i < Model.VPFApprovalList.Count; i++)
+                {
+
+                    @Html.HiddenFor(Model => Model.VPFApprovalList[i].EmployeeGI)
+                    @Html.HiddenFor(Model => Model.VPFApprovalList[i].EmployeeCode)
+                    <tr>
+
+                        <td data-label="ID">@Model.VPFApprovalList[i].EmployeeID</td>
+                        <td data-label="Employee Name">@Model.VPFApprovalList[i].EmployeeName</td>
+                        <td data-label="Function">@Model.VPFApprovalList[i].Function</td>
+                        <td data-label="Location">@Model.VPFApprovalList[i].Location</td>
+                        <td data-label="Modified Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.VPFApprovalList[i].ModifiedDate))</td>
+                        <td data-label="VPF Amount Old">@Model.VPFApprovalList[i].oldVpfAmount</td>
+                        <td data-label="VPF Amount New">@Model.VPFApprovalList[i].newVpfAmount</td>
+                    </tr>
+
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

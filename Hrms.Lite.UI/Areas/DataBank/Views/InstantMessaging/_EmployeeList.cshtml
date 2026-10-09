@@ -1,0 +1,69 @@
+﻿@model Hrms.Lite.Shared.DataBank.InstantMessaging
+    <script src="~/js/tooltip.js"></script>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "empList" }))
+    {
+        <div class="ihits-table table-border mobile-responsive-table instant-msg-emp-list vertical-scroll-500">
+
+            <table id="EmpListTable">
+                <thead>
+                    <tr class="table-dark">
+
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Division</th>
+                        <th scope="col">Grade</th>
+
+
+                        <th scope="col">
+                            <div class="checkbox-inline selectAllChkBx pl-2">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    <input data-val="true" value="true" id="SelectAll" name="SelectAll" type="checkbox" onchange="onSelectAllClick()">
+                                    <span cursorshover="true"></span>
+                                </label>
+                                <label class="checkbox checkbox-outline checkbox-success"></label>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ApplicableEmployeesList != null && Model.ApplicableEmployeesList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ApplicableEmployeesList.Count; i++)
+                        {
+                    <tr>
+
+                        <td>
+                            @Html.HiddenFor(m => m.MessageCode)
+                            @Model.ApplicableEmployeesList[i].EmployeeID
+                            @Html.HiddenFor(m => m.ApplicableEmployeesList[i].EmployeeCode)
+                        </td>
+                        <td>@Model.ApplicableEmployeesList[i].EmpName</td>
+                        <td>@Model.ApplicableEmployeesList[i].Location </td>
+                        <td>@Model.ApplicableEmployeesList[i].Designation</td>
+                        <td>@Model.ApplicableEmployeesList[i].Department</td>
+                        <td>@Model.ApplicableEmployeesList[i].Division </td>
+                        <td>@Model.ApplicableEmployeesList[i].Grade </td>
+
+
+                        <td data-label="">
+                            <div class="checkbox-inline ">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.ApplicableEmployeesList[i].Applicable)
+                                    <span></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+           
+        </div>
+
+        <!-- Table Setion End -->
+    }

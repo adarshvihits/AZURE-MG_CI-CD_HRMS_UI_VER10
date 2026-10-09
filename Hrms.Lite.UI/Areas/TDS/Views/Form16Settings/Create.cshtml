@@ -1,0 +1,214 @@
+﻿@model Hrms.Lite.Shared.TDS.Form16Settings
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/TDS/Form16Settings.js"></script>
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "Form16_Settings" }))
+{
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Form 16 Settings</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            Form 16 Settings
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <div class="page_white">
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Assessment Year</label>
+                                        <div class="form-group filter-combobox mr-10" style="width: 320px;">
+                                            @Html.DropDownListFor(model => model.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYear, "---Select Assessment Year---", new { @class = "form-control form-control-sm", @onchange = "fillDetails(),validate(this,'Assessment')" })
+                                            <span id="Assessment" style="bottom: -20px;"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Financial Year</label>
+
+                                        @Html.TextBoxFor(m => m.FinancialYear, new { @class = "form-control", placeholder = "Financial Year", @readonly = "true" })
+                                     
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>From Date</label>
+
+                                        @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", placeholder = "From Date", @readonly = "true" })
+                                       
+                                        <span id="fromdate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>To Date</label>
+
+                                        @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", placeholder = "To Date", @readonly = "true" })
+                          
+                                        <span id="todate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <div class="form-group filter-combobox mr-10" style="width: 320px;">
+                                            @Html.DropDownListFor(model => model.GroupCompany.Code, (SelectList)ViewBag.GroupCompany, "---Select Group Company---", new { @class = "form-control form-control-sm", @onchange = "validate(this,'groupcmpy')" })
+                                            <span id="groupcmpy" style="bottom: -20px;"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Address</label>
+
+                                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control form-control-sm", @maxlength = "400", @onchange = "validate(this,'address')" })
+                                    <span id="address" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>PAN of the Deductor</label>
+
+                                        @Html.TextBoxFor(m => m.PAN, new { @class = "form-control", placeholder = "PAN", @maxlength = 10,  @onblur = "validatePan('PAN','pan')", @onchange = "validate(this,'pan')" })
+                                        <span id="pan" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>TAN of the Deductor</label>
+                                        @Html.TextBoxFor(m => m.TAN, new { @class = "form-control", placeholder = "TAN", @maxlength = 10, @onchange = "validate(this,'tan')" })
+                                        <span id="tan" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Name of Authorised Person</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", @onchange = "validate(this,'name')" })
+                                        <span id="name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Father's Name of Authorised Person</label>
+                                        @Html.TextBoxFor(m => m.FatherName, new { @class = "form-control", placeholder = "Father's Name", @onchange = "validate(this,'fathername')" })
+                                        <span id="fathername" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Designation</label>
+                                        @Html.TextBoxFor(m => m.Designation, new { @class = "form-control", placeholder = "Designation", @onchange = "validate(this,'designation')" })
+                                        <span id="designation" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+
+                                    <div class="form-group">
+                                        <label>Place</label>
+                                        @Html.TextBoxFor(m => m.Place, new { @class = "form-control", placeholder = "Place", @onchange = "validate(this,'place')" })
+                                        <span id="place" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group date">
+                                            @Html.TextBoxFor(m => m.PrintDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 datepkr", placeholder = "Date", @onchange = "validate(this,'printdate')" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="la la-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span id="printdate" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-12 align-right">
+                                    <button type="button" onclick="onSubmit()"
+                                            class="btn btn-default float-right mobile-full-width">
+
+                                        Save
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Container-->
+        </div>
+
+    </div>
+
+}

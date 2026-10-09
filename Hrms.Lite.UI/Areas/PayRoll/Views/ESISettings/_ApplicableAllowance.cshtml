@@ -1,0 +1,78 @@
+﻿@model Hrms.Lite.Shared.PayRoll.ESISettings
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "ApplAllowance" }))
+{   
+    <div class="ihits-table table-border mobile-responsive-table mb-5 vertical-scroll-250 pf-settings-allowance" style="padding:10px;">
+        <table>
+            <thead>
+                <tr class="table-light">
+
+                    <th scope="col">Allowance</th>
+
+                    <th scope="col">Y/N</th>
+
+
+                    <th scope="col">Applicable</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ESIApplicableAllowance != null && Model.ESIApplicableAllowance.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.ESIApplicableAllowance.Count; i++)
+                    {
+                <tr>
+
+                    <td data-label="">
+                        @Html.HiddenFor(m => m.ESIApplicableAllowance[i].AllowanceCode)
+                        @Html.HiddenFor(m => m.ESIApplicableAllowance[i].AllowanceName)
+                        @Html.HiddenFor(m => m.ESIDeduction.Code)
+                        @Model.ESIApplicableAllowance[i].AllowanceName
+                    </td>
+
+                    <td data-label="">
+
+
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary ">
+                                @*<input type="checkbox" name="Checkboxes16">*@
+                                @Html.CheckBoxFor(m => m.ESIApplicableAllowance[i].YN,new { @onchange = "onCheckboxClick('" + i + "')" })
+                                <span></span>
+                            </label>
+
+                        </div>
+
+
+                    </td>
+                    <td data-label="">
+
+
+
+                        <div class="form-group">
+
+                            @Html.TextBoxFor(m => m.ESIApplicableAllowance[i].Applicable, new { @class = "form-control form-control-sm" })
+                        </div>
+
+                    </td>
+
+                </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 10px;">
+
+        <div class="col-md-12 align-right pb-3">
+
+            <a type="button" class="btn btn-default  mobile-full-width" onclick="ESISettingsAllowanceSave()">
+                Save
+            </a>
+        </div>
+
+
+    </div>
+}

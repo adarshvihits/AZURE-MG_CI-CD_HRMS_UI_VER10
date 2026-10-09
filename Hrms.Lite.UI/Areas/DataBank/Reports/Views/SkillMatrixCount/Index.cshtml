@@ -1,0 +1,171 @@
+﻿@model Tuple<Hrms.Lite.Shared.DataBank.Reports.SkillMatrix, System.Data.DataTable>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+<script>
+   
+
+    function showDetails(e) {
+        // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Skills").data("kendoWindow");
+        // empID = dataItem.EmployeeID;
+        // wnd.center().open();
+        wnd.content("loading user info...").refresh({
+            url: "@Url.Action("ChildGrid", "SkillMatrixReport")"
+        }).center().open();
+
+
+
+    }
+
+    
+    
+
+</script>
+
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Skill Matrix</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Skill Matrix
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+
+                            <div class="tab-items medium">
+
+                                <div style="display:flex; align-items:center;">
+                                    <label style="padding-right:3px; width:135px;">Select Type</label>
+                                    <select id="Type" onchange="GetList()" class="form-control form-control-sm ">
+
+                                        <option selected="selected" value="1">All</option>
+                                        <option value="2">Soft Skill</option>
+                                        <option value="3">Technical Skill</option>
+
+
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="tab-items highs d-flex align-items-center">
+
+
+                                <button type="button" onclick="showDetails()" class="btn btn-default btn-sm float-left">
+                                    Select Skills
+                                </button>
+
+
+                            </div>
+                            <div class="tab-items select-option lows  ">
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+
+                                @*<div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>*@
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel" onclick="exportGrid()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                   
+
+
+                    <!-- Table Section -->
+                    <!-- Table Setion End -->
+                    <div id="ActiveListDiv" style="display:flex; justify-content:center;">
+                        @await Html.PartialAsync("~/Areas/DataBank/Reports/Views/SkillMatrixCount/_List.cshtml", Model)
+                    </div>
+
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Item1.Filter)
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

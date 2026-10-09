@@ -1,0 +1,356 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.TalentPool
+<script src="~/js/tooltip.js"></script>
+@*<script src="~/js/settings.js"></script>*@
+<script>
+    $(document).ready(function () {
+        debugger;
+        fillData();
+        //$('#GenText').html(GenderText);
+        //$('#YosText').html(YosText);
+        //$('#AgeText').html(AgeText);
+
+        //$('#talentPoolTable').DataTable({
+        //    "pageLength": 10,
+        //    "language": {
+        //        searchPlaceholder: "Search"
+        //    }
+        //});
+
+
+        //$('.ihits-table table').removeClass("dataTable no-footer");
+        //$(".ihits-table table tr th").removeAttr('style')
+    });
+</script>
+
+<!--<div class="row">
+
+    <div class="col-md-12">
+        <p class="mb-0">
+            <b>Filters Applied: </b>
+
+            @{
+                int flag = 0;
+                int Skills = 0;
+                int SkillProficiency = 0;
+                int Education = 0;
+                int Languages = 0;
+            }-->
+@*@if (Model.TalentPoolList != null && Model.TalentPoolList.Count > 0)
+    {*@
+@if (Model.Skills != null && Model.Skills.Count != 0)
+{
+    flag = 1;
+    if (Model.AllSkills)
+    {
+        <b>Skill</b><span>-</span>
+        <span>All</span>
+        Skills = 1;
+    }
+    else
+    {
+        for (int i = 0; i < Model.Skills.Count; i++)
+        {
+            if (Model.Skills[i].APPLICABILITY)
+            {
+
+                Skills = 1;
+
+                if (i == 0)
+                {
+                    
+                  @Model.Skills[i].NAME
+                }
+                else
+                {
+                   @Model.Skills[i].NAME
+                }
+
+            }
+        }
+    }
+}
+@if (Model.SkillProficiency != null && Model.SkillProficiency.Count != 0)
+{
+    flag = 1;
+    if (Model.AllSkillProficiency)
+    {
+        @if (Skills != 0)
+        {
+            <span>,</span>
+        }
+        <b>Skill Proficiency</b><span>-</span>
+        <span>All</span>
+        SkillProficiency = 1;
+    }
+    else
+    {
+        for (int i = 0; i < Model.SkillProficiency.Count; i++)
+        {
+            if (Model.SkillProficiency[i].APPLICABILITY)
+            {
+                SkillProficiency = 1;
+                if (i == 0)
+                {
+                    @if (Skills != 0)
+                    {
+                        <span>,</span>
+                    }
+                    <b>Skill Proficiency</b><span>-</span>
+                    <span>@Model.SkillProficiency[i].NAME</span>
+                }
+                else
+                {
+                    <span>, </span>@Model.SkillProficiency[i].NAME
+                }
+            }
+        }
+    }
+
+}
+@if (Model.Education != null && Model.Education.Count != 0)
+{
+    flag = 1;
+    if (Model.AllEducation)
+    {
+        @if (Skills != 0 || SkillProficiency != 0)
+        {
+            <span>,</span>
+        }
+        <b>Qualification</b><span>-</span>
+        <span>All</span>
+        Education = 1;
+    }
+    else
+    {
+
+        for (int i = 0; i < Model.Education.Count; i++)
+        {
+            if (Model.Education[i].APPLICABILITY)
+            {
+                Education = 1;
+                if (i == 0)
+                {
+                    @if (Skills != 0 || SkillProficiency != 0)
+                    {
+                        <span>,</span>
+                    }
+                    <b>Qualification</b><span>-</span>
+                    <span>@Model.Education[i].NAME</span>
+                }
+                else
+                {
+                    <span>, </span>@Model.Education[i].NAME
+                }
+            }
+        }
+
+    }
+}
+@if (Model.Languages != null && Model.Languages.Count != 0)
+{
+    flag = 1;
+
+    for (int i = 0; i < Model.Languages.Count; i++)
+    {
+        if (Model.Languages[i].Read == true || Model.Languages[i].Speak == true || Model.Languages[i].Write == true)
+        {
+            Languages = 1;
+            if (i == 0)
+            {
+            @if (Skills != 0 || SkillProficiency != 0 || Education != 0)
+            {
+                <span>,</span>
+            }
+            <b>Languages</b><span>-</span>
+            <span>@Model.Languages[i].NAME</span>
+            if (Model.Languages[i].Read == true)
+            {
+                <span>R</span>
+            }
+            if (Model.Languages[i].Write == true)
+            {
+                <span>W</span>
+            }
+            if (Model.Languages[i].Speak == true)
+            {
+                <span>S</span>
+            }
+        }
+        else
+        {
+            <span>, </span>@Model.Languages[i].NAME
+            if (Model.Languages[i].Read == true)
+            {
+                <span>R</span>
+            }
+            if (Model.Languages[i].Write == true)
+            {
+                <span>W</span>
+            }
+            if (Model.Languages[i].Speak == true)
+            {
+                <span>S</span>
+            }
+        }
+        }
+    }
+
+
+}
+@if (Model.Gender != null && Model.Gender.Name != null)
+{
+    flag = 1;
+    @if (Skills != 0 || SkillProficiency != 0 || Education != 0 || Languages != 0)
+    {
+        <span>,</span>
+    }
+    <b>Gender</b><span>-</span><span id="GenText">@Model.Gender.Name</span>
+}
+@if (Model.YOSFrom != null)
+{ 
+    flag = 1;
+    @if (Skills != 0 || SkillProficiency != 0 || Education != 0 || Languages != 0 || Model.Gender.Code != null)
+    {
+        <span>,</span>
+    }
+    <b>Years of Service</b><span>-</span><span id="YosText">@Model.YSAboveOrBelow.Name</span><span>&nbsp;@Model.YOSFrom</span>
+    if (Model.YOSTo != null)
+    {
+        <span>- @Model.YOSTo</span>
+    }
+}
+@if (Model.AgeFrom != null)
+{
+    flag = 1;
+    @if (Skills != 0 || SkillProficiency != 0 || Education != 0 || Languages != 0 || Model.Gender.Code != null || Model.YOSFrom != null)
+    {
+        <span>,</span>
+    }
+    <b>Age</b><span>-</span><span id="AgeText">@Model.AgeAboveOrBelow.Name</span><span>&nbsp;@Model.AgeFrom</span>
+    if (Model.AgeTo != null)
+    {
+        <span>- @Model.AgeTo</span>
+    }
+}
+@if (flag == 0)
+{
+    <span>No filters applied</span>
+}
+@*}*@
+<!--</p>
+    </div>
+
+</div>-->
+<!-- Table Section -->
+<div class="page_white">
+<div class="row tab-style-button ">
+    <div class="tab-button-wrap ">
+        <!-- <div class="tab-items ml-3  border-none ">
+            <div class="form-group filter-combobox  float-left"
+                style="width: 100px;">
+                <select class="form-control form-control-sm  " id="exampleSelects">
+                    <option>Today</option>
+                    <option>Yesterday</option>
+
+                </select>
+            </div>
+
+        </div> -->
+
+        <div class="tab-items select-option mb-2 d-flex">
+            <div class="sraech-slider" onclick="onSearchClick()">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+
+            @*<div class="sraech-slider">
+                <div class="search-slider-inner">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>*@
+
+
+
+            @*<div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+            <i class="fas fa-filter"></i>
+            <i class="fas fa-check"></i>
+        </div>*@
+
+
+
+
+
+            <div id="filterForm" class="filter-button slider-btn" data-bs-toggle="tooltip" title="Filter">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-check"></i>
+            </div>
+
+
+
+
+
+            <div>
+                <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel" onclick="onExportToExcelClick()">
+                    <i class="icon-xl far fa-file-excel"></i>
+                </a>
+                @*<button data-bs-toggle="tooltip" title="Export to Excel"
+                    class="btn btn-excel">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>*@
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table talent-pool">
+    @Html.HiddenFor(m => m.TalentPoolList.Count)
+    <table id="talentPoolTable" class="common-table">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Location</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @*@if (Model.TalentPoolList != null && Model.TalentPoolList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.TalentPoolList.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="ID">@Model.TalentPoolList[i].EmployeeID</td>
+                            <td data-label="Employee Name">
+                                @Html.ActionLink(Model.TalentPoolList[i].FullName, "GetEmployeeProfileDetails", "EmployeeProfile", new { EmployeeGI = Model.TalentPoolList[i].EmployeeGI, Breadcrumb = "TalentPool", BreadcrumbName = "Talent Pool List" }, null)
+                            </td>
+                            <td data-label="Designation">@Model.TalentPoolList[i].Designation</td>
+                            <td data-label="Location">@Model.TalentPoolList[i].Location</td>
+                        </tr>
+                    }
+                }*@
+
+
+        </tbody>
+    </table>
+
+
+
+
+    <div id="filterSlider">
+
+        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+    </div>
+</div>
+    </div>
+<!-- Table Setion End -->
+<!--end: Datatable-->

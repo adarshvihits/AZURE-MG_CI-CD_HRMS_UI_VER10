@@ -1,0 +1,67 @@
+﻿@model Hrms.Lite.Shared.DashBoard.DataBankDashBoard
+<script src="~/js/settings.js"></script>
+
+
+<style>
+    .dataTables_scrollBody {
+        height: 23vh !important;
+    }
+</style>
+
+
+
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table overdue-list-table ">
+    <table class="common-table">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">  ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">DOJ</th>
+                <th scope="col">Y/S</th>
+               
+                    <th scope="col">Renewal Date</th>
+                
+                
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.DataBankDashBoardDetailsList != null && Model.DataBankDashBoardDetailsList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.DataBankDashBoardDetailsList.Count; i++)
+                {
+
+
+                    <tr>
+                        <td data-label="Emp ID">@Model.DataBankDashBoardDetailsList[i].EmployeeID</td>
+
+                        <td data-label="Name">@Model.DataBankDashBoardDetailsList[i].FullName </td>
+                        <td data-label="Designation">@Model.DataBankDashBoardDetailsList[i].Designation	</td>
+
+                        <td data-label="Department">@Model.DataBankDashBoardDetailsList[i].Department</td>
+                        <td data-label="Location">@Model.DataBankDashBoardDetailsList[i].Location	</td>
+                        <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DataBankDashBoardDetailsList[i].DOJ))	</td>
+                        <td data-label="Y/S">@Model.DataBankDashBoardDetailsList[i].YearOfService</td>
+                        @if (ViewBag.Type == "UPCOMING RENEWALS")
+                        {
+                        <td data-label="Expiry Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DataBankDashBoardDetailsList[i].DueDate))</td>
+                        }
+                        else
+                        {
+                        <td data-label="Overdue Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.DataBankDashBoardDetailsList[i].ExpiredDate))</td>
+                        }
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+
+    </table>
+</div>

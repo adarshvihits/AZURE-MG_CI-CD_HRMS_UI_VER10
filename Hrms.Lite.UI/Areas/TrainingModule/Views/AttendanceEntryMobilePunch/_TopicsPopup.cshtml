@@ -1,0 +1,119 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.AttendanceEntryMobilePunch
+@*<script src="~/js/settings.js"></script>*@
+
+<script src="~/scripts/TrainingModule/AttendanceEntryMobilePunch.js"></script>
+<script>
+    var searchClick = 0;
+    function onSearchClick1() {
+        debugger;
+        if (searchClick == 0) {
+            searchClick = 1;
+            $('.dataTableSearchPopup1').addClass('field-width-big');
+            CursorFocusOnSearch();
+        }
+        else {
+            searchClick = 0;
+            $('.dataTableSearchPopup1').removeClass('field-width-big');
+        }
+    }
+</script>
+<style>
+    .select-option .sraech-slider i, .select-option .filter-button i {
+        z-index: 10;
+        position: relative;
+    }
+
+    .select-option .sraech-slider input.form-control {
+        top: -9px;
+    }
+</style>
+<div class="row tab-style-button">
+    <div class="tab-button-wrap">
+
+
+
+
+        <!--<div class="tab-items select-option">-->
+            @*<div class="sraech-slider ">
+                <div class="search-slider-inner1">
+                    <i class="fa fa-search" onclick="onSearchClick1()"></i>
+                </div>
+                <input type="text" id="searchList1" class="form-control form-control-sm dataTableSearchPopup1"
+                       placeholder="Search by ID/Name" onkeyup="searchRows1()">
+            </div>*@
+            @*<div class="tab-items select-option" style=" display: flex; align-items: center;">*@
+            @*<div class="sraech-slider">
+                    <div class="search-slider-inner">
+                        <i class="fa fa-search" onclick="$('#searchList').focus();"></i>
+                    </div>
+                    <input id="searchList" type="text" class="form-control form-control-sm"
+                           placeholder="Search Here" onkeyup="searchRows()">
+                </div>*@
+
+
+            @*</div>*@
+
+
+
+            @*<a data-bs-toggle="tooltip" title="" class="btn btn-excel float-right" data-bs-original-title="Export to Excel" onclick="participantcompletedExportToExcel()" style=" margin-top: 0px;">
+                <i class="icon-xl far fa-file-excel"></i>
+            </a>*@
+
+        <!--</div>-->
+
+
+
+    </div>
+</div>
+
+@Html.HiddenFor(m => m.ScheduleCode)
+@Html.HiddenFor(m => m.EmployeeCode)
+
+
+<div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table partcipantcompleted_details  vertical-scroll-200">
+    @Html.HiddenFor(m => m.TopicDetails.Count)
+
+    <table id="ParticipantsCompleted">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Subject</th>
+                <th scope="col">Location</th>
+                <th scope="col">Punch Time</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.TopicDetails != null && Model.TopicDetails.Count > 0)
+            {
+                for (int i = 0; i < Model.TopicDetails.Count; i++)
+
+                {
+                    <tr>
+
+
+                        @*<td data-label="ID">@Model.TopicDetails[i].EmployeeCode</td>*@
+                        <td data-label="Employee Name">@Model.TopicDetails[i].Topic</td>
+                        <td data-label="Designation">@Model.TopicDetails[i].Addr</td>
+                        <td data-label="Department">@Model.TopicDetails[i].Punchtime</td>
+                
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+
+    </table>
+</div>
+

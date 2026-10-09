@@ -1,0 +1,261 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+    <script src="~/js/bootstrap-datepicker.js"></script>
+<div class="step-outer step_row">
+
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+        Personal Info
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active">
+        Job Details
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" data-bs-toggle="tooltip" data-bs-original-title="Compensation & Benefits" class="step-item">
+        C & B
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item">
+        Address
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item">
+        Attendance Settings
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item">
+        Statutory & Payment
+        <span class="step-circle"></span>
+    </a>
+    @*<a href="#" class="step-item">
+        Other Groupings
+        <span class="step-circle"></span>
+    </a>*@
+    <a href="#" class="step-item">
+        ID & Manager Generation
+        <span class="step-circle"></span>
+    </a>
+
+</div>
+
+<div class="step-progress-outer">
+
+    <div class="step-left col-md-12">
+        <h3>Job Details</h3>
+
+        <div class="row my-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Company</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Company.Code, (SelectList)ViewBag.Company, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'company')" })
+                    <span id="Company"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Location</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Location.Code, (SelectList)ViewBag.Loc, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'location')" })
+                    <span id="location"></span>
+                </div>
+            </div>
+            @if (Model.AddOnClassification.DivisionExists == true)
+            {
+                @Html.HiddenFor(m => m.AddOnClassification.DivisionExists)
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Division</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Division.Code, (SelectList)ViewBag.Div, "--Select Division--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'division')" })
+                        <span id="division"></span>
+                    </div>
+                </div>
+            }
+            @if (Model.AddOnClassification.SectionExists == true)
+            {
+                @Html.HiddenFor(m => m.AddOnClassification.SectionExists)
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Section</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Section.Code, (SelectList)ViewBag.Sec, "--Select Section--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'section')" })
+                        <span id="section"></span>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row my-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Department</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Department.Code, (SelectList)ViewBag.Dept, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'department')" })
+                    <span id="department"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Sub.Department</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.SubDepartment.Code, (SelectList)ViewBag.SubDepartment, "--Select Sub.Department--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'SubDepartment')" })
+                    <span id="SubDepartment"></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Designation</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Grade.Code, (SelectList)ViewBag.Grd, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onGradeChange(this,'grade')" })
+                    <span id="grade"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fun.Designation</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Designation.Code, (SelectList)ViewBag.Dsg, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'designation'); 'incApplicable'(this)" })
+                    <span id="designation"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row my-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Category</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Category.Code, (SelectList)ViewBag.Cat, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onCategoryChange(this)" })
+                    <span id="category"></span>
+                </div>
+            </div>
+
+            @if (Model.AddOnClassification.WageGradeExists == true)
+            {
+                @Html.HiddenFor(m => m.AddOnClassification.WageGradeExists)
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Wage Grade </label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.WageGrade.Code, (SelectList)ViewBag.Wgr, "--Select Wage Grade--", new { @class = "form-control form-control-sm", id = "WageGradeDropDown", @onchange = "validate(this, 'WageGrd');OnWageGradeChanged();" })
+                        <span id="WageGrd"></span>
+                    </div>
+                </div>
+            }
+
+            @if (Model.AddOnClassification.EmploymentTypeExists == true)
+            {
+                @Html.HiddenFor(m => m.AddOnClassification.EmploymentTypeExists)
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Employment Type</label>
+                        <span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.EmploymentType.Code, (SelectList)ViewBag.Emt, "--Select Employment Type--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'EmpType')" })
+                        <span id="EmpType"></span>
+                    </div>
+                </div>
+            }
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Function</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.Function.Code, (SelectList)ViewBag.Function, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'function')" })
+                    <span id="function"></span>
+                </div>
+            </div>
+
+        </div>
+       
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Payroll Group</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.PayrollGroup.Code, (SelectList)ViewBag.PayrollGrp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'payroll')" })
+                    <span id="payroll"></span>
+                </div>
+            </div>
+            @*<div class="col-md-3">
+            <div class="form-group">
+                <label>VDA Group</label>
+
+                @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.VDAGroup.Code, (SelectList)ViewBag.VDAGroup, "--Select--", new { @class = "form-control form-control-sm" })
+                <span id="vdagroup"></span>
+            </div>
+        </div>*@
+            <div class="col-md-3 renewaldivEnroll">
+                <div class="form-group">
+                    <label id="renewal">Renewal Date</label><span class="Mandatory">*</span>
+                    <div class="input-group date" id="renewaldt">
+
+                        @Html.TextBoxFor(m => m.PreEnrollment.BasicInfo.RenewalDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @readonly = "true", @placeholder = "Renewal Date", @onchange = "validateDOR(this,'dor')", onclick = "$('.renewaldatepicker').datepicker('show')" })
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <span id="dor"></span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Notice Period (In Days)</label><span class="Mandatory">*</span>
+
+                    @Html.TextBoxFor(m => m.PreEnrollment.JobDetails.NoticePeriod, new { @class = "form-control form-control-sm", @maxlength = 3, @placeholder = "Notice Period (In Days)", @onblur = "validate(this,'noticeperiod')", @onkeypress = "return onlyNumberKey(event)" })
+                    <span id="noticeperiod"></span>
+                </div>
+            </div>
+            @if (Model.AddOnClassification.WorkLocationExists == true)
+            {
+                @Html.HiddenFor(m => m.AddOnClassification.WorkLocationExists)
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Work Location</label><span class="Mandatory">*</span>
+                        @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.WorkLocation.Code, (SelectList)ViewBag.Wlo, "--Select Work Location--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'WrkLoc')" })
+                        <span id="WrkLoc"></span>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="row">
+
+            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Incentive Applicable</label><span class="Mandatory">*</span>
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.IncenticeApplicable.Code, (SelectList)ViewBag.IncApplicable, "--Incentice Applicablility--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'incApplicable');fillCostCenter(this);" })
+                    <span id="incApplicable"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Ince.Cost Center</label><span class="Mandatory">*</span>
+                    @Html.DropDownListFor(m => m.PreEnrollment.JobDetails.IncentiveCostCenter.Code, (SelectList)ViewBag.IncentiveCostCenter, "--Incentive CostCenter--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'incCostCenter')" })
+                    <span id="incCostCenter"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6">
+        <button type="button" onclick="PopUp_Preview()"
+                class="btn btn-default float-left mobile-full-width">
+            Salary Details
+        </button>
+
+    </div>
+    <div class="col-md-6">
+        <button type="button" onclick="onNextClick('Enroll_jobdetails','Compensation')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+</div>
+

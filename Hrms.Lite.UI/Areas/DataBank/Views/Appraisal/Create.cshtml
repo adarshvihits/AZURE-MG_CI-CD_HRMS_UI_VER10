@@ -1,0 +1,307 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Appraisal
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/DataBank/Appraisal.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //$(".pending").hide();
+        $('.search-profile-details').hide(300);
+        $('#trainingList').removeClass('hide');
+
+    });
+
+        const myTimeout = setTimeout(changeFocus, 500);
+
+    function changeFocus() {
+        $('#AppraisalRequest_EvaluationPeriod_Code').focus();
+    }
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex",@id="appraisalReqSave"}))
+{
+ 
+   <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Appraisal List</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "Appraisal", new { Area = "DataBank" })" class="">Appraisal List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Appraisal List
+                        </li>
+                    </ul>
+                </div>
+            </div>
+           
+        </div>
+        <!--end::Container-->
+    </div>
+  
+    <!--begin::Wrapper-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Header-->
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="profile-header position-relative box-shadow-none mb-2">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.EmployeeGI)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+
+
+                        <div class="page_white">
+
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Evaluation Period</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.AppraisalRequest.EvaluationPeriod.Code, (SelectList)ViewBag.Aep, "--Select Evaluation Period--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'evaluationperiod')" })
+                                                <span id="evaluationperiod"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Appraisal Type</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.AppraisalRequest.AppraisalType.Code, (SelectList)ViewBag.Aty, "--Select Appraisal Type--", new { @class = "form-control form-control-sm", @onchange = "onAppraisalTypeChange(this,'appraisaltype')" })
+                                                <span id="appraisaltype"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 rating hide">
+                                            <div class="form-group font-awesome">
+                                                <label>Self Score Rating</label>
+                                                <span class="Mandatory">*</span>
+                                                <div class="star-rating">
+                                                    <input type="radio" name="stars" id="star-a" value="5" onclick="onStarRatingClick(5)" />
+                                                    <label for="star-a"></label>
+                                                    <input type="radio" name="stars" id="star-b" value="4" onclick="onStarRatingClick(4)" />
+                                                    <label for="star-b"></label>
+                                                    <input type="radio" name="stars" id="star-c" value="3" onclick="onStarRatingClick(3)" />
+                                                    <label for="star-c"></label>
+                                                    <input type="radio" name="stars" id="star-d" value="2" onclick="onStarRatingClick(2)" />
+                                                    <label for="star-d"></label>
+                                                    <input type="radio" name="stars" id="star-e" value="1" onclick="onStarRatingClick(1)" />
+                                                    <label for="star-e"></label>
+                                                </div>
+                                                @Html.HiddenFor(m => m.AppraisalRequest.SelfRating.Code)
+                                                @*@Html.DropDownListFor(m => m.TrainingRequest.PostAssessmentScore, (SelectList)ViewBag.Score, "--Select--", new { @class = "form-control form-control-sm" })*@
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 text-box">
+                                            <div class="form-group">
+                                                <label>Self Score</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.AppraisalRequest.SelfScore, new { @class = "form-control form-control-sm", @placeholder = "Self Score", @onkeypress = "return onlyNumberKey(event)", @maxlength = 5, @oninput = "process(this)", @onchange = "validate(this,'score')" })
+                                                <span id="score"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Appraiser Name </label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.AppraisalRequest.Appraiser.Code, (SelectList)ViewBag.Aev, "--Select Appraiser Name--", new
+                                                {
+                                                    @class = "selectpicker form-control form-control-sm",
+                                               @onchange = "validate(this,'appraiser')",
+                                               data_show_subtext = "true",
+                                               data_live_search = "true"
+                                           })
+
+                                            </div>
+                                            <span id="appraiser"></span>
+                                        </div>
+                                        <div class="col-md-3 rating hide">
+                                            <div class="form-group font-awesome">
+                                                <label>Appraiser Score Rating</label>
+                                                <span class="Mandatory">*</span>
+                                                <div class="star-rating">
+                                                    <input type="radio" name="stars2" id="star-aa" value="5" onclick="onStarRatingClick2(5)" />
+                                                    <label for="star-aa"></label>
+                                                    <input type="radio" name="stars2" id="star-bb" value="4" onclick="onStarRatingClick2(4)" />
+                                                    <label for="star-bb"></label>
+                                                    <input type="radio" name="stars2" id="star-cc" value="3" onclick="onStarRatingClick2(3)" />
+                                                    <label for="star-cc"></label>
+                                                    <input type="radio" name="stars2" id="star-dd" value="2" onclick="onStarRatingClick2(2)" />
+                                                    <label for="star-dd"></label>
+                                                    <input type="radio" name="stars2" id="star-ee" value="1" onclick="onStarRatingClick2(1)" />
+                                                    <label for="star-ee"></label>
+                                                </div>
+                                                @Html.HiddenFor(m => m.AppraisalRequest.AppraiserRating.Code)
+                                                @*@Html.DropDownListFor(m => m.TrainingRequest.PostAssessmentScore, (SelectList)ViewBag.Score, "--Select--", new { @class = "form-control form-control-sm" })*@
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 text-box">
+                                            <div class="form-group">
+                                                <label>Appraiser Score</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.AppraisalRequest.AppraiserScore, new { @class = "form-control form-control-sm", @placeholder = "Appraiser Score", @onkeypress = "return onlyNumberKey(event)", @maxlength = 5, @oninput = "process(this)", @onchange = "validate(this,'AppraiserScore')" })
+                                                <span id="AppraiserScore"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Reviewer Name </label>
+                                                <span class="Mandatory">*</span>
+                                                @*@Html.DropDownListFor(m => m.AppraisalRequest.Reviewer.Code, (SelectList)ViewBag.Aev, "--Select Reviewer Name--", new
+                                 {
+                                     @class = "selectpicker form-control form-control-sm",
+                                     @onchange = "onTrainingNameChange(this)",
+                                data_show_subtext = "true",
+                                data_live_search = "true"
+                            })*@
+                                                @Html.DropDownListFor(m => m.AppraisalRequest.Reviewer.Code, (SelectList)ViewBag.Aev, "--Select Reviewer Name--", new
+                                               {
+                                                   @class = "selectpicker form-control form-control-sm",
+                                              @onchange = "validate(this,'reviewer')",
+                                              data_show_subtext = "true",
+                                              data_live_search = "true"
+                                          })
+
+                                            </div>
+                                            <span id="reviewer"></span>
+                                        </div>
+                                        <div class="col-md-3 rating hide">
+                                            <div class="form-group font-awesome">
+                                                <label>Reviewer Score Rating</label>
+                                                <span class="Mandatory">*</span>
+                                                <div class="star-rating">
+                                                    <input type="radio" name="star3" id="star-aaa" value="5" onclick="onStarRatingClick3(5)" />
+                                                    <label for="star-aaa"></label>
+                                                    <input type="radio" name="star3" id="star-bbb" value="4" onclick="onStarRatingClick3(4)" />
+                                                    <label for="star-bbb"></label>
+                                                    <input type="radio" name="star3" id="star-ccc" value="3" onclick="onStarRatingClick3(3)" />
+                                                    <label for="star-ccc"></label>
+                                                    <input type="radio" name="star3" id="star-ddd" value="2" onclick="onStarRatingClick3(2)" />
+                                                    <label for="star-ddd"></label>
+                                                    <input type="radio" name="star3" id="star-eee" value="1" onclick="onStarRatingClick3(1)" />
+                                                    <label for="star-eee"></label>
+                                                </div>
+                                                @Html.HiddenFor(m => m.AppraisalRequest.ReviewerRating.Code)
+                                                @*@Html.DropDownListFor(m => m.TrainingRequest.PostAssessmentScore, (SelectList)ViewBag.Score, "--Select--", new { @class = "form-control form-control-sm" })*@
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 text-box">
+                                            <div class="form-group">
+                                                <label> Reviewer Score</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.TextBoxFor(m => m.AppraisalRequest.ReviewerScore, new
+                                                {
+                                                    @class = "form-control form-control-sm",
+                                                    @placeholder = "Reviewer Score",
+                                                    @onkeypress = "return onlyNumberKey(event)",
+                                                    @maxlength = 5,
+                                                    @oninput = "process(this)",
+                                                    @onchange = "validate(this,'reviewer')) "
+                                                })
+                                                <span id="reviewerscore"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Recommendation</label>
+                                                <span class="Mandatory">*</span>
+                                                @Html.DropDownListFor(m => m.AppraisalRequest.Recommendation.Code, (SelectList)ViewBag.Are, "--Select Recommendation--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'Recommendation')" })
+                                                <span id="Recommendation"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                @Html.TextAreaFor(m => m.AppraisalRequest.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = 250 })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Table Section -->
+                        <h6 class="main-title mt-3 mb-3">LogList</h6>
+                        @await Html.PartialAsync("_AppraisalLogList", Model.AppraisalRequest.AppraisalLog)
+                        <!-- Table Setion End -->
+                        <div id="AppraisalLogDetails" class="hide">
+                            @await Html.PartialAsync("_AppraisalLogDetails", Model.AppraisalRequest)
+                        </div>
+                        <div class="row card-footer-bottom-fixed">
+
+                            <div class="col-md-12 align-right">
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="validateAll()">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+
+
+    </div>
+    <!--end::Wrapper-->
+}

@@ -1,0 +1,108 @@
+﻿@model Hrms.Lite.Shared.Master.AttendanceRequestReason
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "Department", FormMethod.Post, new { id = "AttendanceRequestReasonSave" }))
+{
+    @Html.HiddenFor(m => m.Mode)
+    <div id="addattendancerequest" class="slider-forms slider-forms-open AddNewOrEdit">
+        <div class="slider-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('AddNewOrEdit')"></i>
+            </div>
+            <h4>
+                Attendance Request Reason
+            </h4>
+            <div class="row pt-2">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Reason</label>
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm AsName", @placeholder = "Reason", @onchange = "validate(this,'reasonname')", maxlength = "120" })
+                        <span id="reasonname"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div> Active</div>
+                        <label class="switch" onclick="ActiveInactiveValidationAttReason('Attendance Request Reason',@Model.Code)">
+                            @Html.CheckBoxFor(Model => Model.Active,new { @id="Attreason"})
+                            @Html.HiddenFor(Model => Model.ReasonGI)
+                            @Html.HiddenFor(Model => Model.LogCode)
+                            <span class="slider round pl-3" style="margin:4px 20px;"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8">  <h4>Set Applicability </h4></div>
+
+            <div class="row my-1">
+
+                <div class="col-md-12">
+                    <div class="ihits-table table-border mobile-responsive-table attendance-request-slider vertical-scroll-300">
+                        <table id="ReasonApplicable">
+                            <thead>
+
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Reason_SetApplicability.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.Reason_SetApplicability.Count; i++)
+                                    {
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].LeaveCode)
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].ReasonCode)
+                                        @Html.HiddenFor(m => m.Reason_SetApplicability[i].LeaveName)
+                                        <tr>
+                                            <td data-label="Allowance">@Model.Reason_SetApplicability[i].LeaveName</td>
+                                            <td data-label="Y/S">
+                                                <div class="checkbox-inline">
+                                                    <label class="checkbox checkbox-outline checkbox-success">
+                                                        @Html.CheckBoxFor(m => m.Reason_SetApplicability[i].Applicability)
+                                                        @*, new { @onclick = "moduleChange(" + i + ")" }*@
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="AttendaceRequestReasonSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="AttendaceRequestReasonSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+}

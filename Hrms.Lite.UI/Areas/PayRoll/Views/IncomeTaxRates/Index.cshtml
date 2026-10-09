@@ -1,0 +1,175 @@
+﻿@model Hrms.Lite.Shared.PayRoll.IncomeTaxRates
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/PayRoll/incomeTaxRates.js"></script>
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Income Tax Rates</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+
+                        <li class="breadcrumb-item">
+                            Income Tax Rates
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Header-->
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per">
+
+                    <div class="card-body">
+
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "incomeTaxRatesSave" }))
+                        { 
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap align-items-center">
+                                <div class="tab-items ">
+                                    <div class="tab-items mt-2">
+                                        <label>Assessment Year </label>
+                                        <div class="form-group filter-combobox mt-0">
+
+                                            @*<select class="form-control form-control-sm " id="exampleSelects" style="width: 200px;">
+                                                <option>Demo</option>
+                                                <option>Demo</option>
+
+                                            </select>*@
+                                            @Html.DropDownListFor(m => m.AssessmentYear.Code, (SelectList)ViewBag.AssessmentYr,"--Select--", new { @class = "form-control form-control-sm", @style = "width: 200px",@onchange= "GetList();validate(this,'assmt')" })
+                                            <span id="assmt"></span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-items ">
+                                    <div class="tab-items mt-2">
+                                        <label>IT Category</label>
+                                        <div class="form-group filter-combobox mt-0">
+
+                                            @*<select class="form-control form-control-sm " id="exampleSelects" style="width: 200px;">
+                                                <option>Demo</option>
+                                                <option>Demo</option>
+
+                                            </select>*@
+                                            @Html.DropDownListFor(m => m.ITCategory.Code, (SelectList)ViewBag.ItCategory,"--Select--", new { @class="form-control form-control-sm",@style="width : 200px", @onchange = "GetList();validate(this,'itCate')" })
+                                            <span id="itCate"></span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-items pt-2">
+                                    <div class="d-flex">
+
+
+                                        <div class="pr-3">
+                                            Slab  Based On :
+                                        </div>
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-success">                                                                                                
+                                                @Html.RadioButtonFor(m => m.BasedOn, "1", new { @onchange = "GetList()" })
+                                                <span></span>Old
+                                            </label>
+                                            <label class="radio radio-outline radio-success">
+                                                @Html.RadioButtonFor(m => m.BasedOn, "2", new { @onchange = "GetList()" })
+                                                <span></span>New
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div class="tab-items select-option">
+
+
+                                    <!-- <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                        <input type="text" class="form-control form-control-sm" placeholder="ID/Name">
+                                    </div>
+                                    <div class="filter-button" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                    </div>
+                                    <button data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" data-bs-original-title="Export to Excel">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </button>
+                                     -->
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!-- Table Section -->
+                       <div id="incomeTaxRatesList">
+                           @await Html.PartialAsync("_List")
+                       </div>
+                        <!-- Table Setion End -->
+
+                        <div class="row card-footer-bottom-fixed border-none">
+
+                            <div class="col-md-12 align-right">
+                                <a type="button"
+                                   class="btn btn-default  mobile-full-width" onclick="OnSaveClick()">
+                                    Save
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <!--end: Datatable-->
+                        }
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+
+    </div>
+    <!--end::Content-->
+  

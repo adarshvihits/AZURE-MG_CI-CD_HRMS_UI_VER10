@@ -1,0 +1,67 @@
+﻿
+@model Hrms.Lite.Shared.PayRoll.AllowanceSettings.AllowanceSettingsBatchUpdate
+<script>
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('CalcTypeCode');
+
+    });
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "BatchUpdateAllowance" }))
+{
+    <div id="BatchUpdate" class="slider-forms slider-forms-open batchUpdateDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('batchUpdateDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Batch Update
+            </h4>
+            <div class="row-outer">
+                <label class="view-title"> Offday Wage Allowance</label>
+                <div class="view-details">
+                    @Html.HiddenFor(m => m.AllowanceCode)
+                    @Model.Allowance.Name
+
+                </div>
+            </div>
+            <div class="row mt-2">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Calculation Type</label><span class="Mandatory">*</span>
+                                                       <div class="view-details">
+                                                           @Html.DropDownListFor(model => model.CalcTypeCode, (SelectList)ViewBag.CalculationType, "Select Calculation Type", new { @class = "form-control form-control-sm", @style = "width: 212px;",@onchange= "validate(this,'CalcType')" })
+                                                           <span id="CalcType"></span>
+                                                       </div>
+
+                    </div>
+                   
+                </div>
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Amount/Rate in %</label><span class="Mandatory">*</span>
+                        @*@Html.TextBoxFor(model => model.Rate, new { @class = "form-control form-control-sm", @placeholder = "Amount/Rate in %", style = "width: 100%", maxlength = "8", @type = "number", @onkeydown = "if(event.key==='.'){event.preventDefault();}", @oninput = "event.target.value = event.target.value.replace(/[^0-9]*/g,'')" })*@
+                        @Html.TextBoxFor(model => model.Rate, new { @class = "form-control form-control-sm", @placeholder = "Amount/Rate in %", @style = "width: 100%", maxlength = "8", onpaste = "return false", onkeypress = "return onlyNumberKey(event)", @autocomplete = "off" })
+                        
+                        <span id="RateValidation"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    <button type="button"
+                            class="btn btn-default  mobile-full-width" onclick="BatchUpdateClick()">
+                        Update
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}

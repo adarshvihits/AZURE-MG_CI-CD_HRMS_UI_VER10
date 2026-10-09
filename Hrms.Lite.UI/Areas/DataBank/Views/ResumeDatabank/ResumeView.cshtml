@@ -1,0 +1,441 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+@{
+    ViewData["Title"] = Model.Details.FullName;
+    Layout = "~/Views/Shared/_LayoutResumeView.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script>
+   $(document).ready(function () {
+       debugger
+        $.ajax({
+        type: "POST" ,
+            url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+            data: { filename: '@Model.Details.CandidatesPhoto.FileName' },
+        success: function (data, jqXHR, response) {
+
+            if (jqXHR = "success") {
+                var mimeType = getMimeTypeFromFilename('@Model.Details.CandidatesPhoto.FileName');
+                debugger
+                $('.emp_HeaderPic').css('background-image', "url('" + mimeType + data + "')");
+
+
+        }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+            }
+        });
+   })
+
+</script>
+<style>
+    .AVATAR {
+        WIDTH: 100%;
+        HEIGHT: 200PX;
+        OBJECT-FIT: cover;
+    }
+
+        .AVATAR .avatar {
+            WIDTH: 100%;
+            HEIGHT: 100%;
+            BACKGROUND-POSITION: center;
+            BACKGROUND-SIZE: cover;
+        }
+</style>
+
+
+<div class="cover shadow-lg bg-white">
+    <div class="cover-bg p-3 p-lg-4 text-white">
+        <div class="row">
+            <div class="col-lg-4 col-md-5">
+
+                @*<div class="avatar hover-effect bg-white shadow-sm p-1">
+            <img src="@Model.Details.CandidatesPhoto.AbsoluteUri"
+                 width="200" height="200">
+        </div>*@
+
+
+                <div class="AVATAR">
+
+                    <div class="avatar hover-effect bg-white shadow-sm p-1 emp_HeaderPic">
+                    </div>
+
+                </div>
+
+            </div>
+                <div class="col-lg-8 col-md-7 text-center text-md-start">
+                    <h2 class="h1 mt-2 aos-init aos-animate" data-aos="fade-left" data-aos-delay="0">@Model.Details.FullName</h2>
+                    <p data-aos="fade-left" data-aos-delay="100" class="aos-init aos-animate">
+
+                        <span>@Model.Details.RefNo</span>
+                    </p>
+                    @*<div class="d-print-none aos-init aos-animate" data-aos="fade-left" data-aos-delay="200">
+                <a class="btn btn-light text-dark shadow-sm mt-1 me-1"
+                   href="https://demo.templateflip.com/right-resume/right-resume.pdf" target="_blank">Download CV</a>
+            </div>*@
+                </div>
+            </div>
+    </div>
+    <div class="about-section pt-4 px-3 px-lg-4 mt-1">
+        <div class="row">
+
+            <div class="col-md-6 ">
+                <h2 class="h3 mb-3">Personal Details</h2>
+                <div class="row mt-2">
+                    <div class="col-sm-4">
+                        <div class="pb-1">DOB</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Details.DOB))</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="pb-1">Gender</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary">@Model.Details.Gender.Name</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="pb-1">Marital Status</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary">@Model.Details.MaritalStatus.Name</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="pb-1">Phone</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary">@Model.Details.Mobile</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="pb-1">Email</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary">@Model.Details.Email</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="h3 mb-3 ">Address</h2>
+                <div class="">
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary"> @Model.Details.House</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary"> @Model.Details.City</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary"> @Model.Details.Street</div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="pb-1 text-secondary"> @Model.Details.House</div>
+                    </div>
+                    @Model.Details.District.Name,@Model.Details.State.Name,@Model.Details.Country.Name
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr class="d-print-none">
+    <div class="skills-section px-3 px-lg-4">
+        <h2 class="h3 mb-3">Professional Skills</h2>
+        <div class="row">
+            @if (Model.Skill != null && Model.Skill.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Skill.Count; i++)
+                {
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <span>@Model.Skill[i].Skill.Name</span>
+
+                            @if (Model.Skill[i].SkillProficiency.Code == 2)
+                            {
+                                <div class="progress my-1">
+                                    <div class="progress-bar bg-danger aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                         data-aos-delay="100" data-aos-anchor=".skills-section" style="width: 20%" aria-valuenow="90"
+                                         aria-valuemin="0" aria-valuemax="100">@Model.Skill[i].SkillProficiency.Name</div>
+                                    </div>
+                                }
+                                else if (Model.Skill[i].SkillProficiency.Code == 1)
+                                {
+                                    <div class="progress my-1">
+                                        <div class="progress-bar bg-info aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                             data-aos-delay="200" data-aos-anchor=".skills-section" style="width: 40%" aria-valuenow="85"
+                                             aria-valuemin="0" aria-valuemax="100">@Model.Skill[i].SkillProficiency.Name</div>
+                                        </div>
+                                    }
+
+                                    else if (Model.Skill[i].SkillProficiency.Code == 3)
+                                    {
+                                        <div class="progress my-1">
+                                            <div class="progress-bar bg-warning aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                                 data-aos-delay="300" data-aos-anchor=".skills-section" style="width: 60%" aria-valuenow="90"
+                                                 aria-valuemin="0" aria-valuemax="100">@Model.Skill[i].SkillProficiency.Name</div>
+                                            </div>
+                                        }
+                                        else if (Model.Skill[i].SkillProficiency.Code == 4)
+                                        {
+                                            <div class="progress my-1">
+                                                <div class="progress-bar bg-primary aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                                     data-aos-delay="400" data-aos-anchor=".skills-section" style="width: 80%" aria-valuenow="90"
+                                                     aria-valuemin="0" aria-valuemax="100">@Model.Skill[i].SkillProficiency.Name</div>
+                                                </div>
+                                            }
+                                            else if (Model.Skill[i].SkillProficiency.Code == 5)
+                                            {
+                                                <div class="progress my-1">
+                                                    <div class="progress-bar bg-success aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                                         data-aos-delay="500" data-aos-anchor=".skills-section" style="width: 100%" aria-valuenow="85"
+                                                         aria-valuemin="0" aria-valuemax="100">@Model.Skill[i].SkillProficiency.Name</div>
+                                                    </div>
+                                                }
+                        </div>
+
+                    </div>
+                }
+            }
+            @*<div class="col-md-6">
+                    <div class="mb-2">
+                        <span>Basic</span>
+                        <div class="progress my-1">
+                            <div class="progress-bar bg-danger aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                 data-aos-delay="400" data-aos-anchor=".skills-section" style="width: 20%" aria-valuenow="90"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span>Expert</span>
+                        <div class="progress my-1">
+                            <div class="progress-bar bg-success aos-init aos-animate" role="progressbar" data-aos="zoom-in-right"
+                                 data-aos-delay="500" data-aos-anchor=".skills-section" style="width: 100%" aria-valuenow="85"
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+    <hr class="d-print-none">
+    <div class="work-experience-section px-3 px-lg-4">
+        <h2 class="h3 mb-4">Work Experience</h2>
+        <div class="timeline">
+            @if (Model.Experience != null && Model.Experience.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Experience.Count; i++)
+                {
+                    <div class="timeline-card timeline-card-primary card shadow-sm">
+                        <div class="card-body">
+                            <div class="h5 mb-1"> <span class="text-muted h6">@Model.Experience[i].CompanyName</span></div>
+                            <div class="text-muted text-small mb-2">
+                                <i class="fa-sharp fa-solid fa-location-dot new-day"></i><span class="locate-new">@Model.Experience[i].Location</span>, <span class="calander-section">
+                                    <i class="fa-solid fa-calendar-days new-day"></i><span class="locate-new">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Experience[i].From))  - @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Experience[i].To))</span>
+                                </span>,
+                                <span class="calander-section"><i class="fa-solid fa-handshake"></i> Y/E : <span>@Model.Experience[i].Experience</span>
+                            </div>
+                            <!-- <div>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative
+                            approaches to corporate strategy foster collaborative thinking to further the overall value
+                            proposition.</div> -->
+                        </div>
+                    </div>
+
+                }
+            }
+
+        </div>
+    </div>
+    <hr class="d-print-none">
+    <div class="page-break"></div>
+    <div class="education-section px-3 px-lg-4 ">
+        <h2 class="h3 mb-4">Education</h2>
+        <div class="timeline">
+            @if (Model.Education != null && Model.Education.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Education.Count; i++)
+                {
+                    <div class="timeline-card timeline-card-success card shadow-sm">
+                        <div class="card-body">
+                            <div class="h5 mb-1">
+                                @Model.Education[i].Qualification.Name <span class="text-muted h6">
+                                    @Model.Education[i].SpecializationOfBranch.Name
+                                </span>
+                            </div>
+                            <div class="text-muted text-small mb-2">
+                                <span>
+                                    <i class="fa-solid fa-user-graduate new-day"></i><span class="locate-new">@Model.Education[i].QualificationType.Name,</span><span class="calander-section">Completed In @Model.Education[i].YearOfCompletion</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+    <hr class="d-print-none">
+    <div class="page-break"></div>
+    <div class="education-section px-3 px-lg-4 ">
+        <h2 class="h3 mb-4">Certifications</h2>
+        <div class="timeline">
+            @if (Model.Certifications != null && Model.Certifications.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Certifications.Count; i++)
+                {
+                    <div class="timeline-card timeline-card-certificate card shadow-sm">
+                        <div class="card-body">
+                            <div class="h5 mb-1">
+                                @Model.Certifications[i].Certificate <span class="text-muted h6">
+                                    @Model.Certifications[i].CertificateType.Name
+                                </span>
+                            </div>
+
+                            <div class="pt-2">
+                                <div class="text-muted text-small ">
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="flex-new">
+                                                        <h6 class="pb-1"> <i class="fa-solid fa-user-graduate new-day"></i>Certificate Type </h6>
+                                                        <span class="dot-cls">:</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="pb-1 text-secondary"> @Model.Certifications[i].CertificateType.Name</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="flex-new">
+                                                        <h6 class="pb-1"> <i class="fa-solid fa-user-graduate new-day"></i>Mode </h6>
+                                                        <span class="dot-cls">:</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="pb-1 text-secondary "> @Model.Certifications[i].CertificateMode.Name</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <new></new> -->
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="flex-new">
+                                                        <h6 class="pb-1">
+                                                            <i class="fa-solid fa-calendar-days new-day"></i>Issued Date
+
+                                                        </h6>
+                                                        <span class="dot-sec">:</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="pb-1 text-secondary"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.Certifications[i].IssuedDate))</div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="flex-new">
+                                                        <h6 class="pb-1">
+                                                            <i class="fa-solid fa-hourglass-start new-day"></i>Validity
+
+
+                                                        </h6>
+                                                        <span class="">:</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="pb-1 text-secondary">@Model.Certifications[i].CertificateValidity.Name</div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+    <hr class="d-print-none">
+    <div class="contant-section px-3 px-lg-4 pb-4" id="contact">
+        <h2 class="h3 text ">
+            Summary
+        </h2>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="mt-2">
+                    <h3 class="h6">
+
+                        Suitable Designation
+                    </h3>
+                    <div class="pb-2 text-secondary">
+                        @if (Model.Details.SuitedDesignationName != null && Model.Details.SuitedDesignationName.Length != 0)
+                        {
+                            for (int i = 0; i < Model.Details.SuitedDesignationName.Length; i++)
+                            {
+                        @Model.Details.SuitedDesignationName[i]
+                         if (i != 0)
+                                {
+                        <span>,</span>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mt-2">
+                    <h3 class="h6">
+
+                        Suitable Location
+                    </h3>
+                    <div class="pb-2 text-secondary">
+                        @if (Model.Details.SuitedLocationName != null && Model.Details.SuitedLocationName.Length != 0)
+                        {
+                            for (int i = 0; i < Model.Details.SuitedLocationName.Length; i++)
+                            {
+                        @Model.Details.SuitedLocationName[i]
+                         if (i != 0)
+                                {
+                        <span>,</span>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="col d-none d-print-block">
+                <div class="mt-2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

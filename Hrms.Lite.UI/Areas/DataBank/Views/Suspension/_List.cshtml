@@ -1,0 +1,97 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.Suspension
+
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.PendingCount').html(@Model.PendingCount);
+        $('.CompletedCount').html(@Model.CompletedCount);
+        setTimeout(showHelp, 500);
+    });
+
+    function ApplyFilter(mode) {
+        if (mode == 'apply') {
+            if (filterApplicable >= 1) {
+                GetList(currentTab);
+                CloseSlider('basicFilter');
+                $('#filterForm').removeClass('filter-apply');
+            }
+            else {
+                //showSpinner();
+                GetList(currentTab);
+                CloseSlider('basicFilter');
+                $('#filterForm').addClass('filter-apply');
+            }
+        }
+        else {
+            //showSpinner();
+            filterApplicable = 1;
+            $('.reset').val('');
+            $('#Optional_Filter_EmploymentStatus_Code').val(0);
+            $('#filterForm').removeClass('filter-apply');
+            GetList(currentTab);
+        }
+    }
+</script>
+<div class="ihits-table table-border odd-even  mobile-responsive-table suspension_list">
+    @Html.HiddenFor(m => m.SuspensionList.Count)
+    <table id="SuspensionTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation </th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Date Of Joining">DOJ</th>
+                <th scope="col">Incident</th>
+                <th scope="col">Occured Date</th>
+                <th scope="col">Reported By</th>
+                @if (Model.Tab == "Completed")
+                { 
+                <th scope="col">Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.SuspensionList != null && Model.SuspensionList.Count > 0)
+            {
+                for (int i = 0; i < Model.SuspensionList.Count; i++)
+                { 
+                    <tr>
+                        <td>@Model.SuspensionList[i].EmployeeID</td>
+                         @if (Model.Tab == "Completed")
+                         {
+                             <td>@Model.SuspensionList[i].EmployeeName</td>
+                         }
+                         else
+                         { 
+                            <td><a onclick="onEmployeeClick('@Model.SuspensionList[i].IncidentGI','@Model.SuspensionList[i].EmployeeName','@Model.SuspensionList[i].EmployeeID')">@Model.SuspensionList[i].EmployeeName</a></td>
+                         }
+                        <td>@Model.SuspensionList[i].Designation</td>
+                        <td>@Model.SuspensionList[i].Department</td>
+                        <td>@Model.SuspensionList[i].Location</td>
+                        <td>@Model.SuspensionList[i].DOJ</td>
+                        <td>@Model.SuspensionList[i].Incident</td>
+                        <td>@Model.SuspensionList[i].OccuredDate</td>
+                        <td>@Model.SuspensionList[i].ReportedBy</td>
+                         @if (Model.Tab == "Completed")
+                         { 
+                            <td>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-icon btn-edit icon-only " data-bs-original-title="Edit" cursorshover="true"
+                                   onclick="onEmployeeClick('@Model.SuspensionList[i].IncidentGI','@Model.SuspensionList[i].EmployeeName','@Model.SuspensionList[i].EmployeeID')">
+                                    <i class="icon-xl fas fa-pencil-alt" cursorshover="true"></i>
+                                </a>
+                                 <a data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon icon-only mobile-full-width btn-delete" cursorshover="true" onclick="Delete('@Model.SuspensionList[i].IncidentGI')">
+                                    <i class="icon-xl far fa-trash-alt" cursorshover="true"></i>
+                                </a>
+                            </td>
+                         }
+                        
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

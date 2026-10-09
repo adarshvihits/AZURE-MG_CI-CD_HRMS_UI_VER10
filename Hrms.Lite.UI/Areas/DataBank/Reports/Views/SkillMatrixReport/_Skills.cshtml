@@ -1,0 +1,45 @@
+﻿@*@model Tuple<Hrms.Lite.Shared.DataBank.Reports.SkillMatrix, System.Data.DataTable,System.Data.DataTable,System.Data.DataTable>*@
+<style>
+    .k-grid-content table thead tr th:nth-child(1),
+    .k-grid-content table tbody tr td:nth-child(1){
+        text-align:center;
+    }
+    
+    </style>
+@using Kendo.Mvc.UI
+@using Hrms.Lite.Shared.DataBank.Reports;
+@(
+Html.Kendo().Grid<Hrms.Lite.Shared.DataBank.Reports.SkillsList>()
+            .Name("skillGrid")
+            .Columns(columns =>
+            {
+                columns.Select().Width(50).HtmlAttributes(new { style = "" });
+                columns.Bound(e => e.SkillCode).Visible(false);
+                columns.Bound(e => e.SkillType);
+                columns.Bound(e => e.Skill);
+                columns.Bound(e => e.ShortName);
+            })
+    .Events(events => events
+    .DataBound("onDataBound")
+    )
+     
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(50)
+                        .Read(read => read.Action("GetSkills", "SkillMatrixReport"))
+            )
+             .Scrollable().HtmlAttributes(new { style = "height:330px;" })
+          //  .ToClientTemplate()
+        )
+
+<div style="padding-top: 11px; display:flex; justify-content:flex-end;">
+
+        
+<button type="button" onclick="saveSelectedSkills()" class="btn btn-default btn-sm float-left">
+  Apply
+</button>
+<button type="button" onclick="clearSelection()" class="btn btn-default btn-sm float-left">
+    Clear
+</button>
+</div>
+

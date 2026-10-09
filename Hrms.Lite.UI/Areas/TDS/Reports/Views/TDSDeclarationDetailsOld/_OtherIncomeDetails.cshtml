@@ -1,0 +1,84 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "OtherIncme" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table  otherincome-tble-list mb-2">
+                <table id="otherIncome">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Nature of Income</th>
+                            <th scope="col">Amount(Rs)</th>
+                            <th scope="col">TDS/TCS</th>
+                            <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Status">Status</th>
+                            @*<th scope="col" data-bs-toggle="tooltip" data-bs-original-title="View">View</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @if (Model.OtherIncomeList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.OtherIncomeList.Count; i++)
+                            {
+
+                        <tr id="row_OI_@i">
+                            <td data-label="SlNo">
+
+                                @(i + 1)
+                            </td>
+
+                            <td data-label="NatureofIncome">
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].flag)
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].TrnCode)
+                                @Html.HiddenFor(m => Model.OtherIncomeList[i].NatureofIncome)
+                                @Html.DisplayFor(m => m.OtherIncomeList[i].NatureofIncome)
+                            </td>
+
+                            <td data-label="Amount">
+                                @Html.DisplayFor(m => m.OtherIncomeList[i].Amount)
+
+
+                            </td>
+                            <td data-label="TdsorTcs">
+                                @Html.DisplayFor(m => m.OtherIncomeList[i].TdsorTcs)
+
+                            </td>
+                            <td data-label="Status"> @Html.DisplayFor(m => Model.OtherIncomeList[i].ApprovalStatus)</td>
+                            @*<td data-label="AttachDocument">
+                                <i onclick="GetUploadDocumentPopUp('OtherIncome', '@Model.OtherIncomeList[i].TrnCode')" title="Click Here To View Document" class=" far fa-eye"></i>
+                                <span>@Model.OtherIncomeList[i].OIDocCount </span>
+                            </td>*@
+                        </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" align="center"><em>No table data</em></td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+
+
+
+
+
+

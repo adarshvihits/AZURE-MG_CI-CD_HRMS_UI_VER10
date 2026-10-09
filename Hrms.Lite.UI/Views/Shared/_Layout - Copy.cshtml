@@ -1,0 +1,534 @@
+﻿<!DOCTYPE html>
+<html>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Account.Login CurrentUser = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Account.Login>(Context.Session.GetString("User"));
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>
+
+        @CurrentUser.authUser.CompanyName | HRMS
+    </title>
+    <environment names="Development,Docker">
+        <meta name="description" content="No subheader example" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <!--begin::Fonts-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+        <!--end::Fonts-->
+        <!--begin::Page Vendors Styles(used by this page)-->
+        <link href="~/css/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Page Vendors Styles-->
+        <!--begin::Global Theme Styles(used by all pages)-->
+        <link href="~/css/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Global Theme Styles-->
+        <!--begin::Layout Themes(used by all pages)-->
+        <link href="~/css/login.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/sumoselect.css" rel="stylesheet" />
+        <link href="~/css/color-theme.css" rel="stylesheet" />
+        <link href="~/css/responsive.css" rel="stylesheet" />
+
+        <!--end::Layout Themes-->
+        <link rel="shortcut icon" href="images/favicon.ico" />
+        @*<link href="~/css/DataTables-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+
+        <!--DAshbOad Themes-->
+        <link href="~/css/DashBoard.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <meta name="description" content="No subheader example" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <!--begin::Fonts-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+        <!--end::Fonts-->
+        <!--begin::Page Vendors Styles(used by this page)-->
+        <link href="~/css/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Page Vendors Styles-->
+        <!--begin::Global Theme Styles(used by all pages)-->
+        <link href="~/css/plugins.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <!--end::Global Theme Styles-->
+        <!--begin::Layout Themes(used by all pages)-->
+        <link href="~/css/login.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/custom.css" rel="stylesheet" type="text/css" />
+        <link href="~/css/sumoselect.css" rel="stylesheet" />
+        <link href="~/css/color-theme.css" rel="stylesheet" />
+        <link href="~/css/responsive.css" rel="stylesheet" />
+        <!--end::Layout Themes-->
+        <link rel="shortcut icon" href="images/favicon.ico" />
+        @*<link href="~/css/DataTables-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css" />
+
+        <!--DAshbOad Themes-->
+        <link href="~/css/DashBoard.css" rel="stylesheet" />
+    </environment>
+</head>
+<body id="" class="aside-fixed aside-minimize aside-minimize-hoverable ">
+
+
+    <div class="spinner-outer">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+    <div class="main-outer-div">
+        <div class="main-outer-div-inner">
+
+
+
+
+            @*<div class="color-theme-selector">
+                    <div class="color-theme-icon-outer">
+                        <span class="color-theme-icon one-theme"></span>
+                        <span class="color-theme-icon magenta-theme"></span>
+                        <span class="color-theme-icon green-theme"></span>
+                        <span class="color-theme-icon two-theme"></span>
+
+
+                    </div>
+                    <button type="button" class="btn btn-small  mobile-full-width" onclick="logOut()">
+                            Logout
+                        </button>
+
+                </div>*@
+
+            <div class="dropdown logOutMenu">
+                <!--begin::Toggle-->
+                <div class="topbar-item" data-bs-toggle="dropdown" data-offset="10px,0px" aria-expanded="false">
+                    <div class="d-flex align-items-center pr-5 ">
+                        <div class="pt-2">
+                            <span class="authername ">
+                                @CurrentUser.authUser.EmployeeName<span class="authername pl-2">(@CurrentUser.authUser.EmployeeID)&nbsp;, &nbsp;</span>
+                                <span class="authername">
+                                    @CurrentUser.authUser.UserRole
+                                    </span>
+                                </span>
+</div>
+                            <div class="employee-profile-img ml-5">
+                            <img src="@CurrentUser.authUser.ImageUrl">
+                        </div>
+                    </div>
+                </div>
+                <!--end::Toggle-->
+                <!--begin::Dropdown-->
+                <div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg top-3">
+                    <form>
+                        <!--begin::Header-->
+                        <div class="login-wrap">
+                            <div class="login-profile-top">
+                                <div class="login-profile-image">
+                                    <img src="@CurrentUser.authUser.ImageUrl">
+                                </div>
+                                <div class="login-profile-more-details">
+                                    <span class="username">@CurrentUser.authUser.EmployeeName (@CurrentUser.authUser.EmployeeID)</span>
+                                    <span class="other-details">@CurrentUser.authUser.Designation</span>
+                                    <a class="other-details" style="cursor:pointer;" data-bs-toggle="modal" data-target=".hd-example-modal-lg" onclick="GetUserRoleDetails(@CurrentUser.authUser.UserRoleCode)">@Html.Hidden(CurrentUser.authUser.UserRole) @CurrentUser.authUser.UserRole</a>
+
+                                </div>
+                            </div>
+                            <div class="login-button-outer col-md-12 text-center">
+                                <div class="sign-out" onclick="logOut()">Log Out</div>
+
+                                @*<div class="view-profile" onclick="ViewProfile('@CurrentUser.authUser.EmployeeGI')">View Profile</div>*@
+
+                                <a onclick="changePwd()">Change Password</a>
+                            </div>
+
+                            <!--<div class="color-theme-picker">
+                                <div class="color-item blue-theme" onclick="changeTheme('blue-theme')"></div>
+                                <div class="color-item magenta-theme" onclick="changeTheme('magenta-theme')"></div>
+                                <div class="color-item green-theme" onclick="changeTheme('green-theme')"></div>
+                                <div class="color-item white-theme" onclick="changeTheme('white-theme')"></div>-->
+                            @*<div class="color-item one-theme" onclick="changeTheme('one-theme')"></div>
+                                <div class="color-item two-theme" onclick="changeTheme('two-theme')"></div>
+                                <div class="color-item three-theme" onclick="changeTheme('three-theme')"></div>
+                                <div class="color-item four-theme" onclick="changeTheme('four-theme')"></div>
+                                <div class="color-item five-theme" onclick="changeTheme('five-theme')"></div>
+                                <div class="color-item six-theme" onclick="changeTheme('six-theme')"></div>
+                                <div class="color-item seven-theme" onclick="changeTheme('seven-theme')"></div>
+                                <div class="color-item eight-theme" onclick="changeTheme('eight-theme')"></div>
+                                <div class="color-item nine-theme" onclick="changeTheme('nine-theme')"></div>*@
+                            <!--</div>-->
+                            @*<div class="dark_mode">
+
+                                    <input type="checkbox" class="checkbox" id="checkbox">
+                                    <label for="checkbox" class="label">
+                                        <i class="fas fa-moon"></i>
+                                        <i class='fas fa-sun'></i>
+                                        <div class='ball'> </div>
+                                    </label>
+                                </div>*@
+
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Content-->
+                        <!--begin::Tabpane-->
+                        <!--end::Content-->
+
+
+
+
+
+                    </form>
+
+                    <!--end::Dropdown-->
+
+
+
+
+
+                </div>
+
+
+
+
+
+            </div>
+            <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
+                <!--begin::Logo-->
+                <!--end::Logo-->
+                <!--begin::Toolbar-->
+                <div class="d-flex align-items-center">
+                    <!--begin::Aside Mobile Toggle-->
+                    <button class="btn p-0 burger-icon burger-icon-left" id="kt_aside_mobile_toggle">
+                        <span></span>
+                    </button>
+                    <!--end::Aside Mobile Toggle-->
+                    <!--begin::Header Menu Mobile Toggle-->
+                    <button class="btn p-0 burger-icon ml-4" id="kt_header_mobile_toggle">
+                        <span>
+
+                        </span>
+                    </button>
+                    <!--end::Header Menu Mobile Toggle-->
+
+                </div>
+                <!--end::Toolbar-->
+                <a href="index.html">
+                    <img alt="Logo" src="~/images/logo-light.png" />
+                </a>
+
+            </div>
+            <!--end::Header Mobile-->
+            <div class="d-flex flex-column flex-root">
+                <!--begin::Page-->
+                <div class="d-flex flex-row flex-column-fluid page">
+                    <!--begin::Aside-->
+                    <div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
+                        <!--begin::Brand-->
+                        <div class="brand flex-column-auto" id="kt_brand">
+                            <!--begin::Logo-->
+                            <a href="add-candidate.html" class="brand-logo">
+                                <img alt="Logo" src="~/images/logo-light.png" />
+                            </a>
+                            <!--end::Logo-->
+                            <!--begin::Toggle-->
+                            @*<button class="brand-toggle side-btn btn btn-sm px-0" id="kt_aside_toggle">
+                                    <i class=" fas fa-angle-double-right icon-md"></i>
+                                </button>*@
+                            <!--end::Toolbar-->
+                        </div>
+                        <!--end::Brand-->
+                        <!--begin::Aside Menu-->
+
+                        <div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
+                            <!--begin::Menu Container-->
+                            <div id="kt_aside_menu" class="aside-menu" data-menu-vertical="1" data-menu-scroll="1"
+                                 data-menu-dropdown-timeout="500">
+                                <!--begin::Menu Nav-->
+                                <ul class="menu-nav">
+                                    @if (CurrentUser.MenuEntity.Menu != null)
+                                    {
+                                        @foreach (var group in CurrentUser.MenuEntity.Module.GroupBy(m => new { m.Name, m.ModuleCode, m.Class }))
+                                        {
+                                            <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                                                <a href="javascript:;" class="menu-link menu-toggle">
+                                                    <i class="menu-icon flaticon-layers @group.Key.Class"></i>
+                                                    <span class="menu-text">@group.Key.Name</span>
+                                                    <i class="menu-arrow"></i>
+                                                </a>
+                                                <div class="menu-submenu">
+                                                    <i class="menu-arrow"></i>
+                                                    <ul class="menu-subnav">
+                                                        <li class="menu-item menu-item-parent" aria-haspopup="true">
+                                                            <span class="menu-link">
+                                                                <span class="menu-text">Pages</span>
+                                                            </span>
+                                                        </li>
+                                                        @foreach (var sub in CurrentUser.MenuEntity.SubModule.Where(m => m.ModuleCode == group.Key.ModuleCode))
+                                                        {
+                                                            <li class="menu-item menu-item-submenu" aria-haspopup="true"
+                                                                data-menu-toggle="hover">
+                                                                <a href="javascript:;" class="menu-link menu-toggle">
+                                                                    <i class="menu-bullet menu-bullet-dot">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="menu-text">@sub.Name</span>
+                                                                    <i class="menu-arrow"></i>
+                                                                </a>
+                                                                <div class="menu-submenu">
+                                                                    <i class="menu-arrow"></i>
+                                                                    <ul class="menu-subnav">
+                                                                        @foreach (var menu in CurrentUser.MenuEntity.Menu.Where(m => m.SubModuleCode == sub.SubModuleCode))
+                                                                        {
+                                                                            <li class="menu-item" aria-haspopup="true">
+                                                                                <a href="@Url.Action(menu.Action, menu.Controller, new { Area = menu.Area })" class="menu-link">
+                                                                                    <i class="menu-bullet menu-bullet-dot">
+                                                                                        <span></span>
+                                                                                    </i>
+                                                                                    <span class="menu-text">@menu.Name</span>
+                                                                                </a>
+                                                                            </li>
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        }
+                                      
+                                    }
+                                </ul>
+
+
+                                <!--end::Menu Nav-->
+                            </div>
+                            <!--end::Menu Container-->
+                        </div>
+                        <!--end::Aside Menu-->
+                    </div>
+                    <!--end::Aside-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+                        <!--begin::Header-->
+                        <!--end::Header-->
+                        @RenderBody()
+
+
+
+
+                        <!--<div class="footer bg-white d-flex flex-lg-column" id="kt_footer">-->
+                        <!--begin::Container-->
+                        <!--<div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">-->
+                        <!--begin::Copyright-->
+                        <!--<div class="text-dark order-2 order-md-1">
+                            <span class="text-muted font-weight-bold mr-2">2021©</span>
+                            <a href="#" target="_blank" class="text-dark-75 text-hover-primary">
+                                ihits
+                                technologies
+                            </a>
+                        </div>-->
+                        <!--end::Copyright-->
+                        <!--begin::Nav-->
+                        <!--<div class="nav nav-dark">
+                            <a href="#" target="_blank" class="nav-link pl-0 pr-5">About</a>
+                            <a href="#" target="_blank" class="nav-link pl-0 pr-5">Team</a>
+                            <a href="#" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
+                        </div>-->
+                        <!--end::Nav-->
+                        <!--</div>-->
+                        <!--end::Container-->
+                        <!--</div>-->
+                        @*<footer class="esh-app-footer footer">
+                                <div class="container">
+                                    <article class="row">
+                                        <section class="col-sm-6"></section>
+                                        <section class="col-sm-6">
+                                            <div class="esh-app-footer-text hidden-xs"> e-ShopOnWeb. All rights reserved </div>
+                                        </section>
+                                    </article>
+                                </div>
+                            </footer>*@
+
+
+
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Page-->
+            </div>
+            <!--end::Main-->
+        </div>
+    </div>
+
+    <div class="modal fade hd-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:1100px;">
+            <div class="modal-content popup" style="padding:25px 20px;">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Applicability
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div id="userRoleDetailsView"></div>
+              
+            </div>
+        </div>
+    </div>
+
+
+    <environment names="Development,Docker">
+        @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
+        <script src="~/js/jquery.min.js"></script>
+        <!--end::Global Config-->
+        <!--begin::Global Theme Bundle(used by all pages)-->
+        <script src="~/js/plugins.bundle.js"></script>
+        <script src="~/js/prismjs.bundle.js"></script>
+        <script src="~/js/scripts.bundle.js"></script>
+        <!--end::Global Theme Bundle-->
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="~/js/fullcalendar.bundle.js"></script>
+        <!-- <script src="//maps.google.com/maps/api/js?key=AIzaSyBTGnKT7dt597vo9QgeQ7BFhvSRP4eiMSM"></script> -->
+        <script src="~/js/gmaps.js"></script>
+        <!--end::Page Vendors-->
+        <!--begin::Page Scripts(used by this page)-->
+        <script src="~/js/widgets.js"></script>
+        <script src="~/js/bootstrap-datepicker.js"></script>
+
+
+        <script src="~/js/jquery.sumoselect.min.js"></script>
+        <script src="~/scripts/commonValidators.js"></script>
+        <script src="~/scripts/common.js"></script>
+        <script src="~/js/multiselect.js"></script>
+        <!---- Added on 25- feb---->
+        @*<script src="~/js/bootstrap-multiselect.js"></script>*@
+        <script src="~/js/custom.js"></script>
+        <script src="~/js/datatables.min.js"></script>
+        <script src="~/scripts/Account/login.js"></script>
+        @*<script src="~/js/settings.js"></script>*@
+
+        <!--end::Page Scripts-->
+
+    </environment>
+    <environment names="Staging,Production">
+        @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
+        <script src="~/js/jquery.min.js"></script>
+        <!--end::Global Config-->
+        <!--begin::Global Theme Bundle(used by all pages)-->
+        <script src="~/js/plugins.bundle.js"></script>
+        <script src="~/js/prismjs.bundle.js"></script>
+        <script src="~/js/scripts.bundle.js"></script>
+        <!--end::Global Theme Bundle-->
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="~/js/fullcalendar.bundle.js"></script>
+        <!-- <script src="//maps.google.com/maps/api/js?key=AIzaSyBTGnKT7dt597vo9QgeQ7BFhvSRP4eiMSM"></script> -->
+        <script src="~/js/gmaps.js"></script>
+        <!--end::Page Vendors-->
+        <!--begin::Page Scripts(used by this page)-->
+        <script src="~/js/widgets.js"></script>
+        <script src="~/js/bootstrap-datepicker.js"></script>
+
+
+        <script src="~/js/jquery.sumoselect.min.js"></script>
+        <script src="~/scripts/commonValidators.js"></script>
+        <script src="~/scripts/common.js"></script>
+        <script src="~/js/multiselect.js"></script>
+        <!---- Added on 25- feb---->
+        @*<script src="~/js/bootstrap-multiselect.js"></script>*@
+        <script src="~/js/custom.js"></script>
+        <script src="~/js/datatables.min.js"></script>
+        <script src="~/scripts/Account/login.js"></script>
+        @*<script src="~/js/settings.js"></script>*@
+
+        <!--end::Page Scripts-->
+    </environment>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+
+<script>
+     if ('@TempData["Message"]' != "")
+        swal.fire('@TempData["Message"]');
+
+    document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+            $('.spinner-outer').show();
+        }
+        else {
+            $('.spinner-outer').hide();
+        }
+    }
+
+    $(document).ready(function () {
+
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/Home/GetTheme',
+            dataType: 'json',
+            success: function (result) {
+                //console.log(result);
+                document.body.id = result;
+                $('#' + result).removeClass('hide');
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+            }
+        });
+
+    });
+
+
+    function changeTheme(themeColor) {
+        $.ajax({
+
+            type: 'POST',
+            url: '/Home/ChangeTheme',
+            dataType: 'json',
+            data: { ThemeName: themeColor },
+            success: function (result) {
+                //console.log(result)
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+            }
+        });
+    }
+    function logOut() {
+        var url = "/Account/Logout";
+        window.location.href = url;
+    }
+
+    //function preventBack() { window.history.forward(); }
+    //setTimeout("preventBack()", 0);
+    //window.onunload = function () { null };
+
+
+
+    const checkbox = document.getElementById('checkbox');
+
+    checkbox.addEventListener('change', () => {
+        document.body.classList.toggle('black-theme');
+    })
+
+
+
+</script>
+
+
+
+
+

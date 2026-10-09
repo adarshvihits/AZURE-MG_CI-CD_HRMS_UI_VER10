@@ -1,0 +1,108 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrnParticipantSelection
+@*<script src="~/js/settings.js"></script>*@
+@*<link href="~/css/tablestyle.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <link href="~/css/style.bundle.css" rel="stylesheet" />*@
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "SaveService" }))
+{
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table   Employee-Selection-poup  vertical-scroll-250">
+
+    @Html.HiddenFor(m => m.TrnParticipantList.Count)
+
+
+    <table id="TRNPARTICIPANTTable">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Department</th>
+                <th scope="col">Location</th>
+                <th scope="col">DOJ</th>
+
+                <th scope="col">
+                    @*<label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted" style="padding-left:8px;">
+                   <input data-val="true" data-val-required="The AllSkills field is required." id="myCheckbox" name="myCheckbox" type="checkbox" value="true" checked>
+                   <span></span>
+                   </label>*@
+                    <label class="checkbox checkbox-outline checkbox-success pl-1">
+                        <input type="checkbox"
+                               name="Checkboxes15" id="MenuAll" onclick="onAllClick('MenuAll','TRNPARTICIPANTTable')" value="true" checked>
+                        <span></span>
+                    </label>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.TrnParticipantList != null && Model.TrnParticipantList.Count > 0)
+
+                {
+                    for (int i = 0; i < Model.TrnParticipantList.Count; i++)
+
+                    {
+
+                        <tr>
+                            <td data-label="EmployeeID">
+                                @Model.TrnParticipantList[i].EmployeeID
+                                @Html.HiddenFor(m => m.TrnParticipantList[i].EmployeeCode)
+                                @*@Html.HiddenFor(m => m.TrnParticipantList[i].ScheduleCode)*@
+                            </td>
+                            <td data-label="Name">@Model.TrnParticipantList[i].EmployeeName </td>
+                            <td data-label="Designation">@Model.TrnParticipantList[i].Designation </td>
+                            <td data-label="Department">@Model.TrnParticipantList[i].Department</td>
+                            <td data-label="Location">@Model.TrnParticipantList[i].Location</td>
+                            <td data-label="DOJ">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.TrnParticipantList[i].DOJ))</td>
+
+                            <td data-label="DOJ">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    @Html.CheckBoxFor(m => m.TrnParticipantList[i].applicable)
+
+                                    <span id="checkbx"></span>
+                                </label>
+                                @*<label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        <input data-val="true" data-val-required="The APPLICABILITY field is required." id="" name="" onchange="" type="checkbox" value="true">
+                                        <span></span>
+                                    </label>*@
+                            </td>
+
+                            @*<td data-label="EmployerContribution">@Model.TrnParticipantList[i].TrnStatus</td>*@
+                            @*<td>
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deletedepartment"
+                                       class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick(@Model.TrnParticipantList[i].EmployeeGI)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                </td>*@
+
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+
+
+
+
+
+    </table>
+
+    <div class="row pt-10 align-right pb-2">
+
+        <div class="col-md-12">
+
+            <button type="button" class="btn btn-default mobile-full-width" onclick="Save()">
+                Save
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+  }

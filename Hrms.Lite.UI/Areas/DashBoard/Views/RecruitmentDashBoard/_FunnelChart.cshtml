@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DashBoard.RecruitmentDashBoardChartList>
+@using Kendo.Mvc.UI
+<style>
+
+    .wide p {
+        display: none;
+    }
+</style>
+<div class="demo-section wide">
+    @(Html.Kendo().Chart(Model).Name("funnelChart")
+    .HtmlAttributes(new { style = "width: 100%; height: 200px;" })
+            .Series(series =>
+                series.Funnel(m => m.Count,m=> m.Name)
+            )
+            //.Title(t => t.Text("October").Position(ChartTitlePosition.Bottom))
+            .Legend(l => l.Visible(false))
+            .SeriesDefaults(sd =>
+            {
+                sd.Funnel().Labels(lbls =>
+                {
+                    lbls.Visible(true)
+                        .Background("transparent")
+                        .Color("white")
+                        .Format("N0");
+                })
+                .DynamicSlope(false)
+                .DynamicHeight(false);
+            })
+            .Tooltip(tt => tt.Visible(true).Template("#=category#"))
+            .RenderAs(RenderingMode.Canvas)
+        )
+    </div>
+    @*<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+        <style>
+            #funnelchartdiv {
+                width: 100%;
+
+            }
+        </style>
+
+
+
+        <script>
+
+            // Add data
+
+
+            var chart = am4core.create("funnelchartdiv", am4charts.SlicedChart);
+              chart.data = @Html.Raw(ViewBag.Funnel);
+
+            var series = chart.series.push(new am4charts.PyramidSeries());
+            series.dataFields.value = "Count";
+            series.dataFields.category = "Name";
+            series.alignLabels = true;
+
+            series.topWidth = am4core.percent(100);
+            series.bottomWidth = am4core.percent(40);
+            series.colors.list = [
+                am4core.color("#36B9EA"),
+                am4core.color("#B2BEB5"),
+                am4core.color("#8A9A5B"),
+                am4core.color("#3CB371"),
+
+            ];
+            series.labels.template.disabled = true;
+            series.ticks.template.disabled = true;
+
+
+
+
+        </script>
+
+        <div id="funnelchartdiv">
+
+        </div>*@
+
+
+
+

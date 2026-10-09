@@ -1,0 +1,173 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.BranchGrading
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table  grade-wise-employee-list">
+        @Html.HiddenFor(m => m.MainList.Count)
+        <table class="common-table" id="BranchGradingTable">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Branch Code ">Br.Code</th>
+                    <th scope="col">Branch Name</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Branch Grade</th>
+
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Std Numbers ">Std No.</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Current Number ">Cur. No.</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Variance Count ">Var.</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Std Grosspay ">Std. GP </th>
+                    <th scope="col">GP+ </th>
+                    <th scope="col">GP-</th>
+                    <th scope="col" data-bs-toggle="tooltip"
+                        data-bs-original-title="Ongoing MRF  "> MRF </th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                @if (Model != null && Model.MainList != null && Model.MainList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.MainList.Count; i++)
+                    {
+
+                        <tr>
+                            <td data-label="Branch Code">@Model.MainList[i].Location.UserCode</td>
+                            <td data-label="Branch Name" >
+                                <div class="button-group ">
+                                    <a data-bs-toggle="modal" data-target=".bd-example-modal-lg"
+                                       type="button" class="btn  btn-sm branch" onclick="GetPopUp('@Model.MainList[i].Location.Code')">
+                                        @Model.MainList[i].Location.Name
+                                    </a>
+
+                                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                                         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" style="width: 500px;">
+                                            <div class="modal-content popup">
+                                                <div class="modal-header border-none" style="padding:10px">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        Change Branch Grade
+                                                    </h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="modal-body">
+
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                @Html.HiddenFor(m => Model.MainList[i].Location.Code)
+
+                            </td>
+                            <td data-label="Region">@Model.MainList[i].Region.Name</td>
+                            <td data-label="Grade" class="branch">@Model.MainList[i].Grade.Name</td>
+
+
+                            <td data-label="Std Numbers">@Model.MainList[i].StdNumbers</td>
+                            <td data-label="Current Number">@Model.MainList[i].CurrentNumbers </td>
+                            <td data-label="Variance Count">@Model.MainList[i].VarianceCount</td>
+                            <td data-label="Variance % ">@Model.MainList[i].StdGP</td>
+
+
+                            <td data-label="GP+ ">
+
+                                <div class="button-group ">
+                                    <a data-bs-toggle="modal" data-target=".gp-example-modal-lg"
+                                       type="button" class="btn  btn-sm branch " onclick="GetGPPlusPopUp('@Model.MainList[i].Location.Code', 'PLUS')">
+                                        @Model.MainList[i].GP_PLUS
+                                    </a>
+
+
+
+                                </div>
+
+                            </td>
+
+
+                            <td data-label="GP-">
+
+
+                                <div class="button-group ">
+                                    <a data-bs-toggle="modal" data-target=".gpneg-example-modal-lg"
+                                       type="button" class="btn  btn-sm branch" onclick="GetGPNegPopUp('@Model.MainList[i].Location.Code','NEG')">
+                                        @Model.MainList[i].GP_NEG
+                                    </a>
+
+
+
+                                </div>
+
+
+
+                            </td>
+                            <td data-label="Ongoing MRF">@Model.MainList[i].MRF</td>
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade gp-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 950px;">
+            <div class="modal-content popup">
+                <div class="modal-header border-none" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        GP+ Details
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade gpneg-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 950px;">
+            <div class="modal-content popup">
+                <div class="modal-header border-none" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        GP- Details
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+
+                </div>
+
+            </div>
+        </div>
+    </div>

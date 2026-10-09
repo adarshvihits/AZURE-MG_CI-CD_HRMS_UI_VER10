@@ -1,0 +1,65 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.JobPosting
+    <script src="~/js/tooltip.js"></script>
+    <script>
+    $(document).ready(function () {
+        debugger;
+        $('#tb1').html("@Model.Tab1Count");
+        $('#tb2').html("@Model.Tab2Count");
+    });
+    </script>
+    <script src="~/js/settings.js"></script>
+    <div class="ihits-table table-border odd-even mobile-responsive-table job-posted-lis new-tble-pad-tp">
+        @Html.HiddenFor(m => m.JobPostingList.Count)
+        <table id="JPPendingTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">MRF No.</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Applied Designation</th>
+                    <th scope="col">Applied Location</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Initiated On">Initiated On</th>
+                    <th scope="col">Deadline</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="No of Requirements">N / Req</th>
+                    <th data-bs-toggle="tooltip" title="Days Left">D.L.</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.JobPostingList != null && Model.JobPostingList.Count > 0)
+                {
+
+
+                    for (int i = 0; i < Model.JobPostingList.Count; i++)
+
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.JobPostingList[i].MRFGI)
+                            @Html.HiddenFor(model => Model.JobPostingList[i].VacancyManagementCode)
+                            <td data-label="Code">@Model.JobPostingList[i].JobCode</td>
+                            <td data-label="Job Title">
+                                <a id="applicantshortlisted" onclick="getJobPostingDetails('@Model.JobPostingList[i].MRFGI', 'Pending','@Model.JobPostingList[i].IsJobDescriptionNotPresent')">
+                                    @Model.JobPostingList[i].JobTitle
+                                </a>
+                            </td>
+                            <td data-label="Applied Designation"> @Model.JobPostingList[i].Designation</td>
+                            <td data-label="Applied Designation"> @Model.JobPostingList[i].Location</td>
+                            <td data-label="Requested Date"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobPostingList[i].RequestedDate))</td>
+                            <td data-label="Need by Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.JobPostingList[i].NeedByDate))</td>
+                            <td data-label="No of Requirements"> @Model.JobPostingList[i].NoOfRequirements</td>
+                            @if (@Model.JobPostingList[i].Aging < 0)
+                            {
+                                <td data-label="Days Left"><span class="text-color-low">@Model.JobPostingList[i].Aging</span></td>
+                            }
+                            else
+                            {
+                                <td data-label="Days Left"><span class="text-color-high">@Model.JobPostingList[i].Aging</span></td>
+                            }
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>

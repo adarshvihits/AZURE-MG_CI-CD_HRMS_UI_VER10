@@ -1,0 +1,90 @@
+﻿@model Hrms.Lite.Shared.Master.UserApplicabilityAdvancedUser
+
+
+<div class="ihits-table table-border  mb-0 vertical-scroll-400 userability_advance_list   ">
+
+    @Html.HiddenFor(m => m.UserApplicabilityAdvancedUserDetails.Count)
+    <table id="UserApplicabilityAdvancedUser">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">UserName</th>
+                <th scope="col">Role</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">
+                    <label class="checkbox checkbox-outline checkbox-success pl-2"  style="display:none;"  id="checkbox2">
+                        <input type="checkbox" name="Checkboxes15" id="allSub" onclick="onAllClick('allSub','UserApplicabilityAdvancedUser')">
+                        <span class="mr-1"></span>
+                    </label>
+                </th>
+                <th id="checkbox3" style="display:none;"></th>
+                <th scope="col" class="remove"></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.UserApplicabilityAdvancedUserDetails != null && Model.UserApplicabilityAdvancedUserDetails.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.UserApplicabilityAdvancedUserDetails.Count; i++)
+                    {
+
+                        <tr>
+
+
+
+                            <td data-label="UserName">@Model.UserApplicabilityAdvancedUserDetails[i].UserName @Html.HiddenFor(m => m.UserApplicabilityAdvancedUserDetails[i].ClassificationCode) @Html.HiddenFor(m => m.UserApplicabilityAdvancedUserDetails[i].GroupingCode) @Html.HiddenFor(m => m.UserApplicabilityAdvancedUserDetails[i].UserCode) </td>
+
+                            <td data-label="Role">@Model.UserApplicabilityAdvancedUserDetails[i].Role</td>
+                            <td data-label="Mobile">@Model.UserApplicabilityAdvancedUserDetails[i].Mobile</td>
+                            <td data-label="From">@Model.UserApplicabilityAdvancedUserDetails[i].ActiveFrom</td>
+                            <td data-label="To">@Model.UserApplicabilityAdvancedUserDetails[i].ActiveTo</td>
+                            <td data-label="Y/S" class="check">
+
+                                <div class="checkbox-inline" id="checkbox1">
+                                    <label class="checkbox checkbox-outline checkbox-success">
+
+                                        @Html.CheckBoxFor(m => m.UserApplicabilityAdvancedUserDetails[i].Applicable, new { @onclick = "checkBoxClick(this,'allSub','Applicable')" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td data-label="" id="actionColumn">
+                                <div class="AddOrRemove">
+
+
+                                    @if (Model.UserApplicabilityAdvancedUserDetails[i].Applicable == true)
+                                    {
+                                      
+                                        <button type="button" class="btn btn-default  mobile-full-width" onclick="OnClick('@Model.UserApplicabilityAdvancedUserDetails[i].UserCode','Remove',@i)">
+                                            Remove
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-default  mobile-full-width" onclick="OnClick('@Model.UserApplicabilityAdvancedUserDetails[i].UserCode','Add',@i)">
+                                            Add
+                                        </button>
+                                      
+
+                                    }
+                                     
+                                </div>
+                                </td>
+                        </tr>
+                    }
+                }
+            }
+
+        </tbody>
+
+
+    </table>
+
+   
+
+</div>
+

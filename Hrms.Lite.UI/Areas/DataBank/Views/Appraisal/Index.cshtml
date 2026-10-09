@@ -1,0 +1,206 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Appraisal
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/DataBank/Appraisal.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //$(".pending").hide();
+        $('.search-profile-details').hide(300);
+        $('#AppraisalList').removeClass('hide');
+
+    });
+</script>
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Appraisal List</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Appraisal List
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+
+                                    @Html.DropDownListFor(m => m.TabCode, (SelectList)ViewBag.Tabs, new { @class = "form-control form-control-sm", @onchange = "TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())" })
+                                </div>
+                            </div>
+                            <div class="col-6" id="assetFilter">
+                                <div class="form-group">
+                                    <label>Select Evaluation Period</label>
+                                    @Html.DropDownListFor(m => m.DurationwiseFilterSlab.Code, (SelectList)ViewBag.Filter, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onFilterDropdownChange(this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--begin: Search Form-->
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="tab-items">
+                                @*<a href="@Url.Action("Index", "AssetAllocation", new { Area = "Databank" })" class="btn-title all active">*@
+
+                                <!--<span class="btn-title all active" onclick="Tab(0,'all','@Model.AppraisalTabs[0].Name')">
+
+                @Model.AppraisalTabs[0].Name-->
+                                @*<span class="btn-notification AllTabCount">@Model.AllTabCount</span>*@
+                                <!--</span>-->
+                                @*</a>*@
+                            </div>
+                            <div class="tab-items">
+                                <div class="form-group filter-combobox filterList">
+
+                                    @Html.DropDownListFor(m => m.AppraisalTypeCode, (SelectList)ViewBag.AppraisalType, "All", new { @class = "form-control form-control-sm filterDropDown", @onchange = "Tab(0,'all',$('#AppraisalTypeCode option:selected').text())" })
+                                </div>
+                            </div>
+                            <div class="tab-items">
+                                <div class="form-group filter-combobox filterList" style="width:130px;">
+
+                                    @Html.DropDownListFor(m => m.DurationwiseFilterSlab.Code, (SelectList)ViewBag.Filter, new { @class = "form-control form-control-sm filterDropDown", @onchange = "onFilterDropdownChange(this)" })
+                                </div>
+
+                            </div>
+                            @*@if (Model != null && Model.AssetAllocationTabs.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.AssetAllocationTabs.Count; i++)
+                    {
+                        if (Model.AssetAllocationTabs[i].Name == "All")
+                        {
+
+                            <div class="tab-items">
+
+                                <span class="btn-title @Model.AssetAllocationTabs[i].Name active" onclick="AllTab()">
+
+                                    @Model.AssetAllocationTabs[i].Name
+                                    <span class="btn-notification">025</span>
+                                </span>
+
+                            </div>
+                        }
+                        else
+                        {
+
+                        <div class="tab-items">
+
+                            <span class="btn-title @Model.AssetAllocationTabs[i].Name" onclick="AllTab()">
+
+                                @Model.AssetAllocationTabs[i].Name
+                                <span class="btn-notification">025</span>
+                            </span>
+
+                        </div>
+                        }
+                    }
+                }*@
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                @*<a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="ExportToExcel()">
+                        <i class="icon-xl far fa-file-excel"></i>
+                    </a>*@
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" onclick="ExportToExcel()" data-bs-original-title="Export to Excel">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div id="AppraisalList" class="hide">
+
+                        @await Html.PartialAsync("_AppraisalList", Model)
+
+                    </div>
+                    <div id="newRequestSlider" class="hide">
+                        @await Html.PartialAsync("_NewRequest", Model);
+
+                    </div>
+                    <div id="newDeleteRequestSlider">
+                        @*@await Html.PartialAsync("_Delete");*@
+
+                    </div>
+                    <!-- Table Setion End -->
+                    <div class="row row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <a id="addNewAPPraisal"
+                                   class="btn btn-default float-right mobile-full-width slider-btn" onclick="onNewRequestClick()">
+                                    Add New
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+</div>
+<!--end::Content-->
+<!--end::Entry-->

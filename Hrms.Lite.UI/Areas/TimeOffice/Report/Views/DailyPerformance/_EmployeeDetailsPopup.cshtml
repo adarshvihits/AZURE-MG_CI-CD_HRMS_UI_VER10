@@ -1,0 +1,203 @@
+﻿
+@model Hrms.Lite.Shared.TimeOffice.Report.DailyPerformance
+
+<script src="~/js/tooltip.js"></script>
+<style>
+    .popup {
+        margin: 8% auto;
+        /* padding: 10px; */
+    }
+    .empidd {
+        font-size: 13px;
+    }
+
+    .employeenameee {
+        font-size: 13px;
+    }
+
+
+    .modal-body {
+        padding: 7px 20px;
+    }
+
+    .textclr {
+        color: red !important;
+    }
+    .green_td {
+        color: #007600;
+    }
+    .red_td {
+        color: red !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="empidd mb-0">ID :</h4>
+            <span class="empcodee ml-2">@Html.DisplayFor(model => Model.EmployeeID)</span>
+            @Html.HiddenFor(m => m.EmployeeID)
+        </div>
+    </div>
+    <div class="col-md-4 d-flex align-items-center">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="employeenameee mb-0">Employee Name :</h4>
+            <span class="employeenameee  ml-2">@Html.DisplayFor(model => Model.EmployeeName)</span>
+            @Html.HiddenFor(m => m.EmployeeName)
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="empidd mb-0">Location :</h4>
+            <span class="empcodee ml-2">@Html.DisplayFor(model => Model.LocationName)</span>
+            @Html.HiddenFor(m => m.LocationName)
+        </div>
+    </div>
+  
+</div>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-3 d-flex align-items-center">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="employeenameee mb-0">No Of Punch :</h4>
+            <span class="employeenameee  ml-2">@Html.DisplayFor(model => Model.NoOfPunch)</span>
+            @Html.HiddenFor(m => m.NoOfPunch)
+        </div>
+    </div>
+
+
+
+
+
+    <div class="col-md-4 d-flex align-items-center">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="employeenameee mb-0">Punch Date :</h4>
+            <span class="employeenameee  ml-2">@Html.DisplayFor(model => Model.PunchDate)</span>
+            @Html.HiddenFor(m => m.PunchDate)
+        </div>
+    </div>
+
+    @*<div class="col-md-3">
+            <div class="empcodee d-flex align-items-center">
+                <h4 class="empidd mb-0">Total In :</h4>
+                <span class="empcodee ml-2">@Html.DisplayFor(model => Model.TotInTime)</span>
+                @Html.HiddenFor(m => m.NoOfPunch)
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-center">
+            <div class="empcodee d-flex align-items-center">
+                <h4 class="employeenameee mb-0">Total Out :</h4>
+                <span class="employeenameee  ml-2">@Html.DisplayFor(model => Model.TotOUTTime)</span>
+                @Html.HiddenFor(m => m.PunchDate)
+            </div>
+        </div>*@
+    <div class="col-md-3 d-flex align-items-center">
+        <div class="empcodee d-flex align-items-center">
+            <h4 class="employeenameee mb-0">Total Time :</h4>
+            <span class="employeenameee  ml-2">@Html.DisplayFor(model => Model.TotalTime)</span>
+            @Html.HiddenFor(m => m.TotalTime)
+        </div>
+    </div>
+    <div class="col-md-2">
+        <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left ml-12" data-bs-original-title="Export to Excel">
+            <i class="icon-xl far fa-file-excel" onclick="ExportToExcelPunchStatusPOPUP('@Model.PunchDate','@Model.EmployeeGI')"></i>
+        </a>
+    </div>
+
+</div>
+<div class="row">
+   
+
+
+
+
+
+
+
+
+</div>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table mt-2 vertical-scroll-400">
+
+    <table>
+        @Html.HiddenFor(m => m.DailyPerformancePopUpList.Count)
+        @Html.HiddenFor(m => m.EmployeeGI)
+        @Html.HiddenFor(m => m.PunchDate)
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col" data-bs-toggle="tooltip" title="">Type</th>
+                @*<th scope="col" data-bs-toggle="tooltip" title="">Reader</th>*@
+                <th scope="col" data-bs-toggle="tooltip" title="">From </th>
+                <th scope="col" data-bs-toggle="tooltip" title="">To</th>
+                <th scope="col" data-bs-toggle="tooltip" title="">IN</th>
+                <th scope="col" data-bs-toggle="tooltip" title="">OUT</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.DailyPerformancePopUpList != null && Model.DailyPerformancePopUpList.Count > 0)
+            {
+                @foreach (var item in Model.DailyPerformancePopUpList)
+                {
+
+                    @if (item.punchStatus == "OUT")
+                    {
+                        <tr>
+
+
+                            <td class="red_td" data-label="" id="">@item.punchStatus</td>
+                            @*<td  class="red_td" data-label="" id="">@item.Reader</td>*@
+                            <td class="red_td" data-label="" id="">@item.FromTime</td>
+                            <td class="red_td" data-label="" id="">@item.ToTime</td>
+                            <td class="red_td" data-label="" id="">@item.IN</td>
+                            <td class="red_td" data-label="" id="">@item.OUT</td>
+
+                        </tr>
+
+                    }
+                    else
+                    {
+                        <tr>
+
+
+                            <td data-label="" id=""> @item.punchStatus </td>
+                            @*<td data-label="" id="">@item.Reader</td>*@
+                            <td data-label="" id="">@item.FromTime</td>
+                            <td data-label="" id="">@item.ToTime</td>
+                            <td data-label="" id="">@item.IN</td>
+                            <td data-label="" id="">@item.OUT</td>
+
+                        </tr>
+                    }
+
+                }
+
+
+
+            }
+            <tr style=" background-color: #d3d9e1; position: sticky; bottom: 0;  ">
+
+
+                <td data-label="" id="">  </td>
+                @*<td data-label="" id="">@item.Reader</td>*@
+                <td data-label="" id=""></td>
+                <td data-label="" id=""></td>
+                <td data-label="" id="" style="font-weight:600;">@Html.DisplayFor(model => Model.TotInTime)</td>
+                <td data-label="" id="" style=" font-weight: 600; color: red;">@Html.DisplayFor(model => Model.TotOUTTime)</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>

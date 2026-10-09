@@ -1,0 +1,267 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LoanTopUpDetails
+    <script src="~/js/tooltip.js"></script>
+
+    <script src="~/js/bootstrap-datepicker.js"></script>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "LoanTopUp-Save" }))
+    {
+        <div id="AppraisalView" class="slider-forms slider-forms-open edit">
+            <div class="slider-inner-style new-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('edit')">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <div class="location-slider">
+                    <h4>Loan TopUp</h4>
+
+
+                    <div class="profile-header position-relative pb-12 mb-5"
+                         style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                        <div class="row">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                        </div>
+                        <div class="profile-header-overflow"></div>
+                    </div>
+                </div>
+                <div class="add-padding">  
+
+
+                    <div class="row">
+                      
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Principle Amount
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.CmpLoanAmount)
+                                    @Html.HiddenFor(Model => Model.BalanceAmt)
+                                    @Html.HiddenFor(Model => Model.MaxLimitPerEmployee)
+                                    @Html.HiddenFor(Model => Model.Tenure)
+                                    @Html.HiddenFor(Model => Model.LoanIssueCode)
+                                    @Html.HiddenFor(Model => Model.PrincipleAmount)
+                                    @Model.PrincipleAmount
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">Monthly EMI</label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.MonthlyEMI)
+                                    @Model.MonthlyEMI
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Total Tenure
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.TotalTenure)
+                                    @Model.TotalTenure
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Disbursement Date
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.DisbursementDate)
+                                    @*@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LoanTopUpDetails.DisbursementDate))*@
+                                    @Model.DisbursementDate
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Payment Started
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.PaymentStarted)
+                                    @Model.PaymentStarted
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                    <h4 class="pt-3">Repayment Details</h4>
+
+                    <div class="row pt-2">
+                        <div class="col-md-4">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Paid Amount
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.PaidAmount)
+                                    @Model.PaidAmount
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Balance Amount
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.BalanceAmount)
+                                    @Model.BalanceAmount
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    Balance Tenure
+                                </label>
+                                <div class="view-details">
+                                    @Html.HiddenFor(Model => Model.BalanceTenure)
+                                    @Model.BalanceTenure
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <h4 class="pt-3">TopUp Details</h4>
+
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Top Up Amount </label>
+                                <span class="Mandatory">*</span>
+                                @*<input type="text"
+                        class="form-control form-control-sm"
+                        placeholder="Top Up Amount ">*@
+
+                                @Html.TextBoxFor(Model => Model.TopUpAmount, new { @class = "form-control form-control-sm", @onchange = "OnTopUpAmountClick()", @placeholder = "Top Up Amount", maxlength = "8", @onblur = "validate(this,'TopupAmt');checkLoanAmt()", @onkeypress = "return onlyNumberKey(event)" })
+
+                            </div>
+                            <span id="TopupAmt"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>New EMI Amount</label>
+                                <span class="Mandatory">*</span>
+                                @*<input type="text"
+                        class="form-control form-control-sm"
+                        placeholder="New Emi Amount">*@
+                                @Html.TextBoxFor(Model => Model.NewEMIAmount, new { @class = "form-control form-control-sm", @onchange = "OnNewEMIclick()", maxlength = "8", @onblur = "validate(this,'NewEmi');checkLoanAmt()", @onkeypress = "return onlyNumberKey(event)" })
+                                <span id="NewEmi"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row pt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                                <label>Remaining Tenure</label>
+                                <span class="Mandatory">*</span>
+                                @*<input type="text"
+                        class="form-control form-control-sm"
+                        placeholder="Remaining Tenure">*@
+                                @Html.TextBoxFor(Model => Model.RemainingTenure, new { @class = "form-control form-control-sm", @onchange = "OnRemainingTenureClick()", maxlength = "3", @onblur = "validate(this,'RemTenure');checkLoanAmt()", @onkeypress = "return onlyNumberKey(event)" })
+                                <span id="RemTenure"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Disbursement Date
+
+                                </label>
+                                <span class="Mandatory">*</span>
+                                <div class="input-group date">
+                                    @Html.TextBoxFor(Model => Model.NewDisbursementDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 didate", @readonly = "true", @placeholder = "Disbursement Date", @onchange = "CheckDisbursementDate()" })
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <span id="DisDate"></span>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="row pt-1">
+
+                        <div class="col-md-6">
+                            <div class="row-outer">
+                                <label class="view-title">
+                                    New Balance Amount
+                                </label>
+                                <div class="view-details">
+                                    <span class="newBalance">@Html.DisplayFor(Model => Model.NewBalanceAmount)</span>
+                                    @Html.HiddenFor(Model => Model.NewBalanceAmount)
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="row">
+
+
+
+
+                        <div class="col-md-12">
+                            <label>Remarks</label>
+
+                            @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control form-control-sm", maxlength = "250" })
+                        </div>
+
+                    </div>
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-right">
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="LoanTopUpSave()">
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            </div>
+    }

@@ -1,0 +1,223 @@
+﻿
+
+
+
+@model Hrms.Lite.Shared.Master.KendoReport
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.uniform.min.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<style>
+    #transferletter{
+        position: absolute;
+        left: 40px;
+        right: 38px;
+        top: 36px;
+        bottom: 65px;
+        overflow: hidden;
+        clear: both;
+    }
+
+    .my-wrapper {
+        display: block !important;
+    }
+
+    .my-inner3 {
+        padding-top: 15px;
+        float: left !important;
+    }
+
+    .my-inner2 {
+        float: left !important;
+    }
+
+    .tab-button-wrap .tab-items {
+        padding: 0px 2px 0px 5px;
+    }
+
+    .payslip_container {
+        padding: 10px 20px 20px;
+        height: 100%;
+    }
+
+    .select-option .sraech-slider {
+        margin-right: -1px;
+    }
+</style>
+
+
+
+
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Transfer Letter</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+
+                        <a href="@Url.Action("Index", "EmployeeCompanyDocuments", new { Area = "DataBank" })">Employee Company Documents</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Transfer Letter
+                    </li>
+
+                    @*<li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "JobTransition", new { Area = "DataBank" })">Job Transition List</a>
+                        </li>*@
+
+
+
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+            @*<div class="card card-custom height-100per">
+
+                    <div class="card-body">
+
+                        <div>
+                            <div class="row-outer " style="width:200px;">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    @Html.DropDownListFor(m => m.Basic_Filter.Location.Code, (SelectList)ViewBag.Loc, "All", new { @class = "form-control form-control-sm reset" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>*@
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <div class="payslip_container">
+                        <div id="appointmentLetter">
+                            loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+
+
+    <!--end::Entry-->
+
+</div>
+
+
+
+
+
+
+
+@section scripts
+    {
+    <script src="/api/reports/resources/js/telerikReportViewer"></script>
+
+    <script type="text/javascript">
+
+
+        function onReady(e, args) {
+            var kendoTouch = $(".trv-pages-area").data("kendoTouch");
+
+            if (kendoTouch) {
+                kendoTouch.unbind("doubletap");
+            }
+        }
+
+        $(document).ready(function () {
+
+            var code = $('#Basic_Filter_Location_Code').val();
+
+
+
+            $("#transferletter")
+                .telerik_ReportViewer({
+
+                    serviceUrl: "/api/reports/",
+
+
+
+                    pageReady: onReady,
+
+
+                    reportSource: {
+
+
+                        report: "RoyalDriveAppointmentLetter.trdp",
+                        @*report: '@Model.Url.offerLetter',*@
+
+
+
+                        parameters: {
+                            @*PreEnrollCode: '@Model.PreEnrollCode',*@
+                            url: '@Model.Url.Urllink' + "/api/OfferLetterReport/GetOfferLetterReport?PreEnrollCode=" + parseInt('@Model.PreEnrollCode'),
+
+
+
+                        }
+
+
+                    },
+
+
+                    viewMode: telerikReportViewer.ViewModes.PRINT_PREVIEW,
+
+                    scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+
+                    scale: 1.0,
+
+                    enableAccessibility: false,
+
+
+                    sendEmail: { enabled: true }
+                });
+
+
+
+
+        });
+    </script>
+}

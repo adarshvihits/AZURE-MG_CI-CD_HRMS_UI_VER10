@@ -1,0 +1,62 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.Generic.Master.GrievanceAuthority
+    <script src="~/js/tooltip.js"></script>
+    <script src="~/js/settings.js"></script>
+
+
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table grievance-authority-list new-tble-pad-tp  ">
+        @Html.HiddenFor(m => m.GrievanceAuthorityList.Count)
+        <table id="GrievanceTable" class="common-table">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Grievance Category</th>
+                    <th scope="col">Authority Name</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.GrievanceAuthorityList != null && Model.GrievanceAuthorityList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.GrievanceAuthorityList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => Model.GrievanceAuthorityList[i].CategoryCode)
+
+                            <td data-label="Sl. No">@Model.GrievanceAuthorityList[i].SlNo</td>
+                            <td data-label="Grievance Category">@Model.GrievanceAuthorityList[i].CategoryName</td>
+                            <td data-label="Authority Name">
+                                @Model.GrievanceAuthorityList[i].EmployeeInfo.FullName
+                                @if (@Model.GrievanceAuthorityList[i].EmployeeInfo.EmployeeID != "")
+                                {
+                                    <span>
+                                        (@Model.GrievanceAuthorityList[i].EmployeeInfo.EmployeeID)
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>   @Model.GrievanceAuthorityList[i].EmployeeInfo.EmployeeID</span>
+                                }
+                            </td>
+                            <td data-label="Edit">
+
+                                <a data-bs-toggle="tooltip" title="Edit" id="editgrievance"
+                                   type="button"
+                                   class="btn btn-icon btn-edit icon-only " onclick="OnEditClick('@Model.GrievanceAuthorityList[i].CategoryCode')">
+                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                </a>
+                                <!-- Edit Slider start-->
+                                <!-- Edit Slider  end-->
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,203 @@
+﻿@model Hrms.Lite.Shared.TDS.InvestmentDeclaration
+
+<style>
+    .form-control {
+        height: calc(1.0em + 1.3rem + 2px) !important;
+    }
+
+
+
+    .ihits-table .form-control {
+        color: tomato;
+        font-weight: 500;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "deduction" }))
+{
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table  eighty-g-tble-Approval-list  mb-2 Investmen-Under-Section-Old-list ">
+                <table id="investment">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Deduction</th>
+                            <th class="text-right" scope="col">Actual Amt</th>
+                            <th class="text-right" scope="col">Approved Amt</th>
+                            <th class="text-center" scope="col" data-bs-toggle="tooltip" data-bs-original-title="Status">Status</th>
+                            <th class="text-center" scope="col" data-bs-toggle="tooltip" data-bs-original-title="View">View</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @Html.HiddenFor(m => m.EmployeeGuid)
+                        @Html.HiddenFor(m => m.AssessmentYear.Code)
+                        @Html.HiddenFor(m => m.EightyCDeductionList.Count)
+
+                        @if (Model.EightyCDeductionList != null)
+                        {
+                            @for (int i = 0; i < Model.EightyCDeductionList.Count; i++)
+                            {
+                               
+                        <tr id="row_OI_@i">
+
+                            <td data-label="slno">
+
+                                @(i + 1)
+                            </td>
+                            <td data-label="deduction">
+
+                                @Html.DisplayFor(m => Model.EightyCDeductionList[i].InvestmentName)
+                            </td>
+                            <td data-label="Amount">
+                                @Html.DisplayFor(m => Model.EightyCDeductionList[i].Amount)
+
+                            </td>
+
+                            <td data-label="Amount">
+                                @Html.DisplayFor(m => Model.EightyCDeductionList[i].ApprovedAmount)
+
+                            </td>
+                            <td data-label="Status"> @Html.DisplayFor(m => Model.EightyCDeductionList[i].ApprovalStatus)</td>
+                            <td data-label="AttachDocument">
+                                <i onclick="GetUploadDocumentPopUp('ACT_I80C', '@Model.EightyCDeductionList[i].InvestmentCode')" title="Click Here To View Document" class="flaticon far fa-eye"></i>
+                                <span class="">@Model.EightyCDeductionList[i].DedDocCount </span>
+                            </td>
+
+
+
+
+
+
+
+
+
+                        </tr>
+                            }
+
+                        }
+
+                    </tbody>
+
+
+           
+
+
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+<div class="accoding-new-color-change">LIC - Actual Entry Details</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "lic" }))
+{
+    <div id="tablic" class="row">
+        <div class="col-md-12">
+            <div class="ihits-table table-border mobile-responsive-table LIC-Old-Entry-Details-list mb-2">
+                <table id="family">
+                    <thead>
+                        <tr class="table-light">
+                            <th scope="col">Sl.No.</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Relationship</th>
+                            <th scope="col">Policy Taken Date</th>
+                            <th scope="col">Policy No.</th>
+                            <th class="text-right" scope="col">Premium Act.Amount</th>
+                            <th class="text-right" scope="col">Sum Assured Act.Amount</th>
+                            <th class="text-right" scope="col">App.Premium Amount</th>
+                            <th class="text-right" scope="col">App.Sum Assured Amount</th>
+                            <th scope="col">Remarks</th>
+                            <th scope="col">App.Status</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model.LICList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.LICList.Count; i++)
+                            {
+
+                        <tr id="row_OI_@i">
+                            <td data-label="SlNo">
+                                @(i + 1)
+                            </td>
+                            <td data-label="Name">
+
+                                @Html.DisplayFor(m => m.LICList[i].Name)
+                            </td>
+
+                            <td data-label="Relationship">
+
+                                @Html.DisplayFor(m => m.LICList[i].RelationShipName)
+                            </td>
+                            <td data-label="PolicyTakenDate">
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.LICList[i].PolicyTakenDate))
+
+                            </td>
+                            <td data-label="PolicyNo">
+
+                                @Html.DisplayFor(m => m.LICList[i].PolicyNo)
+
+                            </td>
+                            <td class="text-right" data-label="PremiumAmount">
+
+                                @Html.DisplayFor(m => m.LICList[i].PremiumAmount)
+                            </td>
+                            <td class="text-right" data-label="SumAssured">
+
+                                @Html.DisplayFor(m => m.LICList[i].SumAssured)
+                            </td>
+                            <td class="text-right" data-label="PremiumAmount">
+
+                                @Html.DisplayFor(m => m.LICList[i].PremiumAmountApp)
+                            </td>
+                            <td class="text-right" data-label="SumAssured">
+
+                                @Html.DisplayFor(m => m.LICList[i].SumAssuredApp)
+                            </td>
+                            <td data-label="Name">
+
+                                @Html.DisplayFor(m => m.LICList[i].Remarks)
+                            </td>
+
+
+                            <td data-label="Status"> @Html.DisplayFor(m => Model.LICList[i].ApprovalStatus)</td>
+                            <td data-label="AttachDocument">
+                                <i onclick="GetUploadDocumentPopUp('LIC',0)" title="Click Here To View Document" class="flaticon far fa-eye"></i>
+                                <span>@Model.LICList[i].LICDocCount </span>
+                            </td>
+
+                        </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="12" align="center"><em>No table data</em></td>
+                            </tr>
+                        }
+                    </tbody>
+
+
+
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+}

@@ -1,0 +1,185 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.DisciplinaryIncidents
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/DataBank/disciplinaryIncidents.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.search-profile-details').hide(300);
+
+    });
+</script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Incident Management</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Incident Management List
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <div class="mobile-tab-section">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Select Type</label>
+                                    @*<select class="form-control form-control-sm "
+                                id="exampleSelects"
+                                onchange="(this.options[this.selectedIndex].value?  window.open(this.options[this.selectedIndex].value,'_self'):'')">
+                            <option>...Select...</option>
+                            <option value="allowance-master.html">Active</option>
+                            <option value="">Inactive</option>
+                            <option value="allowance-master-pending.html">
+                                Pending
+                            </option>
+
+                        </select>*@
+                                    @Html.DropDownListFor(m => m.TabCode, (SelectList)ViewBag.Tabs, new { @class = "form-control form-control-sm", @onchange = "TabsDropdown($('#TabCode').val(),$('#TabCode option:selected').text())" })
+                                </div>
+                            </div>
+                            <div class="col-6" id="assetFilter">
+                                <div class="form-group">
+                                    <label>Select Allowance Type</label>
+                                    @Html.DropDownListFor(m => m.DurationwiseFilterSlab.Code, (SelectList)ViewBag.Data, new { @class = "form-control form-control-sm", @onchange = "onFilterDropdownChange(0,this)" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Search Form-->
+                    <!-- TILE STYLE -->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+
+                            @*<div class="tab-items">
+            <span class="btn-title all active" onclick="Tab('@Model.DisciplinaryIncidentsTabs[0].Code','all','@Model.DisciplinaryIncidentsTabs[0].Name')">
+                @Model.DisciplinaryIncidentsTabs[0].Name
+                <span class="btn-notification AllTabCount">@Model.AllTabCount</span>
+            </span>
+        </div>*@
+                            <div class="form-group filter-combobox">
+                                @Html.DropDownListFor(m => m.IncidentCode, (SelectList)ViewBag.Incident, "All", new { @class = "form-control form-control-sm", @onchange = "Tab(0,'all',$('#IncidentCode option:selected').text())" })
+                            </div>
+                            <div class="form-group filter-combobox pl-2" style="width:150px;">
+                                @Html.DropDownListFor(m => m.DurationwiseFilterSlab.Code, (SelectList)ViewBag.Data, new { @class = "form-control form-control-sm filterDropDown", @onchange = "onFilterDropdownChange(0,this)" })
+                            </div>
+                            @*@if (Model.DisciplinaryIncidentsTabs[5].Name != null)
+        {
+            <div class="tab-items low">
+
+                <span class="btn-title pendingreq" onclick="Tab('@Model.DisciplinaryIncidentsTabs[5].Code','pendingreq','@Model.DisciplinaryIncidentsTabs[5].Name')">
+
+                    @Model.DisciplinaryIncidentsTabs[5].Name
+                    <span class="btn-notification PendingTabCount">@Model.PendingTabCount</span>
+                </span>
+
+            </div>
+        }*@
+
+
+                            <div class="tab-items select-option">
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                           placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="Export to Excel" class="btn btn-excel float-left" onclick="onExportToExcelClick()">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Table Section -->
+
+                    <div id="DisciplinaryIncList">
+
+                        @await Html.PartialAsync("_DisciplinaryIncidentsList", Model)
+
+                    </div>
+                    <div id="DisciplinaryInc">
+
+
+                    </div>
+                    <!-- Table Setion End -->
+                    <div id="addNewDisciplnry">
+                        @await Html.PartialAsync("_NewRequest", Model)
+                    </div>
+                    <div class="row row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+
+
+                            <a id="addNewDisciplinary" type="button"
+                               class="btn btn-default float-right mobile-full-width slider-btn">
+                                Add New
+                            </a>
+
+                        </div>
+
+                    </div>
+                    <!--end: Datatable-->
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_EmployeeFilter.cshtml", Model.Filter)
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<!--end::Content-->

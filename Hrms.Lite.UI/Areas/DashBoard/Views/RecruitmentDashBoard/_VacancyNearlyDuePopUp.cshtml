@@ -1,0 +1,66 @@
+﻿
+@model Hrms.Lite.Shared.DashBoard.RecruitmentDashBoard
+
+<script src="~/js/settings.js"></script>
+
+<style>
+    .dataTables_scrollBody {
+        height: 30vh !important;
+    }
+
+    .dataTables_scrollHeadInner table {
+        width: 100% !important;
+    }
+</style>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ">
+    @Html.HiddenFor(m => m.VacancyNearlyDueList.Count)
+    <table class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">MRF No.</th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Location</th>
+                <th scope="col">Region</th>
+                <th scope="col">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Number of Requirements">N/Req</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Days Left">D.L.</th>
+                <th scope="col" data-bs-toggle="tooltip" title="Mapped Resumes">Resumes</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.VacancyNearlyDueList != null && Model.VacancyNearlyDueList.Count > 0)
+            {
+
+
+                for (int i = 0; i < Model.VacancyNearlyDueList.Count; i++)
+
+                {
+                    <tr>
+
+                        @Html.HiddenFor(model => Model.VacancyNearlyDueList[i].VacancyManagementGI)
+                        @Html.HiddenFor(model => Model.VacancyNearlyDueList[i].VacancyManagementCode)
+                        <td data-label="Code">@Model.VacancyNearlyDueList[i].JobCode</td>
+                        <td data-label="Job Title"> @Model.VacancyNearlyDueList[i].JobTitle</td>
+                        @*<td data-label="Requsted Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].RequestedDate))</td>*@
+                        <td data-label="Location">@Model.VacancyNearlyDueList[i].Location</td>
+                        <td data-label="Region">@Model.VacancyNearlyDueList[i].Region</td>
+                        <td data-label="Need by Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyNearlyDueList[i].NeedByDate))</td>
+                        <td data-label="No of Requirements"> @Model.VacancyNearlyDueList[i].NoOfRequirements</td>
+                        @if (@Model.VacancyNearlyDueList[i].Aging < 0)
+                        {
+                            <td data-label="Days Left"><span class="text-color-low">@Model.VacancyNearlyDueList[i].Aging</span></td>
+                        }
+                        else
+                        {
+                            <td data-label="Days Left"><span class="text-color-high">@Model.VacancyNearlyDueList[i].Aging</span></td>
+                        }
+                        <td data-label="Resumes"> @Model.VacancyNearlyDueList[i].MappedResumes</td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

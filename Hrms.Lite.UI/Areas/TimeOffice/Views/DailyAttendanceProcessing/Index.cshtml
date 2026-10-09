@@ -1,0 +1,182 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/TimeOffice/dailyAttendProcessing.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/DataTables-1.11.3/js/jquery.dataTables.min.js" defer></script>
+
+<script>
+
+    $(document).ready(function () {
+        if (location.href.includes('?')) {
+            history.pushState({}, null, location.href.split('?')[0]);
+        }
+        if ($('#ProcesingDate').val() != '') {
+            var procDate = _GetFormattedDate($('#ProcesingDate').val());
+            $('#ProcesingDate').val(procDate);
+        }
+    });
+
+
+    $(document).ready(function () {
+
+        $("#TableSearch").keyup(function () {
+            debugger;
+            var value = this.value.toLowerCase().trim();
+
+            $("table tr").each(function (index) {
+                if (!index) return;
+                $(this).find("td").each(function () {
+                    var id = $(this).text().toLowerCase().trim();
+                    var not_found = (id.indexOf(value) == -1);
+                    $(this).closest('tr').toggle(!not_found);
+                    return not_found;
+                });
+            });
+            if ($("#procSummaryTable tbody tr").length == $("#procSummaryTable tbody tr:hidden").length)
+                $('#procSummaryTable').find('tbody').append("<tr id='noDataImg' class='exit-page'><td><div  style='text-align:center; display:flex; align-items:center; justify-content:center;height:45vh;'><img src='/images/nodata.png'/></div ></td></tr>");
+        });
+    });
+</script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Daily Attendance Processing</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Daily Attendance Processing
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per">
+
+                <div class="card-body">
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+
+                            <div class="tab-items">
+
+                                <div class="row-outer pb-2">
+                                    <label>Date</label>
+                                    <div class="input-group date">
+                                        @Html.TextBoxFor(m => m.ProcesingDate, "{0:dd-MMM-yyyy}", new
+                                        {
+                                            @class = "form-control kt_datepicker_2",
+                                            @placeholder = "Date",
+                                            @autocomplete = "off",
+                                       @readonly = "true",
+                                       onchange = "Validate('onchange')"
+                                   })
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span id="att_process_date"></span>
+                                </div>
+                            </div>
+                            <div class="tab-items pl-3 pt-3">
+
+                                <button type="button" class="btn btn-default btn-sm float-left" onclick="ValidatePunchingId()">
+                                    Proceed To Save
+                                </button>
+                            </div>
+
+                            <div class="tab-items select-option">
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="TableSearch" class="form-control form-control-sm" placeholder="ID/Name">
+                                </div>
+                                @*<div id="filterForm" class="filter-button filteropen" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter" onclick="validatefilter()">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>*@
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                    @Html.Hidden("FormName", (object)ViewBag.FormName)
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                    <!-- Table Section -->
+                    <div id="dap_summary">
+                        @await Html.PartialAsync("_ProcessedSummary")
+                    </div>
+                    <!-- Table Setion End -->
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="modal fade punchingIDPopUp" tabindex="-1"
+     role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" style=" max-width: 1051px; height:400px;">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Punching ID Missing / Duplication
+                </h5>
+                <button type="button" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true"
+                       class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

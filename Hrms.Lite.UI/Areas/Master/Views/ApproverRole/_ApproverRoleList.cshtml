@@ -1,0 +1,106 @@
+﻿@model Hrms.Lite.Shared.Master.ApproverRole
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+
+
+        });
+</script>
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table ApproverRole-master-list-one pt-1">
+    @Html.HiddenFor(m => m.ApproverRoleList.Count)
+    <table id="ApproverRoleTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+
+                <th scope="col">Name</th>
+                @*<th scope="col">Short Name</th>*@
+                <th scope="col">Country</th>
+                <th scope="col">Authority</th>
+                <th scope="col">Classification Type</th>
+                <th scope="col">Classification</th>
+                @*<th scope="col">Department</th>*@
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{
+                if (Model.ApproverRoleList != null && Model.ApproverRoleList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ApproverRoleList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => Model.Code)
+                            <td data-label="Name">@Model.ApproverRoleList[i].Name</td>
+                            <td data-label="Region">@Model.ApproverRoleList[i].CountryName</td>
+                            <td data-label="Authority">@Model.ApproverRoleList[i].Employee.Name</td>
+                            <td data-label="Location">@Model.ApproverRoleList[i].ApplicabilityName</td>
+                            <td data-label="Division">@Model.ApproverRoleList[i].Applicability.Name</td>
+                            @*<td data-label="Department">@Model.ApproverRoleList[i].DepartmentName</td>*@
+                            <td data-label="Actions">
+                                <div>
+                                   @* <a data-bs-toggle="tooltip" title="View" class="view_btn " onclick="getDetails('@Model.ApproverRoleList[i].Code')"> </a>*@
+
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="ApproverRoleedit"
+                                           class="btn btn-icon btn-edit icon-only ">
+                                            <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY','@Model.ApproverRoleList[i].Code',@i)"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="ApproverRoleedit"
+                                           class="btn btn-icon btn-edit icon-only ">
+                                            <i class="icon-xl fas fa-pencil-alt" onclick="onAddNewOrEditClick('MODIFY', '@Model.ApproverRoleList[i].Code',@i);
+                                            swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="ApproverRoledelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete">
+                                            <i class="icon-xl far fa-trash-alt" onclick="onDeleteClick('@Model.ApproverRoleList[i].Code','DELETE',@i)"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="ApproverRoledelete"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete">
+                                            <i class="icon-xl far fa-trash-alt" onclick="onDeleteClick('@Model.ApproverRoleList[i].Code','DELETE',@i);
+                                            swal.fire(MasterPersmissionMsg);"></i>
+                                        </a>
+                                    }
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+
+            }
+
+
+        </tbody>
+    </table>
+</div>

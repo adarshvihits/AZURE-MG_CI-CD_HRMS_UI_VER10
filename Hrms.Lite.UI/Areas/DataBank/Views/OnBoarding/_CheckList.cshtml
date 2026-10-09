@@ -1,0 +1,77 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <script>
+
+            $(document).ready(function () {
+                debugger;
+             $(".AllCount").html(@Model.AllCount);
+            $(".PreenrollmentAppCount").html(@Model.PreenrollmentAppCount);
+            $(".EnrollmentCount").html(@Model.EnrollmentCount);
+            $(".CheckListCount").html(@Model.CheckListCount);
+            $(".JoiningConfCount").html(@Model.JoiningConfCount);
+                $(".OverDueCount").html(@Model.OverDueCount);
+                $(".ActiveVacancyCount").html(@Model.ActiveVacancyCount);
+                 $(".documentsCount").html(@Model.JoiningConfCount);
+            });
+
+
+
+    </script>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table onboarding_checklist">
+        <table id="CheckList" class="common-table">
+           @Html.HiddenFor(m=>m.OnBoardingList.Count)
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Sl:No</th>
+                    <th scope="col">Applicant ID</th>
+                    <th scope="col">Candidate Name</th>
+                    <th scope="col">Fun.Designation</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Due days</th>
+                    <th scope="col" data-bs-toggle="tooltip" data-placement="right" title="Expected DOJ">E:DOJ</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                @if (Model.OnBoardingList != null && Model.OnBoardingList.Count > 0)
+                {
+                    for (int i = 0; i < Model.OnBoardingList.Count; i++)
+                    {
+                <tr>
+
+                    <td data-label="SL:NO">@(i + 1)</td>
+                    <td data-label="Applicant ID">@Model.OnBoardingList[i].ApplicantID</td>
+                    @if (Model.UserVsMenuTab[3].Applicable == true)
+                    {
+                        <td data-label="Candidate Name">
+                            @Html.ActionLink(@Model.OnBoardingList[i].CandidateName, "GetCheckList", "OnBoarding", new { preEnrollGI = @Model.OnBoardingList[i].PreEnrollGI }, null)
+                            @*@Html.ActionLink(@Model[i].CandidateName, "Create", "Enrollment", new { userid = "isha123" }, null)*@
+                        </td>
+                    }
+                    else
+                    {
+                        <td data-label="Candidate Name">
+                            <a onclick="swal.fire(MasterPersmissionMsg)">@Model.OnBoardingList[i].CandidateName</a>
+                        </td>
+                    }
+                    <td data-label="Fun.Designation"> @Model.OnBoardingList[i].Designation.Name</td>
+                    <td data-label="Department"> @Model.OnBoardingList[i].Department.Name</td>
+                    <td data-label="Location"> @Model.OnBoardingList[i].Location.Name</td>
+                    <td data-label="Due Days" align="left"> @Model.OnBoardingList[i].DueDays</td>
+                    <td data-label="E:DOJ"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.OnBoardingList[i].ExpectedDOJ))</td>
+                    @*<td data-label="Due Days" align="right"> Yes</td>*@
+                    @*
+        <td data-label="" align="center">
+            <button type="button" class="btn btn-view">Proceed</button>
+        </td>*@
+
+
+                </tr>
+                    }
+                }
+               
+            </tbody>
+        </table>
+    </div>

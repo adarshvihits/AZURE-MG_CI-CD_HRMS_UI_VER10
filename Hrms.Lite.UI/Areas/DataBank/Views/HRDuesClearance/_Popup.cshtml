@@ -1,0 +1,57 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.EmployeeDueClearance
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "parameterDetails" }))
+{
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table  dues-clearance-popup-list vertical-scroll-200  pt-1">
+        @Html.HiddenFor(m => m.ParameterDetails.Count)
+        <table id="parameterTable">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">Sl No</th>
+                    <th scope="col">Dues Parameter</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Authority</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model != null && Model.ParameterDetails != null && Model.ParameterDetails.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ParameterDetails.Count; i++)
+
+                        {
+                                <tr>
+                                                    <td data-label="Employee ID">@Html.HiddenFor(m => m.ParameterDetails[i].ParameterCode)@Html.HiddenFor(m => m.ParameterDetails[i].ResignationGI) @Model.ParameterDetails[i].SlNo</td>
+                                    <td data-label="Employee Name">@Model.ParameterDetails[i].ParameterName</td>
+                                    <td data-label="Designation">@Model.ParameterDetails[i].Department.Name</td>
+                                    <td data-label="Department">@Model.ParameterDetails[i].AuthName</td>                                   
+                                    <td data-label="Action">
+
+                                        <div class="checkbox-inline">
+
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted mr-1">
+                                                @Html.CheckBoxFor(m => m.ParameterDetails[i].Status)
+
+                                                <span></span>
+                                            </label>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                        }
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12 align-right mt-4">
+
+        <a type="button" class="btn btn-default  mobile-full-width" onclick="Save()">
+            Save
+        </a>
+    </div>
+}

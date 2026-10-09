@@ -1,0 +1,109 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+    <script>
+        $(document).ready(function () {
+            moveCursorToEnd('ShiftDetails_Code');
+        });
+    </script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "dutyDateWise_Batch_Form" }))
+    {
+        <div class="slider-forms slider-forms-open  dutyDateWise_Batch">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('dutyDateWise_Batch')">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <h4>
+                    Batch Update
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Selected
+                                Date
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.From)
+                                @Html.HiddenFor(m => m.Circle.Code)
+                                @Html.HiddenFor(m => m.PayrollGroup.Code)
+                                @Html.HiddenFor(m => m.Month.Code)
+                                @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.From))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Month</label>
+                            <div class="view-details">
+                                @Model.Month.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Circle</label>
+                            <div class="view-details">
+                                @Model.Circle.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Payroll
+                                Group
+                            </label>
+                            <div class="view-details">
+                                @Model.PayrollGroup.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shift Code </label>
+
+                            @Html.DropDownListFor(m => m.ShiftDetails.Code, (SelectList)ViewBag.Shift, "--Select Shift--", new { @class = "form-control form-control-sm", @onchange = "onDutyBatchShiftCHnage(this,'datewise',"+Model.Month.Code+ "," + Model.PayrollGroup.Code + "," + Model.Circle.Code + "," + "'"+Model.SelectedDate+"'" + ")" })
+                            <span id="dutyDatewiseShift"></span>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row pt-5">
+
+
+
+                    <div class="col-md-12" id="dutyDateWiseBatchList">
+                        @await Html.PartialAsync("_EntryBatchUpdateEmpList", Model)
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <a type="button"
+                           class="btn btn-default  mobile-full-width" onclick="onDateWiseBatchUpdateSaveClick('@Model.From')">
+                            Update
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }

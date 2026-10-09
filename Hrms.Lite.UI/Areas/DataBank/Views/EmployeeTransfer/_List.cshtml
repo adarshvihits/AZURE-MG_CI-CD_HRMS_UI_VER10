@@ -1,0 +1,44 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeTransfer
+<script src="~/js/settings.js"></script>
+
+<div class="ihits-table table-border mobile-responsive-table Employee_Confirmation_list">
+    @Html.HiddenFor(m => m.EmployeeTransferList.Count)
+    <table id="empTransferListTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">ID</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Request ID </th>
+                <th scope="col">Request Date</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">Location</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Approver</th>
+                <th scope="col">Approved Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.EmployeeTransferList != null && Model.EmployeeTransferList.Count > 0)
+            {
+                for (int i = 0; i < Model.EmployeeTransferList.Count; i++)
+                {
+            <tr>
+                @Html.HiddenFor(Model => Model.EmployeeTransferList[i].EmployeeCode)
+                <td data-label="ID">@Model.EmployeeTransferList[i].EmployeeID</td>
+                <td data-label="Employee Name"><a href="@Url.Action("Create", "JobTransition", new {EmployeeGI=Model.EmployeeTransferList[i].EmployeeGI,BasedOn="Transfer" , Area = "DataBank" })">@Model.EmployeeTransferList[i].EmployeeName</td>
+                <td data-label="Request ID">@Model.EmployeeTransferList[i].RequestId</td>
+                <td data-label="Request Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeTransferList[i].RequestDate))</td>
+                <td data-label="Functional Designaion">@Model.EmployeeTransferList[i].FuncDesignation</td>
+                <td data-label="Location">@Model.EmployeeTransferList[i].Location</td>
+                <td data-label="Reason">@Model.EmployeeTransferList[i].Reason</td>
+                <td data-label="Approver">@Model.EmployeeTransferList[i].Approver</td>
+                <td data-label="Approved Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.EmployeeTransferList[i].ApproveDate))</td>
+            </tr>
+
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,120 @@
+﻿@model Hrms.Lite.Shared.Master.AccountsHead
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>
+    (Context.Session.GetString("UserRoleActions"));
+    }
+    <script src="~/js/tooltip.js"></script>
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <script src="~/js/settings.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            debugger;
+            @* $('.AllTabCount').html("@Model.ActiveCount");
+            $('.InActiveTabCount').html("@Model.InactiveCount");*@
+            $('.pendingTabCount').html("@Model.PendingCount");
+
+
+
+            //$('#appraisaltypetable').DataTable({
+            //    "pageLength": 25,
+            //    "language": {
+            //        searchPlaceholder: "Search"
+            //    }
+            //});
+
+
+            //$('.ihits-table table').removeClass("dataTable no-footer");
+            //$(".ihits-table table tr th").removeAttr('style');
+
+        });
+    </script>
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Accounts-head-master-list">
+        @Html.HiddenFor(m => m.AccountsHeadList.Count)
+    <table id="AccountsListTable" class="common-table dt-width-fix">
+            <thead>
+                @Html.HiddenFor(m=>m.AccountsHeadList.Count)
+                <tr class="table-dark">
+                    <th scope="col" data-bs-toggle="tooltip" title="Accounts Head Code">Act. Head Code</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Short Name</th>
+
+                    <th scope="col">Head Type</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    if (Model.AccountsHeadList != null && Model.AccountsHeadList.Count > 0)
+                    {
+                        for (int i = 0; i < Model.AccountsHeadList.Count; i++)
+
+                        {
+
+                                <tr>
+
+                                    <td data-label="Code">@Model.AccountsHeadList[i].AccountsHeadUserCode</td>
+                                    <td data-label="Name">@Model.AccountsHeadList[i].Name</td>
+                                    <td data-label="Name">@Model.AccountsHeadList[i].ShortName</td>
+                                    <td data-label="Code">@Model.AccountsHeadList[i].AccountsHeadCodeTypeName</td>
+                                    <td data-label="Actions">
+                                        <div>
+
+                                   
+
+                                     
+                                            @Html.HiddenFor(model => Model.AccountsHeadList[i].GI)
+                                            @Html.HiddenFor(model => Model.AccountsHeadList[i].LogGI)
+                                            @Html.HiddenFor(model => Model.AccountsHeadList[i].Code)
+                                            @Html.HiddenFor(model => Model.AccountsHeadList[i].Mode)
+                                            @Html.HiddenFor(model => Model.AccountsHeadList[i].ApproveMode)
+
+                                            @Html.HiddenFor(m => m.AccountsHeadList[i].EditActive)
+                                            @Html.HiddenFor(model => Model.GI)
+                                            @if (CurrentUserRoleActions.Modify == true)
+                                            {
+                                                <a data-bs-toggle="tooltip" title="Edit"
+                                                   id="circleedit"
+                                                   class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.AccountsHeadList[i].GI', '@Model.AccountsHeadList[i].LogGI',@i)">
+                                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a data-bs-toggle="tooltip" title="Edit"
+                                                   id="circleedit"
+                                                   class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.AccountsHeadList[i].GI', '@Model.AccountsHeadList[i].LogGI',@i);
+                                                swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#AddNewOrEditSlider');});">
+                                                    <i class="icon-xl fas fa-pencil-alt"></i>
+                                                </a>
+                                            }
+                                            @if (CurrentUserRoleActions.Delete == true)
+                                            {
+                                                <a data-bs-toggle="tooltip" title="Delete"
+                                                   id="deletecircle"
+                                                   class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.AccountsHeadList[i].GI', '@Model.AccountsHeadList[i].LogGI','DELETE',@i)">
+                                                    <i class="icon-xl far fa-trash-alt"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a data-bs-toggle="tooltip" title="Delete"
+                                                   id="deletecircle"
+                                                   class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="onDeleteClick('@Model.AccountsHeadList[i].GI', '@Model.AccountsHeadList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg)">
+                                                    <i class="icon-xl far fa-trash-alt"></i>
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>

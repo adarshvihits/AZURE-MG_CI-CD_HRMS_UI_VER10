@@ -1,0 +1,1305 @@
+﻿@model Hrms.Lite.Shared.MIS.MISDashBoard
+@using Kendo.Mvc.UI
+<script>
+    $(document).ready(function () {
+
+        const spr = setTimeout(hideSpinner, 1000)
+    });
+   
+        function columnVisual(e) {
+        console.log(e);
+        if (e.category=='Male')
+            return createMaleColumn(e.rect, e.options.color);
+            else
+            return createFeMaleColumn(e.rect, e.options.color);
+        }
+    function createMaleColumn(rect, color) {
+        var origin = rect.origin;
+        var height = rect.size.height;
+        var group = new kendo.drawing.Group();
+
+        var bodyHeight = (30/100)*height;
+      
+        var legHeight = (100 / 100) * height;
+
+        var diameter = (10 / 100) * height;
+        // Create the head as a circle
+        var head = new kendo.drawing.Circle(new kendo.geometry.Circle([origin.x + 50, origin.y], 20), {
+            fill: { color: color }
+        });
+        group.append(head);
+
+        // Create the body as a rectangle
+        var body = new kendo.drawing.Rect(new kendo.geometry.Rect([origin.x + 40, origin.y + 30], [20,  bodyHeight]), {
+            fill: { color: color }
+        });
+        group.append(body);
+
+      
+
+        // Create the legs as rectangles with increased width
+        var leftLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([origin.x + 35, origin.y + height - 70], [15, legHeight]), {
+            fill: { color: color }
+        });
+        group.append(leftLeg);
+
+        var rightLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([origin.x + 50, origin.y + height - 70], [15, legHeight]), {
+            fill: { color: color }
+        });
+        group.append(rightLeg);
+
+        return group;
+    }
+
+    function createFeMaleColumn(rect, color) {
+        var origin = rect.origin;
+        var height = rect.size.height;
+        var group = new kendo.drawing.Group();
+
+        var bodyHeight = (30 / 100) * height;
+
+         var diameter = (10 / 100) * height;
+
+        var legHeight = (100 / 100) * height;
+        console.log(legHeight);
+
+        // Create the head as a circle
+        var head = new kendo.drawing.Circle(new kendo.geometry.Circle([origin.x + 50, origin.y], diameter), {
+            fill: { color: color }
+        });
+        group.append(head);
+
+        // Create the body as a path (a triangle)
+        var body = new kendo.drawing.Path()
+            .moveTo(origin.x + 50, origin.y + bodyHeight-30)
+            .lineTo(origin.x, 150)
+           .lineTo(origin.x+95, 150)
+            
+            .close()
+            .fill("#89CFF0");
+        group.append(body);
+
+        // Create the legs as rectangles with increased width
+        var leftLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([origin.x + 35, origin.y + height - 70], [15, legHeight]), {
+            fill: { color: color }
+        });
+        group.append(leftLeg);
+
+        var rightLeg = new kendo.drawing.Rect(new kendo.geometry.Rect([origin.x + 50, origin.y + height - 70], [15, legHeight]), {
+            fill: { color: color }
+        });
+        group.append(rightLeg);
+
+        return group;
+
+    }
+
+
+   
+
+</script>
+
+@*<script src=@Url.Script("pako_deflate.min.js")></script>*@
+<style>
+    .maria {
+        background-image: url("https://demos.telerik.com/kendo-ui/content/web/Customers/BERGS.jpg");
+    }
+    .export-app {
+        display: table;
+        width: 100%;
+        height: 750px;
+        padding: 0;
+    }
+
+        .export-app .demo-section {
+            margin: 0 auto;
+            border: 0;
+        }
+
+    .charts-wrapper {
+        height: 250px;
+        padding: 0 0 20px;
+    }
+
+    #applications,
+    #users,
+    #referrals {
+        display: inline-block;
+        width: 50%;
+        height: 240px;
+        vertical-align: top;
+    }
+
+    #applications,
+    #referrals {
+        width: 24%;
+        height: 250px;
+    }
+
+  
+
+    .demo-section.content-wrapper,
+    .demo-section.export-app {
+        display: block !important;
+    }
+
+    .demo-section.export-app {
+        height: auto;
+    }
+
+
+    .k-tilelayout-item-header .k-card-title {
+        font-size: 1rem;
+    }
+
+    .k-card-header {
+        flex: 0 0 auto;
+    }
+
+    .k-card-body {
+        overflow: hidden;
+    }
+
+    .k-tilelayout-item:nth-child(1) {
+        background-color: #295F98 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+    .k-tilelayout-item:nth-child(2) {
+        background-color: #F05A7E !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+    .k-tilelayout-item:nth-child(3) {
+        background-color: #0B8494 !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+    .k-tilelayout-item:nth-child(4) {
+        background-color: #FABC3F !important;
+        border-radius: 10px 10px 10px 10px;
+        color: #fff !important;
+        height: 150px;
+    }
+
+
+
+
+</style>
+
+<script>
+
+ function onEmpClick() {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 35, type: 'ActiveEmployees', name: 'ActiveEmployees' },
+
+            success: function (result) {
+
+                window.location.href = '/MIS/MISDashBoard?id=35&groupCom=' + groupCom + '&type=ActiveEmployees&name=ActiveEmployees&age=0';
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+    }
+
+    function onSeriesAgeOver(e) {
+        $("#hrByAg").css("cursor", "pointer");
+    }
+    function onSeriesAgeClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        var age = e.category
+        if (age == '60+') {
+            age = '60-100';
+        }
+        else {
+            age = age.replace(' Year', '');
+        }
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 36, type: 'AGE', age: age },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=36&groupCom=' + groupCom + '&type=AGE&name=Age&age=' + e.category;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function onSeriesDptOver(e) {
+        $("#hrByDept").css("cursor", "pointer");
+    }
+    function onSeriesDptClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 37, type: 'Department', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=37&groupCom=' + groupCom + '&type=Department&name=' + e.dataItem.department + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function onSeriesLocOver(e) {
+        $("#hrByLoc").css("cursor", "pointer");
+    }
+    function onSeriesLocClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 38, type: 'Department', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=38&groupCom=' + groupCom + '&type=Location&name=' + e.dataItem.location + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function onSeriesDivOver(e) {
+        $("#hrByDiv").css("cursor", "pointer");
+    }
+    function onSeriesDivClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 39, type: 'Division', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=38&groupCom=' + groupCom + '&type=Division&name=' + e.dataItem.division + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+    function onSeriesCatOver(e) {
+        $("#hrByCat").css("cursor", "pointer");
+    }
+    function onSeriesCatClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 50, type: 'Category', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=50&groupCom=' + groupCom + '&type=Category&name=' + e.dataItem.category + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function onSeriesGrdOver(e) {
+        $("#hrByGrd").css("cursor", "pointer");
+    }
+    function onSeriesGrdClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 51, type: 'Grade', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=51&groupCom=' + groupCom + '&type=Grade&name=' + e.dataItem.grade + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+    function onSeriesRegOver(e) {
+        $("#hrByReg").css("cursor", "pointer");
+    }
+    function onSeriesRegClick(e) {
+        var groupCom = $("#GroupCompanyCode").val();
+
+        $.ajax({
+
+            type: 'GET',
+            url: '/MIS/MISDashBoard/ReloadDiv',
+            dataType: 'html',
+            data: { id: 52, type: 'Region', age: e.dataItem.code },
+
+            success: function (result) {
+
+
+                window.location.href = '/MIS/MISDashBoard?id=52&groupCom=' + groupCom + '&type=Region&name=' + e.dataItem.region + '&age=' + e.dataItem.code;
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                debugger
+                document.body.id = "kt_body";
+                $('body').html(xhr.responseText);
+
+
+            }
+        });
+
+    }
+
+
+    </script>
+<script id="activeCount" type="text/x-kendo-template">
+        <div onclick="onEmpClick()"  style="display:flex; align-items:center;justify-content:space-around;font-size:1.5rem;cursor:pointer;">
+    <div onclick="onEmpClick()" id="employeeCount" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;cursor:pointer; font-weight: 700">@Model.employeeCount </div>
+     <div onclick="onEmpClick()" id="employeeMaleCount" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;cursor:pointer; font-weight: 700"><i class="fa fa-male" aria-hidden="true" style="padding-right: 5px;font-size: 3rem;padding-top: 5px;color: \\#97d5f2;"></i>@Model.employeeMaleCount </div>
+      <div onclick="onEmpClick()" id="employeeFeMaleCount" style="color: \\#fff; height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem;cursor:pointer; font-weight: 700"><i class="fa fa-female" aria-hidden="true" style="padding-right: 5px;padding-top: 3px;font-size: 3rem;color:\\#f6b2d9;"></i>@Model.employeeFeMaleCount </div></div>
+</script>
+
+<script id="averageAge" type="text/x-kendo-template">
+    <div id="avgAge" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight: 700">@Model.avgAge </div>
+
+</script>
+<script id="averageTenure" type="text/x-kendo-template">
+    <div id="avgTenure" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight: 700">@Model.avgTenure </div>
+
+</script>
+<script id="averageSalary" type="text/x-kendo-template">
+    <div id="avgSal" style="color: \\#fff;height:100%;display:flex; align-items:center;justify-content:center;font-size:3rem; font-weight: 700">@Model.avgGP </div>
+
+</script>
+<script id="hrbyGender" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRGender>()
+
+                                                       .Name("hrByG")
+
+                                                       .Title("")
+
+                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                       .Legend(legend => legend
+                                                        .Position(ChartLegendPosition.Right).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Vertical)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                       )
+                                                              .SeriesDefaults(seriesDefaults => seriesDefaults
+                                           .Column().Visual("columnVisual")
+                                      
+                                    
+
+                                   )
+                                                       .ChartArea(chartArea => chartArea
+                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                           .DataSource(ds => ds.Read(read => read.Action("GetGenderHR", "MISDashBoard").Data("getParam")))
+                                                       .Series(series =>
+                                                       {
+                                                           series.Column(model => model.total).Name("Gender").CategoryField("gender").Color("\\#89CFF0");
+
+                                                       })
+                                                       .CategoryAxis(axis => axis
+                                                       .Labels(labels => labels.Rotation(0))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       
+                                                      
+                                                       )
+                                                     //  .MajorUnit(1000)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+
+<script id="salaryRange" type="text/x-kendo-template">
+    @(
+        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.SalaryRange>()
+                                                                      .Name("salRange")
+                                                                      .Title("")
+                                                                    
+                                              .Legend(legend => legend
+
+                                                     .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+
+
+                                                      .Visible(true)
+                                                      )
+                                                      .ChartArea(chart => chart
+                                                      .Background("transparent")
+
+
+                                                      )
+                                                      .DataSource(ds =>
+                                                      {
+                                                              ds.Read(read => read.Action("GetSalaryRange", "MISDashBoard").Data("getGroupCompany"));
+
+
+                                                      }
+                                                      )
+                                                      .Series(series => series
+
+                                                      .Pie(model => model.total, model => model.range)
+
+                                                      .Labels(labels => labels.
+                                                          Template("\\#= dataItem.range \\# - \\#= dataItem.total \\#")
+                                                      .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                      .Background("transparent")
+
+                                                      .Visible(true)
+                                                      )
+
+
+                                              ).SeriesColors("\\#E85C0D", "\\#7A1CAC", "\\#41B3A2", "\\#C75B7A", "\\#694F8E")
+                                             .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                     .Tooltip(tooltip => tooltip.Template("\\#= dataItem.range \\# - \\#= dataItem.total \\#").Visible(true))
+
+                                                   
+
+                                     
+
+                                                          .ToClientTemplate()
+                                                          
+                                                      )
+
+
+
+</script>
+
+<script id="genHr" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRGender>()
+                                                          .Name("genderHR")
+                                                          .Title("")
+
+                                                          .Legend(legend => legend
+
+                                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+                                                          .Orientation(ChartLegendOrientation.Vertical)
+
+
+
+                                                          .Visible(true)
+                                                          )
+                                                          .ChartArea(chart => chart
+                                                          .Background("transparent")
+
+
+                                                          )
+                                                          .DataSource(ds =>
+                                                          {
+                                                                  ds.Read(read => read.Action("GetGenderHR", "MISDashBoard").Data("getGroupCompany"));
+
+
+                                                          }
+                                                          )
+                                                          .Series(series => series
+
+                                                          .Pie(model => model.total, model => model.gender)
+
+                                                          .Labels(labels => labels.
+                                                                  Template("\\#= dataItem.gender \\# - \\#= dataItem.total \\#")
+                                                          .Position(ChartSeriesLabelsPosition.OutsideEnd)
+
+                                                          .Background("transparent")
+
+                                                          .Visible(true)
+                                                          )
+
+
+                                                                          ).SeriesColors("\\#166f99", "\\#2185b4", "\\#8d4194", "\\#75744d", "\\#f76d31")
+
+                                                               .HtmlAttributes(new { style = "height:100%;width:100%;" })
+
+                                                                       .Tooltip(tooltip => tooltip.Template("\\#= dataItem.gender \\# - \\#= dataItem.total \\#").Visible(true))
+
+                                                          
+
+                                                              .ToClientTemplate()
+                                                          )
+
+
+
+</script>
+
+<script id="hrbyDepartment" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRDepartment>()
+
+                                                   .Name("hrByDept")
+
+                                                       .Events(e => e.SeriesHover("onSeriesDptOver")
+                                                                                     .SeriesClick("onSeriesDptClick"))
+
+                                                   .Title("")
+
+                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                   .Legend(legend => legend
+                                                   .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                   )
+                                                   .ChartArea(chartArea => chartArea
+                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                       .DataSource(ds => ds.Read(read => read.Action("GetDepartmentHR", "MISDashBoard").Data("getParam")))
+                                                   .Series(series =>
+                                                   {
+                                                           series.Column(model => model.total).Name("Department").CategoryField("shrtName").Color("\\#FF6969")
+                                                             .Tooltip(tooltip => tooltip.
+                                                                             Template("(\\#= (dataItem.department)\\# - \\#= (dataItem.total)\\# )").Visible(true));
+
+                                                   })
+                                                   .CategoryAxis(axis => axis
+                                                  // .Labels(labels => labels.Rotation(45))
+                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                   .Line(line => line.Visible(false))
+                                                   )
+                                                   .ValueAxis(axis => axis.Numeric()
+                                                   .Labels(labels => labels
+                                                   .Format("{0:N0}")
+                                                   //.Rotation(0)
+                                                   )
+                                                  // .MajorUnit(500)
+
+                                                   .Line(line => line.Visible(false))
+                                                   )
+                                                   .RenderAs(RenderingMode.Canvas)
+                                                   .Tooltip(tooltip => tooltip
+                                                   .Visible(true)
+                                                   .Format("{0:N0}")
+                                                   )
+                                                   .ToClientTemplate()
+                                                   )
+
+</script>
+
+<script id="hrbyAge" type="text/x-kendo-template">
+    @(
+        Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRAge>()
+
+                                                           .Name("hrByAg")
+
+                                                               .Events(e => e.SeriesHover("onSeriesAgeOver")
+                                                                                 .SeriesClick("onSeriesAgeClick"))
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                               .DataSource(ds => ds.Read(read => read.Action("GetAgeHR", "MISDashBoard").Data("getParam")))
+                                                           .Series(series =>
+                                                           {
+                                                                   series.Column(model => model.male).Name("Male").CategoryField("age").Color("\\#88D66C").Spacing(0);
+
+                                                                   series.Column(model => model.feMale).Name("Female").CategoryField("age").Color("\\#EB5B00").Spacing(0);
+
+                                                       })
+                                                       .CategoryAxis(axis => axis
+                                                       .Labels(labels => labels.Rotation(0))
+                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .ValueAxis(axis => axis.Numeric()
+                                                       .Labels(labels => labels
+                                                       .Format("{0:N0}")
+                                                       //.Rotation(0)
+                                                       )
+                                                      // .MajorUnit(500)
+
+                                                       .Line(line => line.Visible(false))
+                                                       )
+                                                       .RenderAs(RenderingMode.Canvas)
+                                                       .Tooltip(tooltip => tooltip
+                                                       .Visible(true)
+                                                       .Format("{0:N0}")
+                                                       )
+                                                       .ToClientTemplate()
+                                                       )
+
+</script>
+
+<script id="hrbyTenure" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTenure>()
+
+                                                           .Name("hrByTen")
+
+                                                           .Title("")
+
+                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                           .Legend(legend => legend
+                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                           )
+                                                           .ChartArea(chartArea => chartArea
+                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetTenureHR", "MISDashBoard").Data("getParam")))
+                                                           .Series(series =>
+                                                           {
+                                                               //series.Column(model => model.total).Name("Tenure").CategoryField("age").Color("\\#89CFF0");
+
+                                                                   series.Column(model => model.male).Name("Male").CategoryField("age").Color("\\#FF4C4C").Spacing(0);
+
+                                                                   series.Column(model => model.feMale).Name("Female").CategoryField("age").Color("\\#37B7C3").Spacing(0);
+
+                                                           })
+                                                           .CategoryAxis(axis => axis
+                                                           .Labels(labels => labels.Rotation(0))
+                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .ValueAxis(axis => axis.Numeric()
+                                                           .Labels(labels => labels
+                                                           .Format("{0:N0}")
+                                                           //.Rotation(0)
+                                                           )
+                                                         //  .MajorUnit(500)
+
+                                                           .Line(line => line.Visible(false))
+                                                           )
+                                                           .RenderAs(RenderingMode.Canvas)
+                                                           .Tooltip(tooltip => tooltip
+                                                           .Visible(true)
+                                                           .Format("{0:N0}")
+                                                           )
+                                                           .ToClientTemplate()
+                                                           )
+
+</script>
+
+<script id="hrbyLocation" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRLocation>()
+
+                                                               .Name("hrByLoc")
+                                                                    .Events(e => e.SeriesHover("onSeriesLocOver")
+                                                                                     .SeriesClick("onSeriesLocClick"))
+                                                               .Title("")
+
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                               )
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetLocationHR", "MISDashBoard").Data("getParam")))
+                                                               .Series(series =>
+                                                               {
+                                                                       series.Column(model => model.total).Name("Location").CategoryField("shrtName").Color("\\#FF8F00")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                             Template("(\\#= (dataItem.location)\\# - \\#= (dataItem.total)\\# )").Visible(true)); ;
+
+                                                               })
+                                                               .CategoryAxis(axis => axis
+                                                               //.Labels(labels => labels.Rotation(45))
+                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .ValueAxis(axis => axis.Numeric()
+                                                               .Labels(labels => labels
+                                                               .Format("{0:N0}")
+                                                               //.Rotation(0)
+                                                               )
+                                                            //   .MajorUnit(500)
+
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .RenderAs(RenderingMode.Canvas)
+                                                               .Tooltip(tooltip => tooltip
+                                                               .Visible(true)
+                                                               .Format("{0:N0}")
+                                                               )
+                                                               .ToClientTemplate()
+                                                               )
+
+</script>
+
+<script id="hrbyTQJ" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTimetoQuitJob>()
+
+                                                               .Name("hrByTimeToQuitJob")
+
+                                                               .Title("")
+
+                                                                   .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                               .Legend(legend => legend
+                                                               .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                               )
+                                                               .ChartArea(chartArea => chartArea
+                                                               .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetTimeToQuitJobHR", "MISDashBoard").Data("getParam")))
+                                                               .Series(series =>
+                                                               {
+                                                                   series.Line(model => model.percentage).Name("Service").CategoryField("year").Color("\\#4C3BCF").Width(5);                                                                
+
+                                                                  
+
+                                                               })
+                                                               .CategoryAxis(axis => axis
+                                                               .Labels(labels => labels.Rotation(0))
+                                                               .MajorGridLines(lines => lines.Visible(false))
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .ValueAxis(axis => axis.Numeric()
+                                                                   .Title("Percentage")
+                                                               .Labels(labels => labels
+                                                               .Format("{0:N0}")
+                                                               //.Rotation(0)
+                                                               )
+                                                               //  .MajorUnit(500)
+
+                                                               .Line(line => line.Visible(false))
+                                                               )
+                                                               .RenderAs(RenderingMode.Canvas)
+                                                                   .Tooltip(tooltip => tooltip.Template("\\#= dataItem.year \\# - \\#= dataItem.count \\#").Visible(true))
+                                                               .ToClientTemplate()
+                                                               )
+
+</script>
+
+
+<script id="hrbyRegion" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRRegion>()
+
+                                                                   .Name("hrByReg")
+                                                                        .Events(e => e.SeriesHover("onSeriesRegOver")
+                                                                                                 .SeriesClick("onSeriesRegClick"))
+
+                                                                   .Title("")
+
+                                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                   .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                   )
+                                                                   .ChartArea(chartArea => chartArea
+                                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                               .DataSource(ds => ds.Read(read => read.Action("GetRegionHR", "MISDashBoard").Data("getParam")))
+                                                                   .Series(series =>
+                                                                   {
+                                                                       series.Column(model => model.total).Name("Region").CategoryField("shrtName").Color("\\#028391")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                             Template("(\\#= (dataItem.region)\\# - \\#= (dataItem.total)\\# )").Visible(true)); ;
+
+                                                                   })
+                                                                   .CategoryAxis(axis => axis
+                                                                   //.Labels(labels => labels.Rotation(45))
+                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .ValueAxis(axis => axis.Numeric()
+                                                                   .Labels(labels => labels
+                                                                   .Format("{0:N0}")
+                                                                   //.Rotation(0)
+                                                                   )
+                                                                   //   .MajorUnit(500)
+
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .RenderAs(RenderingMode.Canvas)
+                                                                   .Tooltip(tooltip => tooltip
+                                                                   .Visible(true)
+                                                                   .Format("{0:N0}")
+                                                                   )
+                                                                   .ToClientTemplate()
+                                                                   )
+
+</script>
+<script id="hrbyDivision" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRDivision>()
+
+                                                                   .Name("hrByDiv")
+                                                                        .Events(e => e.SeriesHover("onSeriesDivOver")
+                                                                                         .SeriesClick("onSeriesDivClick"))
+                                                                   .Title("")
+
+                                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                   .Legend(legend => legend
+                                                                   .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                   )
+                                                                   .ChartArea(chartArea => chartArea
+                                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetDivisionHR", "MISDashBoard").Data("getParam")))
+                                                                   .Series(series =>
+                                                                   {
+                                                                       series.Column(model => model.total).Name("Division").CategoryField("shrtName").Color("\\#003285")
+                                                                         .Tooltip(tooltip => tooltip.
+                                                                             Template("(\\#= (dataItem.division)\\# - \\#= (dataItem.total)\\# )").Visible(true)); ;
+
+                                                                   })
+                                                                   .CategoryAxis(axis => axis
+                                                                   //.Labels(labels => labels.Rotation(45))
+                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .ValueAxis(axis => axis.Numeric()
+                                                                   .Labels(labels => labels
+                                                                   .Format("{0:N0}")
+                                                                   //.Rotation(0)
+                                                                   )
+                                                                   //   .MajorUnit(500)
+
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .RenderAs(RenderingMode.Canvas)
+                                                                   .Tooltip(tooltip => tooltip
+                                                                   .Visible(true)
+                                                                   .Format("{0:N0}")
+                                                                   )
+                                                                   .ToClientTemplate()
+                                                                   )
+
+</script>
+
+<script id="hrbyGrade" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRDivision>()
+
+                                                                       .Name("hrByGrd")
+
+                                                                            .Events(e => e.SeriesHover("onSeriesGrdOver")
+                                                                                                 .SeriesClick("onSeriesGrdClick"))
+
+                                                                       .Title("")
+
+                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                       .Legend(legend => legend
+                                                                        .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                       )
+                                                                       .ChartArea(chartArea => chartArea
+                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                       .DataSource(ds => ds.Read(read => read.Action("GetGradeHR", "MISDashBoard").Data("getParam")))
+                                                                       .Series(series =>
+                                                                       {
+                                                                           series.Column(model => model.total).Name("Grade").CategoryField("shrtName").Color("\\#D2649A")
+                                                                             .Tooltip(tooltip => tooltip.
+                                                                                 Template("(\\#= (dataItem.grade)\\# - \\#= (dataItem.total)\\# )").Visible(true)); ;
+
+                                                                       })
+                                                                       .CategoryAxis(axis => axis
+                                                                       //.Labels(labels => labels.Rotation(45))
+                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                       .Labels(labels => labels
+                                                                       .Format("{0:N0}")
+                                                                       //.Rotation(0)
+                                                                       )
+                                                                       //   .MajorUnit(500)
+
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                       .Tooltip(tooltip => tooltip
+                                                                       .Visible(true)
+                                                                       .Format("{0:N0}")
+                                                                       )
+                                                                       .ToClientTemplate()
+                                                                       )
+
+</script>
+
+<script id="hrbyCategory" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRCategory>()
+
+                                                                           .Name("hrByCat")
+
+                                                                               .Events(e => e.SeriesHover("onSeriesCatOver")
+                                                                                             .SeriesClick("onSeriesCatClick"))
+
+                                                                           .Title("")
+
+                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                           .Legend(legend => legend
+                                                                          .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                           )
+                                                                           .ChartArea(chartArea => chartArea
+                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetCategoryHR", "MISDashBoard").Data("getParam")))
+                                                                           .Series(series =>
+                                                                           {
+                                                                               series.Column(model => model.total).Name("Category").CategoryField("shrtName").Color("\\#1E0342")
+                                                                                 .Tooltip(tooltip => tooltip.
+                                                                                     Template("(\\#= (dataItem.category)\\# - \\#= (dataItem.total)\\# )").Visible(true)); ;
+
+                                                                           })
+                                                                           .CategoryAxis(axis => axis
+                                                                           //.Labels(labels => labels.Rotation(45))
+                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                           .Labels(labels => labels
+                                                                           .Format("{0:N0}")
+                                                                           //.Rotation(0)
+                                                                           )
+                                                                           //   .MajorUnit(500)
+
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                           .Tooltip(tooltip => tooltip
+                                                                           .Visible(true)
+                                                                           .Format("{0:N0}")
+                                                                           )
+                                                                           .ToClientTemplate()
+                                                                           )
+
+</script>
+
+<script id="hrTimeOffice" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTimeOffice>()
+
+                                                                   .Name("hrTO")
+
+                                                                   .Title("")
+
+                                                                       .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                   .Legend(legend => legend
+                                                                   .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                   )
+                                                                   .ChartArea(chartArea => chartArea
+                                                                   .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetTimeOfficeHR", "MISDashBoard").Data("getParam")))
+                                                                   .Series(series =>
+                                                                   {
+                                                                           series.Column(model => model.lateIn).Name("Late In").CategoryField("monthName")
+                                                                           .Color("\\#89CFF0").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+                                                                           
+                                                                           series.Column(model => model.earlyOut).Name("Early Out").CategoryField("monthName")
+                                                                           .Color("\\#a4abf5").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true)); 
+                                                                           series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));
+
+                                                                   })
+                                                                   .CategoryAxis(axis => axis
+                                                                   .Labels(labels => labels.Rotation(0))
+                                                                   .MajorGridLines(lines => lines.Visible(false))
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .ValueAxis(axis => axis.Numeric()
+                                                                   .Labels(labels => labels
+                                                                   .Format("{0:N0}")
+                                                                   //.Rotation(0)
+                                                                   )
+                                                                //   .MajorUnit(100)
+
+                                                                   .Line(line => line.Visible(false))
+                                                                   )
+                                                                   .RenderAs(RenderingMode.Canvas)
+                                                                   .Tooltip(tooltip => tooltip
+                                                                   .Visible(true)
+                                                                               
+                                                                   .Format("{0:N0}")
+                                                                   )
+                                                                   .ToClientTemplate()
+                                                                   )
+
+</script>
+
+<script id="hrTimeOfficeDepartment" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTODepartment>()
+
+                                                                       .Name("hrDept")
+
+                                                                       .Title("")
+
+                                                                           .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                       .Legend(legend => legend
+                                                                       .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                       )
+                                                                       .ChartArea(chartArea => chartArea
+                                                                       .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                           .DataSource(ds => ds.Read(read => read.Action("GetTODepartmentHR", "MISDashBoard").Data("getParam")))
+                                                                       .Series(series =>
+                                                                       {
+                                                                           series.Column(model => model.lateIn).Name("Late In").CategoryField("department")
+                                                                           .Color("\\#89CFF0").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                               series.Column(model => model.earlyOut).Name("Early Out").CategoryField("department")
+                                                                           .Color("\\#a4abf5").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                          @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                       })
+                                                                       .CategoryAxis(axis => axis
+                                                                       .Labels(labels => labels.Rotation(0))
+                                                                       .MajorGridLines(lines => lines.Visible(false))
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .ValueAxis(axis => axis.Numeric()
+                                                                       .Labels(labels => labels
+                                                                       .Format("{0:N0}")
+                                                                       //.Rotation(0)
+                                                                       )
+                                                                    //   .MajorUnit(100)
+
+                                                                       .Line(line => line.Visible(false))
+                                                                       )
+                                                                       .RenderAs(RenderingMode.Canvas)
+                                                                       .Tooltip(tooltip => tooltip
+                                                                       .Visible(true)
+
+                                                                       .Format("{0:N0}")
+                                                                       )
+                                                                       .ToClientTemplate()
+                                                                       )
+
+</script>
+
+<script id="hrTimeOfficeLocation" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.HRTOLocation>()
+
+                                                                           .Name("hrLoc")
+
+                                                                           .Title("")
+
+                                                                               .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                                           .Legend(legend => legend
+                                                                           .Position(ChartLegendPosition.Bottom).Labels(x => x.Font("9px Arial,Helvetica,sans-serif"))
+                                                  .Orientation(ChartLegendOrientation.Horizontal)
+                                                  .Labels(x => x.Font("15px Arial,Helvetica,sans-serif"))
+
+                                                                           )
+                                                                           .ChartArea(chartArea => chartArea
+                                                                           .Margin(margin => margin.Top(10).Right(5).Left(10).Bottom(0)))
+                                                                                                                   .DataSource(ds => ds.Read(read => read.Action("GetTOLocationHR", "MISDashBoard").Data("getParam")))
+                                                                           .Series(series =>
+                                                                           {
+                                                                               series.Column(model => model.lateIn).Name("Late In").CategoryField("location")
+                                                                               .Color("\\#89CFF0").Spacing(0)
+                                                                                .Tooltip(tooltip => tooltip.
+                                                                                 Template("(Late In - \\#= (dataItem.lateIn)\\# )").Visible(true));
+
+                                                                               series.Column(model => model.earlyOut).Name("Early Out").CategoryField("location")
+                                                                           .Color("\\#a4abf5").Spacing(0)
+                                                                            .Tooltip(tooltip => tooltip.
+                                                                             Template("(Early Out  - \\#= (dataItem.earlyOut)\\# )").Visible(true));
+                                                                               @* series.Column(model => model.overTime).Name("Over Time").CategoryField("monthName")
+                                                                           .Spacing(0)
+                                                                           .Color("\\#a4c8ed").Gap(0).Tooltip(tooltip => tooltip.
+                                                                             Template("(Over Time - \\#= (dataItem.overTime)\\# )").Visible(true));*@
+
+                                                                           })
+                                                                           .CategoryAxis(axis => axis
+                                                                           .Labels(labels => labels.Rotation(0))
+                                                                           .MajorGridLines(lines => lines.Visible(false))
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .ValueAxis(axis => axis.Numeric()
+                                                                           .Labels(labels => labels
+                                                                           .Format("{0:N0}")
+                                                                           //.Rotation(0)
+                                                                           )
+                                                                         //  .MajorUnit(100)
+
+                                                                           .Line(line => line.Visible(false))
+                                                                           )
+                                                                           .RenderAs(RenderingMode.Canvas)
+                                                                           .Tooltip(tooltip => tooltip
+                                                                           .Visible(true)
+
+                                                                           .Format("{0:N0}")
+                                                                           )
+                                                                           .ToClientTemplate()
+                                                                           )
+
+</script>
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(12)
+        .RowsHeight("150px")
+        .ColumnsWidth("250px")
+
+        .Containers(c =>
+        {
+        // c.Add().Header(h => h.Text("Gender")).BodyTemplateId("hrbyGender").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count")).BodyTemplateId("activeCount").ColSpan(3).RowSpan(1);
+        c.Add().Header(h => h.Text("Avg Age")).BodyTemplateId("averageAge").ColSpan(3).RowSpan(1);
+        c.Add().Header(h => h.Text("Avg Service")).BodyTemplateId("averageTenure").ColSpan(3).RowSpan(1);
+        c.Add().Header(h => h.Text("Avg Salary")).BodyTemplateId("averageSalary").ColSpan(3).RowSpan(1);
+
+        c.Add().Header(h => h.Text("Head Count by Age Range")).BodyTemplateId("hrbyAge").ColSpan(6).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Service")).BodyTemplateId("hrbyTenure").ColSpan(6).RowSpan(2);
+
+
+        c.Add().Header(h => h.Text("Salary Range")).BodyTemplateId("salaryRange").ColSpan(3).RowSpan(2);
+        // c.Add().Header(h => h.Text("Diversity")).BodyTemplateId("genHr").ColSpan(3).RowSpan(2);
+
+        c.Add().Header(h => h.Text("Time to Quit the Job")).BodyTemplateId("hrbyTQJ").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Department")).BodyTemplateId("hrbyDepartment").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Location")).BodyTemplateId("hrbyLocation").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Region")).BodyTemplateId("hrbyRegion").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Division")).BodyTemplateId("hrbyDivision").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Grade")).BodyTemplateId("hrbyGrade").ColSpan(3).RowSpan(2);
+        c.Add().Header(h => h.Text("Head Count by Category")).BodyTemplateId("hrbyCategory").ColSpan(3).RowSpan(2);
+
+
+
+
+           @* c.Add().Header(h => h.Text("Punching Analysis Past 6 Months")).BodyTemplateId("hrTimeOffice").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Punching Analysis Department Wise")).BodyTemplateId("hrTimeOfficeDepartment").ColSpan(3).RowSpan(2);
+            c.Add().Header(h => h.Text("Punching Analysis Location Wise")).BodyTemplateId("hrTimeOfficeLocation").ColSpan(3).RowSpan(2);*@
+            
+        })
+        .Reorderable(true)
+        .Resizable(true)
+        .Events(e => e.Resize("onTileResize"))
+    )

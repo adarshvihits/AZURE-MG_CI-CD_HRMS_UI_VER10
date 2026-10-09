@@ -1,0 +1,127 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ApplicantTracking
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+
+        $('.Tab3Count').html("@Model.Tab3Count");
+        $('.Tab6Count').html("@Model.Tab6Count");
+        $('.Tab7Count').html("@Model.Tab7Count");
+
+    });
+
+</script>
+<style>
+    .view_btn_appli {
+        width: 18px;
+        height: 18px;
+        background: url(/images/icons/viewappli.svg);
+        background-size: contain;
+        color: white;
+        display: inline-block;
+        background-repeat: no-repeat;
+        margin: 2px;
+    }
+</style>
+<div class="ihits-table table-border odd-even mobile-responsive-table final-approve-lists new-tble-pad-tp">
+    @Html.HiddenFor(m => Model.ApplicantTrackingList.Count)
+    <table class="common-table">
+
+        <thead>
+
+            <tr class="table-dark">
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Applicant ID">
+                    Appli. ID
+
+                </th>
+                <th scope="col">
+                    Applicant Name
+                </th>
+                <th scope="col">
+                    MRF No.
+                </th>
+                <th scope="col">Job Title</th>
+                <th scope="col">Deadline</th>
+                <th scope="col" data-bs-toggle="tooltip" title=""
+                    data-bs-original-title="Days Left">D.L.</th>
+                <th scope="col">
+                    Location
+                </th>
+
+
+                <th scope="col">
+                    Age
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" title=""
+                    data-bs-original-title="Years Of Experience">
+                    Y/E
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" title="Resume Uploaded By Candidate">Resume</th>
+                <th scope="col">Tracker</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ApplicantTrackingList != null && Model.ApplicantTrackingList.Count > 0)
+            {
+
+                for (int i = 0; i < Model.ApplicantTrackingList.Count; i++)
+                {
+            <tr>
+                <td data-label="Applicant ID">
+                    @Model.ApplicantTrackingList[i].RefNo
+                </td>
+                <td data-label="Applicant Name">
+                    <a id="salarycommunication " onclick="RAApproveOrReject('Approve','@Model.ApplicantTrackingList[i].ResumeDataBankGI',@Model.ApplicantTrackingList[i].ApplicantTrackingCode)">
+                        @Model.ApplicantTrackingList[i].ApplicantName
+                    </a>
+
+                </td>
+
+                <td data-label="MRF No.">
+                    @Model.ApplicantTrackingList[i].JobCode
+                </td>
+                <td data-label="Job Title">
+                    @Html.HiddenFor(m => m.ApplicantTrackingList[i].ResumeDataBankGI)
+
+                    @Model.ApplicantTrackingList[i].JobTitle
+                </td>
+                <td data-label="Need by Date">
+                    @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.ApplicantTrackingList[i].NeededByDate))
+                </td>
+                @*<td data-label="Days Left ">
+            @Model.ApplicantTrackingList[i].DaysLeft
+        </td>*@
+                @if (@Model.ApplicantTrackingList[i].DaysLeft < 0)
+                {
+                    <td data-label="Days Left"><span class="text-color-low">@Model.ApplicantTrackingList[i].DaysLeft</span></td>
+                }
+                else
+                {
+                    <td data-label="Days Left"><span class="text-color-high">@Model.ApplicantTrackingList[i].DaysLeft</span></td>
+                }
+                <td data-label="Required Location ">
+                    @Model.ApplicantTrackingList[i].Location
+                </td>
+
+
+                <td data-label="Age">@Model.ApplicantTrackingList[i].Age</td>
+                <td data-label="Years Of Experience"> @Model.ApplicantTrackingList[i].YOS</td>
+                <td data-label="View">
+                    <a data-bs-toggle="tooltip" title="" class="view_btn_appli" title="Resume Uploaded By Candidate" onclick="showDocument('@Model.ApplicantTrackingList[i].ResumeFile','@Model.ApplicantTrackingList[i].Resume')" cursorshover="true"> </a>
+                </td>
+                <td data-label="Tracker">
+
+                    <a href="#" id="applicant " onclick="GetApplicantTracker('@Model.ApplicantTrackingList[i].ResumeDataBankGI')">
+                        <i class="icon-xl la la-arrow-circle-right"></i>
+                    </a>
+
+                </td>
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

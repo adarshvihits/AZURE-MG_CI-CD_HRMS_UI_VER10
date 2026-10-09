@@ -1,0 +1,350 @@
+﻿@model Hrms.Lite.Shared.Recruitment.DocumentVerification
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Recruitment/documentVerification.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Document Verification</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action(" Index", "Home" , new { Area="" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "DocumentVerification" , new { Area="Recruitment" })">Document Verification List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Document Verification
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="profile-header position-relative box-shadow-none mb-5">
+                        @await Html.PartialAsync("~/Areas/Recruitment/Views/DocumentVerification/_Header.cshtml",Model)
+                        @Html.HiddenFor(m => m.EmployeeGI)
+                        @Html.HiddenFor(m => m.CandidateID)
+                        @Html.HiddenFor(m => m.AadharUrl)
+                        @Html.HiddenFor(m => m.PANUrl)
+                        @Html.HiddenFor(m => m.DrivingLicenseUrl)
+                        @Html.HiddenFor(m => m.PassportUrl)
+                        <div class="profile-header-overflow"></div>
+                    </div>
+
+
+
+
+                    <div class="col-sm-12">
+                        <div class="ihits-table document-upload-tble-change table-border hover-color odd-even mobile-responsive-table document-upload-list mt-10">
+                            <table>
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">Document</th>
+
+                                        <th scope="col">Doc Number</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td data-label="ID">Aadhar</td>
+
+                                        <td data-label="Doc Number">@Model.AadharNumber</td>
+                                        <td data-label="Description">NA</td>
+                                        <td data-label="Location">@Model.AadhaarStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn"
+                                                   data-bs-original-title="Verify" onclick="viewFile('Aadhaar', '@Model.AadharUrl',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">PAN</td>
+
+                                        <td data-label="Designation">@Model.PANNumber</td>
+                                        <td data-label="department">NA</td>
+                                        <td data-label="Location">@Model.PanStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+
+
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="viewFile('Pan','@Model.PANUrl',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">Driving License</td>
+
+                                        <td data-label="Designation">@Model.DrivingLicenseNumber</td>
+                                        <td data-label="department">NA</td>
+                                        <td data-label="Location">@Model.DLStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+                                                @*<a id="AadharFileEdit" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only slider-btn" data-bs-original-title="Edit" onclick="viewFile('Driving License','@Model.DrivingLicenseUrl')">
+            <i class="icon-xl fas fa-pencil-alt"></i>
+        </a>*@
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="viewFile('Driving License', '@Model.DLUrl',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">Passport</td>
+
+                                        <td data-label="Designation">@Model.PassportNumber</td>
+                                        <td data-label="department">NA</td>
+                                        <td data-label="Location">@Model.PassportStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+                                        
+
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="viewFile('Passport','@Model.PassportUrl',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td data-label="ID">SSLC</td>
+
+                                        <td data-label="Designation">NA</td>
+                                        <td data-label="department">@Model.SslcDescription</td>
+                                        <td data-label="Location">@Model.SslcStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">                                             
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="EditOtherDocuments('@Model.EmployeeGI', 'SSLC',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">HSE</td>
+
+                                        <td data-label="Designation">NA</td>
+                                        <td data-label="department">@Model.HseDescription</td>
+                                        <td data-label="Location">@Model.HseStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">                                             
+
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="EditOtherDocuments('@Model.EmployeeGI','HSE', @Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">Graduation</td>
+
+                                        <td data-label="Designation">NA</td>
+                                        <td data-label="department">@Model.GraduationDescription</td>
+                                        <td data-label="Location">@Model.GraduationStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+
+                                                @*<a id="AadharFileEdit" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon btn-edit icon-only slider-btn" data-bs-original-title="Edit" onclick="EditOtherDocuments('00000000-0000-0000-0000-000000000000','Graduation')">
+            <i class="icon-xl fas fa-pencil-alt"></i>
+        </a>*@
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn" 
+                                                   data-bs-original-title="Verify" onclick="EditOtherDocuments('@Model.EmployeeGI','Graduation',@Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+
+
+
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td data-label="ID">Post Graduation</td>
+
+                                        <td data-label="Designation">NA</td>
+                                        <td data-label="department">@Model.PgDescription</td>
+                                        <td data-label="Location">@Model.PgStatus</td>
+                                        <td data-label=">Salary Structure">
+                                            <div class="small-btn-group">
+
+
+
+
+                                                <a id="editNewDocument" data-bs-toggle="tooltip" title="" type="button" class="btn btn-icon  slider-btn"
+                                                   data-bs-original-title="Verify" onclick="EditOtherDocuments('@Model.EmployeeGI','Post Graduation', @Model.ApplicantTrackingCode)">
+                                                    <i class="fa  verify-icon" aria-hidden="true"></i>
+
+                                                </a>
+
+
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+                    <div id="sliderDiv">
+
+                    </div>
+                    <!-- Table Section -->
+
+
+
+
+                    <div class="row card-footer-bottom-fixed">
+                        <div class="col-md-12">
+                          
+                        </div>
+
+                    </div>
+
+                    <!--end: Datatable-->
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="slider-over-flow"></div>
+<!--end::Content-->

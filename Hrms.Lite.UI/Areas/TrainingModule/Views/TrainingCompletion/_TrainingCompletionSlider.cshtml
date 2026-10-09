@@ -1,0 +1,316 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingCompletion
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/bootstrap-timepicker.js"></script>
+
+<script src="~/scripts/TrainingModule/TrainingCompletion.js"></script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        var commtab = @Model.TrainingDocList.Count
+        //var commtab = $('#TrainingDocList_Count').val();
+        for(var i = 0; i < commtab; i++) {
+            var b = document.getElementById('TrainingDocList_' + i + '__AbsoluteUri');
+            if (b.value == null) {
+                fileLabel.innerHTML = "No File Chosen";
+            }
+            else {
+                var b = document.getElementById('TrainingDocList_' + i + '__ActualFileName');
+                if (b.value != '') {
+
+                    let replacemnt = '..';
+                    theSplit = b.value.slice(0, 17);
+                    fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+                }
+                else {
+                    fileLabel.innerHTML = "";
+
+                }
+            }
+        }
+
+        //var DocUpload = $('#EmpDetailss_DocUpload').val();
+
+    });
+
+
+
+
+
+
+
+
+
+    function filechange(i) {
+        debugger
+        var a = document.getElementById('TrainingDocList_' + i + '__FileData');
+        if (a.value == "") {
+            $('#fileLabel_' + i).html("No File Chosen");
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 12);
+
+            $('#fileLabel_' + i).html(theSplit.substring(0, theSplit.length - 2) + replacemnt);
+        }
+    }
+
+</script>
+
+<style>
+    .trngdoc {
+        color: white !important;
+    }
+</style>
+
+
+
+
+@using (Html.BeginForm("Save", "TrainingCostList", FormMethod.Post, new { id = "TrainingCostList", enctype = "multipart/form-data" }))
+{
+    <div id="addallowance" class="slider-forms slider-forms-open TrainingCost">
+        <div class="slider-inner-style ">
+            <div class="slider-form-close" onclick="CloseSlider('TrainingCost')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+
+                Training Completion
+            </h4>
+
+
+            <div class="row my-3">
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>
+                            Status
+                            <span class="Mandatory">*</span>
+                        </label>
+
+                        @Html.HiddenFor(m => m.ScheduleCode)
+                        @Html.HiddenFor(m => m.TrainingCode)
+                        @Html.DropDownListFor(m => m.TrainingStatusCode, (SelectList)ViewBag.TrainingStatus, "--Status--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'TrainingSub')" })
+                        <span id="TrainingStatus"></span>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <label>Duration</label>
+                        @Html.TextBoxFor(Model => Model.Duration, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Duration", @onblur = "validate(this,'DeptShortName')", maxlength = "5" })
+
+                        <span id="CompletionCost"></span>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+                <div class="row my-3">
+
+                    <div class="col-md-6">
+                        <div class="ihits-table table-border mobile-responsive-table ">
+                            <h4 style="font-size:15px;">
+                                Trainer Cost
+                            </h4>
+                            <table class="table form-grid clear fixTable" id="TrainingCostList">
+                                <thead>
+                                    <tr class="table-gray">
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Cost</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model != null && Model.TrainerCostList != null)
+                                        {
+
+                                            @for (int i = 0; i < Model.TrainerCostList.Count; i++)
+                                            {
+
+                                                <tr>
+
+                                                    @Html.HiddenFor(m => m.TrainerCostList[i].TrainerTypeCode)
+                                                    @Html.HiddenFor(m => m.TrainerCostList[i].TrainerCostHeadCode)
+                                                    @*<td data-label="Name">
+                                                            @Model.TrainerCostList[i].TrainerCostHeadCode
+                                                        </td>*@
+                                                    <td data-label="Point">
+                                                        @Model.TrainerCostList[i].TrainerCostName
+                                                    </td>
+                                                    <td data-label="Point">
+                                                        @Html.TextBoxFor(Model => Model.TrainerCostList[i].Trainercost, new { @class = "form-control form-control-sm FactorDiscription" })
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ihits-table table-border mobile-responsive-table ">
+                            <h4 style="font-size:15px;">
+                                Training Cost
+                            </h4>
+                            <table class="table form-grid clear fixTable" id="TrainingCostList">
+                                <thead>
+                                    <tr class="table-gray">
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Cost</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model != null && Model.TrainingCostList != null)
+                                        {
+
+                                            @for (int i = 0; i < Model.TrainingCostList.Count; i++)
+                                            {
+
+                                                <tr>
+                                                    @Html.HiddenFor(m => m.TrainingCostList[i].TrainingCostHeadCode)
+                                                    @*<td data-label="Name">
+                                                            @Model.TrainingCostList[i].TrainingCostHeadCode
+                                                        </td>*@
+                                                    <td data-label="Point">
+                                                        @Model.TrainingCostList[i].TrainingCostName
+                                                    </td>
+                                                    <td data-label="Point">
+                                                        @Html.TextBoxFor(Model => Model.TrainingCostList[i].Trainingcost, new { @class = "form-control form-control-sm FactorDiscription" })
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row my-3">
+                    <div class="col-md-12">
+
+
+                        <div class="ihits-table table-border mobile-responsive-table ">
+                            <h4 style="font-size:15px;">
+                                Document Upload
+                            </h4>
+                            <table class="table form-grid clear fixTable" id="TrainingDocList">
+                                <thead>
+                                    <tr class="table-gray">
+                                        <th scope="col">File</th>
+                                        <th scope="col">Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                    @for (int i = 0; i < Model.TrainingDocList.Count; i++)
+                                    {
+
+                                        <tr id="row_OI_@i">
+
+                                            @Html.HiddenFor(m => m.TrainerCostList[i].TrainerTypeCode)
+                                            @Html.HiddenFor(m => m.TrainerCostList[i].TrainerCostHeadCode)
+                                            @*<td data-label="Name">
+                                @Model.TrainerCostList[i].TrainerCostHeadCode
+                            </td>*@
+                                            <td data-label="Document">
+
+
+
+                                                <div class="file-upload-form-group" style="width:185px;">
+
+
+                                                    <div class="file-upload-form mb-1">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.TrainingDocList[i].FileName','@Model.TrainingDocList[i].AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                        @Html.HiddenFor(m => m.TrainingDocList[i].AbsoluteUri)
+                                                        @Html.HiddenFor(m => m.TrainingDocList[i].ActualFileName)
+                                                        @Html.HiddenFor(m => m.TrainingDocList[i].FileName)
+                                                        @Html.TextBoxFor(m => m.TrainingDocList[i].FileData, new { @type = "file", @title = "", @class = "previewImage trngdoc", @name = "profile_avatar", @accept = ".png, .jpg, .jpeg, .pdf, .bmp", onchange = "filechange(" + i + ")" })
+
+                                                        @if (Model.TrainingDocList[i].ActualFileName == "")
+                                                        {
+                                                            <label id="fileLabel_@i" class="nofilelabel notchlabel">No File Chosen</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            @*<label id="fileLabel" class="nofilelabel notchlabel">@Model.FactorComments[i].Attachment.ActualFileName.Substring(0,5)</label>*@
+                                                            <label id="fileLabel_@i" class="nofilelabel notchlabel">@Model.TrainingDocList[i].ActualFileName</label>
+                                                        }
+
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            </td>
+
+                                            <td data-label="Actions">
+                                                <button type="button" onclick="AddRowGrid('TrainingDocList')"
+                                                        class="btn btn-icon btn-default icon-only  mobile-full-width">
+                                                    <i class="icon-xl fas fa-plus"></i>
+                                                </button>
+                                                <button type="button" onclick="DeleteRw(@i)"
+                                                        class="btn btn-icon btn-delete icon-only mobile-full-width">
+                                                    <i class="icon-xl far fa-trash-alt"></i>
+                                                </button>
+
+
+                                            </td>
+                                        </tr>
+
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+          
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+
+                    <button type="button" class="btn btn-default  mobile-full-width" onclick="TrainingCompletionCostSave()">
+                        Save
+                    </button>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

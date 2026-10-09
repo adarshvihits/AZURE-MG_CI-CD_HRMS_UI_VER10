@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.DashBoard.SuccessionDashboard
+@using Kendo.Mvc.UI
+<style>
+    #summarychart #chart1{
+        position:relative;
+        top:-30px;
+    }
+</style>
+<div id="summarychart">
+
+
+    @(Html.Kendo().Chart<Hrms.Lite.Shared.DashBoard.SuccessionDashboard>()
+    .Name("chart1")   
+   
+    .Legend(legend => legend
+    .Visible(true)
+    .Position(ChartLegendPosition.Bottom)
+    .Labels(labels => labels
+        .Font("11px Arial,Helvetica,sans-serif")
+        .Padding(p => p.Top(10).Right(50))
+    )
+)
+    .ChartArea(chart => chart
+        .Background("transparent")
+        .Height(260) // Adjusted height
+        .Width(260)  // Adjusted width
+
+    )
+    .Series(series =>
+    {
+        series.Donut(new dynamic[] {
+            new {category = "High",value = Model.RiskDiagram.HighRiskCount},
+            new {category = "Medium",value =  Model.RiskDiagram.ModerateRiskCount},
+            new {category = "Low",value =  Model.RiskDiagram.LowRiskCount },
+
+        });
+    })
+    .SeriesColors(new string[] { "#ca405a", "#e26a05", "#78ae9c" })
+   
+.Tooltip(tooltip => tooltip
+    .Visible(true)
+    .Template("#= category #: #= value #")
+)
+ .Events(events => events
+        .Render("onChartRender") // Bind render event to custom function
+    )
+)
+
+</div>
+<script type="text/javascript">
+    // Function to add a custom label in the center of the donut chart
+    function onChartRender(e) {
+        var chart = e.sender;
+
+        // Set the total value directly from your model or data
+        var total = @Model.RiskDiagram.TotalCount; // Replace with your total value
+
+        // Create a label in the center of the donut
+        var centerLabel = new kendo.drawing.Text(total, [128,125], {
+
+            font: "bold 14px Arial",
+            color: "#333",
+            verticalAlign: "middle",
+            horizontalAlign: "center"
+        });
+
+        // Add the label to the chart's drawing surface
+        chart.surface.draw(centerLabel);
+    }
+</script>

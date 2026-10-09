@@ -1,0 +1,173 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.DTO.OnBoarding
+@{
+    ViewData["Title"] = "CheckListCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script src="~/scripts/DataBank/onBoarding.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @style = "height:100%", @id = "checklistCreate" }))
+{
+
+    <!--begin::Header-->
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+            <!--end::Header Menu Wrapper-->
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Onboarding Checklist</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                                <i class="icon-nm fas fa-home mt-1"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "OnBoarding", new { Area = "DataBank" })" class="">Onboarding List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Onboarding Checklist
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+           
+            <!--end::Topbar-->
+        </div>
+    </div>
+    <!--end::Container-->
+
+    <!--begin::Content-->
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <!--begin: Search Form-->
+                        <div class="profile-header">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.PreEnrollGI)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+                        <!-- Table Section -->
+                        <div class="tab-outer accordion-only">
+                            <ul class="ulList">
+                                <!-- Tab Start -->
+                                @{
+                                    int i = 0;
+                                    @if (Model.JoiningCheckList != null)
+                                    {
+                                        @foreach (var group in Model.JoiningCheckList.GroupBy(m => new { m.CheckTypeCode, m.CheckType }))
+                                        {
+
+                                            <li class="tabOne clickOnTab active">@group.Key.CheckType</li>
+                                            <div id="tabOne" class="tab-content active">
+                                                <div class="ihits-table table-border  mobile-responsive-table employee-exit-checklist">
+                                                    <table>
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th scope="col">SlNo</th>
+                                                                <th scope="col">Items</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col">Remarks</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{int j = 0;}
+                                                            @foreach (var item in Model.JoiningCheckList.Where(m => m.CheckTypeCode == group.Key.CheckTypeCode))
+                                                            {
+
+                                                                @Html.Hidden("JoiningCheckList[" + i + "].CheckTypeCode", item.CheckTypeCode)
+                                                                @Html.Hidden("JoiningCheckList[" + i + "].CheckItemCode", item.CheckItemCode)
+                                                                @Html.Hidden("JoiningCheckList[" + i + "].PreEnrollGI", item.PreEnrollGI)
+                                                                @Html.Hidden("JoiningCheckList[" + i + "].IsMandatory", item.IsMandatory)
+
+
+                                                                <tr>
+                                                                    <td data-label="SI">@(j + 1)</td>
+                                                                    <td data-label="Check Item">
+                                                                        @item.CheckItem
+                                                                        @if (item.IsMandatory == true)
+                                                                        {
+                                                                            <span class="Mandatory">*</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td data-label="Status">
+                                                                        <div style="position:relative">
+
+
+                                                                            @Html.DropDownListFor(modelItem => modelItem.JoiningCheckList[i].JoiningCheckStatus.Code,
+                                                                                     (SelectList)ViewBag.ChecklistStatus, new { @class = "form-control form-control-sm ChecklistStatus", @onchange = "onstatuschange(" + i + ",'check_status_span_')" })
+                                                                            <span id="check_status_span_@i"></span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td data-label="Remarks">
+                                                                        @Html.TextBoxFor(modelItem => modelItem.JoiningCheckList[i].Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = 250 })
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                i++;
+                                                                j++;
+
+
+                                                            }
+
+
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <!-- Tab End -->
+                                            <!-- Tab Start -->
+
+                                                                }
+                                                                    }
+                                                                }
+                                </ul>
+                        </div>
+
+                        <!-- Table Setion End -->
+
+                        <div class="row card-footer-bottom-fixed">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-default float-right mobile-full-width" onclick="ChecklistSave()">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+                        <!--end: Datatable-->
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+
+
+    </div>
+    <!--end::Content-->
+}

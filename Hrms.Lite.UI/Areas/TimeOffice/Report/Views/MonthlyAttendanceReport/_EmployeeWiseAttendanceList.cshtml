@@ -1,0 +1,67 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+<!-- Table Section -->
+
+<div class="ihits-table table-border vertical-scroll-400  mobile-responsive-table employee-wise-attendance-entry-list ">
+    @Html.HiddenFor(m => m.Employee_DailyAttendanceEditDetails.Count)
+    <table id="employee-wise-attendance-entry-list-table">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">Date</th>
+                <th scope="col">Day</th>
+                <th data-bs-toggle="tooltip" title="Shift Code" scope="col">Sh.Code</th>
+                <th scope="col">IN</th>
+                <th scope="col">OUT</th>
+                <th data-bs-toggle="tooltip" title="Total Time" scope="col">Tot.Time</th>
+                <th data-bs-toggle="tooltip" title="First Half" scope="col">FH</th>
+                <th data-bs-toggle="tooltip" title="Second Half" scope="col">SH</th>
+                <th scope="col">Remarks</th>
+                @*<th scope="col">Edit</th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+            
+            @if (Model.Employee_DailyAttendanceEditDetails != null && Model.Employee_DailyAttendanceEditDetails.Count > 0)
+            {             
+                @for (int i = 0; i < Model.Employee_DailyAttendanceEditDetails.Count; i++)
+                {
+
+                    <tr>
+                        <td data-label="Date">
+                            @Model.Employee_DailyAttendanceEditDetails[i].Date.ToString("dd-MMM-yyyy")
+                           @Html.HiddenFor(Model=>Model.Employee_DailyAttendanceEditDetails[i].Date)
+                        </td>
+                        <td data-label="Day">@Model.Employee_DailyAttendanceEditDetails[i].Day</td>
+                        <td data-label="Shift Code">@Model.Employee_DailyAttendanceEditDetails[i].Shift.Name</td>
+                        <td data-label="IN">@Model.Employee_DailyAttendanceEditDetails[i].IN</td>
+                        <td data-label="OUT">@Model.Employee_DailyAttendanceEditDetails[i].OUT</td>
+                        <td data-label="Total Time">@Model.Employee_DailyAttendanceEditDetails[i].TotalTime</td>
+                        <td data-label="FH">@Model.Employee_DailyAttendanceEditDetails[i].FirstHalf.Name</td>
+                        <td data-label="SH">@Model.Employee_DailyAttendanceEditDetails[i].SecondHalf.Name</td>
+                        <td data-label="Remarks">@Model.Employee_DailyAttendanceEditDetails[i].Remarks</td>
+                        @*<td data-label="Edit">
+                            <div class="small-btn-group">
+                                <a type="button" data-bs-toggle="tooltip" title="Edit" class="btn btn-icon btn-edit icon-only" onclick="onEmployeeDailyAttendEditClick('@Model.EmployeeGI', '@Model.Employee_DailyAttendanceEditDetails[i].Date.ToString("yyyy-MM-dd")','@Model.Employee_DailyAttendanceEditDetails[i].FirstHalf.Name')"><i class="icon-xl fas fa-pencil-alt"></i></a>
+
+
+                            </div>
+                        </td>*@
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10"> No data</td>
+                </tr>
+            }
+
+
+
+
+
+        </tbody>
+    </table>
+</div>
+<!-- Table Setion End -->

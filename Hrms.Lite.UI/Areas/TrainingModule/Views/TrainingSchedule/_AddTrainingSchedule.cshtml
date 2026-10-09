@@ -1,0 +1,251 @@
+﻿@model Hrms.Lite.Shared.TrainingModule.TrainingSchedule
+    <script src="~/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function ()
+    {
+        var StatusCode = $('input[name="PostassessmentRequired"]:checked').val();
+        if (StatusCode == 2) {
+            $('.AssessmentDate').addClass('hide')
+        }
+        else {
+            $('.AssessmentDate').removeClass('hide')
+        }
+        
+    });
+</script>
+@using (Html.BeginForm("Save", "TrainingSchedule", FormMethod.Post, new { id = "TrainingScheduleSave" }))
+{
+    <div id="addallowance" class="slider-forms slider-forms-open TrainingSchedule">
+        <div class="slider-inner-style ">
+            <div class="slider-form-close" onclick="CloseSlider('TrainingSchedule')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+               
+                Training Schedule
+            </h4>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            Select Training
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.HiddenFor(m=>m.Mode)
+                        @Html.HiddenFor(m=>m.ScheduleCode)
+                        @Html.DropDownListFor(m => m.Training.Code, (SelectList)ViewBag.TrainingSub, "--Training--", new { @class = "form-control form-control-sm" })
+                        <span id="TrainingCode"></span>
+
+
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>
+                            select Month
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Month--", new { @class = "form-control form-control-sm",@onchange="DateSelect()" })
+                        <span id="MonthCode"></span>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.StartDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Start Date", @onchange = "AddDatechange()" })
+
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span id="StartDateschedule"></span>
+
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.EndDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "End Date" })
+
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span id="EndDateSchedule"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                        <label>Post Assessment Required/Not</label>
+                        <div>
+                            <div class="radio-inline">
+                                <label class="radio radio-outline radio-success">
+                                    @Html.RadioButtonFor(m => m.PostassessmentRequired, "1", new { @onchange = "fillAssessmentRequired()" })
+                                    <span></span>Yes
+                                </label>
+                                <label class="radio radio-outline radio-success">
+                                    @Html.RadioButtonFor(m => m.PostassessmentRequired, "2", new { @onchange = "fillAssessmentRequired()" })
+                                    <span></span>No
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                    <div class="col-md-6">
+
+                        <div class="form-group AssessmentDate">
+                            <label>Post Assessment Date</label>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(Model => Model.RequestUptoDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Start Date" })
+
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <span id="RequestUpto"></span>
+                        </div>
+
+
+                    </div>
+              
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Remarks/Responsibility</label>
+                    @Html.TextAreaFor(model => Model.Remarks, new { @class = "form-control form-control-sm FactorDiscription", @placeholder = "Description", maxlength = "250" })
+
+                </div>
+
+            </div>
+            @*<div class="row">
+                <div class="col-md-12">
+                    <label>Training Needs</label>
+                    @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm FactorDiscription", @placeholder = "Description", maxlength = "250" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Required Facilities </label>
+                    @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm FactorDiscription", @placeholder = "Description", maxlength = "250" })
+
+                </div>
+
+            </div>*@
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            No Of Participants
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(model => model.ParticipantsCount, new { @class = "form-control form-control-sm ReviewPeriodName", @placeholder = "0", @onblur = "OnlycapitalizeFirstLetter(this,'ReviewPeriodName')", maxlength = "120" })
+
+                        <span id="ParticipantsHeadCount"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Request Type</label>
+                        @Html.DropDownListFor(m => m.RequestType.Code, (SelectList)ViewBag.RequestType, "--RequestType--", new { @class = "form-control form-control-sm" })
+                        <span id="RequestCodeType"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Request UpTo</label>
+                        <div class="input-group date">
+                            @Html.TextBoxFor(Model => Model.RequestUptoDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2", @placeholder = "Start Date" })
+
+
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span id="RequestDateUpTo"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>
+                            Out Of Mark
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(model => model.OutOfMark, new { @class = "form-control form-control-sm ReviewPeriodName", @placeholder = "0", @onblur = "OnlycapitalizeFirstLetter(this,'ReviewPeriodName')", maxlength = "120" })
+
+                        <span id="OutOfMark1"></span>
+                    </div>
+                </div>
+            </div>
+
+          
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="TrainingScheduleSave('CREATE')">
+                            Save
+                        </button>
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <button type="button" class="btn btn-default  mobile-full-width" onclick="TrainingScheduleSave('MODIFY')">
+                            Modify
+                        </button>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+

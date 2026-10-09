@@ -1,0 +1,446 @@
+﻿@model Hrms.Lite.Shared.TDS.TaxCalculator
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/scripts/TDS/taxCalculator.js"></script>
+<style>
+    .new-btnn {
+        background-color: #0068ff;
+        color: #fff;
+    }
+
+        .new-btnn:hover {
+            color: #fff;
+        }
+
+    .table_one_hed {
+        text-decoration: underline;
+        text-underline-offset: 10px;
+        padding-bottom: 5px;
+        font-weight: 600;
+        color: #009852;
+    }
+
+    .table_one_hed_two {
+        text-decoration: underline;
+        text-underline-offset: 10px;
+        padding-bottom: 5px;
+        font-weight: 600;
+        color: #2c6eb2;
+    }
+
+
+
+    .new-btnn_one {
+        text-align: center;
+        font-size: 16px;
+        width: 100% !important;
+        height: 50px !important;
+        background-color: #009852 !important;
+        color: white;
+    }
+
+
+    .new-btnn_two {
+        text-align: center;
+        font-size: 16px;
+        width: 100% !important;
+        height: 50px;
+        background-color: #2c6eb2;
+        color: white;
+    }
+
+    .new-btnn_one:hover {
+        color: white;
+    }
+
+    .new-btnn_two:hover {
+        color: white;
+    }
+
+    .ihits-table ::-webkit-scrollbar {
+        width: 9px;
+    }
+
+    .blod_let {
+        color: red;
+        font-weight: 700;
+    }
+</style>
+
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Tax Calculator</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+
+                        <a href="@Url.Action("Index", "DashBoard", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("Index", "TaxCalculator", new { Area = "TDS" })" class="">
+                            Tax Calculator List
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Tax Calculator
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    @Html.HiddenFor(m => m.TDSComponentSplitUpOld.Count)
+                    @Html.HiddenFor(m => m.EmployeeGuid)
+                    @Html.HiddenFor(m => m.AssessmentYr)
+                    <div class="row w-100">
+
+                        <div class="tab-button-wrap">
+                            <div class="tab-items ml-5 pr-0 border-none ">
+                                <div class="row-outer" style=" font-size: 15px; font-weight: 500;">
+                                    @Model.EmployeeHeader.EmployeeName
+                                </div>
+
+                            </div>
+                         
+                                  
+
+                                        <div class="row-outer pb-2">
+
+                                            <div class="radio-inline pt-0 ml-5">
+                                                <label class="radio radio-outline radio-success">
+                                                    @Html.RadioButtonFor(m => m.Parameter, "0", new { @onchange = "GetDetails()" })
+                                                    <span></span>Declaration
+                                                </label>
+                                                <label class="radio radio-outline radio-success">
+                                                    @Html.RadioButtonFor(m => m.Parameter, "1", new { @onchange = "GetDetails()" })
+                                                    <span></span>With Proof
+                                                </label>
+                                                <label class="radio radio-outline radio-success">
+                                                    @Html.RadioButtonFor(m => m.Parameter, "2", new { @onchange = "GetDetails()" })
+                                                    <span></span>Approved
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    
+
+                                    <div class="tab-items select-option">
+
+                                        <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-right" data-bs-original-title="Export to Excel" onclick="ExportToExcel()">
+                                            <i class="icon-xl far fa-file-excel"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                       
+
+
+                            <div class="row TaxData" style="padding:10px 0; background-color: white; margin-bottom: 2px;">
+                                <div class="col-md-6" style=" border-right: 1px solid #ebedf3;">
+                                    <div class="back-color-new-add">
+                                        <div class="ihits-table table-border hover-color odd-even mobile-responsive  Tax-Calculator-list-one vertical-scroll-250" style="padding:8px;">
+
+
+                                            <div class="table_one_hed  d-flex   justify-content-center">
+                                                <h4 class="table_one_hed ">Calculation based on Old Regime</h4>
+                                            </div>
+
+
+                                            <table class="tble-new-color-chng">
+                                                <thead>
+
+                                                    <tr class="table-color-new  table-light    " style="color:white;  ">
+                                                        <th class="table-radius-new-payroll ">Sl.No.</th>
+                                                        <th scope="col">Head</th>
+                                                        <th scope="col">Processed Salary</th>
+                                                        <th class="" scope="col">Projected Salary</th>
+                                                        <th class="table-radius-new-payroll-end" scope="col">Total</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="overflow-x: hidden;">
+                                                    @if (Model.TDSComponentSplitUpOld != null && Model.TDSComponentSplitUpOld.Count > 0)
+                                                    {
+                                                        for (int i = 0; i < Model.TDSComponentSplitUpOld.Count; i++)
+                                                        {
+                                                            <tr>
+                                                                <td data-label="slno">
+                                                                    @Model.TDSComponentSplitUpOld[i].SlNo
+                                                                </td>
+                                                                <td data-label="head">
+                                                                    @Model.TDSComponentSplitUpOld[i].Head
+
+                                                                </td>
+                                                                <td data-label="processedsal" class="">@Model.TDSComponentSplitUpOld[i].ProcessedSalary</td>
+                                                                <td data-label="projectdsal" class="">
+                                                                    @Model.TDSComponentSplitUpOld[i].ProjectedSalary
+                                                                </td>
+                                                                <td data-label="total" class="">@Model.TDSComponentSplitUpOld[i].Total</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="5">
+                                                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <div class="back-color-new-add">
+                                        <div class="ihits-table table-border hover-color odd-even mobile-responsive  Tax-Calculator-list-one vertical-scroll-250" style="padding:8px;">
+
+
+                                            <div class="table_one_hed  d-flex   justify-content-center">
+                                                <h4 class="table_one_hed_two ">Calculation based on New Regime</h4>
+                                            </div>
+
+                                            <table class="tble-new-color-chng">
+                                                <thead>
+                                                    @Html.HiddenFor(m => m.TDSComponentSplitUpNew.Count)
+                                                    <tr class="table-color-new  table-light    " style="color:white;  ">
+
+                                                        <th class="table-radius-new-payroll ">Sl.No.</th>
+                                                        <th scope="col">Head</th>
+                                                        <th scope="col">Processed Salary</th>
+                                                        <th class="" scope="col">Projected Salary</th>
+                                                        <th class="table-radius-new-payroll-end" scope="col">Total</th>
+
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="overflow-x: hidden;">
+                                                    @if (Model.TDSComponentSplitUpNew != null && Model.TDSComponentSplitUpNew.Count > 0)
+                                                    {
+                                                        for (int i = 0; i < Model.TDSComponentSplitUpNew.Count; i++)
+                                                        {
+                                                            <tr>
+                                                                <td data-label="slno">
+                                                                    @Model.TDSComponentSplitUpNew[i].SlNo
+                                                                </td>
+                                                                <td data-label="head">
+                                                                    @Model.TDSComponentSplitUpNew[i].Head
+
+                                                                </td>
+                                                                <td data-label="processedsal" class="">@Model.TDSComponentSplitUpNew[i].ProcessedSalary</td>
+                                                                <td data-label="projectdsal" class="">
+                                                                    @Model.TDSComponentSplitUpNew[i].ProjectedSalary
+                                                                </td>
+                                                                <td data-label="total" class="">@Model.TDSComponentSplitUpNew[i].Total</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="5">
+                                                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row" style="padding:10px 0; background-color: white;">
+
+                                <div class="col-md-6" style=" border-right: 1px solid #ebedf3;">
+
+                                    <div class="back-color-new-add-two">
+
+                                        <div class="ihits-table table-border hover-color odd-even mobile-responsive new-dash-table Tax-Calculator-list-two vertical-scroll-80" style="padding:8px;">
+                                            <table class="tble-new-color-chng">
+                                                <thead>
+                                                    <tr class="table-color-new  table-light  " style="color: white; ">
+                                                        <th class="table-radius-new-payroll ">Amount</th>
+                                                        <th scope="col">IT Rate</th>
+                                                        <th scope="col">TAX</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.TaxDetailsOld != null && Model.TaxDetailsOld.Count > 0)
+                                                    {
+                                                        for (int i = 0; i < Model.TaxDetailsOld.Count; i++)
+                                                        {
+                                                            <tr>
+                                                                <td data-label="amount" class="">
+                                                                    @Model.TaxDetailsOld[i].Amount
+                                                                </td>
+                                                                <td data-label="itrate" class="">@Model.TaxDetailsOld[i].ITRate</td>
+                                                                <td data-label="tds" class="">
+                                                                    @Model.TaxDetailsOld[i].TDS
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="old_cls_one pt-5" style="margin:0px 8px;">
+                                            <button id="BatchUpdate" type="button" class="btn new-btnn_one btn-sm old_cls cursor-pointer  ">
+                                                Tax Based old : @Model.TaxOld
+                                            </button>
+
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+
+
+
+
+                                <div class="col-md-6">
+
+                                    <div class="back-color-new-add-two">
+
+                                        <div class="ihits-table table-border hover-color odd-even mobile-responsive new-dash-table Tax-Calculator-list-two vertical-scroll-80" style="padding:8px;">
+                                            <table class="tble-new-color-chng">
+                                                <thead>
+                                                    <tr class="table-color-new  table-light  " style="color: white; ">
+                                                        <th class="table-radius-new-payroll ">Amount</th>
+                                                        <th scope="col">IT Rate</th>
+                                                        <th scope="col">TAX</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.TaxDetailsNew != null && Model.TaxDetailsNew.Count > 0)
+                                                    {
+                                                        for (int i = 0; i < Model.TaxDetailsNew.Count; i++)
+                                                        {
+                                                            <tr>
+                                                                <td data-label="amount" class="">
+                                                                    @Model.TaxDetailsNew[i].Amount
+                                                                </td>
+                                                                <td data-label="itrate" class="">@Model.TaxDetailsNew[i].ITRate</td>
+                                                                <td data-label="tds" class="">
+                                                                    @Model.TaxDetailsNew[i].TDS
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                    <div class="old_cls_two  pt-5" style="margin:0px 8px;">
+                                        <button id="BatchUpdate" type="button" class="btn new-btnn_two btn-sm old_cls cursor-pointer mr-5">
+                                            Tax Based New : @Model.TaxNew
+                                        </button>
+
+                                    </div>
+
+
+
+
+
+
+
+
+                                </div>
+                                @if (Model.TaxNew > 0.00M | @Model.TaxOld > 0.00M)
+                                {
+                                    <div class="footer_grid_cont w-100 text-center" style="padding:20px;">
+                                        <span class="" style="color:black;font-weight:500;">Based on above calculation <strong class="blod_let">@Model.Regime</strong> is better option for reduce tax.</span>
+                                    </div>
+                                }
+
+
+
+
+
+
+                            </div>
+                        </div>  </div>  </div>  </div>  </div>

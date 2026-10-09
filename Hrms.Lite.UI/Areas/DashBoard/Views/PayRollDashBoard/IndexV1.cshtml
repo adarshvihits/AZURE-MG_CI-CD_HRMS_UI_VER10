@@ -1,0 +1,877 @@
+﻿@model Hrms.Lite.Shared.DashBoard.PayrollDashBoard
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/kendo/2023.1.117/kendo.bootstrap-main.min.css" rel="stylesheet" />
+<script src="~/js/kendo/kendo.all.min.js"></script>
+<script src="~/js/kendo/kendo.aspnetmvc.min.js"></script>
+<link href="~/css/DashBoard.css" rel="stylesheet" />
+<script src="~/scripts/DashBoard/payRollDashboard.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index","Home",new { Area=""})"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        PayRoll
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+                    <!-- Dashboard start here -->
+                    <!-- top section start here -->
+
+                    <div class="row">
+
+
+
+
+                        <!--begin::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b step-item" style="height: 130px">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                        <div class="d-flex">
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="/images/icons/onboarding-pending.svg">
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count pr-3">@Model.PayrollConfirmations</div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center pt-7" 
+                                             data-bs-toggle="modal" data-target="" onclick="onLabelClick('PayrollConfirmations','PayrollConfirmationspopup')">
+                                            <div class="d-flex align-items-center">
+
+                                                <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3"> Payroll Confirmations</a>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--end::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <!--begin::Tiles Widget 3-->
+                            <div class="card gutter-b step-item" style="height: 130px">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                        <div class="d-flex">
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="/images/icons/notebook.svg">
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count pr-3">@Model.PendingTask</div>
+                                        </div>
+
+
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+                                            <div class="d-flex align-items-center">
+
+                                                <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">
+                                                    Salary Posting Pending
+                                                </a>
+                                            </div>
+                                            @*<div class="">
+                                                    <a href="#">  <img src="/images/icons/card_arrow.svg"></a>
+
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Tiles Widget 3-->
+                        </div>
+
+
+
+                        <!--begin::Tiles Widget 4-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b step-item" style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('FandFPending','fandfpendingPopup')">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+                                        <div class="d-flex">
+                                            <span class="approval_icon">
+                                                <!--start::Svg Icon-->
+
+                                                <img src="~/images/icons/F&F.svg" />
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <div class="approval_count pr-3">@Model.FandFPendingCount</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center pt-7">
+                                            <div class="d-flex align-items-center">
+
+                                                <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">F & F Pending Count	</a>
+                                            </div>
+                                            @*<div class="">
+                                                    <a href="#">  <img src="/images/icons/card_arrow.svg"></a>
+
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--begin::Tiles Widget 4-->
+
+                        <div class="col-xl-3">
+                            <div class="card gutter-b cuser-pointer-hand    " style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('OutstandingLoanBalance','outstandloanbalancePopup')">
+                                <!--begin::Body-->
+                                <div class="card-body    d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                        <a href="#" class="text-dark-75 text-hover-primary     font-weight-bolder font-size-h3">Outstanding Loan Balance</a>
+                                        <span class="approval_icon">
+                                            <!--start::Svg Icon-->
+                                            <!--end::Svg Icon-->
+                                        </span>
+
+                                        <div class="loan">
+
+                                            <div class="icon_left">
+
+                                                <img src="~/images/icons/Loan_balance.svg" />
+                                            </div>
+
+                                            <div class="loan_balance">
+                                                <a href="#">  @Model.OutstandingLoanBalance </a>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!--end::Stats-->
+                                    <!--end::Body-->
+                                </div>
+
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                    <!-- top section end here -->
+
+                    <div class="row">
+
+                        <div class="col-xl-6">
+
+
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <!--begin::Stats Widget 4-->
+                                    <div class="card card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body" style=" padding: 18px; ">
+
+
+                                            <div class="row">
+
+                                                <div class="col-xl-6 ">
+
+                                                    <div class="pf_applicablity">
+
+                                                        <a class="card-title font-weight-bolder text-dark-75 font-size-h5 mb-2 ">PF Applicability   </a>
+
+                                                        <!--start::Svg Icon-->
+                                                        @*<div>
+                                                                <div class="pf_no"></div>
+                                                            </div>*@
+
+                                                        <div class="row  pt-3">
+                                                            <div class="col-md-3">
+                                                                <span class="ml-0 pf_no" @*data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability','NO','pfNoPopup')"*@>
+                                                                    No
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_no" @*data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability','YES','pfYesPopup')"*@>Yes</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_no" @*data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability','VARIANCE','pfVarPopup')"*@>Var</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row ">
+                                                            <div class="col-md-3">
+                                                                <span class="ml-0 pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability', 'NO', 'pfNoPopup','PF')">@Model.PFNotApplicable</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability', 'YES', 'pfYesPopup','PF')"> @Model.PFApplicable</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('PF Applicability','VARIANCE','pfVarPopup','PF')">@Model.PFVariance</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--end::Svg Icon-->
+
+
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-xl-1 ">
+                                                    <div class="border_left"></div>
+                                                </div>
+                                                <div class="col-xl-5">
+
+                                                    <div class="pf_applicablity">
+
+                                                        <a class="card-title font-weight-bolder text-dark-75 font-size-h5 mb-2 ">ESI Applicability</a>
+
+                                                        <div class="row  pt-3">
+                                                            <div class="col-md-3">
+                                                                <span class="ml-0 pf_no">No</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_no">Yes</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_no">Var</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row ">
+                                                            <div class="col-md-3">
+                                                                <span class="ml-0 pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('ESI Applicability', 'NO', 'esiNoPopup','ESI'); $('.pfOREsi').html('ESI Group')">@Model.ESINotApplicable</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('ESI Applicability','YES','esiYesPopup','ESI')">@Model.ESIApplicable</span>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <span class="pf_yes step-item" data-bs-toggle="modal" data-target="" onclick="onPFESIClick('ESI Applicability','VARIANCE','esiVarPopup','ESI')">@Model.ESIVariance</span>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                        <!--end::Body-->
+
+                                    </div>
+                                    <!--end::Stats Widget 4-->
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+
+                                <!--begin::Tiles Widget 4-->
+                                <div class="col-xl-6">
+                                    @*<div class="card gutter-b cuser-pointer-hand " style="height: 130px" data-bs-toggle="modal" data-target="" onclick="onLabelClick('SalaryVariance','salaryvariencePopup')">
+                                      
+                                        <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                        
+                                            <div class="flex-grow-1 card-spacer-x pt-6">
+                                                <div class="d-flex">
+                                                    <span class="approval_icon">
+                                                      
+
+                                                        <img src="~/images/icons/bank_account.svg" />
+                                                 
+                                                    </span>
+                                                    <div class="approval_count pr-3">@Model.SalaryVariance</div>
+                                                </div>
+
+
+
+                                                <div class="d-flex justify-content-between align-items-center pt-7">
+                                                    <div class="d-flex align-items-center">
+
+                                                        <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Salary Variance</a>
+                                                    </div>
+                           
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                      
+                                    </div>*@
+
+
+
+
+
+
+                                    <div class="card gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8 cuser-pointer-hand">
+
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3 bottom_border"  data-bs-toggle="modal" data-target="" onclick="onLabelClick('SalaryVariance','salaryvariencePopup')">
+
+
+
+                                                <div class="active_employee_icon">
+                                                    <!--start::Svg Icon-->
+                                                    <img src="/images/icons/bank_account.svg">
+                                                    <a class=" font-weight-bolder font-size-h3">Salary Variance</a>
+
+                                                    <!--end::Svg Icon-->
+                                                </div>
+
+
+                                                <div>
+                                                    <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.SalaryVariance</span>
+                                                </div>
+
+
+                                            </div>
+
+
+
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3 cuser-pointer-hand" data-bs-toggle="modal" data-target="" onclick="onLabelClick('OtherVarience','othervariencePopup')">
+
+
+                                                <div class="active_employee_icon">
+                                                    <!--start::Svg Icon-->
+                                                    <img src="~/images/icons/salary.svg" />
+
+                                                    <a class=" font-weight-bolder font-size-h3">Other Variance</a>
+                                                    <!--end::Svg Icon-->
+                                                </div>
+
+
+                                                <div>
+                                                    <span class="text-dark-75 font-weight-bolder font-size-h3">2</span>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                </div>
+                                <!--begin::Tiles Widget 4-->
+                                <!--begin::Tiles Widget 4-->
+                                <div class="col-xl-6">
+
+                                    <div class="card gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8 cuser-pointer-hand">
+
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3 bottom_border" data-bs-toggle="modal" data-target="" >
+
+
+
+                                                <div class="active_employee_icon">
+                                                    <!--start::Svg Icon-->
+                                                    <img src="/images/icons/bank_account.svg">
+                                                    <a class=" font-weight-bolder font-size-h3">Salary Hold</a>
+
+                                                    <!--end::Svg Icon-->
+                                                </div>
+
+
+                                                <div>
+                                                    <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.SalaryVariance</span>
+                                                </div>
+
+
+                                            </div>
+
+
+
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3 cuser-pointer-hand" >
+
+
+                                                <div class="active_employee_icon">
+                                                    <!--start::Svg Icon-->
+                                                    <img src="~/images/icons/salary.svg" />
+
+                                                    <a class=" font-weight-bolder font-size-h3">Salary Release</a>
+                                                    <!--end::Svg Icon-->
+                                                </div>
+
+
+                                                <div>
+                                                    <span class="text-dark-75 font-weight-bolder font-size-h3">2</span>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                </div>
+                                <!--begin::Tiles Widget 4-->
+
+
+
+
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+                        <!--begin::Tiles salary section -->
+
+                        <div class="col-xl-6">
+                            <div class="card gutter-b salary_section" style="height:280px;">
+
+                                <div class="row">
+
+                                    <div class="col-xl-6 border_right">
+
+                                        <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                            <a href="#" class="salary_text">Total Salary <span>YTD</span></a><br />
+                                            <div class="d-flex pt-4">
+                                                <span class="approval_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="~/images/icons/total_salary.svg" />
+                                                    <!--end::Svg Icon-->
+                                                </span>
+
+
+                                                <div class="total_salary">@Model.TotalSalaryYTD</div>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-xl-6">
+
+                                        <div class="flex-grow-1 card-spacer-x pt-6">
+
+                                            <a href="#" class="salary_text">
+                                                Average Salary
+                                            </a><br />
+                                            <div class="d-flex pt-4">
+                                                <span class="approval_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="~/images/icons/average_salary.svg" />
+                                                    <!--end::Svg Icon-->
+                                                </span>
+
+
+                                                <div class="total_salary">@Model.AverageSalary</div>
+
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+                        <!--begin::Tiles salary section -->
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <div class="col-xl-12">
+                            <div class="card-body d-flex flex-column p-0" style="position: relative;">
+
+
+                                <div class="card card-body ">
+
+
+                                    @*<img src="~/images/icons/graph.svg" />*@
+
+                                    @await Html.PartialAsync("_Chart",Model.PayrollDashBoardDiagram)
+
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_OtherVariance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Other Variance
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body  othervariencePopup"></div>
+
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade payDash_SAlVariance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Salary Variance
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body  salaryvariencePopup"></div>
+
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_FandFPending" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:30px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    F & F Pending Count
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  fandfpendingPopup"></div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_loanbalance" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Outstanding Loan Balance
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body  outstandloanbalancePopup"></div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_PFYes" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    PF Applicable
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  pfYesPopup"></div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade payDash_PFNo" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1090px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    PF Not Applicable
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body  pfNoPopup pt-0"></div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade payDash_PFVar" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    PF Variance
+
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  pfVarPopup"></div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_ESINo" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    ESI Not Applicable
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  esiNoPopup"></div>
+            <!-- <end table></end> -->
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_ESIYes" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    ESI Applicable
+
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body  esiYesPopup"></div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade payDash_ESIVar" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="max-width:1030px;">
+        <div class="modal-content popup " @*style="height:445px ;"*@>
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    ESI  Variance
+
+
+
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body  esiVarPopup"></div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade PayrollConfirmations" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div id="myDiv" class="modal-content popup">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Payroll Confirmations</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body PayrollConfirmationsPopup">
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

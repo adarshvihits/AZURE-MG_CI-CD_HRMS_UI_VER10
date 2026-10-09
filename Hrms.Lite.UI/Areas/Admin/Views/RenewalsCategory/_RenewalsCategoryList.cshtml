@@ -1,0 +1,65 @@
+﻿@model Hrms.Lite.Shared.Admin.RenewalsCategory
+<script src="~/js/tooltip.js"></script>
+<script src="~/js/settings.js"></script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+    });
+</script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table renewalscategory-list01 pt-1">
+    @Html.HiddenFor(model => Model.RenewalsCategoryList.Count)
+    <table id="DesignationTable" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.RenewalsCategoryList != null && Model.RenewalsCategoryList.Count > 0)
+                {
+                    for (int i = 0; i < Model.RenewalsCategoryList.Count; i++)
+
+                    {
+
+
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.RenewalsCategoryCode)
+                            @Html.HiddenFor(model => Model.Description)
+                            @Html.HiddenFor(model => Model.Active)
+                            <td data-label="Name">@Model.RenewalsCategoryList[i].Name</td>
+                            <td data-label="Short Name">@Model.RenewalsCategoryList[i].ShortName</td>
+                            <td data-label="Actions">
+                                <div>
+
+                                    <a data-bs-toggle="tooltip" title="Edit"
+                                       id="renewalscategoryedit"
+                                       class="btn btn-icon btn-edit icon-only " onclick="onAddNewOrEditClick('MODIFY','@Model.RenewalsCategoryList[i].RenewalsCategoryCode')">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </a>
+
+
+
+                                    <a data-bs-toggle="tooltip" title="Delete"
+                                       id="deleterenewalscategory"
+                                       class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.RenewalsCategoryList[i].RenewalsCategoryCode','DELETE')">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

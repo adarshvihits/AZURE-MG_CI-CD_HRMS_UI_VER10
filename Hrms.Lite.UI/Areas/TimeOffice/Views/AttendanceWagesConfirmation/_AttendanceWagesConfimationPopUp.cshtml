@@ -1,0 +1,94 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.AttendanceWagesConfirmation
+
+<div  class="ihits-table table-border hover-color odd-even mobile-responsive-table emp_profile-list-table">
+
+    <div class="row">
+        <div class="col-md-4">
+            <h5>@Model.IDName</h5>
+        </div>
+
+        <div class="col-md-8 d-flex justify-content-end">
+            @Html.HiddenFor(m=>Model.EmployeeName)
+            <a type="button" data-bs-toggle="tooltip" title="" class="btn btn-excel" data-bs-original-title="Export to Excel">
+                <i class="icon-xl far fa-file-excel" onclick="Pop_Up_ExportToExcel('@Model.EmployeeGI', '@Model.EmployeeName')"></i>
+            </a>
+        </div>
+
+    </div>
+
+ 
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Wage_Confirmation_popup_table vertical-scroll-250">
+        <table id="PopUpTable">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">Date</th>
+                    <th scope="col">IN</th>
+                    <th scope="col">OUT </th>
+                    <th scope="col">Total</th>
+                    @if (Model.Type == "LessHours")
+                    {
+                        <th scope="col">Less Hours</th>
+                    }
+                    else if (Model.Type == "OTHours")
+                    {
+                        <th scope="col">OT Hours</th>
+                    }
+                    else if (Model.Type == "OffDay")
+                    {
+                        <th scope="col">Offday</th>
+                    }
+                    else if (Model.Type == "Shift")
+                    {
+                        <th scope="col">Shift</th>
+                        <th scope="col">Amount</th>
+                    }
+                    else
+                    {
+                        <th scope="col">Holiday</th>
+
+                    }
+
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+               
+                    @if (Model != null && Model.AttnDetails != null && Model.AttnDetails.Count > 0)
+                    {
+
+                        for (int i = 0; i < Model.AttnDetails.Count; i++)
+                        {
+                            @Html.HiddenFor(m=>Model.AttnDetails.Count)
+
+                            <tr>
+                                <td data-label="Date"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Convert.ToDateTime(Model.AttnDetails[i].Date)))</td>
+                                <td data-label="IN">
+                                    @Model.AttnDetails[i].IN
+
+                                </td>
+                                <td data-label="OUT">@Model.AttnDetails[i].Out</td>
+                                <td data-label="Total">@Model.AttnDetails[i].Total </td>
+                                @if (Model.Type == "Shift")
+                                {
+                            <td data-label="Total">@Model.AttnDetails[i].Type </td>
+                                }
+                                <td data-label="OT Hours">@Model.AttnDetails[i].Value </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="3" align="center"> No  Data Found</td>
+                        </tr>
+                    }
+                
+
+            </tbody>
+        </table>
+    </div>
+</div>

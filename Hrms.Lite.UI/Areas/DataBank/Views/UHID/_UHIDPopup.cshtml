@@ -1,0 +1,128 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.UHID
+<style>
+    .profile-header .form-control {
+        border: 1px solid #cdc8c8;
+</style>
+<script>
+   $(document).ready(function () {
+       debugger
+        $.ajax({
+        type: "POST" ,
+            url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+            data: { filename: '@Model.FileName' },
+        success: function (data, jqXHR, response) {
+
+            if (jqXHR = "success") {
+                var mimeType = getMimeTypeFromFilename('@Model.FileName');
+                debugger
+                
+
+                $('.emp_HeaderPic').css('background-image', `url('/AccessFile/GetEmpThumbnail?EmployeeGI=${'@Model.EmployeeGI'}')`);
+        }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+            }
+        });
+   })
+
+</script>
+@using (Html.BeginForm("Save", "UHID", FormMethod.Post, new { id = "UHIDSave" }))
+{
+
+    <div>
+        <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="image-input image-input-outline image-input-circle float-right  emp_HeaderPic" id="kt_image_4">
+                        <div class="image-input-wrapper">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                    <div class="row">
+                        <div class="flex-grow-1">
+                            <!--begin::Title-->
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <div class="d-flex mr-3 header-profile-name align-items-center">
+                                    <a class="">@Model.EmployeeName</a>
+                                    <span>(@Model.EmployeeID)</span>
+
+                                </div>
+
+                            </div>
+
+                            <!--end::Title-->
+                            <!--begin::Content-->
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group w-100">
+                        @Html.HiddenFor(model => model.EmployeeCode)
+                        @Html.TextBoxFor(m => m.UHIDNumber, new { @class = "form-control form-control-sm", placeholder = "UHID No", @maxlength = "120" })
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+        <div style="padding:10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table  vertical-scroll-200">
+            <table id="">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col">Name</th>
+                        <th scope="col">Date Of Birth</th>
+                        <th scope="col">Relation</th>
+                        <th scope="col">Occupation </th>
+                        <th scope="col">UHID No.</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        if (Model.FamilyDetails != null && Model.FamilyDetails.Count > 0)
+                        {
+                            for (int i = 0; i < Model.FamilyDetails.Count; i++)
+
+                            {
+                                <tr>
+
+                                    <td data-label="Employee Name">
+                                        @Model.FamilyDetails[i].Name
+                                        @Html.HiddenFor(model => model.FamilyDetails[i].EmployeeRowId)
+                                        @Html.HiddenFor(model => model.FamilyDetails[i].RelationCode)
+
+                                    </td>
+                                    <td data-label="Employee Name">
+
+                                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.FamilyDetails[i].DateOfBirth))
+                                    </td>
+                                    <td data-label="Relation">  @Model.FamilyDetails[i].RelationName</td>
+                                    <td data-label="Occupation">
+                                        @Model.FamilyDetails[i].Occupation
+                                    </td>
+                                    <td data-label=">UHID No">
+                                        @Html.TextBoxFor(m => m.FamilyDetails[i].UHIDNumber, new { @class = "form-control form-control-sm", placeholder = "UHID No", @maxlength = "120" })
+
+                                    </td>
+
+
+
+
+                                </tr>
+                            }
+                        }
+                    }
+
+
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+}

@@ -1,0 +1,284 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.OrganizationalChart
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="https://kendo.cdn.telerik.com/2023.1.117/styles/kendo.bootstrap-main.min.css" rel="stylesheet" type="text/css" />
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.all.min.js"></script>
+
+<script src="https://kendo.cdn.telerik.com/2023.1.314/js/kendo.aspnetmvc.min.js"></script>
+
+ <script src="~/scripts/DataBank/Reports/OrganizationalChart.js"></script>
+
+ <script>
+    $(document).ready(function () {
+
+//        function exportToPDF() {
+//    var chart = $("#orgCharts").getKendoOrgChart();
+
+//    kendo.drawing.drawDOM(chart.element, {
+//        paperSize: "A4",
+//        margin: { top: "1cm", bottom: "1cm", left: "1cm", right: "1cm" },
+//        scale: 0.8,
+//        height: chart.element.height()
+//    }).then(function (group) {
+//        kendo.drawing.pdf.saveAs(group, "orgchart.pdf");
+//    });
+//}
+
+//$("#export-pdf-button").click(exportToPDF);
+
+
+        $("#export-pdf-button").click(function () {
+
+            exportPDF();
+
+            //var charts = $("#orgCharts").getKendoOrgChart();
+            //charts.exportPDF({ paperSize: "auto", margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" } }).done(function (data) {
+            //    kendo.saveAs({
+            //        dataURI: data,
+            //        fileName: "orgChart.pdf",
+            //        proxyURL: "@Url.Action("Export_Save", "Chart_Api")"
+            //    });
+            //});
+        });
+
+
+        });
+
+
+    var draw = kendo.drawing;
+
+    function exportPDF() {
+        draw.drawDOM("#orgCharts", {
+            paperSize: "A4",
+           // margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" },
+        scale: 0.3
+    }).then(function (group) {
+        kendo.drawing.pdf.saveAs(group, "filename.pdf");
+    });
+    }
+
+    //function exportPDF() {
+    //    draw.drawDOM($("#orgChart"))
+    //        .then(function (root) {
+    //            // Chaining the promise via then
+    //            return draw.exportImage(root);
+    //        })
+    //        .done(function (data) {
+    //            // Here 'data' is the Base64-encoded image file
+    //            kendo.saveAs({
+    //                dataURI: data,
+    //                fileName: "orgchart.jpg"
+    //            });
+    //        });
+    //}
+
+            function GetEmployee(sender) {
+
+     
+
+    var parameterValue = $(sender).val();
+
+    // Get a reference to the OrgChart data source
+    var orgChartDataSource = $("#orgCharts").data("kendoOrgChart").dataSource;
+
+    // Set the transport configuration option of the data source to a function
+    orgChartDataSource.transport.read = function (options) {
+        // Modify the URL of the data source dynamically based on the parameter
+            options.url = "/DataBank/OrganizationalChart/GetOrgChart?empCode=" + parameterValue;
+        // Call the original read method of the transport
+        kendo.data.RemoteTransport.prototype.read.call(this, options);
+    };
+
+    // Refresh the data of the data source by calling its read method
+    orgChartDataSource.read();
+
+
+  
+}
+
+</script>
+
+<style>
+    .custom {
+        padding: 25px;
+        display: inline-grid;
+    }
+
+        .custom > div, .custom > span {
+            margin: 0 auto;
+        }
+
+    img {
+        height: 50px;
+        float: right;
+    }
+</style>
+@using Kendo.Mvc.UI;
+@using Hrms.Lite.Shared.DataBank.Reports;
+
+
+
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <!--begin::Header-->
+        <div id="kt_header" class="header header-fixed">
+            <!--begin::Container-->
+            <div class="container-fluid d-flex align-items-stretch justify-content-between">
+                <!--begin::Header Menu Wrapper-->
+
+
+                <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                    <!--begin::Header Menu-->
+                    <div class="d-flex align-items-baseline flex-wrap mr-5">
+                        <h3 class="main-title">Organizational Chart</h3>
+                        <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                            <li class="breadcrumb-item ">
+                                <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                            </li>
+
+                            <!-- <li class="breadcrumb-item text-muted">
+                                <a href="policies-circulars.html">Policies & Circulars List</a>
+                            </li> -->
+                            <li class="breadcrumb-item text-muted">
+                               Organizational Chart
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--begin::Topbar-->
+                <!--end::Topbar-->
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+
+
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <!--begin::Entry-->
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container full-width">
+                    <!--begin::Dashboard-->
+                    <!--begin::Row-->
+
+                    <div class="row height-100per">
+
+                        <div class="col-md-12">
+                            <div class="card card-custom height-100per">
+
+                                <div class="card-body ">
+                                    <div class="row">
+
+                                      
+                                        <div class="col-md-12">
+                                            <div class="row tab-style-button">
+                                                <div class="tab-button-wrap">
+
+
+
+                                                <div class="tab-items">
+
+                                                    <div class="form-group filter-combobox mt-0">
+                                                      
+                                                        @Html.DropDownListFor(m => m.OrganizationalChartList, (SelectList)ViewBag.Empl,"Select Employee", new { @class = "form-control form-control-sm", @onchange = "GetEmployee(this)" })
+                                                    </div>
+                                                </div>
+
+
+                                                    <div class="tab-items select-option mb-1">
+
+                                                    <button id="export-pdf-button" data-bs-toggle="tooltip" title="" class="btn btn-excel float-left btn-pdf" data-bs-original-title="Export to Pdf">
+                                                            <i class="fa fa-file mb-0" aria-hidden="true"></i>
+                                                        </button>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        <div class="card-body">
+                                            <!--begin: Search Form-->
+                                            <div id="orgChart" class="card card-custom height-100per">
+
+                                                
+                                                    @(Html.Kendo().OrgChart<OrganizationalChart_List>()
+                                                    .Name("orgCharts")
+                                                   // .HtmlAttributes(new { style = "width:100%;height:100%;" })
+                                                    .Template("<div class='custom'>" +
+                                                    "<div><img src=' #: Avatar #'/></div>" +
+                                                    "<span style='text-align: center;'><strong> #: Name # </strong></span>" +
+                                                    "<div><i>  #: Title # </i></div>" +
+                                                    "</div>")
+                                                    .GroupHeaderTemplate("<strong>#: value # </strong>")
+                                                    //.GroupField("Title")
+                                                        .Editable(false)
+                                                        //  .GroupField("ParentID")
+                                                        //   .GroupHeaderTemplateId("groupHeaderTemplate")
+                                                           
+                                                           
+                                                        .DataSource(dataSource => dataSource
+                                                    .Read(read => read.Action("GetOrgChart", "OrganizationalChart"))
+                                                        .Model(m =>
+                                                        {
+                                                            m.Id(f => f.ID);
+                                                            m.ParentId(f => f.ParentID);
+                                                            m.Name(f => f.Name);
+                                                            m.Title(f => f.Title);
+                                                            m.Avatar(f => f.Avatar);
+                                                            m.Expanded(f => f.Expanded);
+                                                        })
+                                                        )
+                                                        )
+                                             
+                                            </div>
+                                        </div>
+
+
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Container-->
+            </div>
+            <!--end::Entry-->
+        </div>
+        <!--end::Content-->
+
+
+
+    </div>
+
+<script id="groupHeaderTemplate" type="text/x-kendo-template">
+     #
+       var orgChart=$('\#orgCharts').data('kendoOrgChart');
+       var ds = orgChart.dataSource;
+       var parent = ds.get(data.value);
+
+       if(parent){
+           #<span>Reports To: <strong>#: parent.name #</strong></span>#
+       }
+     #
+    </strong>
+</script>
+
+
+
+
+
+
+             
+  

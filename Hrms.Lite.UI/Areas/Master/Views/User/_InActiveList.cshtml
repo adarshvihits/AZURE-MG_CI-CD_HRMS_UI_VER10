@@ -1,0 +1,85 @@
+﻿@model Hrms.Lite.Shared.Master.User
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+  
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table user-entry-list-tab-four pt-1">
+        @Html.HiddenFor(m => m.UserList.Count)
+        <table id="inActiveTable" class="common-table ">
+            <thead>
+                <tr class="table-dark">
+
+                    <th scope="col">User ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">User Role</th>
+                    <th data-bs-toggle="tooltip" title="User vs Employee Count" scope="col">Count</th>
+                    <th scope="col">Is Admin</th>
+                    <th scope="col">Valid To</th>
+                    <th scope="col">Password Expiry</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.UserList != null && Model.UserList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.UserList.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.UserList[i].UserMasterGI)
+                        <tr>
+
+                            <td data-label="User Name">@Model.UserList[i].UserName</td>
+                            <td data-label="Employee Name">@Model.UserList[i].EmployeeName</td>
+                            <td data-label="User Role">@Model.UserList[i].UserRole</td>
+                            <td data-label="User vs Emp Count">@Model.UserList[i].Count</td>
+                            <td data-label="Full Permission">@Model.UserList[i].FullPermission</td>
+                            <td data-label="Valid To">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].ValidTo))</td>
+                            <td data-label="Password Expiry">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.UserList[i].PasswordExpiry))</td>
+                            <td data-label="Type">@Model.UserList[i].Type</td>
+                            <td data-label="Actions">
+                                <div>
+                                    <span data-bs-toggle="tooltip" title="Edit"
+                                          type="button"
+                                          class="btn btn-icon btn-edit icon-only" onclick="onEditInActiveUserClick('@Model.UserList[i].UserMasterGI','@Model.UserList[i].Type')">
+                                        <i class="icon-xl fas fa-pencil-alt"></i>
+                                    </span>
+
+
+                                    <!-- delete Slider  start-->
+                                    @*@if (Model.UserList[i].Type != "Essp")
+
+                                    {
+                                        <a id="userMasterESSPDelete" data-bs-toggle="tooltip" title="Delete"
+                                           type="button"
+                                           class="btn btn-icon slider-btn  icon-only mobile-full-width  btn-delete" onclick="onDeleteInActiveClick('@Model.UserList[i].UserMasterGI')">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a id="userMasterESSPDelete" data-bs-toggle="tooltip" title="Delete"
+                                           type="button"
+                                           class="btn btn-icon slider-btn  icon-only mobile-full-width  btn-delete" onclick="onDeleteInActiveEsspClick('@Model.UserList[i].UserMasterGI')">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }*@
+
+                                    <div id="deleteEsspUser">
+
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div id="deleteInActiveUser" class="hide">
+            @await Html.PartialAsync("_DeleteEsspUser")
+        </div>
+
+        @*<div id="deleteEsspUser">
+
+        </div>*@
+    </div>

@@ -1,0 +1,98 @@
+﻿@model Hrms.Lite.Shared.DataBank.EmployeeProvisionUpdate
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "EmployeeProvisionUpdate", FormMethod.Post, new { id = "EmployeeProvisionUpdatesave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Employee Provision Update</h4>
+            </div>
+            <div class="add-padding">
+                <div class="profile-header position-relative box-shadow-none mb-2">
+                    @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+
+
+                    <div class="profile-header-overflow"></div>
+                </div>
+
+
+
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="form-group mb-0">
+                            <label>Allowance</label><span class="Mandatory"></span>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.code)
+                            @Html.HiddenFor(model => Model.AllowanceCode)
+                            <h6>@Html.DisplayFor(model => Model.AllowanceName)</h6>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Amount
+                                <span class="Mandatory">*</span>
+                            </label>
+                               @Html.TextBoxFor(
+                                Model => Model.Amount,
+                                new
+                            {
+                                    @class = "form-control form-control-sm DeptShtName",
+                                    @placeholder = "Amount",
+                                    maxlength = "12",
+                                    inputmode = "decimal",
+                                    oninput = "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');"
+                                }
+                            )
+
+                        </div>
+                        <span id="PranNumberid"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="EmployeeProvisionUpdateSave('Save')">
+                                Save
+                            </button>
+
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+
+                    <button type="button" class="btn btn-default  mobile-full-width" onclick="EmployeeProvisionUpdateSave('Modify')">
+                        Save
+                    </button>
+                            
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

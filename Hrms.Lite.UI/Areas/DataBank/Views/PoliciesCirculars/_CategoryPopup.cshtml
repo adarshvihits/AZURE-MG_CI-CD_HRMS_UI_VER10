@@ -1,0 +1,75 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PoliciesCirculars
+
+    <script src="~/js/tooltip.js"></script>
+
+    <script src="~/scripts/DataBank/policiesCirculars.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Categorysave" }))
+{
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table exitpopup-questionaire-list  vertical-scroll-250">
+        @{var abc = 0;}
+        <table id="CategoryTable">
+            <thead>
+                <tr class="table-light">
+
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">
+                        Policies & Circular
+                        Category
+                    </th>
+
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Category.Count; i++)
+
+                {
+                    abc = i;
+                    <tr id="row_OI_@i">
+
+                        <td data-label="Sl. No" id="grid_slno">@(i+1)</td>
+                        <td data-label="Policies & Circular Category">
+                            <div class="form-group">
+
+                                @Html.HiddenFor(model => Model.Category[i].Code)
+                                @Html.HiddenFor(model => Model.Category[i].GI)
+                                @Html.TextBoxFor(Model => Model.Category[i].Name, new { @class = "form-control form-control-sm" })
+                        </td>
+
+                        <td data-label="Actions">
+                            <a data-bs-toggle="tooltip"  data-bs-original-title="Add"
+                               class="btn btn-icon btn-edit icon-only slider-btn" onclick="AddNewResultRow('CategoryTable')">
+                                <i class="fa fa-plus"
+                                   aria-hidden="true"></i>
+                            </a>
+
+
+                            <!-- delete Slider  start-->
+                            <a data-bs-toggle="tooltip"
+                              data-bs-original-title="Delete"
+                               class="btn btn-icon  icon-only mobile-full-width btn-delete" onclick="DeleteResultRow(@i)">
+                                <i class="icon-xl far fa-trash-alt"></i>
+                            </a>
+
+
+                            <!-- <end delete section></end> -->
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row p-3">
+
+        <div class="col-md-12 align-right ">
+            <button type="button"
+                    class="btn btn-default float-right mobile-full-width" onclick="SaveCategory()">
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+}

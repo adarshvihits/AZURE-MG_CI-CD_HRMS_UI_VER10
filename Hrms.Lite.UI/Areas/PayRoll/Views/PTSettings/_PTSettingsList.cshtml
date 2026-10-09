@@ -1,0 +1,95 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PTSettings
+
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<style>
+    .ihits-table.table-border table thead tr th {
+        /*padding: 10px 7px;*/
+        padding: 12px 13px !important;
+        font-weight: 500;
+    }
+ 
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+
+        
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table Pt-Settings-list vertical-scroll-450">
+            <table class="table form-grid clear fixTable " id="AddNewRow">
+                @Html.HiddenFor(m => m.Details.Count)
+                @{var abc = 0;}
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Salary From</th>
+                        <th scope="col">Salary To</th>
+                        <th scope="col">PT Amount</th>
+                        <th scope="col"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Details != null && Model.Details.Count > 0)
+                    {
+
+                    @for (int i = 0; i < Model.Details.Count; i++)
+                    {
+                        abc = i;
+                        <tr id="row_OI_@i">
+                            <td data-label="Salary From" id="grid_slno">
+                                @*@Html.HiddenFor(Model => Model.Details[i].SalaryFrom)*@
+                                @Html.HiddenFor(Model => Model.PTGroup.Code)
+                                @Html.HiddenFor(Model => Model.Details[i].RowNumber)
+                                @Html.HiddenFor(Model => Model.Details[i].TrnCode)
+                                @Html.TextBoxFor(Model => Model.Details[i].SalaryFrom, new { @class = "form-control form-control-sm", @onkeypress = "return onlyNumberKey(event)",@maxlength="8" })
+                                <span id="salaryfrom_@i" class="spanfrom"></span>
+                            </td>
+                            <td data-label="Salary To">
+                                <div style="position:relative;">
+                                    @Html.TextBoxFor(Model => Model.Details[i].SalaryTo, new { @class = "form-control form-control-sm", @onblur = "validateSalaryTo(" + i + ")", @onkeypress = "return onlyNumberKey(event)", @maxlength = "8" })
+                                    <span id="salaryto_@i" class="spanto"></span>
+                                </div>
+                            </td>
+                            <td data-label="PT Amount">
+                                @*@Html.HiddenFor(Model => Model.Details[i].RateAmount)*@
+                                <div class="form-group">
+                                    @Html.TextBoxFor(Model => Model.Details[i].RateAmount, new { @class = "form-control form-control-sm", @onkeypress = "return onlyAmount(event)", @maxlength = "8", @onblur = "CheckPTAmt("+i+")" })
+                                    <span id="ptamount_@i" class="amountpt"></span>
+                                </div>
+                            </td>
+                            <td data-label="Action">
+                                @*@if (i == Model.Details.Count - 1)
+                                {*@
+                                <div class="d-flex">
+
+                                    <a data-tooltip="Add"
+                                       id="addrowid_@i"
+                                       class="btn-edit  addrowid btn btn-icon  icon-only mobile-full-width slider-btn  " onclick="AddRowGrid('AddNewRow',@i)">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+
+                                    <a data-tooltip="Delete"
+                                       id="deleterowid_@i"
+                                       class="btn btn-icon  icon-only mobile-full-width slider-btn btn-delete deleterowid" onclick="DeleteRw(@i)">
+                                        <i class="icon-xl far fa-trash-alt"></i>
+                                    </a>
+                                </div>
+
+                                @*}*@
+                            </td>
+                        </tr>
+                    }
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+

@@ -1,0 +1,103 @@
+﻿@model Hrms.Lite.Shared.PayRoll.Reports.SalaryReports
+
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table salary-summary-popup mt-5 tble-common-align-poup">
+        <table id="summaryListTableID">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">@Model.groupbyname</th>
+                    <th scope="col">Emp Count</th>
+                    <th scope="col">%</th>
+                    <th scope="col" data-bs-toggle="tooltip" title=""
+                        data-bs-original-title="Gross Allowance">Gross Allow</th>
+                    <th scope="col">%</th>
+                    <th scope="col" data-bs-toggle="tooltip" title=""
+                        data-bs-original-title="Gross Deduction">Gross Ded</th>
+                    <th scope="col">Advance</th>
+                    <th scope="col">Net Pay</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{ var TotalEmpCount = 0;
+                    decimal TotalGrossAllow = 0;
+                }
+                @if (Model.GroupSummary != null && Model.GroupSummary.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.GroupSummary.Count; i++)
+                    {
+                        <tr>
+                            <td data-label="Department">
+                                @Model.GroupSummary[i].Name
+                            </td>
+                            <td data-label="Emp Count">
+                                @Model.GroupSummary[i].Count
+                            </td>
+                            <td data-label="%"> @Model.GroupSummary[i].Count_Perc </td>
+                            <td data-label="Gross Allowance">
+                                @Model.GroupSummary[i].GrossAlw
+                            </td>
+                            <td data-label="%"> @Model.GroupSummary[i].GrossAlw_Perc</td>
+                            <td data-label="Gross Deduction">
+                                @Model.GroupSummary[i].GrossDeduction
+                            </td>
+                            <td data-label="Advance"> @Model.GroupSummary[i].Advance</td>
+                            <td data-label="Net Pay"> @Model.GroupSummary[i].NetPay</td>
+
+
+                            @{
+
+                                TotalEmpCount += Model.GroupSummary[i].Count;
+                                TotalGrossAllow += Model.GroupSummary[i].GrossAlw;
+                            }
+
+                        </tr>
+
+
+                    }
+                }
+
+
+
+                <tr style=" position: sticky; bottom: 0;"
+                    class="table-light">
+                    <td data-label="ID">
+                    </td>
+
+                    <td data-label="No of days">
+                        <strong>@TotalEmpCount</strong>
+                    </td>
+
+
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+
+                    <td data-label="No of days">
+                        <strong>@TotalGrossAllow</strong>
+                    </td>
+
+
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+                    <td data-label="No of days">
+                        <strong></strong>
+                    </td>
+
+                </tr>
+
+
+
+            </tbody>
+
+
+        </table>
+    </div>

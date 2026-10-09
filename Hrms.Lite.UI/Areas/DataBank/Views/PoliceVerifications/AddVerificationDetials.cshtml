@@ -1,0 +1,215 @@
+﻿
+@model Hrms.Lite.Shared.DataBank.PoliceVerification
+
+@{
+    ViewData["Title"] = "Save";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+}
+<script src="~/scripts/DataBank/PoliceVerification.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "Verification_Save", enctype = "multipart/form-data" }))
+{
+    <div id="kt_header" class="header header-fixed">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex align-items-stretch justify-content-between">
+            <!--begin::Header Menu Wrapper-->
+
+
+            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                <!--begin::Header Menu-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h3 class="main-title">Police Verification</h3>
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item ">
+                            <a href="@Url.Action("Index", "Home", new { Area = "" })" class=""><i class="icon-nm fas fa-home"></i></a>
+                        </li>
+
+                        <li class="breadcrumb-item text-muted">
+                            <a href="@Url.Action("Index", "PoliceVerifications", new { Area = "DataBank" })">Police Verification List</a>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            Police Verification
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--begin::Topbar-->
+            <!--end::Topbar-->
+        </div>
+        <!--end::Container-->
+    </div>
+
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+                <div class="row height-100per">
+
+                    <div class="col-md-12">
+                        <div class="card card-custom height-100per">
+
+                            <div class="card-body">
+
+
+                                <div class="profile-header position-relative box-shadow-none" id="PoliceVerEmpHeader">
+
+                                    <div id="VerificationEmployeeHeader">
+                                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+
+                                    </div>
+
+                                    <div class="profile-header-overflow"></div>
+                                </div>
+
+
+                                <div class="page_white">
+                                    <div class="row my-4">
+
+                                        <div class="col-md-3">
+                                            <label>
+                                                Date Of Verification
+                                                <span class="Mandatory">*</span>
+                                            </label>
+                                            <div class="input-group date">
+
+                                                @Html.HiddenFor(Model => Model.EmployeeCode)
+                                                @Html.HiddenFor(Model => Model.EmployeeHeader.EmployeeId)
+                                                @Html.HiddenFor(Model => Model.EmployeeGI)
+                                                @Html.HiddenFor(Model => Model.PoliceVerificationGI)
+
+                                                @Html.TextBoxFor(Model => Model.VerificationDate, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_2 VerDate", @readonly = "true", @placeholder = "Date Of Verification", @onchange = "validate(this,'Vdate')" })
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <span id="Vdate"> </span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>
+                                                    Police Station Details
+                                                    <span class="Mandatory">*</span>
+                                                </label>
+                                                @Html.TextBoxFor(Model => Model.PoliceStationDetails, new { @class = "form-control form-control-sm EShtName", @placeholder = "Police Station Details", @onblur = "validate(this,'details')" })
+                                                <span id="details"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>
+                                                    Details Of Attesting Authority
+                                                    <span class="Mandatory">*</span>
+                                                </label>
+                                                @Html.TextBoxFor(Model => Model.DetailsAuthority, new { @class = "form-control form-control-sm EShtName", @placeholder = "Details Of Attesting Authority", @onblur = "validate(this,'authority')" })
+                                                <span id="authority"></span>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Country</label>
+                                                @Html.DropDownListFor(m => m.Country.Code, (SelectList)ViewBag.Cntry, "--Select Country--", new { @class = "form-control form-control-sm", @onchange = "onCountryChange(this,'country')" })
+
+                                                <span id="country"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>State</label>
+                                                @Html.DropDownListFor(m => m.State.Code, (SelectList)ViewBag.St, "--Select State--", new { @class = "form-control form-control-sm", @onchange = "onStateChange(this,'state')" })
+
+                                                <span id="state"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>District</label>
+                                                @Html.DropDownListFor(m => m.District.Code, (SelectList)ViewBag.Dist, "--Select District--", new { @class = "form-control form-control-sm", @onchange = "onDistrictChangepd(this,'district')" })
+
+                                                <span id="district" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label>Remarks</label>
+                                                    @Html.TextAreaFor(Model => Model.Remarks, new { @class = "form-control form-control-sm LPDescription", @placeholder = "Remarks", maxlength = "250" })
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-3">
+                                                <div class="file-upload-form-group">
+                                                    <label for="formFileMultiple" class="form-label">
+                                                        Attach
+                                                        File
+                                                    </label>
+
+                                                    <div class="file-upload-form mb-1">
+                                                        <div class="small-btn-group">
+                                                            <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="previewDocument()"><i class="icon-xl far fa-eye"></i></button>
+                                                        </div>
+                                                        <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+
+                                                            @Html.TextBoxFor(m => m.Attachment.FileData, new { @type = "file", @class = "form-control PreviewImage", @name = "profile_avatar", onchange = "CheckImageExtensionSize(this)", title = "" })
+                                                            @*@Html.HiddenFor(m => m.Attachment.AbsoluteUri)*@
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+                                    <div class="row card-footer-bottom-fixed">
+
+                                        <div class="col-md-12 align-right">
+                                            <button type="button" class="btn btn-default  mobile-full-width" onclick="SaveVerificationDetails()">
+                                                Save
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--end::Container-->
+        </div>
+        <!--end::Entry-->
+    </div>
+}

@@ -1,0 +1,117 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DailyAttendanceEntry
+<script src="~/js/bootstrap-datepicker.js"></script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "eaEntry_Batch_Form",onsubmit="return ValidateBatchUpdate()"  }))
+    {
+        <div class="slider-forms slider-forms-open eaEntry_Batch_Slider">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('eaEntry_Batch_Slider')"><i class="ki ki-close icon-xs text-muted"></i></div>
+                <h4>
+                    Batch Update
+                </h4>
+                <div class="profile-header position-relative pb-12 mb-5"
+                     style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                    <div class="row">
+                        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+                    </div>
+                    <div class="profile-header-overflow"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Month</label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.Employee_DailyAttendanceBatchUpdate.EmployeeGI)
+                                @Html.HiddenFor(m => m.Employee_DailyAttendanceBatchUpdate.Month.Name)
+                                @Model.Employee_DailyAttendanceBatchUpdate.Month.Name
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>From</label>
+                            <span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.Employee_DailyAttendanceBatchUpdate.From, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_11", @placeholder = "Date", @autocomplete = "off", @onchange = "validate(this, 'eaBatch_from')" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="eaBatch_from"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>To</label>
+                            <span class="Mandatory">*</span>
+                            <div class="input-group date">
+                                @Html.TextBoxFor(m => m.Employee_DailyAttendanceBatchUpdate.To, "{0:dd-MMM-yyyy}", new { @class = "form-control kt_datepicker_11", @placeholder = "Date", @autocomplete = "off", @onchange = "validateToDate(this, 'eaBatch_to')" })
+
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="eaBatch_to"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>First Half</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => Model.Employee_DailyAttendanceBatchUpdate.FirstHalf.Code, (SelectList)ViewBag.AttendenceStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this, 'eaBatch_first'),ValidateStatus(this)" })
+
+                        </div>
+                        <span id="eaBatch_first"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Second Half</label>
+                            <span class="Mandatory">*</span>
+                            @Html.DropDownListFor(m => Model.Employee_DailyAttendanceBatchUpdate.SecondHalf.Code, (SelectList)ViewBag.AttendenceStatus, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validateToDate(this, 'eaBatch_second'),ValidateStatus(this)" })
+
+                        </div>
+                        <span id="eaBatch_second"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            @Html.TextAreaFor(m => m.Employee_DailyAttendanceBatchUpdate.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks", @maxlength = "250" })
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <a type="button" class="btn btn-default  mobile-full-width" onclick="return EmployeedailyAttendanceBatchUpdateSave()">
+                            Update
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    }

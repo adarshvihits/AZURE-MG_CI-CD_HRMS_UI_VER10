@@ -1,0 +1,466 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PostExitProcess
+
+
+<script>
+    $(document).ready(function () {
+        debugger
+        $.ajax({
+
+            type: 'GET',
+            url: '/AccessFile/GetFileStorageType',
+
+            success: function (data) {
+
+                if (data == 'BLOB') ifAzure();
+                else
+
+                    $('.emp_HeaderPic').css('background-image', "url('" + '@Model.EmployeeHeader.EmployeeAbsoluteUri' + "')");
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if ($($.parseHTML(xhr.responseText)).filter(".Login_Session").length > 0) {
+                    window.location.reload();
+                }
+                else {
+                    document.body.id = "kt_body";
+                    $('body').html(xhr.responseText);
+                }
+            }
+        });
+        function ifAzure() {
+            $.ajax({
+                type: "POST",
+                url: "/AccessFile/ViewAsBackGroundImage", // do not hard code your url's
+                data: { filename: '@Model.EmployeeHeader.FileName' },
+                success: function (data, jqXHR, response) {
+
+                    if (jqXHR = "success") {
+                        var mimeType = getMimeTypeFromFilename('@Model.EmployeeHeader.FileName');
+                        debugger
+                        $('.emp_HeaderPic').css('background-image', "url('" + mimeType + data + "')");
+
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        }
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var b = document.getElementById('Attachment1_AbsoluteUri');
+        if (b.value == null || b.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Attachment1_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 10);
+                fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel.innerHTML = "";
+
+            }
+        }
+
+        var b = document.getElementById('Attachment2_AbsoluteUri');
+        if (b.value == null || b.value == "") {
+            fileLabel2.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Attachment2_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 10);
+                fileLabel2.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel2.innerHTML = "";
+
+            }
+        }
+
+
+        var b = document.getElementById('Attachment3_AbsoluteUri');
+        if (b.value == null || b.value == "") {
+            fileLabel3.innerHTML = "No File Chosen";
+        }
+        else {
+            var b = document.getElementById('Attachment3_ActualFileName');
+            if (b.value != '') {
+
+                let replacemnt = '..';
+                theSplit = b.value.slice(0, 10);
+                fileLabel3.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+            }
+            else {
+                fileLabel3.innerHTML = "";
+
+            }
+        }
+
+    });
+
+    function onAttachment1Change() {
+
+        var a = document.getElementById('Attachment1_FileData');
+        if (a.value == "") {
+            fileLabel.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 10);
+            fileLabel.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    }
+
+    function onAttachment2Change() {
+        var a = document.getElementById('Attachment2_FileData');
+        if (a.value == "") {
+            fileLabel2.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 10);
+            fileLabel2.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    }
+    function onAttachment3Change() {
+        var a = document.getElementById('Attachment3_FileData');
+        if (a.value == "") {
+            fileLabel3.innerHTML = "No File Chosen";
+        }
+        else {
+            debugger
+            var theSplit = a.value.split('\\');
+            theSplit = theSplit[theSplit.length - 1];
+            let replacemnt = '..';
+            theSplit = theSplit.slice(0, 10);
+            fileLabel3.innerHTML = theSplit.substring(0, theSplit.length - 2) + replacemnt;
+        }
+    }
+
+
+
+</script>
+<style>
+
+    .filAttachment_FileData {
+        color: white !important;
+    }
+
+    .step-progress-outer .btn.btn-icon i::before {
+        color: #fff;
+    }
+
+    .step-outer .step-item {
+        left: 0px;
+    }
+</style>
+
+
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "Save_PostExit",enctype = "multipart/form-data" }))
+{
+    <div id="empattendancesettings" class="slider-forms slider-forms-open salaryHld">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('salaryHld')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Post Exit Process
+            </h4>
+            <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                <div class="row">
+                    <div class="col-md-2">
+                        @*<div class="image-input image-input-outline image-input-circle float-right" id="kt_image_4" style="background-image: @Model.EmployeeHeader.EmployeeAbsoluteUri">
+                        <div class="image-input-wrapper">
+                        </div>
+                    </div>*@
+                        <div class="image-input image-input-outline image-input-circle  mr-5 emp_HeaderPic" id="kt_image_4">
+                            <div class="image-input-wrapper">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-10 pl-7">
+                        <div class="row">
+
+                            <div class="flex-grow-1">
+                                <!--begin::Title-->
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <div class=" mr-3 header-profile-name">
+                                        <a class="">@Model.EmployeeHeader.EmployeeName</a>
+                                        <a>
+                                            @*( @Model.EmployeeHeader.EmployeeId
+                                        )*@
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                                <!--end::Title-->
+                                <!--begin::Content-->
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="d-flex flex-column flex-grow-1 pr-8">
+                                        <div class="d-flex flex-wrap mb-1">
+                                            <span data-bs-toggle="tooltip" data-bs-original-title="Designation" class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                <i class="fas fa-briefcase icon-nm mr-2"></i>@Model.EmployeeHeader.Designation.Name
+                                            </span>
+                                            <span data-bs-toggle="tooltip" data-bs-original-title="Department" class="header-profile-email mr-5 mb-lg-0 mb-2">
+                                                <i class="fas fa-network-wired icon-nm mr-2"></i>@Model.EmployeeHeader.Department.Name
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-header-overflow"></div>
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="view-title">Location</label>
+                        <div class="view-details">
+                            @Html.HiddenFor(m => m.EmployeeHeader.EmployeeGuid)
+                            @Html.HiddenFor(m => m.EmployeeHeader.EmployeeCode)
+                            @*@Html.HiddenFor(m => m.Location)
+                    @Html.HiddenFor(m => m.GrossDeduction)
+                    @Html.HiddenFor(m => m.GrossSalry)*@
+                            @Html.HiddenFor(m => m.Location)
+                            @Html.DisplayFor(m => m.Location)
+                            @*@Html.TextBoxFor(m => m.Additions)
+                    @Html.TextBoxFor(m => m.Recoveries)*@
+                            @*@Html.TextAreaFor(m => m.Remarks)*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Additions</label>
+                        @*<span class="Mandatory">*</span>*@
+                        @Html.TextBoxFor(m => m.Additions, new
+                   {
+                       @class = "form-control form-control-sm",
+                       @placeholder = "Additions",
+                       style = "width: 100%",
+                       @onkeypress = "return onlyAmount(event)",
+                       @onchange = "NetpayAmount()",
+                       id = "Additions",
+                       @onblur = "validate(this,'holdamnt')"
+
+
+
+
+                   })
+                        <span id="Additions"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="row my-3">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Additions</label>
+                    <div class="view-details">
+
+                        @Html.TextBoxFor(m => m.Additions)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Recoveries</label>
+                    <div class="view-details">
+
+                        @Html.TextBoxFor(m => m.Recoveries)
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+           
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Recoveries</label>
+                    @*<span class="Mandatory">*</span>*@
+                    @Html.TextBoxFor(m => m.Recoveries, new
+               {
+                   @class = "form-control form-control-sm",
+                   @placeholder = "Recoveries",
+                   style = "width: 100%",
+                   @onkeypress = "return onlyAmount(event)",
+                   @onchange = "NetpayAmount()",
+                   id = "Recoveries",
+                   @onblur = "validate(this,'holdamnt')"
+
+
+
+
+               })
+                    <span id="Recoveries"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="view-title">Net Payable</label>
+                    @Html.HiddenFor(m => m.Netpay)
+                    @*@Html.DisplayFor(m => m.Netpay)*@
+                    <div class="view-details">
+                        <span id="Net_Payable">@Model.Netpay</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+            <div class="row">
+
+
+
+
+                <div class="col-md-6">
+                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attachment 1
+                        </label>
+
+                        <div class="file-upload-form mb-1">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.Attachment1.FileName', '@Model.Attachment1.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                            @*<input class="form-control" type="file" id="formFileMultiple" multiple="">*@
+                        <div data-bs-toggle="tooltip"
+                             data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                            @Html.TextBoxFor(m => m.Attachment1.FileData, new { @class = "form-control filAttachment_FileData ", @type = "file", title = "",@onchange="onAttachment1Change()" })
+                            @Html.HiddenFor(m =>m.Attachment1.AbsoluteUri)
+                            @Html.HiddenFor(m =>m.Attachment1.ActualFileName)
+                            <label id="fileLabel" class="nofilelabel notchlabel"></label>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attachment 2
+                        </label>
+
+                        <div class="file-upload-form mb-1">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.Attachment2.FileName', '@Model.Attachment2.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                            @*<input class="form-control" type="file" id="formFileMultiple" multiple="">*@
+                        <div data-bs-toggle="tooltip"
+                             data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                            @Html.TextBoxFor(m => m.Attachment2.FileData, new { @class = "form-control filAttachment_FileData", @type = "file", title = "",@onchange="onAttachment2Change()" })
+                            @Html.HiddenFor(m =>m.Attachment2.AbsoluteUri)
+                            @Html.HiddenFor(m =>m.Attachment2.ActualFileName)
+                            <label id="fileLabel2" class="nofilelabel notchlabel"></label>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-md-6">
+                    <div class="file-upload-form-group">
+                        <label for="formFileMultiple" class="form-label">
+                            Attachment 3
+                        </label>
+
+                        <div class="file-upload-form mb-1">
+                            <div class="small-btn-group">
+                                <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="showDocument('@Model.Attachment3.FileName', '@Model.Attachment3.AbsoluteUri')"><i class="icon-xl far fa-eye"></i></button>
+                            </div>
+                            @*<input class="form-control" type="file" id="formFileMultiple" multiple="">*@
+                        <div data-bs-toggle="tooltip"
+                             data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+                            @Html.TextBoxFor(m => m.Attachment3.FileData, new { @class = "form-control filAttachment_FileData", @type = "file", title = "" ,@onchange="onAttachment3Change()"})
+                            @Html.HiddenFor(m =>m.Attachment3.AbsoluteUri)
+                            @Html.HiddenFor(m =>m.Attachment3.ActualFileName)
+                            <label id="fileLabel3" class="nofilelabel notchlabel"></label>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Remarks</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextAreaFor(m => m.Remark, new
+               {
+                   @class = "form-control form-control-sm",
+                   @placeholder = "Remarks",
+                   style = "width: 100%",
+                        @onblur = "validate(this,'remarks')"
+
+
+
+               })
+                    <span id="remarks"></span>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+                <div class="col-md-12 align-right">
+                    <a type="button"
+                       class="btn btn-default  mobile-full-width" onclick="Save()">
+                        Save
+                    </a>
+                </div>
+            </div>
+        </div>
+        </div>
+}

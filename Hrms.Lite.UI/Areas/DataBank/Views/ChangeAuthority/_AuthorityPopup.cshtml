@@ -1,0 +1,56 @@
+﻿@model Hrms.Lite.Shared.DataBank.ChangeAuthority
+<script>
+    $('.AUTHSEARCH').selectpicker();
+
+</script>
+    <div class="profile-header position-relative box-shadow-none mb-2">
+        @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+        @Html.HiddenFor(m => m.EmployeeGI)
+        <div class="profile-header-overflow"></div>
+    </div>
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-1 Change-Authority-Popup-List">
+        @Html.HiddenFor(m => m.TrnCode)
+        @Html.HiddenFor(m => m.WorkflowCode)
+        @Html.HiddenFor(m => m.EmployeeCode)
+        @Html.HiddenFor(Model => Model.LevelAuthorityList.Count)
+        <table class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Level</th>
+                    <th scope="col">Authority</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.LevelAuthorityList != null && Model.LevelAuthorityList.Count > 0)
+                {
+                    for (int i = 0; i < Model.LevelAuthorityList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(Model => Model.LevelAuthorityList[i].TrnCode)
+                            @Html.HiddenFor(Model => Model.LevelAuthorityList[i].LevelCode)
+
+                            <td data-label="Level">@Model.LevelAuthorityList[i].Level</td>
+                            <td data-label="Authority">
+                                <div class="slider-search-field">
+                                    @Html.DropDownListFor(m => m.LevelAuthorityList[i].Authority.Code, (SelectList)ViewBag.Authority, "Search by Employee name/ID", new
+                                  {
+                                      @class = "selectpicker sliderSearchInput form-control form-control-sm AUTHSEARCH",
+                                      data_show_subtext = "true",
+                                      data_live_search = "true"
+                                  })
+                                </div>
+                                @*@Html.DropDownListFor(m => Model.LevelAuthorityList[i].Authority.Code, new SelectList(ViewBag.Authority, "Value", "Text", Model.LevelAuthorityList[i].Authority.Code), "Select", new { @class = "form-control form-control-sm"})*@
+                                <span id="Authority_@i"></span>
+                            </td>
+                            <td data-label="Action">
+                                <div class="small-btn-group" id="updatecancel_@i">
+                                    <button type="button" data-bs-toggle="tooltip" title="Update" class="btn btn-icon btn-update btn-cancel icon-only"><i class="icon-xl fas fa-sync-alt update-icon" onclick="onUpdateClick('@Model.LevelAuthorityList[i].TrnCode', '@Model.LevelAuthorityList[i].LevelCode',@Model.TrnCode,@i)"></i> </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>

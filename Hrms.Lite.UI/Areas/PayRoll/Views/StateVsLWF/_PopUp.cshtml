@@ -1,0 +1,115 @@
+﻿@model Hrms.Lite.Shared.PayRoll.LWFSettings
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Contribution_PopUp" }))
+{
+
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    Employee's Contribution
+                    <span class="Mandatory">*</span>
+                </label>
+          
+                @*@Html.HiddenFor(model => Model.Description)*@
+                @Html.HiddenFor(m=>Model.StateCode)
+                @Html.TextBoxFor(Model => Model.ELWF, new { @class = "form-control form-control-sm", @placeholder = "Employee's Contribution", @onblur = "OnlycapitalizeFirstLetter(this,'elwf')", maxlength = "120" })
+                <span id="elwf"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    Employer's Contribution
+                    <span class="Mandatory">*</span>
+                </label>
+                @Html.TextBoxFor(Model => Model.MLWF, new { @class = "form-control form-control-sm DesShtName", @placeholder = "Employer's Contribution", @onblur = "validate(this,'mlwf')", maxlength = "5" })
+
+                <span id="mlwf"></span>
+            </div>
+        </div>
+
+    </div>
+
+  
+    
+    
+    
+    <div style="padding:0px 10px;" class="ihits-table table-border hover-color odd-even mobile-responsive-table emp-group-list-table vertical-scroll-180">
+
+
+
+        <br>
+        <table id="PopUptable">
+            <thead>
+
+
+                <tr class="table-light">
+
+
+
+                    <th scope="col">Month</th>
+                    <th scope="col">
+                        <div class="checkbox-inline justify-content-center pl-3">
+                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                <input type="checkbox" name="Checkboxes16" id="Con_Checkbox" onchange="OnCheckBoxAllClick('Con_Checkbox','PopUptable')">  <span></span>
+                            </label>
+                        </div>
+                    </th>
+
+
+                </tr>
+
+            </thead>
+            <tbody>
+                @if (Model.LWFSettingsStateDetailsList != null && Model.LWFSettingsStateDetailsList.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.LWFSettingsStateDetailsList.Count; i++)
+                    {
+
+                        <tr>
+
+                           
+
+                            <td data-label="Department">@Model.LWFSettingsStateDetailsList[i].Month</td>
+                            <td data-label="Count">
+                                <div class="checkbox-inline justify-content-center">
+                                    <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                                        @*<input type="checkbox" name="Checkboxes16">*@
+                                        @Html.HiddenFor(m => Model.LWFSettingsStateDetailsList[i].MonthCode)
+                                        @Html.CheckBoxFor(m => m.LWFSettingsStateDetailsList[i].Applicability, new { @onclick = "onChkBoxClick(this,'Con_Checkbox','PopUptable')" })
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                            </td>
+
+
+
+
+                        </tr>
+
+                    }
+                }
+
+            </tbody>
+        </table>
+
+        <div class="mt-3 mb-2">
+            <button type="button" style="float:right" class="btn btn-default  mobile-full-width" onclick="OnSaveClick()">
+                Save
+            </button>
+        </div>
+
+        @*<div class="mt-3 mb-2">
+            <button type="button" style="float:right" class="btn btn-default  mobile-full-width" onclick="OnCancelClick()">
+                Cancel
+            </button>
+        </div>*@
+
+    </div>
+}

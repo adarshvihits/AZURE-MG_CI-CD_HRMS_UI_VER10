@@ -1,0 +1,97 @@
+﻿@model Hrms.Lite.Shared.Master.Asset
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script src="~/js/settings.js"></script>
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        $('.AllTabCount').html("@Model.ActiveCount");
+        $('.InActiveTabCount').html("@Model.InactiveCount");
+        $('.pendingTabCount').html("@Model.PendingCount");
+
+
+    });
+</script>
+<div class="ihits-table table-border  odd-even mobile-responsive-table asset-master-list pt-1">
+    <table id="AssetMasterTable" class="common-table dt-width-fix">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Name</th>
+                <th scope="col">Short Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Code</th>
+                <th scope="col">Status</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.AssetList != null && Model.AssetList.Count > 0)
+                {
+                    for (int i = 0; i < Model.AssetList.Count; i++)
+
+                    {
+                        <tr>
+                            @Html.HiddenFor(m => m.AssetList[i].EditActive)
+                            <td data-label="Name">
+                                @Model.AssetList[i].Name
+                                @Html.HiddenFor(m => Model.AssetList.Count)
+                            </td>
+                            <td data-label="Short Name">  @Model.AssetList[i].ShortName</td>
+                            <td data-label="Category"> @Model.AssetList[i].AssetCategory.Name</td>
+                            <td data-label="Code"> @Model.AssetList[i].AssetCode</td>
+                            <td data-label="Status"> @Model.AssetList[i].Status</td>
+                            <td data-label="Actions"> @Model.AssetList[i].Condition.Name</td>
+
+                            <td data-label="Condition">
+                                <div>
+                                    @if (CurrentUserRoleActions.Modify == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addAssetMaster"
+                                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.AssetList[i].GI', '@Model.AssetList[i].LogGI',@i)">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Edit"
+                                           id="addAssetMaster"
+                                           class="btn btn-icon btn-edit icon-only" onclick="AddNewOrEditClick('MODIFY', '@Model.AssetList[i].GI', '@Model.AssetList[i].LogGI',@i);
+                                           swal.fire(MasterPersmissionMsg).then(function () { DisableAllElements('#newRequestSlider'); });">
+                                            <i class="icon-xl fas fa-pencil-alt"></i>
+                                        </a>
+                                    }
+                                    @if (CurrentUserRoleActions.Delete == true)
+                                    {
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="deletecountry"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.AssetList[i].GI', '@Model.AssetList[i].LogGI','DELETE',@i)">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {                                     
+                                        <a data-bs-toggle="tooltip" title="Delete"
+                                           id="deletecountry"
+                                           class="btn btn-icon  icon-only mobile-full-width  btn-delete" onclick="onDeleteClick('@Model.AssetList[i].GI', '@Model.AssetList[i].LogGI', 'DELETE',@i);
+                                           swal.fire(MasterPersmissionMsg);">
+                                            <i class="icon-xl far fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>

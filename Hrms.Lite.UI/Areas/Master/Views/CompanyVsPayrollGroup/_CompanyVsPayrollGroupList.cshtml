@@ -1,0 +1,118 @@
+﻿@model Hrms.Lite.Shared.Master.CompanyVsPayrollGroup
+<script src="~/js/tooltip.js"></script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "CompanyVsPayrollGroup" }))
+
+{
+
+    <style>
+
+        /* CompanyVsPayRollGroup   */
+        .CompanyVsPayRollGroup table thead tr th:nth-child(1),
+        .CompanyVsPayRollGroup table tbody tr td:nth-child(1) {
+            width: 50% !important;
+        }
+
+        .CompanyVsPayRollGroup table thead tr th:nth-child(2),
+        .CompanyVsPayRollGroup table tbody tr td:nth-child(2) {
+            width: 40% !important;
+            align-items: end;
+        }
+
+
+        .CompanyVsPayRollGroup table thead tr th:nth-child(3),
+        .CompanyVsPayRollGroup table tbody tr td:nth-child(3) {
+            width: 10% !important;
+            align-items: end;
+        }
+
+    </style>
+    <div class="ihits-table table-border mobile-responsive-table CompanyVsPayRollGroup vertical-scroll-500">
+
+        <table id="CompanyVsPayrollGroupListTable">
+            <thead>
+                <tr class="table-dark">
+
+
+                    <th scope="col">PayrollGroup</th>
+                    <th></th>
+                    <th scope="col">Select</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CompanyVsPayrollGroupList != null && Model.CompanyVsPayrollGroupList.Count > 0)
+                {
+                    for (int i = 0; i < Model.CompanyVsPayrollGroupList.Count; i++)
+                    {
+                <tr>
+
+                    <td>@Model.CompanyVsPayrollGroupList[i].Name </td>
+
+
+
+                    <td >
+
+                        @Html.HiddenFor(m => m.CompanyVsPayrollGroupList[i].PayrollGroupCode)
+                        @Html.HiddenFor(m => m.Code)
+                        @Html.HiddenFor(m => m.CompanyVsPayrollGroupList[i].GroupCompanyCode)
+                    </td>
+
+
+
+
+
+
+
+
+                    <td>
+
+
+
+
+
+
+
+
+
+
+                        <div class="checkbox-inline">
+                            <label class="checkbox checkbox-outline checkbox-success">
+                                @Html.CheckBoxFor(m => m.CompanyVsPayrollGroupList[i].Applicable)@*, new { @onclick = "onChkBoxClick(this,'AllListTable')" })*@
+                                <span></span>
+                            </label>
+                        </div>
+
+                </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align: center;display: flex;align-items: center;justify-content: center;height: 60vh;"><img src="/images/nodata.png" /></div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row card-footer-bottom-fixed">
+            @if (Model.CompanyVsPayrollGroupList != null && Model.CompanyVsPayrollGroupList.Count > 0)
+            {
+                <div class="col-md-9">
+                    <span class="row-count align-left"><b>Total Rows:<span id="rwCnt">@Model.CompanyVsPayrollGroupList.Count</span></b></span>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-default float-right mobile-full-width" id="saveButton" type="button" onclick="onSaveApplicabilityClick()">
+                        Save
+                    </button>
+
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Table Setion End -->
+}

@@ -1,0 +1,147 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "creditEmpSave" , enctype = "multipart/form-data" }))
+{
+    <div id="creditcheckinglist" class="slider-forms slider-forms-open op_checking">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('op_checking')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            @if (Model.FormName == "CreditChecking")
+            {
+                <h4>
+                    Credit Check
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Employment Check
+                </h4>
+            }
+            <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+                @await Html.PartialAsync("~/Areas/Recruitment/Views/OfferProcessing/_SliderHeader.cshtml",Model)
+                @Html.HiddenFor(m=>m.CreditChecking.PreEnrollGI)
+                <div class="profile-header-overflow"></div>
+            </div>
+            <div class="row my-2">
+
+                <div class="col-md-6">
+                    <label class="view-title">
+                        MRF No
+                    </label>
+                    <div class="view-details">
+                        @Model.JobCode
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="view-title">
+                        Job Title
+                    </label>
+                    <div class="view-details">
+                        @Model.JobTitle
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row my-2">
+                <div class="col-md-6">
+                    <label class="view-title">
+                      Deadline
+                    </label>
+                    <div class="view-details">
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.NeedByDate))
+                    </div>
+                </div>
+                @*<div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>Selection </label>
+                        @Html.DropDownListFor(model => model.CreditChecking.SelectionStatus,
+                        new List<SelectListItem>
+                            {
+                            new SelectListItem {  Value= "1" , Text = "Passed" },
+                            new SelectListItem { Value = "0" , Text = "Failed" },
+
+                            },
+                            new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>*@
+
+            </div>
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+                    <label>Remarks</label>
+                    @Html.TextAreaFor(m => m.CreditChecking.Remarks, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+
+            <div class="row my-2">
+                @if (Model.FormName == "CreditChecking")
+                {
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Credit Score</label>
+                            @Html.TextBoxFor(m => m.CreditChecking.CreditScore, new { @class = "form-control", @placeholder = "Credit Score",@onblur= "validate(this,'credScore')" })
+                        </div>
+                        <span id="credScore"></span>
+                    </div>
+                }
+                    <div class="col-md-6">
+                        <div class="file-upload-form-group">
+                            <label for="formFileMultiple" class="form-label">
+                                File Upload
+                            </label>
+
+                            <div class="file-upload-form mb-1">
+                                <div class="small-btn-group">
+                                    <button type="button" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="View Image" class="btn btn-icon btn-default" onclick="Preview()"><i class="icon-xl far fa-eye"></i></button>
+                                </div>
+                                <div data-bs-toggle="tooltip" data-bs-original-title=" Only pdf, doc, docx files
+                                            are
+                                            allowed , File size less than 1 MB.">
+
+
+                                    @Html.TextBoxFor(model => model.CreditChecking.Attachment.FileData, null, new { type = "file", @class = "input-file PreviewImage", @onchange = "CheckImageExtensionSize(this)", title = "" })
+                                </div>
+                            </div>
+                     
+                        
+                              
+                            </div>
+
+                    </div>
+
+
+
+
+                    <div class="row card-footer-bottom-fixed border-none">
+                        @if (Model.FormName == "CreditChecking")
+                        {
+                            <div class="col-md-12 align-right">
+                                <button type="button"
+                                        class="btn btn-default  mobile-full-width" onclick="saveCheck('CreditChecking')">
+                                    Save
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-12 align-right">
+                                <button type="button"
+                                        class="btn btn-default  mobile-full-width" onclick="saveCheck('EmployeementChecking')">
+                                    Save
+                                </button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+        </div>
+  </div>
+}

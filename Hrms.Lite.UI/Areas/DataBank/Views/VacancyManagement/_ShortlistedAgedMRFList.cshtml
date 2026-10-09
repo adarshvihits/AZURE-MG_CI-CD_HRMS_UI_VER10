@@ -1,0 +1,56 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.VacancyManagement
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+    <div class="ihits-table table-border odd-even mobile-responsive-table overdue-list new-tble-pad-tp">
+        @Html.HiddenFor(m => m.VacancyManagement_List.Count)
+        <table id="ShortlistedAgedMRFTbl" class="common-table">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">MRF No.</th>
+                    <th scope="col">Job Title</th>
+                    @*<th scope="col" data-bs-toggle="tooltip" title="Requested Date">Req Date</th>*@
+                    <th scope="col">Location</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Deadline</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Number of Requirements">N/Req</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Days Left">D.L.</th>
+                    <th scope="col" data-bs-toggle="tooltip" title="Mapped Resumes">Resumes</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.VacancyManagement_List != null && Model.VacancyManagement_List.Count > 0)
+                {
+
+
+                    for (int i = 0; i < Model.VacancyManagement_List.Count; i++)
+
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementGI)
+                            @Html.HiddenFor(model => Model.VacancyManagement_List[i].VacancyManagementCode)
+                            <td data-label="Code">@Model.VacancyManagement_List[i].JobCode</td>
+                            <td data-label="Job Title"> @Model.VacancyManagement_List[i].JobTitle</td>
+                            @*<td data-label="Requsted Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].RequestedDate))</td>*@
+                            <td data-label="Location">@Model.VacancyManagement_List[i].Location</td>
+                            <td data-label="Region">@Model.VacancyManagement_List[i].Region</td>
+                            <td data-label="Need by Date">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", Model.VacancyManagement_List[i].NeedByDate))</td>
+                            <td data-label="No of Requirements"> @Model.VacancyManagement_List[i].NoOfRequirements</td>
+                            @if (@Model.VacancyManagement_List[i].Aging < 0)
+                            {
+                                <td data-label="Days Left"><span class="text-color-low">@Model.VacancyManagement_List[i].Aging</span></td>
+                            }
+                            else
+                            {
+                                <td data-label="Days Left"><span class="text-color-high">@Model.VacancyManagement_List[i].Aging</span></td>
+                            }
+                            <td data-label="Resumes"> @Model.VacancyManagement_List[i].MappedResumes</td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>

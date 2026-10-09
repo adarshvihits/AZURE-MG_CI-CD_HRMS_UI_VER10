@@ -1,0 +1,678 @@
+﻿@model Hrms.Lite.Shared.DashBoard.RecruitmentDashBoard
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/scripts/DashBoard/recruitmentDashBoard.js"></script>
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Dashboard</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="dashboard.html"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Recuritment
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body" style=" padding: 15px 50px; ">
+
+
+                    <!-- Dashboard start here -->
+                    <!-- top section start here -->
+
+                    <div class="row">
+
+                        <div class="col-xl-3">
+                            <div class="card gutter-b gutter-set newlist" style="height: 95px" data-bs-toggle="modal" data-target=".outstandloanbalance">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x " style="padding:6px 0px; padding-left:0px !important; padding-right:0px !important;">
+                                        <div class="form-group pb-3" style="border-radius:8px;">
+
+                                            @*@Html.DropDownListFor(m => m.ClassificationType.Code, (SelectList)ViewBag.ClassifnType, new { @class = "form-control form-control-sm", @style = "height:35px;", @onchange = "onClassfnTypeChange(this)" })*@
+
+                                        </div>
+
+
+                                        <div class="form-group" style="border-radius:8px;">
+                                            @*@Html.DropDownListFor(m => m.Classification.Code, (SelectList)ViewBag.Classifn, "All", new { @class = "form-control form-control-sm", @style = "height:35px;", @onchange = "onClassfnChange(this)" })*@
+
+                                        </div>
+
+
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+
+                        </div>
+
+
+                        <!--begin::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b gutter-set remove-size" style="height: 95px">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-5">
+
+                                        <div class="d-flex">
+
+
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center pt-3">
+                                            <div class="d-flex align-items-center">
+                                                <span class="approval_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="/images/icons/onboarding-pending.svg">
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <a href="@Url.Action("Index", "VacancyManagement", new { Area="DataBank"})" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Active Vacancy</a>
+                                            </div>
+                                            <div class="">
+                                                <div class="approval_count pr-3">@Model.ActiveVacancy</div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--end::Tiles Widget 2-->
+                        <div class="col-xl-3">
+                            <!--begin::Tiles Widget 3-->
+                            <div class="card gutter-b gutter-set remove-size" style="height: 95px">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+
+
+
+
+                                        <div class="d-flex justify-content-between align-items-center pt-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="approval_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="/images/icons/notebook.svg">
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">
+                                                    Over Due Vacancy
+                                                </a>
+                                            </div>
+                                            <div class="">
+                                                <div class="approval_count pr-3">@Model.OverDueVacancy</div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Tiles Widget 3-->
+                        </div>
+
+
+
+                        <!--begin::Tiles Widget 4-->
+                        <div class="col-xl-3">
+                            <div class="card gutter-b gutter-set remove-size" style="height:95px" data-bs-toggle="modal" data-target=".fandfpendingcount">
+                                <!--begin::Body-->
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <!--begin::Stats-->
+                                    <div class="flex-grow-1 card-spacer-x pt-6">
+                                        <div class="d-flex">
+
+
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center pt-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="approval_icon">
+                                                    <!--start::Svg Icon-->
+
+                                                    <img src="~/images/icons/F&F.svg" />
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Critical Vacancies</a>
+                                            </div>
+                                            <div class="">
+                                                <div class="approval_count pr-3">@Model.CriticalVacancy</div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--end::Stats-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                        </div>
+                        <!--begin::Tiles Widget 4-->
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xl-6">
+
+
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="row middile_section">
+                                        <div class="col-xl-6">
+                                            <!--begin::Stats Widget 1-->
+                                            <div class="card gutter-b gutter-set">
+                                                <!--begin::Body-->
+                                                <div class="card-body active_employee flex-grow-1 card-spacer-x  recruitment-grow">
+
+                                                    <div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-3 bottom_border">
+
+
+
+                                                            <div class="active_employee_icon">
+                                                                <!--start::Svg Icon-->
+
+                                                                <img src="~/images/icons/Active_Employees.svg" />
+                                                                <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3" href="#">Posted MRF </a>
+
+                                                                <!--end::Svg Icon-->
+                                                            </div>
+
+
+                                                            <div>
+                                                                <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.PostedMRF</span>
+                                                            </div>
+
+
+                                                        </div>
+
+
+
+
+                                                        <div class="d-flex align-items-center justify-content-between ">
+
+
+                                                            <div class="active_employee_icon">
+                                                                <!--start::Svg Icon-->
+
+                                                                <img src="~/images/icons/my-applicability.svg" />
+
+                                                                <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3" href="@Url.Action("Index", "JobPosting", new { Area="DataBank"})">Pending For Post</a>
+                                                                <!--end::Svg Icon-->
+                                                            </div>
+
+
+                                                            <div>
+                                                                <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.PendingForPost</span>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+                                                </div>
+                                                <!--end::Body-->
+                                            </div>
+                                            <!--end::Stats Widget 1-->
+                                        </div>
+
+
+
+                                        <div class="col-xl-6">
+                                            <!--begin::Stats Widget 1-->
+                                            <div class="card gutter-b gutter-set">
+                                                <!--begin::Body-->
+                                                <div class="card-body active_employee flex-grow-1 card-spacer-x recruitment-grow">
+
+
+                                                    <div class="d-flex align-items-center justify-content-between mb-3 bottom_border">
+
+
+
+                                                        <div class="active_employee_icon">
+                                                            <!--start::Svg Icon-->
+
+                                                            <img src="~/images/icons/Active_Employees.svg" />
+                                                            <a data-bs-toggle="modal" data-target=".HR_approve" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3" href="@Url.Action("Index", "ApplicantTracking", new { Area="DataBank"})">Short Listed</a>
+
+                                                            <!--end::Svg Icon-->
+                                                            <!--popup content start-->
+                                                            <!--popup content start-->
+
+
+
+
+                                                        </div>
+
+
+                                                        <div>
+                                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.ShortListed</span>
+                                                        </div>
+
+
+                                                    </div>
+
+
+
+
+                                                    <div class="d-flex align-items-center justify-content-between ">
+
+
+                                                        <div class="active_employee_icon">
+                                                            <!--start::Svg Icon-->
+
+                                                            <img src="~/images/icons/calendar-due.svg" />
+
+                                                            <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3" href="@Url.Action("InterviewOrEvaluation", "ApplicantTracking", new { Area="DataBank"})">Short Listed Interview</a>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+
+
+                                                        <div>
+                                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.ShortListedInterview</span>
+
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+                                                </div>
+                                                <!--end::Body-->
+                                            </div>
+                                            <!--end::Stats Widget 1-->
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="row middile_section">
+                                        <div class="col-xl-6">
+                                            <!--begin::Stats Widget 1-->
+                                            <div class="card gutter-b gutter-set">
+                                                <!--begin::Body-->
+                                                <div class="card-body active_employee flex-grow-1 card-spacer-x recruitment-grow">
+
+
+                                                    <div class="d-flex justify-content-between align-items-center pt-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="approval_icon">
+                                                                <!--start::Svg Icon-->
+
+                                                                <img src="~/images/icons/F&F.svg" />
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            <a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Vacancy Closed This Week</a>
+                                                        </div>
+                                                        <div class="">
+                                                            <div class="approval_count pr-3">@Model.VacancyClosedThisWeek</div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--end::Body-->
+                                            </div>
+                                            <!--end::Stats Widget 1-->
+                                        </div>
+
+
+
+                                        <div class="col-xl-6">
+                                            <!--begin::Stats Widget 1-->
+                                            <div class="card gutter-b gutter-set">
+                                                <!--begin::Body-->
+                                                <div class="card-body active_employee flex-grow-1 card-spacer-x recruitment-grow">
+
+
+                                                    <div class="d-flex justify-content-between align-items-center pt-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="approval_icon">
+                                                                <!--start::Svg Icon-->
+
+                                                                <img src="~/images/icons/F&F.svg" />
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            <a href="@Url.Action("FinalApprovalList", "ApplicantTracking", new { Area="DataBank"})" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Final Approval	</a>
+                                                        </div>
+                                                        <div class="">
+                                                            <div class="approval_count pr-3">@Model.FinalApproval</div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--end::Body-->
+                                            </div>
+                                            <!--end::Stats Widget 1-->
+                                        </div>
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                        <div class="col-xl-2">
+                            <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                <div class="card card-body graph-grow" style=" height: 240px; ">
+                                    <div class="new-offer text d-flex align-items-center">
+                                        <div class="percent">
+                                            <h3>@Model.OfferAccpRatio</h3>
+                                            <div class="offer-accpt">Offer Acceptance Ratio</div>
+                                            <div class="eight">@Model.Offeraccepted</div>
+                                            <div>Offer Accepted</div>
+                                            <hr />
+                                            <div class="eight">@Model.OfferRejected</div>
+                                            <div>
+                                                Offer Rejected
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin::Tiles salary section -->
+                        @*<div class="col-xl-4">
+                                <div class="card gutter-b " >
+                                    <div class="row">
+                                        <div class="col-xl-12 ">
+                                           <div class="fummel-img">
+                                               <img src="~/images/exp6.png"/>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+                        <div class="col-xl-4">
+                            <div class="card-body d-flex flex-column p-0" style="position: relative; height:240px;">
+                                <div class="card card-body graph-grow">
+                                    <div class="graph-pie">
+                                        <img src="~/images/pie.jpg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin::Tiles salary section -->
+
+
+
+
+
+
+
+
+
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <div class="col-xl-4">
+                            <div class="card-body d-flex flex-column p-0" style="position: relative; height:250px;">
+                                <div class="card card-body graph-grow ">
+                                    <div class="graph-new">
+                                        <img src="~/images/horizontal_full.png" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4">
+                            <!--begin::Stats Widget 1-->
+                            <div class="card gutter-b remove-gutter" style="height:250px" ;>
+                                <!--begin::Body-->
+                                <div class="card-body active_employee flex-grow-1 card-spacer-x pt-8">
+
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3 bottom_border">
+
+
+
+                                        <div class="active_employee_icon">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/onboarding-pending.svg" />
+                                            <a class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Offer Processing</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+
+                                        <div>
+                                            <span class="text-dark-75 font-weight-bolder font-size-h3">@Model.OfferProcessing</span>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+
+                                        <div class="pre_env_appr">
+                                            <!--start::Svg Icon-->
+
+                                            <img src="~/images/icons/pre_env_appr.svg" />
+                                            <a class="text-dark font-size-h3 text-hover-primary" href="@Url.Action("OfferVerification", "OfferProcessing", new { Area="Recruitment"})">Offer Verification</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+                                        <div class="pre_env_count">@Model.OfferVerification</div>
+
+
+
+                                    </div>
+
+
+
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+
+                                        <div class="pre_env_appr">
+                                            <!--start::Svg Icon-->
+                                            <img src="~/images/icons/joining_confirmation.svg" />
+                                            <a class="text-dark font-size-h3 text-hover-primary" href="@Url.Action("CreditChecking", "OfferProcessing", new { Area="Recruitment"})">Credit Checking</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+                                        <div class="pre_env_count">
+                                            @Model.CreditChecking
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+
+                                        <div class="pre_env_appr">
+                                            <!--start::Svg Icon-->
+                                            <img src="~/images/icons/joining_confirmation.svg" />
+                                            <a class="text-dark font-size-h3 text-hover-primary" href="@Url.Action("EmployeementChecking", "OfferProcessing", new { Area="Recruitment"})">Employment Checking</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+                                        <div class="pre_env_count">
+                                            @Model.EmploymentChecking
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+
+                                        <div class="pre_env_appr">
+                                            <!--start::Svg Icon-->
+                                            <img src="~/images/icons/joining_confirmation.svg" />
+                                            <a class="text-dark font-size-h3 text-hover-primary" href="@Url.Action("OfferInitiation", "OfferProcessing", new { Area="Recruitment"})">Offer Initalize</a>
+
+                                            <!--end::Svg Icon-->
+                                        </div>
+
+                                        <div class="pre_env_count">
+                                            @Model.OfferInitialize
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::Stats Widget 1-->
+                        </div>
+                        @*<div class="col-xl-4">
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <div class="card card-body graph-grow" style=" height: 280px; ">
+                                        <div class="new-offer text d-flex align-items-center justify-content-center">
+                                            <div class="percent">
+
+                                                <div class="eight">18</div>
+                                                <div>Offer Verification</div>
+                                                <hr />
+                                                <div class="eight">23</div>
+                                                <div>
+                                                    Credit Check
+                                                </div>
+                                                <hr />
+                                                <div class="eight">23</div>
+                                                <div>
+                                                    Employee Check
+                                                </div>
+                                               <hr />
+                                                <div class="eight">23</div>
+                                                <div>
+                                                    Offer
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*<div class="col-xl-2">
+                                <div class="card-body d-flex flex-column p-0" style="position: relative;">
+                                    <div class="card card-body graph-grow" style=" height: 280px; ">
+                                        <div class="new-offer text d-flex align-items-center">
+                                            <div class="percent">
+                                                <h3>70%</h3>
+                                                <div class="offer-accpt">Offer Acceptance Ratio</div>
+                                                <div class="eight">18</div>
+                                                <div>Offer Accepted</div>
+                                                <hr />
+                                                <div class="eight">23</div>
+                                                <div>
+                                                    Offer Rejected
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="col-xl-4">
+                            <div class="card gutter-b  remove-gutter" style="height:250px;">
+                                <div class="row">
+                                    <div class="col-xl-12 ">
+                                        <div class="fummel-img">
+                                            <img src="~/images/exp6.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

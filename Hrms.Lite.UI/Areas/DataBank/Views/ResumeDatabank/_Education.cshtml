@@ -1,0 +1,166 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.ResumeDataBank
+
+
+<script>
+    $(document).ready(function () {
+        $(".YrCompltn").datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years",
+            autoclose: true
+        });
+
+    });
+
+</script>
+<style>
+    .step-outer .step-item {
+        left: 0px;
+    }
+</style>
+
+
+<div class="step-outer ">
+
+    <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Basic')">
+        Basic Details
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Address')">
+        Address
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onTabNameClick('Rd_Experience')">
+        Experience
+        <span class="step-circle"></span>
+    </a>
+    <div class="step-item active">
+        Education
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Certifications
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Skills
+        <span class="step-circle"></span>
+    </div>
+    <div class="step-item">
+        Summary
+        <span class="step-circle"></span>
+    </div>
+</div>
+
+
+<div class="step-progress-outer">
+
+    <div class="step-demo col-md-5">
+        <img src="~/images/resume_template.png" style="max-width: 100%;" />
+    </div>
+
+
+    <div class="step-left col-md-7">
+
+
+
+        <div class="resumegrid_repeat my-3 education_Outer">
+            <h2>Education</h2>
+            @{
+                if (Model.Education != null && Model.Education.Count > 0)
+                {
+
+                    for (int i = 0; i < Model.Education.Count; i++)
+                    {
+                        <div class="Rdeducation" id="education_div_@i">
+
+                            <div class="row my-2">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Qualification Type</label><span class="Mandatory">*</span>
+                                        @Html.DropDownListFor(m => m.Education[i].QualificationType.Code, (SelectList)ViewBag.QualifnType, "--Select--", new { @class = "form-control form-control-sm ifEduEmpty", @onchange = "onQualifnTypeChange(this," + @i + ")" })
+
+                                        <span id="rd_Qualtype_@i" class="rd_Edu_Span_Qualtype"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Qualification</label><span class="Mandatory">*</span>
+                                        @Html.DropDownListFor(m => m.Education[i].Qualification.Code, new SelectList(Model.Education[i].QualifnDropdown, "Code", "Name"), "--Select--", new { @class = "form-control form-control-sm ifEduEmpty", @onchange = "onQualifnChange(this," + @i + ")" })
+
+                                        <span id="rd_Qualificn_@i" class="rd_Edu_Span_Qual"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Specialization of Branch</label><span class="Mandatory">*</span>
+                                        @Html.DropDownListFor(m => m.Education[i].SpecializationOfBranch.Code, new SelectList(Model.Education[i].speznDropdown, "Code", "Name"), "--Select--", new
+                                        {
+                                            @class = "form-control form-control-sm ifEduEmpty",
+                                       @onchange = "validateResumeDB(this,'rd_Spec_'," + @i + ")"
+                                        })
+
+                                        <span id="rd_Spec_@i" class="rd_Edu_Span_spec"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row my-2">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Year of Completion</label><span class="Mandatory">*</span>
+
+                                        @Html.DropDownListFor(m => m.Education[i].YearOfCompletion, (SelectList)ViewBag.Year, "--Select--", new
+                                {
+                                    @class = "form-control form-control-sm ifEduEmpty",
+                                @onchange = "validateResumeDB(this,'rd_Yr_'," + @i + ")"
+                                })
+
+                                        <span id="rd_Yr_@i" class="rd_Edu_Span_yr"></span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a data-bs-toggle="tooltip" title="" data-bs-original-title="Delete" class="btn btn-icon btn-delete big-btn float-left" onclick="DeleteRwEdu(@i)"><i class="icon-xl far fa-trash-alt"></i></a>
+
+
+                                </div>
+                                <div class="col-md-10">
+                                    <button type="button" onclick="AddEDucation()"
+                                            class="btn btn-default float-right mobile-full-width">
+                                        Add More
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    
+                    }
+                }
+            }
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- <end table></end> -->
+<div class="row card-footer-bottom-fixed">
+
+    <div class="col-md-12 align-right">
+        <button type="button" onclick="onNextClick('Rd_Education')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+
+</div>

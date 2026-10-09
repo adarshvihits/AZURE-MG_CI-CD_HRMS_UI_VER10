@@ -1,0 +1,684 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.PreEnrollment
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Recruitment/offerProcessing.js"></script>
+<script>
+    $(document).ready(function () {
+        //const myTimeout = setTimeout(CTCCalculation, 5000);
+        CTCCalculation();
+
+        var pan = $("#BasicInfo_PanNo").val();
+        var Adhar = $("#BasicInfo_AdharNo").val();
+        $(".pa_AdharNo").html(mask(Adhar));
+        $(".pa_Pan").html(mask(pan));
+    });
+
+    //function POPUP(GI) {
+      
+    //    $.ajax({
+    //        type: 'GET',
+    //        url: '/Recruitment/OfferProcessing/Summary',
+    //        dataType: 'html',
+    //        data: {'PreEnrollGI' :GI},
+    //        success: function (Data) {
+    //            var m = $('.bd-example-modal-lg');
+    //            m.find('.modal-body').html('');
+    //            m.find('.modal-body').html(Data);
+    //            m.modal('show');
+    //        },
+    //        error: function (xhr, textStatus, errorThrown) {
+    //            swal.fire(xhr.responseText);
+
+    //        }
+    //    });
+    //}
+
+
+    //function OnEmployeeClick(PreEnrollCode,PreEnrollGI) {
+    //    debugger
+    //    var url = "/Recruitment/OfferProcessing/GertOfferLetter?PreEnrollCode=" + PreEnrollCode + "&PreEnrollGI=" + PreEnrollGI;
+    //    window.open(url,"_blank");
+
+    //}
+
+
+
+</script>
+<style>
+    .btn.btn-danger {
+      
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Offer Initiation </h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot p-0 mt-1 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        <a href="@Url.Action("OfferInitiation", "OfferProcessing", new { Area = "Recruitment" })" class="">Offer Initiation List</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Offer Initiation
+                    </li>
+                </ul>
+            </div>
+            <!--end::Header Menu-->
+        </div>
+
+
+
+        <!--end::Header Menu Wrapper-->
+        <!--begin::Topbar-->
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+
+<!--end::Header-->
+<!--begin::Content-->
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "offerInitiationApprove"}))
+{
+    <div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+        <!--begin::Entry-->
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class="container full-width">
+                <!--begin::Dashboard-->
+                <!--begin::Row-->
+
+
+
+                <div class="card card-custom height-100per footer-row-fixed">
+
+                    <div class="card-body">
+                        <div class="profile-header">
+                            @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeHeader.cshtml", Model.EmployeeHeader)
+                            @Html.HiddenFor(m => m.BasicInfo.PanNo)
+                            @Html.HiddenFor(m => m.BasicInfo.AdharNo)
+                            @Html.HiddenFor(m => m.BasicInfo.FullName)
+                            @Html.HiddenFor(m => m.Mode)
+                            @Html.HiddenFor(m => m.MinimumSalary)
+                            @Html.HiddenFor(m => m.MaximumSalary)
+                            @Html.HiddenFor(m => m.Compensation.OfferedSalary)
+                            @Html.HiddenFor(m => m.PreEnrollCode)
+                            <div class="profile-header-overflow"></div>
+                        </div>
+                        <div class="page_white mt-5">
+                            <div class="onboarding-view">
+                                <h5><i class="fas fa-briefcase icon-md mr-2"></i>Personal Info</h5>
+                                <div class="five-col">
+                                    <div class="row-outer">
+                                        <label class="view-title">DOJ</label>
+                                        <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.BasicInfo.AcceptedDOJ))</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">DOB</label>
+                                        <div class="view-details">@Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.BasicInfo.DOB))</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Gender</label>
+                                        <div class="view-details">@Model.BasicInfo.Gender.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Relation</label>
+                                        <div class="view-details">@Model.BasicInfo.FathersName (@Model.BasicInfo.Relation.Name)</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">Aadhar Number</label>
+                                        <div class="view-details pa_AdharNo">@Model.BasicInfo.AdharNo</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">PAN</label>
+                                        <div class="view-details pa_Pan">@Model.BasicInfo.PanNo</div>
+                                    </div>
+
+                                </div>
+                                <h5><i class="fas fa-briefcase icon-md mr-2"></i>Job Details</h5>
+                                <div class="five-col">
+                                    <div class="row-outer">
+                                        <label class="view-title">Mobile No.</label>
+                                        <div class="view-details">@Model.PermanentAddress.MobileNo</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Email</label>
+                                        <div class="view-details">@Model.PermanentAddress.MailID</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Category</label>
+                                        <div class="view-details">@Model.JobDetails.Category.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Grade</label>
+                                        <div class="view-details">@Model.JobDetails.Grade.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Designation</label>
+                                        <div class="view-details">@Model.JobDetails.Designation.Name</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">Department</label>
+                                        <div class="view-details">@Model.JobDetails.Department.Name</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">Location</label>
+                                        <div class="view-details">@Model.JobDetails.Location.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Payroll Group</label>
+                                        <div class="view-details">@Model.JobDetails.PayrollGroup.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">VDA Group</label>
+                                        <div class="view-details">@Model.JobDetails.VDAGroup.Name</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">Renewal Date</label>
+                                        <div class="view-details"> @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.BasicInfo.RenewalDate))</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Notice Period (In Days)</label>
+                                        <div class="view-details">@Model.JobDetails.NoticePeriod</div>
+                                    </div>
+
+                                </div>
+                                <h5><i class="fas fa-briefcase icon-md mr-2"></i>Compensation & Benefits</h5>
+                                <div class="three-col border-none mb-0">
+                                    <div class="row-outer">
+                                        <label class="view-title">Salary Band</label>
+                                        <div class="view-details">@Model.Compensation.SalaryStructure.Name</div>
+                                    </div>
+                                    <div class="row-outer ">
+
+                                        <label class="view-title">Offered Salary</label>
+                                        <div class="view-details">@Model.Compensation.OfferedSalary</div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="personal-details-left mt-0">
+                                            <ul class="nav nav-tabs exittab" role="tablist">
+                                                <li class="nav-item exititem mr-0">
+                                                    <a class="nav-link exit-link active" data-bs-toggle="tab"
+                                                       href="#tabs-1" role="tab">Allowance</a>
+                                                </li>
+                                                <li class="nav-item exititem mr-0">
+                                                    <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-2"
+                                                       role="tab">Deductions</a>
+                                                </li>
+                                                <li class="nav-item exititem">
+                                                    <a class="nav-link exit-link" data-bs-toggle="tab" href="#tabs-3"
+                                                       role="tab">Provision And Perks</a>
+                                                </li>
+
+                                            </ul><!-- Tab panes -->
+                                            <div class="tab-content  "
+                                                 style="display: block ; position: relative; top: 5px;">
+                                                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Fixed Allowance</th>
+                                                                            <th scope="col">Amount</th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @if (Model.Compensation.FixedAllowance != null && Model.Compensation.FixedAllowance.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.FixedAllowance.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="Fixed Allowance">
+                                                                                        @Model.Compensation.FixedAllowance[i].Name
+                                                                                    </td>
+
+                                                                                    <td data-label="Amount">
+                                                                                        @Html.HiddenFor(m => m.Compensation.FixedAllowance[i].Amount, new { @class = "AllowanceAmount" })
+                                                                                        @Model.Compensation.FixedAllowance[i].Amount
+                                                                                    </td>
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <end></end> -->
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                            Your Company
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Other Applicable Allowance</th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.Compensation.VariableAllowance != null && Model.Compensation.VariableAllowance.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.VariableAllowance.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="Variable Allowance">
+                                                                                        @Model.Compensation.VariableAllowance[i].Name
+                                                                                    </td>
+
+
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <!-- <new? -->
+
+
+                                                </div>
+                                                <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Fixed Deduction</th>
+
+                                                                            <th scope="col">Amount</th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.Compensation.FixedDeduction != null && Model.Compensation.FixedDeduction.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.FixedDeduction.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="Fixed Deduction">
+                                                                                        @Model.Compensation.FixedDeduction[i].Name
+                                                                                    </td>
+
+                                                                                    <td data-label="Amount">
+                                                                                        @Html.HiddenFor(m => m.Compensation.FixedDeduction[i].Amount, new { @class = "DeductionsAmount" })
+                                                                                        @Model.Compensation.FixedDeduction[i].Amount
+                                                                                    </td>
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <end></end> -->
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                            Your Company
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">Other Applicable Deduction</th>
+
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.Compensation.VariableDeduction != null && Model.Compensation.VariableDeduction.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.VariableDeduction.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="Variable Deduction">
+                                                                                        @Model.Compensation.VariableDeduction[i].Name
+                                                                                    </td>
+
+
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-structure-tab vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">
+                                                                                Fixed Provision & Perks
+                                                                            </th>
+
+                                                                            <th scope="col">Amount</th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.Compensation.FixedProvisions != null && Model.Compensation.FixedProvisions.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.FixedProvisions.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="Fixed Provision & Perks">
+                                                                                        @Model.Compensation.FixedProvisions[i].Name
+                                                                                    </td>
+
+                                                                                    <td data-label="Amount">
+                                                                                        @Html.HiddenFor(m => m.Compensation.FixedProvisions[i].Amount, new { @class = "ProvisionsAmount" })
+                                                                                        @Model.Compensation.FixedProvisions[i].Amount
+                                                                                    </td>
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <end></end> -->
+                                                        <div class="col-md-6">
+
+                                                            <!-- <div class="newgroup">
+                                        <h5><i
+                                                class="fas fa-briefcase icon-md mr-2"></i>Evaluate
+                                            Your Company
+                                        </h5>
+                                    </div> -->
+                                                            <div class="ihits-table table-border  mobile-responsive-table salary-add-allowance vertical-scroll-150">
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr class="table-light">
+                                                                            <th scope="col">
+                                                                                Variable Provision
+                                                                                & Perks
+                                                                            </th>
+
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (Model.Compensation.VariableProvisions != null && Model.Compensation.VariableProvisions.Count > 0)
+                                                                        {
+
+                                                                            for (int i = 0; i < Model.Compensation.VariableProvisions.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td data-label="SI">@Model.Compensation.VariableProvisions[i].Name</td>
+
+
+
+                                                                                </tr>
+                                                                            }
+                                                                        }
+
+
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                                <div class="four-col  mt-4">
+                                    <div class="row-outer">
+                                        <label class="view-title">Gross Salary</label>
+                                        <div class="view-details"><span id="GrossSalary"></span></div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">CTC</label>
+                                        <div class="view-details"><span id="CTC"></span></div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Total Deductions</label>
+                                        <div class="view-details"><span id="totDeductions"></span></div>
+                                    </div>
+                                   
+                                    @*<div class="row-outer">
+                    <label class="view-title">PF</label>
+                    <div class="view-details">
+                        @if (Model.Compensation.PF == true)
+                        {
+                            <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                        }
+                    </div>
+                </div>*@
+
+                                    @*<div class="row-outer">
+                    <label class="view-title">ESI</label>
+                    <div class="view-details">
+                        @if (Model.Compensation.ESI == true)
+                        {
+                            <button type="button" class="btn btn-icon btn-tick border-radius"><i class="icon-xl fas fa-check"></i></button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-icon btn-close border-radius"><i class="icon-xl fas fa-times"></i></button>
+                        }
+                    </div>
+                </div>*@
+                                </div>
+
+                                <h5><i class="fas fa-briefcase icon-md mr-2"></i>Address for Communication</h5>
+                                <div class="five-col border-none">
+                                    <div class="row-outer">
+                                        <label class="view-title">House</label>
+                                        <div class="view-details">@Model.PermanentAddress.House</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">Street</label>
+                                        <div class="view-details">@Model.PermanentAddress.Street</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">City</label>
+                                        <div class="view-details">@Model.PermanentAddress.City</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">PIN code</label>
+                                        <div class="view-details">@Model.PermanentAddress.PinCode</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">Country</label>
+                                        <div class="view-details">@Model.PermanentAddress.Country.Name</div>
+                                    </div>
+                                    <div class="row-outer">
+                                        <label class="view-title">State</label>
+                                        <div class="view-details">@Model.PermanentAddress.State.Name</div>
+                                    </div>
+
+                                    <div class="row-outer">
+                                        <label class="view-title">District</label>
+                                        <div class="view-details">@Model.PermanentAddress.District.Name</div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row card-footer-bottom-fixed">
+                            @Html.HiddenFor(m => m.PreEnrollGI)
+
+
+
+
+
+                          
+                            <div class="col-md-12 align-right">
+
+                                @*<button type="button" class="btn btn-default mobile-full-width" onclick="ApproveReject('@Model.PreEnrollGI', 'APPROVE')">
+            Approve
+        </button>*@
+                                @*<button type="button" class="btn btn-default mobile-full-width" data-bs-toggle="modal" onclick="POPUP('@Model.PreEnrollCode')" data-target=".bd-example-modal-lg">
+        Preview & Approve
+         </button>*@
+                                <button type="button" class="btn btn-danger  mobile-full-width" onclick="OfferInitiationReject('@Model.PreEnrollGI','REJECT')">
+                                    Reject
+                                </button>
+                                @Html.HiddenFor(m => m.Tab)
+                                <button type="button" class="btn btn-default mobile-full-width" data-bs-toggle="modal" onclick="OnEmployeeClick('@Model.PreEnrollCode', '@Model.PreEnrollGI', '@Model.Tab')" data-target=".bd-example-modal-lg">
+                                    Preview & Approve
+                                </button>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!--end::Row-->
+                <!--begin::Row-->
+                <!--end::Row-->
+                <!--end::Dashboard-->
+            </div>
+            <!--end::Container-->
+        </div>
+
+    </div>
+    <!--end::Content-->
+}
+
+@*<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+            <div class="modal-header" style="padding:10px">
+                <h5 class="modal-title" id="exampleModalLabel">Offer Summary</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+            </div>
+
+        </div>
+    </div>
+</div>*@

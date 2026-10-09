@@ -1,0 +1,171 @@
+@model Hrms.Lite.Shared.Master.PlanningApproval
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+    var list = Model.PlanningApprovalList ?? new List<Hrms.Lite.Shared.Master.PlanningApproval>();
+    string currentTab = (ViewBag.CurrentTab as string) ?? "PENDING";
+    int totalRequests = Model.PendingCount + Model.ApprovedCount + Model.RejectedCount;
+}
+<div class="stat-row">
+    <div class="stat-tile tone-warning">
+        <div class="stat-label">Pending approval</div>
+        <div class="stat-value">@Model.PendingCount</div>
+        <div class="stat-sub">HR Head queue</div>
+    </div>
+    <div class="stat-tile tone-accent">
+        <div class="stat-label">Total requests</div>
+        <div class="stat-value">@totalRequests</div>
+        <div class="stat-sub">Selected period</div>
+    </div>
+    <div class="stat-tile tone-success">
+        <div class="stat-label">Approved this period</div>
+        <div class="stat-value">@Model.ApprovedCount</div>
+        <div class="stat-sub">Selected period</div>
+    </div>
+    <div class="stat-tile tone-danger">
+        <div class="stat-label">Rejected this period</div>
+        <div class="stat-value">@Model.RejectedCount</div>
+        <div class="stat-sub">Needs resubmission</div>
+    </div>
+</div>
+
+<div class="approval-tab-row">
+    <div class="approval-tab-btn @(currentTab == "PENDING" ? "active" : "")" onclick="ShowApprovalTab('PENDING')">
+        Pending <span class="tab-count">@Model.PendingCount</span>
+    </div>
+    <div class="approval-tab-btn @(currentTab == "APPROVED" ? "active" : "")" onclick="ShowApprovalTab('APPROVED')">
+        Approved <span class="tab-count">@Model.ApprovedCount</span>
+    </div>
+    <div class="approval-tab-btn @(currentTab == "REJECTED" ? "active" : "")" onclick="ShowApprovalTab('REJECTED')">
+        Rejected <span class="tab-count">@Model.RejectedCount</span>
+    </div>
+</div>
+
+<div id="approvalCardList">
+    @if (list.Count > 0)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            var item = list[i];
+            bool isPlanChange = (item.EntryType ?? "").ToUpper() == "MODIFY";
+            <div class="approval-card" data-search="@($"{item.BranchName} {item.DepartmentName} {item.SectionName}".ToLower())">
+                <div class="approval-card-top">
+                    <div>
+                        @if (isPlanChange)
+                        {
+                            <span class="pill pill-accent">Plan change</span>
+                        }
+                        else
+                        {
+                            <span class="pill pill-accent">New plan</span>
+                        }
+                        <div class="approval-card-title">@item.BranchName &rarr; @item.DepartmentName &rarr; @item.SectionName</div>
+                        <div class="approval-card-subtitle">@item.GradeName</div>
+                    </div>
+                    <div class="approval-card-meta">
+                        <div class="approval-card-id">@item.planId</div>
+                        @if (!string.IsNullOrEmpty(item.SubmittedBy))
+                        {
+                            <div>Submitted by @item.SubmittedBy</div>
+                        }
+                        @if (item.SubmittedOn.HasValue)
+                        {
+                            <div>on @item.SubmittedOn.Value.ToString("dd MMM yyyy")</div>
+                        }
+                    </div>
+                </div>
+
+                <div class="approval-metrics">
+                    @if (isPlanChange)
+                    {
+                        <div class="metric-block">
+                            <div class="metric-label">Plan Count</div>
+                            <div class="metric-value">
+                                @if (item.PreviousPlanCount.HasValue)
+                                {
+                                    <span class="diff-old">@item.PreviousPlanCount</span>
+                                }
+                                <span class="diff-new">@item.PlanCount</span>
+                            </div>
+                        </div>
+                        <div class="metric-block">
+                            <div class="metric-label">Avg. Salary</div>
+                            <div class="metric-value">
+                                @if (item.PreviousAvgSalary.HasValue)
+                                {
+                                    <span class="diff-old">&#8377; @item.PreviousAvgSalary.Value.ToString("N0")</span>
+                                }
+                                <span class="diff-new">&#8377; @item.AvgSalary.ToString("N0")</span>
+                            </div>
+                        </div>
+                        <div class="metric-block">
+                            <div class="metric-label">Total Salary</div>
+                            <div class="metric-value">
+                                @if (item.PreviousTotalSalary.HasValue)
+                                {
+                                    <span class="diff-old">&#8377; @item.PreviousTotalSalary.Value.ToString("N0")</span>
+                                }
+                                <span class="diff-new">&#8377; @item.TotalSalary.ToString("N0")</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="metric-block">
+                            <div class="metric-label">Proposed Plan Count</div>
+                            <div class="metric-value">@item.PlanCount</div>
+                        </div>
+                        <div class="metric-block">
+                            <div class="metric-label">Proposed Avg. Salary</div>
+                            <div class="metric-value">&#8377; @item.AvgSalary.ToString("N0")</div>
+                        </div>
+                        <div class="metric-block">
+                            <div class="metric-label">Proposed Total Salary</div>
+                            <div class="metric-value">&#8377; @item.TotalSalary.ToString("N0")</div>
+                        </div>
+                    }
+                </div>
+
+                @if (currentTab == "PENDING")
+                {
+                    <div class="workflow-step">
+                        <span class="step-badge">@(item.StepNumber > 0 ? item.StepNumber : 1)</span>
+                        Awaiting @item.ApproverRole (@item.ApproverName)
+                    </div>
+                    <div class="approval-actions">
+                        <input type="text" class="text-input note-input" id="note_@i" placeholder="Add a note (required to reject)" />
+                        @if (CurrentUserRoleActions.Approve == true)
+                        {
+                            <button type="button" class="btn btn-outline-secondary" onclick="onRejectClick(@item.Logcode, '@item.LogGI', '@item.EntryType', @i)">Reject</button>
+                            <button type="button" class="btn btn-default" onclick="onApproveClick(@item.Logcode, '@item.LogGI', '@item.EntryType', @i)">Approve</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-secondary" onclick="swal.fire(MasterPersmissionMsg);">Reject</button>
+                            <button type="button" class="btn btn-default" onclick="swal.fire(MasterPersmissionMsg);">Approve</button>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="approval-decision-note">
+                        @(currentTab == "APPROVED" ? "Approved" : "Rejected") by @item.DecidedBy
+                        @if (item.DecisionDate.HasValue)
+                        {
+                            <text> on @item.DecisionDate.Value.ToString("dd MMM yyyy")</text>
+                        }
+                        @if (!string.IsNullOrEmpty(item.Remarks))
+                        {
+                            <text> &mdash; "@item.Remarks"</text>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="approval-empty">No requests here.</div>
+    }
+</div>

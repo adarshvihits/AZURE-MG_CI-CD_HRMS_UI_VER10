@@ -1,0 +1,209 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.Enrollment
+
+<style>
+    .bootstrap-select.form-control-sm .dropdown-toggle {
+        padding: 7px 13px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        debugger
+        if ($('#AttendanceSettings_ShiftType_Code').val() == 1) {
+            $('#singleselect').show();
+            $('#multipleselect').hide();
+            //$("#sselect").prop('selectedIndex', 0);
+            $("#AttendanceSettings_ShiftDetailsIds").val('');
+        }
+        else if ($('#AttendanceSettings_ShiftType_Code').val() == 2) {
+            $('#singleselect').hide();
+            $('#multipleselect').show();
+            //$("#AttendanceSettings_ShiftDetailsIds").val('');
+            $("#sselect").val('');
+
+        }
+        else {
+            $('#singleselect').hide();
+            $('#multipleselect').show();
+            //$("#AttendanceSettings_ShiftDetailsIds").val('');
+            $("#sselect").val('');            
+        }
+
+
+
+     
+            if ($('#AttendanceSettings_PunchingApplicability_Code').val() == 1) {
+                $(".pun_MethodDiv").removeClass('hide');
+            }
+            else {
+                $(".pun_MethodDiv").addClass('hide');                
+
+            }
+
+        
+
+
+    });
+</script>
+<div class="step-outer step_row">
+
+
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Personal-Info')">
+        Personal Info
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Job-Details')">
+        Job Details
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" data-bs-toggle="tooltip" data-bs-original-title="Compensation & Benefits" onclick="onStepCircleClick('Compensation')">
+        C & B
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item active" onclick="onStepCircleClick('Address')">
+        Address
+        <span class="step-circle"></span>
+    </a>
+
+    <a href="#" class="step-item active">
+        Attendance Settings
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item">
+        Leave
+        <span class="step-circle"></span>
+    </a>
+    <a href="#" class="step-item">
+        Statutory & Payment
+        <span class="step-circle"></span>
+    </a>
+    @*<a href="#" class="step-item">
+        Other Groupings
+        <span class="step-circle"></span>
+    </a>*@
+    <a href="#" class="step-item">
+        ID & Manager Generation
+        <span class="step-circle"></span>
+    </a>
+
+
+</div>
+
+<div class="step-progress-outer">
+
+    <div class="step-left col-md-12">
+        <h3> Attendance Settings</h3>
+
+        <div class="row my-3">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Shift Type</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.AttendanceSettings.ShiftType.Code, (SelectList)ViewBag.SftType, "--Select Shift Type--", new { @class = "form-control form-control-sm", @onchange = "onShiftTypeChange(this)" })
+                    <span id="shifttype"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Shift Details</label><span class="Mandatory">*</span>
+
+                    <div id="multipleselect" class="form-control-sm form-control sDetails JType">
+
+                        @Html.ListBoxFor(m => m.AttendanceSettings.ShiftDetailsIds, (SelectList)ViewBag.SftDetails, new { @class = "form-control-multiselect ", @multiple = "multiple", @onchange = "validateShiftDetails(this,'shiftdetails','sDetails')" })
+                    </div>
+
+                    <div id="singleselect">
+                        @Html.DropDownListFor(m => m.AttendanceSettings.ShiftDetailsId, (SelectList)ViewBag.SftDetails, "--Select Shift Details--", new { @id = "sselect", @class = "form-control form-control-sm JType", @onblur = "validate(this,'shiftdetails')" })
+                    </div>
+
+
+                </div>
+                <span id="shiftdetails"></span>
+            </div>
+            @*<div class="col-md-3">
+                <div class="form-group">
+                    <label>Shift Circle</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.AttendanceSettings.ShiftCircle.Code, (SelectList)ViewBag.ShiftCircle, "--Select Shift Circle--", new { @class = "form-control form-control-sm", @onblur = "validate(this,'shiftcircle')" })
+                    <span id="shiftcircle"></span>
+                </div>
+            </div>*@
+
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Punching Applicability</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(model => model.AttendanceSettings.PunchingApplicability.Code,
+                    new List<SelectListItem> {new SelectListItem {  Value= "1" , Text = "YES" },new SelectListItem { Value = "0" , Text = "NO" },
+                   }, "-- Select Punching Applicability--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'punchingAppl');onPunchingApplChange(this)" })
+
+
+                </div>
+                <span id="punchingAppl"></span>
+            </div>
+
+            <div class="col-md-3 pun_MethodDiv">
+                <div class="form-group">
+                    <label>Punching Method</label><span class="Mandatory">*</span>
+
+                    <div class="form-control  form-control-sm  pMethod JType ">
+                        @Html.ListBoxFor(m => m.AttendanceSettings.PunchingMethodIDs, (SelectList)ViewBag.Punching, new { @class = "form-control-multiselect ", @multiple = "multiple", @onchange = "validatePunchingMethod(this,'punchingmethod','pMethod')" })
+                    </div>
+                </div>
+                <span id="punchingmethod"></span>
+            </div>
+
+
+
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Holiday Group</label><span class="Mandatory">*</span>
+
+                    @Html.DropDownListFor(m => m.AttendanceSettings.HolidayGroup.Code, (SelectList)ViewBag.HolidayGrp, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'holidayGroup')" })
+                </div>
+                <span id="holidayGroup"></span>
+            </div>
+
+            <div class="col-md-3">
+                @if (Model.PreEnrollment.FiledValidations !=null && Model.PreEnrollment.FiledValidations[4].Applicability == true)
+                {
+                    <div class="form-group">
+                        <label>Offday Settings</label><span class="Mandatory">*</span>
+
+                        @Html.DropDownListFor(m => m.AttendanceSettings.OffdaySettings.Code, (SelectList)ViewBag.YearlyOffDaySettings, "--Select--", new { @class = "form-control form-control-sm", @onchange = "validate(this,'OffdaySettings')" })
+                    </div>
+                    <span id="OffdaySettings"></span>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label>Offday Settings</label>
+
+                        @Html.DropDownListFor(m => m.AttendanceSettings.OffdaySettings.Code, (SelectList)ViewBag.YearlyOffDaySettings, "--Select--", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <span id="OffdaySettings"></span>
+                }
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+<div class="row card-footer-bottom-fixed">
+    <div class="col-md-6">
+        <button type="button" onclick="PopUp_Preview()"
+                class="btn btn-default float-left mobile-full-width">
+            Salary Details
+        </button>
+
+    </div>
+    <div class="col-md-6">
+        <button type="button" onclick="onNextClick('Enroll_attendance','Leave')"
+                class="btn btn-default float-right mobile-full-width">
+            Next
+        </button>
+    </div>
+</div>

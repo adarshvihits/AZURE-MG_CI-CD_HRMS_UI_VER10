@@ -1,0 +1,131 @@
+﻿@model Hrms.Lite.Shared.Master.ExitCheckList
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+@using (Html.BeginForm("Save", "ExitCheckList", FormMethod.Post, new { id = "ChecklistSave" }))
+{
+
+    <div id="editchecklist" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Exit Checklist
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        <label>
+                            Check Item
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm Checkname", @placeholder = "Check Item", @onblur = "OnlycapitalizeFirstLetter(this,'checkitem')", maxlength = "120" })
+                        <span id="checkitem"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>
+                            Type
+                            <span class="Mandatory">*</span>
+                        </label>
+                        @*<select class="form-control form-control-sm " id="exampleSelects">
+                                <option>..Select..</option>
+                                <option>Communication</option>
+                                <option>Knowlegde Transfer</option>
+                                <option>Recoveries</option>
+                                <option>IT Permission & Access</option>
+                                <option>Others</option>
+                            </select>*@
+                        @Html.DropDownListFor(Model => Model.CheckListType.Code, (SelectList)ViewBag.CheckListTypecombo, "--Select--", new { @class = "form-control form-control-sm CheckType", @onblur = "validate(this,'CType')" })
+                        <span id="CType"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row my-3">
+
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onchange="ActiveInactiveValidation('EXIT CHECKLIST','@Model.Code')">
+                            @Html.HiddenFor(m => Model.Code)
+                            @Html.CheckBoxFor(model => model.Active, new { @class = "form-control form-control-sm", @id = "Activeinactivelist" })
+
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="checkbox-inline h-100 align-content-center">
+                        <label>Is Mandatory</label>
+                        <label class="checkbox checkbox-outline checkbox-success">
+                            @Html.CheckBoxFor(Model => Model.IsMandatory)
+                            <span style="margin-left:10px;"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            @if (Model.Mode == "CREATE")
+            {
+                <label>Description</label>
+                @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm EDescription", @placeholder = "Description", maxlength = "250" })
+
+            }
+            @if (Model.Mode == "MODIFY")
+            {
+                <label class="view-title">Description</label>
+                <div class="view-details">
+
+                    @Html.DisplayFor(Model => Model.Description)
+                    @Html.HiddenFor(model => Model.Description)
+                </div>
+            }
+
+
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @*<button type="submit" class="btn btn-default  mobile-full-width">
+            Create
+        </button>*@
+                    @if (Model.Mode == "CREATE")
+                    {
+
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="CheckListSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="CheckListSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+}

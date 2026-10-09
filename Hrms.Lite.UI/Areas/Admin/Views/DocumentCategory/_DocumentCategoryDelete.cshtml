@@ -1,0 +1,139 @@
+﻿@model Hrms.Lite.Shared.Admin.DocumentCategory
+<script src="~/js/tooltip.js"></script>
+
+@using (Html.BeginForm("Delete", "DocumentCategory", FormMethod.Post, new { @id = "deleteDocumentCategory" }))
+{
+    @Html.HiddenFor(model => Model.GI)
+    @Html.HiddenFor(model => Model.Mode)
+
+    <div id="deleteDocCategory" class="slider-forms slider-forms-open deleteDocCategory">
+        <div class="slider-inner-style  new-inner-style">
+            <div class="slider-form-close">
+                <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('deleteDocCategory')"></i>
+            </div>
+            <div class="location-slider">
+                <h4>
+                    Document Category
+                </h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Name</label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.Name)
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Short Name
+                            </label>
+                            <div class="view-details">
+                                @Html.DisplayFor(model => Model.ShortName)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <div class="row-outer">
+                            <label class="view-title">Active</label>
+                            <div class="view-details">
+
+                                @if (Model.Active == true)
+                                {
+
+                                    <button type="button" class="btn btn-icon btn-tick">
+                                        <i class="icon-xl fas fa-check"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-icon btn-close">
+                                        <i class="icon-xl fas fa-times"></i>
+
+                                    </button>
+                                }
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row my-3">
+
+                    <div class="col-md-12">
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+                            @Html.DisplayFor(model => Model.Description)
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table document_categoryparameter_lists">
+                        @Html.HiddenFor(Model => Model.ParameterList.Count)
+
+                        <table id="parameterlist" class="common-table">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">Parameters</th>
+                                    <th scope="col">Applicability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.ParameterList.Count > 0)
+                                {
+
+                                    for (int i = 0; i < Model.ParameterList.Count; i++)
+                                    {
+                                        @Html.HiddenFor(m => m.ParameterList[i].ParameterCode)
+
+                                <tr>
+                                    <td data-label="Parameter">@Model.ParameterList[i].ParameterName</td>
+                                    <td data-label="Y/N">
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-outline checkbox-success">
+                                                @Html.CheckBoxFor(m => m.ParameterList[i].Applicable)
+
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    
+
+                                </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <a type="button"
+                           data-bs-toggle="tooltip" title="Delete"
+                           data-bs-original-title="Delete"
+                           class="btn btn-icon btn-delete big-btn float-none" onclick="return confirmDelete('@Model.GI')">
+                            <i class="icon-xl far fa-trash-alt"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

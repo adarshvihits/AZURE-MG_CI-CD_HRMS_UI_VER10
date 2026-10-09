@@ -1,0 +1,106 @@
+﻿@model Hrms.Lite.Shared.DataBank.Reports.SalaryProjectionReport
+
+<script src="~/js/tooltip.js"></script>
+
+<script src="~/scripts/DataBank/Reports/SalaryProjectionReport.js"></script>
+<script src="~/js/Multiselectdropdown.js"></script>
+
+<script src="~/js/settings.js"></script>
+
+@using (Html.BeginForm("Save", "SalaryProjectionReport", FormMethod.Post, new { id = "salaryprojsave" }))
+{
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table pt-1 ">
+
+        <div class="row ">
+            <div class="col-md-3">
+                <label>Amount Type</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    <select id="AmountType" class="form-control form-control-sm">
+                        <option value="0">%</option>
+                        <option value="1">Amount</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label>Type</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    <select id="Type" class="form-control form-control-sm " onchange="OnTypeChange()">
+                        <option value="0">Gross Pay</option>
+                        <option value="1">Allowance Wise</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label>Amount</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    @Html.TextBoxFor(Model => Model.Amount, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Amount", maxlength = "8" })
+                </div>
+            </div>
+
+            <div class="col-md-3 AllowanceDiv" style="display:none;">
+                <label>Allowance</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    @Html.DropDownListFor(m => m.Allowance, (SelectList)ViewBag.doc, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+
+        </div>
+        <h5 style="padding:5px 0px;" class="pt-5">Applicable Employees Filter</h5>
+        <div class="row my-3">
+            <div class="col-md-3">
+                <label>Fun.Designation</label><span class="Mandatory">*</span>
+                <div class="form-group">
+
+                    @*@Html.DropDownListFor(m => m.Designation, (SelectList)ViewBag.dsg, new { @class = "form-control form-control-sm" })*@
+                    @Html.ListBoxFor(m => m.Designation, (SelectList)ViewBag.dsg, new
+                    {
+                    @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                    @multiple = "multiple",
+                    data_db_filter = "true",
+                    })
+
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label>Department</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    @*@Html.DropDownListFor(m => m.Department, (SelectList)ViewBag.Dept, new { @class = "form-control form-control-sm" })*@
+
+                    @Html.ListBoxFor(m => m.Department, (SelectList)ViewBag.Dept, new
+                    {
+                    @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                    @multiple = "multiple",
+                    data_db_filter = "true",
+                    })
+
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label>Location</label><span class="Mandatory">*</span>
+                <div class="form-group">
+                    @*@Html.DropDownListFor(m => m.Location, (SelectList)ViewBag.Loc, new { @class = "form-control form-control-sm" })*@
+
+                    @Html.ListBoxFor(m => m.Location, (SelectList)ViewBag.Loc, new
+                    {
+                    @class = "multiselectDropdownField form-control-multiselect form-control-sm",
+                    @multiple = "multiple",
+                    data_db_filter = "true",
+                    })
+                </div>
+            </div>
+
+        </div>
+        <div class="mt-3 mb-2">
+            <button type="button" style="float:right" class="btn btn-default  mobile-full-width" onclick="OnApplyClick()">
+                Apply
+            </button>
+        </div>
+
+    </div>
+
+}
+

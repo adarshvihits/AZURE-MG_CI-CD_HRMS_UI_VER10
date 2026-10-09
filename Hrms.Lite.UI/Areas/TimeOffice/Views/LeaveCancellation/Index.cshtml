@@ -1,0 +1,154 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCancellation
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/LeaveCancellation.js"></script>
+<script>
+    $(document).ready(function () {
+       fillData();
+    });
+
+</script>
+
+
+
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Leave Cancellation</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+
+                    <li class="breadcrumb-item text-muted">
+                        Leave Cancellation
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!--end::Container-->
+</div>
+
+
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+                   
+
+                 
+                        <div class="row tab-style-button">
+                            <div class="tab-button-wrap">
+                                <div class="tab-items ml-5 pr-0 border-none select-option lows">
+                                    <div class="form-group filter-combobox mr-5" style="width: 140px;">
+
+                                        @Html.DropDownListFor(m => Model.Payroll.Code, (SelectList)ViewBag.PayRollGroup, "--PayrollGroup--", new { @class = "form-control form-control-sm filterDropDownPG", @onchange = "validate(this,'PayrollLev');" +
+                                   "$('.filterDropDownPG').val($('#Payroll_Code').val());fillMonth(this);"
+                                   })
+
+                                        <span id="PayrollLev"></span>
+                                    </div>
+
+                                </div>
+                                <div class="tab-items ml-5 pr-0 border-none select-option">
+                                    <div class="form-group filter-combobox mr-2" style="width: 140px;">
+                                       
+                                        @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Month--",  new { @class = "form-control form-control-sm Amonth", @onchange = "validate(this,'MonthLev');" +
+                                   "$('.Amonth').val($('#Month_Code').val());fillData()"
+                                   })
+
+                                        <span id="MonthLev"></span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="tab-items ml-5 pr-0 border-none select-option">
+                                    <div class="form-group filter-combobox mr-5" style="width: 140px;">
+
+                                        @Html.DropDownListFor(m => m.Leave.Code, (SelectList)ViewBag.Type, "All", new { @class = "form-control form-control-sm Aname", @onchange = "fillData()" })
+
+                                     <span id="LeaveType"></span>
+                                    </div>
+                                </div>
+
+                                <!-- <batch updates></batch> -->
+
+
+                                <div class="tab-items select-option ">
+
+                                    <div class="sraech-slider">
+                                        <div class="search-slider-inner">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                                               placeholder="ID/Name">
+                                    </div>
+                                    <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <a data-bs-toggle="tooltip" title="Export to Excel"
+                                       class="btn btn-excel mr-0" onclick="ExportToExcel()">
+                                        <i class="icon-xl far fa-file-excel"></i>
+                                    </a>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+          
+                    
+                    <div id="Variableallowancelist">
+                        @await Html.PartialAsync("_List")
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.Filter)
+                    </div>
+                    <div class="row card-footer-bottom-fixed">
+
+                        <div class="col-md-12 ">
+                            <a id="wageGradeMasterAdd" type="button" class="btn btn-default  mobile-full-width" onclick="TransactionHistory()">
+                                Transaction History
+                            </a>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+

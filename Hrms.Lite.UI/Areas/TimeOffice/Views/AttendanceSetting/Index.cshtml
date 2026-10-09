@@ -1,0 +1,200 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.AttendanceSetting
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/datatables.min.js"></script>
+<script src="~/scripts/TimeOffice/employeeAttendanceSettings.js"></script>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Employee Attendance Settings</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })" class="">
+                            <i class="icon-nm fas fa-home mt-1"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">
+                        Employee Attendance Settings
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--begin::Topbar-->
+        <div class="topbar">
+
+            <!--begin::User-->
+            <!-- <div class="topbar-item">
+                <div
+                    class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2">
+                    <span
+                        class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
+                    <span
+                        class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Sean</span>
+
+                </div>
+            </div> -->
+            <!--end::User-->
+        </div>
+        <!--end::Topbar-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+                    <!--begin: Search Form-->
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap align-items-center">
+                            <!-- <div class="tab-items high">
+        <span class="btn-title">All
+            <span class="btn-notification">025</span>
+        </span>
+    </div>
+
+    <div class="tab-items medium">
+        <span class="btn-title">Training Completion
+            <span class="btn-notification">025</span>
+        </span>
+    </div>
+    <div class="tab-items high">
+        <span class="btn-title">Probation Completion
+            <span class="btn-notification">025</span>
+        </span>
+    </div>
+
+    <div class="tab-items low">
+        <span class="btn-title">More
+            <span class="btn-notification">025</span>
+        </span>
+    </div> -->
+
+
+
+
+
+                            <div class="tab-items mt-2">
+                                <!-- <label>Group By</label> -->
+                                <div class="form-group filter-combobox mt-0 " style="width:179px;">
+
+                                    @Html.DropDownListFor(model => model.GroupBy,
+                                       new List<SelectListItem> {
+                                            new SelectListItem {  Value= "0" , Text = "Punching Method"},
+                                            new SelectListItem {  Value= "1" , Text = "Shift Type" },
+                                            new SelectListItem { Value = "2" , Text = "Holiday Group" },
+                                            new SelectListItem { Value = "3" , Text = "Offday" },
+                                            new SelectListItem { Value = "4" , Text = "Leave Group" },
+                                            new SelectListItem { Value = "5" , Text = "COFF Applicability" },
+                                            new SelectListItem { Value = "6" , Text = "Less Hour Applicability" },
+                                            new SelectListItem { Value = "8" , Text = "Single Punch Applicability" },
+                                            new SelectListItem { Value = "9" , Text = "Night Off Applicability" },
+                                            new SelectListItem { Value = "10" , Text = "OD/RA Auto Approval" }
+                                         },
+                                       new { @class = "form-control form-control-sm", @onchange = "onGroupByChange(this,'groupby')" })
+                                </div>
+                            </div>
+                            <div class="tab-items mt-2">
+
+                                <div class="form-group filter-combobox mt-0" style="width:192px;">
+                                    @Html.DropDownListFor(m => m.Classification, (SelectList)ViewBag.Classification, "All", new { @class = "form-control form-control-sm", @onchange = "fillData()" })
+                                </div>
+                            </div>
+
+                            <div class="radio-inline">
+                                <label class="radio radio-outline radio-success">
+                                    @Html.RadioButtonFor(m => m.Type, "Assigned", new { @onchange = "fillData()" })
+                                    <span></span>Assigned
+                                </label>
+                                <label class="radio radio-outline radio-success">
+                                    @Html.RadioButtonFor(m => m.Type, "NotAssigned", new { @onchange = "fillData()" })
+                                    <span></span>Not Assigned
+                                </label>
+                            </div>
+
+                            <div class="tab-items select-option high">
+
+
+
+                                <div class="sraech-slider">
+                                    <div class="search-slider-inner">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                    <input type="text" id="dataTableSearch" class="form-control form-control-sm" placeholder="ID/Name">
+                                </div>
+                                <div id="filterForm" class="filter-button slider-btn " data-bs-toggle="tooltip" title="Filter">
+                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <a data-bs-toggle="tooltip" title="" class="btn btn-excel float-left" onclick="ExportToExcel()"
+                                   data-bs-original-title="Export to Excel">
+                                    <i class="icon-xl far fa-file-excel"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div id="AttendanceSettingslist">
+                        @await Html.PartialAsync("_List", Model)
+                    </div>
+                    <div id="EditSliderPartial">
+
+                    </div>
+                    <div id="filterSlider">
+                        @await Html.PartialAsync("~/Views/Shared/_Filter.cshtml", Model.filter)
+                    </div>
+
+                    <!--end: Datatable-->
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 align-left">
+                            <!-- <a type="button"
+                class="btn btn-default  mobile-full-width">
+                Save
+            </a> -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Row-->
+            <!--begin::Row-->
+            <!--end::Row-->
+            <!--end::Dashboard-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="slider-over-flow"></div>
+<!--end::Content-->

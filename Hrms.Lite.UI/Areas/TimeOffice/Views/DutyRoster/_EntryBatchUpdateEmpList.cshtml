@@ -1,0 +1,83 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.DutyRoster
+<script>
+
+    $(document).ready(function () {
+        debugger
+        $('.dutyApplicability').on('click', function () {
+            debugger
+            if ($('.dutyApplicability:checked').length == $('.dutyApplicability').length) {
+                $('#allDutyRrCheckbox').prop('checked', true);
+            } else {
+                $('#allDutyRrCheckbox').prop('checked', false);
+            }
+        });
+    });
+</script>
+<div class="ihits-table table-border mobile-responsive-table  duty-slide-set vertical-scroll-350 mb-5">
+    <table class="m-0"  id="DutyCheckBoxTable">
+        <thead>
+            <tr class="table-light">
+                <th scope="col">ID</th>
+
+                <th scope="col">Employee Name</th>
+                <th scope="col">Fun.Designation</th>
+                <th scope="col">
+                    <div class="checkbox-inline">
+                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                            <input type="checkbox" name="Checkboxes15" id="allDutyRrCheckbox" onchange="onDutyRostrAllClick('allDutyRrCheckbox','DutyCheckBoxTable')">
+                            <span class="mr-1"></span>
+
+                            @*<span></span>*@
+                        </label>
+                    </div>
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.DutyRoster_EmployeePrimaryInfo != null && Model.DutyRoster_EmployeePrimaryInfo.Count > 0)
+                {
+                    for (int i = 0; i < Model.DutyRoster_EmployeePrimaryInfo.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.DutyRoster_EmployeePrimaryInfo[i].EmployeeGI)
+                        <tr>
+                           <td data-label="ID">
+
+                                @Model.DutyRoster_EmployeePrimaryInfo[i].EmployeeID
+                            </td>
+                            <td data-label="Employee Name">
+                                @Model.DutyRoster_EmployeePrimaryInfo[i].FullName
+                            </td>
+                            <td data-label="Designation">
+                                @Model.DutyRoster_EmployeePrimaryInfo[i].Designation.Name
+                            </td>
+                            <td data-label="Select">
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+
+                                        @Html.CheckBoxFor(m => m.DutyRoster_EmployeePrimaryInfo[i].Applicability,new { @class= "dutyApplicability" })
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr></tr>
+                    }
+                }
+
+
+
+
+
+        </tbody>
+    </table>
+</div>
+

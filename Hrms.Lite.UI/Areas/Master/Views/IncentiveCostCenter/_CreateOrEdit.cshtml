@@ -1,0 +1,113 @@
+﻿@model Hrms.Lite.Shared.Master.IncentiveCostCenter
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+<script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm("Save", "IncentiveCostCenter", FormMethod.Post, new { id = "IncentiveCostCentersave" }))
+{
+    <div id="departmentedit" class="slider-forms slider-forms-open AddnewOrEditDiv">
+        <div class="slider-inner-style new-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddnewOrEditDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <div class="location-slider">
+                <h4>Incentive Cost Center</h4>
+            </div>
+            <div class="add-padding">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.HiddenFor(model => Model.Mode)
+                            @Html.HiddenFor(model => Model.GI)
+                            @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm DeptName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'IncentiveCostCenterName')", maxlength = "120" })
+                            <span id="IncentiveCostCenterName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>
+                                Short Name
+                                <span class="Mandatory">*</span>
+                            </label>
+                            @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm DeptShtName", @placeholder = "Short Name", @onblur = "validate(this,'IncentiveCostCenterShortName')", maxlength = "5" })
+                            <span id="IncentiveCostCenterShortName"></span>
+
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mt-4">
+                        <div class="d-flex align-items-center">
+                            <div> Active</div>
+                            <label class="switch" @*onchange="ActiveInactiveValidation('DPT','@Model.Code')"*@>
+                                @Html.HiddenFor(m => Model.Code)
+                                @Html.CheckBoxFor(model => model.Active, new { @id = "Activeinactivedpt" })
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label>Description</label>
+                        <div class="view-details">
+                            @if (Model.Mode == "CREATE")
+                            {
+
+                                @Html.TextAreaFor(model => Model.Description, new { @class = "form-control form-control-sm DeptDiscription", @placeholder = "Description", maxlength = "250" })
+
+
+
+                            }
+                            @if (Model.Mode == "MODIFY")
+                            {
+
+                                @Html.HiddenFor(model => Model.Description)
+
+                                @Html.DisplayFor(model => Model.Description)
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row card-footer-bottom-fixed border-none">
+                    <div class="col-md-12 align-right">
+                        @if (Model.Mode == "CREATE")
+                        {
+                           
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="IncentiveCostCenterSave('Save')">
+                                    Save
+                                </button>
+                           
+                        }
+                        @if (Model.Mode == "MODIFY")
+                        {
+                           
+                                <button type="button" class="btn btn-default  mobile-full-width" onclick="IncentiveCostCenterSave('Modify')">
+                                    Modify
+                                </button>
+                           
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

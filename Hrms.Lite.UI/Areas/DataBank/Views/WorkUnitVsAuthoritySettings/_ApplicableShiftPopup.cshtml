@@ -1,0 +1,70 @@
+﻿@model Hrms.Lite.Shared.DataBank.WorkUnitVsAuthoritySettings
+
+
+<div class="row mb-2 ">
+    @Html.HiddenFor(m => m.WorkUnitCode)
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Work Unit : @Model.WorkUnit</label>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "ShiftSave"}))
+{
+    <div class="row mb-2 ">
+        @Html.HiddenFor(m => m.WorkUnitCode)
+
+        <div class="ihits-table table-border hover-color odd-even mobile-responsive-table">
+            @Html.HiddenFor(m => m.WorkUnitVsSift.Count)
+            <table id="WorkUnitVsShiftTable" class="common-table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Sl No</th>
+                        <th scope="col">Shift</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{if (Model.WorkUnitVsSift != null && Model.WorkUnitVsSift.Count > 0)
+                        {
+                            for (int i = 0; i < Model.WorkUnitVsSift.Count; i++)
+                            {
+                                <tr>
+                                    <td data-label="Sl No">@Model.WorkUnitVsSift[i].SlNo</td>
+                                    <td data-label="Shift">
+                                        @Html.HiddenFor(m => m.WorkUnitVsSift[i].ShiftCode)
+                                        @Model.WorkUnitVsSift[i].Shift
+                                    </td>
+                                    <td data-label="Actions">
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted mr-1">
+                                                @Html.CheckBoxFor(m => m.WorkUnitVsSift[i].Applicability)
+
+                                                <span></span>
+                                            </label>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+<div class="row pt-3">
+    <div class="col-md-12 mt-2 mb-5">
+        <button id="saveShift" type="button" class="btn btn-default float-right mobile-full-width" onclick="onSaveShiftClick()">
+            Save
+        </button>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+﻿@model Hrms.Lite.Shared.TimeOffice.LeaveCarryForward
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //$('#Name').focus();
+            moveCursorToEnd('LeaveCFDetails_CF');
+            $('#LeaveCFDetails_CF').val('');
+        });
+        $(window).ready(function () {
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    if (preventENterFlag == 0)
+                        BatchUpdate();
+                    return false;
+                }
+            });
+        });
+    </script>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "BatchUpdateSlider" }))
+    {
+        <div id="BatchUpdate" class="slider-forms slider-forms-open batchupSlider">
+            <div class="slider-inner-style">
+                <div class="slider-form-close" onclick="CloseSlider('batchupSlider');preventENterFlag = 1">
+                    <i class="ki ki-close icon-xs text-muted"></i>
+                </div>
+                <h4>
+                    Batch Update
+                </h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave
+                                Group
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveCFDetails.LeaveGroup.Code)
+                                @Model.LeaveCFDetails.LeaveGroup.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Leave </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveCFDetails.Leave.Code)
+                                @Model.LeaveCFDetails.Leave.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave Period
+                                From
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveCFDetails.LeavePeriodFrom.Code)
+                                @Model.LeaveCFDetails.LeavePeriodFrom.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">
+                                Leave Period To
+                            </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveCFDetails.LeavePeriodTo.Code)
+                                @Model.LeaveCFDetails.LeavePeriodTo.Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row-outer">
+                            <label class="view-title">Month </label>
+                            <div class="view-details">
+                                @Html.HiddenFor(m => m.LeaveCFDetails.Month.Code)
+                                @Model.LeaveCFDetails.Month.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Carry Forward</label><span class="Mandatory">*</span>
+                    
+                            @Html.TextBoxFor(m => m.LeaveCFDetails.CF, new { @class = "form-control form-control-sm",
+                           @maxlength = "3",
+                           @placeholder = "Carry Forward", style = "width: 100%", @onkeypress = "return onlyAmount(event)",
+                           @onblur= "validate(this,'cf')"
+                       })
+                        </div>
+                        <span id="cf"></span>
+                    </div>
+                </div>
+                <div class="row card-footer-bottom-fixed border-none">
+
+                    <div class="col-md-12 align-right">
+                        <button type="button"
+                                class="btn btn-default  mobile-full-width" onclick="BatchUpdate()">
+                            Update
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }

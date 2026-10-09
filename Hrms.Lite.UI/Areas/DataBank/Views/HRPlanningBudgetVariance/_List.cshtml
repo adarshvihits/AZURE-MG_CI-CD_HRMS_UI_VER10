@@ -1,0 +1,137 @@
+﻿@model Hrms.Lite.Shared.DataBank.DTO.HRPlanningBudget
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/tooltip.js"></script>
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table  budget-varience-report">
+    <table id="VarianceList" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                @if (Model.Type.Code == 0)
+                {
+                    <th scope="col">
+                        Region
+
+                    </th>
+                }
+                else
+                {
+                    <th scope="col">
+                        Location
+
+                    </th>
+                    <th scope="col">
+                        Region
+
+                    </th>
+                }
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="">
+                    Budgtd Nos
+
+
+                </th>
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Current Numbers">
+                    Cur. Nos
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Variance ">
+                    Var.
+
+                </th>
+                <th scope="col">
+                    Filled %
+
+                </th>
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Variance Percentage">
+                    Var. %
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Ongoing MRF">
+                    Ongoing
+                </th>
+
+
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Short/Excess">
+                    Sh/Ex
+
+
+                </th>
+                <th scope="col" data-bs-toggle="tooltip" data-bs-original-title="Pending MRF">
+                    P.MRF
+                </th>
+                <th scope="col" class="chkTh">
+                    Select
+
+                </th>
+
+
+            </tr> 
+        </thead>
+        <tbody>
+            @if (Model.Details != null && Model.Details.Count > 0)
+            {
+
+                for (int i = 0; i < Model.Details.Count; i++)
+                {
+            <tr>
+                @if (Model.Type.Code == 0)
+                {
+                    <td data-label="Region">@Html.HiddenFor(m => m.Details[i].Region.Code) @Model.Details[i].Region.Name</td>
+                }
+                else
+                {
+                    <td data-label="Location">@Html.HiddenFor(m => m.Details[i].Location.Code) @Model.Details[i].Location.Name</td>
+                    <td data-label="Region">@Html.HiddenFor(m => m.Details[i].Region.Code) @Model.Details[i].Region.Name</td>
+                }
+                <td data-label="Budget Numbers">
+                    @Model.Details[i].BudgetedNo @Html.HiddenFor(m => m.Details[i].BudgetedNo) @Html.HiddenFor(m => m.Designation.Code) @Html.HiddenFor(m => m.HRPlanning.Code) @Html.HiddenFor(m => m.Type.Code)
+                </td>
+
+                <td data-label="Current Numbers">
+                    @Model.Details[i].CurrentNo @Html.HiddenFor(m => m.Details[i].CurrentNo)
+
+                </td>
+                <td data-label="Variance">
+                    @Model.Details[i].VarianceNo @Html.HiddenFor(m => m.Details[i].VarianceNo)
+
+                </td>
+                <td data-label="Filled %">
+                    @Model.Details[i].FilledPerce @Html.HiddenFor(m => m.Details[i].FilledPerce)
+
+                </td>
+                <td data-label="Variance %">
+                    @Model.Details[i].VariancePerce @Html.HiddenFor(m => m.Details[i].VariancePerce)
+
+                </td>
+                <td data-label="Current MRF">
+                    @Model.Details[i].CurrentMRF @Html.HiddenFor(m => m.Details[i].CurrentMRF)
+
+                </td>
+
+                <td data-label="Short/Excess">
+                    @Model.Details[i].Short_Excess @Html.HiddenFor(m => m.Details[i].Short_Excess)
+
+                </td>
+                <td data-label="New MRF planned">
+                    @Model.Details[i].NewMRF_Planned @Html.HiddenFor(m => m.Details[i].NewMRF_Planned)
+
+                </td>
+                <td data-label="Select" class="chkTd">
+                    <div class="checkbox-inline justify-content-center">
+                        <label class="checkbox checkbox-outline checkbox-outline-1x checkbox-primary text-muted">
+                            @*<input type="checkbox" name="Checkboxes16">*@
+                            @Html.CheckBoxFor(m => m.Details[i].Select,new { @onchange="CheckPendingMRF(this,"+Model.Details[i].NewMRF_Planned+")"})
+                            <span></span>
+                        </label>
+                    </div>
+
+                </td>
+
+
+            </tr>
+                }
+            }
+
+                </tbody>
+    </table>
+</div>

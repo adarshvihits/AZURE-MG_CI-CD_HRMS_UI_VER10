@@ -1,0 +1,122 @@
+﻿@model Hrms.Lite.Shared.PayRoll.CostProcessing
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/PayRoll/CostProcessing.js"></script>
+
+<style>
+    .form-control .btn.dropdown-toggle {
+        border: none !important;
+    }
+</style>
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <!--begin::Container-->
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <!--begin::Header Menu Wrapper-->
+
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <!--begin::Header Menu-->
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Monthly Cost Processing </h3>
+
+            </div>
+        </div>
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Header-->
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid " id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container full-width">
+            <!--begin::Dashboard-->
+            <!--begin::Row-->
+
+
+
+            <div class="card card-custom height-100per footer-row-fixed">
+
+                <div class="card-body">
+
+
+
+                    <div class="row tab-style-button">
+                        <div class="tab-button-wrap">
+                            <div class="form-group col-md-2">
+
+                                <label> Payroll Group </label>
+                                @Html.DropDownListFor(m => m.PayrollGroup.Code, (SelectList)ViewBag.PayrollGroup, "--Select--", new { @class = "form-control form-control-sm", @onchange = "onPayrollGroupChange(this,'payrollGrp');", @onblur = "validate(this,'payrollGroup')" })
+                                <span id="payrollGroup"></span>
+
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label> Month</label>
+                                @Html.DropDownListFor(m => m.Month.Code, (SelectList)ViewBag.Month, "--Select--", new
+                                {
+                                    @class = "form-control form-control-sm processMnth",
+                               @onblur = "validate(this,'payrollM')"
+                           })
+
+                                <span id="payrollM"></span>
+
+                            </div>
+
+
+                            <div class="tab-items pl-5 pt-3  d-flex align-items-center">
+
+                                <button id="procBtn" type="button" class="btn btn-default btn-sm float-left" data-bs-toggle="modal" data-target="" onclick="onProcessClick()">
+                                    Process
+                                </button>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+
+</div>
+<div class="modal fade cost_ProcPopup" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:940px ;">
+            <div class="modal-content popup">
+                <div class="modal-header" style="padding:10px">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                       
+                    </h5>
+                    <div>
+
+                        <button type="button" class="close mt-2" data-bs-dismiss="modal"
+                                aria-label="Close" onclick="$('#procBtn').prop('disabled', false);">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+

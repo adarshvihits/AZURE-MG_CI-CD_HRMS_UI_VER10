@@ -1,0 +1,380 @@
+@model Hrms.Lite.Shared.Recruitment.ApplicantProfile
+@{
+    ViewData["Title"] = "Applicant Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Func<string, string> val = value => string.IsNullOrWhiteSpace(value) ? "-" : value;
+    Func<DateTime, string> date = value => value == DateTime.MinValue ? "-" : value.ToString("dd MMM yyyy");
+    Func<string, string> initials = name =>
+    {
+        var parts = (name ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return string.Concat(parts.Take(2).Select(p => char.ToUpper(p[0])));
+    };
+    var comm = Model.CommunicationAddress ?? new Hrms.Lite.Shared.Recruitment.ApplicantAddress();
+    var perm = Model.PermanentAddress ?? new Hrms.Lite.Shared.Recruitment.ApplicantAddress();
+    var qualifications = Model.QualificationList ?? new List<Hrms.Lite.Shared.Recruitment.ApplicantQualification>();
+    var employers = Model.EmploymentList ?? new List<Hrms.Lite.Shared.Recruitment.ApplicantEmployment>();
+    var languages = Model.LanguageList ?? new List<Hrms.Lite.Shared.Recruitment.ApplicantLanguage>();
+    var vacancies = Model.VacancyList ?? new List<Hrms.Lite.Shared.Recruitment.ApplicantVacancy>();
+    var contacts = Model.EmergencyContactList ?? new List<Hrms.Lite.Shared.Recruitment.ApplicantEmergencyContact>();
+    var experience = Model.IsFresher ? "Fresher"
+        : "Experienced" + (Model.ExperienceYears > 0 || Model.ExperienceMonths > 0
+            ? " · " + (Model.ExperienceYears > 0 ? Model.ExperienceYears + " yrs " : "") + (Model.ExperienceMonths > 0 ? Model.ExperienceMonths + " mos" : "")
+            : "");
+}
+<link href="~/css/hrplan.css" rel="stylesheet" type="text/css" />
+<link href="~/css/applicantProfile.css" rel="stylesheet" type="text/css" />
+<script src="~/js/jquery.min.js"></script>
+<script src="~/scripts/Recruitment/applicantProfile.js"></script>
+
+@functions {
+    // Yes / No pill for boolean answers
+    private Microsoft.AspNetCore.Html.IHtmlContent YesNo(bool value)
+    {
+        return new Microsoft.AspNetCore.Html.HtmlString(value
+            ? "<span class=\"pill pill-success\">Yes</span>"
+            : "<span class=\"pill pill-neutral\">No</span>");
+    }
+}
+
+<!--begin::Header-->
+<div id="kt_header" class="header header-fixed">
+    <div class="container-fluid d-flex align-items-stretch justify-content-between">
+        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+            <div class="d-flex align-items-baseline flex-wrap mr-5">
+                <h3 class="main-title">Applicant Profile</h3>
+                <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                    <li class="breadcrumb-item ">
+                        <a href="@Url.Action("Index", "Home", new { Area = "" })"><i class="icon-nm fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Applicants", new { Area = "Recruitment" })">Applicants</a>
+                    </li>
+                    <li class="breadcrumb-item text-muted">@Model.ApplicantName</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Header-->
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container full-width">
+            <div class="card card-custom height-100per apf-page">
+
+                <!-- profile header -->
+                <div class="apf-header">
+                    <div class="apf-avatar">@initials(Model.ApplicantName)</div>
+                    <div class="apf-header-main">
+                        <a class="apf-back" href="@Url.Action("Index", "Applicants", new { Area = "Recruitment" })">
+                            <i class="fas fa-arrow-left"></i> Back to Applicants
+                        </a>
+                        <div class="apf-name-row">
+                            <h1 class="apf-name">@Model.ApplicantName</h1>
+                            @if (!string.IsNullOrWhiteSpace(Model.Status))
+                            {
+                                <span class="pill pill-warning">@Model.Status</span>
+                            }
+                        </div>
+                        <div class="apf-meta">
+                            Applicant ID <strong>@val(Model.ApplicantCode)</strong>
+                            @if (!string.IsNullOrWhiteSpace(Model.AppliedFor))
+                            {
+                                <span>&nbsp;·&nbsp; Applied for <strong>@Model.AppliedFor</strong></span>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.AppliedLocation))
+                            {
+                                <span>&nbsp;·&nbsp; @Model.AppliedLocation</span>
+                            }
+                            @if (Model.AppliedOn != DateTime.MinValue)
+                            {
+                                <span>&nbsp;·&nbsp; @date(Model.AppliedOn)</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section navigation (stays above the scrolling sections) -->
+                <div class="apf-nav" id="ApplicantProfileNav">
+                    <a class="apf-nav-item active" href="#sec-personal"><i class="far fa-user"></i> Personal</a>
+                    <a class="apf-nav-item" href="#sec-address"><i class="fas fa-map-marker-alt"></i> Address &amp; Contacts</a>
+                    <a class="apf-nav-item" href="#sec-education"><i class="fas fa-graduation-cap"></i> Education</a>
+                    <a class="apf-nav-item" href="#sec-professional"><i class="fas fa-briefcase"></i> Professional</a>
+                    <a class="apf-nav-item" href="#sec-linguistic"><i class="fas fa-globe"></i> Linguistic Ability</a>
+                    <a class="apf-nav-item" href="#sec-additional"><i class="fas fa-info-circle"></i> Additional Details</a>
+                    <a class="apf-nav-item" href="#sec-vacancies"><i class="far fa-clock"></i> Applied Vacancies</a>
+                </div>
+
+                <div class="apf-scroll" id="ApplicantProfileScroll">
+                <div class="apf-body">
+
+                    <!-- 1. Personal -->
+                    <section id="sec-personal" class="apf-section">
+                        <div class="apf-eyebrow">Section 1 of 7</div>
+                        <h2 class="apf-title">Personal Details</h2>
+                        <div class="apf-card">
+                            <div class="apf-personal">
+                                <div>
+                                    <div class="apf-label">Applicant Photo</div>
+                                    <div class="apf-photo">@initials(Model.ApplicantName)</div>
+                                </div>
+                                <div class="apf-grid apf-grid-3">
+                                    <div><div class="apf-label">Nationality</div><div class="apf-value">@val(Model.Nationality)</div></div>
+                                    <div><div class="apf-label">Country of Residence</div><div class="apf-value">@val(Model.Residence)</div></div>
+                                    <div><div class="apf-label">Gender</div><div class="apf-value">@val(Model.Gender)</div></div>
+                                    <div><div class="apf-label">Date of Birth</div><div class="apf-value">@date(Model.DOB)</div></div>
+                                    <div><div class="apf-label">Marital Status</div><div class="apf-value">@val(Model.MaritalStatus)</div></div>
+                                    <div><div class="apf-label">Mobile</div><div class="apf-value">@val(Model.Mobile)</div></div>
+                                    <div><div class="apf-label">Email</div><div class="apf-value apf-break">@val(Model.Email)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 2. Address & contacts -->
+                    <section id="sec-address" class="apf-section">
+                        <div class="apf-eyebrow">Section 2 of 7</div>
+                        <h2 class="apf-title">Address for Communication</h2>
+                        @foreach (var address in new[] { new { Title = "Communication Address", A = comm }, new { Title = "Permanent Address", A = perm } })
+                        {
+                            <div class="apf-card">
+                                <div class="apf-subtitle">@address.Title</div>
+                                <div class="apf-grid apf-grid-4">
+                                    <div><div class="apf-label">House Name / No.</div><div class="apf-value">@val(address.A.House)</div></div>
+                                    <div><div class="apf-label">Street</div><div class="apf-value">@val(address.A.Street)</div></div>
+                                    <div><div class="apf-label">City</div><div class="apf-value">@val(address.A.City)</div></div>
+                                    <div><div class="apf-label">Post Office</div><div class="apf-value">@val(address.A.PostOffice)</div></div>
+                                    <div><div class="apf-label">Pin Code</div><div class="apf-value">@val(address.A.Pin)</div></div>
+                                    <div><div class="apf-label">District</div><div class="apf-value">@val(address.A.District)</div></div>
+                                    <div><div class="apf-label">State</div><div class="apf-value">@val(address.A.State)</div></div>
+                                    <div><div class="apf-label">Country</div><div class="apf-value">@val(address.A.Country)</div></div>
+                                </div>
+                            </div>
+                        }
+                        <div class="apf-card">
+                            <div class="apf-subtitle">Family Member Contact Details</div>
+                            @if (contacts.Count == 0)
+                            {
+                                <div class="apf-empty">No family member contact recorded.</div>
+                            }
+                            else
+                            {
+                                @foreach (var contact in contacts)
+                                {
+                                    <div class="apf-grid apf-grid-4 apf-contact-row">
+                                        <div><div class="apf-label">Name</div><div class="apf-value">@val(contact.Name)</div></div>
+                                        <div><div class="apf-label">Relation</div><div class="apf-value">@val(contact.Relation)</div></div>
+                                        <div><div class="apf-label">Mobile Number</div><div class="apf-value">@val(contact.Mobile)</div></div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="apf-card">
+                            <div class="apf-subtitle">Reference Details</div>
+                            <div class="apf-grid apf-grid-2">
+                                <div class="apf-dashed">
+                                    <div class="apf-eyebrow">Reference Person 1</div>
+                                    <div class="apf-label">Name &amp; Address</div><div class="apf-value mb-3">@val(Model.Reference1Name)</div>
+                                    <div class="apf-label">Contact Number</div><div class="apf-value">@val(Model.Reference1Contact)</div>
+                                </div>
+                                <div class="apf-dashed">
+                                    <div class="apf-eyebrow">Reference Person 2</div>
+                                    <div class="apf-label">Name &amp; Address</div><div class="apf-value mb-3">@val(Model.Reference2Name)</div>
+                                    <div class="apf-label">Contact Number</div><div class="apf-value">@val(Model.Reference2Contact)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. Education -->
+                    <section id="sec-education" class="apf-section">
+                        <div class="apf-eyebrow">Section 3 of 7</div>
+                        <h2 class="apf-title">Education Qualification</h2>
+                        <div class="apf-card">
+                            <div class="apf-grid apf-grid-4">
+                                <div><div class="apf-label">Qualification Level</div><div class="apf-value">@val(Model.QualificationLevel)</div></div>
+                            </div>
+                        </div>
+                        <div class="apf-card">
+                            <div class="apf-subtitle">Qualification Details</div>
+                            @if (qualifications.Count == 0)
+                            {
+                                <div class="apf-empty">No qualification details recorded.</div>
+                            }
+                            else
+                            {
+                                <div class="apf-table-wrap">
+                                    <table class="apf-table">
+                                        <thead><tr><th>Qualification</th><th>Institute / University</th><th>Course Type</th><th>Completed</th><th>Passed</th><th>Duration</th><th>Year</th><th>% Marks</th><th>Highest</th></tr></thead>
+                                        <tbody>
+                                            @foreach (var q in qualifications)
+                                            {
+                                                <tr>
+                                                    <td class="apf-strong">@q.Qualification</td>
+                                                    <td>@q.Institute</td>
+                                                    <td>@q.CourseType</td>
+                                                    <td>@YesNo(q.Completed)</td>
+                                                    <td>@YesNo(q.Passed)</td>
+                                                    <td>@q.Duration</td>
+                                                    <td>@q.Year</td>
+                                                    <td>@q.Percentage</td>
+                                                    <td>@if (q.Highest) {<span class="pill pill-accent">Highest</span>}</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <!-- 4. Professional -->
+                    <section id="sec-professional" class="apf-section">
+                        <div class="apf-eyebrow">Section 4 of 7</div>
+                        <h2 class="apf-title">Professional Details</h2>
+                        <div class="apf-card">
+                            <div class="apf-label">Fresher or Experienced</div>
+                            <span class="pill pill-accent">@experience</span>
+                        </div>
+                        @if (Model.IsFresher)
+                        {
+                            <div class="apf-card apf-empty">No employment history to show — this applicant has indicated they are a fresher.</div>
+                        }
+                        else if (employers.Count == 0)
+                        {
+                            <div class="apf-card apf-empty">No employment history recorded.</div>
+                        }
+                        else
+                        {
+                            <div class="apf-subtitle mt-2">Employment History</div>
+                            @foreach (var emp in employers)
+                            {
+                                <div class="apf-card">
+                                    <div class="apf-emp-head">
+                                        <span class="apf-strong">@emp.Employer</span>
+                                        <span class="apf-muted">·</span>
+                                        <span>@emp.Designation</span>
+                                        @if (emp.CurrentlyWorking)
+                                        {
+                                            <span class="pill pill-success">Current Employer</span>
+                                        }
+                                    </div>
+                                    <div class="apf-grid apf-grid-4">
+                                        <div><div class="apf-label">From</div><div class="apf-value">@date(emp.FromDate)</div></div>
+                                        <div><div class="apf-label">To</div><div class="apf-value">@(emp.CurrentlyWorking ? "Present" : date(emp.ToDate))</div></div>
+                                        <div><div class="apf-label">CTC</div><div class="apf-value">@val(emp.CTC)</div></div>
+                                        <div><div class="apf-label">Reference</div><div class="apf-value">@val(emp.Reference)</div></div>
+                                    </div>
+                                    <div class="mt-4"><div class="apf-label">Roles &amp; Responsibilities</div><div class="apf-value apf-normal">@val(emp.Roles)</div></div>
+                                </div>
+                            }
+                        }
+                    </section>
+
+                    <!-- 5. Linguistic ability -->
+                    <section id="sec-linguistic" class="apf-section">
+                        <div class="apf-eyebrow">Section 5 of 7</div>
+                        <h2 class="apf-title">Linguistic Ability</h2>
+                        <div class="apf-card">
+                            <div class="apf-subtitle">Languages Known</div>
+                            @if (languages.Count == 0)
+                            {
+                                <div class="apf-empty">No languages recorded.</div>
+                            }
+                            else
+                            {
+                                <div class="apf-table-wrap">
+                                    <table class="apf-table">
+                                        <thead><tr><th>Language</th><th>Read</th><th>Write</th><th>Speak</th></tr></thead>
+                                        <tbody>
+                                            @foreach (var lang in languages)
+                                            {
+                                                <tr>
+                                                    <td class="apf-strong">@val(lang.Language)</td>
+                                                    <td>@YesNo(lang.Read)</td>
+                                                    <td>@YesNo(lang.Write)</td>
+                                                    <td>@YesNo(lang.Speak)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <!-- 6. Additional details -->
+                    <section id="sec-additional" class="apf-section">
+                        <div class="apf-eyebrow">Section 6 of 7</div>
+                        <h2 class="apf-title">Additional Details</h2>
+                        <div class="apf-card">
+                            <div class="apf-grid apf-grid-2">
+                                <div>
+                                    <div class="apf-label">How did you come to know about this vacancy?</div>
+                                    <div class="apf-value">@val(Model.Source)</div>
+                                </div>
+                                <div>
+                                    <div class="apf-label">Landmark Near Residence</div>
+                                    <div class="apf-value">@val(Model.Landmark)</div>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(Model.ReferringEmployeeID) || !string.IsNullOrWhiteSpace(Model.ReferringEmployeeName))
+                            {
+                                <div class="apf-grid apf-grid-2 apf-dashed mt-4">
+                                    <div><div class="apf-label">Referring Person's Employee ID</div><div class="apf-value">@val(Model.ReferringEmployeeID)</div></div>
+                                    <div><div class="apf-label">Referring Person's Name</div><div class="apf-value">@val(Model.ReferringEmployeeName)</div></div>
+                                </div>
+                            }
+                        </div>
+                        <div class="apf-card">
+                            <div class="apf-grid apf-grid-2">
+                                <div><div class="apf-label">Did you work with Malabar Group before?</div>@YesNo(Model.IsPreviousEmployee)</div>
+                                <div><div class="apf-label">Any family member working with Malabar?</div>@YesNo(Model.IsFamilyMemberEmployee)</div>
+                                <div><div class="apf-label">Are you willing to travel?</div>@YesNo(Model.WillingToTravel)</div>
+                                <div><div class="apf-label">Are you willing to relocate?</div>@YesNo(Model.WillingToRelocate)</div>
+                                <div><div class="apf-label">Do you have a passport?</div>@YesNo(Model.HavePassport)</div>
+                                <div><div class="apf-label">Passport No.</div><div class="apf-value">@val(Model.PassportNo)</div></div>
+                                <div><div class="apf-label">Legal right to work?</div>@YesNo(Model.HaveLegalRightToWork)</div>
+                                <div><div class="apf-label">Visa Details</div><div class="apf-value">@val(Model.VisaDetails)</div></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 7. Applied vacancies -->
+                    <section id="sec-vacancies" class="apf-section">
+                        <div class="apf-eyebrow">Section 7 of 7</div>
+                        <h2 class="apf-title">Applied Vacancies</h2>
+                        <div class="apf-card">
+                            @if (vacancies.Count == 0)
+                            {
+                                <div class="apf-empty">No applied vacancies recorded.</div>
+                            }
+                            else
+                            {
+                                <div class="apf-table-wrap">
+                                    <table class="apf-table">
+                                        <thead><tr><th>Vacancy</th><th>Location / Showroom</th><th>Applied On</th><th>Application ID</th><th>Status</th></tr></thead>
+                                        <tbody>
+                                            @foreach (var v in vacancies)
+                                            {
+                                                <tr>
+                                                    <td class="apf-strong">@v.Vacancy</td>
+                                                    <td>@v.Location</td>
+                                                    <td>@date(v.AppliedOn)</td>
+                                                    <td>@v.ApplicationID</td>
+                                                    <td>@if (!string.IsNullOrWhiteSpace(v.Status)) {<span class="pill pill-accent">@v.Status</span>}</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </section>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+﻿
+
+@model Hrms.Lite.Shared.PayRoll.ProcessReadinessCheck
+
+<script src="~/js/settings.js"></script>
+
+<script>
+
+    $(".search-slider-inner11").click(function () {
+        $("#dataTableSearch").toggleClass('field-width-big')
+    });
+
+</script>
+<style>
+    .dataTables_scrollBody {
+        height: 30vh !important;
+    }
+
+    .searchicons {
+        z-index: 3;
+        position: relative;
+        padding-top: 6px;
+    }
+</style>
+
+<div class="row tab-style-button">
+    <div class="tab-button-wrap align-items-center">
+
+
+
+
+
+        <div class="tab-items">
+
+        </div>
+
+
+
+        <div class="tab-items select-option high">
+
+            <div class="sraech-slider">
+                <div class="search-slider-inner11">
+                    <i class="fa fa-search searchicons "></i>
+                </div>
+                <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                       placeholder="ID/Name">
+            </div>
+
+            @*<div class="sraech-slider">
+            <div class="search-slider-inner">
+                <i class="fa fa-search"></i>
+            </div>
+            <input type="text" id="dataTableSearch" class="form-control form-control-sm"
+                   placeholder="ID/Name">
+        </div>*@
+            <!--<button data-bs-toggle="tooltip" title=""
+            class="btn btn-excel"
+            data-bs-original-title="Export to Excel" onclick="ExportToExcelPopUp('ATTENDANCE_SETTINGS',@ViewBag.RawName,1)">
+        <i class="icon-xl far fa-file-excel"></i>
+    </button>-->
+
+            <button data-bs-toggle="tooltip" title=""
+                    class="btn btn-excel"
+                    data-bs-original-title="Export to Excel" onclick="AttendanceExportToExcelPopUp('ATTENDANCE_SETTINGS','@ViewBag.RowName',1)">
+                <i class="icon-xl far fa-file-excel"></i>
+            </button>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<div class="ihits-table table-border hover-color odd-even mobile-responsive-table">
+    @Html.HiddenFor(m => m.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup.Count)
+    <table id="PopUp_DailyAttn_Tbl_ID" class="common-table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Sl.No</th>
+                <th scope="col">Date</th>
+
+
+
+
+
+
+            </tr>
+        </thead>
+        @if (Model.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup != null && Model.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup.Count > 0)
+        {
+            for (int i = 0; i < Model.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup.Count; i++)
+            {
+                <tr>
+                    <td data-label="slno">
+                        @Model.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup[i].SlNo
+                    </td>
+                    <td data-label="Date">
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.MonthlyAttendanceProcessing.MonthlyAttendanceProcessing_Validations_popup[i].PendingDates))
+
+                    </td>
+
+
+
+                </tr>
+
+
+            }
+        }
+
+
+    </table>
+</div>

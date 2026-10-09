@@ -1,0 +1,41 @@
+﻿@model Hrms.Lite.Shared.Master.EventGroup
+
+    <div class="ihits-table table-border hover-color odd-even mobile-responsive-table event_grp_emplist vertical-scroll-180 p-3">
+        <table id="receipientListTable">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Designation</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.EmpList != null && Model.EmpList.Count > 0)
+                {
+                    for (int i = 0; i < Model.EmpList.Count; i++)
+                    {
+
+                    <tr>
+                        <td>
+                            
+                           
+                            @Model.EmpList[i].EmployeeID
+                        </td>
+                        <td>
+                            @Model.EmpList[i].EmployeeName
+                        </td>
+                        <td>
+                            @{
+                                string EmpcodeID = "EmpList_" + i + "__EmployeeCode";
+                                string EmpcodeName = "EmpList[" + i + "].EmployeeCode";
+                            }
+                            <input type="hidden" id="@EmpcodeID" name="@EmpcodeName" class="form-control form-control-sm employee-code" value="@Model.EmpList[i].EmployeeCode" />
+                            @Html.HiddenFor(m => m.EmpList[i].Applicable)
+                            @Model.EmpList[i].Designation
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,207 @@
+﻿@model IEnumerable<Hrms.Lite.Shared.DashBoard.Diagram>
+
+@using Kendo.Mvc.UI
+
+
+<style>
+    .graph-hei-databank {
+        padding: 10px;
+    }
+
+        .graph-hei-databank .form-control {
+            margin-bottom: 10px;
+            margin-left: 10px;
+            position: relative;
+            z-index: 10;
+        }
+</style>
+
+<div class="demo-section wide">
+    @(Html.Kendo().Chart(Model)
+        .Name("chart")
+        //.HtmlAttributes(new { style = "z-index:9" })
+        .ChartArea(area=>area.Height(200).Width(900))
+        .Title("")
+        //.Legend(legend => legend
+        //.Position(ChartLegendPosition.Right)/*.OffsetX(500).OffsetY(-20).Orientation(ChartLegendOrientation.Horizontal)*/
+        //.Item(item => item.Visual("createLegendItem"))
+        //)
+        .Legend(legend => legend.Visible(false))
+        .SeriesDefaults(seriesDefaults => seriesDefaults
+            .Column().Visual("columnVisual")
+            .Stack(true)
+            .Highlight(highlight => highlight.Toggle("toggleHandler"))
+        )
+        .Series(series =>
+        {
+            series.Column(model => model.HighRiskCount).Name("High").Color("#ca405a");
+            series.Column(model => model.ModerateRiskCount).Name("Medium").Color("#e26a05");
+            series.Column(model => model.LowRiskCount).Name("Low").Color("#78ae9c");
+    
+        })
+        //.Series(series => {
+        //    series.Column(new double[] { 5600, 6300, 7400, 9100, 11700, 13800, 12800, 11000, 10200, 9800, 12300, 11300 }).Name("Total Visits");
+        //    series.Column(new double[] { 5200, 3400, 2300, 4000, 6700, 8300, 4000, 5000, 6400, 7200, 7500, 8100 }).Name("Unique visitors");
+        //})
+        .CategoryAxis(axis => axis
+            .Categories(model => model.Type)
+            .Labels(labels => labels.Padding(10, 0, 0, 0).Rotation(0))
+            .MajorGridLines(lines => lines.Visible(false))
+            .Line(line => line.Visible(false))
+
+            )
+        //.CategoryAxis(axis => axis
+        //    //.Categories("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        //    .Labels(labels => labels.Padding(10,15,0,0))
+        //    .MajorGridLines(lines => lines.Visible(false))
+        //    .Line(line => line.Visible(false))
+        //)
+
+        .Panes(panes=> panes.Add().Clip(false))
+        .ValueAxis(axis => axis
+            .Numeric()
+            .Line(line => line.Visible(false))
+        )
+        .Tooltip(tooltip => tooltip
+            .Visible(true).Template("<b>#= dataItem.TypeFullName #</b> <br /> #= series.name #: #= value #") // Customize the template here
+        )
+    )
+
+</div>
+
+<script>         
+    function columnVisual(e) {
+        var color = '';
+        if (e.options.name == 'High') {
+            color = '#ca405a';
+        }
+        else if (e.options.name == 'Low')
+            color = '#78ae9c';
+        else
+            color = '#e26a05';
+        
+        return createColumn(e.rect, color);
+    }
+
+    function toggleHandler(e) {
+        e.preventDefault();
+        var visual = e.visual;
+        var opacity = e.show ? 0.8 : 1;
+
+        visual.opacity(opacity);
+    }
+    
+    function createLegendItem(e) {
+        var drawing = kendo.drawing;
+        var geometry = kendo.geometry;
+        var color = '';
+        if (e.series.name == 'High') {
+            color = '#ca405a';
+        }
+        else if (e.series.name == 'Medium') {
+            color = '#e26a05';
+        }
+        else if (e.series.name == 'Low') {
+            color = '#78ae9c';
+        }
+        else {
+            color = e.options.markers.background;
+        }
+        //var color = e.options.markers.background;
+        var labelColor = e.options.labels.color;
+        var rect = new geometry.Rect([0, 0], [120, 50]);
+        var layout = new drawing.Layout(rect, {
+            spacing: 5,
+            alignItems: "center"
+        });
+
+        var overlay = drawing.Path.fromRect(rect, {
+            fill: {
+                color: "#fff",
+                opacity: 0
+            },
+            stroke: {
+                color: "none"
+            },
+            cursor: "pointer"
+        });
+
+        var column = createColumn(new geometry.Rect([0, 0], [15, 10]), color);
+        var label = new drawing.Text(e.series.name, [0, 0], {
+            fill: {
+                color: labelColor
+            }
+        })
+
+        layout.append(column, label);
+        layout.reflow();
+
+        var group = new drawing.Group().append(layout, overlay);
+
+        return group;
+    }
+
+    function createColumn(rect, color) {
+        var drawing = kendo.drawing;
+       //var geometry = kendo.geometry;
+
+        var origin = rect.origin;
+        //var center = rect.center();
+        var bottomRight = rect.bottomRight();
+        //var radiusX = rect.width() / 2;
+        //var radiusY = radiusX / 3;
+        var gradient = new drawing.LinearGradient({
+            stops: [{
+                offset: 0,
+                color: color
+            }, {
+                offset: 0.5,
+                color: color,
+                opacity: 0.9
+            }, {
+                offset: 0.5,
+                color: color,
+                opacity: 0.9
+            }, {
+                offset: 1,
+                color: color
+            }]
+        });
+
+        var path = new drawing.Path({
+            fill: gradient,
+            stroke: {
+                color: "none"
+            }
+        //}).moveTo(origin.x, origin.y)
+        //    .lineTo(origin.x, bottomRight.y)
+        //    .arc(180, 0, radiusX, radiusY, true)
+        //    .lineTo(bottomRight.x, origin.y)
+        //    .arc(0, 180, radiusX, radiusY);
+        }).moveTo(origin.x, origin.y)
+            .lineTo(origin.x, bottomRight.y)   // Vertical line to bottom left
+            .lineTo(bottomRight.x, bottomRight.y)  // Horizontal line to bottom right
+            .lineTo(bottomRight.x, origin.y)   // Vertical line to top right
+            .close();
+
+        //var topArcGeometry = new geometry.Arc([center.x, origin.y], {
+        //    startAngle: 0,
+        //    endAngle: 360,
+        //    radiusX: radiusX,
+        //    radiusY: radiusY
+        //});
+
+        //var topArc = new drawing.Arc(topArcGeometry, {
+        //    fill: {
+        //        color: color
+        //    },
+        //    stroke: {
+        //        color: "#ebebeb"
+        //    }
+        //});
+        var group = new drawing.Group();
+        //group.append(path, topArc);
+        group.append(path);
+        return group;
+    }
+</script>

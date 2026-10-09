@@ -1,0 +1,53 @@
+﻿@model Hrms.Lite.Shared.MIS.CompanyMIS
+@using Kendo.Mvc.UI;
+
+@(Html.Kendo().Chart<Hrms.Lite.Shared.MIS.MISDetailsList>()
+                                    .Name("Testchart")
+                                    .Title("Department wise strength")
+
+
+
+
+                                    .Legend(legend => legend
+
+                                    .Position(ChartLegendPosition.Right)
+                                    .Orientation(ChartLegendOrientation.Vertical)
+
+
+                                    .Visible(true)
+                                    )
+                                    .ChartArea(chart => chart
+                                    .Background("transparent")
+
+
+                                    )
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read(read => read.Action("GetDepCount", "DepartmentCount"));
+
+
+                                    }
+                                    )
+                                    .Series(series => series
+
+                                    .Donut(model => model.count, model => model.name)
+
+                                    .Labels(labels => labels
+                                    .Template("#= dataItem.name #: \n #= dataItem.count#")
+
+                                    .Background("transparent")
+
+                                    .Visible(true)
+                                    )
+
+
+                                    )
+
+
+
+                                    .Tooltip(tooltip => tooltip.
+                                    Template("${ dataItem.name } - ${ dataItem.count }").Visible(true)
+
+                                    )
+
+                                    )

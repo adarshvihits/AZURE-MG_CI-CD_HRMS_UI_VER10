@@ -1,0 +1,117 @@
+﻿
+@model Hrms.Lite.Shared.Master.CheckupType
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@{
+    Hrms.Lite.Shared.Master.UserRole CurrentUserRoleActions = JsonConvert.DeserializeObject<Hrms.Lite.Shared.Master.UserRole>(Context.Session.GetString("UserRoleActions"));
+}
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('#Name').focus();
+        moveCursorToEnd('Name');
+    });
+
+
+</script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Medical_Checkup_Save" }))
+{
+    <div id="addmedicalcheckup" class="slider-forms slider-forms-open AddNewDiv">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="CloseSlider('AddNewDiv')">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </div>
+            <h4>
+                Medical Checkup Type
+            </h4>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        @Html.HiddenFor(model => Model.Mode)
+                        @Html.HiddenFor(model => Model.LogGI)
+                        @Html.HiddenFor(model => Model.GI)
+                        @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control form-control-sm CName", @placeholder = "Name", @onblur = "OnlycapitalizeFirstLetter(this,'CheckName')", maxlength = "120" })
+                        <span id="CheckName"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Short Name</label>
+                        @Html.TextBoxFor(Model => Model.ShortName, new { @class = "form-control form-control-sm CShtName", @placeholder = "Short Name", @onblur = "validate(this,'CheckShort')", maxlength = "5" })
+                        <span id="CheckShort"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row my-3">
+
+
+                <div class="col-md-12 d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div>Active</div>
+                        <label class="switch" onclick="ActiveInactiveValidationMedCheck('Medical Checkup Type',@Model.Code)">
+                            @Html.CheckBoxFor(model => model.Active,new { @id="checkup"})
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row my-3">
+
+                <div class="col-md-12">
+
+                    @if (Model.Mode == "CREATE")
+                    {
+                        <label>Description</label>
+                        @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control form-control-sm CDescription", @placeholder = "Description", maxlength = "250" })
+
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        <label class="view-title">Description</label>
+                        <div class="view-details">
+
+                            @Html.DisplayFor(Model => Model.Description)
+                            @Html.HiddenFor(model => Model.Description)
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row card-footer-bottom-fixed border-none">
+
+                <div class="col-md-12 align-right">
+                    @if (Model.Mode == "CREATE")
+                    {
+                        @if (CurrentUserRoleActions.Create == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="CheckUpSave('Save')">
+                                Save
+                            </button>
+                        }
+                    }
+                    @if (Model.Mode == "MODIFY")
+                    {
+                        @if (CurrentUserRoleActions.Modify == true)
+                        {
+                            <button type="button" class="btn btn-default  mobile-full-width" onclick="CheckUpSave('Modify')">
+                                Modify
+                            </button>
+                        }
+                    }
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+}

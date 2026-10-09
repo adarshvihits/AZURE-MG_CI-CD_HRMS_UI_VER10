@@ -1,0 +1,211 @@
+﻿@model Hrms.Lite.Shared.PayRoll.PFSettings
+    <script src="~/js/tooltip.js"></script>
+@using (Html.BeginForm(null,null, FormMethod.Post, new { @id="PfDetailsSave"}))
+{
+<div id="PF_Settings_slider" class="slider-forms slider-forms-open closeEdit">
+    <div class="slider-inner-style">
+        <div class="slider-form-close">
+            <i class="ki ki-close icon-xs text-muted" onclick="CloseSlider('closeEdit')"></i>
+        </div>
+        <h4>PF Settings</h4>
+        @Html.HiddenFor(m => m.PFSettingsDetails.EmployeeGI)
+        @Html.HiddenFor(m => m.PFSettingsDetails.EmployeeCode)
+        @Html.HiddenFor(m => m.PFSettingsDetails.EmployeeID)
+        @Html.HiddenFor(m => m.PFSettingsDetails.Location)
+        @Html.HiddenFor(m => m.PFSettingsDetails.DOJ)
+        @Html.HiddenFor(m => m.PFDeduction.Code)
+        <div class="profile-header position-relative pb-12 mb-5" style="padding-bottom: 2px !important; padding-top: 5px !important;">
+            <div class="row">
+                @await Html.PartialAsync("~/Areas/DataBank/Views/Shared/_EmployeeSliderHeader.cshtml", Model.EmployeeHeader)
+            </div>
+            <div class="profile-header-overflow"></div>
+        </div>
+        <div class="row">
+            <!-- <div class="col-md-4">
+            <div class="row-outer">
+                <label class="view-title">Evaluation Period</label>
+                <div class="view-details">
+                    Demo</div>
+            </div>
+        </div> -->
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">
+                        Location
+                    </label>
+                    <div class="view-details">
+                        @Model.PFSettingsDetails.Location
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row-outer">
+                    <label class="view-title">DOJ</label>
+                    <div class="view-details">
+                        
+                        @Html.Encode(String.Format("{0:dd-MMM-yyyy}", @Model.PFSettingsDetails.DOJ))
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>PF Group </label>
+                    <span class="Mandatory">*</span>
+                    @Html.DropDownListFor(m => m.PFSettingsDetails.PFGroup.Code, (SelectList)ViewBag.Pfg, "--select--", new { @class = "form-control form-control-sm filterDropDown", @onchange = "validate(this,'pfgroup')" })
+                    <span id="pfgroup"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>PF No</label>
+                    
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.PFNo, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)" })
+                </div>
+                @*<span id="pfno"></span>*@
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>UAN No</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.UANNo, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'uanno')" })
+                </div>
+                <span id="uanno"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>EPF%</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.EPFPercentage, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyAmount(event)", @onchange = "validate(this,'epfpercentange')" })
+                    @Html.HiddenFor(m =>m.PFSettingsDetails.Gen_EPF)
+                </div>
+                <span id="epfpercentange"></span>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>EPS%</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.EPSPercentage, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyAmount(event)", @onchange = "validate(this,'epspercentage')" })
+                    @Html.HiddenFor(m => m.PFSettingsDetails.Gen_EPS)
+                </div>
+                <span id="epspercentage"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>ERPF%</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.ERPFPercentage, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyAmount(event)", @onchange = "validate(this,'erpfpercentage')" })
+                    @Html.HiddenFor(m => m.PFSettingsDetails.Gen_ERPF)
+                </div>
+                <span id="erpfpercentage"></span>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>VPF%</label>
+                    
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.VPFPercentage, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)" })
+                </div>
+                @*<span id="vpfpercentage"></span>*@
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>VPF Amt</label>
+                   
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.VPFAmount, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)" })
+                </div>
+                @*<span id="vpfamount"></span>*@
+            </div>
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Min Limit</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.MinLimit, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'minlimit')" })
+                    @Html.HiddenFor(m => m.PFSettingsDetails.Gen_MinLimit)
+                </div>
+                <span id="minlimit"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Emp Max Limit</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.EmpMaxLimit, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'empmaxlimit')" })
+                    @Html.HiddenFor(m => m.PFSettingsDetails.Gen_EmpMaxLimit)
+                </div>
+                <span id="empmaxlimit"></span>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label> Employer Max Limit</label>
+                    <span class="Mandatory">*</span>
+                    @Html.TextBoxFor(m => m.PFSettingsDetails.EmployerMaxLimit, new { @class = "form-control form-control-sm", @placeholder = "Closure Amount", @onkeypress = "return onlyNumberKey(event)", @onchange = "validate(this,'employermaxlimit')" })
+                    @Html.HiddenFor(m => m.PFSettingsDetails.Gen_EmployerMaxLimit)
+                </div>
+                <span id="employermaxlimit"></span>
+            </div>
+
+        </div>
+
+
+
+
+        <div class="row">
+
+
+
+
+            <div class="col-md-12">
+                <label>Remarks</label>
+                @Html.TextAreaFor(m => m.PFSettingsDetails.Remarks, new { @class = "form-control form-control-sm", @placeholder = "Remarks" })
+            </div>
+
+        </div>
+        <div class="row card-footer-bottom-fixed border-none">
+
+            <div class="col-md-12 align-right">
+                <a type="button" class="btn btn-default  mobile-full-width" onclick="PFDetailsSave()">
+                    Save
+                </a>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+}

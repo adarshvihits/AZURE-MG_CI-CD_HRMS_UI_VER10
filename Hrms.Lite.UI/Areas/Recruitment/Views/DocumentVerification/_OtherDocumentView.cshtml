@@ -1,0 +1,91 @@
+﻿@model Hrms.Lite.Shared.Recruitment.DocumentVerification
+
+<script src="~/js/tooltip.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger;
+        moveCursorToEnd('SliderDocumentName');
+    });
+</script>
+<style>
+
+    .slider-forms.slider-forms-opens {
+        right: 0px;
+        transition: 0.4s;
+    }
+   /* #AadharFileView {
+        width: 850px;
+        z-index: 1000;
+    }*/
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "display-flex", @id = "AadharOrPanApprove", enctype = "multipart/form-data" }))
+{
+    <div id="AadharFileView" class="slider-forms slider-forms-opens viewAadharOrPan">
+        <div class="slider-inner-style">
+            <div class="slider-form-close" onclick="ClosedocVerifnSlider('viewAadharOrPan')"><i class="ki ki-close icon-xs text-muted"></i></div>
+            <h4>Other Documents</h4>
+            @Html.HiddenFor(m => m.EmployeeGI)
+            @Html.HiddenFor(m => m.SliderTitle)
+            @Html.HiddenFor(m => m.DocType)
+            @Html.HiddenFor(m => m.ApplicantTrackingCode)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Name</label>
+                        @*<input type="text" class="form-control form-control-sm" placeholder="Name in Document">*@
+                        <div class="doc-txt">
+                            @Html.HiddenFor(m => m.SliderDocumentName)
+                            <span id="documentNm"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Document Type</label>
+                        @*@Html.DropDownListFor(m => m.SliderDocumentType.Code, (SelectList)ViewBag.DocumentType, "--Select Document Type--", new { @class = "form-control form-control-sm" })*@
+                        <div class="doc-txt">
+                            Education
+                            @Html.HiddenFor(m => m.SliderDocumentType.Code)
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            @*<textarea class="form-control form-control-sm " placeholder="Description"></textarea>*@
+                            @Html.TextAreaFor(m => m.SliderDescription, new { @class = "form-control form-control-sm", @placeholder = "Description", @maxlength = 250 })
+                        </div>
+                    </div>
+
+                </div>
+          
+                         
+      
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <img width="400" height="200" src=@Model.File.AbsoluteUri>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row card-footer-bottom-fixed border-none">
+
+                        <div class="col-md-12 float-right-btn">
+
+
+                            <button type="button" class="btn btn-default " onclick="approveDocument()">Verify</button>
+                        </div>
+                    </div>
+
+                </div>
+    </div>
+}
