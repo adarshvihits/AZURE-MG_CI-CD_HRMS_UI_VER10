@@ -21,6 +21,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Test Telerik login
+        env:
+          T_USER: ${{ secrets.TELERIK_NUGET_USER }}
+          T_KEY: ${{ secrets.TELERIK_NUGET_KEY }}
+        run: |
+          if [ -z "$T_USER" ] || [ -z "$T_KEY" ]; then echo "SECRET IS EMPTY"; exit 1; fi
+          curl -s -o /dev/null -w "HTTP status: %{http_code}\n" -u "$T_USER:$T_KEY" https://nuget.telerik.com/v3/index.json
       - name: Add Telerik NuGet feed
         run: >
           dotnet nuget add source https://nuget.telerik.com/v3/index.json
