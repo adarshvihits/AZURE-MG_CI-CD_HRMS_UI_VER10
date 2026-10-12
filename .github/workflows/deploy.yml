@@ -21,7 +21,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
+      - name: Add Telerik NuGet feed
+        run: >
+          dotnet nuget add source https://nuget.telerik.com/v3/index.json
+          --name TelerikFeed
+          --username "${{ secrets.TELERIK_NUGET_USER }}"
+          --password "${{ secrets.TELERIK_NUGET_KEY }}"
+          --store-password-in-clear-text
       - run: dotnet restore
       - run: dotnet build --no-restore -c Release
       - run: dotnet test --no-build -c Release
