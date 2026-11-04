@@ -2,7 +2,9 @@ trigger:
   branches:
     include:
     - master
+
 pr: none
+
 variables:
 - name: buildConfiguration
   value: 'Release'
@@ -19,21 +21,28 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '10.x'
+
+    - script: >
+        dotnet nuget add source https://nuget.telerik.com/v3/index.json
+        --name TelerikFeed
+        --username "$(TelerikUser)"
+        --password "$(TelerikPassword)"
+        --store-password-in-clear-text
+      displayName: 'Add Telerik NuGet source'
+
     - task: DotNetCoreCLI@2
       displayName: 'Restore'
       inputs:
         command: 'restore'
         projects: '**/*.sln'
-        feedsToUse: 'select'
-        vstsFeed: ''
-        includeNuGetOrg: true
-        externalFeedCredentials: 'Telerik-Connection-Service'
+
     - task: DotNetCoreCLI@2
       displayName: 'Build'
       inputs:
         command: 'build'
         projects: '**/*.sln'
         arguments: '--configuration $(buildConfiguration) --no-restore'
+
     - task: DotNetCoreCLI@2
       displayName: 'Publish'
       inputs:
@@ -41,6 +50,7 @@ stages:
         publishWebProjects: true
         arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: true
+
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
@@ -64,4 +74,3 @@ stages:
               appType: 'webApp'
               appName: 'mg-hrms-ui'
               package: '$(Pipeline.Workspace)/drop/*.zip'
-
